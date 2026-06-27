@@ -8,7 +8,10 @@
     "slug": {
       "type": "string"
     },
-    "brandLogo": {
+    "brandLogoLight": {
+      "type": "string"
+    },
+    "brandLogoDark": {
       "type": "string"
     },
     "heroImage": {
