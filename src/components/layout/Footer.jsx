@@ -1,46 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND_DISCLAIMER } from '@/lib/constants';
+import { BRAND_DISCLAIMER, BRAND_DATA } from '@/lib/constants';
 
 const footerLinks = {
   company: [
-    { label: "About Kariv Glamour", to: "/about" },
-    { label: "Authentication Process", to: "/authentication" },
-    { label: "Our Values", to: "/about#values" },
-    { label: "Sell or Trade", to: "/sell-trade" }
+    { label: "Über Kariv Glamour", to: "/about" },
+    { label: "Authentifizierungsprozess", to: "/authentication" },
+    { label: "Unsere Werte", to: "/about#values" },
+    { label: "Verkaufen & Tauschen", to: "/sell-trade" }
   ],
   service: [
-    { label: "Contact", to: "/customer-service" },
+    { label: "Kontakt", to: "/customer-service" },
     { label: "FAQ", to: "/customer-service#faq" },
-    { label: "Shipping Information", to: "/legal/shipping-policy" },
-    { label: "Returns & Refunds", to: "/legal/returns-refund-policy" },
-    { label: "Warranty", to: "/legal/warranty-policy" },
-    { label: "Track Order", to: "/customer-service#track" }
+    { label: "Versandinformationen", to: "/legal/shipping-policy" },
+    { label: "Rückgabe & Rückerstattung", to: "/legal/returns-refund-policy" },
+    { label: "Garantie", to: "/legal/warranty-policy" }
   ],
   legal: [
-    { label: "Terms & Conditions", to: "/legal/terms-and-conditions" },
-    { label: "Privacy Policy", to: "/legal/privacy-policy" },
-    { label: "Cookie Policy", to: "/legal/cookie-policy" },
+    { label: "AGB", to: "/legal/terms-and-conditions" },
+    { label: "Datenschutz", to: "/legal/privacy-policy" },
+    { label: "Cookie-Richtlinie", to: "/legal/cookie-policy" },
     { label: "Impressum", to: "/legal/impressum" },
     { label: "Authenticity Disclaimer", to: "/legal/authenticity-disclaimer" },
     { label: "Brand Disclaimer", to: "/legal/brand-disclaimer" }
   ],
-  brands: [
-    { label: "Rolex", to: "/brands/rolex" },
-    { label: "Patek Philippe", to: "/brands/patek-philippe" },
-    { label: "Omega", to: "/brands/omega" },
-    { label: "Cartier", to: "/brands/cartier" },
-    { label: "Audemars Piguet", to: "/brands/audemars-piguet" },
-    { label: "All Brands", to: "/brands" }
-  ]
+  brands: BRAND_DATA.slice(0, 6).map(b => ({ label: b.name, to: `/brands/${b.slug}` })).concat([{ label: "Alle Marken", to: "/brands" }])
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-[#070707] border-t border-white/5">
+    <footer className="bg-background border-t border-border">
       {/* Brand disclaimer */}
-      <div className="max-w-7xl mx-auto px-6 py-10 border-b border-white/5">
-        <p className="text-[10px] tracking-[0.05em] leading-relaxed text-[#8E8E93] max-w-4xl">
+      <div className="max-w-7xl mx-auto px-6 py-10 border-b border-border">
+        <p className="text-[10px] tracking-[0.05em] leading-relaxed text-muted-foreground max-w-4xl">
           {BRAND_DISCLAIMER}
         </p>
       </div>
@@ -51,17 +43,17 @@ export default function Footer() {
           {/* Logo column */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/">
-              <h2 className="font-display text-xl tracking-[0.08em] text-[#E5E5E5] mb-4">
+              <h2 className="font-display text-xl tracking-[0.08em] text-foreground mb-4">
                 <span className="font-light">KARIV</span>{' '}
-                <span className="text-[#C5A367]">GLAMOUR</span>
+                <span className="text-primary">GLAMOUR</span>
               </h2>
             </Link>
-            <p className="text-xs text-[#8E8E93] leading-relaxed mb-6">
-              Your destination for authenticated luxury timepieces from the world's most iconic maisons.
+            <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+              Ihr Ziel für authentifizierte Luxusuhren von den ikonischsten Manufakturen der Welt.
             </p>
             <div className="flex gap-4">
               {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(social => (
-                <a key={social} href="#" className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] hover:text-[#C5A367] transition-colors">
+                <a key={social} href="#" className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-primary transition-colors">
                   {social.slice(0, 2)}
                 </a>
               ))}
@@ -70,17 +62,17 @@ export default function Footer() {
 
           {/* Link columns */}
           {[
-            { title: "Company", links: footerLinks.company },
-            { title: "Customer Service", links: footerLinks.service },
-            { title: "Legal", links: footerLinks.legal },
-            { title: "Brands", links: footerLinks.brands }
+            { title: "Unternehmen", links: footerLinks.company },
+            { title: "Kundenservice", links: footerLinks.service },
+            { title: "Rechtliches", links: footerLinks.legal },
+            { title: "Marken", links: footerLinks.brands }
           ].map(col => (
             <div key={col.title}>
-              <h3 className="text-[10px] tracking-[0.2em] uppercase text-[#C5A367] font-medium mb-5">{col.title}</h3>
+              <h3 className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-5">{col.title}</h3>
               <ul className="space-y-3">
                 {col.links.map(link => (
                   <li key={link.to}>
-                    <Link to={link.to} className="text-xs text-[#8E8E93] hover:text-[#E5E5E5] transition-colors">
+                    <Link to={link.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -92,13 +84,13 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/5">
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[10px] text-[#8E8E93]">© {new Date().getFullYear()} Kariv Glamour. All rights reserved.</p>
+          <p className="text-[10px] text-muted-foreground">© {new Date().getFullYear()} Kariv Glamour. Alle Rechte vorbehalten.</p>
           <div className="flex gap-6">
-            <Link to="/legal/privacy-policy" className="text-[10px] text-[#8E8E93] hover:text-[#E5E5E5]">Privacy</Link>
-            <Link to="/legal/terms-and-conditions" className="text-[10px] text-[#8E8E93] hover:text-[#E5E5E5]">Terms</Link>
-            <Link to="/legal/cookie-policy" className="text-[10px] text-[#8E8E93] hover:text-[#E5E5E5]">Cookies</Link>
+            <Link to="/legal/privacy-policy" className="text-[10px] text-muted-foreground hover:text-foreground">Datenschutz</Link>
+            <Link to="/legal/terms-and-conditions" className="text-[10px] text-muted-foreground hover:text-foreground">AGB</Link>
+            <Link to="/legal/cookie-policy" className="text-[10px] text-muted-foreground hover:text-foreground">Cookies</Link>
           </div>
         </div>
       </div>

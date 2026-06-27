@@ -44,9 +44,9 @@ export default function BrandDetail() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="h-64 bg-[#111] animate-pulse mb-10" />
-        <div className="h-8 bg-[#151515] w-48 mb-4" />
-        <div className="h-4 bg-[#151515] w-full max-w-xl" />
+        <div className="h-64 bg-card animate-pulse mb-10" />
+        <div className="h-8 bg-card w-48 mb-4" />
+        <div className="h-4 bg-card w-full max-w-xl" />
       </div>
     );
   }
@@ -58,21 +58,21 @@ export default function BrandDetail() {
         {brand?.heroImage ? (
           <img src={brand.heroImage} alt={brandName} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#111] to-[#0A0A0B]" />
+          <div className="w-full h-full bg-gradient-to-br from-card to-background" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-16 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-4">
-            <Link to="/" className="hover:text-[#E5E5E5]">Home</Link>
+          <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-4">
+            <Link to="/" className="hover:text-foreground">Start</Link>
             <ChevronRight size={10} />
-            <Link to="/brands" className="hover:text-[#E5E5E5]">Brands</Link>
+            <Link to="/brands" className="hover:text-foreground">Marken</Link>
             <ChevronRight size={10} />
-            <span className="text-[#E5E5E5]">{brandName}</span>
+            <span className="text-foreground">{brandName}</span>
           </div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-4xl md:text-6xl font-light text-[#E5E5E5] tracking-tight"
+            className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight"
           >
             {brandName}
           </motion.h1>
@@ -82,17 +82,17 @@ export default function BrandDetail() {
       {/* Brand story */}
       <section className="max-w-7xl mx-auto px-6 py-16 md:py-24">
         <div className="max-w-3xl">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5A367] mb-4 block">The Maison</span>
-          <p className="text-sm text-[#8E8E93] leading-relaxed">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">Die Manufaktur</span>
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {brand?.longDescription || brand?.shortDescription ||
-              `Explore our curated selection of authentic ${brandName} timepieces. Each watch has been inspected and authenticated by our team of horological experts.`}
+              `Entdecken Sie unsere kuratierte Auswahl an authentischen ${brandName} Zeitmessern. Jede Uhr wurde von unserem Team horologischer Experten inspiziert und authentifiziert.`}
           </p>
         </div>
 
         {/* Brand disclaimer */}
-        <div className="mt-8 border border-white/5 p-4 flex items-start gap-3">
-          <ShieldCheck size={14} className="text-[#C5A367] flex-shrink-0 mt-0.5" />
-          <p className="text-[10px] text-[#8E8E93] leading-relaxed">
+        <div className="mt-8 border border-border p-4 flex items-start gap-3">
+          <ShieldCheck size={14} className="text-primary flex-shrink-0 mt-0.5" />
+          <p className="text-[10px] text-muted-foreground leading-relaxed">
             {brand?.brandDisclaimer || BRAND_DISCLAIMER}
           </p>
         </div>
@@ -100,15 +100,15 @@ export default function BrandDetail() {
 
       {/* Collections */}
       {collections.length > 0 && (
-        <section className="border-t border-white/5 py-16 md:py-20">
+        <section className="border-t border-border py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-6">
-            <h2 className="font-display text-2xl text-[#E5E5E5] font-light mb-10">Collections</h2>
+            <h2 className="font-display text-2xl text-foreground font-light mb-10">Kollektionen</h2>
             <div className="flex gap-3 flex-wrap">
               {collections.map(col => (
                 <Link
                   key={col.id}
                   to={`/shop?brand=${encodeURIComponent(brandName)}`}
-                  className="border border-white/10 px-5 py-3 text-xs text-[#E5E5E5] hover:border-[#C5A367] hover:text-[#C5A367] transition-colors"
+                  className="border border-border px-5 py-3 text-xs text-foreground hover:border-primary hover:text-primary transition-colors"
                 >
                   {col.collectionName}
                 </Link>
@@ -119,15 +119,15 @@ export default function BrandDetail() {
       )}
 
       {/* Products */}
-      <section className="border-t border-white/5 py-16 md:py-20">
+      <section className="border-t border-border py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="font-display text-2xl text-[#E5E5E5] font-light">Available Timepieces</h2>
-              <p className="text-xs text-[#8E8E93] mt-1">{products.length} watch{products.length !== 1 ? 'es' : ''} available</p>
+              <h2 className="font-display text-2xl text-foreground font-light">Verfügbare Zeitmesser</h2>
+              <p className="text-xs text-muted-foreground mt-1">{products.length} Uhr{products.length !== 1 ? 'en' : ''} verfügbar</p>
             </div>
-            <Link to={`/shop?brand=${encodeURIComponent(brandName)}`} className="text-[10px] tracking-[0.12em] uppercase text-[#C5A367] hover:text-[#E5E5E5]">
-              View All in Shop →
+            <Link to={`/shop?brand=${encodeURIComponent(brandName)}`} className="text-[10px] tracking-[0.12em] uppercase text-primary hover:text-foreground">
+              Alle im Shop ansehen →
             </Link>
           </div>
           {products.length > 0 ? (
@@ -135,8 +135,8 @@ export default function BrandDetail() {
               {products.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           ) : (
-            <div className="text-center py-16 border border-white/5">
-              <p className="text-[#8E8E93] text-sm">No {brandName} watches currently available. Check back soon.</p>
+            <div className="text-center py-16 border border-border">
+              <p className="text-muted-foreground text-sm">Derzeit keine {brandName} Uhren verfügbar. Bitte kommen Sie später zurück.</p>
             </div>
           )}
         </div>
@@ -144,14 +144,14 @@ export default function BrandDetail() {
 
       {/* FAQs */}
       {brand?.faqs?.length > 0 && (
-        <section className="border-t border-white/5 py-16 md:py-20">
+        <section className="border-t border-border py-16 md:py-20">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className="font-display text-2xl text-[#E5E5E5] font-light mb-10">Frequently Asked Questions</h2>
+            <h2 className="font-display text-2xl text-foreground font-light mb-10">Häufig gestellte Fragen</h2>
             <div className="space-y-6">
               {brand.faqs.map((faq, i) => (
-                <div key={i} className="border-b border-white/5 pb-6">
-                  <h3 className="text-sm text-[#E5E5E5] font-medium mb-2">{faq.question}</h3>
-                  <p className="text-xs text-[#8E8E93] leading-relaxed">{faq.answer}</p>
+                <div key={i} className="border-b border-border pb-6">
+                  <h3 className="text-sm text-foreground font-medium mb-2">{faq.question}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{faq.answer}</p>
                 </div>
               ))}
             </div>

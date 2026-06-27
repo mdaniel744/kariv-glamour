@@ -5,6 +5,7 @@ import FeaturedProducts from '@/components/home/FeaturedProducts';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import EditorialSection from '@/components/home/EditorialSection';
 import TrustBar from '@/components/shared/TrustBar';
+import PopularCollections from '@/components/home/PopularCollections';
 
 export default function Home() {
   return (
@@ -13,16 +14,16 @@ export default function Home() {
       <BrandMarquee />
       <FeaturedProducts
         index="01"
-        title="Featured Timepieces"
-        subtitle="Handpicked selections from our curated inventory"
+        title="Ausgewählte Zeitmesser"
+        subtitle="Handverlesene Auswahl aus unserem kuratierten Inventar"
         filter={{ featured: true }}
         linkTo="/shop"
         limit={4}
       />
       <FeaturedProducts
         index="02"
-        title="New Arrivals"
-        subtitle="The latest additions to our collection"
+        title="Neuheiten"
+        subtitle="Die neuesten Ergänzungen unserer Kollektion"
         filter={{ isNewArrival: true }}
         linkTo="/shop?isNewArrival=true"
         limit={4}
@@ -30,12 +31,13 @@ export default function Home() {
       <FeaturedProducts
         index="03"
         title="Certified Pre-Owned"
-        subtitle="Authenticated and inspected pre-owned luxury watches"
+        subtitle="Authentifizierte und geprüfte gebrauchte Luxusuhren"
         filter={{ isCertifiedPreOwned: true }}
         linkTo="/shop?isCertifiedPreOwned=true"
         limit={4}
       />
       <CategoryGrid />
+      <PopularCollections />
       <TrustBar />
       <EditorialSection />
     </div>

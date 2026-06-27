@@ -11,17 +11,17 @@ const WATCH_IMAGES = {
 };
 
 const categories = [
-  { title: "Men's Watches", subtitle: "Discover the Collection", to: "/shop?gender=Men", image: WATCH_IMAGES.dive, span: "md:col-span-2 md:row-span-2" },
-  { title: "Women's Watches", subtitle: "Elegance Redefined", to: "/shop?gender=Women", image: WATCH_IMAGES.women, span: "" },
-  { title: "Vintage & Collectible", subtitle: "Timeless Treasures", to: "/shop?isVintage=true", image: WATCH_IMAGES.vintage, span: "" },
-  { title: "New Arrivals", subtitle: "Just Added", to: "/shop?isNewArrival=true", image: WATCH_IMAGES.dress, span: "md:col-span-2" }
+  { title: "Herrenuhren", subtitle: "Kollektion entdecken", to: "/shop?gender=Men", image: WATCH_IMAGES.dive, span: "md:col-span-2 md:row-span-2" },
+  { title: "Damenuhren", subtitle: "Eleganz neu definiert", to: "/shop?gender=Women", image: WATCH_IMAGES.women, span: "" },
+  { title: "Vintage & Sammlerstücke", subtitle: "Zeitlose Schätze", to: "/shop?isVintage=true", image: WATCH_IMAGES.vintage, span: "" },
+  { title: "Neuheiten", subtitle: "Frisch eingetroffen", to: "/shop?isNewArrival=true", image: WATCH_IMAGES.dress, span: "md:col-span-2" }
 ];
 
 export default function CategoryGrid() {
   return (
     <section className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
-        <SectionHeading index="04" title="Shop by Category" subtitle="Find the perfect timepiece for every occasion" />
+        <SectionHeading index="04" title="Nach Kategorie einkaufen" subtitle="Finden Sie die perfekte Uhr für jeden Anlass" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-[200px] md:auto-rows-[250px]">
           {categories.map((cat, i) => (
             <motion.div

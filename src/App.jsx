@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import { CartProvider } from '@/lib/cartContext';
+import { ThemeProvider } from '@/lib/themeContext';
 
 // Site layout
 import SiteLayout from '@/components/layout/SiteLayout';
@@ -105,6 +106,7 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
+        <ThemeProvider>
         <CartProvider>
           <Router>
             <ScrollToTop />
@@ -112,6 +114,7 @@ function App() {
           </Router>
           <Toaster />
         </CartProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </AuthProvider>
   )

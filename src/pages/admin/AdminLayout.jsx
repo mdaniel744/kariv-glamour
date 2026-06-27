@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard } from 'lucide-react';
+
+function AdminDarkMode() {
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    return () => {
+      // Don't remove dark on unmount — let the theme context manage it
+      // Only remove if the user's saved theme is light
+      if (localStorage.getItem('kariv-theme') !== 'dark') {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+  }, []);
+  return null;
+}
 
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -18,16 +32,18 @@ export default function AdminLayout() {
   const { pathname } = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] flex">
+    <>
+    <AdminDarkMode />
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className="w-56 border-r border-white/5 flex-shrink-0 hidden md:block">
-        <div className="p-5 border-b border-white/5">
+      <aside className="w-56 border-r border-border flex-shrink-0 hidden md:block">
+        <div className="p-5 border-b border-border">
           <Link to="/">
-            <span className="font-display text-sm tracking-[0.08em] text-[#E5E5E5]">
-              <span className="font-light">KARIV</span> <span className="text-[#C5A367]">GLAMOUR</span>
+            <span className="font-display text-sm tracking-[0.08em] text-foreground">
+              <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
             </span>
           </Link>
-          <p className="text-[9px] tracking-[0.15em] uppercase text-[#8E8E93] mt-1">Admin Console</p>
+          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">Admin Console</p>
         </div>
         <nav className="p-3 space-y-0.5">
           {navItems.map(item => {
@@ -37,7 +53,7 @@ export default function AdminLayout() {
                 key={item.to}
                 to={item.to}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs transition-colors ${
-                  active ? 'bg-[#C5A367]/10 text-[#C5A367]' : 'text-[#8E8E93] hover:text-[#E5E5E5] hover:bg-white/5'
+                  active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
               >
                 <item.icon size={15} />
@@ -55,5 +71,6 @@ export default function AdminLayout() {
         </div>
       </main>
     </div>
+    </>
   );
 }

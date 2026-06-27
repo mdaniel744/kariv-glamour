@@ -10,9 +10,9 @@ export default function HeroSection() {
     <section className="relative h-[90vh] md:h-screen overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img src={HERO_IMAGE} alt="Luxury watch movement macro" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-transparent to-[#0A0A0B]/30" />
+        <img src={HERO_IMAGE} alt="Luxusuhren Bewegung Makro" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
       </div>
 
       {/* Content */}
@@ -22,30 +22,30 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="inline-block text-[10px] tracking-[0.3em] uppercase text-[#C5A367] mb-6 font-medium"
+            className="inline-block text-[10px] tracking-[0.3em] uppercase text-primary mb-6 font-medium"
           >
-            Authenticated Luxury Timepieces
+            Authentifizierte Luxusuhren
           </motion.span>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-[#E5E5E5] leading-[1.1] tracking-tight mb-6"
+            className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-foreground leading-[1.1] tracking-tight mb-6"
           >
-            Discover Authentic<br />
-            Luxury Watches from<br />
-            the World's Most<br />
-            <span className="text-[#C5A367] italic">Iconic Maisons.</span>
+            Entdecken Sie<br />
+            authentische Luxusuhren<br />
+            von den ikonischsten<br />
+            <span className="text-primary italic">Manufakturen der Welt.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-sm md:text-base text-[#8E8E93] leading-relaxed mb-10 max-w-lg"
+            className="text-sm md:text-base text-muted-foreground leading-relaxed mb-10 max-w-lg"
           >
-            Explore a curated selection of new, pre-owned, vintage, and collectible timepieces from Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet and more.
+            Eine kuratierte Auswahl an neuen, gebrauchten, vintage und Sammler-Uhren von Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet und mehr.
           </motion.p>
 
           <motion.div
@@ -56,16 +56,16 @@ export default function HeroSection() {
           >
             <Link
               to="/shop"
-              className="inline-flex items-center justify-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:bg-[#B8944F] transition-colors group"
+              className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:bg-primary/90 transition-colors group"
             >
-              Shop Luxury Watches
+              Luxusuhren entdecken
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to="/brands"
-              className="inline-flex items-center justify-center gap-2 border border-white/20 text-[#E5E5E5] text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:border-[#C5A367] hover:text-[#C5A367] transition-colors"
+              className="inline-flex items-center justify-center gap-2 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:border-primary hover:text-primary transition-colors"
             >
-              Explore Brands
+              Marken erkunden
             </Link>
           </motion.div>
         </div>
@@ -78,7 +78,7 @@ export default function HeroSection() {
         transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#C5A367]" />
+        <div className="w-px h-12 bg-gradient-to-b from-transparent to-primary" />
       </motion.div>
     </section>
   );

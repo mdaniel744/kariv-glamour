@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA } from '@/lib/constants';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 
 export default function Brands() {
   const [brands, setBrands] = useState([]);
@@ -19,11 +19,17 @@ export default function Brands() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
+        <Link to="/" className="hover:text-foreground">Start</Link>
+        <ChevronRight size={10} />
+        <span className="text-foreground">Marken</span>
+      </div>
+
       <div className="mb-14">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5A367] mb-2 block">The Maisons</span>
-        <h1 className="font-display text-4xl md:text-6xl font-light text-[#E5E5E5] tracking-tight">Our Brands</h1>
-        <p className="text-sm text-[#8E8E93] mt-3 max-w-xl">
-          Explore timepieces from the world's most respected watchmakers. Each brand represents centuries of horological excellence.
+        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">Die Manufakturen</span>
+        <h1 className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight">Unsere Marken</h1>
+        <p className="text-sm text-muted-foreground mt-3 max-w-xl">
+          Entdecken Sie Zeitmesser von den renommiertesten Uhrenherstellern der Welt. Jede Marke repräsentiert jahrhundertelange horologische Exzellenz.
         </p>
       </div>
 
@@ -36,24 +42,24 @@ export default function Brands() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
           >
-            <Link to={`/brands/${brand.slug}`} className="group block border border-white/5 hover:border-[#C5A367]/30 transition-all">
-              <div className="aspect-[16/9] bg-[#111] overflow-hidden relative">
+            <Link to={`/brands/${brand.slug}`} className="group block border border-border hover:border-primary/30 transition-all">
+              <div className="aspect-[16/9] bg-card overflow-hidden relative">
                 {brand.heroImage ? (
                   <img src={brand.heroImage} alt={brand.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="font-display text-3xl text-[#222] font-light tracking-[0.1em]">{brand.name}</span>
+                    <span className="font-display text-3xl text-muted-foreground/30 font-light tracking-[0.1em]">{brand.name}</span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
               </div>
               <div className="p-6">
-                <h2 className="font-display text-xl text-[#E5E5E5] font-light group-hover:text-[#C5A367] transition-colors">{brand.name}</h2>
+                <h2 className="font-display text-xl text-foreground font-light group-hover:text-primary transition-colors">{brand.name}</h2>
                 {brand.shortDescription && (
-                  <p className="text-xs text-[#8E8E93] mt-2 line-clamp-2 leading-relaxed">{brand.shortDescription}</p>
+                  <p className="text-xs text-muted-foreground mt-2 line-clamp-2 leading-relaxed">{brand.shortDescription}</p>
                 )}
-                <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.12em] uppercase text-[#C5A367] mt-4 group-hover:gap-3 transition-all">
-                  Explore Collection <ArrowRight size={12} />
+                <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.12em] uppercase text-primary mt-4 group-hover:gap-3 transition-all">
+                  Kollektion entdecken <ArrowRight size={12} />
                 </span>
               </div>
             </Link>

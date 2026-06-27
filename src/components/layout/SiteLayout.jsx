@@ -5,7 +5,7 @@ import Footer from './Footer';
 
 export default function SiteLayout() {
   return (
-    <div className="min-h-screen bg-[#0A0A0B]">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-16 md:pt-28">
         <Outlet />

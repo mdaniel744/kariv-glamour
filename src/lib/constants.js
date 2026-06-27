@@ -31,11 +31,11 @@ export const GENDERS = ["Men", "Women", "Unisex"];
 export const WATCH_SHAPES = ["Round", "Rectangular", "Square", "Oval", "Cushion", "Tonneau", "Octagonal"];
 
 export const SORT_OPTIONS = [
-  { value: "-created_date", label: "Newest First" },
-  { value: "price", label: "Price: Low to High" },
-  { value: "-price", label: "Price: High to Low" },
-  { value: "brand", label: "Brand A–Z" },
-  { value: "-brand", label: "Brand Z–A" }
+  { value: "-created_date", label: "Neueste zuerst" },
+  { value: "price", label: "Preis: Niedrig zu Hoch" },
+  { value: "-price", label: "Preis: Hoch zu Niedrig" },
+  { value: "brand", label: "Marke A–Z" },
+  { value: "-brand", label: "Marke Z–A" }
 ];
 
 export const BRAND_DISCLAIMER = "Kariv Glamour is an independent luxury watch ecommerce platform. Unless expressly stated, Kariv Glamour is not affiliated with, endorsed by, or an official authorized dealer of the brands displayed on this website. Brand names, model names, and trademarks are used only to identify authentic products available for sale.";

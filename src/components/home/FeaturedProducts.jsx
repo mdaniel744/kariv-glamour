@@ -29,10 +29,10 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[...Array(limit)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="aspect-[3/4] bg-[#151515] mb-4" />
-                <div className="h-3 bg-[#151515] w-20 mb-2" />
-                <div className="h-3 bg-[#151515] w-full mb-2" />
-                <div className="h-3 bg-[#151515] w-16" />
+                <div className="aspect-[3/4] bg-card mb-4" />
+                <div className="h-3 bg-card w-20 mb-2" />
+                <div className="h-3 bg-card w-full mb-2" />
+                <div className="h-3 bg-card w-16" />
               </div>
             ))}
           </div>

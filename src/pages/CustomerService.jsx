@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Mail, Phone, MapPin, Clock, ChevronDown } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, ChevronDown, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import TrustBar from '@/components/shared/TrustBar';
 
@@ -21,51 +22,59 @@ export default function CustomerService() {
 
   return (
     <div>
+      <div className="max-w-7xl mx-auto px-6 pt-8">
+        <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+          <Link to="/" className="hover:text-foreground">Start</Link>
+          <ChevronRight size={10} />
+          <span className="text-foreground">Kundenservice</span>
+        </div>
+      </div>
+
       <section className="py-20 md:py-28">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5A367] mb-4 block">Support</span>
-          <h1 className="font-display text-4xl md:text-5xl font-light text-[#E5E5E5] tracking-tight mb-4">Customer Service</h1>
-          <p className="text-sm text-[#8E8E93]">Our team of watch specialists is here to assist you.</p>
+          <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">Support</span>
+          <h1 className="font-display text-4xl md:text-5xl font-light text-foreground tracking-tight mb-4">Kundenservice</h1>
+          <p className="text-sm text-muted-foreground">Unser Team von Uhrenspezialisten ist hier, um Ihnen zu helfen.</p>
         </div>
       </section>
 
       {/* Contact methods */}
-      <section className="border-t border-white/5 py-16">
+      <section className="border-t border-border py-16">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8">
           {[
-            { icon: Mail, title: "Email", detail: "service@kariv-glamour.com", sub: "Response within 24 hours" },
-            { icon: Phone, title: "Phone", detail: "+49 (0) 123 456 789", sub: "Mon–Fri, 9:00–18:00 CET" },
-            { icon: MapPin, title: "Location", detail: "Germany", sub: "European headquarters" },
-            { icon: Clock, title: "Hours", detail: "Mon–Fri 9–18 CET", sub: "Saturday by appointment" }
+            { icon: Mail, title: "E-Mail", detail: "service@kariv-glamour.com", sub: "Antwort innerhalb von 24 Stunden" },
+            { icon: Phone, title: "Telefon", detail: "+49 (0) 123 456 789", sub: "Mo–Fr, 9:00–18:00 MEZ" },
+            { icon: MapPin, title: "Standort", detail: "Deutschland", sub: "Europäische Zentrale" },
+            { icon: Clock, title: "Öffnungszeiten", detail: "Mo–Fr 9–18 MEZ", sub: "Samstag nach Termin" }
           ].map((item, i) => (
-            <div key={i} className="border border-white/5 p-6 text-center">
-              <item.icon size={24} className="text-[#C5A367] mx-auto mb-4" strokeWidth={1.5} />
-              <h3 className="text-[11px] tracking-[0.12em] uppercase text-[#E5E5E5] font-medium mb-2">{item.title}</h3>
-              <p className="text-xs text-[#E5E5E5]">{item.detail}</p>
-              <p className="text-[10px] text-[#8E8E93] mt-1">{item.sub}</p>
+            <div key={i} className="border border-border p-6 text-center">
+              <item.icon size={24} className="text-primary mx-auto mb-4" strokeWidth={1.5} />
+              <h3 className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-2">{item.title}</h3>
+              <p className="text-xs text-foreground">{item.detail}</p>
+              <p className="text-[10px] text-muted-foreground mt-1">{item.sub}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Contact form */}
-      <section className="border-t border-white/5 py-16">
+      <section className="border-t border-border py-16">
         <div className="max-w-2xl mx-auto px-6">
-          <h2 className="font-display text-2xl text-[#E5E5E5] font-light mb-8 text-center">Send Us a Message</h2>
+          <h2 className="font-display text-2xl text-foreground font-light mb-8 text-center">Senden Sie uns eine Nachricht</h2>
           {submitted ? (
-            <div className="text-center py-12 border border-[#C5A367]/30">
-              <p className="text-[#C5A367] text-sm">Thank you for your message. We'll respond within 24 hours.</p>
+            <div className="text-center py-12 border border-primary/30">
+              <p className="text-primary text-sm">Vielen Dank für Ihre Nachricht. Wir antworten innerhalb von 24 Stunden.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid md:grid-cols-2 gap-5">
-                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Your Name" className="bg-[#111] border border-white/10 text-sm text-[#E5E5E5] px-4 py-3 placeholder:text-[#555] outline-none focus:border-[#C5A367] w-full" />
-                <input required type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="Your Email" className="bg-[#111] border border-white/10 text-sm text-[#E5E5E5] px-4 py-3 placeholder:text-[#555] outline-none focus:border-[#C5A367] w-full" />
+                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Ihr Name" className="bg-card border border-border text-sm text-foreground px-4 py-3 placeholder:text-muted-foreground/50 outline-none focus:border-primary w-full" />
+                <input required type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="Ihre E-Mail" className="bg-card border border-border text-sm text-foreground px-4 py-3 placeholder:text-muted-foreground/50 outline-none focus:border-primary w-full" />
               </div>
-              <input required value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} placeholder="Subject" className="bg-[#111] border border-white/10 text-sm text-[#E5E5E5] px-4 py-3 placeholder:text-[#555] outline-none focus:border-[#C5A367] w-full" />
-              <textarea required rows={5} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} placeholder="Your Message" className="bg-[#111] border border-white/10 text-sm text-[#E5E5E5] px-4 py-3 placeholder:text-[#555] outline-none focus:border-[#C5A367] w-full resize-none" />
-              <button type="submit" className="w-full bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-[#B8944F] transition-colors">
-                Send Message
+              <input required value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} placeholder="Betreff" className="bg-card border border-border text-sm text-foreground px-4 py-3 placeholder:text-muted-foreground/50 outline-none focus:border-primary w-full" />
+              <textarea required rows={5} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} placeholder="Ihre Nachricht" className="bg-card border border-border text-sm text-foreground px-4 py-3 placeholder:text-muted-foreground/50 outline-none focus:border-primary w-full resize-none" />
+              <button type="submit" className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
+                Nachricht senden
               </button>
             </form>
           )}
@@ -73,27 +82,27 @@ export default function CustomerService() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="border-t border-white/5 py-16 bg-[#070707]">
+      <section id="faq" className="border-t border-border py-16 bg-secondary">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="font-display text-2xl text-[#E5E5E5] font-light mb-10 text-center">Frequently Asked Questions</h2>
+          <h2 className="font-display text-2xl text-foreground font-light mb-10 text-center">Häufig gestellte Fragen</h2>
           {faqs.length > 0 ? (
             <div className="space-y-3">
               {faqs.map((faq, i) => (
-                <div key={faq.id} className="border border-white/5">
+                <div key={faq.id} className="border border-border bg-background">
                   <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left">
-                    <span className="text-sm text-[#E5E5E5] pr-4">{faq.question}</span>
-                    <ChevronDown size={16} className={`text-[#C5A367] flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                    <span className="text-sm text-foreground pr-4">{faq.question}</span>
+                    <ChevronDown size={16} className={`text-primary flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                   </button>
                   {openFaq === i && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-5 pb-5">
-                      <p className="text-xs text-[#8E8E93] leading-relaxed">{faq.answer}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{faq.answer}</p>
                     </motion.div>
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-center text-sm text-[#8E8E93]">FAQ content is being prepared. Please contact us directly for any questions.</p>
+            <p className="text-center text-sm text-muted-foreground">FAQ-Inhalte werden vorbereitet. Bitte kontaktieren Sie uns direkt bei Fragen.</p>
           )}
         </div>
       </section>

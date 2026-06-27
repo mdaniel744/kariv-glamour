@@ -2,20 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-export default function SectionHeading({ index, title, subtitle, linkTo, linkLabel = "View All" }) {
+export default function SectionHeading({ index, title, subtitle, linkTo, linkLabel = "Alle ansehen" }) {
   return (
     <div className="flex items-end justify-between mb-10 md:mb-14">
       <div>
         {index && (
-          <span className="text-[11px] tracking-[0.2em] text-[#C5A367] font-display mb-2 block">{index}</span>
+          <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block">{index}</span>
         )}
-        <h2 className="font-display text-3xl md:text-4xl font-light text-[#E5E5E5] tracking-tight">{title}</h2>
+        <h2 className="font-display text-3xl md:text-4xl font-light text-foreground tracking-tight">{title}</h2>
         {subtitle && (
-          <p className="text-sm text-[#8E8E93] mt-2 max-w-lg">{subtitle}</p>
+          <p className="text-sm text-muted-foreground mt-2 max-w-lg">{subtitle}</p>
         )}
       </div>
       {linkTo && (
-        <Link to={linkTo} className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-[#C5A367] hover:text-[#E5E5E5] transition-colors group">
+        <Link to={linkTo} className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors group">
           {linkLabel}
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>

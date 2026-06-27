@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 
 export default function BrandMarquee() {
   return (
-    <section className="py-16 md:py-24 border-y border-white/5">
+    <section className="py-16 md:py-24 border-y border-border">
       <div className="max-w-7xl mx-auto px-6 mb-10">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5A367] font-medium">Featured Maisons</span>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-primary font-medium">Ausgewählte Manufakturen</span>
       </div>
       <div className="overflow-hidden">
         <motion.div
@@ -19,7 +19,7 @@ export default function BrandMarquee() {
             <Link
               key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
-              className="flex-shrink-0 text-xl md:text-2xl font-display font-light text-[#555] hover:text-[#C5A367] transition-colors duration-500 tracking-[0.05em]"
+              className="flex-shrink-0 text-xl md:text-2xl font-display font-light text-muted-foreground/40 hover:text-primary transition-colors duration-500 tracking-[0.05em]"
             >
               {brand.name}
             </Link>
