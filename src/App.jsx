@@ -32,6 +32,9 @@ import RolexCollectionPage from '@/pages/RolexCollectionPage';
 import PatekPhilippePage from '@/pages/PatekPhilippePage';
 import PatekPhilippeSeoLanding from '@/pages/PatekPhilippeSeoLanding';
 import PatekPhilippeCollectionPage from '@/pages/PatekPhilippeCollectionPage';
+import OmegaPage from '@/pages/OmegaPage';
+import OmegaSeoLanding from '@/pages/OmegaSeoLanding';
+import OmegaCollectionPage from '@/pages/OmegaCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -81,6 +84,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands" element={<Brands />} />
         <Route path="/brands/rolex" element={<RolexPage />} />
         <Route path="/brands/patek-philippe" element={<PatekPhilippePage />} />
+        <Route path="/brands/omega" element={<OmegaPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -125,6 +129,31 @@ const AuthenticatedApp = () => {
         <Route path="/patek-philippe/watchmaking" element={<PatekPhilippeSeoLanding slug="patek-philippe-watchmaking" />} />
         <Route path="/patek-philippe/maintenance" element={<PatekPhilippeSeoLanding slug="patek-philippe-maintenance" />} />
         <Route path="/patek-philippe/:slug" element={<PatekPhilippeCollectionPage />} />
+
+        {/* Omega SEO landing pages */}
+        <Route path="/omega-kaufen" element={<OmegaSeoLanding slug="omega-kaufen" />} />
+        <Route path="/omega-uhr-kaufen" element={<OmegaSeoLanding slug="omega-uhr-kaufen" />} />
+        <Route path="/omega-gebraucht-kaufen" element={<OmegaSeoLanding slug="omega-gebraucht-kaufen" />} />
+        <Route path="/gebrauchte-omega-uhren" element={<OmegaSeoLanding slug="gebrauchte-omega-uhren" />} />
+        <Route path="/omega-speedmaster-kaufen" element={<OmegaSeoLanding slug="omega-speedmaster-kaufen" />} />
+        <Route path="/omega-moonwatch-kaufen" element={<OmegaSeoLanding slug="omega-moonwatch-kaufen" />} />
+        <Route path="/omega-seamaster-kaufen" element={<OmegaSeoLanding slug="omega-seamaster-kaufen" />} />
+        <Route path="/omega-seamaster-diver-300m-kaufen" element={<OmegaSeoLanding slug="omega-seamaster-diver-300m-kaufen" />} />
+        <Route path="/omega-seamaster-planet-ocean-kaufen" element={<OmegaSeoLanding slug="omega-seamaster-planet-ocean-kaufen" />} />
+        <Route path="/omega-seamaster-aqua-terra-kaufen" element={<OmegaSeoLanding slug="omega-seamaster-aqua-terra-kaufen" />} />
+        <Route path="/omega-constellation-kaufen" element={<OmegaSeoLanding slug="omega-constellation-kaufen" />} />
+        <Route path="/omega-de-ville-kaufen" element={<OmegaSeoLanding slug="omega-de-ville-kaufen" />} />
+        <Route path="/omega-herren" element={<OmegaSeoLanding slug="omega-herren" />} />
+        <Route path="/omega-damen" element={<OmegaSeoLanding slug="omega-damen" />} />
+        <Route path="/welche-omega-kaufen" element={<OmegaSeoLanding slug="welche-omega-kaufen" />} />
+        <Route path="/omega-speedmaster-oder-seamaster" element={<OmegaSeoLanding slug="omega-speedmaster-oder-seamaster" />} />
+        <Route path="/omega-neu-oder-gebraucht" element={<OmegaSeoLanding slug="omega-neu-oder-gebraucht" />} />
+        <Route path="/omega/story" element={<OmegaSeoLanding slug="omega-story" />} />
+        <Route path="/omega/watchmaking" element={<OmegaSeoLanding slug="omega-watchmaking" />} />
+        <Route path="/omega/maintenance" element={<OmegaSeoLanding slug="omega-maintenance" />} />
+        <Route path="/omega/master-chronometer-guide" element={<OmegaSeoLanding slug="omega-master-chronometer-guide" />} />
+        <Route path="/omega/co-axial-guide" element={<OmegaSeoLanding slug="omega-co-axial-guide" />} />
+        <Route path="/omega/:slug" element={<OmegaCollectionPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/about" element={<About />} />
