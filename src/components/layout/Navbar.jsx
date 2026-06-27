@@ -4,6 +4,7 @@ import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon } from 'luc
 import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
 import { BRAND_DATA } from '@/lib/constants';
+import BrandLogo from '@/components/shared/BrandLogo';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
@@ -74,9 +75,10 @@ export default function Navbar() {
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
                     >
-                      <div className="bg-popover border border-border rounded p-6 grid grid-cols-3 gap-x-10 gap-y-3 min-w-[420px] shadow-lg">
+                      <div className="bg-popover border border-border rounded p-6 grid grid-cols-2 gap-x-8 gap-y-3 min-w-[480px] shadow-lg">
                         {BRAND_DATA.map(b => (
-                          <Link key={b.slug} to={`/brands/${b.slug}`} className="text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                          <Link key={b.slug} to={`/brands/${b.slug}`} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                            <BrandLogo slug={b.slug} className="h-3.5 w-auto" alt="" />
                             {b.name}
                           </Link>
                         ))}
