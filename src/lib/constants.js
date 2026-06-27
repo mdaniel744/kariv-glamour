@@ -16,6 +16,20 @@ export const BRAND_DATA = [
   { name: "Girard-Perregaux", slug: "girard-perregaux" }
 ];
 
+export const BRAND_LOGOS = {
+  "rolex": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d565f9b76_RolexLogo.svg",
+  "patek-philippe": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/f4bf21975_PatekPhilippeLogo.svg",
+  "omega": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/711da8f99_OmegaWatchesLogo.svg",
+  "cartier": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/446c28c26_Cartier.svg",
+  "audemars-piguet": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0295b16b6_AudemarsPiguetlogoblack.svg",
+  "breitling": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b66c03d45_Breitling1884.svg",
+  "hublot": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/504665e88_HublotLogo.svg",
+  "grand-seiko": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/cb784ea15_GrandSeiko.svg",
+  "tag-heuer": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5087a4d1c_TagHeuerLogo.svg",
+  "tudor": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0f27e79fb_TudorLogo.svg",
+  "bvlgari": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2e66a7b94_bvlgarikaufen.svg",
+};
+
 export const DIAL_COLORS = ["Black", "Blue", "Green", "Gray", "Silver", "White", "Brown", "Champagne", "Pink", "Red", "Violet", "Orange", "Yellow", "Mother of Pearl", "Skeleton", "Pavé", "Beige"];
 
 export const CASE_MATERIALS = ["Stainless Steel", "Yellow Gold", "Rose Gold", "White Gold", "Platinum", "Titanium", "Ceramic", "Carbon", "Bronze", "Two-Tone", "Steel and Gold", "Steel and Rose Gold"];

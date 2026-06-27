@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND_DATA } from '@/lib/constants';
+import { BRAND_DATA, BRAND_LOGOS } from '@/lib/constants';
 import { motion } from 'framer-motion';
 
+const LOGO_BRANDS = BRAND_DATA.filter(brand => BRAND_LOGOS[brand.slug]);
+
 export default function BrandMarquee() {
+  const items = [...LOGO_BRANDS, ...LOGO_BRANDS];
+
   return (
     <section className="py-16 md:py-24 border-y border-border">
       <div className="max-w-7xl mx-auto px-6 mb-10">
@@ -11,17 +15,21 @@ export default function BrandMarquee() {
       </div>
       <div className="overflow-hidden">
         <motion.div
-          animate={{ x: [0, -1500] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-          className="flex gap-12 md:gap-16 whitespace-nowrap"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          className="flex gap-10 md:gap-16 whitespace-nowrap"
         >
-          {[...BRAND_DATA, ...BRAND_DATA].map((brand, i) => (
+          {items.map((brand, i) => (
             <Link
               key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
-              className="flex-shrink-0 text-xl md:text-2xl font-display font-light text-muted-foreground/40 hover:text-primary transition-colors duration-500 tracking-[0.05em]"
+              className="flex-shrink-0 h-10 md:h-12 flex items-center justify-center group"
             >
-              {brand.name}
+              <img
+                src={BRAND_LOGOS[brand.slug]}
+                alt={`${brand.name} watches at Kariv Glamour`}
+                className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+              />
             </Link>
           ))}
         </motion.div>
