@@ -24,5 +24,5 @@ export default function BrandLogo({ slug, alt = '', className = '', style }) {
 
   if (!src) return null;
 
-  return <img src="https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5bec649e7_Omegawhitelogo.svg" alt={alt} className={className} style={style} />;
+  return <img src="https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/cb784ea15_GrandSeiko.svg" alt={alt} className={className} style={style} />;
 }
