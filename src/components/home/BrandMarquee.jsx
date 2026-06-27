@@ -28,7 +28,7 @@ export default function BrandMarquee() {
               <img
                 src={BRAND_LOGOS[brand.slug]}
                 alt={`${brand.name} watches at Kariv Glamour`}
-                className="h-full w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-500 dark:invert dark:opacity-80"
+                className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
               />
             </Link>
           ))}
