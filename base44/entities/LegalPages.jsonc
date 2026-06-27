@@ -1,0 +1,34 @@
+{
+  "name": "LegalPages",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "de",
+        "en"
+      ],
+      "default": "de"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "slug",
+    "content"
+  ]
+}

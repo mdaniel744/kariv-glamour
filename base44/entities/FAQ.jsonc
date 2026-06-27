@@ -1,0 +1,47 @@
+{
+  "name": "FAQ",
+  "type": "object",
+  "properties": {
+    "question": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "General",
+        "Shipping",
+        "Payment",
+        "Returns",
+        "Authentication",
+        "Warranty",
+        "Brand-Specific"
+      ]
+    },
+    "relatedBrand": {
+      "type": "string"
+    },
+    "relatedPage": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "de",
+        "en"
+      ],
+      "default": "de"
+    },
+    "sortOrder": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "question",
+    "answer",
+    "category"
+  ]
+}

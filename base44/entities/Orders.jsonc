@@ -1,0 +1,91 @@
+{
+  "name": "Orders",
+  "type": "object",
+  "properties": {
+    "customerName": {
+      "type": "string"
+    },
+    "customerEmail": {
+      "type": "string"
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "orderStatus": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Processing",
+        "Shipped",
+        "Delivered",
+        "Cancelled",
+        "Refunded"
+      ],
+      "default": "Pending"
+    },
+    "paymentStatus": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Paid",
+        "Failed",
+        "Refunded"
+      ],
+      "default": "Pending"
+    },
+    "shippingStatus": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Shipped",
+        "In Transit",
+        "Delivered"
+      ],
+      "default": "Pending"
+    },
+    "totalAmount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "shippingAddress": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "string"
+    },
+    "paymentMethod": {
+      "type": "string"
+    },
+    "trackingNumber": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customerName",
+    "customerEmail",
+    "totalAmount"
+  ]
+}

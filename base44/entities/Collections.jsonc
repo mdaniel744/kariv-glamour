@@ -1,0 +1,35 @@
+{
+  "name": "Collections",
+  "type": "object",
+  "properties": {
+    "brand": {
+      "type": "string"
+    },
+    "collectionName": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "string"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "brand",
+    "collectionName",
+    "slug"
+  ]
+}

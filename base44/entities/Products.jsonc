@@ -1,0 +1,210 @@
+{
+  "name": "Products",
+  "type": "object",
+  "properties": {
+    "productTitle": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "collection": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "referenceNumber": {
+      "type": "string"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "New",
+        "Unworn",
+        "Excellent",
+        "Very Good",
+        "Good",
+        "Vintage"
+      ]
+    },
+    "yearOfProduction": {
+      "type": "number"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Men",
+        "Women",
+        "Unisex"
+      ]
+    },
+    "caseDiameter": {
+      "type": "string"
+    },
+    "caseMaterial": {
+      "type": "string"
+    },
+    "braceletMaterial": {
+      "type": "string"
+    },
+    "dialColor": {
+      "type": "string"
+    },
+    "watchShape": {
+      "type": "string",
+      "enum": [
+        "Round",
+        "Rectangular",
+        "Square",
+        "Oval",
+        "Cushion",
+        "Tonneau",
+        "Octagonal"
+      ]
+    },
+    "movementType": {
+      "type": "string"
+    },
+    "functions": {
+      "type": "string"
+    },
+    "waterResistance": {
+      "type": "string"
+    },
+    "crystalType": {
+      "type": "string"
+    },
+    "powerReserve": {
+      "type": "string"
+    },
+    "boxIncluded": {
+      "type": "boolean"
+    },
+    "papersIncluded": {
+      "type": "boolean"
+    },
+    "serviceHistory": {
+      "type": "string"
+    },
+    "polishedStatus": {
+      "type": "string"
+    },
+    "originalPartsStatus": {
+      "type": "string"
+    },
+    "warrantyType": {
+      "type": "string"
+    },
+    "warrantyDuration": {
+      "type": "string"
+    },
+    "authenticationStatus": {
+      "type": "string",
+      "enum": [
+        "Authenticated",
+        "Pending",
+        "Not Verified"
+      ],
+      "default": "Pending"
+    },
+    "authenticityCertificate": {
+      "type": "boolean"
+    },
+    "productDescription": {
+      "type": "string"
+    },
+    "shortDescription": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    },
+    "salePrice": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "availability": {
+      "type": "string",
+      "enum": [
+        "In Stock",
+        "Sold",
+        "Reserved",
+        "Coming Soon"
+      ],
+      "default": "In Stock"
+    },
+    "stockQuantity": {
+      "type": "number",
+      "default": 1
+    },
+    "sku": {
+      "type": "string"
+    },
+    "productImages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "featuredImage": {
+      "type": "string"
+    },
+    "shippingInfo": {
+      "type": "string"
+    },
+    "returnEligibility": {
+      "type": "boolean",
+      "default": true
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "googleMerchantTitle": {
+      "type": "string"
+    },
+    "googleMerchantDescription": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "isNewArrival": {
+      "type": "boolean",
+      "default": false
+    },
+    "isCertifiedPreOwned": {
+      "type": "boolean",
+      "default": false
+    },
+    "isVintage": {
+      "type": "boolean",
+      "default": false
+    },
+    "isLimitedEdition": {
+      "type": "boolean",
+      "default": false
+    },
+    "scopeOfDelivery": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "productTitle",
+    "brand",
+    "price"
+  ]
+}

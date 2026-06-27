@@ -1,0 +1,66 @@
+{
+  "name": "Brands",
+  "type": "object",
+  "properties": {
+    "brandName": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "brandLogo": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "string"
+    },
+    "shortDescription": {
+      "type": "string"
+    },
+    "longDescription": {
+      "type": "string"
+    },
+    "brandDisclaimer": {
+      "type": "string"
+    },
+    "featuredCollections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "faqs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "buyingGuideContent": {
+      "type": "string"
+    },
+    "brandTint": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "brandName",
+    "slug"
+  ]
+}
