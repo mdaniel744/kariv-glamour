@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
@@ -27,19 +27,32 @@ export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [buyOpen, setBuyOpen] = useState(false);
   const [securityOpen, setSecurityOpen] = useState(false);
+  const buyRef = useRef(null);
+  const securityRef = useRef(null);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       window.location.href = `/shop?search=${encodeURIComponent(searchQuery.trim())}`;
-      setSearchOpen(false);
       setSearchQuery('');
     }
   };
+
+  // Close dropdowns when clicking outside of them
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (buyOpen && buyRef.current && !buyRef.current.contains(e.target)) setBuyOpen(false);
+      if (securityOpen && securityRef.current && !securityRef.current.contains(e.target)) setSecurityOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [buyOpen, securityOpen]);
+
+  const toggleBuy = () => { setBuyOpen(prev => !prev); setSecurityOpen(false); };
+  const toggleSecurity = () => { setSecurityOpen(prev => !prev); setBuyOpen(false); };
 
   return (
     <>
@@ -62,105 +75,38 @@ export default function Navbar() {
 
         {/* Main nav */}
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Mobile menu button */}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground">
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-
-            {/* Logo */}
-            <Link to="/" className="flex-shrink-0">
-              <h1 className="font-display text-xl md:text-2xl tracking-[0.08em] text-foreground">
-                <span className="font-light">KARIV</span>{' '}
-                <span className="text-primary font-normal">GLAMOUR</span>
-              </h1>
-            </Link>
-
-            {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-7">
-              {/* Buy a watch — mega dropdown */}
-              <div className="relative" onMouseEnter={() => setBuyOpen(true)} onMouseLeave={() => setBuyOpen(false)}>
-                <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
-                  Buy a watch <ChevronDown size={12} />
-                </Link>
-                <AnimatePresence>
-                  {buyOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 pt-4"
-                    >
-                      <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[720px]">
-                        {/* Watch brands */}
-                        <div className="flex-1">
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Brands</p>
-                          <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-                            {BRAND_DATA.map(b => (
-                              <Link key={b.slug} to={`/brands/${b.slug}`} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
-                                <BrandFavicon slug={b.slug} className="h-3.5 w-auto" alt="" />
-                                {b.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                        {/* Watch categories */}
-                        <div className="w-52 border-l border-border pl-8">
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Categories</p>
-                          <div className="space-y-3">
-                            {WATCH_CATEGORIES.map(c => (
-                              <Link key={c.to} to={c.to} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
-                                {c.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Top Deals</Link>
-              <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Collections</Link>
-
-              {/* Kariv Security — dropdown */}
-              <div className="relative" onMouseEnter={() => setSecurityOpen(true)} onMouseLeave={() => setSecurityOpen(false)}>
-                <Link to="/authentication" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
-                  Kariv Security <ChevronDown size={12} />
-                </Link>
-                <AnimatePresence>
-                  {securityOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 pt-4"
-                    >
-                      <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
-                        <div className="space-y-3">
-                          {SECURITY_LINKS.map(s => (
-                            <Link key={s.to} to={s.to} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
-                              {s.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Guides</Link>
+          {/* Row 1: logo + visible search + actions */}
+          <div className="flex items-center justify-between h-16 md:h-20 gap-3 md:gap-6">
+            <div className="flex items-center gap-3">
+              <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground">
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+              <Link to="/" className="flex-shrink-0">
+                <h1 className="font-display text-xl md:text-2xl tracking-[0.08em] text-foreground">
+                  <span className="font-light">KARIV</span>{' '}
+                  <span className="text-primary font-normal">GLAMOUR</span>
+                </h1>
+              </Link>
             </div>
 
+            {/* Visible search bar (desktop) */}
+            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md items-center gap-3 border border-border rounded-full px-4 py-2 bg-card">
+              <Search size={16} className="text-muted-foreground flex-shrink-0" />
+              <input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Suche nach Marke, Kollektion, Referenznummer..."
+                className="flex-1 w-full bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body"
+              />
+              {searchQuery && (
+                <button type="button" onClick={() => setSearchQuery('')} className="text-muted-foreground hover:text-foreground">
+                  <X size={14} />
+                </button>
+              )}
+            </form>
+
             {/* Actions */}
-            <div className="flex items-center gap-4">
-              <button onClick={() => setSearchOpen(!searchOpen)} className="text-foreground hover:text-primary transition-colors">
-                <Search size={18} />
-              </button>
+            <div className="flex items-center gap-3 md:gap-4">
               <button onClick={toggleTheme} className="md:hidden text-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
@@ -182,38 +128,101 @@ export default function Navbar() {
               </Link>
             </div>
           </div>
-        </div>
 
-        {/* Search overlay */}
-        <AnimatePresence>
-          {searchOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="border-t border-border"
-            >
-              <form onSubmit={handleSearch} className="max-w-7xl mx-auto px-6 py-4">
-                <div className="flex items-center gap-4">
-                  <Search size={18} className="text-muted-foreground" />
-                  <input
-                    autoFocus
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Suche nach Marke, Kollektion, Referenznummer..."
-                    className="flex-1 bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body"
-                  />
-                  <button type="button" onClick={() => setSearchOpen(false)} className="text-muted-foreground hover:text-foreground">
-                    <X size={18} />
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Mobile search bar */}
+          <form onSubmit={handleSearch} className="md:hidden flex items-center gap-3 border border-border rounded-full px-3 py-2 mb-2 bg-card">
+            <Search size={16} className="text-muted-foreground flex-shrink-0" />
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Suche nach Marke, Kollektion..."
+              className="flex-1 w-full bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body"
+            />
+          </form>
+
+          {/* Row 2: menu items (desktop) */}
+          <div className="hidden md:flex items-center gap-7 border-t border-border py-3">
+            {/* Buy a watch — mega dropdown */}
+            <div ref={buyRef} className="relative">
+              <button onClick={toggleBuy} className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
+                Buy a watch <ChevronDown size={12} className={`transition-transform ${buyOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {buyOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 pt-3"
+                  >
+                    <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[60vw]">
+                      {/* Watch brands */}
+                      <div className="flex-1">
+                        <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Brands</p>
+                        <div className="grid grid-cols-3 gap-x-6 gap-y-3">
+                          {BRAND_DATA.map(b => (
+                            <Link key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                              <BrandFavicon slug={b.slug} className="h-3.5 w-auto" alt="" />
+                              {b.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                      {/* Watch categories */}
+                      <div className="w-52 border-l border-border pl-8">
+                        <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Categories</p>
+                        <div className="space-y-3">
+                          {WATCH_CATEGORIES.map(c => (
+                            <Link key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                              {c.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Top Deals</Link>
+            <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Collections</Link>
+
+            {/* Kariv Security — dropdown */}
+            <div ref={securityRef} className="relative">
+              <button onClick={toggleSecurity} className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
+                Kariv Security <ChevronDown size={12} className={`transition-transform ${securityOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {securityOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 pt-3"
+                  >
+                    <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
+                      <div className="space-y-3">
+                        {SECURITY_LINKS.map(s => (
+                          <Link key={s.to} to={s.to} onClick={() => setSecurityOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Guides</Link>
+          </div>
+        </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile off-canvas menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -221,7 +230,7 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -300 }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-background pt-20"
+            className="fixed inset-0 z-40 bg-background pt-20 overflow-y-auto"
           >
             <div className="p-6 space-y-6">
               {[
