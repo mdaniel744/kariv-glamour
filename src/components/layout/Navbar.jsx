@@ -156,7 +156,7 @@ export default function Navbar() {
                     transition={{ duration: 0.2 }}
                     className="absolute top-full left-0 pt-3"
                   >
-                    <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[60vw]">
+                    <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[70vw]">
                       {/* Watch brands */}
                       <div className="flex-1">
                         <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Brands</p>
