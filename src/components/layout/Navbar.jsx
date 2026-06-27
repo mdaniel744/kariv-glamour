@@ -30,6 +30,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [buyOpen, setBuyOpen] = useState(false);
   const [securityOpen, setSecurityOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
   const buyRef = useRef(null);
   const securityRef = useRef(null);
 
@@ -53,6 +54,7 @@ export default function Navbar() {
 
   const toggleBuy = () => { setBuyOpen(prev => !prev); setSecurityOpen(false); };
   const toggleSecurity = () => { setSecurityOpen(prev => !prev); setBuyOpen(false); };
+  const closeMobile = () => { setMobileOpen(false); setMobileExpanded(null); };
 
   return (
     <>
@@ -232,29 +234,90 @@ export default function Navbar() {
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed inset-0 z-40 bg-background pt-20 overflow-y-auto"
           >
-            <div className="p-6 space-y-6">
-              {[
-                { to: '/shop', label: 'Buy a watch' },
-                { to: '/shop', label: 'Top Deals' },
-                { to: '/brands', label: 'Watch Collections' },
-                { to: '/authentication', label: 'Buyer Protection' },
-                { to: '/customer-service', label: 'FAQs' },
-                { to: '/legal/returns-and-refunds', label: 'Returns & Refunds' },
-                { to: '/legal/shipping-and-delivery', label: 'Shipping & Delivery' },
-                { to: '/guides', label: 'Watch Guides' },
-                { to: '/sell-trade', label: 'Verkaufen & Tauschen' },
-                { to: '/about', label: 'Über uns' },
-                { to: '/customer-service', label: 'Kundenservice' },
-              ].map(item => (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors"
+            <div className="p-6 space-y-1">
+              {/* Buy a watch — expandable */}
+              <div>
+                <button
+                  onClick={() => setMobileExpanded(mobileExpanded === 'buy' ? null : 'buy')}
+                  className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2"
                 >
-                  {item.label}
-                </Link>
-              ))}
+                  Buy a watch
+                  <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'buy' ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {mobileExpanded === 'buy' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-4 pt-2 pb-4 space-y-5">
+                        <div>
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">Watch Brands</p>
+                          <div className="space-y-2">
+                            {BRAND_DATA.map(b => (
+                              <Link key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                                <BrandFavicon slug={b.slug} className="h-4 w-auto" alt="" />
+                                {b.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">Watch Categories</p>
+                          <div className="space-y-2">
+                            {WATCH_CATEGORIES.map(c => (
+                              <Link key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                                {c.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Top Deals</Link>
+              <Link to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Watch Collections</Link>
+
+              {/* Kariv Security — expandable */}
+              <div>
+                <button
+                  onClick={() => setMobileExpanded(mobileExpanded === 'security' ? null : 'security')}
+                  className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2"
+                >
+                  Kariv Security
+                  <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'security' ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {mobileExpanded === 'security' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-4 pt-2 pb-4 space-y-2">
+                        {SECURITY_LINKS.map(s => (
+                          <Link key={s.to} to={s.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Watch Guides</Link>
+              <Link to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Verkaufen & Tauschen</Link>
+              <Link to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Über uns</Link>
+              <Link to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Kundenservice</Link>
             </div>
           </motion.div>
         )}
