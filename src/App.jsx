@@ -26,6 +26,9 @@ import CustomerService from '@/pages/CustomerService';
 import SellTrade from '@/pages/SellTrade';
 import Guides from '@/pages/Guides';
 import LegalPage from '@/pages/LegalPage';
+import RolexPage from '@/pages/RolexPage';
+import RolexSeoLanding from '@/pages/RolexSeoLanding';
+import RolexCollectionPage from '@/pages/RolexCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -73,7 +76,28 @@ const AuthenticatedApp = () => {
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/brands" element={<Brands />} />
+        <Route path="/brands/rolex" element={<RolexPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
+
+        {/* Rolex SEO landing pages */}
+        <Route path="/rolex-kaufen" element={<RolexSeoLanding slug="rolex-kaufen" />} />
+        <Route path="/rolex-gebraucht-kaufen" element={<RolexSeoLanding slug="rolex-gebraucht-kaufen" />} />
+        <Route path="/gebrauchte-rolex-uhren" element={<RolexSeoLanding slug="gebrauchte-rolex-uhren" />} />
+        <Route path="/rolex-submariner-kaufen" element={<RolexSeoLanding slug="rolex-submariner-kaufen" />} />
+        <Route path="/rolex-daytona-kaufen" element={<RolexSeoLanding slug="rolex-daytona-kaufen" />} />
+        <Route path="/rolex-datejust-kaufen" element={<RolexSeoLanding slug="rolex-datejust-kaufen" />} />
+        <Route path="/rolex-gmt-master-ii-kaufen" element={<RolexSeoLanding slug="rolex-gmt-master-ii-kaufen" />} />
+        <Route path="/rolex-day-date-kaufen" element={<RolexSeoLanding slug="rolex-day-date-kaufen" />} />
+        <Route path="/rolex-oyster-perpetual-kaufen" element={<RolexSeoLanding slug="rolex-oyster-perpetual-kaufen" />} />
+        <Route path="/rolex-herren" element={<RolexSeoLanding slug="rolex-herren" />} />
+        <Route path="/rolex-damen" element={<RolexSeoLanding slug="rolex-damen" />} />
+        <Route path="/welche-rolex-kaufen" element={<RolexSeoLanding slug="welche-rolex-kaufen" />} />
+        <Route path="/rolex-neu-oder-gebraucht" element={<RolexSeoLanding slug="rolex-neu-oder-gebraucht" />} />
+        <Route path="/rolex-box-papers-guide" element={<RolexSeoLanding slug="rolex-box-papers-guide" />} />
+        <Route path="/rolex/story" element={<RolexSeoLanding slug="rolex-story" />} />
+        <Route path="/rolex/watchmaking" element={<RolexSeoLanding slug="rolex-watchmaking" />} />
+        <Route path="/rolex/maintenance" element={<RolexSeoLanding slug="rolex-maintenance" />} />
+        <Route path="/rolex/:slug" element={<RolexCollectionPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/about" element={<About />} />
