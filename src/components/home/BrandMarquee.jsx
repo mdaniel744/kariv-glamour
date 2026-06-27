@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND_DATA, BRAND_LOGOS } from '@/lib/constants';
+import { base44 } from '@/api/base44Client';
 import BrandLogo from '@/components/shared/BrandLogo';
 import { motion } from 'framer-motion';
 
-const LOGO_BRANDS = BRAND_DATA.filter(brand => BRAND_LOGOS[brand.slug]);
-
 export default function BrandMarquee() {
-  const items = [...LOGO_BRANDS, ...LOGO_BRANDS];
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await base44.entities.Brands.list();
+        setBrands(data.filter(b => b.brandLogoLight));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    load();
+  }, []);
+
+  const items = [...brands, ...brands];
+
+  if (items.length === 0) return null;
 
   return (
     <section className="py-16 md:py-24 border-y border-border">
@@ -28,7 +42,9 @@ export default function BrandMarquee() {
             >
               <BrandLogo
                 slug={brand.slug}
-                alt={`${brand.name} watches at Kariv Glamour`}
+                light={brand.brandLogoLight}
+                dark={brand.brandLogoDark}
+                alt={`${brand.brandName} watches at Kariv Glamour`}
                 className="h-full w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-500"
               />
             </Link>
