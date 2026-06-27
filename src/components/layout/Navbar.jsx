@@ -7,13 +7,30 @@ import { BRAND_DATA } from '@/lib/constants';
 import BrandFavicon from '@/components/shared/BrandFavicon';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const WATCH_CATEGORIES = [
+  { label: 'New Arrivals', to: '/shop?condition=New&condition=Unworn' },
+  { label: 'Certified Pre-Owned', to: '/shop?isCertifiedPreOwned=true' },
+  { label: 'Vintage Watches', to: '/shop?isVintage=true' },
+  { label: "Men's Watches", to: '/shop?gender=Men' },
+  { label: "Women's Watches", to: '/shop?gender=Women' },
+  { label: 'Unisex Watches', to: '/shop?gender=Unisex' },
+];
+
+const SECURITY_LINKS = [
+  { label: 'Buyer Protection', to: '/authentication' },
+  { label: 'FAQs', to: '/customer-service' },
+  { label: 'Returns & Refunds', to: '/legal/returns-and-refunds' },
+  { label: 'Shipping & Delivery', to: '/legal/shipping-and-delivery' },
+];
+
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [brandsOpen, setBrandsOpen] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
+  const [securityOpen, setSecurityOpen] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -60,36 +77,83 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Shop</Link>
-              <div className="relative" onMouseEnter={() => setBrandsOpen(true)} onMouseLeave={() => setBrandsOpen(false)}>
-                <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
-                  Marken <ChevronDown size={12} />
+            <div className="hidden md:flex items-center gap-7">
+              {/* Buy a watch — mega dropdown */}
+              <div className="relative" onMouseEnter={() => setBuyOpen(true)} onMouseLeave={() => setBuyOpen(false)}>
+                <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
+                  Buy a watch <ChevronDown size={12} />
                 </Link>
                 <AnimatePresence>
-                  {brandsOpen && (
+                  {buyOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
+                      className="absolute top-full left-0 pt-4"
                     >
-                      <div className="bg-popover border border-border rounded p-6 grid grid-cols-2 gap-x-8 gap-y-3 min-w-[480px] shadow-lg">
-                        {BRAND_DATA.map(b => (
-                          <Link key={b.slug} to={`/brands/${b.slug}`} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
-                            <BrandFavicon slug={b.slug} className="h-3.5 w-auto" alt="" />
-                            {b.name}
-                          </Link>
-                        ))}
+                      <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[720px]">
+                        {/* Watch brands */}
+                        <div className="flex-1">
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Brands</p>
+                          <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                            {BRAND_DATA.map(b => (
+                              <Link key={b.slug} to={`/brands/${b.slug}`} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                                <BrandFavicon slug={b.slug} className="h-3.5 w-auto" alt="" />
+                                {b.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                        {/* Watch categories */}
+                        <div className="w-52 border-l border-border pl-8">
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Categories</p>
+                          <div className="space-y-3">
+                            {WATCH_CATEGORIES.map(c => (
+                              <Link key={c.to} to={c.to} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                                {c.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
-              <Link to="/shop?condition=New&condition=Unworn" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Neuheiten</Link>
-              <Link to="/shop?isCertifiedPreOwned=true" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Pre-Owned</Link>
-              <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Guides</Link>
+
+              <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Top Deals</Link>
+              <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Collections</Link>
+
+              {/* Kariv Security — dropdown */}
+              <div className="relative" onMouseEnter={() => setSecurityOpen(true)} onMouseLeave={() => setSecurityOpen(false)}>
+                <Link to="/authentication" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium flex items-center gap-1">
+                  Kariv Security <ChevronDown size={12} />
+                </Link>
+                <AnimatePresence>
+                  {securityOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-0 pt-4"
+                    >
+                      <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
+                        <div className="space-y-3">
+                          {SECURITY_LINKS.map(s => (
+                            <Link key={s.to} to={s.to} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                              {s.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-foreground hover:text-primary transition-colors font-medium">Watch Guides</Link>
             </div>
 
             {/* Actions */}
@@ -161,20 +225,20 @@ export default function Navbar() {
           >
             <div className="p-6 space-y-6">
               {[
-                { to: '/shop', label: 'Alle Uhren' },
-                { to: '/brands', label: 'Marken' },
-                { to: '/shop?condition=New&condition=Unworn', label: 'Neuheiten' },
-                { to: '/shop?isCertifiedPreOwned=true', label: 'Certified Pre-Owned' },
-                { to: '/shop?isVintage=true', label: 'Vintage' },
-                { to: '/shop?gender=Men', label: 'Herrenuhren' },
-                { to: '/shop?gender=Women', label: 'Damenuhren' },
+                { to: '/shop', label: 'Buy a watch' },
+                { to: '/shop', label: 'Top Deals' },
+                { to: '/brands', label: 'Watch Collections' },
+                { to: '/authentication', label: 'Buyer Protection' },
+                { to: '/customer-service', label: 'FAQs' },
+                { to: '/legal/returns-and-refunds', label: 'Returns & Refunds' },
+                { to: '/legal/shipping-and-delivery', label: 'Shipping & Delivery' },
+                { to: '/guides', label: 'Watch Guides' },
                 { to: '/sell-trade', label: 'Verkaufen & Tauschen' },
-                { to: '/guides', label: 'Uhren-Guides' },
                 { to: '/about', label: 'Über uns' },
                 { to: '/customer-service', label: 'Kundenservice' },
               ].map(item => (
                 <Link
-                  key={item.to}
+                  key={item.label}
                   to={item.to}
                   onClick={() => setMobileOpen(false)}
                   className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors"
