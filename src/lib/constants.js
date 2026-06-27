@@ -30,6 +30,19 @@ export const BRAND_LOGOS = {
   "bvlgari": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2e66a7b94_bvlgarikaufen.svg",
 };
 
+export const BRAND_LOGOS_WHITE = {
+  "rolex": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/9b56ec8bb_Rolexwhitelogo.svg",
+  "patek-philippe": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/ed1596459_Patekphilippewhitelogo.svg",
+  "omega": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5bec649e7_Omegawhitelogo.svg",
+  "cartier": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/74d2ad8ac_Cartierwhitelogo.svg",
+  "audemars-piguet": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0508246d7_Audemarspiguetwhitelogo.svg",
+  "breitling": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/bf1deaa46_Breitling1884whitelogo.svg",
+  "hublot": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/886722df1_Hublotwhitelogo.svg",
+  "grand-seiko": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d781ab317_GrandSeikoWhitelogo.svg",
+  "tag-heuer": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/6c8ceff36_TagHeuerwhitelogo.svg",
+  "bvlgari": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/8fe9e3f94_bvlgariwhitelogo.svg",
+};
+
 export const DIAL_COLORS = ["Black", "Blue", "Green", "Gray", "Silver", "White", "Brown", "Champagne", "Pink", "Red", "Violet", "Orange", "Yellow", "Mother of Pearl", "Skeleton", "Pavé", "Beige"];
 
 export const CASE_MATERIALS = ["Stainless Steel", "Yellow Gold", "Rose Gold", "White Gold", "Platinum", "Titanium", "Ceramic", "Carbon", "Bronze", "Two-Tone", "Steel and Gold", "Steel and Rose Gold"];
