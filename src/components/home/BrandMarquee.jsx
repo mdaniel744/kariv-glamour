@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BRAND_DATA, BRAND_LOGOS } from '@/lib/constants';
+import BrandLogo from '@/components/shared/BrandLogo';
 import { motion } from 'framer-motion';
 
 const LOGO_BRANDS = BRAND_DATA.filter(brand => BRAND_LOGOS[brand.slug]);
@@ -25,10 +26,10 @@ export default function BrandMarquee() {
               to={`/brands/${brand.slug}`}
               className="flex-shrink-0 h-16 md:h-20 flex items-center justify-center group"
             >
-              <img
-                src={BRAND_LOGOS[brand.slug]}
+              <BrandLogo
+                slug={brand.slug}
                 alt={`${brand.name} watches at Kariv Glamour`}
-                className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                className="h-full w-auto object-contain opacity-60 group-hover:opacity-100 transition-all duration-500"
               />
             </Link>
           ))}

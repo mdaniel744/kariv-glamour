@@ -16,18 +16,70 @@ export const BRAND_DATA = [
   { name: "Girard-Perregaux", slug: "girard-perregaux" }
 ];
 
+// ============================================================================
+// BRAND_LOGOS — Theme-aware brand logo assets
+// ----------------------------------------------------------------------------
+// Each brand has TWO logo variants:
+//   light  → dark-colored logo shape, displayed on LIGHT/white backgrounds
+//   dark   → white-colored logo shape, displayed on DARK/black backgrounds
+//
+// Upload guidelines:
+//   - Format: SVG (vector, transparent background) preferred
+//   - Width: ~400px
+//   - light: logo shape in black or dark color
+//   - dark:  logo shape in white or light color
+//   - Ensure clear/transparent background (no solid fill behind the shape)
+//
+// To add a new logo: upload both variants, then add a new entry below
+// keyed by the brand slug (must match BRAND_DATA slug).
+// If a dark variant is not yet uploaded, leave `dark` as "" — the BrandLogo
+// component will automatically fall back to the light variant.
+// ============================================================================
 export const BRAND_LOGOS = {
-  "rolex": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d565f9b76_RolexLogo.svg",
-  "patek-philippe": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/f4bf21975_PatekPhilippeLogo.svg",
-  "omega": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/711da8f99_OmegaWatchesLogo.svg",
-  "cartier": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/446c28c26_Cartier.svg",
-  "audemars-piguet": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0295b16b6_AudemarsPiguetlogoblack.svg",
-  "breitling": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b66c03d45_Breitling1884.svg",
-  "hublot": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/504665e88_HublotLogo.svg",
-  "grand-seiko": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/cb784ea15_GrandSeiko.svg",
-  "tag-heuer": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5087a4d1c_TagHeuerLogo.svg",
-  "tudor": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0f27e79fb_TudorLogo.svg",
-  "bvlgari": "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2e66a7b94_bvlgarikaufen.svg",
+  "rolex": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d565f9b76_RolexLogo.svg",
+    dark: ""
+  },
+  "patek-philippe": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/f4bf21975_PatekPhilippeLogo.svg",
+    dark: ""
+  },
+  "omega": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/711da8f99_OmegaWatchesLogo.svg",
+    dark: ""
+  },
+  "cartier": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/446c28c26_Cartier.svg",
+    dark: ""
+  },
+  "audemars-piguet": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0295b16b6_AudemarsPiguetlogoblack.svg",
+    dark: ""
+  },
+  "breitling": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b66c03d45_Breitling1884.svg",
+    dark: ""
+  },
+  "hublot": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/504665e88_HublotLogo.svg",
+    dark: ""
+  },
+  "grand-seiko": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/cb784ea15_GrandSeiko.svg",
+    dark: ""
+  },
+  "tag-heuer": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5087a4d1c_TagHeuerLogo.svg",
+    dark: ""
+  },
+  "tudor": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0f27e79fb_TudorLogo.svg",
+    dark: ""
+  },
+  "bvlgari": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2e66a7b94_bvlgarikaufen.svg",
+    dark: ""
+  },
 };
 
 export const DIAL_COLORS = ["Black", "Blue", "Green", "Gray", "Silver", "White", "Brown", "Champagne", "Pink", "Red", "Violet", "Orange", "Yellow", "Mother of Pearl", "Skeleton", "Pavé", "Beige"];
