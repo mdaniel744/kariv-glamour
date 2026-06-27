@@ -156,25 +156,25 @@ export default function Navbar() {
                     transition={{ duration: 0.2 }}
                     className="absolute top-full left-0 pt-3"
                   >
-                    <div className="bg-popover border border-border rounded p-8 shadow-lg flex gap-10 w-[70vw]">
+                    <div className="bg-popover border border-border rounded p-10 shadow-lg flex items-center gap-12 w-[70vw] h-[70vh]">
                       {/* Watch brands */}
                       <div className="flex-1">
-                        <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Brands</p>
-                        <div className="grid grid-cols-3 gap-x-6 gap-y-3">
+                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">Watch Brands</p>
+                        <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {BRAND_DATA.map(b => (
-                            <Link key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-2 text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
-                              <BrandFavicon slug={b.slug} className="h-3.5 w-auto" alt="" />
+                            <Link key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-3 text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                              <BrandFavicon slug={b.slug} className="h-7 w-auto" alt="" />
                               {b.name}
                             </Link>
                           ))}
                         </div>
                       </div>
                       {/* Watch categories */}
-                      <div className="w-52 border-l border-border pl-8">
-                        <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-4">Watch Categories</p>
-                        <div className="space-y-3">
+                      <div className="w-72 border-l border-border pl-10">
+                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">Watch Categories</p>
+                        <div className="space-y-5">
                           {WATCH_CATEGORIES.map(c => (
-                            <Link key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                            <Link key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors">
                               {c.label}
                             </Link>
                           ))}
