@@ -23,7 +23,7 @@ export default function BrandMarquee() {
             <Link
               key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
-              className="flex-shrink-0 h-10 md:h-12 flex items-center justify-center group"
+              className="flex-shrink-0 h-16 md:h-20 flex items-center justify-center group"
             >
               <img
                 src={BRAND_LOGOS[brand.slug]}
