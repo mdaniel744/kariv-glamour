@@ -82,6 +82,40 @@ export const BRAND_LOGOS = {
   },
 };
 
+// ============================================================================
+// BRAND_FAVICONS — Small brand marks for menus, filters, and compact UI.
+// ----------------------------------------------------------------------------
+// Two variants per brand (same convention as BRAND_LOGOS):
+//   light  → dark-colored mark, shown on LIGHT/white backgrounds
+//   dark   → white-colored mark, shown on DARK/black backgrounds
+//
+// Only brands with a provided favicon file appear here. Brands without an
+// entry render as plain text (no icon) via the BrandFavicon component.
+// Upload the missing variants and add entries below as they become available.
+// ============================================================================
+export const BRAND_FAVICONS = {
+  "rolex": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/de44bd3d1_RolexFavicon.svg",
+    dark: ""
+  },
+  "patek-philippe": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/f13729613_PatekPhilippeFavicon.svg",
+    dark: ""
+  },
+  "audemars-piguet": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/66ee9e565_AudemarsPiguetFavicon.svg",
+    dark: ""
+  },
+  "breitling": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/14578ef90_BreitlingLogoFavicon.svg",
+    dark: ""
+  },
+  "hublot": {
+    light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/88042f5e7_HublotFavicon.svg",
+    dark: ""
+  },
+};
+
 export const DIAL_COLORS = ["Black", "Blue", "Green", "Gray", "Silver", "White", "Brown", "Champagne", "Pink", "Red", "Violet", "Orange", "Yellow", "Mother of Pearl", "Skeleton", "Pavé", "Beige"];
 
 export const CASE_MATERIALS = ["Stainless Steel", "Yellow Gold", "Rose Gold", "White Gold", "Platinum", "Titanium", "Ceramic", "Carbon", "Bronze", "Two-Tone", "Steel and Gold", "Steel and Rose Gold"];

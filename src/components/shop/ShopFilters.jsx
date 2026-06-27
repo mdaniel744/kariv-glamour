@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 import { ChevronDown, X } from 'lucide-react';
-import BrandLogo from '@/components/shared/BrandLogo';
+import BrandFavicon from '@/components/shared/BrandFavicon';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (
@@ -26,7 +26,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
                   }}
                   className="w-3.5 h-3.5 rounded-sm border-border bg-transparent accent-primary"
                 />
-                {opt.slug && <BrandLogo slug={opt.slug} className="h-3.5 w-auto" alt="" />}
+                {opt.slug && <BrandFavicon slug={opt.slug} className="h-3.5 w-auto" alt="" />}
                 <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">{val}</span>
               </label>
             );
