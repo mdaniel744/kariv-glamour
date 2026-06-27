@@ -29,6 +29,9 @@ import LegalPage from '@/pages/LegalPage';
 import RolexPage from '@/pages/RolexPage';
 import RolexSeoLanding from '@/pages/RolexSeoLanding';
 import RolexCollectionPage from '@/pages/RolexCollectionPage';
+import PatekPhilippePage from '@/pages/PatekPhilippePage';
+import PatekPhilippeSeoLanding from '@/pages/PatekPhilippeSeoLanding';
+import PatekPhilippeCollectionPage from '@/pages/PatekPhilippeCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -77,6 +80,7 @@ const AuthenticatedApp = () => {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/brands" element={<Brands />} />
         <Route path="/brands/rolex" element={<RolexPage />} />
+        <Route path="/brands/patek-philippe" element={<PatekPhilippePage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -98,6 +102,29 @@ const AuthenticatedApp = () => {
         <Route path="/rolex/watchmaking" element={<RolexSeoLanding slug="rolex-watchmaking" />} />
         <Route path="/rolex/maintenance" element={<RolexSeoLanding slug="rolex-maintenance" />} />
         <Route path="/rolex/:slug" element={<RolexCollectionPage />} />
+
+        {/* Patek Philippe SEO landing pages */}
+        <Route path="/patek-philippe-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-kaufen" />} />
+        <Route path="/patek-philippe-gebraucht-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-gebraucht-kaufen" />} />
+        <Route path="/patek-philippe-uhr-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-uhr-kaufen" />} />
+        <Route path="/patek-philippe-nautilus-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-nautilus-kaufen" />} />
+        <Route path="/patek-philippe-aquanaut-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-aquanaut-kaufen" />} />
+        <Route path="/patek-philippe-calatrava-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-calatrava-kaufen" />} />
+        <Route path="/patek-philippe-cubitus-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-cubitus-kaufen" />} />
+        <Route path="/patek-philippe-grand-complications-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-grand-complications-kaufen" />} />
+        <Route path="/patek-philippe-complications-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-complications-kaufen" />} />
+        <Route path="/patek-philippe-twenty-4-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-twenty-4-kaufen" />} />
+        <Route path="/patek-philippe-golden-ellipse-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-golden-ellipse-kaufen" />} />
+        <Route path="/patek-philippe-gondolo-kaufen" element={<PatekPhilippeSeoLanding slug="patek-philippe-gondolo-kaufen" />} />
+        <Route path="/patek-philippe-herren" element={<PatekPhilippeSeoLanding slug="patek-philippe-herren" />} />
+        <Route path="/patek-philippe-damen" element={<PatekPhilippeSeoLanding slug="patek-philippe-damen" />} />
+        <Route path="/welche-patek-philippe-kaufen" element={<PatekPhilippeSeoLanding slug="welche-patek-philippe-kaufen" />} />
+        <Route path="/patek-philippe-neu-oder-gebraucht" element={<PatekPhilippeSeoLanding slug="patek-philippe-neu-oder-gebraucht" />} />
+        <Route path="/patek-philippe-archives-extract-guide" element={<PatekPhilippeSeoLanding slug="patek-philippe-archives-extract-guide" />} />
+        <Route path="/patek-philippe/story" element={<PatekPhilippeSeoLanding slug="patek-philippe-story" />} />
+        <Route path="/patek-philippe/watchmaking" element={<PatekPhilippeSeoLanding slug="patek-philippe-watchmaking" />} />
+        <Route path="/patek-philippe/maintenance" element={<PatekPhilippeSeoLanding slug="patek-philippe-maintenance" />} />
+        <Route path="/patek-philippe/:slug" element={<PatekPhilippeCollectionPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/about" element={<About />} />
