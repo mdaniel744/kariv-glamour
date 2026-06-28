@@ -12,9 +12,9 @@ export default function CartierCollectionGrid() {
           <h2 className="font-display text-3xl md:text-4xl font-light mb-4" style={{ color: CARTIER_COLORS.ink }}>Discover Cartier Watch Collections</h2>
           <p className="text-sm max-w-2xl mx-auto" style={{ color: CARTIER_COLORS.graphite }}>Browse Cartier's most recognizable watch families and find the design that best matches your style.</p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar">
           {CARTIER_COLLECTIONS.map((c, i) => (
-            <motion.div key={c.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: (i % 3) * 0.05 }}>
+            <motion.div key={c.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: (i % 4) * 0.05 }} className="flex-shrink-0 snap-start min-w-[80%] sm:min-w-[45%] lg:min-w-[30%]">
               <Link to={`/cartier/${c.slug}`} className="group block border transition-colors hover:opacity-95" style={{ borderColor: 'rgba(28,28,28,0.12)', backgroundColor: CARTIER_COLORS.ivoryLight }}>
                 <div className="aspect-[4/3] overflow-hidden flex items-center justify-center" style={{ backgroundColor: CARTIER_COLORS.ivory }}>
                   {c.image ? (
