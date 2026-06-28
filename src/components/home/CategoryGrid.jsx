@@ -36,7 +36,7 @@ export default function CategoryGrid() {
                 <img src={cat.image} alt={cat.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-5 md:p-7">
-                  <h3 className="font-display text-lg md:text-xl text-white font-light tracking-wide">{cat.title}</h3>
+                  <h3 className="font-display text-lg md:text-xl text-white font-normal tracking-wide">{cat.title}</h3>
                   <p className="text-[10px] tracking-[0.15em] uppercase text-white/60 mt-1">{cat.subtitle}</p>
                 </div>
               </Link>

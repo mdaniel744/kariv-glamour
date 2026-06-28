@@ -40,7 +40,7 @@ export default function PopularCollections() {
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
             <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block">05</span>
-            <h2 className="font-display text-3xl md:text-4xl font-light text-foreground tracking-tight">Beliebte Kollektionen</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">Beliebte Kollektionen</h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-lg">Entdecken Sie die begehrtesten Uhren-Kollektionen</p>
           </div>
         </div>
@@ -58,7 +58,7 @@ export default function PopularCollections() {
                 className="group block border border-border p-6 hover:border-primary/30 transition-colors"
               >
                 <p className="text-[10px] tracking-[0.15em] uppercase text-primary mb-2">{col.brand}</p>
-                <h3 className="font-display text-lg text-foreground font-light group-hover:text-primary transition-colors">{col.collectionName}</h3>
+                <h3 className="font-display text-lg text-foreground font-normal group-hover:text-primary transition-colors">{col.collectionName}</h3>
                 <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.12em] uppercase text-muted-foreground mt-3 group-hover:text-primary transition-colors">
                   Entdecken <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                 </span>

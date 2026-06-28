@@ -31,7 +31,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-foreground leading-[1.1] tracking-tight mb-6"
+            className="font-display text-4xl md:text-6xl lg:text-7xl font-normal text-foreground leading-[1.1] tracking-tight mb-6"
           >
             Entdecken Sie<br />
             authentische Luxusuhren<br />

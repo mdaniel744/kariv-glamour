@@ -9,7 +9,7 @@ export default function SectionHeading({ index, title, subtitle, linkTo, linkLab
         {index && (
           <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block">{index}</span>
         )}
-        <h2 className="font-display text-3xl md:text-4xl font-light text-foreground tracking-tight">{title}</h2>
+        <h2 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">{title}</h2>
         {subtitle && (
           <p className="text-sm text-muted-foreground mt-2 max-w-lg">{subtitle}</p>
         )}

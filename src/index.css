@@ -7,17 +7,17 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    --foreground: 0 0% 0%;
     --card: 0 0% 98%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover-foreground: 0 0% 0%;
     --primary: 158 60% 22%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 7%;
+    --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 35%;
+    --muted-foreground: 0 0% 25%;
     --accent: 158 60% 26%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
@@ -47,17 +47,17 @@
 
   .dark {
     --background: 0 0% 4%;
-    --foreground: 0 0% 90%;
+    --foreground: 0 0% 100%;
     --card: 0 0% 7%;
-    --card-foreground: 0 0% 90%;
+    --card-foreground: 0 0% 100%;
     --popover: 0 0% 7%;
-    --popover-foreground: 0 0% 90%;
+    --popover-foreground: 0 0% 100%;
     --primary: 39 45% 58%;
     --primary-foreground: 0 0% 4%;
     --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 55%;
+    --muted-foreground: 0 0% 70%;
     --accent: 39 45% 58%;
     --accent-foreground: 0 0% 4%;
     --destructive: 0 84% 60%;
@@ -87,8 +87,9 @@
   }
   body {
     @apply bg-background text-foreground font-body antialiased;
-    font-size: 1.0625rem;
-    line-height: 1.65;
+    font-size: 1.125rem;
+    font-weight: 450;
+    line-height: 1.7;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);

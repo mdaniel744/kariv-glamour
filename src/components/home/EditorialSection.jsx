@@ -36,7 +36,7 @@ export default function EditorialSection() {
             <Link key={i} to="/guides" className="group block">
               <div className="border border-border p-8 hover:border-primary/30 transition-colors h-full flex flex-col">
                 <span className="text-[9px] tracking-[0.2em] uppercase text-primary mb-4">{guide.tag}</span>
-                <h3 className="font-display text-xl text-foreground font-light mb-3 group-hover:text-primary transition-colors leading-tight">
+                <h3 className="font-display text-xl text-foreground font-normal mb-3 group-hover:text-primary transition-colors leading-tight">
                   {guide.title}
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-6">{guide.excerpt}</p>
