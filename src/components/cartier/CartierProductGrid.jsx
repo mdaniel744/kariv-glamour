@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { SlidersHorizontal, X } from 'lucide-react';
 import CartierFilterSidebar from './CartierFilterSidebar';
 import CartierProductCard from './CartierProductCard';
-import { CARTIER_QUICK_FILTERS, CARTIER_COLORS } from '@/lib/cartierData';
+import { CARTIER_QUICK_FILTERS } from '@/lib/cartierData';
 
 const SORT_OPTIONS = [
   { value: '-created_date', label: 'Featured' },
@@ -73,27 +73,27 @@ export default function CartierProductGrid() {
   }, [products, filters, sortBy]);
 
   return (
-    <section id="shop" className="py-16 md:py-24" style={{ backgroundColor: CARTIER_COLORS.ivory }}>
+    <section id="shop" className="py-16 md:py-24 bg-secondary">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3" style={{ color: CARTIER_COLORS.gold }}>Cartier Boutique</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light" style={{ color: CARTIER_COLORS.ink }}>Shop Cartier Watches</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Cartier Boutique</span>
+          <h2 className="font-display text-3xl md:text-4xl font-light text-foreground">Shop Cartier Watches</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {CARTIER_QUICK_FILTERS.map((chip, i) => (
-            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border transition-colors hover:opacity-70" style={{ borderColor: 'rgba(138,43,43,0.25)', color: CARTIER_COLORS.red }}>{chip.label}</Link>
+            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
           ))}
         </div>
 
-        <div className="flex items-center justify-between mb-8 pb-4 border-b" style={{ borderColor: 'rgba(28,28,28,0.12)' }}>
-          <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase" style={{ color: CARTIER_COLORS.ink }}>
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
+          <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
             <SlidersHorizontal size={14} /> Filter
           </button>
-          <p className="hidden md:block text-xs" style={{ color: CARTIER_COLORS.muted }}>{filtered.length} Zeitmesser</p>
+          <p className="hidden md:block text-xs text-muted-foreground">{filtered.length} Zeitmesser</p>
           <div className="flex items-center gap-2 ml-auto">
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border text-xs px-3 py-2 outline-none" style={{ borderColor: 'rgba(28,28,28,0.12)', color: CARTIER_COLORS.ink }}>
-              {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} style={{ color: '#1C1C1C' }}>{o.label}</option>)}
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
+              {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
             </select>
           </div>
         </div>
@@ -105,12 +105,12 @@ export default function CartierProductGrid() {
           <div className="flex-1">
             {loading ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse" style={{ backgroundColor: CARTIER_COLORS.ivoryLight }} />)}
+                {[...Array(6)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-sm" style={{ color: CARTIER_COLORS.muted }}>Keine Cartier Uhren gefunden, die Ihren Kriterien entsprechen.</p>
-                <Link to="/cartier-uhr-kaufen" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block" style={{ color: CARTIER_COLORS.red }}>Alle Cartier Uhren ansehen</Link>
+                <p className="text-sm text-muted-foreground">Keine Cartier Uhren gefunden, die Ihren Kriterien entsprechen.</p>
+                <Link to="/cartier-uhr-kaufen" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Cartier Uhren ansehen</Link>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -122,14 +122,14 @@ export default function CartierProductGrid() {
       </div>
 
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: CARTIER_COLORS.ivory }}>
+        <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl" style={{ color: CARTIER_COLORS.ink }}>Filter</h2>
-              <button onClick={() => setMobileFiltersOpen(false)} style={{ color: CARTIER_COLORS.muted }}><X size={20} /></button>
+              <h2 className="font-display text-xl text-foreground">Filter</h2>
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground"><X size={20} /></button>
             </div>
             <CartierFilterSidebar filters={filters} setFilters={setFilters} />
-            <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 text-[11px] tracking-[0.15em] uppercase font-medium py-4" style={{ backgroundColor: CARTIER_COLORS.red, color: '#fff' }}>
+            <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4">
               {filtered.length} Ergebnisse anzeigen
             </button>
           </div>

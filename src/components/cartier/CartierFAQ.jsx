@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { CARTIER_FAQS, CARTIER_COLORS } from '@/lib/cartierData';
+import { CARTIER_FAQS } from '@/lib/cartierData';
 
 export default function CartierFAQ() {
   useEffect(() => {
@@ -13,18 +13,18 @@ export default function CartierFAQ() {
   }, []);
 
   return (
-    <section className="py-16 md:py-24" style={{ backgroundColor: CARTIER_COLORS.ivoryLight }}>
+    <section className="py-16 md:py-24 bg-background">
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-10">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3" style={{ color: CARTIER_COLORS.gold }}>Häufige Fragen</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light" style={{ color: CARTIER_COLORS.ink }}>Cartier FAQ</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Häufige Fragen</span>
+          <h2 className="font-display text-3xl md:text-4xl font-light text-foreground">Cartier FAQ</h2>
         </div>
         <Accordion type="single" collapsible>
           {CARTIER_FAQS.map((f, i) => (
-            <AccordionItem key={i} value={`q-${i}`} style={{ borderColor: 'rgba(28,28,28,0.12)' }}>
-              <AccordionTrigger className="text-base font-display hover:no-underline" style={{ color: CARTIER_COLORS.ink }}>{f.q}</AccordionTrigger>
+            <AccordionItem key={i} value={`q-${i}`}>
+              <AccordionTrigger className="text-base font-display text-foreground hover:no-underline">{f.q}</AccordionTrigger>
               <AccordionContent>
-                <div className="text-sm leading-relaxed [&_a]:underline" style={{ color: CARTIER_COLORS.graphite }} dangerouslySetInnerHTML={{ __html: f.a }} />
+                <div className="text-sm leading-relaxed text-muted-foreground [&_a]:underline [&_a]:text-primary" dangerouslySetInnerHTML={{ __html: f.a }} />
               </AccordionContent>
             </AccordionItem>
           ))}

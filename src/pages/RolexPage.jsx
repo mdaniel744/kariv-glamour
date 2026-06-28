@@ -41,7 +41,7 @@ export default function RolexPage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-background">
       <RolexHero />
       <RolexIntro />
       <RolexCollectionCarousel />

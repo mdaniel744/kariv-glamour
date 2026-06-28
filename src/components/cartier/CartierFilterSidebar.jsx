@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { CARTIER_COLLECTIONS, CARTIER_CASE_MATERIALS, CARTIER_SHAPES, CARTIER_MOVEMENTS, CARTIER_DIAL_COLORS, CARTIER_BRACELETS, CARTIER_CASE_SIZES, CARTIER_AVAILABILITY, CARTIER_BOX_PAPERS, CARTIER_COLORS } from '@/lib/cartierData';
+import { CARTIER_COLLECTIONS, CARTIER_CASE_MATERIALS, CARTIER_SHAPES, CARTIER_MOVEMENTS, CARTIER_DIAL_COLORS, CARTIER_BRACELETS, CARTIER_CASE_SIZES, CARTIER_AVAILABILITY, CARTIER_BOX_PAPERS } from '@/lib/cartierData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (
-    <div className="border-b" style={{ borderColor: 'rgba(28,28,28,0.12)' }}>
-      <button onClick={onToggle} className="w-full flex items-center justify-between py-4 text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: '#1C1C1C' }}>
+    <div className="border-b border-border">
+      <button onClick={onToggle} className="w-full flex items-center justify-between py-4 text-[11px] tracking-[0.12em] uppercase font-medium text-foreground">
         {label}
-        {selected.length > 0 && <span className="text-[9px] px-1.5 py-0.5 rounded-full mr-auto ml-2" style={{ backgroundColor: '#8A2B2B', color: '#fff' }}>{selected.length}</span>}
-        <ChevronDown size={14} className="transition-transform" style={{ transform: open ? 'rotate(180deg)' : 'none' }} />
+        {selected.length > 0 && <span className="text-[9px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full mr-auto ml-2">{selected.length}</span>}
+        <ChevronDown size={14} className={`text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
         <div className="pb-4 space-y-2 max-h-48 overflow-y-auto">
@@ -18,8 +18,8 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
             const isSelected = selected.includes(val);
             return (
               <label key={val} className="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" checked={isSelected} onChange={() => onChange(isSelected ? selected.filter(s => s !== val) : [...selected, val])} className="w-3.5 h-3.5 rounded-sm" style={{ accentColor: '#8A2B2B' }} />
-                <span className="text-xs group-hover:opacity-70 transition-opacity" style={{ color: '#3A3A3A' }}>{val}</span>
+                <input type="checkbox" checked={isSelected} onChange={() => onChange(isSelected ? selected.filter(s => s !== val) : [...selected, val])} className="w-3.5 h-3.5 rounded-sm border-border bg-transparent accent-primary" />
+                <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">{val}</span>
               </label>
             );
           })}
@@ -40,7 +40,7 @@ export default function CartierFilterSidebar({ filters, setFilters }) {
   return (
     <div>
       {activeCount > 0 && (
-        <button onClick={reset} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase mb-4" style={{ color: CARTIER_COLORS.red }}>
+        <button onClick={reset} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase mb-4 text-primary hover:text-foreground transition-colors">
           <X size={12} /> Alle Filter löschen
         </button>
       )}
@@ -55,11 +55,11 @@ export default function CartierFilterSidebar({ filters, setFilters }) {
       <FilterGroup label="Gehäusegröße" options={CARTIER_CASE_SIZES} selected={filters.caseSize} onChange={v => update('caseSize', v)} open={openGroups.caseSize} onToggle={() => toggleGroup('caseSize')} />
       <FilterGroup label="Box & Papers" options={CARTIER_BOX_PAPERS} selected={filters.boxPapers} onChange={v => update('boxPapers', v)} open={openGroups.boxPapers} onToggle={() => toggleGroup('boxPapers')} />
       <FilterGroup label="Verfügbarkeit" options={CARTIER_AVAILABILITY} selected={filters.availability} onChange={v => update('availability', v)} open={openGroups.availability} onToggle={() => toggleGroup('availability')} />
-      <div className="border-b py-4" style={{ borderColor: 'rgba(28,28,28,0.12)' }}>
-        <p className="text-[11px] tracking-[0.12em] uppercase font-medium mb-3" style={{ color: '#1C1C1C' }}>Preisbereich</p>
+      <div className="border-b border-border py-4">
+        <p className="text-[11px] tracking-[0.12em] uppercase font-medium mb-3 text-foreground">Preisbereich</p>
         <div className="flex gap-2">
-          <input type="number" placeholder="Min" value={filters.priceMin} onChange={e => update('priceMin', e.target.value)} className="w-full border text-xs px-3 py-2 outline-none" style={{ borderColor: 'rgba(28,28,28,0.12)', backgroundColor: '#FBF8F2', color: '#1C1C1C' }} />
-          <input type="number" placeholder="Max" value={filters.priceMax} onChange={e => update('priceMax', e.target.value)} className="w-full border text-xs px-3 py-2 outline-none" style={{ borderColor: 'rgba(28,28,28,0.12)', backgroundColor: '#FBF8F2', color: '#1C1C1C' }} />
+          <input type="number" placeholder="Min" value={filters.priceMin} onChange={e => update('priceMin', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />
+          <input type="number" placeholder="Max" value={filters.priceMax} onChange={e => update('priceMax', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />
         </div>
       </div>
     </div>

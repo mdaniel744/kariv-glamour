@@ -36,7 +36,7 @@ export default function CartierPage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-background">
       <CartierHero />
       <CartierIntro />
       <CartierCollectionGrid />
