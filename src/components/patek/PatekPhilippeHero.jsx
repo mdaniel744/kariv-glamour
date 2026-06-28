@@ -5,13 +5,13 @@ import { ChevronRight } from 'lucide-react';
 import { PATEK_HERO_IMAGE } from '@/lib/patekData';
 
 const ANCHOR_LINKS = [
-  { label: 'Collections', href: '#patek-collections' },
-  { label: 'New Arrivals', href: '#patek-products' },
-  { label: 'Pre-Owned Patek Philippe', href: '/patek-philippe-gebraucht-kaufen' },
-  { label: 'Patek Philippe Buying Guide', href: '/welche-patek-philippe-kaufen' },
-  { label: 'Watchmaking', href: '#patek-watchmaking' },
-  { label: 'Maintenance', href: '#patek-maintenance' },
-];
+{ label: 'Collections', href: '#patek-collections' },
+{ label: 'New Arrivals', href: '#patek-products' },
+{ label: 'Pre-Owned Patek Philippe', href: '/patek-philippe-gebraucht-kaufen' },
+{ label: 'Patek Philippe Buying Guide', href: '/welche-patek-philippe-kaufen' },
+{ label: 'Watchmaking', href: '#patek-watchmaking' },
+{ label: 'Maintenance', href: '#patek-maintenance' }];
+
 
 export default function PatekPhilippeHero() {
   return (
@@ -33,8 +33,8 @@ export default function PatekPhilippeHero() {
 
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Patek Philippe Boutique</span>
 
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-foreground">
-            Patek Philippe Watches at<br /><span className="italic text-primary">Kariv Glamour</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-foreground [font-family:'Lilita_One',_system-ui]">Patek Philippe Watches at
+Kariv Glamour
           </h1>
 
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">
@@ -47,12 +47,12 @@ export default function PatekPhilippeHero() {
           </div>
 
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {ANCHOR_LINKS.map((link, i) => (
-              <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">{link.label}</a>
-            ))}
+            {ANCHOR_LINKS.map((link, i) =>
+            <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">{link.label}</a>
+            )}
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
