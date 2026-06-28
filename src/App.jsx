@@ -39,6 +39,9 @@ import OmegaCollectionPage from '@/pages/OmegaCollectionPage';
 import CartierPage from '@/pages/CartierPage';
 import CartierSeoLanding from '@/pages/CartierSeoLanding';
 import CartierCollectionPage from '@/pages/CartierCollectionPage';
+import HublotPage from '@/pages/HublotPage';
+import HublotSeoLanding from '@/pages/HublotSeoLanding';
+import HublotCollectionPage from '@/pages/HublotCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -90,6 +93,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/patek-philippe" element={<PatekPhilippePage />} />
         <Route path="/brands/omega" element={<OmegaPage />} />
         <Route path="/brands/cartier" element={<CartierPage />} />
+        <Route path="/brands/hublot" element={<HublotPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -175,6 +179,23 @@ const AuthenticatedApp = () => {
         <Route path="/cartier-damen" element={<CartierSeoLanding slug="cartier-damen" />} />
         <Route path="/cartier/story" element={<CartierSeoLanding slug="cartier-story" />} />
         <Route path="/cartier/:slug" element={<CartierCollectionPage />} />
+
+        {/* Hublot SEO landing pages */}
+        <Route path="/hublot-uhr" element={<HublotSeoLanding slug="hublot-uhr" />} />
+        <Route path="/hublot-uhren" element={<HublotSeoLanding slug="hublot-uhren" />} />
+        <Route path="/hublot-gebraucht" element={<HublotSeoLanding slug="hublot-gebraucht" />} />
+        <Route path="/hublot-kaufen" element={<HublotSeoLanding slug="hublot-kaufen" />} />
+        <Route path="/hublot-uhr-kaufen" element={<HublotSeoLanding slug="hublot-uhr-kaufen" />} />
+        <Route path="/hublot-gebraucht-kaufen" element={<HublotSeoLanding slug="hublot-gebraucht-kaufen" />} />
+        <Route path="/gebrauchte-hublot-uhren" element={<HublotSeoLanding slug="gebrauchte-hublot-uhren" />} />
+        <Route path="/hublot-big-bang-kaufen" element={<HublotSeoLanding slug="hublot-big-bang-kaufen" />} />
+        <Route path="/hublot-big-bang-unico-kaufen" element={<HublotSeoLanding slug="hublot-big-bang-unico-kaufen" />} />
+        <Route path="/hublot-classic-fusion-kaufen" element={<HublotSeoLanding slug="hublot-classic-fusion-kaufen" />} />
+        <Route path="/hublot-classic-fusion-chronograph-kaufen" element={<HublotSeoLanding slug="hublot-classic-fusion-chronograph-kaufen" />} />
+        <Route path="/hublot-spirit-of-big-bang-kaufen" element={<HublotSeoLanding slug="hublot-spirit-of-big-bang-kaufen" />} />
+        <Route path="/hublot-square-bang-kaufen" element={<HublotSeoLanding slug="hublot-square-bang-kaufen" />} />
+        <Route path="/hublot/story" element={<HublotSeoLanding slug="hublot-story" />} />
+        <Route path="/hublot/:slug" element={<HublotCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
