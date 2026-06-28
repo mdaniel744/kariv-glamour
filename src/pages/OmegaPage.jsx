@@ -41,7 +41,7 @@ export default function OmegaPage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-background">
       <OmegaHero />
       <OmegaIntro />
       <OmegaCollectionCarousel />

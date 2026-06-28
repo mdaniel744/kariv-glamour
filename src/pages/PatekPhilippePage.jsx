@@ -41,7 +41,7 @@ export default function PatekPhilippePage() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-background">
       <PatekPhilippeHero />
       <PatekPhilippeIntro />
       <PatekPhilippeCollectionCarousel />
