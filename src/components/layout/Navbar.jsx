@@ -17,7 +17,7 @@ const WATCH_CATEGORIES = [
 ];
 
 const SECURITY_LINKS = [
-  { label: 'Buyer Protection', to: '/authentication' },
+  { label: 'Buyer Protection', to: '/buyer-protection' },
   { label: 'FAQs', to: '/customer-service' },
   { label: 'Returns & Refunds', to: '/legal/returns-and-refunds' },
   { label: 'Shipping & Delivery', to: '/legal/shipping-and-delivery' },

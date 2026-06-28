@@ -22,6 +22,7 @@ import Cart from '@/pages/Cart';
 import Wishlist from '@/pages/Wishlist';
 import About from '@/pages/About';
 import Authentication from '@/pages/Authentication';
+import BuyerProtection from '@/pages/BuyerProtection';
 import CustomerService from '@/pages/CustomerService';
 import SellTrade from '@/pages/SellTrade';
 import Guides from '@/pages/Guides';
@@ -158,6 +159,7 @@ const AuthenticatedApp = () => {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/about" element={<About />} />
         <Route path="/authentication" element={<Authentication />} />
+        <Route path="/buyer-protection" element={<BuyerProtection />} />
         <Route path="/customer-service" element={<CustomerService />} />
         <Route path="/sell-trade" element={<SellTrade />} />
         <Route path="/guides" element={<Guides />} />
