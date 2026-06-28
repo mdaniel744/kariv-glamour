@@ -1,0 +1,44 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { CARTIER_COLORS, CARTIER_LOGO, CARTIER_HERO_IMAGE } from '@/lib/cartierData';
+
+const ANCHORS = [
+  { label: 'Collections', href: '#collections' },
+  { label: 'Tank', to: '/cartier-tank-kaufen' },
+  { label: 'Santos', to: '/cartier-santos-kaufen' },
+  { label: 'Panthère', to: '/cartier-panthere-kaufen' },
+  { label: 'Pre-Owned Cartier', to: '/cartier-gebraucht-kaufen' },
+  { label: 'Cartier Story', href: '#story' },
+];
+
+export default function CartierHero() {
+  return (
+    <section className="relative overflow-hidden" style={{ backgroundColor: CARTIER_COLORS.ivory }}>
+      <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-5" style={{ color: CARTIER_COLORS.gold }}>Cartier Maison</span>
+          <h1 className="font-display text-4xl md:text-6xl font-light leading-tight mb-6" style={{ color: CARTIER_COLORS.ink }}>Cartier Watches at Kariv Glamour</h1>
+          <p className="text-base leading-relaxed max-w-xl mb-8" style={{ color: CARTIER_COLORS.graphite }}>Explore elegant Cartier watches, from timeless Tank models to Santos de Cartier, Panthère de Cartier, Ballon Bleu, Baignoire and other iconic designs.</p>
+          <div className="flex flex-wrap gap-3 mb-8">
+            <Link to="/cartier-uhr-kaufen" className="inline-flex items-center justify-center px-7 py-3.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: CARTIER_COLORS.red, color: '#fff' }}>Shop Cartier Watches</Link>
+            <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:opacity-70" style={{ borderColor: CARTIER_COLORS.ink, color: CARTIER_COLORS.ink }}>Discover Cartier Collections</a>
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {ANCHORS.map((a, i) => a.href ? (
+              <a key={i} href={a.href} className="text-[11px] tracking-[0.12em] uppercase hover:opacity-70" style={{ color: CARTIER_COLORS.red }}>{a.label}</a>
+            ) : (
+              <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase hover:opacity-70" style={{ color: CARTIER_COLORS.red }}>{a.label}</Link>
+            ))}
+          </div>
+        </motion.div>
+        <div className="flex flex-col items-center">
+          <img src={CARTIER_LOGO} alt="Cartier" className="h-10 md:h-12 w-auto mb-6" />
+          <div className="aspect-[4/5] w-full max-w-sm overflow-hidden border" style={{ borderColor: 'rgba(197,165,114,0.4)' }}>
+            <img src={CARTIER_HERO_IMAGE} alt="Cartier watch" className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

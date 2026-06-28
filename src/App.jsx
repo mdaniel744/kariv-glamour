@@ -36,6 +36,9 @@ import PatekPhilippeCollectionPage from '@/pages/PatekPhilippeCollectionPage';
 import OmegaPage from '@/pages/OmegaPage';
 import OmegaSeoLanding from '@/pages/OmegaSeoLanding';
 import OmegaCollectionPage from '@/pages/OmegaCollectionPage';
+import CartierPage from '@/pages/CartierPage';
+import CartierSeoLanding from '@/pages/CartierSeoLanding';
+import CartierCollectionPage from '@/pages/CartierCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -86,6 +89,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/rolex" element={<RolexPage />} />
         <Route path="/brands/patek-philippe" element={<PatekPhilippePage />} />
         <Route path="/brands/omega" element={<OmegaPage />} />
+        <Route path="/brands/cartier" element={<CartierPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -155,6 +159,23 @@ const AuthenticatedApp = () => {
         <Route path="/omega/master-chronometer-guide" element={<OmegaSeoLanding slug="omega-master-chronometer-guide" />} />
         <Route path="/omega/co-axial-guide" element={<OmegaSeoLanding slug="omega-co-axial-guide" />} />
         <Route path="/omega/:slug" element={<OmegaCollectionPage />} />
+
+        {/* Cartier SEO landing pages */}
+        <Route path="/cartier-uhr-kaufen" element={<CartierSeoLanding slug="cartier-uhr-kaufen" />} />
+        <Route path="/cartier-gebraucht-kaufen" element={<CartierSeoLanding slug="cartier-gebraucht-kaufen" />} />
+        <Route path="/gebrauchte-cartier-uhren" element={<CartierSeoLanding slug="gebrauchte-cartier-uhren" />} />
+        <Route path="/cartier-tank-kaufen" element={<CartierSeoLanding slug="cartier-tank-kaufen" />} />
+        <Route path="/cartier-santos-kaufen" element={<CartierSeoLanding slug="cartier-santos-kaufen" />} />
+        <Route path="/cartier-panthere-kaufen" element={<CartierSeoLanding slug="cartier-panthere-kaufen" />} />
+        <Route path="/cartier-ballon-bleu-kaufen" element={<CartierSeoLanding slug="cartier-ballon-bleu-kaufen" />} />
+        <Route path="/cartier-baignoire-kaufen" element={<CartierSeoLanding slug="cartier-baignoire-kaufen" />} />
+        <Route path="/cartier-pasha-kaufen" element={<CartierSeoLanding slug="cartier-pasha-kaufen" />} />
+        <Route path="/cartier-crash-kaufen" element={<CartierSeoLanding slug="cartier-crash-kaufen" />} />
+        <Route path="/cartier-herren" element={<CartierSeoLanding slug="cartier-herren" />} />
+        <Route path="/cartier-damen" element={<CartierSeoLanding slug="cartier-damen" />} />
+        <Route path="/cartier/story" element={<CartierSeoLanding slug="cartier-story" />} />
+        <Route path="/cartier/:slug" element={<CartierCollectionPage />} />
+
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/about" element={<About />} />

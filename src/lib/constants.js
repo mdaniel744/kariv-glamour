@@ -50,7 +50,7 @@ export const BRAND_LOGOS = {
   },
   "cartier": {
     light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/446c28c26_Cartier.svg",
-    dark: ""
+    dark: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/74d2ad8ac_Cartierwhitelogo.svg"
   },
   "audemars-piguet": {
     light: "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0295b16b6_AudemarsPiguetlogoblack.svg",
