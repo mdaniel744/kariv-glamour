@@ -5,7 +5,19 @@
     "question": {
       "type": "string"
     },
+    "question_en": {
+      "type": "string"
+    },
+    "question_de": {
+      "type": "string"
+    },
     "answer": {
+      "type": "string"
+    },
+    "answer_en": {
+      "type": "string"
+    },
+    "answer_de": {
       "type": "string"
     },
     "category": {

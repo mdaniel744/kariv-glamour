@@ -5,10 +5,22 @@
     "title": {
       "type": "string"
     },
+    "title_en": {
+      "type": "string"
+    },
+    "title_de": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },
     "content": {
+      "type": "string"
+    },
+    "content_en": {
+      "type": "string"
+    },
+    "content_de": {
       "type": "string"
     },
     "language": {
@@ -22,7 +34,19 @@
     "seoTitle": {
       "type": "string"
     },
+    "seoTitle_en": {
+      "type": "string"
+    },
+    "seoTitle_de": {
+      "type": "string"
+    },
     "seoDescription": {
+      "type": "string"
+    },
+    "seoDescription_en": {
+      "type": "string"
+    },
+    "seoDescription_de": {
       "type": "string"
     }
   },

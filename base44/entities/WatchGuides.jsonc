@@ -5,6 +5,12 @@
     "title": {
       "type": "string"
     },
+    "title_en": {
+      "type": "string"
+    },
+    "title_de": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },
@@ -25,16 +31,46 @@
     "content": {
       "type": "string"
     },
+    "content_en": {
+      "type": "string"
+    },
+    "content_de": {
+      "type": "string"
+    },
     "excerpt": {
+      "type": "string"
+    },
+    "excerpt_en": {
+      "type": "string"
+    },
+    "excerpt_de": {
       "type": "string"
     },
     "seoTitle": {
       "type": "string"
     },
+    "seoTitle_en": {
+      "type": "string"
+    },
+    "seoTitle_de": {
+      "type": "string"
+    },
     "seoDescription": {
       "type": "string"
     },
+    "seoDescription_en": {
+      "type": "string"
+    },
+    "seoDescription_de": {
+      "type": "string"
+    },
     "seoKeywords": {
+      "type": "string"
+    },
+    "seoKeywords_en": {
+      "type": "string"
+    },
+    "seoKeywords_de": {
       "type": "string"
     },
     "language": {

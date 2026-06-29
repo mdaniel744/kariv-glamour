@@ -8,10 +8,22 @@
     "collectionName": {
       "type": "string"
     },
+    "collectionName_en": {
+      "type": "string"
+    },
+    "collectionName_de": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },
     "description": {
+      "type": "string"
+    },
+    "description_en": {
+      "type": "string"
+    },
+    "description_de": {
       "type": "string"
     },
     "heroImage": {
@@ -20,10 +32,28 @@
     "seoTitle": {
       "type": "string"
     },
+    "seoTitle_en": {
+      "type": "string"
+    },
+    "seoTitle_de": {
+      "type": "string"
+    },
     "seoDescription": {
       "type": "string"
     },
+    "seoDescription_en": {
+      "type": "string"
+    },
+    "seoDescription_de": {
+      "type": "string"
+    },
     "seoKeywords": {
+      "type": "string"
+    },
+    "seoKeywords_en": {
+      "type": "string"
+    },
+    "seoKeywords_de": {
       "type": "string"
     }
   },

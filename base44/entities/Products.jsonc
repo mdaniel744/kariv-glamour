@@ -5,6 +5,12 @@
     "productTitle": {
       "type": "string"
     },
+    "productTitle_en": {
+      "type": "string"
+    },
+    "productTitle_de": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },
@@ -72,6 +78,12 @@
     "functions": {
       "type": "string"
     },
+    "functions_en": {
+      "type": "string"
+    },
+    "functions_de": {
+      "type": "string"
+    },
     "waterResistance": {
       "type": "string"
     },
@@ -90,13 +102,37 @@
     "serviceHistory": {
       "type": "string"
     },
+    "serviceHistory_en": {
+      "type": "string"
+    },
+    "serviceHistory_de": {
+      "type": "string"
+    },
     "polishedStatus": {
+      "type": "string"
+    },
+    "polishedStatus_en": {
+      "type": "string"
+    },
+    "polishedStatus_de": {
       "type": "string"
     },
     "originalPartsStatus": {
       "type": "string"
     },
+    "originalPartsStatus_en": {
+      "type": "string"
+    },
+    "originalPartsStatus_de": {
+      "type": "string"
+    },
     "warrantyType": {
+      "type": "string"
+    },
+    "warrantyType_en": {
+      "type": "string"
+    },
+    "warrantyType_de": {
       "type": "string"
     },
     "warrantyDuration": {
@@ -117,7 +153,19 @@
     "productDescription": {
       "type": "string"
     },
+    "productDescription_en": {
+      "type": "string"
+    },
+    "productDescription_de": {
+      "type": "string"
+    },
     "shortDescription": {
+      "type": "string"
+    },
+    "shortDescription_en": {
+      "type": "string"
+    },
+    "shortDescription_de": {
       "type": "string"
     },
     "price": {
@@ -159,23 +207,68 @@
     "shippingInfo": {
       "type": "string"
     },
+    "shippingInfo_en": {
+      "type": "string"
+    },
+    "shippingInfo_de": {
+      "type": "string"
+    },
     "returnEligibility": {
       "type": "boolean",
       "default": true
     },
+    "scopeOfDelivery": {
+      "type": "string"
+    },
+    "scopeOfDelivery_en": {
+      "type": "string"
+    },
+    "scopeOfDelivery_de": {
+      "type": "string"
+    },
     "metaTitle": {
+      "type": "string"
+    },
+    "metaTitle_en": {
+      "type": "string"
+    },
+    "metaTitle_de": {
       "type": "string"
     },
     "metaDescription": {
       "type": "string"
     },
+    "metaDescription_en": {
+      "type": "string"
+    },
+    "metaDescription_de": {
+      "type": "string"
+    },
     "seoKeywords": {
+      "type": "string"
+    },
+    "seoKeywords_en": {
+      "type": "string"
+    },
+    "seoKeywords_de": {
       "type": "string"
     },
     "googleMerchantTitle": {
       "type": "string"
     },
+    "googleMerchantTitle_en": {
+      "type": "string"
+    },
+    "googleMerchantTitle_de": {
+      "type": "string"
+    },
     "googleMerchantDescription": {
+      "type": "string"
+    },
+    "googleMerchantDescription_en": {
+      "type": "string"
+    },
+    "googleMerchantDescription_de": {
       "type": "string"
     },
     "featured": {
@@ -197,9 +290,6 @@
     "isLimitedEdition": {
       "type": "boolean",
       "default": false
-    },
-    "scopeOfDelivery": {
-      "type": "string"
     }
   },
   "required": [

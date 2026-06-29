@@ -5,6 +5,12 @@
     "brandName": {
       "type": "string"
     },
+    "brandName_en": {
+      "type": "string"
+    },
+    "brandName_de": {
+      "type": "string"
+    },
     "slug": {
       "type": "string"
     },
@@ -20,10 +26,28 @@
     "shortDescription": {
       "type": "string"
     },
+    "shortDescription_en": {
+      "type": "string"
+    },
+    "shortDescription_de": {
+      "type": "string"
+    },
     "longDescription": {
       "type": "string"
     },
+    "longDescription_en": {
+      "type": "string"
+    },
+    "longDescription_de": {
+      "type": "string"
+    },
     "brandDisclaimer": {
+      "type": "string"
+    },
+    "brandDisclaimer_en": {
+      "type": "string"
+    },
+    "brandDisclaimer_de": {
       "type": "string"
     },
     "featuredCollections": {
@@ -35,10 +59,28 @@
     "seoTitle": {
       "type": "string"
     },
+    "seoTitle_en": {
+      "type": "string"
+    },
+    "seoTitle_de": {
+      "type": "string"
+    },
     "seoDescription": {
       "type": "string"
     },
+    "seoDescription_en": {
+      "type": "string"
+    },
+    "seoDescription_de": {
+      "type": "string"
+    },
     "seoKeywords": {
+      "type": "string"
+    },
+    "seoKeywords_en": {
+      "type": "string"
+    },
+    "seoKeywords_de": {
       "type": "string"
     },
     "faqs": {
@@ -55,7 +97,41 @@
         }
       }
     },
+    "faqs_en": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "faqs_de": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "buyingGuideContent": {
+      "type": "string"
+    },
+    "buyingGuideContent_en": {
+      "type": "string"
+    },
+    "buyingGuideContent_de": {
       "type": "string"
     },
     "brandTint": {
