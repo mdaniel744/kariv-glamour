@@ -23,7 +23,7 @@ export default function ProductDetail() {
         const data = await base44.entities.Products.get(id);
         setProduct(data);
         const rel = await base44.entities.Products.filter({ brand: data.brand }, '-created_date', 4);
-        setRelated(rel.filter(p => p.id !== data.id).slice(0, 4));
+        setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
         console.error(e);
       } finally {
@@ -45,8 +45,8 @@ export default function ProductDetail() {
             <div className="h-6 bg-card w-24" />
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (!product) {
@@ -54,35 +54,35 @@ export default function ProductDetail() {
       <div className="max-w-7xl mx-auto px-6 py-20 text-center">
         <h1 className="font-display text-2xl text-foreground">Produkt nicht gefunden</h1>
         <Link to="/shop" className="text-primary text-sm mt-4 inline-block">Zurück zum Shop</Link>
-      </div>
-    );
+      </div>);
+
   }
 
   const images = product.productImages?.length > 0 ? product.productImages :
-    product.featuredImage ? [product.featuredImage] : [];
+  product.featuredImage ? [product.featuredImage] : [];
   const inCart = isInCart(product.id);
   const wishlisted = isInWishlist(product.id);
   const brandSlug = product.brand?.toLowerCase().replace(/\s+/g, '-');
 
   const specs = [
-    { label: "Marke", value: product.brand },
-    { label: "Kollektion", value: product.collection },
-    { label: "Modell", value: product.model },
-    { label: "Referenz", value: product.referenceNumber },
-    { label: "Jahr", value: product.yearOfProduction },
-    { label: "Zustand", value: product.condition },
-    { label: "Gehäusedurchmesser", value: product.caseDiameter },
-    { label: "Gehäusematerial", value: product.caseMaterial },
-    { label: "Zifferblattfarbe", value: product.dialColor },
-    { label: "Armband", value: product.braceletMaterial },
-    { label: "Uhrwerk", value: product.movementType },
-    { label: "Funktionen", value: product.functions },
-    { label: "Wasserdichtigkeit", value: product.waterResistance },
-    { label: "Glas", value: product.crystalType },
-    { label: "Gangreserve", value: product.powerReserve },
-    { label: "Uhrenform", value: product.watchShape },
-    { label: "Geschlecht", value: product.gender }
-  ].filter(s => s.value);
+  { label: "Marke", value: product.brand },
+  { label: "Kollektion", value: product.collection },
+  { label: "Modell", value: product.model },
+  { label: "Referenz", value: product.referenceNumber },
+  { label: "Jahr", value: product.yearOfProduction },
+  { label: "Zustand", value: product.condition },
+  { label: "Gehäusedurchmesser", value: product.caseDiameter },
+  { label: "Gehäusematerial", value: product.caseMaterial },
+  { label: "Zifferblattfarbe", value: product.dialColor },
+  { label: "Armband", value: product.braceletMaterial },
+  { label: "Uhrwerk", value: product.movementType },
+  { label: "Funktionen", value: product.functions },
+  { label: "Wasserdichtigkeit", value: product.waterResistance },
+  { label: "Glas", value: product.crystalType },
+  { label: "Gangreserve", value: product.powerReserve },
+  { label: "Uhrenform", value: product.watchShape },
+  { label: "Geschlecht", value: product.gender }].
+  filter((s) => s.value);
 
   return (
     <div>
@@ -92,12 +92,12 @@ export default function ProductDetail() {
           <Link to="/" className="hover:text-foreground">Start</Link>
           <ChevronRight size={10} />
           <Link to="/shop" className="hover:text-foreground">Shop</Link>
-          {product.brand && (
-            <>
+          {product.brand &&
+          <>
               <ChevronRight size={10} />
               <Link to={`/brands/${brandSlug}`} className="hover:text-foreground">{product.brand}</Link>
             </>
-          )}
+          }
           <ChevronRight size={10} />
           <span className="text-foreground truncate max-w-[200px]">{product.productTitle}</span>
         </div>
@@ -112,27 +112,27 @@ export default function ProductDetail() {
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="aspect-square bg-card overflow-hidden mb-4"
-            >
-              {images.length > 0 ? (
-                <img src={images[selectedImage]} alt={product.productTitle} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground/40 text-sm">Kein Bild verfügbar</div>
-              )}
+              className="aspect-square bg-card overflow-hidden mb-4">
+              
+              {images.length > 0 ?
+              <img src={images[selectedImage]} alt={product.productTitle} className="w-full h-full object-cover" /> :
+
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground/40 text-sm">Kein Bild verfügbar</div>
+              }
             </motion.div>
-            {images.length > 1 && (
-              <div className="flex gap-2">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`w-16 h-16 border ${i === selectedImage ? 'border-primary' : 'border-border'} overflow-hidden`}
-                  >
+            {images.length > 1 &&
+            <div className="flex gap-2">
+                {images.map((img, i) =>
+              <button
+                key={i}
+                onClick={() => setSelectedImage(i)}
+                className={`w-16 h-16 border ${i === selectedImage ? 'border-primary' : 'border-border'} overflow-hidden`}>
+                
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
-                ))}
+              )}
               </div>
-            )}
+            }
           </div>
 
           {/* Product info — sticky */}
@@ -140,53 +140,53 @@ export default function ProductDetail() {
             <div>
               <Link
                 to={`/brands/${brandSlug}`}
-                className="text-[10px] tracking-[0.2em] uppercase text-primary hover:underline"
-              >
+                className="text-[10px] tracking-[0.2em] uppercase text-primary hover:underline">
+                
                 {product.brand}
               </Link>
-              <h1 className="font-display text-2xl md:text-3xl font-light text-foreground mt-2 leading-tight">
+              <h1 className="text-2xl md:text-3xl mt-2 leading-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">
                 {product.productTitle}
               </h1>
-              {product.referenceNumber && (
-                <p className="text-xs text-muted-foreground mt-1">Ref. {product.referenceNumber}</p>
-              )}
+              {product.referenceNumber &&
+              <p className="text-xs text-muted-foreground mt-1">Ref. {product.referenceNumber}</p>
+              }
             </div>
 
             {/* Price */}
             <div className="border-y border-border py-5">
               <div className="flex items-baseline gap-3">
-                {product.salePrice && product.salePrice < product.price ? (
-                  <>
+                {product.salePrice && product.salePrice < product.price ?
+                <>
                     <span className="font-display text-3xl text-primary">{formatPrice(product.salePrice)}</span>
                     <span className="text-sm text-muted-foreground line-through">{formatPrice(product.price)}</span>
-                  </>
-                ) : (
-                  <span className="font-display text-3xl text-foreground">{formatPrice(product.price)}</span>
-                )}
+                  </> :
+
+                <span className="font-display text-3xl text-foreground">{formatPrice(product.price)}</span>
+                }
               </div>
               <div className="flex items-center gap-4 mt-3">
                 <span className={`text-[10px] tracking-[0.1em] uppercase px-2 py-1 ${product.availability === 'In Stock' ? 'bg-emerald-600/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-600/15 text-red-600 dark:text-red-400'}`}>
                   {product.availability === 'In Stock' ? 'Auf Lager' : product.availability || 'Auf Lager'}
                 </span>
-                {product.condition && (
-                  <span className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground">{product.condition}</span>
-                )}
+                {product.condition &&
+                <span className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground">{product.condition}</span>
+                }
               </div>
             </div>
 
             {/* Quick specs */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: "Box", value: product.boxIncluded ? "Inklusive" : "Nicht inklusive" },
-                { label: "Papiere", value: product.papersIncluded ? "Inklusive" : "Nicht inklusive" },
-                { label: "Jahr", value: product.yearOfProduction || "N/A" },
-                { label: "Größe", value: product.caseDiameter || "N/A" }
-              ].map(item => (
-                <div key={item.label} className="bg-card border border-border p-3">
+              { label: "Box", value: product.boxIncluded ? "Inklusive" : "Nicht inklusive" },
+              { label: "Papiere", value: product.papersIncluded ? "Inklusive" : "Nicht inklusive" },
+              { label: "Jahr", value: product.yearOfProduction || "N/A" },
+              { label: "Größe", value: product.caseDiameter || "N/A" }].
+              map((item) =>
+              <div key={item.label} className="bg-card border border-border p-3">
                   <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">{item.label}</p>
                   <p className="text-xs text-foreground mt-0.5">{item.value}</p>
                 </div>
-              ))}
+              )}
             </div>
 
             {/* Actions */}
@@ -195,24 +195,24 @@ export default function ProductDetail() {
                 onClick={() => !inCart && addToCart(product)}
                 disabled={inCart}
                 className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${
-                  inCart ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                }`}
-              >
+                inCart ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`
+                }>
+                
                 <ShoppingBag size={16} />
                 {inCart ? 'Im Warenkorb' : 'In den Warenkorb'}
               </button>
               <div className="flex gap-3">
                 <button
                   onClick={() => toggleWishlist(product)}
-                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors"
-                >
+                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors">
+                  
                   <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : ''} />
                   {wishlisted ? 'Gespeichert' : 'Wunschliste'}
                 </button>
                 <Link
                   to="/customer-service"
-                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors"
-                >
+                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors">
+                  
                   <MessageCircle size={14} />
                   Experten fragen
                 </Link>
@@ -223,45 +223,45 @@ export default function ProductDetail() {
             <div className="border border-border p-5 space-y-3">
               <h3 className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium">Die Kariv Garantie</h3>
               {[
-                { icon: ShieldCheck, text: product.authenticationStatus === 'Authenticated' ? 'Von Kariv Glamour authentifiziert' : 'Authentifizierung ausstehend' },
-                { icon: Truck, text: "Weltweit versicherter Versand" },
-                { icon: RotateCcw, text: product.returnEligibility !== false ? "Rückgabe innerhalb von 14 Tagen" : "Finaler Verkauf — keine Rückgabe" },
-                { icon: Award, text: "Transparente Zustandsbewertung" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
+              { icon: ShieldCheck, text: product.authenticationStatus === 'Authenticated' ? 'Von Kariv Glamour authentifiziert' : 'Authentifizierung ausstehend' },
+              { icon: Truck, text: "Weltweit versicherter Versand" },
+              { icon: RotateCcw, text: product.returnEligibility !== false ? "Rückgabe innerhalb von 14 Tagen" : "Finaler Verkauf — keine Rückgabe" },
+              { icon: Award, text: "Transparente Zustandsbewertung" }].
+              map((item, i) =>
+              <div key={i} className="flex items-center gap-3">
                   <item.icon size={14} className="text-primary flex-shrink-0" />
                   <span className="text-xs text-muted-foreground">{item.text}</span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
 
         {/* Description & Specs */}
         <div className="mt-20 grid md:grid-cols-2 gap-16">
-          {product.productDescription && (
-            <div>
+          {product.productDescription &&
+          <div>
               <h2 className="font-display text-2xl text-foreground font-light mb-6">Über diesen Zeitmesser</h2>
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{product.productDescription}</p>
             </div>
-          )}
+          }
           <div>
             <h2 className="font-display text-2xl text-foreground font-light mb-6">Technische Spezifikationen</h2>
             <div className="space-y-0">
-              {specs.map((spec, i) => (
-                <div key={i} className="flex justify-between py-3 border-b border-border">
+              {specs.map((spec, i) =>
+              <div key={i} className="flex justify-between py-3 border-b border-border">
                   <span className="text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{spec.label}</span>
                   <span className="text-xs text-foreground">{spec.value}</span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* Related */}
-      {related.length > 0 && (
-        <div className="border-t border-border py-16 md:py-24">
+      {related.length > 0 &&
+      <div className="border-t border-border py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-end justify-between mb-10">
               <h2 className="font-display text-2xl text-foreground font-light">Mehr von {product.brand}</h2>
@@ -270,13 +270,13 @@ export default function ProductDetail() {
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {related.map(p => <ProductCard key={p.id} product={p} />)}
+              {related.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
         </div>
-      )}
+      }
 
       <TrustBar />
-    </div>
-  );
+    </div>);
+
 }
