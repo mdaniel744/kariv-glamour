@@ -9,7 +9,7 @@ export default function RolexIntro() {
         <motion.span initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">
           The Maison
         </motion.span>
-        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-3xl md:text-4xl font-light mb-8 text-foreground">
+        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-3xl md:text-4xl mb-8 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">
           An Icon of Swiss Watchmaking
         </motion.h2>
         <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-sm md:text-base leading-relaxed text-muted-foreground">
@@ -22,6 +22,6 @@ export default function RolexIntro() {
           <Link to="/condition-grading" className="underline decoration-dotted hover:opacity-70 text-primary">condition grading</Link>, and a refined shopping experience.
         </motion.p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
