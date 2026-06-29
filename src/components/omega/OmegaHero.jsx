@@ -5,14 +5,14 @@ import { ChevronRight } from 'lucide-react';
 import { OMEGA_HERO_IMAGE } from '@/lib/omegaData';
 
 const ANCHOR_LINKS = [
-  { label: 'Collections', href: '#omega-collections' },
-  { label: 'New Arrivals', href: '#omega-products' },
-  { label: 'Pre-Owned Omega', href: '/omega-gebraucht-kaufen' },
-  { label: 'Omega Speedmaster', href: '/omega-speedmaster-kaufen' },
-  { label: 'Omega Seamaster', href: '/omega-seamaster-kaufen' },
-  { label: 'Omega Buying Guide', href: '/welche-omega-kaufen' },
-  { label: 'Maintenance', href: '#omega-maintenance' },
-];
+{ label: 'Collections', href: '#omega-collections' },
+{ label: 'New Arrivals', href: '#omega-products' },
+{ label: 'Pre-Owned Omega', href: '/omega-gebraucht-kaufen' },
+{ label: 'Omega Speedmaster', href: '/omega-speedmaster-kaufen' },
+{ label: 'Omega Seamaster', href: '/omega-seamaster-kaufen' },
+{ label: 'Omega Buying Guide', href: '/welche-omega-kaufen' },
+{ label: 'Maintenance', href: '#omega-maintenance' }];
+
 
 export default function OmegaHero() {
   return (
@@ -34,8 +34,8 @@ export default function OmegaHero() {
 
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Omega Boutique</span>
 
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-foreground">
-            Omega Watches at<br /><span className="italic text-primary">Kariv Glamour</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-bold">Omega Watches at
+Kariv Glamour
           </h1>
 
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">
@@ -48,12 +48,12 @@ export default function OmegaHero() {
           </div>
 
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {ANCHOR_LINKS.map((link, i) => (
-              <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">{link.label}</a>
-            ))}
+            {ANCHOR_LINKS.map((link, i) =>
+            <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">{link.label}</a>
+            )}
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
