@@ -14,7 +14,7 @@ const TRUST_BADGES = [
 export default function BpHero() {
   return (
     <section className="relative overflow-hidden bg-background border-b border-border">
-      <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+      <div className="w-full px-6 md:px-12 lg:px-20 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
         <div>
           <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-primary font-medium mb-6">
             <ShieldCheck size={14} /> Buyer Protection

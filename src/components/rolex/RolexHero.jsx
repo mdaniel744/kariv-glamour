@@ -20,7 +20,7 @@ export default function RolexHero() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-20 md:py-32 lg:py-40">
+      <div className="relative w-full px-6 md:px-12 lg:px-20 py-20 md:py-32 lg:py-40">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

@@ -21,7 +21,7 @@ export default function PatekPhilippeHero() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-20 md:py-28 lg:py-36">
+      <div className="relative w-full px-6 md:px-12 lg:px-20 py-20 md:py-28 lg:py-36">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mb-6 text-muted-foreground">
             <Link to="/" className="hover:text-foreground">Start</Link>

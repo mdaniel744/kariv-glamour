@@ -13,7 +13,7 @@ const ANCHORS = [
 export default function HublotHero() {
   return (
     <section className="relative overflow-hidden bg-background border-b border-border">
-      <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+      <div className="w-full px-6 md:px-12 lg:px-20 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Hublot</span>
           <h1 className="font-display text-4xl md:text-6xl font-light leading-tight mb-6 text-foreground">Hublot Uhren at Kariv Glamour</h1>
