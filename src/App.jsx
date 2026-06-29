@@ -48,6 +48,9 @@ import BreitlingCollectionPage from '@/pages/BreitlingCollectionPage';
 import AudemarsPiguetPage from '@/pages/AudemarsPiguetPage';
 import AudemarsPiguetSeoLanding from '@/pages/AudemarsPiguetSeoLanding';
 import AudemarsPiguetCollectionPage from '@/pages/AudemarsPiguetCollectionPage';
+import GrandSeikoPage from '@/pages/GrandSeikoPage';
+import GrandSeikoSeoLanding from '@/pages/GrandSeikoSeoLanding';
+import GrandSeikoCollectionPage from '@/pages/GrandSeikoCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -102,6 +105,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/hublot" element={<HublotPage />} />
         <Route path="/brands/breitling" element={<BreitlingPage />} />
         <Route path="/brands/audemars-piguet" element={<AudemarsPiguetPage />} />
+        <Route path="/brands/grand-seiko" element={<GrandSeikoPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -240,6 +244,25 @@ const AuthenticatedApp = () => {
         <Route path="/welche-audemars-piguet-kaufen" element={<AudemarsPiguetSeoLanding slug="welche-audemars-piguet-kaufen" />} />
         <Route path="/audemars-piguet/story" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-story" />} />
         <Route path="/audemars-piguet/:slug" element={<AudemarsPiguetCollectionPage />} />
+
+        {/* Grand Seiko SEO landing pages */}
+        <Route path="/grand-seiko-uhr" element={<GrandSeikoSeoLanding slug="grand-seiko-uhr" />} />
+        <Route path="/grand-seiko-uhren" element={<GrandSeikoSeoLanding slug="grand-seiko-uhren" />} />
+        <Route path="/grand-seiko-uhr-herren" element={<GrandSeikoSeoLanding slug="grand-seiko-uhr-herren" />} />
+        <Route path="/grand-seiko-uhr-damen" element={<GrandSeikoSeoLanding slug="grand-seiko-uhr-damen" />} />
+        <Route path="/grand-seiko-snowflake" element={<GrandSeikoSeoLanding slug="grand-seiko-snowflake" />} />
+        <Route path="/grand-seiko-shunbun" element={<GrandSeikoSeoLanding slug="grand-seiko-shunbun" />} />
+        <Route path="/grand-seiko-spring-drive" element={<GrandSeikoSeoLanding slug="grand-seiko-spring-drive" />} />
+        <Route path="/grand-seiko-gmt" element={<GrandSeikoSeoLanding slug="grand-seiko-gmt" />} />
+        <Route path="/grand-seiko-gebraucht" element={<GrandSeikoSeoLanding slug="grand-seiko-gebraucht" />} />
+        <Route path="/grand-seiko-kaufen" element={<GrandSeikoSeoLanding slug="grand-seiko-kaufen" />} />
+        <Route path="/grand-seiko-uhr-kaufen" element={<GrandSeikoSeoLanding slug="grand-seiko-uhr-kaufen" />} />
+        <Route path="/grand-seiko-gebraucht-kaufen" element={<GrandSeikoSeoLanding slug="grand-seiko-gebraucht-kaufen" />} />
+        <Route path="/welche-grand-seiko-kaufen" element={<GrandSeikoSeoLanding slug="welche-grand-seiko-kaufen" />} />
+        <Route path="/grand-seiko-snowflake-vs-shunbun" element={<GrandSeikoSeoLanding slug="grand-seiko-snowflake-vs-shunbun" />} />
+        <Route path="/grand-seiko-spring-drive-guide" element={<GrandSeikoSeoLanding slug="grand-seiko-spring-drive-guide" />} />
+        <Route path="/grand-seiko/story" element={<GrandSeikoSeoLanding slug="grand-seiko-story" />} />
+        <Route path="/grand-seiko/:slug" element={<GrandSeikoCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
