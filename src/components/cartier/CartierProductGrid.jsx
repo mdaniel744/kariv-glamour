@@ -77,7 +77,7 @@ export default function CartierProductGrid() {
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Cartier Boutique</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Shop Cartier Watches</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Shop Cartier Watches</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
