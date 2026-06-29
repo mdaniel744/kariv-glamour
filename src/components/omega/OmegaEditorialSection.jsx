@@ -14,17 +14,17 @@ export default function OmegaEditorialSection({ section, reverse }) {
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="[direction:ltr]">
             <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{section.eyebrow}</span>
-            <h2 className="font-display text-3xl md:text-4xl font-light mb-6 text-foreground">{section.title}</h2>
+            <h2 className="text-3xl md:text-4xl mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{section.title}</h2>
             <p className="text-sm leading-relaxed mb-6 text-muted-foreground">{section.description}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-2 mb-8">
-              {section.internalLinks?.map((link, i) => (
-                <Link key={i} to={link.link} className="text-[11px] underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
-              ))}
+              {section.internalLinks?.map((link, i) =>
+              <Link key={i} to={link.link} className="text-[11px] underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
+              )}
             </div>
             <Link to={section.link} className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:bg-background border-primary text-primary">{section.cta}</Link>
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
