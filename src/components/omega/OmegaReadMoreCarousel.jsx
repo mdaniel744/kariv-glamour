@@ -29,7 +29,7 @@ export default function OmegaReadMoreCarousel() {
                 <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-card">
                   <img src={card.image} alt={card.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
-                <h3 className="font-display text-lg font-light mb-2 text-foreground">{card.title}</h3>
+                <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{card.title}</h3>
                 <p className="text-xs leading-relaxed mb-3 line-clamp-2 text-muted-foreground">{card.description}</p>
                 <span className="text-[10px] tracking-[0.12em] uppercase group-hover:opacity-70 text-primary">Read More →</span>
               </Link>
