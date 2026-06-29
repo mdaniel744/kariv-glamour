@@ -1,31 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
 import { BRAND_DATA } from '@/lib/constants';
 import BrandFavicon from '@/components/shared/BrandFavicon';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const WATCH_CATEGORIES = [
-{ label: 'New Arrivals', to: '/shop?condition=New&condition=Unworn' },
-{ label: 'Certified Pre-Owned', to: '/shop?isCertifiedPreOwned=true' },
-{ label: 'Vintage Watches', to: '/shop?isVintage=true' },
-{ label: "Men's Watches", to: '/shop?gender=Men' },
-{ label: "Women's Watches", to: '/shop?gender=Women' },
-{ label: 'Unisex Watches', to: '/shop?gender=Unisex' }];
-
-
-const SECURITY_LINKS = [
-{ label: 'Buyer Protection', to: '/buyer-protection' },
-{ label: 'FAQs', to: '/customer-service' },
-{ label: 'Returns & Refunds', to: '/legal/returns-and-refunds' },
-{ label: 'Shipping & Delivery', to: '/legal/shipping-and-delivery' }];
 
 
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation('navigation');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [buyOpen, setBuyOpen] = useState(false);
@@ -33,6 +21,22 @@ export default function Navbar() {
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const buyRef = useRef(null);
   const securityRef = useRef(null);
+
+  const WATCH_CATEGORIES = [
+    { label: t('categories.newArrivals'), to: '/shop?condition=New&condition=Unworn' },
+    { label: t('categories.certifiedPreOwned'), to: '/shop?isCertifiedPreOwned=true' },
+    { label: t('categories.vintageWatches'), to: '/shop?isVintage=true' },
+    { label: t('categories.mensWatches'), to: '/shop?gender=Men' },
+    { label: t('categories.womensWatches'), to: '/shop?gender=Women' },
+    { label: t('categories.unisexWatches'), to: '/shop?gender=Unisex' }
+  ];
+
+  const SECURITY_LINKS = [
+    { label: t('security.buyerProtection'), to: '/buyer-protection' },
+    { label: t('security.faqs'), to: '/customer-service' },
+    { label: t('security.returnsRefunds'), to: '/legal/returns-and-refunds' },
+    { label: t('security.shippingDelivery'), to: '/legal/shipping-and-delivery' }
+  ];
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -63,11 +67,12 @@ export default function Navbar() {
         <div className="hidden md:block border-b border-border">
           <div className="w-full mx-auto px-6 py-2 flex justify-between items-center">
             <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-body">
-              Authentifizierte Luxusuhren · Weltweit versichert
+              {t('topBar')}
             </p>
             <div className="flex gap-6 items-center">
-              <Link to="/about" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">Über uns</Link>
-              <Link to="/customer-service" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">Kundenservice</Link>
+              <Link to="/about" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('about')}</Link>
+              <Link to="/customer-service" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('customerService')}</Link>
+              <LanguageSwitcher />
               <button onClick={toggleTheme} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
                 {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
               </button>
@@ -97,7 +102,7 @@ export default function Navbar() {
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Suche nach Marke, Kollektion, Referenznummer..."
+                placeholder={t('searchPlaceholder')}
                 className="flex-1 w-full bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body" />
               
               {searchQuery &&
@@ -137,7 +142,7 @@ export default function Navbar() {
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Suche nach Marke, Kollektion..."
+              placeholder={t('searchPlaceholderMobile')}
               className="flex-1 w-full bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body" />
             
           </form>
@@ -147,7 +152,7 @@ export default function Navbar() {
             {/* Buy a watch — mega dropdown */}
             <div ref={buyRef} className="relative">
               <button onClick={toggleBuy} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium flex items-center gap-1">
-                Buy a watch <ChevronDown size={12} className={`transition-transform ${buyOpen ? 'rotate-180' : ''}`} />
+                {t('buyWatch')} <ChevronDown size={12} className={`transition-transform ${buyOpen ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {buyOpen &&
@@ -161,7 +166,7 @@ export default function Navbar() {
                     <div className="bg-popover border border-border rounded p-10 shadow-lg flex items-center gap-12 w-[70vw] h-[70vh]">
                       {/* Watch brands */}
                       <div className="flex-1">
-                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">Watch Brands</p>
+                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchBrands')}</p>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {BRAND_DATA.map((b) =>
                         <Link key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-3 text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
@@ -173,7 +178,7 @@ export default function Navbar() {
                       </div>
                       {/* Watch categories */}
                       <div className="w-72 border-l border-border pl-10">
-                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">Watch Categories</p>
+                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchCategories')}</p>
                         <div className="space-y-5">
                           {WATCH_CATEGORIES.map((c) =>
                         <Link key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors">
@@ -188,13 +193,13 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">Top Deals</Link>
-            <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">Watch Collections</Link>
+            <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('topDeals')}</Link>
+            <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchCollections')}</Link>
 
             {/* Kariv Security — dropdown */}
             <div ref={securityRef} className="relative">
               <button onClick={toggleSecurity} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium flex items-center gap-1">
-                Kariv Security <ChevronDown size={12} className={`transition-transform ${securityOpen ? 'rotate-180' : ''}`} />
+                {t('karivSecurity')} <ChevronDown size={12} className={`transition-transform ${securityOpen ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {securityOpen &&
@@ -219,7 +224,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">Watch Guides</Link>
+            <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchGuides')}</Link>
           </div>
         </div>
       </nav>
@@ -241,7 +246,7 @@ export default function Navbar() {
                 onClick={() => setMobileExpanded(mobileExpanded === 'buy' ? null : 'buy')}
                 className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">
                 
-                  Buy a watch
+                  {t('buyWatch')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'buy' ? 'rotate-180' : ''}`} />
                 </button>
                 <AnimatePresence>
@@ -255,7 +260,7 @@ export default function Navbar() {
                   
                       <div className="pl-4 pt-2 pb-4 space-y-5">
                         <div>
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">Watch Brands</p>
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchBrands')}</p>
                           <div className="space-y-2">
                             {BRAND_DATA.map((b) =>
                         <Link key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -266,7 +271,7 @@ export default function Navbar() {
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">Watch Categories</p>
+                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchCategories')}</p>
                           <div className="space-y-2">
                             {WATCH_CATEGORIES.map((c) =>
                         <Link key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -281,8 +286,8 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <Link to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Top Deals</Link>
-              <Link to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Watch Collections</Link>
+              <Link to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('topDeals')}</Link>
+              <Link to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchCollections')}</Link>
 
               {/* Kariv Security — expandable */}
               <div>
@@ -290,7 +295,7 @@ export default function Navbar() {
                 onClick={() => setMobileExpanded(mobileExpanded === 'security' ? null : 'security')}
                 className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">
                 
-                  Kariv Security
+                  {t('karivSecurity')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'security' ? 'rotate-180' : ''}`} />
                 </button>
                 <AnimatePresence>
@@ -314,10 +319,11 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <Link to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Watch Guides</Link>
-              <Link to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Verkaufen & Tauschen</Link>
-              <Link to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Über uns</Link>
-              <Link to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Kundenservice</Link>
+              <Link to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchGuides')}</Link>
+              <Link to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('sellTrade')}</Link>
+              <Link to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('about')}</Link>
+              <Link to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('customerService')}</Link>
+              <div className="pt-2"><LanguageSwitcher /></div>
             </div>
           </motion.div>
         }

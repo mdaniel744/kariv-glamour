@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard } from 'lucide-react';
 
 function AdminDarkMode() {
   useEffect(() => {
     document.documentElement.classList.add('dark');
     return () => {
-      // Don't remove dark on unmount — let the theme context manage it
-      // Only remove if the user's saved theme is light
       if (localStorage.getItem('kariv-theme') !== 'dark') {
         document.documentElement.classList.remove('dark');
       }
@@ -16,26 +15,26 @@ function AdminDarkMode() {
   return null;
 }
 
-const navItems = [
-  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-  { to: '/admin/products', icon: Package, label: 'Products' },
-  { to: '/admin/brands', icon: Tag, label: 'Brands' },
-  { to: '/admin/collections', icon: Layers, label: 'Collections' },
-  { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
-  { to: '/admin/customers', icon: Users, label: 'Customers' },
-  { to: '/admin/guides', icon: BookOpen, label: 'Guides' },
-  { to: '/admin/legal', icon: FileText, label: 'Legal Pages' },
-  { to: '/admin/faq', icon: HelpCircle, label: 'FAQ' }
-];
-
 export default function AdminLayout() {
+  const { t } = useTranslation('admin');
   const { pathname } = useLocation();
+
+  const navItems = [
+    { to: '/admin', icon: LayoutDashboard, label: t('dashboard'), exact: true },
+    { to: '/admin/products', icon: Package, label: t('products') },
+    { to: '/admin/brands', icon: Tag, label: t('brands') },
+    { to: '/admin/collections', icon: Layers, label: t('collections') },
+    { to: '/admin/orders', icon: ShoppingCart, label: t('orders') },
+    { to: '/admin/customers', icon: Users, label: t('customers') },
+    { to: '/admin/guides', icon: BookOpen, label: t('guides') },
+    { to: '/admin/legal', icon: FileText, label: t('legal') },
+    { to: '/admin/faq', icon: HelpCircle, label: t('faq') }
+  ];
 
   return (
     <>
     <AdminDarkMode />
     <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
       <aside className="w-56 border-r border-border flex-shrink-0 hidden md:block">
         <div className="p-5 border-b border-border">
           <Link to="/">
@@ -64,7 +63,6 @@ export default function AdminLayout() {
         </nav>
       </aside>
 
-      {/* Main */}
       <main className="flex-1 overflow-y-auto">
         <div className="p-6 md:p-8">
           <Outlet />

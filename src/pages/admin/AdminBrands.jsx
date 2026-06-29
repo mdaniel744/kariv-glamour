@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import BilingualField from '@/components/admin/BilingualField';
 
 export default function AdminBrands() {
+  const { t } = useTranslation('admin');
   const { toast } = useToast();
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,22 +21,34 @@ export default function AdminBrands() {
 
   useEffect(() => { load(); }, []);
 
-  const openNew = () => { setForm({ brandName: '', slug: '', shortDescription: '', longDescription: '', brandDisclaimer: '', seoTitle: '', seoDescription: '' }); setEditing('new'); };
+  const openNew = () => {
+    setForm({ slug: '', brandName_de: '', brandName_en: '', shortDescription_de: '', shortDescription_en: '', longDescription_de: '', longDescription_en: '', brandDisclaimer_de: '', brandDisclaimer_en: '', seoTitle_de: '', seoTitle_en: '', seoDescription_de: '', seoDescription_en: '', brandLogoLight: '', brandLogoDark: '', heroImage: '' });
+    setEditing('new');
+  };
   const openEdit = (b) => { setForm({ ...b }); setEditing(b.id); };
 
   const handleSave = async () => {
     try {
-      const payload = { ...form, slug: form.slug || form.brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-') };
-      if (editing === 'new') { await base44.entities.Brands.create(payload); toast({ title: "Brand created" }); }
-      else { await base44.entities.Brands.update(editing, payload); toast({ title: "Brand updated" }); }
+      const payload = {
+        ...form,
+        brandName: form.brandName_de || form.brandName_en || form.brandName || '',
+        shortDescription: form.shortDescription_de || form.shortDescription_en || form.shortDescription || '',
+        longDescription: form.longDescription_de || form.longDescription_en || form.longDescription || '',
+        brandDisclaimer: form.brandDisclaimer_de || form.brandDisclaimer_en || form.brandDisclaimer || '',
+        seoTitle: form.seoTitle_de || form.seoTitle_en || form.seoTitle || '',
+        seoDescription: form.seoDescription_de || form.seoDescription_en || form.seoDescription || '',
+        slug: form.slug || (form.brandName_de || form.brandName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      };
+      if (editing === 'new') { await base44.entities.Brands.create(payload); toast({ title: t('brandCreated') }); }
+      else { await base44.entities.Brands.update(editing, payload); toast({ title: t('brandUpdated') }); }
       setEditing(null); load();
-    } catch (e) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
+    } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this brand?')) return;
-    try { await base44.entities.Brands.delete(id); toast({ title: "Brand deleted" }); load(); }
-    catch (e) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
+    if (!confirm(t('deleteConfirmBrand'))) return;
+    try { await base44.entities.Brands.delete(id); toast({ title: t('brandDeleted') }); load(); }
+    catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleImageUpload = async (e, field) => {
@@ -42,50 +57,42 @@ export default function AdminBrands() {
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setForm(prev => ({ ...prev, [field]: file_url }));
-    } catch { toast({ title: "Upload failed", variant: "destructive" }); }
+    } catch { toast({ title: t('uploadFailed'), variant: "destructive" }); }
   };
 
   if (editing !== null) {
     return (
       <div>
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-display text-[#E5E5E5] font-light">{editing === 'new' ? 'Add Brand' : 'Edit Brand'}</h1>
+          <h1 className="text-xl font-display text-[#E5E5E5] font-light">{editing === 'new' ? t('addBrand') : t('editBrand')}</h1>
           <button onClick={() => setEditing(null)} className="text-[#8E8E93]"><X size={18} /></button>
         </div>
         <div className="space-y-4 max-w-2xl">
-          {[
-            { label: 'Brand Name', name: 'brandName' },
-            { label: 'Slug', name: 'slug' },
-            { label: 'Short Description', name: 'shortDescription', textarea: true },
-            { label: 'Long Description', name: 'longDescription', textarea: true },
-            { label: 'Brand Disclaimer', name: 'brandDisclaimer', textarea: true },
-            { label: 'SEO Title', name: 'seoTitle' },
-            { label: 'SEO Description', name: 'seoDescription', textarea: true }
-          ].map(f => (
-            <div key={f.name}>
-              <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{f.label}</label>
-              {f.textarea ? (
-                <textarea value={form[f.name] || ''} onChange={e => setForm({...form, [f.name]: e.target.value})} rows={3} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367] resize-none" />
-              ) : (
-                <input value={form[f.name] || ''} onChange={e => setForm({...form, [f.name]: e.target.value})} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]" />
-              )}
-            </div>
-          ))}
+          <BilingualField label={t('fields.brandName')} name="brandName" form={form} setForm={setForm} />
+          <div>
+            <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{t('fields.slug')}</label>
+            <input value={form.slug || ''} onChange={e => setForm({...form, slug: e.target.value})} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]" />
+          </div>
+          <BilingualField label={t('fields.shortDescription')} name="shortDescription" form={form} setForm={setForm} type="textarea" />
+          <BilingualField label={t('fields.longDescription')} name="longDescription" form={form} setForm={setForm} type="textarea" />
+          <BilingualField label={t('fields.brandDisclaimer')} name="brandDisclaimer" form={form} setForm={setForm} type="textarea" />
+          <BilingualField label={t('fields.seoTitle')} name="seoTitle" form={form} setForm={setForm} />
+          <BilingualField label={t('fields.seoDescription')} name="seoDescription" form={form} setForm={setForm} type="textarea" />
           <div className="flex gap-4">
-            {['brandLogo', 'heroImage'].map(field => (
+            {['brandLogoLight', 'brandLogoDark', 'heroImage'].map(field => (
               <div key={field}>
-                <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{field === 'brandLogo' ? 'Logo' : 'Hero Image'}</label>
+                <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{field === 'brandLogoLight' ? t('fields.logo') + ' (Light)' : field === 'brandLogoDark' ? t('fields.logo') + ' (Dark)' : t('fields.heroImage')}</label>
                 <div className="flex items-center gap-3">
                   {form[field] && <img src={form[field]} alt="" className="w-16 h-16 object-cover border border-white/10" />}
                   <label className="cursor-pointer border border-white/10 px-3 py-2 text-xs text-[#8E8E93] hover:border-[#C5A367]">
-                    <Upload size={12} className="inline mr-1" /> Upload
+                    <Upload size={12} className="inline mr-1" /> {t('upload')}
                     <input type="file" accept="image/*" onChange={e => handleImageUpload(e, field)} className="hidden" />
                   </label>
                 </div>
               </div>
             ))}
           </div>
-          <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3"><Save size={14} /> Save Brand</button>
+          <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3"><Save size={14} /> {t('saveBrand')}</button>
         </div>
       </div>
     );
@@ -94,21 +101,21 @@ export default function AdminBrands() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-display text-[#E5E5E5] font-light">Brands</h1>
-        <button onClick={openNew} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-4 py-2.5"><Plus size={14} /> Add Brand</button>
+        <h1 className="text-xl font-display text-[#E5E5E5] font-light">{t('brands')}</h1>
+        <button onClick={openNew} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-4 py-2.5"><Plus size={14} /> {t('addBrand')}</button>
       </div>
       {loading ? (
         <div className="space-y-2">{[...Array(3)].map((_, i) => <div key={i} className="h-14 bg-[#111] animate-pulse" />)}</div>
       ) : brands.length === 0 ? (
-        <div className="text-center py-16 border border-white/5"><p className="text-[#8E8E93] text-sm">No brands yet.</p></div>
+        <div className="text-center py-16 border border-white/5"><p className="text-[#8E8E93] text-sm">{t('noBrands')}</p></div>
       ) : (
         <div className="space-y-2">
           {brands.map(b => (
             <div key={b.id} className="flex items-center justify-between bg-[#111] border border-white/5 p-3">
               <div className="flex items-center gap-3">
-                {b.brandLogo && <img src={b.brandLogo} alt="" className="w-8 h-8 object-contain" />}
+                {b.brandLogoLight && <img src={b.brandLogoLight} alt="" className="w-8 h-8 object-contain" />}
                 <div>
-                  <p className="text-xs text-[#E5E5E5]">{b.brandName}</p>
+                  <p className="text-xs text-[#E5E5E5]">{b.brandName_de || b.brandName}</p>
                   <p className="text-[10px] text-[#8E8E93]">/{b.slug}</p>
                 </div>
               </div>

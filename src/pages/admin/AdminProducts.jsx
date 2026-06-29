@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import BilingualField from '@/components/admin/BilingualField';
 
 export default function AdminProducts() {
+  const { t } = useTranslation('admin');
   const { toast } = useToast();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +26,7 @@ export default function AdminProducts() {
   useEffect(() => { loadProducts(); }, []);
 
   const openNew = () => {
-    setForm({ productTitle: '', brand: '', collection: '', model: '', referenceNumber: '', price: '', condition: 'Excellent', gender: 'Men', caseDiameter: '', caseMaterial: '', dialColor: '', braceletMaterial: '', movementType: '', yearOfProduction: '', availability: 'In Stock', featured: false, isNewArrival: false, isCertifiedPreOwned: false, isVintage: false, productDescription: '', shortDescription: '', authenticationStatus: 'Pending', boxIncluded: false, papersIncluded: false });
+    setForm({ brand: '', collection: '', model: '', referenceNumber: '', price: '', condition: 'Excellent', gender: 'Men', caseDiameter: '', caseMaterial: '', dialColor: '', braceletMaterial: '', movementType: '', yearOfProduction: '', availability: 'In Stock', featured: false, isNewArrival: false, isCertifiedPreOwned: false, isVintage: false, authenticationStatus: 'Pending', boxIncluded: false, papersIncluded: false, productTitle_de: '', productTitle_en: '', shortDescription_de: '', shortDescription_en: '', productDescription_de: '', productDescription_en: '' });
     setEditing('new');
   };
 
@@ -34,29 +37,37 @@ export default function AdminProducts() {
 
   const handleSave = async () => {
     try {
-      const payload = { ...form, price: Number(form.price) || 0, yearOfProduction: Number(form.yearOfProduction) || undefined, slug: (form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') };
+      const payload = {
+        ...form,
+        price: Number(form.price) || 0,
+        yearOfProduction: Number(form.yearOfProduction) || undefined,
+        productTitle: form.productTitle_de || form.productTitle_en || form.productTitle || '',
+        shortDescription: form.shortDescription_de || form.shortDescription_en || form.shortDescription || '',
+        productDescription: form.productDescription_de || form.productDescription_en || form.productDescription || '',
+        slug: (form.productTitle_de || form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      };
       if (editing === 'new') {
         await base44.entities.Products.create(payload);
-        toast({ title: "Product created" });
+        toast({ title: t('productCreated') });
       } else {
         await base44.entities.Products.update(editing, payload);
-        toast({ title: "Product updated" });
+        toast({ title: t('productUpdated') });
       }
       setEditing(null);
       loadProducts();
     } catch (e) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: t('error'), description: e.message, variant: "destructive" });
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this product?')) return;
+    if (!confirm(t('deleteConfirmProduct'))) return;
     try {
       await base44.entities.Products.delete(id);
-      toast({ title: "Product deleted" });
+      toast({ title: t('productDeleted') });
       loadProducts();
     } catch (e) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: t('error'), description: e.message, variant: "destructive" });
     }
   };
 
@@ -67,7 +78,7 @@ export default function AdminProducts() {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setForm(prev => ({ ...prev, featuredImage: file_url, productImages: [...(prev.productImages || []), file_url] }));
     } catch (e) {
-      toast({ title: "Upload failed", variant: "destructive" });
+      toast({ title: t('uploadFailed'), variant: "destructive" });
     }
   };
 
@@ -93,55 +104,56 @@ export default function AdminProducts() {
     return (
       <div>
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-display text-[#E5E5E5] font-light">{editing === 'new' ? 'Add Product' : 'Edit Product'}</h1>
+          <h1 className="text-xl font-display text-[#E5E5E5] font-light">{editing === 'new' ? t('addProduct') : t('editProduct')}</h1>
           <button onClick={() => setEditing(null)} className="text-[#8E8E93] hover:text-[#E5E5E5]"><X size={18} /></button>
         </div>
         <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <Field label="Product Title" name="productTitle" required />
-          <Field label="Brand" name="brand" type="select" options={BRAND_DATA.map(b => b.name)} />
-          <Field label="Collection" name="collection" />
-          <Field label="Model" name="model" />
-          <Field label="Reference Number" name="referenceNumber" />
-          <Field label="Price (EUR)" name="price" type="number" />
-          <Field label="Condition" name="condition" type="select" options={CONDITIONS} />
-          <Field label="Gender" name="gender" type="select" options={GENDERS} />
-          <Field label="Year" name="yearOfProduction" type="number" />
-          <Field label="Case Diameter" name="caseDiameter" placeholder="e.g. 41mm" />
-          <Field label="Case Material" name="caseMaterial" type="select" options={CASE_MATERIALS} />
-          <Field label="Dial Color" name="dialColor" type="select" options={DIAL_COLORS} />
-          <Field label="Bracelet Material" name="braceletMaterial" />
-          <Field label="Movement Type" name="movementType" type="select" options={MOVEMENT_TYPES} />
-          <Field label="Watch Shape" name="watchShape" type="select" options={WATCH_SHAPES} />
-          <Field label="Availability" name="availability" type="select" options={['In Stock', 'Sold', 'Reserved', 'Coming Soon']} />
-          <Field label="Authentication" name="authenticationStatus" type="select" options={['Authenticated', 'Pending', 'Not Verified']} />
+          <Field label={t('fields.brand')} name="brand" type="select" options={BRAND_DATA.map(b => b.name)} />
+          <Field label={t('fields.collection')} name="collection" />
+          <Field label={t('fields.model')} name="model" />
+          <Field label={t('fields.referenceNumber')} name="referenceNumber" />
+          <Field label={t('fields.price')} name="price" type="number" />
+          <Field label={t('fields.condition')} name="condition" type="select" options={CONDITIONS} />
+          <Field label={t('fields.gender')} name="gender" type="select" options={GENDERS} />
+          <Field label={t('fields.year')} name="yearOfProduction" type="number" />
+          <Field label={t('fields.caseDiameter')} name="caseDiameter" placeholder="e.g. 41mm" />
+          <Field label={t('fields.caseMaterial')} name="caseMaterial" type="select" options={CASE_MATERIALS} />
+          <Field label={t('fields.dialColor')} name="dialColor" type="select" options={DIAL_COLORS} />
+          <Field label={t('fields.braceletMaterial')} name="braceletMaterial" />
+          <Field label={t('fields.movementType')} name="movementType" type="select" options={MOVEMENT_TYPES} />
+          <Field label={t('fields.watchShape')} name="watchShape" type="select" options={WATCH_SHAPES} />
+          <Field label={t('fields.availability')} name="availability" type="select" options={['In Stock', 'Sold', 'Reserved', 'Coming Soon']} />
+          <Field label={t('fields.authentication')} name="authenticationStatus" type="select" options={['Authenticated', 'Pending', 'Not Verified']} />
         </div>
         <div className="grid md:grid-cols-2 gap-4 mb-6">
-          <Field label="Short Description" name="shortDescription" type="textarea" />
-          <Field label="Full Description" name="productDescription" type="textarea" />
+          <BilingualField label={t('fields.productTitle')} name="productTitle" form={form} setForm={setForm} />
+          <BilingualField label={t('fields.shortDescription')} name="shortDescription" form={form} setForm={setForm} type="textarea" />
+          <div className="md:col-span-2">
+            <BilingualField label={t('fields.fullDescription')} name="productDescription" form={form} setForm={setForm} type="textarea" />
+          </div>
         </div>
         <div className="flex flex-wrap gap-6 mb-6">
-          <Field label="Featured" name="featured" type="checkbox" />
-          <Field label="New Arrival" name="isNewArrival" type="checkbox" />
-          <Field label="Certified Pre-Owned" name="isCertifiedPreOwned" type="checkbox" />
-          <Field label="Vintage" name="isVintage" type="checkbox" />
-          <Field label="Box Included" name="boxIncluded" type="checkbox" />
-          <Field label="Papers Included" name="papersIncluded" type="checkbox" />
+          <Field label={t('fields.featured')} name="featured" type="checkbox" />
+          <Field label={t('fields.newArrival')} name="isNewArrival" type="checkbox" />
+          <Field label={t('fields.certifiedPreOwned')} name="isCertifiedPreOwned" type="checkbox" />
+          <Field label={t('fields.vintage')} name="isVintage" type="checkbox" />
+          <Field label={t('fields.boxIncluded')} name="boxIncluded" type="checkbox" />
+          <Field label={t('fields.papersIncluded')} name="papersIncluded" type="checkbox" />
         </div>
-        {/* Image upload */}
         <div className="mb-6">
-          <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-2">Product Image</label>
+          <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-2">{t('fields.productImage')}</label>
           <div className="flex items-center gap-4">
             {form.featuredImage && (
               <img src={form.featuredImage} alt="" className="w-20 h-20 object-cover border border-white/10" />
             )}
             <label className="cursor-pointer flex items-center gap-2 border border-white/10 px-4 py-2 text-xs text-[#8E8E93] hover:border-[#C5A367] hover:text-[#C5A367] transition-colors">
-              <Upload size={14} /> Upload Image
+              <Upload size={14} /> {t('uploadImage')}
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
             </label>
           </div>
         </div>
         <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3 hover:bg-[#B8944F] transition-colors">
-          <Save size={14} /> Save Product
+          <Save size={14} /> {t('saveProduct')}
         </button>
       </div>
     );
@@ -150,9 +162,9 @@ export default function AdminProducts() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-display text-[#E5E5E5] font-light">Products</h1>
+        <h1 className="text-xl font-display text-[#E5E5E5] font-light">{t('products')}</h1>
         <button onClick={openNew} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-4 py-2.5 hover:bg-[#B8944F] transition-colors">
-          <Plus size={14} /> Add Product
+          <Plus size={14} /> {t('addProduct')}
         </button>
       </div>
 
@@ -162,8 +174,8 @@ export default function AdminProducts() {
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-16 border border-white/5">
-          <p className="text-[#8E8E93] text-sm mb-4">No products yet.</p>
-          <button onClick={openNew} className="text-[#C5A367] text-xs">Add your first product</button>
+          <p className="text-[#8E8E93] text-sm mb-4">{t('noProducts')}</p>
+          <button onClick={openNew} className="text-[#C5A367] text-xs">{t('addFirst')}</button>
         </div>
       ) : (
         <div className="space-y-2">
@@ -173,7 +185,7 @@ export default function AdminProducts() {
                 {p.featuredImage && <img src={p.featuredImage} alt="" className="w-full h-full object-cover" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-[#E5E5E5] truncate">{p.productTitle}</p>
+                <p className="text-xs text-[#E5E5E5] truncate">{p.productTitle_de || p.productTitle}</p>
                 <p className="text-[10px] text-[#8E8E93]">{p.brand} · {p.condition} · {p.availability}</p>
               </div>
               <span className="text-xs text-[#C5A367] font-medium">{formatPrice(p.price)}</span>

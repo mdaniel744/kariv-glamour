@@ -9,6 +9,8 @@ import enProducts from '@/locales/en/products.json';
 import deProducts from '@/locales/de/products.json';
 import enFilters from '@/locales/en/filters.json';
 import deFilters from '@/locales/de/filters.json';
+import enAdmin from '@/locales/en/admin.json';
+import deAdmin from '@/locales/de/admin.json';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -17,18 +19,20 @@ i18n.use(initReactI18next).init({
       navigation: enNavigation,
       products: enProducts,
       filters: enFilters,
+      admin: enAdmin,
     },
     de: {
       common: deCommon,
       navigation: deNavigation,
       products: deProducts,
       filters: deFilters,
+      admin: deAdmin,
     },
   },
   lng: 'de',
   fallbackLng: 'de',
   defaultNS: 'common',
-  ns: ['common', 'navigation', 'products', 'filters'],
+  ns: ['common', 'navigation', 'products', 'filters', 'admin'],
   interpolation: {
     escapeValue: false,
   },
