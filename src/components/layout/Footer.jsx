@@ -45,7 +45,7 @@ export default function Footer() {
             <Link to="/">
               <h2 className="font-display text-2xl tracking-[0.08em] text-white mb-4">
                 <span className="font-light">KARIV</span>{' '}
-                <span className="text-[#C5A367] font-semibold">GLAMOUR</span>
+                <span className="font-semibold text-[hsl(var(--popover))]">GLAMOUR</span>
               </h2>
             </Link>
             <p className="text-sm text-white/70 leading-relaxed mb-6 font-body">
