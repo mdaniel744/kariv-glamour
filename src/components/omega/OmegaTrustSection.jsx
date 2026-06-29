@@ -11,21 +11,21 @@ export default function OmegaTrustSection() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <ShieldCheck size={32} className="mx-auto mb-6 text-primary" strokeWidth={1.5} />
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Trust</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-10 text-foreground">Buying Omega Watches with Confidence</h2>
+          <h2 className="text-3xl md:text-4xl mb-10 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Buying Omega Watches with Confidence</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-            {OMEGA_TRUST_POINTS.map((point, i) => (
-              <div key={i} className="border border-border bg-card p-4 text-left">
+            {OMEGA_TRUST_POINTS.map((point, i) =>
+            <div key={i} className="border border-border bg-card p-4 text-left">
                 <p className="text-xs leading-relaxed text-muted-foreground">{point}</p>
               </div>
-            ))}
+            )}
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
-            {OMEGA_TRUST_LINKS.map((link, i) => (
-              <Link key={i} to={link.link} className="text-[10px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
-            ))}
+            {OMEGA_TRUST_LINKS.map((link, i) =>
+            <Link key={i} to={link.link} className="text-[10px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
+            )}
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
