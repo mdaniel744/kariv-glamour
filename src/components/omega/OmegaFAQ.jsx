@@ -38,7 +38,7 @@ export default function OmegaFAQ() {
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">FAQ</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Omega FAQ</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Omega FAQ</h2>
         </div>
         <div>{OMEGA_FAQS.map((faq, i) => <FaqItem key={i} faq={faq} index={i} />)}</div>
       </div>
