@@ -29,7 +29,7 @@ export default function BpHowItWorks() {
               <span className="relative z-10 flex items-center justify-center w-12 h-12 rounded-full bg-background border border-primary text-primary font-display text-lg mb-5">
                 {i + 1}
               </span>
-              <h3 className="font-display text-lg text-foreground mb-2">{step.title}</h3>
+              <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">{step.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.text}</p>
             </motion.div>
           )}
