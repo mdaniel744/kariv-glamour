@@ -35,6 +35,7 @@
     --font-body: 'Inter', sans-serif;
     --font-display: 'Cormorant Garamond', serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --heading-color: 0 0% 0%;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 12%;
     --sidebar-primary: 158 60% 26%;
@@ -48,6 +49,7 @@
   .dark {
     --background: 219 54% 5%;
     --foreground: 0 0% 100%;
+    --heading-color: 0 0% 100%;
     --card: 219 40% 8%;
     --card-foreground: 0 0% 100%;
     --popover: 219 40% 8%;
@@ -94,6 +96,19 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 700;
+    color: hsl(var(--heading-color));
+  }
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.1;
+  }
+  h2 {
+    font-size: clamp(1.875rem, 4vw, 2.5rem);
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    line-height: 1.3;
   }
 }
 
