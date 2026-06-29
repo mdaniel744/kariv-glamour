@@ -8,7 +8,7 @@ export default function PatekPhilippeIntro() {
       <div className="max-w-3xl mx-auto px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Introduction</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-8 text-foreground">An Icon of Fine Watchmaking</h2>
+          <h2 className="text-3xl md:text-4xl mb-8 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">An Icon of Fine Watchmaking</h2>
           <p className="text-sm md:text-base leading-relaxed text-muted-foreground">
             Patek Philippe is one of the most respected names in haute horlogerie, admired for refined design, complex watchmaking, family heritage, and exceptional collector appeal. From elegant{' '}
             <Link to="/patek-philippe/calatrava" className="underline decoration-dotted hover:opacity-70 text-primary">Calatrava watches</Link>{' '}
@@ -26,6 +26,6 @@ export default function PatekPhilippeIntro() {
           </p>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }

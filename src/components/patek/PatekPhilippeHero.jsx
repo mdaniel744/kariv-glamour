@@ -33,8 +33,8 @@ export default function PatekPhilippeHero() {
 
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Patek Philippe Boutique</span>
 
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-foreground">
-            Patek Philippe Watches at<br /><span className="italic text-primary">Kariv Glamour</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-bold">Patek Philippe Watches at
+Kariv Glamour
           </h1>
 
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">
