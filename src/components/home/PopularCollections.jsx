@@ -39,7 +39,7 @@ export default function PopularCollections() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
-            <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block hidden">05</span>
+            
             <h2 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">Beliebte Kollektionen</h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-lg">Entdecken Sie die begehrtesten Uhren-Kollektionen</p>
           </div>
