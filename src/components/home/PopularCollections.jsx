@@ -40,7 +40,7 @@ export default function PopularCollections() {
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
             
-            <h2 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">Beliebte Kollektionen</h2>
+            <h2 className="text-3xl md:text-4xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Beliebte Kollektionen</h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-lg">Entdecken Sie die begehrtesten Uhren-Kollektionen</p>
           </div>
         </div>
