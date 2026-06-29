@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Heart, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
       transition={{ duration: 0.5 }}
       className="group"
     >
-      <Link to={`/product/${product.id}`} className="block">
+      <LocalizedLink to={`/product/${product.id}`} className="block">
         <div className="product-image-grid relative mb-4">
           {product.featuredImage ? (
             <img
@@ -78,7 +78,7 @@ export default function ProductCard({ product }) {
             <p className="text-[10px] text-muted-foreground tracking-wide">{product.condition} · {product.yearOfProduction || 'N/A'}</p>
           )}
         </div>
-      </Link>
+      </LocalizedLink>
     </motion.div>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DISCLAIMER, BRAND_DATA } from '@/lib/constants';
 
@@ -42,12 +42,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           <div className="col-span-2 md:col-span-1">
-            <Link to="/">
+            <LocalizedLink to="/">
               <h2 className="font-display text-2xl tracking-[0.08em] text-white mb-4">
                 <span className="font-light">KARIV</span>{' '}
                 <span className="font-semibold text-[hsl(var(--popover))] dark:text-white">GLAMOUR</span>
               </h2>
-            </Link>
+            </LocalizedLink>
             <p className="text-sm text-white/70 leading-relaxed mb-6 font-body">
               {t('footer.description')}
             </p>
@@ -71,9 +71,9 @@ export default function Footer() {
               <ul className="space-y-3">
                 {col.links.map((link) =>
               <li key={link.to}>
-                    <Link to={link.to} className="text-sm text-white/80 hover:text-[#C5A367] transition-colors font-body">
+                    <LocalizedLink to={link.to} className="text-sm text-white/80 hover:text-[#C5A367] transition-colors font-body">
                       {link.label}
-                    </Link>
+                    </LocalizedLink>
                   </li>
               )}
               </ul>
@@ -86,9 +86,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[11px] text-white/60 font-body">© {new Date().getFullYear()} Kariv Glamour. {t('footer.allRightsReserved', { defaultValue: 'All rights reserved.' })}</p>
           <div className="flex gap-6">
-            <Link to="/legal/privacy-policy" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.privacyPolicy')}</Link>
-            <Link to="/legal/terms-and-conditions" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.termsConditions')}</Link>
-            <Link to="/legal/cookie-policy" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.cookies')}</Link>
+            <LocalizedLink to="/legal/privacy-policy" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.privacyPolicy')}</LocalizedLink>
+            <LocalizedLink to="/legal/terms-and-conditions" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.termsConditions')}</LocalizedLink>
+            <LocalizedLink to="/legal/cookie-policy" className="text-[11px] text-white/60 hover:text-[#C5A367] transition-colors">{t('footer.cookies')}</LocalizedLink>
           </div>
         </div>
       </div>

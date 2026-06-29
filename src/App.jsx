@@ -13,6 +13,7 @@ import { ThemeProvider } from '@/lib/themeContext';
 
 // Site layout
 import SiteLayout from '@/components/layout/SiteLayout';
+import LocaleGuard from '@/components/LocaleGuard';
 
 // Pages
 import Home from '@/pages/Home';
@@ -101,7 +102,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       {/* Public site */}
-      <Route path=":locale" element={<SiteLayout />}>
+      <Route path=":locale" element={<LocaleGuard />}>
         <Route index element={<Home />} />
         <Route path="shop" element={<Shop />} />
         <Route path="product/:id" element={<ProductDetail />} />

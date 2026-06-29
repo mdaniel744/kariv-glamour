@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
+import { useLanguage } from '@/lib/languageContext';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
@@ -14,6 +15,7 @@ export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const { t } = useTranslation('navigation');
+  const { localePath } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [buyOpen, setBuyOpen] = useState(false);
@@ -41,7 +43,7 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/shop?search=${encodeURIComponent(searchQuery.trim())}`;
+      window.location.href = `${localePath('/shop')}?search=${encodeURIComponent(searchQuery.trim())}`;
       setSearchQuery('');
     }
   };
@@ -70,8 +72,8 @@ export default function Navbar() {
               {t('topBar')}
             </p>
             <div className="flex gap-6 items-center">
-              <Link to="/about" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('about')}</Link>
-              <Link to="/customer-service" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('customerService')}</Link>
+              <LocalizedLink to="/about" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('about')}</LocalizedLink>
+              <LocalizedLink to="/customer-service" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('customerService')}</LocalizedLink>
               <LanguageSwitcher />
               <button onClick={toggleTheme} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
                 {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
@@ -88,12 +90,12 @@ export default function Navbar() {
               <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground">
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
-              <Link to="/" className="flex-shrink-0">
+              <LocalizedLink to="/" className="flex-shrink-0">
                 <h1 className="text-xl md:text-2xl tracking-[0.08em] [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">KARIV GLAMOUR
 
 
                 </h1>
-              </Link>
+              </LocalizedLink>
             </div>
 
             {/* Visible search bar (desktop) */}
@@ -117,22 +119,22 @@ export default function Navbar() {
               <button onClick={toggleTheme} className="md:hidden text-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
-              <Link to="/wishlist" className="relative text-foreground hover:text-primary transition-colors">
+              <LocalizedLink to="/wishlist" className="relative text-foreground hover:text-primary transition-colors">
                 <Heart size={18} />
                 {wishlistCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                     {wishlistCount}
                   </span>
                 }
-              </Link>
-              <Link to="/cart" className="relative text-foreground hover:text-primary transition-colors">
+              </LocalizedLink>
+              <LocalizedLink to="/cart" className="relative text-foreground hover:text-primary transition-colors">
                 <ShoppingBag size={18} />
                 {cartCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                     {cartCount}
                   </span>
                 }
-              </Link>
+              </LocalizedLink>
             </div>
           </div>
 
@@ -169,10 +171,10 @@ export default function Navbar() {
                         <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchBrands')}</p>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {BRAND_DATA.map((b) =>
-                        <Link key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-3 text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-3 text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
                               <BrandFavicon slug={b.slug} className="h-7 w-auto" alt="" />
                               {b.name}
-                            </Link>
+                            </LocalizedLink>
                         )}
                         </div>
                       </div>
@@ -181,9 +183,9 @@ export default function Navbar() {
                         <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchCategories')}</p>
                         <div className="space-y-5">
                           {WATCH_CATEGORIES.map((c) =>
-                        <Link key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors">
+                        <LocalizedLink key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors">
                               {c.label}
-                            </Link>
+                            </LocalizedLink>
                         )}
                         </div>
                       </div>
@@ -193,8 +195,8 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <Link to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('topDeals')}</Link>
-            <Link to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchCollections')}</Link>
+            <LocalizedLink to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('topDeals')}</LocalizedLink>
+            <LocalizedLink to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchCollections')}</LocalizedLink>
 
             {/* Kariv Security — dropdown */}
             <div ref={securityRef} className="relative">
@@ -213,9 +215,9 @@ export default function Navbar() {
                     <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
                       <div className="space-y-3">
                         {SECURITY_LINKS.map((s) =>
-                      <Link key={s.to} to={s.to} onClick={() => setSecurityOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                      <LocalizedLink key={s.to} to={s.to} onClick={() => setSecurityOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
                             {s.label}
-                          </Link>
+                          </LocalizedLink>
                       )}
                       </div>
                     </div>
@@ -224,7 +226,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <Link to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchGuides')}</Link>
+            <LocalizedLink to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchGuides')}</LocalizedLink>
           </div>
         </div>
       </nav>
@@ -263,10 +265,10 @@ export default function Navbar() {
                           <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchBrands')}</p>
                           <div className="space-y-2">
                             {BRAND_DATA.map((b) =>
-                        <Link key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                                 <BrandFavicon slug={b.slug} className="h-4 w-auto" alt="" />
                                 {b.name}
-                              </Link>
+                              </LocalizedLink>
                         )}
                           </div>
                         </div>
@@ -274,9 +276,9 @@ export default function Navbar() {
                           <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchCategories')}</p>
                           <div className="space-y-2">
                             {WATCH_CATEGORIES.map((c) =>
-                        <Link key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <LocalizedLink key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                                 {c.label}
-                              </Link>
+                              </LocalizedLink>
                         )}
                           </div>
                         </div>
@@ -286,8 +288,8 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <Link to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('topDeals')}</Link>
-              <Link to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchCollections')}</Link>
+              <LocalizedLink to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('topDeals')}</LocalizedLink>
+              <LocalizedLink to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchCollections')}</LocalizedLink>
 
               {/* Kariv Security — expandable */}
               <div>
@@ -309,9 +311,9 @@ export default function Navbar() {
                   
                       <div className="pl-4 pt-2 pb-4 space-y-2">
                         {SECURITY_LINKS.map((s) =>
-                    <Link key={s.to} to={s.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <LocalizedLink key={s.to} to={s.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                             {s.label}
-                          </Link>
+                          </LocalizedLink>
                     )}
                       </div>
                     </motion.div>
@@ -319,10 +321,10 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <Link to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchGuides')}</Link>
-              <Link to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('sellTrade')}</Link>
-              <Link to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('about')}</Link>
-              <Link to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('customerService')}</Link>
+              <LocalizedLink to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchGuides')}</LocalizedLink>
+              <LocalizedLink to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('sellTrade')}</LocalizedLink>
+              <LocalizedLink to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('about')}</LocalizedLink>
+              <LocalizedLink to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('customerService')}</LocalizedLink>
               <div className="pt-2"><LanguageSwitcher /></div>
             </div>
           </motion.div>
