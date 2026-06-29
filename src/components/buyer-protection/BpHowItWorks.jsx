@@ -47,7 +47,7 @@ export default function BpHowItWorks() {
               {i < STEPS.length - 1 && <span className="w-px flex-1 bg-border mt-2" />}
             </div>
             <div className="pt-2 pb-2">
-              <h3 className="text-lg text-foreground mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold">{step.title}</h3>
+              <h3 className="text-lg text-foreground mb-2 [font-family:'Cormorant_Garamond',_serif] font-bold">{step.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.text}</p>
             </div>
           </div>
