@@ -16,7 +16,7 @@ export default function GrandSeikoCollectionGrid() {
     setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
   }, []);
 
-  useEffect(() => { updateArrows(); }, [updateArrows]);
+  useEffect(() => {updateArrows();}, [updateArrows]);
 
   const scrollByDir = (dir) => {
     const el = scrollRef.current;
@@ -43,27 +43,27 @@ export default function GrandSeikoCollectionGrid() {
           </button>
 
           <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
-            {GS_COLLECTIONS.map((c, i) => (
-              <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: (i % 3) * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[60%] lg:w-[31%]">
+            {GS_COLLECTIONS.map((c, i) =>
+            <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[60%] lg:w-[31%]">
                 <Link to={`/grand-seiko/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
-                    {c.image ? (
-                      <img src={c.image} alt={`Grand Seiko ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    ) : (
-                      <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
-                    )}
+                    {c.image ?
+                  <img src={c.image} alt={`Grand Seiko ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+
+                  <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
+                  }
                   </div>
                   <div className="p-6">
-                    <h3 className="font-display text-xl font-medium mb-2 text-foreground">{c.name}</h3>
+                    <h3 className="text-xl mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{c.name}</h3>
                     <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{c.shortDescription}</p>
                     <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Explore Collection &rarr;</span>
                   </div>
                 </Link>
               </motion.div>
-            ))}
+            )}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
