@@ -7,24 +7,24 @@ import CartierProductCard from './CartierProductCard';
 import { CARTIER_QUICK_FILTERS } from '@/lib/cartierData';
 
 const SORT_OPTIONS = [
-  { value: '-created_date', label: 'Featured' },
-  { value: 'newest', label: 'Neueste Ankünfte' },
-  { value: 'price', label: 'Preis: Niedrig zu Hoch' },
-  { value: '-price', label: 'Preis: Hoch zu Niedrig' },
-  { value: '-yearOfProduction', label: 'Jahr: Neueste zuerst' },
-  { value: 'popular', label: 'Beliebteste' },
-];
+{ value: '-created_date', label: 'Featured' },
+{ value: 'newest', label: 'Neueste Ankünfte' },
+{ value: 'price', label: 'Preis: Niedrig zu Hoch' },
+{ value: '-price', label: 'Preis: Hoch zu Niedrig' },
+{ value: '-yearOfProduction', label: 'Jahr: Neueste zuerst' },
+{ value: 'popular', label: 'Beliebteste' }];
 
-const parseDiameter = (s) => { if (!s) return null; const m = String(s).match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[1]) : null; };
+
+const parseDiameter = (s) => {if (!s) return null;const m = String(s).match(/(\d+(\.\d+)?)/);return m ? parseFloat(m[1]) : null;};
 const sizeRange = (label, d) => {
   if (d == null) return false;
   switch (label) {
-    case 'Mini': return d < 30;
-    case 'Small': return d >= 30 && d < 35;
-    case 'Medium': return d >= 35 && d < 39;
-    case 'Large': return d >= 39 && d < 43;
-    case 'Extra Large': return d >= 43;
-    default: return false;
+    case 'Mini':return d < 30;
+    case 'Small':return d >= 30 && d < 35;
+    case 'Medium':return d >= 35 && d < 39;
+    case 'Large':return d >= 39 && d < 43;
+    case 'Extra Large':return d >= 43;
+    default:return false;
   }
 };
 
@@ -41,7 +41,7 @@ export default function CartierProductGrid() {
       try {
         const data = await base44.entities.Products.filter({ brand: 'Cartier' }, '-created_date', 100);
         setProducts(data);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
+      } catch (e) {console.error(e);} finally {setLoading(false);}
     };
     load();
   }, []);
@@ -49,25 +49,25 @@ export default function CartierProductGrid() {
   const filtered = useMemo(() => {
     const f = filters;
     let result = products;
-    if (f.collection.length) result = result.filter(p => f.collection.includes(p.collection));
-    if (f.caseMaterial.length) result = result.filter(p => f.caseMaterial.includes(p.caseMaterial));
-    if (f.watchShape.length) result = result.filter(p => f.watchShape.includes(p.watchShape));
-    if (f.movementType.length) result = result.filter(p => f.movementType.includes(p.movementType));
-    if (f.dialColor.length) result = result.filter(p => f.dialColor.includes(p.dialColor));
-    if (f.braceletMaterial.length) result = result.filter(p => f.braceletMaterial.includes(p.braceletMaterial));
-    if (f.condition.length) result = result.filter(p => f.condition.includes(p.condition));
-    if (f.gender.length) result = result.filter(p => f.gender.includes(p.gender));
-    if (f.caseSize.length) result = result.filter(p => { const d = parseDiameter(p.caseDiameter); return f.caseSize.some(s => sizeRange(s, d)); });
-    if (f.boxPapers.length) result = result.filter(p => f.boxPapers.some(opt => (opt === 'Box included' && p.boxIncluded) || (opt === 'Papers included' && p.papersIncluded) || (opt === 'Full set' && p.boxIncluded && p.papersIncluded)));
-    if (f.availability.length) result = result.filter(p => f.availability.includes(p.availability));
-    if (f.priceMin) result = result.filter(p => p.price >= Number(f.priceMin));
-    if (f.priceMax) result = result.filter(p => p.price <= Number(f.priceMax));
+    if (f.collection.length) result = result.filter((p) => f.collection.includes(p.collection));
+    if (f.caseMaterial.length) result = result.filter((p) => f.caseMaterial.includes(p.caseMaterial));
+    if (f.watchShape.length) result = result.filter((p) => f.watchShape.includes(p.watchShape));
+    if (f.movementType.length) result = result.filter((p) => f.movementType.includes(p.movementType));
+    if (f.dialColor.length) result = result.filter((p) => f.dialColor.includes(p.dialColor));
+    if (f.braceletMaterial.length) result = result.filter((p) => f.braceletMaterial.includes(p.braceletMaterial));
+    if (f.condition.length) result = result.filter((p) => f.condition.includes(p.condition));
+    if (f.gender.length) result = result.filter((p) => f.gender.includes(p.gender));
+    if (f.caseSize.length) result = result.filter((p) => {const d = parseDiameter(p.caseDiameter);return f.caseSize.some((s) => sizeRange(s, d));});
+    if (f.boxPapers.length) result = result.filter((p) => f.boxPapers.some((opt) => opt === 'Box included' && p.boxIncluded || opt === 'Papers included' && p.papersIncluded || opt === 'Full set' && p.boxIncluded && p.papersIncluded));
+    if (f.availability.length) result = result.filter((p) => f.availability.includes(p.availability));
+    if (f.priceMin) result = result.filter((p) => p.price >= Number(f.priceMin));
+    if (f.priceMax) result = result.filter((p) => p.price <= Number(f.priceMax));
     return [...result].sort((a, b) => {
       switch (sortBy) {
-        case 'price': return a.price - b.price;
-        case '-price': return b.price - a.price;
-        case '-yearOfProduction': return (b.yearOfProduction || 0) - (a.yearOfProduction || 0);
-        default: return new Date(b.created_date) - new Date(a.created_date);
+        case 'price':return a.price - b.price;
+        case '-price':return b.price - a.price;
+        case '-yearOfProduction':return (b.yearOfProduction || 0) - (a.yearOfProduction || 0);
+        default:return new Date(b.created_date) - new Date(a.created_date);
       }
     });
   }, [products, filters, sortBy]);
@@ -77,13 +77,13 @@ export default function CartierProductGrid() {
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Cartier Boutique</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light text-foreground">Shop Cartier Watches</h2>
+          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Shop Cartier Watches</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
-          {CARTIER_QUICK_FILTERS.map((chip, i) => (
-            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
-          ))}
+          {CARTIER_QUICK_FILTERS.map((chip, i) =>
+          <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
+          )}
         </div>
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
@@ -92,8 +92,8 @@ export default function CartierProductGrid() {
           </button>
           <p className="hidden md:block text-xs text-muted-foreground">{filtered.length} Zeitmesser</p>
           <div className="flex items-center gap-2 ml-auto">
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
-              {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
+              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
             </select>
           </div>
         </div>
@@ -103,26 +103,26 @@ export default function CartierProductGrid() {
             <CartierFilterSidebar filters={filters} setFilters={setFilters} />
           </aside>
           <div className="flex-1">
-            {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {loading ?
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}
-              </div>
-            ) : filtered.length === 0 ? (
-              <div className="text-center py-20">
+              </div> :
+            filtered.length === 0 ?
+            <div className="text-center py-20">
                 <p className="text-sm text-muted-foreground">Keine Cartier Uhren gefunden, die Ihren Kriterien entsprechen.</p>
                 <Link to="/cartier-uhr-kaufen" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Cartier Uhren ansehen</Link>
+              </div> :
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {filtered.map((p) => <CartierProductCard key={p.id} product={p} />)}
               </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {filtered.map(p => <CartierProductCard key={p.id} product={p} />)}
-              </div>
-            )}
+            }
           </div>
         </div>
       </div>
 
-      {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
+      {mobileFiltersOpen &&
+      <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl text-foreground">Filter</h2>
@@ -134,7 +134,7 @@ export default function CartierProductGrid() {
             </button>
           </div>
         </div>
-      )}
-    </section>
-  );
+      }
+    </section>);
+
 }
