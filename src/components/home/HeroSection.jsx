@@ -67,7 +67,7 @@ export default function HeroSection() {
   const slide = SLIDES[current];
 
   return (
-    <section className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-background">
+    <section className="relative w-full h-[68vh] md:h-[75vh] overflow-hidden bg-background">
       {/* Slides */}
       <AnimatePresence custom={direction} mode="sync">
         <motion.div

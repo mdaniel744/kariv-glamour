@@ -37,6 +37,21 @@ export default function BrandMarquee() {
     return () => window.removeEventListener('resize', measure);
   }, [brands]);
 
+  // Native non-passive wheel listener so we can preventDefault for horizontal scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handleWheel = (e) => {
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (delta !== 0) {
+        e.preventDefault();
+        x.set(wrapX(x.get() - delta));
+      }
+    };
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [x]);
+
   const wrapX = (nx) => {
     const hw = halfWidth.current;
     if (hw <= 0) return nx;
@@ -80,12 +95,12 @@ export default function BrandMarquee() {
       >
         <motion.div
           ref={trackRef}
-          className="flex gap-10 md:gap-16 whitespace-nowrap cursor-grab active:cursor-grabbing"
+          className="flex gap-10 md:gap-16 whitespace-nowrap cursor-grab active:cursor-grabbing select-none"
           style={{ x }}
           drag="x"
-          dragConstraints={containerRef}
-          dragElastic={0.1}
-          dragMomentum={false}
+          dragConstraints={false}
+          dragElastic={0.2}
+          dragMomentum={true}
           onDragStart={() => { isDragging.current = true; setPause(true); }}
           onDragEnd={() => {
             isDragging.current = false;
