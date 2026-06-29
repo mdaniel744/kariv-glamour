@@ -7,7 +7,7 @@ export const BRAND_DATA = [
   { name: "Breitling", slug: "breitling" },
   { name: "Hublot", slug: "hublot" },
   { name: "Grand Seiko", slug: "grand-seiko" },
-  { name: "IWC Schaffhausen", slug: "iwc" },
+  { name: "IWC Schaffhausen", slug: "iwc-schaffhausen" },
   { name: "Jaeger-LeCoultre", slug: "jaeger-lecoultre" },
   { name: "TAG Heuer", slug: "tag-heuer" },
   { name: "Tudor", slug: "tudor" },
