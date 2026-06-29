@@ -9,7 +9,7 @@ export default function OmegaSeoCardGrid() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Discover</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Discover Omega Watches</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Discover Omega Watches</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {OMEGA_SEO_CARDS.map((card, i) =>
@@ -19,7 +19,7 @@ export default function OmegaSeoCardGrid() {
                   <img src={card.image} alt={card.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="font-display text-lg font-light mb-2 text-foreground">{card.title}</h3>
+                <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{card.title}</h3>
                 <p className="text-xs leading-relaxed mb-3 text-muted-foreground">{card.description}</p>
                 <span className="text-[10px] tracking-[0.12em] uppercase group-hover:opacity-70 text-primary">Explore →</span>
               </Link>

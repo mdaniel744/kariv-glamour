@@ -32,7 +32,7 @@ export default function OmegaCollectionCarousel() {
                   <img src={col.image} alt={`Omega ${col.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="font-display text-lg font-light mb-2 text-foreground">{col.name}</h3>
+                <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{col.name}</h3>
                 <p className="text-xs leading-relaxed mb-3 line-clamp-2 text-muted-foreground">{col.description}</p>
                 <span className="text-[10px] tracking-[0.12em] uppercase transition-colors group-hover:opacity-70 text-primary">Explore Collection →</span>
               </Link>
