@@ -42,6 +42,9 @@ import CartierCollectionPage from '@/pages/CartierCollectionPage';
 import HublotPage from '@/pages/HublotPage';
 import HublotSeoLanding from '@/pages/HublotSeoLanding';
 import HublotCollectionPage from '@/pages/HublotCollectionPage';
+import BreitlingPage from '@/pages/BreitlingPage';
+import BreitlingSeoLanding from '@/pages/BreitlingSeoLanding';
+import BreitlingCollectionPage from '@/pages/BreitlingCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -94,6 +97,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/omega" element={<OmegaPage />} />
         <Route path="/brands/cartier" element={<CartierPage />} />
         <Route path="/brands/hublot" element={<HublotPage />} />
+        <Route path="/brands/breitling" element={<BreitlingPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -196,6 +200,23 @@ const AuthenticatedApp = () => {
         <Route path="/hublot-square-bang-kaufen" element={<HublotSeoLanding slug="hublot-square-bang-kaufen" />} />
         <Route path="/hublot/story" element={<HublotSeoLanding slug="hublot-story" />} />
         <Route path="/hublot/:slug" element={<HublotCollectionPage />} />
+
+        {/* Breitling SEO landing pages */}
+        <Route path="/breitling-uhr" element={<BreitlingSeoLanding slug="breitling-uhr" />} />
+        <Route path="/breitling-uhren" element={<BreitlingSeoLanding slug="breitling-uhren" />} />
+        <Route path="/breitling-uhr-herren" element={<BreitlingSeoLanding slug="breitling-uhr-herren" />} />
+        <Route path="/breitling-uhr-damen" element={<BreitlingSeoLanding slug="breitling-uhr-damen" />} />
+        <Route path="/breitling-uhr-gebraucht" element={<BreitlingSeoLanding slug="breitling-uhr-gebraucht" />} />
+        <Route path="/breitling-kaufen" element={<BreitlingSeoLanding slug="breitling-kaufen" />} />
+        <Route path="/breitling-uhr-kaufen" element={<BreitlingSeoLanding slug="breitling-uhr-kaufen" />} />
+        <Route path="/breitling-gebraucht-kaufen" element={<BreitlingSeoLanding slug="breitling-gebraucht-kaufen" />} />
+        <Route path="/gebrauchte-breitling-uhren" element={<BreitlingSeoLanding slug="gebrauchte-breitling-uhren" />} />
+        <Route path="/breitling-navitimer-kaufen" element={<BreitlingSeoLanding slug="breitling-navitimer-kaufen" />} />
+        <Route path="/breitling-chronomat-kaufen" element={<BreitlingSeoLanding slug="breitling-chronomat-kaufen" />} />
+        <Route path="/breitling-superocean-kaufen" element={<BreitlingSeoLanding slug="breitling-superocean-kaufen" />} />
+        <Route path="/welche-breitling-uhr-kaufen" element={<BreitlingSeoLanding slug="welche-breitling-uhr-kaufen" />} />
+        <Route path="/breitling/story" element={<BreitlingSeoLanding slug="breitling-story" />} />
+        <Route path="/breitling/:slug" element={<BreitlingCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
