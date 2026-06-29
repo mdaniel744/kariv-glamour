@@ -30,7 +30,7 @@ export default function GrandSeikoCollectionGrid() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Grand Seiko Collections</span>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-foreground">Discover Grand Seiko Collections</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-[hsl(var(--primary))]">Discover Grand Seiko Collections</h2>
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">Browse Grand Seiko's official collection families — from the heart of the brand in Heritage to the artisan Masterpiece line.</p>
         </div>
 

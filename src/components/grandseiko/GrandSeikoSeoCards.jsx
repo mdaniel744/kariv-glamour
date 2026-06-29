@@ -9,7 +9,7 @@ export default function GrandSeikoSeoCards() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Grand Seiko entdecken</span>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">Discover Grand Seiko Watches</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-[hsl(var(--primary))]">Discover Grand Seiko Watches</h2>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {GS_SEO_CARDS.map((card, i) =>
