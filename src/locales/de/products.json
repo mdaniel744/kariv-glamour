@@ -1,0 +1,62 @@
+{
+  "referenceNumber": "Referenznummer",
+  "caseDiameter": "Gehäusedurchmesser",
+  "caseMaterial": "Gehäusematerial",
+  "braceletMaterial": "Armbandmaterial",
+  "dialColor": "Zifferblattfarbe",
+  "movementType": "Uhrwerk",
+  "waterResistance": "Wasserdichtigkeit",
+  "crystalType": "Glas",
+  "powerReserve": "Gangreserve",
+  "condition": "Zustand",
+  "yearOfProduction": "Baujahr",
+  "gender": "Tragetyp",
+  "watchShape": "Gehäuseform",
+  "functions": "Funktionen",
+  "boxIncluded": "Originalbox",
+  "papersIncluded": "Papiere",
+  "serviceHistory": "Servicehistorie",
+  "polishedStatus": "Polierzustand",
+  "originalPartsStatus": "Originalteile",
+  "warrantyType": "Garantietyp",
+  "warrantyDuration": "Garantiedauer",
+  "authenticationStatus": "Echtheitsprüfung",
+  "availability": "Verfügbarkeit",
+  "stockQuantity": "Lagerbestand",
+  "sku": "Artikelnummer",
+  "shippingInfo": "Versandinformationen",
+  "returnEligibility": "Rückgaberecht",
+  "scopeOfDelivery": "Lieferumfang",
+  "productDescription": "Beschreibung",
+  "shortDescription": "Zusammenfassung",
+  "featuredImage": "Hauptbild",
+  "productImages": "Galerie",
+  "conditions": {
+    "New": "Neu",
+    "Unworn": "Ungetragen",
+    "Excellent": "Sehr gut",
+    "Very Good": "Gut",
+    "Good": "Befriedigend",
+    "Vintage": "Vintage"
+  },
+  "genders": {
+    "Men": "Herren",
+    "Women": "Damen",
+    "Unisex": "Unisex"
+  },
+  "availabilityStatus": {
+    "In Stock": "Auf Lager",
+    "Sold": "Verkauft",
+    "Reserved": "Reserviert",
+    "Coming Soon": "Bald verfügbar"
+  },
+  "authStatus": {
+    "Authenticated": "Authentifiziert",
+    "Pending": "Prüfung ausstehend",
+    "Not Verified": "Nicht verifiziert"
+  },
+  "boolean": {
+    "yes": "Ja",
+    "no": "Nein"
+  }
+}

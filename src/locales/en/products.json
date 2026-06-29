@@ -1,0 +1,62 @@
+{
+  "referenceNumber": "Reference Number",
+  "caseDiameter": "Case Diameter",
+  "caseMaterial": "Case Material",
+  "braceletMaterial": "Bracelet Material",
+  "dialColor": "Dial Color",
+  "movementType": "Movement",
+  "waterResistance": "Water Resistance",
+  "crystalType": "Crystal",
+  "powerReserve": "Power Reserve",
+  "condition": "Condition",
+  "yearOfProduction": "Year of Production",
+  "gender": "Gender",
+  "watchShape": "Case Shape",
+  "functions": "Functions",
+  "boxIncluded": "Original Box",
+  "papersIncluded": "Papers",
+  "serviceHistory": "Service History",
+  "polishedStatus": "Polishing Status",
+  "originalPartsStatus": "Original Parts",
+  "warrantyType": "Warranty Type",
+  "warrantyDuration": "Warranty Duration",
+  "authenticationStatus": "Authentication Status",
+  "availability": "Availability",
+  "stockQuantity": "Stock Quantity",
+  "sku": "SKU",
+  "shippingInfo": "Shipping Information",
+  "returnEligibility": "Return Eligibility",
+  "scopeOfDelivery": "Scope of Delivery",
+  "productDescription": "Description",
+  "shortDescription": "Summary",
+  "featuredImage": "Main Image",
+  "productImages": "Gallery",
+  "conditions": {
+    "New": "New",
+    "Unworn": "Unworn",
+    "Excellent": "Excellent",
+    "Very Good": "Very Good",
+    "Good": "Good",
+    "Vintage": "Vintage"
+  },
+  "genders": {
+    "Men": "Men",
+    "Women": "Women",
+    "Unisex": "Unisex"
+  },
+  "availabilityStatus": {
+    "In Stock": "In Stock",
+    "Sold": "Sold",
+    "Reserved": "Reserved",
+    "Coming Soon": "Coming Soon"
+  },
+  "authStatus": {
+    "Authenticated": "Authenticated",
+    "Pending": "Pending Verification",
+    "Not Verified": "Not Verified"
+  },
+  "boolean": {
+    "yes": "Yes",
+    "no": "No"
+  }
+}
