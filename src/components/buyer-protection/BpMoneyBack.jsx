@@ -69,15 +69,15 @@ export default function BpMoneyBack() {
       <BpSection icon={ClipboardCheck} title="Returns Made Easy" className="bg-secondary">
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {RETURN_STEPS.map((s, i) => (
-            <div key={i} className="bg-card border border-border rounded p-8">
+            <div key={i} className="bg-[#0A1F17] border border-[#C5A367]/30 rounded p-8">
               <div className="flex items-center gap-3 mb-5">
-                <span className="flex items-center justify-center w-11 h-11 rounded-full bg-secondary border border-border">
-                  <s.icon size={20} className="text-primary" strokeWidth={1.5} />
+                <span className="flex items-center justify-center w-11 h-11 rounded-full bg-[#C5A367]/15 border border-[#C5A367]/40">
+                  <s.icon size={20} className="text-[#C5A367]" strokeWidth={1.5} />
                 </span>
-                <span className="font-display text-2xl text-border">{i + 1}</span>
+                <span className="font-display text-2xl text-[#C5A367]/40">{i + 1}</span>
               </div>
-              <h3 className="font-display text-lg text-foreground mb-3">{s.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{s.text}</p>
+              <h3 className="font-display text-lg text-white mb-3">{s.title}</h3>
+              <p className="text-sm text-white/70 leading-relaxed">{s.text}</p>
             </div>
           ))}
         </div>
