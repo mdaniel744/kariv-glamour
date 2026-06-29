@@ -121,3 +121,12 @@ html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.product-image-grid {
+  background-color: hsl(var(--card));
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+.product-image-grid img {
+  filter: contrast(1.03) brightness(1.01);
+}

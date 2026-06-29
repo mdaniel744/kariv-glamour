@@ -4,6 +4,7 @@ import BrandMarquee from '@/components/home/BrandMarquee';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import EditorialSection from '@/components/home/EditorialSection';
+import EditorialHero from '@/components/home/EditorialHero';
 import TrustBar from '@/components/shared/TrustBar';
 import PopularCollections from '@/components/home/PopularCollections';
 
@@ -36,6 +37,7 @@ export default function Home() {
         linkTo="/shop?isCertifiedPreOwned=true"
         limit={4}
       />
+      <EditorialHero />
       <CategoryGrid />
       <PopularCollections />
       <TrustBar />

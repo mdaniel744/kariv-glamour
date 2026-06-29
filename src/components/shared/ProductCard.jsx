@@ -18,7 +18,7 @@ export default function ProductCard({ product }) {
       className="group"
     >
       <Link to={`/product/${product.id}`} className="block">
-        <div className="relative aspect-[3/4] bg-card overflow-hidden mb-4">
+        <div className="product-image-grid relative mb-4">
           {product.featuredImage ? (
             <img
               src={product.featuredImage}
