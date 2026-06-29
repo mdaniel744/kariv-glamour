@@ -84,7 +84,7 @@ export default function Navbar() {
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
               <Link to="/" className="flex-shrink-0">
-                <h1 className="text-xl md:text-2xl tracking-[0.08em] text-foreground [font-family:'Cormorant_Garamond',_serif] font-bold">KARIV GLAMOUR
+                <h1 className="text-xl md:text-2xl tracking-[0.08em] [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">KARIV GLAMOUR
 
 
                 </h1>
