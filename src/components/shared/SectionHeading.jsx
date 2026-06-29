@@ -7,7 +7,7 @@ export default function SectionHeading({ index, title, subtitle, linkTo, linkLab
     <div className="flex items-end justify-between mb-10 md:mb-14">
       <div>
         {index &&
-        <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block">{index}</span>
+        <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block hidden">{index}</span>
         }
         <h2 className="text-3xl md:text-4xl text-foreground tracking-tight [font-family:'Cormorant_Garamond',_serif] font-bold">{title}</h2>
         {subtitle &&

@@ -26,7 +26,7 @@ export default function PopularCollections() {
     'Cartier': 'cartier', 'Audemars Piguet': 'audemars-piguet', 'Breitling': 'breitling'
   };
 
-  collections.forEach(col => {
+  collections.forEach((col) => {
     if (COLLECTION_SLUGS[col.brand] && COLLECTION_SLUGS[col.brand][col.collectionName]) {
       popular.push(col);
     }
@@ -39,24 +39,24 @@ export default function PopularCollections() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
-            <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block">05</span>
+            <span className="text-[11px] tracking-[0.2em] text-primary font-display mb-2 block hidden">05</span>
             <h2 className="font-display text-3xl md:text-4xl font-normal text-foreground tracking-tight">Beliebte Kollektionen</h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-lg">Entdecken Sie die begehrtesten Uhren-Kollektionen</p>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {popular.slice(0, 8).map((col, i) => (
-            <motion.div
-              key={col.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-            >
+          {popular.slice(0, 8).map((col, i) =>
+          <motion.div
+            key={col.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05 }}>
+            
               <Link
-                to={`/shop?brand=${encodeURIComponent(col.brand)}`}
-                className="group block border border-border p-6 hover:border-primary/30 transition-colors"
-              >
+              to={`/shop?brand=${encodeURIComponent(col.brand)}`}
+              className="group block border border-border p-6 hover:border-primary/30 transition-colors">
+              
                 <p className="text-[10px] tracking-[0.15em] uppercase text-primary mb-2">{col.brand}</p>
                 <h3 className="font-display text-lg text-foreground font-normal group-hover:text-primary transition-colors">{col.collectionName}</h3>
                 <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.12em] uppercase text-muted-foreground mt-3 group-hover:text-primary transition-colors">
@@ -64,9 +64,9 @@ export default function PopularCollections() {
                 </span>
               </Link>
             </motion.div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
