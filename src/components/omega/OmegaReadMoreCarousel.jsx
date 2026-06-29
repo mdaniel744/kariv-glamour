@@ -14,7 +14,7 @@ export default function OmegaReadMoreCarousel() {
         <div className="flex items-end justify-between mb-10">
           <div>
             <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Editorial</span>
-            <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Read More About Omega Watches</h2>
+            <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Read More About Omega Watches</h2>
           </div>
           <div className="hidden md:flex gap-2">
             <button onClick={() => scroll(-1)} className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors text-foreground"><ChevronLeft size={18} /></button>

@@ -146,7 +146,7 @@ export default function OmegaProductGrid() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Shop</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Shop Omega Watches</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Shop Omega Watches</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">

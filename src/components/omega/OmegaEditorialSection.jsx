@@ -14,7 +14,7 @@ export default function OmegaEditorialSection({ section, reverse }) {
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="[direction:ltr]">
             <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{section.eyebrow}</span>
-            <h2 className="text-3xl md:text-4xl mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{section.title}</h2>
+            <h2 className="text-3xl md:text-4xl mb-6 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{section.title}</h2>
             <p className="text-sm leading-relaxed mb-6 text-muted-foreground">{section.description}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-2 mb-8">
               {section.internalLinks?.map((link, i) =>
