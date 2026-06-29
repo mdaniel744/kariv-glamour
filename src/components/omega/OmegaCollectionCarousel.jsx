@@ -15,7 +15,7 @@ export default function OmegaCollectionCarousel() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Collections</span>
-          <h2 className="text-3xl md:text-4xl mb-4 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Discover Omega Collections</h2>
+          <h2 className="text-3xl md:text-4xl mb-4 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Discover Omega Collections</h2>
           <p className="text-sm leading-relaxed max-w-2xl mx-auto text-muted-foreground">Explore Omega's most important watch families, from professional dive watches and legendary chronographs to elegant dress watches and refined everyday timepieces.</p>
         </div>
 
