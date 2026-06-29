@@ -37,7 +37,10 @@ export default function RolexHero() {
 
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Rolex Boutique</span>
 
-          <h1 className="mb-6">Rolex Watches at Kariv Glamour</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--accent))]">Rolex Watches at
+Kariv Glamour
+
+          </h1>
 
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">
             Discover a curated selection of Rolex watches, from timeless Datejust models to iconic professional watches such as the Submariner, Daytona, GMT-Master II and Explorer.
