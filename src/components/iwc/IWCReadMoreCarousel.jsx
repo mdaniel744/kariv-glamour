@@ -17,7 +17,7 @@ export default function IWCReadMoreCarousel() {
                 <span className="font-display text-lg text-foreground/60 group-hover:text-foreground transition-colors">{card.title}</span>
               </div>
               <div className="p-6">
-                <h3 className="font-display text-lg font-medium mb-2 text-foreground">{card.title}</h3>
+                <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{card.title}</h3>
                 <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{card.description}</p>
                 <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Read More &rarr;</span>
               </div>
