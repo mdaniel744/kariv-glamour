@@ -50,7 +50,7 @@ export default function PatekPhilippeInternalLinkingHub() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Explore</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Explore More from Kariv Glamour</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Explore More from Kariv Glamour</h2>
         </div>
         <div className="hidden md:grid grid-cols-3 lg:grid-cols-6 gap-8">{GROUPS.map((g, i) => <LinkColumn key={i} title={g.title} links={g.links} />)}</div>
         <div className="md:hidden">{GROUPS.map((g, i) => <MobileAccordion key={i} title={g.title} links={g.links} />)}</div>
