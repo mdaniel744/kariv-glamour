@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { ShieldCheck, LockKeyhole, BadgeCheck, RotateCcw, Truck, Headset } from 'lucide-react';
 
 const TRUST_BADGES = [
-  { icon: LockKeyhole, label: 'Secure Escrow Payment' },
-  { icon: BadgeCheck, label: 'Authenticity Commitment' },
-  { icon: RotateCcw, label: '14-Day Money-Back Guarantee' },
-  { icon: Truck, label: 'Insured Shipping' },
-  { icon: ShieldCheck, label: 'Verified Dealers' },
-  { icon: Headset, label: 'Buyer Support' },
-];
+{ icon: LockKeyhole, label: 'Secure Escrow Payment' },
+{ icon: BadgeCheck, label: 'Authenticity Commitment' },
+{ icon: RotateCcw, label: '14-Day Money-Back Guarantee' },
+{ icon: Truck, label: 'Insured Shipping' },
+{ icon: ShieldCheck, label: 'Verified Dealers' },
+{ icon: Headset, label: 'Buyer Support' }];
+
 
 export default function BpHero() {
   return (
@@ -19,8 +19,8 @@ export default function BpHero() {
           <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-primary font-medium mb-6">
             <ShieldCheck size={14} /> Buyer Protection
           </span>
-          <h1 className="font-display text-4xl md:text-6xl font-light text-foreground leading-tight mb-6">
-            Kariv Buyer Protection
+          <h1 className="text-4xl md:text-6xl text-foreground leading-tight mb-6 [font-family:'Cormorant_Garamond',_serif] font-bold">Kariv Buyer Protection
+
           </h1>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mb-8">
             Buy your next luxury watch with confidence. Kariv Buyer Protection helps secure your payment, protect your order, verify seller standards, and support you throughout the entire purchase journey.
@@ -34,12 +34,12 @@ export default function BpHero() {
             </a>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {TRUST_BADGES.map((b, i) => (
-              <div key={i} className="flex items-center gap-2">
+            {TRUST_BADGES.map((b, i) =>
+            <div key={i} className="flex items-center gap-2">
                 <b.icon size={16} className="text-primary flex-shrink-0" strokeWidth={1.5} />
                 <span className="text-[11px] tracking-wide text-muted-foreground leading-tight">{b.label}</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
         <div className="relative">
@@ -47,8 +47,8 @@ export default function BpHero() {
             <img
               src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80"
               alt="Luxury watch protected by Kariv Buyer Protection"
-              className="w-full h-full object-cover"
-            />
+              className="w-full h-full object-cover" />
+            
           </div>
           <div className="absolute -bottom-4 -left-4 bg-card border border-border rounded p-4 shadow-lg hidden md:block">
             <div className="flex items-center gap-2">
@@ -58,6 +58,6 @@ export default function BpHero() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
