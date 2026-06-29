@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { IWC_HERO_IMAGE } from '@/lib/iwcData';
 
 const ANCHORS = [
-  { label: "Pilot's Watches", to: '/iwc-schaffhausen/pilots-watches' },
-  { label: 'Portugieser', to: '/iwc-schaffhausen/portugieser' },
-  { label: 'Portofino', to: '/iwc-schaffhausen/portofino' },
-  { label: 'Ingenieur', to: '/iwc-schaffhausen/ingenieur' },
-  { label: 'Aquatimer', to: '/iwc-schaffhausen/aquatimer' },
-];
+{ label: "Pilot's Watches", to: '/iwc-schaffhausen/pilots-watches' },
+{ label: 'Portugieser', to: '/iwc-schaffhausen/portugieser' },
+{ label: 'Portofino', to: '/iwc-schaffhausen/portofino' },
+{ label: 'Ingenieur', to: '/iwc-schaffhausen/ingenieur' },
+{ label: 'Aquatimer', to: '/iwc-schaffhausen/aquatimer' }];
+
 
 export default function IWCHero() {
   return (
@@ -17,7 +17,7 @@ export default function IWCHero() {
       <div className="w-full px-6 md:px-12 lg:px-20 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">IWC Schaffhausen</span>
-          <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-foreground">IWC Schaffhausen Uhren at Kariv Glamour</h1>
+          <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-[hsl(var(--primary))]">IWC Schaffhausen Uhren at Kariv Glamour</h1>
           <p className="text-base leading-relaxed max-w-xl mb-8 text-muted-foreground">
             Explore IWC Schaffhausen watches known for engineering precision, aviation heritage, refined dress-watch design, and iconic collections such as Pilot&rsquo;s Watches, Portugieser, Portofino, Ingenieur and Aquatimer.
           </p>
@@ -26,9 +26,9 @@ export default function IWCHero() {
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">Explore IWC Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            {ANCHORS.map((a, i) => (
-              <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
-            ))}
+            {ANCHORS.map((a, i) =>
+            <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
+            )}
           </div>
         </motion.div>
         <div className="flex items-center justify-center">
@@ -37,6 +37,6 @@ export default function IWCHero() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
