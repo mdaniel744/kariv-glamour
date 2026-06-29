@@ -44,7 +44,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link to="/">
               <h2 className="font-display text-2xl tracking-[0.08em] text-white mb-4">
-                <span className="font-light">KARIV </span>{' '}
+                <span className="font-light">KARIV</span>{' '}
                 <span className="font-semibold text-[hsl(var(--popover))] dark:text-white">GLAMOUR</span>
               </h2>
             </Link>
