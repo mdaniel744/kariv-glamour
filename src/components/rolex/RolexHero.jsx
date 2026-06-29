@@ -5,12 +5,12 @@ import { ChevronRight } from 'lucide-react';
 import { ROLEX_HERO_IMAGE } from '@/lib/rolexData';
 
 const ANCHOR_LINKS = [
-  { label: 'Collections', href: '#rolex-collections' },
-  { label: 'New Arrivals', href: '#rolex-products' },
-  { label: 'Pre-Owned Rolex', href: '/rolex-gebraucht-kaufen' },
-  { label: 'Rolex Buying Guide', href: '/welche-rolex-kaufen' },
-  { label: 'Rolex Maintenance', href: '#rolex-maintenance' },
-];
+{ label: 'Collections', href: '#rolex-collections' },
+{ label: 'New Arrivals', href: '#rolex-products' },
+{ label: 'Pre-Owned Rolex', href: '/rolex-gebraucht-kaufen' },
+{ label: 'Rolex Buying Guide', href: '/welche-rolex-kaufen' },
+{ label: 'Rolex Maintenance', href: '#rolex-maintenance' }];
+
 
 export default function RolexHero() {
   return (
@@ -25,8 +25,8 @@ export default function RolexHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-2xl"
-        >
+          className="max-w-2xl">
+          
           <div className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mb-6 text-muted-foreground">
             <Link to="/" className="hover:text-foreground">Start</Link>
             <ChevronRight size={10} />
@@ -37,9 +37,9 @@ export default function RolexHero() {
 
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">Rolex Boutique</span>
 
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-foreground">
-            Rolex Watches at<br />
-            <span className="italic text-primary">Kariv Glamour</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-bold">Rolex Watches at
+Kariv Glamour
+
           </h1>
 
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">
@@ -56,14 +56,14 @@ export default function RolexHero() {
           </div>
 
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {ANCHOR_LINKS.map((link, i) => (
-              <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">
+            {ANCHOR_LINKS.map((link, i) =>
+            <a key={i} href={link.href} className="text-[10px] tracking-[0.12em] uppercase transition-colors hover:opacity-70 text-primary">
                 {link.label}
               </a>
-            ))}
+            )}
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
