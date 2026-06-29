@@ -51,6 +51,9 @@ import AudemarsPiguetCollectionPage from '@/pages/AudemarsPiguetCollectionPage';
 import GrandSeikoPage from '@/pages/GrandSeikoPage';
 import GrandSeikoSeoLanding from '@/pages/GrandSeikoSeoLanding';
 import GrandSeikoCollectionPage from '@/pages/GrandSeikoCollectionPage';
+import IWCPage from '@/pages/IWCPage';
+import IWCSeoLanding from '@/pages/IWCSeoLanding';
+import IWCCollectionPage from '@/pages/IWCCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -106,6 +109,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/breitling" element={<BreitlingPage />} />
         <Route path="/brands/audemars-piguet" element={<AudemarsPiguetPage />} />
         <Route path="/brands/grand-seiko" element={<GrandSeikoPage />} />
+        <Route path="/brands/iwc-schaffhausen" element={<IWCPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -263,6 +267,26 @@ const AuthenticatedApp = () => {
         <Route path="/grand-seiko-spring-drive-guide" element={<GrandSeikoSeoLanding slug="grand-seiko-spring-drive-guide" />} />
         <Route path="/grand-seiko/story" element={<GrandSeikoSeoLanding slug="grand-seiko-story" />} />
         <Route path="/grand-seiko/:slug" element={<GrandSeikoCollectionPage />} />
+
+        {/* IWC Schaffhausen SEO landing pages */}
+        <Route path="/iwc-schaffhausen-uhr" element={<IWCSeoLanding slug="iwc-schaffhausen-uhr" />} />
+        <Route path="/iwc-schaffhausen-uhren" element={<IWCSeoLanding slug="iwc-schaffhausen-uhren" />} />
+        <Route path="/iwc-schaffhausen-uhr-herren" element={<IWCSeoLanding slug="iwc-schaffhausen-uhr-herren" />} />
+        <Route path="/iwc-schaffhausen-uhr-damen" element={<IWCSeoLanding slug="iwc-schaffhausen-uhr-damen" />} />
+        <Route path="/iwc-schaffhausen-automatic" element={<IWCSeoLanding slug="iwc-schaffhausen-automatic" />} />
+        <Route path="/iwc-schaffhausen-gebraucht" element={<IWCSeoLanding slug="iwc-schaffhausen-gebraucht" />} />
+        <Route path="/iwc-schaffhausen-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-kaufen" />} />
+        <Route path="/iwc-schaffhausen-uhr-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-uhr-kaufen" />} />
+        <Route path="/iwc-schaffhausen-gebraucht-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-gebraucht-kaufen" />} />
+        <Route path="/iwc-schaffhausen-pilot-watches-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-pilot-watches-kaufen" />} />
+        <Route path="/iwc-schaffhausen-portugieser-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-portugieser-kaufen" />} />
+        <Route path="/iwc-schaffhausen-ingenieur-kaufen" element={<IWCSeoLanding slug="iwc-schaffhausen-ingenieur-kaufen" />} />
+        <Route path="/welche-iwc-schaffhausen-kaufen" element={<IWCSeoLanding slug="welche-iwc-schaffhausen-kaufen" />} />
+        <Route path="/iwc-schaffhausen-automatic-guide" element={<IWCSeoLanding slug="iwc-schaffhausen-automatic-guide" />} />
+        <Route path="/iwc-schaffhausen-pilot-watch-guide" element={<IWCSeoLanding slug="iwc-schaffhausen-pilot-watch-guide" />} />
+        <Route path="/iwc-schaffhausen-ingenieur-guide" element={<IWCSeoLanding slug="iwc-schaffhausen-ingenieur-guide" />} />
+        <Route path="/iwc-schaffhausen/story" element={<IWCSeoLanding slug="iwc-schaffhausen-story" />} />
+        <Route path="/iwc-schaffhausen/:slug" element={<IWCCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
