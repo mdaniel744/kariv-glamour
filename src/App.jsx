@@ -45,6 +45,9 @@ import HublotCollectionPage from '@/pages/HublotCollectionPage';
 import BreitlingPage from '@/pages/BreitlingPage';
 import BreitlingSeoLanding from '@/pages/BreitlingSeoLanding';
 import BreitlingCollectionPage from '@/pages/BreitlingCollectionPage';
+import AudemarsPiguetPage from '@/pages/AudemarsPiguetPage';
+import AudemarsPiguetSeoLanding from '@/pages/AudemarsPiguetSeoLanding';
+import AudemarsPiguetCollectionPage from '@/pages/AudemarsPiguetCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -98,6 +101,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/cartier" element={<CartierPage />} />
         <Route path="/brands/hublot" element={<HublotPage />} />
         <Route path="/brands/breitling" element={<BreitlingPage />} />
+        <Route path="/brands/audemars-piguet" element={<AudemarsPiguetPage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -217,6 +221,25 @@ const AuthenticatedApp = () => {
         <Route path="/welche-breitling-uhr-kaufen" element={<BreitlingSeoLanding slug="welche-breitling-uhr-kaufen" />} />
         <Route path="/breitling/story" element={<BreitlingSeoLanding slug="breitling-story" />} />
         <Route path="/breitling/:slug" element={<BreitlingCollectionPage />} />
+
+        {/* Audemars Piguet SEO landing pages */}
+        <Route path="/audemars-piguet-uhr" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhr" />} />
+        <Route path="/audemars-piguet-uhren" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhren" />} />
+        <Route path="/audemars-piguet-uhr-herren" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhr-herren" />} />
+        <Route path="/audemars-piguet-uhr-damen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhr-damen" />} />
+        <Route path="/audemars-piguet-gebraucht" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-gebraucht" />} />
+        <Route path="/audemars-piguet-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-kaufen" />} />
+        <Route path="/audemars-piguet-uhr-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhr-kaufen" />} />
+        <Route path="/audemars-piguet-gebraucht-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-gebraucht-kaufen" />} />
+        <Route path="/audemars-piguet-royal-oak-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-royal-oak-kaufen" />} />
+        <Route path="/audemars-piguet-royal-oak-offshore-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-royal-oak-offshore-kaufen" />} />
+        <Route path="/audemars-piguet-code-1159-kaufen" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-code-1159-kaufen" />} />
+        <Route path="/audemars-piguet-uhr-preis" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-uhr-preis" />} />
+        <Route path="/was-kostet-eine-audemars-piguet-uhr" element={<AudemarsPiguetSeoLanding slug="was-kostet-eine-audemars-piguet-uhr" />} />
+        <Route path="/audemars-piguet-teuerste-uhr" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-teuerste-uhr" />} />
+        <Route path="/welche-audemars-piguet-kaufen" element={<AudemarsPiguetSeoLanding slug="welche-audemars-piguet-kaufen" />} />
+        <Route path="/audemars-piguet/story" element={<AudemarsPiguetSeoLanding slug="audemars-piguet-story" />} />
+        <Route path="/audemars-piguet/:slug" element={<AudemarsPiguetCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
