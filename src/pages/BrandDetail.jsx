@@ -72,7 +72,7 @@ export default function BrandDetail() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl text-foreground tracking-tight [font-family:'Cormorant_Garamond',_serif] font-bold">
+            className="text-4xl md:text-6xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">
             
             {brandName}
           </motion.h1>
