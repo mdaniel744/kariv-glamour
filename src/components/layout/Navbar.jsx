@@ -61,7 +61,7 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
         {/* Top bar */}
         <div className="hidden md:block border-b border-border">
-          <div className="max-w-[1600px] mx-auto px-6 py-2 flex justify-between items-center">
+          <div className="w-full mx-auto px-6 py-2 flex justify-between items-center">
             <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-body">
               Authentifizierte Luxusuhren · Weltweit versichert
             </p>
@@ -76,7 +76,7 @@ export default function Navbar() {
         </div>
 
         {/* Main nav */}
-        <div className="max-w-[1600px] mx-auto px-4 md:px-6">
+        <div className="w-full mx-auto px-4 md:px-6">
           {/* Row 1: logo + visible search + actions */}
           <div className="flex items-center justify-between h-16 md:h-20 gap-3 md:gap-6">
             <div className="flex items-center gap-3">
