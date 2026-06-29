@@ -15,7 +15,7 @@ export default function CartierSeoCardGrid() {
           {CARTIER_SEO_CARDS.map((card, i) =>
           <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }}>
               <Link to={card.link} className="group block border border-border bg-card p-8 transition-colors hover:border-primary/40">
-                <h3 className="font-display text-xl mb-3 text-foreground">{card.title}</h3>
+                <h3 className="text-xl mb-3 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{card.title}</h3>
                 <p className="text-xs leading-relaxed mb-5 text-muted-foreground">{card.description}</p>
                 <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Entdecken →</span>
               </Link>
