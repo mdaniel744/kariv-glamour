@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Upload, Search, Banknote, ShieldCheck, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 
 const steps = [
@@ -10,6 +12,7 @@ const steps = [
 ];
 
 export default function SellTrade() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', brand: '', model: '', reference: '', year: '', condition: '', description: '' });
   const [submitted, setSubmitted] = useState(false);
 
@@ -20,6 +23,7 @@ export default function SellTrade() {
 
   return (
     <div>
+      <SEO title={t('common:seo.sellTrade.title')} description={t('common:seo.sellTrade.description')} />
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Start</Link>

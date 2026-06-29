@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import SEO from '@/components/SEO';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { SORT_OPTIONS } from '@/lib/constants';
@@ -8,6 +10,7 @@ import { SlidersHorizontal, X, Grid3X3, LayoutGrid, ChevronRight } from 'lucide-
 
 export default function Shop() {
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
@@ -78,8 +81,15 @@ export default function Shop() {
     searchParams.get('search') ? `Ergebnisse für "${searchParams.get('search')}"` :
     'Alle Uhren';
 
+  const seoTitle = searchParams.get('isNewArrival') ? t('common:seo.shop.title') + ' — Neuheiten' :
+    searchParams.get('isCertifiedPreOwned') ? t('common:seo.shop.title') + ' — Certified Pre-Owned' :
+    searchParams.get('isVintage') ? t('common:seo.shop.title') + ' — Vintage' :
+    searchParams.get('search') ? `${t('common:seo.shop.title')} — ${searchParams.get('search')}` :
+    t('common:seo.shop.title');
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
+      <SEO title={seoTitle} description={t('common:seo.shop.description')} />
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
         <Link to="/" className="hover:text-foreground">Start</Link>

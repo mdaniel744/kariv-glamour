@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import SEO from '@/components/SEO';
 import HeroSection from '@/components/home/HeroSection';
 import BrandMarquee from '@/components/home/BrandMarquee';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
@@ -9,8 +11,29 @@ import TrustBar from '@/components/shared/TrustBar';
 import PopularCollections from '@/components/home/PopularCollections';
 
 export default function Home() {
+  const { t } = useTranslation();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Kariv Glamour",
+    "url": window.location.origin,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": window.location.origin + "/shop?search={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
   return (
     <div className="-mt-16 md:-mt-28">
+      <SEO
+        title={t('common:seo.home.title')}
+        description={t('common:seo.home.description')}
+        type="website"
+        jsonLd={jsonLd}
+      />
       <HeroSection />
       <BrandMarquee />
       <FeaturedProducts

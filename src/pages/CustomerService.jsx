@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { base44 } from '@/api/base44Client';
 import { Mail, Phone, MapPin, Clock, ChevronDown, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import TrustBar from '@/components/shared/TrustBar';
 
 export default function CustomerService() {
+  const { t } = useTranslation();
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -22,6 +25,7 @@ export default function CustomerService() {
 
   return (
     <div>
+      <SEO title={t('common:seo.customerService.title')} description={t('common:seo.customerService.description')} />
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Start</Link>

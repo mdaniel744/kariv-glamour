@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA } from '@/lib/constants';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 
 export default function Brands() {
+  const { t } = useTranslation();
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
@@ -19,6 +22,7 @@ export default function Brands() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <SEO title={t('common:seo.brands.title')} description={t('common:seo.brands.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
         <Link to="/" className="hover:text-foreground">Start</Link>
         <ChevronRight size={10} />

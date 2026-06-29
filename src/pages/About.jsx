@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Eye, Award, Users, Globe, Heart, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import TrustBar from '@/components/shared/TrustBar';
 import { BRAND_DISCLAIMER } from '@/lib/constants';
 import { motion } from 'framer-motion';
@@ -17,8 +19,10 @@ const values = [
 ];
 
 export default function About() {
+  const { t } = useTranslation();
   return (
     <div>
+      <SEO title={t('common:seo.about.title')} description={t('common:seo.about.description')} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">

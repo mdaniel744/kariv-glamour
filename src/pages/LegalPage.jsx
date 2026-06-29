@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight } from 'lucide-react';
 
@@ -8,6 +10,11 @@ export default function LegalPage() {
   const { slug } = useParams();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { localize } = useLocalizedField();
+
+  const seoTitle = page ? localize(page, 'seoTitle') || localize(page, 'title') : undefined;
+  const seoDescription = page ? localize(page, 'seoDescription') : undefined;
+  useSEO({ title: seoTitle, description: seoDescription, type: 'article' });
 
   useEffect(() => {
     const load = async () => {
@@ -55,9 +62,9 @@ export default function LegalPage() {
         <span className="text-foreground">{page.title}</span>
       </div>
 
-      <h1 className="font-display text-3xl md:text-4xl font-light text-foreground mb-8">{page.title}</h1>
+      <h1 className="font-display text-3xl md:text-4xl font-light text-foreground mb-8">{localize(page, 'title')}</h1>
       <div className="prose prose-sm prose-headings:font-display prose-headings:font-light prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary max-w-none">
-        <ReactMarkdown>{page.content}</ReactMarkdown>
+        <ReactMarkdown>{localize(page, 'content')}</ReactMarkdown>
       </div>
     </div>
   );

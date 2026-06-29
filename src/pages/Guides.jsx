@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import SEO from '@/components/SEO';
 import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Guides() {
+  const { t } = useTranslation();
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,6 +20,7 @@ export default function Guides() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <SEO title={t('common:seo.guides.title')} description={t('common:seo.guides.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
         <Link to="/" className="hover:text-foreground">Start</Link>
         <ChevronRight size={10} />

@@ -1,11 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
+import { useSEO } from '@/hooks/useSEO';
 import { Trash2, ShoppingBag, ArrowLeft, ShieldCheck, Truck, Lock, ChevronRight } from 'lucide-react';
 
 export default function Cart() {
+  const { t } = useTranslation();
   const { cartItems, removeFromCart, cartTotal, clearCart } = useCart();
+  useSEO({ title: t('common:seo.cart.title'), description: t('common:seo.cart.description'), noindex: true });
 
   if (cartItems.length === 0) {
     return (

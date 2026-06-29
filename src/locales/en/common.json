@@ -43,5 +43,51 @@
   "delete": "Delete",
   "edit": "Edit",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "seo": {
+    "home": {
+      "title": "Buy Luxury Watches — Authentic Rolex, Patek Philippe & More",
+      "description": "Discover authentic luxury watches at Kariv Glamour. Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet and more. Shop new, pre-owned, and vintage watches with buyer protection."
+    },
+    "shop": {
+      "title": "Luxury Watch Shop — All Watches",
+      "description": "Browse our complete inventory of authentic luxury watches. Rolex, Omega, Patek Philippe, Cartier and more — all verified and authenticated."
+    },
+    "brands": {
+      "title": "Luxury Watch Brands",
+      "description": "Discover curated luxury watches from the world's most iconic manufacturers — Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet and more."
+    },
+    "about": {
+      "title": "About Kariv Glamour",
+      "description": "Kariv Glamour is your trusted marketplace for authentic luxury watches. Learn about our mission, expertise, and commitment to authenticity."
+    },
+    "authentication": {
+      "title": "Watch Authentication",
+      "description": "Learn how Kariv Glamour authenticates every watch through rigorous inspection by master watchmakers — from condition to parts originality."
+    },
+    "buyerProtection": {
+      "title": "Buyer Protection",
+      "description": "Our comprehensive buyer protection: authenticated watches, insured shipping, secure payment, and 14-day return policy."
+    },
+    "customerService": {
+      "title": "Customer Service",
+      "description": "Help and support for all your luxury watch, order, shipping, and return questions. Our expert team is here for you."
+    },
+    "sellTrade": {
+      "title": "Sell or Trade Luxury Watches",
+      "description": "Sell or trade your luxury watch at Kariv Glamour. Free valuation, competitive pricing, and secure transactions."
+    },
+    "guides": {
+      "title": "Watch Guides & Resources",
+      "description": "Comprehensive luxury watch guides: buying advice, brand guides, investment tips, authentication, and care."
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "description": "Your saved luxury watches at Kariv Glamour."
+    },
+    "cart": {
+      "title": "Shopping Cart",
+      "description": "Your shopping cart at Kariv Glamour."
+    }
+  }
 }

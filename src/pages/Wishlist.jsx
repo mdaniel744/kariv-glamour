@@ -1,11 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/lib/cartContext';
+import { useSEO } from '@/hooks/useSEO';
 import { Heart, ChevronRight } from 'lucide-react';
 import ProductCard from '@/components/shared/ProductCard';
 
 export default function Wishlist() {
+  const { t } = useTranslation();
   const { wishlistItems } = useCart();
+  useSEO({ title: t('common:seo.wishlist.title'), description: t('common:seo.wishlist.description'), noindex: true });
 
   if (wishlistItems.length === 0) {
     return (

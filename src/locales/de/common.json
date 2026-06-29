@@ -43,5 +43,51 @@
   "delete": "Löschen",
   "edit": "Bearbeiten",
   "yes": "Ja",
-  "no": "Nein"
+  "no": "Nein",
+  "seo": {
+    "home": {
+      "title": "Luxusuhren kaufen — Authentische Uhren von Rolex, Patek Philippe & mehr",
+      "description": "Entdecken Sie authentische Luxusuhren bei Kariv Glamour. Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet und mehr. Neue, gebrauchte und vintage Uhren mit Käuferschutz kaufen."
+    },
+    "shop": {
+      "title": "Luxusuhren Shop — Alle Uhren",
+      "description": "Durchstöbern Sie unser komplettes Inventar an authentischen Luxusuhren. Rolex, Omega, Patek Philippe, Cartier und mehr — alle geprüft und authentifiziert."
+    },
+    "brands": {
+      "title": "Luxusuhren Marken",
+      "description": "Entdecken Sie kuratierte Luxusuhren von den ikonischsten Manufakturen der Welt — Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet und mehr."
+    },
+    "about": {
+      "title": "Über Kariv Glamour",
+      "description": "Kariv Glamour ist Ihr vertrauenswürdiger Marktplatz für authentische Luxusuhren. Erfahren Sie mehr über unsere Mission, Expertise und Verpflichtung zur Authentizität."
+    },
+    "authentication": {
+      "title": "Uhren Authentifizierung",
+      "description": "Erfahren Sie, wie Kariv Glamour jede Uhr durch rigorose Prüfung durch Uhrmacher-Experten authentifiziert — vom Zustand bis zur Originalität der Teile."
+    },
+    "buyerProtection": {
+      "title": "Käuferschutz",
+      "description": "Unser umfassender Käuferschutz: authentifizierte Uhren, versicherter Versand, sichere Zahlung und 14-tägige Rückgaberecht."
+    },
+    "customerService": {
+      "title": "Kundenservice",
+      "description": "Hilfe und Support bei allen Fragen zu Luxusuhren, Bestellungen, Versand und Rückgaben. Unser Expertenteam steht Ihnen zur Verfügung."
+    },
+    "sellTrade": {
+      "title": "Luxusuhren verkaufen oder tauschen",
+      "description": "Verkaufen oder tauschen Sie Ihre Luxusuhr bei Kariv Glamour. Kostenlose Bewertung, kompetitive Preise und sichere Abwicklung."
+    },
+    "guides": {
+      "title": "Uhren Ratgeber & Guides",
+      "description": "Umfassende Ratgeber für Luxusuhren: Kaufberatung, Marken-Guides, Investitionstipps, Authentifizierung und Pflege."
+    },
+    "wishlist": {
+      "title": "Wunschliste",
+      "description": "Ihre gespeicherten Luxusuhren bei Kariv Glamour."
+    },
+    "cart": {
+      "title": "Warenkorb",
+      "description": "Ihr Warenkorb bei Kariv Glamour."
+    }
+  }
 }

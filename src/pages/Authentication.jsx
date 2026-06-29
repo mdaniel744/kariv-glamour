@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Search, Microscope, FileCheck, Award, BadgeCheck, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import TrustBar from '@/components/shared/TrustBar';
 
@@ -13,8 +15,10 @@ const steps = [
 ];
 
 export default function Authentication() {
+  const { t } = useTranslation();
   return (
     <div>
+      <SEO title={t('common:seo.authentication.title')} description={t('common:seo.authentication.description')} />
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Start</Link>

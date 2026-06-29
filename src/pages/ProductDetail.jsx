@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
@@ -11,10 +13,32 @@ import TrustBar from '@/components/shared/TrustBar';
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart, isInCart, toggleWishlist, isInWishlist } = useCart();
+  const { localize } = useLocalizedField();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [related, setRelated] = useState([]);
+
+  // SEO — uses localized fields, updates when product loads
+  const seoTitle = product ? localize(product, 'metaTitle') || localize(product, 'productTitle') : undefined;
+  const seoDescription = product ? localize(product, 'metaDescription') || localize(product, 'shortDescription') : undefined;
+  const seoImage = product?.featuredImage;
+  const productJsonLd = product ? {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": seoTitle,
+    "description": seoDescription,
+    "image": seoImage,
+    "brand": { "@type": "Brand", "name": product.brand },
+    "offers": {
+      "@type": "Offer",
+      "price": product.salePrice || product.price,
+      "priceCurrency": product.currency || "EUR",
+      "availability": product.availability === 'In Stock' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "itemCondition": product.condition ? `https://schema.org/${product.condition === 'New' ? 'NewCondition' : 'UsedCondition'}` : undefined
+    }
+  } : null;
+  useSEO({ title: seoTitle, description: seoDescription, image: seoImage, type: 'product', jsonLd: productJsonLd });
 
   useEffect(() => {
     const load = async () => {

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA, BRAND_DISCLAIMER } from '@/lib/constants';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import { motion } from 'framer-motion';
@@ -13,6 +15,7 @@ export default function BrandDetail() {
   const [products, setProducts] = useState([]);
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { localize } = useLocalizedField();
 
   const staticBrand = BRAND_DATA.find((b) => b.slug === slug);
 
@@ -40,6 +43,18 @@ export default function BrandDetail() {
   }, [slug]);
 
   const brandName = brand?.brandName || staticBrand?.name || slug;
+
+  // SEO
+  const seoTitle = brand ? localize(brand, 'seoTitle') || `${brandName} — Luxusuhren` : `${slug} — Luxusuhren`;
+  const seoDescription = brand ? localize(brand, 'seoDescription') || localize(brand, 'shortDescription') : undefined;
+  const brandJsonLd = brand ? {
+    "@context": "https://schema.org",
+    "@type": "Brand",
+    "name": brandName,
+    "description": seoDescription,
+    "logo": brand.brandLogoLight || undefined
+  } : null;
+  useSEO({ title: seoTitle, description: seoDescription, image: brand?.heroImage, type: 'website', jsonLd: brandJsonLd });
 
   if (loading) {
     return (
