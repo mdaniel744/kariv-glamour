@@ -54,6 +54,9 @@ import GrandSeikoCollectionPage from '@/pages/GrandSeikoCollectionPage';
 import IWCPage from '@/pages/IWCPage';
 import IWCSeoLanding from '@/pages/IWCSeoLanding';
 import IWCCollectionPage from '@/pages/IWCCollectionPage';
+import JaegerLeCoultrePage from '@/pages/JaegerLeCoultrePage';
+import JaegerLeCoultreSeoLanding from '@/pages/JaegerLeCoultreSeoLanding';
+import JaegerLeCoultreCollectionPage from '@/pages/JaegerLeCoultreCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -110,6 +113,7 @@ const AuthenticatedApp = () => {
         <Route path="/brands/audemars-piguet" element={<AudemarsPiguetPage />} />
         <Route path="/brands/grand-seiko" element={<GrandSeikoPage />} />
         <Route path="/brands/iwc-schaffhausen" element={<IWCPage />} />
+        <Route path="/brands/jaeger-lecoultre" element={<JaegerLeCoultrePage />} />
         <Route path="/brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -287,6 +291,24 @@ const AuthenticatedApp = () => {
         <Route path="/iwc-schaffhausen-ingenieur-guide" element={<IWCSeoLanding slug="iwc-schaffhausen-ingenieur-guide" />} />
         <Route path="/iwc-schaffhausen/story" element={<IWCSeoLanding slug="iwc-schaffhausen-story" />} />
         <Route path="/iwc-schaffhausen/:slug" element={<IWCCollectionPage />} />
+
+        {/* Jaeger-LeCoultre SEO landing pages */}
+        <Route path="/jaeger-lecoultre-uhr" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhr" />} />
+        <Route path="/jaeger-lecoultre-uhren" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhren" />} />
+        <Route path="/jaeger-lecoultre-uhren-herren" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhren-herren" />} />
+        <Route path="/jaeger-lecoultre-uhren-damen" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhren-damen" />} />
+        <Route path="/gebrauchte-jaeger-lecoultre" element={<JaegerLeCoultreSeoLanding slug="gebrauchte-jaeger-lecoultre" />} />
+        <Route path="/jaeger-lecoultre-kaufen" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-kaufen" />} />
+        <Route path="/jaeger-lecoultre-uhr-kaufen" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhr-kaufen" />} />
+        <Route path="/jaeger-lecoultre-gebraucht-kaufen" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-gebraucht-kaufen" />} />
+        <Route path="/jaeger-lecoultre-uhren-preise" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-uhren-preise" />} />
+        <Route path="/was-kostet-eine-jaeger-lecoultre-uhr" element={<JaegerLeCoultreSeoLanding slug="was-kostet-eine-jaeger-lecoultre-uhr" />} />
+        <Route path="/jaeger-lecoultre-alte-modelle" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-alte-modelle" />} />
+        <Route path="/welche-jaeger-lecoultre-kaufen" element={<JaegerLeCoultreSeoLanding slug="welche-jaeger-lecoultre-kaufen" />} />
+        <Route path="/jaeger-lecoultre-reverso-duoface" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-reverso-duoface" />} />
+        <Route path="/jaeger-lecoultre-master-chronograph" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-master-chronograph" />} />
+        <Route path="/jaeger-lecoultre/story" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-story" />} />
+        <Route path="/jaeger-lecoultre/:slug" element={<JaegerLeCoultreCollectionPage />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
