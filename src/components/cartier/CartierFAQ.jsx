@@ -17,7 +17,7 @@ export default function CartierFAQ() {
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Häufige Fragen</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light text-[hsl(var(--primary))]">Cartier FAQ</h2>
+          <h2 className="text-3xl md:text-4xl text-[hsl(var(--primary))] [font-family:'Cormorant_Garamond',_serif] font-semibold">Cartier FAQ</h2>
         </div>
         <Accordion type="single" collapsible>
           {CARTIER_FAQS.map((f, i) =>
