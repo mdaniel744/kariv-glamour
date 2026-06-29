@@ -29,7 +29,7 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-[#C5A367] bg-[hsl(var(--primary))]">
+    <footer className="border-t-2 border-[#C5A367] bg-[hsl(var(--primary))] dark:bg-[#060B14]">
       {/* Brand disclaimer */}
       <div className="max-w-7xl mx-auto px-6 py-10 border-b border-white/10">
         <p className="text-[11px] tracking-[0.05em] leading-relaxed text-white/60 max-w-4xl font-body">
@@ -45,7 +45,7 @@ export default function Footer() {
             <Link to="/">
               <h2 className="font-display text-2xl tracking-[0.08em] text-white mb-4">
                 <span className="font-light">KARIV</span>{' '}
-                <span className="font-semibold text-[hsl(var(--popover))]">GLAMOUR</span>
+                <span className="font-semibold text-[hsl(var(--popover))] dark:text-white">GLAMOUR</span>
               </h2>
             </Link>
             <p className="text-sm text-white/70 leading-relaxed mb-6 font-body">
@@ -68,7 +68,7 @@ export default function Footer() {
           { title: "Marken", links: footerLinks.brands }].
           map((col) =>
           <div key={col.title}>
-              <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#C5A367] font-semibold mb-5">{col.title}</h3>
+              <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#C5A367] dark:text-white font-semibold mb-5">{col.title}</h3>
               <ul className="space-y-3">
                 {col.links.map((link) =>
               <li key={link.to}>
