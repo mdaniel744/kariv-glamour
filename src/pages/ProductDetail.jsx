@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { useCart } from '@/lib/cartContext';
 import { useLanguage } from '@/lib/languageContext';
+import { useAuth } from '@/lib/AuthContext';
 import { formatPrice } from '@/lib/constants';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
@@ -11,14 +12,18 @@ import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight,
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
+import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart, isInCart, toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
   const { localePath } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [related, setRelated] = useState([]);
 
@@ -217,12 +222,24 @@ export default function ProductDetail() {
 
             {/* Actions */}
             <div className="space-y-3">
-              <LocalizedLink
-                to={`/checkout/${product.id}`}
-                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${product.availability === 'Sold' ? 'bg-muted text-muted-foreground cursor-not-allowed pointer-events-none' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
+              <button
+                onClick={() => {
+                  if (product.availability === 'Sold' || product.availability === 'Reserved') return;
+                  if (isAuthenticated) {
+                    navigate(localePath(`/checkout/${product.id}`));
+                  } else {
+                    setShowAuthModal(true);
+                  }
+                }}
+                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${product.availability === 'Sold' || product.availability === 'Reserved' ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
                 <Lock size={16} />
                 {product.availability === 'Sold' ? 'Sold Out' : product.availability === 'Reserved' ? 'Reserved' : 'Buy Now — Secure Escrow'}
-              </LocalizedLink>
+              </button>
+              <BuyNowAuthModal
+                open={showAuthModal}
+                onClose={() => setShowAuthModal(false)}
+                continueTo={localePath(`/checkout/${product.id}`)}
+              />
               <div className="flex gap-3">
                 <button
                   onClick={() => toggleWishlist(product)}
