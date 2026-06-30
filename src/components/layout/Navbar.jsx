@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
-import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
+import { useAuth } from '@/lib/AuthContext';
+import { isDealer } from '@/lib/escrowConstants';
 import { BRAND_DATA } from '@/lib/constants';
 import BrandFavicon from '@/components/shared/BrandFavicon';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -14,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { user, isAuthenticated } = useAuth();
   const { t } = useTranslation('navigation');
   const { localePath } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -135,6 +138,15 @@ export default function Navbar() {
                   </span>
                 }
               </LocalizedLink>
+              {isAuthenticated ? (
+                <LocalizedLink to={isDealer(user) ? '/dealer' : '/portal'} className="text-foreground hover:text-primary transition-colors">
+                  <User size={18} />
+                </LocalizedLink>
+              ) : (
+                <LocalizedLink to="/login" className="text-[10px] tracking-[0.12em] uppercase text-foreground hover:text-primary transition-colors hidden md:block">
+                  Sign In
+                </LocalizedLink>
+              )}
             </div>
           </div>
 

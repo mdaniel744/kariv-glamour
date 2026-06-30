@@ -1,17 +1,61 @@
 {
+  "name": "User",
+  "type": "object",
   "properties": {
     "role": {
       "type": "string",
       "description": "The role of the user in the app",
       "enum": [
         "admin",
-        "user"
-      ]
+        "user",
+        "buyer",
+        "dealer"
+      ],
+      "default": "buyer"
+    },
+    "isDealerApproved": {
+      "type": "boolean",
+      "default": false
+    },
+    "dealerCompanyName": {
+      "type": "string"
+    },
+    "dealerPhone": {
+      "type": "string"
+    },
+    "dealerTaxId": {
+      "type": "string"
+    },
+    "dealerWebsite": {
+      "type": "string"
+    },
+    "dealerApplicationStatus": {
+      "type": "string",
+      "enum": [
+        "none",
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "none"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "streetAddress": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
     }
   },
   "required": [
     "role"
-  ],
-  "name": "User",
-  "type": "object"
+  ]
 }

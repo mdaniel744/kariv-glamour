@@ -37,6 +37,19 @@ import CustomerService from '@/pages/CustomerService';
 import SellTrade from '@/pages/SellTrade';
 import Guides from '@/pages/Guides';
 import LegalPage from '@/pages/LegalPage';
+import Checkout from '@/pages/Checkout';
+import PortalLayout from '@/pages/portal/PortalLayout';
+import PortalDashboard from '@/pages/portal/PortalDashboard';
+import PortalOrders from '@/pages/portal/PortalOrders';
+import PortalOrderDetail from '@/pages/portal/PortalOrderDetail';
+import PortalProfile from '@/pages/portal/PortalProfile';
+import PortalBecomeDealer from '@/pages/portal/PortalBecomeDealer';
+import DealerLayout from '@/pages/dealer/DealerLayout';
+import DealerDashboard from '@/pages/dealer/DealerDashboard';
+import DealerListings from '@/pages/dealer/DealerListings';
+import DealerListingForm from '@/pages/dealer/DealerListingForm';
+import DealerSales from '@/pages/dealer/DealerSales';
+import RoleGuard from '@/components/RoleGuard';
 import RolexPage from '@/pages/RolexPage';
 import RolexSeoLanding from '@/pages/RolexSeoLanding';
 import RolexCollectionPage from '@/pages/RolexCollectionPage';
@@ -94,6 +107,7 @@ import AdminCustomers from '@/pages/admin/AdminCustomers';
 import AdminGuides from '@/pages/admin/AdminGuides';
 import AdminLegal from '@/pages/admin/AdminLegal';
 import AdminFAQ from '@/pages/admin/AdminFAQ';
+import AdminDealerApplications from '@/pages/admin/AdminDealerApplications';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -467,6 +481,30 @@ const AuthenticatedApp = () => {
         <Route path="sell-trade" element={<SellTrade />} />
         <Route path="guides" element={<Guides />} />
         <Route path="legal/:slug" element={<LegalPage />} />
+        <Route path="checkout/:id" element={<Checkout />} />
+
+        {/* Buyer Portal — protected */}
+        <Route path="portal" element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route element={<PortalLayout />}>
+            <Route index element={<PortalDashboard />} />
+            <Route path="orders" element={<PortalOrders />} />
+            <Route path="orders/:id" element={<PortalOrderDetail />} />
+            <Route path="wishlist" element={<Wishlist />} />
+            <Route path="profile" element={<PortalProfile />} />
+            <Route path="become-dealer" element={<PortalBecomeDealer />} />
+          </Route>
+        </Route>
+
+        {/* Dealer Portal — protected + dealer role */}
+        <Route path="dealer" element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+          <Route element={<RoleGuard requireDealer><DealerLayout /></RoleGuard>}>
+            <Route index element={<DealerDashboard />} />
+            <Route path="listings" element={<DealerListings />} />
+            <Route path="listings/:id" element={<DealerListingForm />} />
+            <Route path="sales" element={<DealerSales />} />
+          </Route>
+        </Route>
+
         <Route path="*" element={<PageNotFound />} />
       </Route>
 
@@ -482,6 +520,7 @@ const AuthenticatedApp = () => {
           <Route path="guides" element={<AdminGuides />} />
           <Route path="legal" element={<AdminLegal />} />
           <Route path="faq" element={<AdminFAQ />} />
+          <Route path="dealer-applications" element={<AdminDealerApplications />} />
         </Route>
       </Route>
 

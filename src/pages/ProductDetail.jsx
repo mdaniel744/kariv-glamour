@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { useCart } from '@/lib/cartContext';
+import { useLanguage } from '@/lib/languageContext';
 import { formatPrice } from '@/lib/constants';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
-import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle } from 'lucide-react';
+import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
@@ -15,6 +16,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart, isInCart, toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
+  const { localePath } = useLanguage();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -215,11 +217,17 @@ export default function ProductDetail() {
 
             {/* Actions */}
             <div className="space-y-3">
+              <LocalizedLink
+                to={`/checkout/${product.id}`}
+                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${product.availability === 'Sold' ? 'bg-muted text-muted-foreground cursor-not-allowed pointer-events-none' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
+                <Lock size={16} />
+                {product.availability === 'Sold' ? 'Sold Out' : product.availability === 'Reserved' ? 'Reserved' : 'Buy Now — Secure Escrow'}
+              </LocalizedLink>
               <button
                 onClick={() => !inCart && addToCart(product)}
                 disabled={inCart}
-                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${
-                inCart ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`
+                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors border ${
+                inCart ? 'border-border text-muted-foreground cursor-not-allowed' : 'border-border text-foreground hover:border-primary'}`
                 }>
                 
                 <ShoppingBag size={16} />

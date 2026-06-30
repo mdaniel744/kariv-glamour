@@ -8,6 +8,15 @@
     "customerEmail": {
       "type": "string"
     },
+    "buyerId": {
+      "type": "string"
+    },
+    "dealerId": {
+      "type": "string"
+    },
+    "dealerName": {
+      "type": "string"
+    },
     "products": {
       "type": "array",
       "items": {
@@ -24,6 +33,15 @@
           },
           "quantity": {
             "type": "number"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "featuredImage": {
+            "type": "string"
           }
         }
       }
@@ -40,6 +58,19 @@
       ],
       "default": "Pending"
     },
+    "escrowStatus": {
+      "type": "string",
+      "enum": [
+        "pending_review",
+        "dealer_accepted",
+        "funds_secured",
+        "shipped",
+        "verified",
+        "funds_released",
+        "cancelled"
+      ],
+      "default": "pending_review"
+    },
     "paymentStatus": {
       "type": "string",
       "enum": [
@@ -49,6 +80,17 @@
         "Refunded"
       ],
       "default": "Pending"
+    },
+    "paymentMethod": {
+      "type": "string",
+      "enum": [
+        "bank_transfer",
+        "credit_card",
+        "crypto"
+      ]
+    },
+    "escrowReference": {
+      "type": "string"
     },
     "shippingStatus": {
       "type": "string",
@@ -73,8 +115,28 @@
     "billingAddress": {
       "type": "string"
     },
-    "paymentMethod": {
-      "type": "string"
+    "shippingDetails": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
     },
     "trackingNumber": {
       "type": "string"

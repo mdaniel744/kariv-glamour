@@ -1,0 +1,59 @@
+{
+  "name": "DealerApplications",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "userEmail": {
+      "type": "string"
+    },
+    "userFullName": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "taxId": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "adminNotes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "userId",
+    "userEmail",
+    "companyName"
+  ]
+}
