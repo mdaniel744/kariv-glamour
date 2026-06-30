@@ -69,6 +69,9 @@ import TudorCollectionPage from '@/pages/TudorCollectionPage';
 import PaneraiPage from '@/pages/PaneraiPage';
 import PaneraiSeoLanding from '@/pages/PaneraiSeoLanding';
 import PaneraiCollectionPage from '@/pages/PaneraiCollectionPage';
+import BvlgariPage from '@/pages/BvlgariPage';
+import BvlgariSeoLanding from '@/pages/BvlgariSeoLanding';
+import BvlgariCollectionPage from '@/pages/BvlgariCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -129,6 +132,7 @@ const AuthenticatedApp = () => {
         <Route path="brands/tag-heuer" element={<TAGHeuerPage />} />
         <Route path="brands/tudor" element={<TudorPage />} />
         <Route path="brands/panerai" element={<PaneraiPage />} />
+        <Route path="brands/bvlgari" element={<BvlgariPage />} />
         <Route path="brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -395,6 +399,28 @@ const AuthenticatedApp = () => {
         <Route path="panerai-uhr-preis" element={<PaneraiSeoLanding slug="panerai-uhr-preis" />} />
         <Route path="panerai/story" element={<PaneraiSeoLanding slug="panerai-story" />} />
         <Route path="panerai/:slug" element={<PaneraiCollectionPage />} />
+
+        {/* Bvlgari SEO landing pages */}
+        <Route path="bvlgari-uhr" element={<BvlgariSeoLanding slug="bvlgari-uhr" />} />
+        <Route path="bvlgari-uhren" element={<BvlgariSeoLanding slug="bvlgari-uhren" />} />
+        <Route path="bulgari-uhr" element={<BvlgariSeoLanding slug="bulgari-uhr" />} />
+        <Route path="bulgari-uhren" element={<BvlgariSeoLanding slug="bulgari-uhren" />} />
+        <Route path="bvlgari-uhr-damen" element={<BvlgariSeoLanding slug="bvlgari-uhr-damen" />} />
+        <Route path="bvlgari-uhr-herren" element={<BvlgariSeoLanding slug="bvlgari-uhr-herren" />} />
+        <Route path="bvlgari-kaufen" element={<BvlgariSeoLanding slug="bvlgari-kaufen" />} />
+        <Route path="bvlgari-uhr-kaufen" element={<BvlgariSeoLanding slug="bvlgari-uhr-kaufen" />} />
+        <Route path="bvlgari-gebraucht" element={<BvlgariSeoLanding slug="bvlgari-gebraucht" />} />
+        <Route path="bvlgari-gebraucht-kaufen" element={<BvlgariSeoLanding slug="bvlgari-gebraucht-kaufen" />} />
+        <Route path="gebrauchte-bvlgari-uhren" element={<BvlgariSeoLanding slug="gebrauchte-bvlgari-uhren" />} />
+        <Route path="bvlgari-serpenti-watch" element={<BvlgariSeoLanding slug="bvlgari-serpenti-watch" />} />
+        <Route path="serpenti-bvlgari" element={<BvlgariSeoLanding slug="serpenti-bvlgari" />} />
+        <Route path="bvlgari-octo-roma" element={<BvlgariSeoLanding slug="bvlgari-octo-roma" />} />
+        <Route path="bvlgari-lvcea" element={<BvlgariSeoLanding slug="bvlgari-lvcea" />} />
+        <Route path="welche-bvlgari-uhr-kaufen" element={<BvlgariSeoLanding slug="welche-bvlgari-uhr-kaufen" />} />
+        <Route path="bvlgari-serpenti-guide" element={<BvlgariSeoLanding slug="bvlgari-serpenti-guide" />} />
+        <Route path="bvlgari-octo-finissimo-guide" element={<BvlgariSeoLanding slug="bvlgari-octo-finissimo-guide" />} />
+        <Route path="bvlgari/story" element={<BvlgariSeoLanding slug="bvlgari-story" />} />
+        <Route path="bvlgari/:slug" element={<BvlgariCollectionPage />} />
 
         <Route path="cart" element={<Cart />} />
         <Route path="wishlist" element={<Wishlist />} />
