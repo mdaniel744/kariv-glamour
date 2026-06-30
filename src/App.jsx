@@ -63,6 +63,9 @@ import JaegerLeCoultreCollectionPage from '@/pages/JaegerLeCoultreCollectionPage
 import TAGHeuerPage from '@/pages/TAGHeuerPage';
 import TAGHeuerSeoLanding from '@/pages/TAGHeuerSeoLanding';
 import TAGHeuerCollectionPage from '@/pages/TAGHeuerCollectionPage';
+import TudorPage from '@/pages/TudorPage';
+import TudorSeoLanding from '@/pages/TudorSeoLanding';
+import TudorCollectionPage from '@/pages/TudorCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -121,6 +124,7 @@ const AuthenticatedApp = () => {
         <Route path="brands/iwc-schaffhausen" element={<IWCPage />} />
         <Route path="brands/jaeger-lecoultre" element={<JaegerLeCoultrePage />} />
         <Route path="brands/tag-heuer" element={<TAGHeuerPage />} />
+        <Route path="brands/tudor" element={<TudorPage />} />
         <Route path="brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -340,6 +344,28 @@ const AuthenticatedApp = () => {
         <Route path="tag-heuer-connected-calibre-e5-guide" element={<TAGHeuerSeoLanding slug="tag-heuer-connected-calibre-e5-guide" />} />
         <Route path="tag-heuer/story" element={<TAGHeuerSeoLanding slug="tag-heuer-story" />} />
         <Route path="tag-heuer/:slug" element={<TAGHeuerCollectionPage />} />
+
+        {/* Tudor SEO landing pages */}
+        <Route path="tudor-uhr" element={<TudorSeoLanding slug="tudor-uhr" />} />
+        <Route path="tudor-uhren" element={<TudorSeoLanding slug="tudor-uhren" />} />
+        <Route path="tudor-watches" element={<TudorSeoLanding slug="tudor-watches" />} />
+        <Route path="tudor-uhr-herren" element={<TudorSeoLanding slug="tudor-uhr-herren" />} />
+        <Route path="tudor-uhr-damen" element={<TudorSeoLanding slug="tudor-uhr-damen" />} />
+        <Route path="tudor-uhr-kaufen" element={<TudorSeoLanding slug="tudor-uhr-kaufen" />} />
+        <Route path="tudor-kaufen" element={<TudorSeoLanding slug="tudor-kaufen" />} />
+        <Route path="tudor-gebraucht" element={<TudorSeoLanding slug="tudor-gebraucht" />} />
+        <Route path="tudor-gebraucht-kaufen" element={<TudorSeoLanding slug="tudor-gebraucht-kaufen" />} />
+        <Route path="gebrauchte-tudor-uhren" element={<TudorSeoLanding slug="gebrauchte-tudor-uhren" />} />
+        <Route path="tudor-black-bay-uhr" element={<TudorSeoLanding slug="tudor-black-bay-uhr" />} />
+        <Route path="tudor-black-bay-kaufen" element={<TudorSeoLanding slug="tudor-black-bay-kaufen" />} />
+        <Route path="tudor-royal-uhr" element={<TudorSeoLanding slug="tudor-royal-uhr" />} />
+        <Route path="tudor-pelagos-kaufen" element={<TudorSeoLanding slug="tudor-pelagos-kaufen" />} />
+        <Route path="welche-tudor-uhr-kaufen" element={<TudorSeoLanding slug="welche-tudor-uhr-kaufen" />} />
+        <Route path="tudor-black-bay-guide" element={<TudorSeoLanding slug="tudor-black-bay-guide" />} />
+        <Route path="tudor-black-bay-vs-pelagos" element={<TudorSeoLanding slug="tudor-black-bay-vs-pelagos" />} />
+        <Route path="tudor-uhr-preis" element={<TudorSeoLanding slug="tudor-uhr-preis" />} />
+        <Route path="tudor/story" element={<TudorSeoLanding slug="tudor-story" />} />
+        <Route path="tudor/:slug" element={<TudorCollectionPage />} />
 
         <Route path="cart" element={<Cart />} />
         <Route path="wishlist" element={<Wishlist />} />
