@@ -1,0 +1,171 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import LocalizedLink from '@/components/LocalizedLink';
+import { useLanguage } from '@/lib/languageContext';
+import { base44 } from '@/api/base44Client';
+import { SlidersHorizontal, X } from 'lucide-react';
+import PaneraiFilterSidebar from './PaneraiFilterSidebar';
+import PaneraiProductCard from './PaneraiProductCard';
+import { PANERAI_QUICK_FILTERS } from '@/lib/paneraiData';
+
+const parseSize = (s) => { if (!s) return null; const m = String(s).match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[1]) : null; };
+
+const isQuartz = (p) => {
+  const f = [p.movementType, p.functions, p.model, p.productTitle].filter(Boolean).join(' ').toLowerCase();
+  return f.includes('quartz');
+};
+
+const isMechanical = (p) => {
+  const f = [p.movementType, p.functions, p.model, p.productTitle].filter(Boolean).join(' ').toLowerCase();
+  return f.includes('automatic') || f.includes('manual') || f.includes('mechanical') || f.includes('calibre') || f.includes('manufacture') || f.includes('self-wind') || f.includes('p.9010') || f.includes('p.5000') || f.includes('p.6000') || f.includes('p.4000');
+};
+
+const matchesFeature = (p, feat) => {
+  const fl = feat.toLowerCase();
+  const fields = [p.functions, p.model, p.productTitle, p.dialColor, p.caseMaterial, p.movementType, p.braceletMaterial, p.waterResistance, p.collection].filter(Boolean).join(' ').toLowerCase();
+  if (fl === 'full set') return p.boxIncluded && p.papersIncluded;
+  if (fl === 'luminor') return fields.includes('luminor') && !fields.includes('marina') && !fields.includes('due') && !fields.includes('submersible');
+  if (fl === 'luminor marina') return fields.includes('marina');
+  if (fl === 'radiomir') return fields.includes('radiomir');
+  if (fl === 'submersible') return fields.includes('submersible');
+  if (fl === 'luminor due') return fields.includes('due');
+  if (fl === 'small seconds') return fields.includes('small second') || fields.includes('sub-dial') || fields.includes('subdial') || fields.includes('seconds');
+  if (fl === 'gmt') return fields.includes('gmt');
+  if (fl === 'chronograph') return fields.includes('chronograph') || fields.includes('chrono');
+  if (fl === 'power reserve') return fields.includes('power reserve') || fields.includes('gangreserve');
+  if (fl === '8 days') return fields.includes('8 day') || fields.includes('acht tage');
+  if (fl === '3 days') return fields.includes('3 day') || fields.includes('drei tage');
+  if (fl === 'marina militare') return fields.includes('marina militare');
+  if (fl === 'destro / left-handed crown') return fields.includes('destro') || fields.includes('left-handed');
+  if (fl === 'sandwich dial') return fields.includes('sandwich');
+  if (fl === 'california dial') return fields.includes('california');
+  if (fl === 'cushion case') return fields.includes('cushion') || fields.includes('panerai');
+  if (fl === 'crown-protecting bridge') return fields.includes('crown') || fields.includes('bridge');
+  if (fl === 'dive watch') return fields.includes('dive') || fields.includes('submersible') || fields.includes('water resistance');
+  if (fl === 'limited edition') return p.isLimitedEdition;
+  return fields.includes(fl);
+};
+
+export default function PaneraiProductGrid() {
+  const { locale } = useLanguage();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('-created_date');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState({ collection: [], watchType: [], caseMaterial: [], movementType: [], dialColor: [], features: [], braceletMaterial: [], condition: [], gender: [], caseSize: [], boxPapers: [], availability: [], type: [], priceMin: '', priceMax: '' });
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      try {
+        const data = await base44.entities.Products.filter({ brand: 'Panerai' }, '-created_date', 100);
+        setProducts(data);
+      } catch (e) { console.error(e); } finally { setLoading(false); }
+    };
+    load();
+  }, []);
+
+  const filtered = useMemo(() => {
+    const f = filters;
+    let result = products;
+    if (f.watchType.length) result = result.filter((p) => f.watchType.some((t) => t === 'Mechanical' && isMechanical(p) || t === 'Quartz' && isQuartz(p)));
+    if (f.collection.length) result = result.filter((p) => f.collection.includes(p.collection));
+    if (f.caseMaterial.length) result = result.filter((p) => f.caseMaterial.includes(p.caseMaterial));
+    if (f.movementType.length) result = result.filter((p) => f.movementType.some((m) => (p.movementType || '').toLowerCase().includes(m.toLowerCase())));
+    if (f.dialColor.length) result = result.filter((p) => f.dialColor.includes(p.dialColor));
+    if (f.features.length) result = result.filter((p) => f.features.some((feat) => matchesFeature(p, feat)));
+    if (f.braceletMaterial.length) result = result.filter((p) => f.braceletMaterial.includes(p.braceletMaterial));
+    if (f.condition.length) result = result.filter((p) => f.condition.includes(p.condition));
+    if (f.gender.length) result = result.filter((p) => f.gender.includes(p.gender));
+    if (f.caseSize.length) result = result.filter((p) => { const d = parseSize(p.caseDiameter); return d != null && f.caseSize.some((s) => parseSize(s) === d); });
+    if (f.type.length) result = result.filter((p) => f.type.some((t) => t === 'New' && ['New', 'Unworn'].includes(p.condition) || t === 'Pre-Owned' && !['New', 'Unworn'].includes(p.condition) || t === 'Vintage' && (p.isVintage || p.condition === 'Vintage')));
+    if (f.boxPapers.length) result = result.filter((p) => f.boxPapers.some((opt) => opt === 'Box included' && p.boxIncluded || opt === 'Papers included' && p.papersIncluded || opt === 'Full set' && p.boxIncluded && p.papersIncluded));
+    if (f.availability.length) result = result.filter((p) => f.availability.includes(p.availability));
+    if (f.priceMin) result = result.filter((p) => p.price >= Number(f.priceMin));
+    if (f.priceMax) result = result.filter((p) => p.price <= Number(f.priceMax));
+    return [...result].sort((a, b) => {
+      switch (sortBy) {
+        case 'price': return a.price - b.price;
+        case '-price': return b.price - a.price;
+        case '-yearOfProduction': return (b.yearOfProduction || 0) - (a.yearOfProduction || 0);
+        case 'limited': return (b.isLimitedEdition ? 1 : 0) - (a.isLimitedEdition ? 1 : 0) || new Date(b.created_date) - new Date(a.created_date);
+        default: return new Date(b.created_date) - new Date(a.created_date);
+      }
+    });
+  }, [products, filters, sortBy]);
+
+  const L = (de, en) => locale === 'de' ? de : en;
+
+  const SORT_OPTIONS = [
+    { value: '-created_date', label: L('Empfohlen', 'Featured') },
+    { value: 'newest', label: L('Neueste Ankünfte', 'Newest arrivals') },
+    { value: 'price', label: L('Preis: Niedrig zu Hoch', 'Price: Low to High') },
+    { value: '-price', label: L('Preis: Hoch zu Niedrig', 'Price: High to Low') },
+    { value: '-yearOfProduction', label: L('Jahr: Neueste zuerst', 'Year: Newest first') },
+    { value: 'limited', label: L('Limitierte Auflagen zuerst', 'Limited editions first') },
+  ];
+
+  return (
+    <section id="shop" className="py-16 md:py-24 bg-secondary">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className="text-center mb-10">
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Panerai Boutique</span>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-[hsl(var(--primary))]">{L('Panerai Uhren entdecken', 'Shop Panerai Watches')}</h2>
+        </div>
+
+        <div className="flex flex-wrap gap-2 justify-center mb-10">
+          {PANERAI_QUICK_FILTERS.map((chip, i) =>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</LocalizedLink>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
+          <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
+            <SlidersHorizontal size={14} /> {L('Filter', 'Filter')}
+          </button>
+          <p className="hidden md:block text-xs text-muted-foreground">{filtered.length} {L('Zeitmesser', 'timepieces')}</p>
+          <div className="flex items-center gap-2 ml-auto">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
+              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex gap-10">
+          <aside className="hidden md:block w-64 flex-shrink-0">
+            <PaneraiFilterSidebar filters={filters} setFilters={setFilters} />
+          </aside>
+          <div className="flex-1">
+            {loading ?
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}
+              </div> :
+            filtered.length === 0 ?
+              <div className="text-center py-20">
+                <p className="text-sm text-muted-foreground">{L('Keine Panerai Uhren gefunden, die Ihren Kriterien entsprechen.', 'No Panerai watches found matching your criteria.')}</p>
+                <LocalizedLink to="/panerai-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">{L('Alle Panerai Uhren ansehen', 'View All Panerai Watches')}</LocalizedLink>
+              </div> :
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {filtered.map((p) => <PaneraiProductCard key={p.id} product={p} />)}
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      {mobileFiltersOpen &&
+        <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-display text-xl text-foreground">{L('Filter', 'Filter')}</h2>
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground"><X size={20} /></button>
+            </div>
+            <PaneraiFilterSidebar filters={filters} setFilters={setFilters} />
+            <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4">
+              {filtered.length} {L('Ergebnisse anzeigen', 'results')}
+            </button>
+          </div>
+        </div>
+      }
+    </section>
+  );
+}

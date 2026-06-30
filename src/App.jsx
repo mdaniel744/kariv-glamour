@@ -66,6 +66,9 @@ import TAGHeuerCollectionPage from '@/pages/TAGHeuerCollectionPage';
 import TudorPage from '@/pages/TudorPage';
 import TudorSeoLanding from '@/pages/TudorSeoLanding';
 import TudorCollectionPage from '@/pages/TudorCollectionPage';
+import PaneraiPage from '@/pages/PaneraiPage';
+import PaneraiSeoLanding from '@/pages/PaneraiSeoLanding';
+import PaneraiCollectionPage from '@/pages/PaneraiCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -125,6 +128,7 @@ const AuthenticatedApp = () => {
         <Route path="brands/jaeger-lecoultre" element={<JaegerLeCoultrePage />} />
         <Route path="brands/tag-heuer" element={<TAGHeuerPage />} />
         <Route path="brands/tudor" element={<TudorPage />} />
+        <Route path="brands/panerai" element={<PaneraiPage />} />
         <Route path="brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -366,6 +370,31 @@ const AuthenticatedApp = () => {
         <Route path="tudor-uhr-preis" element={<TudorSeoLanding slug="tudor-uhr-preis" />} />
         <Route path="tudor/story" element={<TudorSeoLanding slug="tudor-story" />} />
         <Route path="tudor/:slug" element={<TudorCollectionPage />} />
+
+        {/* Panerai SEO landing pages */}
+        <Route path="panerai-uhr" element={<PaneraiSeoLanding slug="panerai-uhr" />} />
+        <Route path="panerai-uhren" element={<PaneraiSeoLanding slug="panerai-uhren" />} />
+        <Route path="panerai-watches" element={<PaneraiSeoLanding slug="panerai-watches" />} />
+        <Route path="panerai-uhr-herren" element={<PaneraiSeoLanding slug="panerai-uhr-herren" />} />
+        <Route path="panerai-kaufen" element={<PaneraiSeoLanding slug="panerai-kaufen" />} />
+        <Route path="panerai-uhr-kaufen" element={<PaneraiSeoLanding slug="panerai-uhr-kaufen" />} />
+        <Route path="panerai-gebraucht" element={<PaneraiSeoLanding slug="panerai-gebraucht" />} />
+        <Route path="panerai-gebraucht-kaufen" element={<PaneraiSeoLanding slug="panerai-gebraucht-kaufen" />} />
+        <Route path="gebrauchte-panerai-uhren" element={<PaneraiSeoLanding slug="gebrauchte-panerai-uhren" />} />
+        <Route path="panerai-luminor-kaufen" element={<PaneraiSeoLanding slug="panerai-luminor-kaufen" />} />
+        <Route path="panerai-luminor-marina" element={<PaneraiSeoLanding slug="panerai-luminor-marina" />} />
+        <Route path="panerai-radiomir" element={<PaneraiSeoLanding slug="panerai-radiomir" />} />
+        <Route path="panerai-luminor-44mm" element={<PaneraiSeoLanding slug="panerai-luminor-44mm" />} />
+        <Route path="panerai-submersible-42mm" element={<PaneraiSeoLanding slug="panerai-submersible-42mm" />} />
+        <Route path="panerai-radiomir-1940" element={<PaneraiSeoLanding slug="panerai-radiomir-1940" />} />
+        <Route path="panerai-8-days" element={<PaneraiSeoLanding slug="panerai-8-days" />} />
+        <Route path="panerai-destro" element={<PaneraiSeoLanding slug="panerai-destro" />} />
+        <Route path="welche-panerai-uhr-kaufen" element={<PaneraiSeoLanding slug="welche-panerai-uhr-kaufen" />} />
+        <Route path="panerai-luminor-vs-radiomir" element={<PaneraiSeoLanding slug="panerai-luminor-vs-radiomir" />} />
+        <Route path="panerai-luminor-vs-submersible" element={<PaneraiSeoLanding slug="panerai-luminor-vs-submersible" />} />
+        <Route path="panerai-uhr-preis" element={<PaneraiSeoLanding slug="panerai-uhr-preis" />} />
+        <Route path="panerai/story" element={<PaneraiSeoLanding slug="panerai-story" />} />
+        <Route path="panerai/:slug" element={<PaneraiCollectionPage />} />
 
         <Route path="cart" element={<Cart />} />
         <Route path="wishlist" element={<Wishlist />} />
