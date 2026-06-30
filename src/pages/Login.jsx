@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,25 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
+import { getSafeReturnUrl, getReturnUrl } from "@/lib/authRedirect";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  // Redirect authenticated users away from login
+  useEffect(() => {
+    if (isAuthenticated) {
+      const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+      navigate(returnTo);
+    }
+  }, [isAuthenticated, navigate, searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +33,8 @@ export default function Login() {
     setLoading(true);
     try {
       await base44.auth.loginViaEmailPassword(email, password);
-      window.location.href = "/";
+      const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+      window.location.href = returnTo;
     } catch (err) {
       setError(err.message || "Invalid email or password");
     } finally {
@@ -29,7 +43,8 @@ export default function Login() {
   };
 
   const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", "/");
+    const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+    base44.auth.loginWithProvider("google", returnTo);
   };
 
   return (
@@ -40,7 +55,7 @@ export default function Login() {
       footer={
         <>
           Don't have an account?{" "}
-          <Link to="/register" className="text-primary font-medium hover:underline">
+          <Link to={`/register${searchParams.toString() ? '?' + searchParams.toString() : ''}`} className="text-primary font-medium hover:underline">
             Create one
           </Link>
         </>

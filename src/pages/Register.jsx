@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,8 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
+import { getSafeReturnUrl } from "@/lib/authRedirect";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -18,6 +20,17 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  // Redirect authenticated users away from register
+  useEffect(() => {
+    if (isAuthenticated) {
+      const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+      navigate(returnTo);
+    }
+  }, [isAuthenticated, navigate, searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +58,8 @@ export default function Register() {
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
       }
-      window.location.href = "/";
+      const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+      window.location.href = returnTo;
     } catch (err) {
       setError(err.message || "Invalid verification code");
     } finally {
@@ -67,7 +81,8 @@ export default function Register() {
   };
 
   const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", "/");
+    const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+    base44.auth.loginWithProvider("google", returnTo);
   };
 
   if (showOtp) {
@@ -132,7 +147,7 @@ export default function Register() {
       footer={
         <>
           Already have an account?{" "}
-          <Link to="/login" className="text-primary font-medium hover:underline">
+          <Link to={`/login${searchParams.toString() ? '?' + searchParams.toString() : ''}`} className="text-primary font-medium hover:underline">
             Log in
           </Link>
         </>

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock, Loader2, AlertTriangle } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
+import { getSafeReturnUrl } from "@/lib/authRedirect";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -26,7 +27,9 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       await base44.auth.resetPassword({ resetToken, newPassword });
-      window.location.href = "/login";
+      // Redirect to login with returnTo for next auth step
+      const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
+      window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
     } catch (err) {
       setError(err.message || "Failed to reset password");
     } finally {

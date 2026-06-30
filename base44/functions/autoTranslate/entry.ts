@@ -22,6 +22,8 @@ const TRANSLATABLE_FIELDS = {
   ]
 };
 
+const MAX_REQUEST_SIZE = 10 * 1024; // 10 KB
+
 function detectLanguage(text) {
   const sample = text.toLowerCase();
   const germanIndicators = [' der ', ' die ', ' das ', ' und ', ' mit ', ' für ', ' von ', ' zu ', ' den ', ' eine ', ' ist ', ' auf ', ' auch ', ' sich ', ' bei ', ' dem ', ' nicht ', ' wie ', ' wir ', ' ihnen ', ' ihre ', ' über '];
@@ -40,26 +42,39 @@ function detectLanguage(text) {
 
 Deno.serve(async (req) => {
   try {
+    // Check request size
+    const contentLength = req.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_REQUEST_SIZE) {
+      return Response.json({ error: 'Request payload too large' }, { status: 413 });
+    }
+
     const base44 = createClientFromRequest(req);
 
-    // Auth: allow admin users OR automation calls (no user context)
+    // Auth: FAIL CLOSED. Manual admin invocation only.
     let user = null;
     try {
       user = await base44.auth.me();
     } catch {
-      // Called from automation — no user context
-    }
-    if (user && user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden — admin only' }, { status: 403 });
+      // No user context — fail closed
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Parse body — supports both direct calls and automation payload format
+    // User must exist and be admin
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Parse body
     const body = await req.json();
-    const entity_name = body.entity_name || body.event?.entity_name;
-    const entity_id = body.entity_id || body.event?.entity_id;
+    const entity_name = body.entity_name;
+    const entity_id = body.entity_id;
 
-    if (!entity_name || !entity_id) {
-      return Response.json({ error: 'entity_name and entity_id are required' }, { status: 400 });
+    if (typeof entity_name !== 'string' || !entity_name.match(/^[A-Za-z]+$/)) {
+      return Response.json({ error: 'Invalid entity_name' }, { status: 400 });
+    }
+
+    if (typeof entity_id !== 'string' || !entity_id.trim()) {
+      return Response.json({ error: 'Invalid entity_id' }, { status: 400 });
     }
 
     const fieldsToTranslate = TRANSLATABLE_FIELDS[entity_name];
@@ -74,7 +89,6 @@ Deno.serve(async (req) => {
     }
 
     // Collect source values and determine source language
-    // Priority: _en fields → _de fields → base fields (with language detection)
     let sourceLang = null;
     const sourceData = {};
 
@@ -90,7 +104,6 @@ Deno.serve(async (req) => {
         sourceData[field] = deValue;
         if (!sourceLang) sourceLang = 'de';
       } else if (!enValue && !deValue && baseValue) {
-        // No localized fields yet — use base and detect language
         sourceData[field] = baseValue;
         if (!sourceLang) {
           sourceLang = detectLanguage(String(baseValue));
@@ -99,13 +112,12 @@ Deno.serve(async (req) => {
     }
 
     if (Object.keys(sourceData).length === 0) {
-      return Response.json({ message: 'No translatable content found (all fields empty or already translated)' });
+      return Response.json({ message: 'No translatable content found' });
     }
 
     const targetLang = sourceLang === 'en' ? 'de' : 'en';
     const targetSuffix = `_${targetLang}`;
 
-    // Only translate fields where the target is NOT already populated (prevents loops)
     const toTranslate = {};
     for (const [field, value] of Object.entries(sourceData)) {
       if (!record[`${field}${targetSuffix}`]) {
@@ -114,10 +126,9 @@ Deno.serve(async (req) => {
     }
 
     if (Object.keys(toTranslate).length === 0) {
-      return Response.json({ message: `All ${targetLang} fields already populated — nothing to translate` });
+      return Response.json({ message: `All ${targetLang} fields already populated` });
     }
 
-    // Build the LLM prompt
     const sourceLanguageName = sourceLang === 'de' ? 'German' : 'English';
     const targetLanguageName = targetLang === 'de' ? 'German' : 'English';
 
@@ -136,7 +147,6 @@ ${JSON.stringify(toTranslate, null, 2)}
 
 Return ONLY a JSON object with the exact same keys, translated to ${targetLanguageName}.`;
 
-    // Build JSON schema for structured LLM response
     const schemaProperties = {};
     for (const field of Object.keys(toTranslate)) {
       schemaProperties[field] = { type: 'string' };
@@ -150,7 +160,6 @@ Return ONLY a JSON object with the exact same keys, translated to ${targetLangua
       }
     });
 
-    // Build update payload with translated fields
     const updateData = {};
     for (const [field, translatedValue] of Object.entries(llmResponse)) {
       if (translatedValue && typeof translatedValue === 'string') {
@@ -162,7 +171,6 @@ Return ONLY a JSON object with the exact same keys, translated to ${targetLangua
       return Response.json({ message: 'LLM returned no usable translations' });
     }
 
-    // Update the entity
     await base44.asServiceRole.entities[entity_name].update(entity_id, updateData);
 
     return Response.json({
@@ -174,6 +182,7 @@ Return ONLY a JSON object with the exact same keys, translated to ${targetLangua
       fields_translated: Object.keys(updateData)
     });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('autoTranslate error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 });

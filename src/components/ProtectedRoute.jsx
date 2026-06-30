@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -9,8 +9,20 @@ const DefaultFallback = () => (
   </div>
 );
 
+const AccessDenied = () => (
+  <div className="fixed inset-0 flex items-center justify-center bg-background">
+    <div className="text-center">
+      <h1 className="text-2xl font-bold text-foreground mb-2">Access Denied</h1>
+      <p className="text-muted-foreground mb-6">You do not have permission to access this area.</p>
+      <a href="/" className="text-primary hover:underline">Return to home</a>
+    </div>
+  </div>
+);
+
 export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthenticatedElement }) {
-  const { isAuthenticated, isLoadingAuth, authChecked, authError, checkUserAuth } = useAuth();
+  const { isAuthenticated, isLoadingAuth, authChecked, authError, user, checkUserAuth } = useAuth();
+  const { pathname } = useLocation();
+  const isAdminRoute = pathname.startsWith('/admin');
 
   useEffect(() => {
     if (!authChecked && !isLoadingAuth) {
@@ -31,6 +43,11 @@ export default function ProtectedRoute({ fallback = <DefaultFallback />, unauthe
 
   if (!isAuthenticated) {
     return unauthenticatedElement;
+  }
+
+  // Admin route: check role
+  if (isAdminRoute && user?.role !== 'admin') {
+    return <AccessDenied />;
   }
 
   return <Outlet />;

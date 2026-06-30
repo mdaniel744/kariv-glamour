@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -10,10 +10,17 @@ import { LanguageProvider } from '@/lib/languageContext';
 import LocaleRedirect from '@/components/LocaleRedirect';
 import { CartProvider } from '@/lib/cartContext';
 import { ThemeProvider } from '@/lib/themeContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Site layout
 import SiteLayout from '@/components/layout/SiteLayout';
 import LocaleGuard from '@/components/LocaleGuard';
+
+// Auth pages
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import ForgotPassword from '@/pages/ForgotPassword';
+import ResetPassword from '@/pages/ResetPassword';
 
 // Pages
 import Home from '@/pages/Home';
@@ -116,6 +123,12 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
+      {/* Public auth routes (non-localized) */}
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="reset-password" element={<ResetPassword />} />
+
       {/* Public site */}
       <Route path=":locale" element={<LocaleGuard />}>
         <Route index element={<Home />} />
@@ -457,17 +470,19 @@ const AuthenticatedApp = () => {
         <Route path="*" element={<PageNotFound />} />
       </Route>
 
-      {/* Admin */}
-      <Route path="admin" element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
-        <Route path="products" element={<AdminProducts />} />
-        <Route path="brands" element={<AdminBrands />} />
-        <Route path="collections" element={<AdminCollections />} />
-        <Route path="orders" element={<AdminOrders />} />
-        <Route path="customers" element={<AdminCustomers />} />
-        <Route path="guides" element={<AdminGuides />} />
-        <Route path="legal" element={<AdminLegal />} />
-        <Route path="faq" element={<AdminFAQ />} />
+      {/* Admin — protected */}
+      <Route path="admin" element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="brands" element={<AdminBrands />} />
+          <Route path="collections" element={<AdminCollections />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="guides" element={<AdminGuides />} />
+          <Route path="legal" element={<AdminLegal />} />
+          <Route path="faq" element={<AdminFAQ />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<LocaleRedirect />} />

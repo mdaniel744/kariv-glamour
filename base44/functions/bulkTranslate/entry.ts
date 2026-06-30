@@ -30,6 +30,10 @@ const TRANSLATABLE_FIELDS = {
   ]
 };
 
+const MAX_REQUEST_SIZE = 10 * 1024; // 10 KB
+const BATCH_SIZE = 50;
+const MAX_BATCHES = 100; // Limit total batches to prevent runaway costs
+
 function detectLanguage(text) {
   const sample = text.toLowerCase();
   const germanIndicators = [' der ', ' die ', ' das ', ' und ', ' mit ', ' für ', ' von ', ' zu ', ' den ', ' eine ', ' ist ', ' auf ', ' auch ', ' sich ', ' bei ', ' dem ', ' nicht ', ' wie ', ' wir ', ' ihnen ', ' ihre ', ' über '];
@@ -50,7 +54,6 @@ async function translateRecord(base44, entityName, record) {
   const fieldsToTranslate = TRANSLATABLE_FIELDS[entityName];
   if (!fieldsToTranslate) return { skipped: true };
 
-  // Collect source values and determine source language
   let sourceLang = null;
   const sourceData = {};
 
@@ -74,13 +77,12 @@ async function translateRecord(base44, entityName, record) {
   }
 
   if (Object.keys(sourceData).length === 0) {
-    return { skipped: true, reason: 'No translatable content found' };
+    return { skipped: true, reason: 'No translatable content' };
   }
 
   const targetLang = sourceLang === 'en' ? 'de' : 'en';
   const targetSuffix = `_${targetLang}`;
 
-  // Only translate fields where the target is NOT already populated
   const toTranslate = {};
   for (const [field, value] of Object.entries(sourceData)) {
     if (!record[`${field}${targetSuffix}`]) {
@@ -89,7 +91,7 @@ async function translateRecord(base44, entityName, record) {
   }
 
   if (Object.keys(toTranslate).length === 0) {
-    return { skipped: true, reason: `All ${targetLang} fields already populated` };
+    return { skipped: true, reason: `All ${targetLang} fields populated` };
   }
 
   const sourceLanguageName = sourceLang === 'de' ? 'German' : 'English';
@@ -131,7 +133,7 @@ Return ONLY a JSON object with the exact same keys, translated to ${targetLangua
   }
 
   if (Object.keys(updateData).length === 0) {
-    return { skipped: true, reason: 'LLM returned no usable translations' };
+    return { skipped: true, reason: 'LLM returned no translations' };
   }
 
   await base44.asServiceRole.entities[entityName].update(record.id, updateData);
@@ -146,17 +148,24 @@ Return ONLY a JSON object with the exact same keys, translated to ${targetLangua
 
 Deno.serve(async (req) => {
   try {
+    // Check request size
+    const contentLength = req.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_REQUEST_SIZE) {
+      return Response.json({ error: 'Request payload too large' }, { status: 413 });
+    }
+
     const base44 = createClientFromRequest(req);
 
-    // Admin-only
+    // Auth: FAIL CLOSED. Manual admin invocation only.
     let user = null;
     try {
       user = await base44.auth.me();
     } catch {
-      // Service-role call
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (user && user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden — admin only' }, { status: 403 });
+
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const body = await req.json().catch(() => ({}));
@@ -167,52 +176,75 @@ Deno.serve(async (req) => {
     const results = {};
 
     for (const entityName of entitiesToProcess) {
+      if (!TRANSLATABLE_FIELDS[entityName]) {
+        results[entityName] = { error: 'Entity not supported', total: 0, translated: 0, skipped: 0, errors: [] };
+        continue;
+      }
+
       try {
-        let allRecords = [];
-        const batchSize = 500;
-        let hasMore = true;
-
-        while (hasMore) {
-          const batch = await base44.asServiceRole.entities[entityName].list('-created_date', batchSize);
-          allRecords = allRecords.concat(batch);
-          hasMore = batch.length === batchSize;
-          if (batch.length < batchSize) break;
-        }
-
         const entityResult = {
-          total: allRecords.length,
+          total: 0,
           translated: 0,
           skipped: 0,
           errors: [],
-          details: []
+          details: [],
+          batch_count: 0
         };
 
-        for (const record of allRecords) {
-          try {
-            const result = await translateRecord(base44, entityName, record);
-            if (result.translated) {
-              entityResult.translated++;
-              entityResult.details.push({
-                id: record.id,
-                fields: result.fields,
-                source: result.source,
-                target: result.target
-              });
-            } else {
-              entityResult.skipped++;
-            }
-          } catch (recordError) {
-            entityResult.errors.push({
-              id: record.id,
-              error: recordError.message
-            });
+        let batchIndex = 0;
+        let skip = 0;
+        let hasMore = true;
+
+        while (hasMore && batchIndex < MAX_BATCHES) {
+          const batch = await base44.asServiceRole.entities[entityName].list('-created_date', BATCH_SIZE, skip);
+
+          if (!batch || batch.length === 0) {
+            hasMore = false;
+            break;
           }
+
+          entityResult.batch_count++;
+
+          for (const record of batch) {
+            entityResult.total++;
+            try {
+              const result = await translateRecord(base44, entityName, record);
+              if (result.translated) {
+                entityResult.translated++;
+                entityResult.details.push({
+                  id: record.id,
+                  fields: result.fields,
+                  source: result.source,
+                  target: result.target
+                });
+              } else {
+                entityResult.skipped++;
+              }
+            } catch (recordError) {
+              entityResult.errors.push({
+                id: record.id,
+                error: recordError instanceof Error ? recordError.message : String(recordError)
+              });
+            }
+          }
+
+          // Pagination: advance offset if we got a full batch
+          if (batch.length === BATCH_SIZE) {
+            skip += BATCH_SIZE;
+          } else {
+            hasMore = false;
+          }
+        }
+
+        // Check if we hit the batch limit
+        if (batchIndex >= MAX_BATCHES && hasMore) {
+          entityResult.warning = `Stopped after ${MAX_BATCHES} batches to prevent runaway costs. More records may exist.`;
         }
 
         results[entityName] = entityResult;
       } catch (entityError) {
         results[entityName] = {
-          error: entityError.message,
+          error: entityError instanceof Error ? entityError.message : String(entityError),
           total: 0,
           translated: 0,
           skipped: 0,
@@ -231,6 +263,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ success: true, summary, details: results });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('bulkTranslate error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 });
