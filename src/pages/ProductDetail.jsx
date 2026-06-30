@@ -223,16 +223,6 @@ export default function ProductDetail() {
                 <Lock size={16} />
                 {product.availability === 'Sold' ? 'Sold Out' : product.availability === 'Reserved' ? 'Reserved' : 'Buy Now — Secure Escrow'}
               </LocalizedLink>
-              <button
-                onClick={() => !inCart && addToCart(product)}
-                disabled={inCart}
-                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors border ${
-                inCart ? 'border-border text-muted-foreground cursor-not-allowed' : 'border-border text-foreground hover:border-primary'}`
-                }>
-                
-                <ShoppingBag size={16} />
-                {inCart ? 'Im Warenkorb' : 'In den Warenkorb'}
-              </button>
               <div className="flex gap-3">
                 <button
                   onClick={() => toggleWishlist(product)}
