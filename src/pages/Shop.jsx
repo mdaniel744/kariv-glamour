@@ -10,93 +10,116 @@ import { SORT_OPTIONS } from '@/lib/constants';
 import { SlidersHorizontal, X, Grid3X3, LayoutGrid, ChevronRight } from 'lucide-react';
 
 export default function Shop() {
-  const [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState('-created_date');
+  const [error, setError] = useState(null);
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || '-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [gridCols, setGridCols] = useState(3);
+  const [page, setPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [hasMore, setHasMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
 
   const [filters, setFilters] = useState({
     brand: searchParams.getAll('brand') || [],
     condition: searchParams.getAll('condition') || [],
     gender: searchParams.getAll('gender') || [],
-    caseMaterial: [],
-    dialColor: [],
-    movementType: [],
-    priceMin: '',
-    priceMax: ''
+    caseMaterial: searchParams.getAll('caseMaterial') || [],
+    dialColor: searchParams.getAll('dialColor') || [],
+    movementType: searchParams.getAll('movementType') || [],
+    availability: searchParams.getAll('availability') || [],
+    priceMin: searchParams.get('priceMin') || '',
+    priceMax: searchParams.get('priceMax') || ''
   });
 
+  // Sync filters to URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.brand.length) filters.brand.forEach(b => params.append('brand', b));
+    if (filters.condition.length) filters.condition.forEach(c => params.append('condition', c));
+    if (filters.gender.length) filters.gender.forEach(g => params.append('gender', g));
+    if (filters.caseMaterial.length) filters.caseMaterial.forEach(m => params.append('caseMaterial', m));
+    if (filters.dialColor.length) filters.dialColor.forEach(c => params.append('dialColor', c));
+    if (filters.movementType.length) filters.movementType.forEach(m => params.append('movementType', m));
+    if (filters.availability.length) filters.availability.forEach(a => params.append('availability', a));
+    if (filters.priceMin) params.set('priceMin', filters.priceMin);
+    if (filters.priceMax) params.set('priceMax', filters.priceMax);
+    if (page > 1) params.set('page', page.toString());
+    if (sortBy !== '-created_date') params.set('sort', sortBy);
+    setSearchParams(params, { replace: true });
+  }, [filters, page, sortBy, setSearchParams]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  // Fetch products via backend function
   useEffect(() => {
     const load = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const query = {};
+        const params = new URLSearchParams();
+        params.set('skip', ((page - 1) * 50).toString());
+        params.set('limit', '50');
+        params.set('sortBy', sortBy);
+        
+        if (filters.brand.length) filters.brand.forEach(b => params.append('brand', b));
+        if (filters.condition.length) filters.condition.forEach(c => params.append('condition', c));
+        if (filters.gender.length) filters.gender.forEach(g => params.append('gender', g));
+        if (filters.caseMaterial.length) filters.caseMaterial.forEach(m => params.append('caseMaterial', m));
+        if (filters.dialColor.length) filters.dialColor.forEach(c => params.append('dialColor', c));
+        if (filters.movementType.length) filters.movementType.forEach(m => params.append('movementType', m));
+        if (filters.availability.length) filters.availability.forEach(a => params.append('availability', a));
+        if (filters.priceMin) params.set('priceMin', filters.priceMin);
+        if (filters.priceMax) params.set('priceMax', filters.priceMax);
+        
         const search = searchParams.get('search');
+        if (search) params.set('search', search);
+        if (searchParams.get('isNewArrival')) params.set('isNewArrival', 'true');
+        if (searchParams.get('isCertifiedPreOwned')) params.set('isCertifiedPreOwned', 'true');
+        if (searchParams.get('isVintage')) params.set('isVintage', 'true');
 
-        if (filters.brand.length === 1) query.brand = filters.brand[0];
-        if (filters.condition.length === 1) query.condition = filters.condition[0];
-        if (filters.gender.length === 1) query.gender = filters.gender[0];
-
-        if (searchParams.get('isNewArrival')) query.isNewArrival = true;
-        if (searchParams.get('isCertifiedPreOwned')) query.isCertifiedPreOwned = true;
-        if (searchParams.get('isVintage')) query.isVintage = true;
-
-        let data = await base44.entities.Products.filter(query, sortBy, 50);
-
-        if (filters.brand.length > 1) data = data.filter(p => filters.brand.includes(p.brand));
-        if (filters.condition.length > 1) data = data.filter(p => filters.condition.includes(p.condition));
-        if (filters.gender.length > 1) data = data.filter(p => filters.gender.includes(p.gender));
-        if (filters.caseMaterial.length > 0) data = data.filter(p => filters.caseMaterial.includes(p.caseMaterial));
-        if (filters.dialColor.length > 0) data = data.filter(p => filters.dialColor.includes(p.dialColor));
-        if (filters.movementType.length > 0) data = data.filter(p => filters.movementType.includes(p.movementType));
-        if (filters.priceMin) data = data.filter(p => p.price >= Number(filters.priceMin));
-        if (filters.priceMax) data = data.filter(p => p.price <= Number(filters.priceMax));
-        if (search) {
-          const q = search.toLowerCase();
-          data = data.filter(p =>
-            (p.productTitle || '').toLowerCase().includes(q) ||
-            (p.brand || '').toLowerCase().includes(q) ||
-            (p.collection || '').toLowerCase().includes(q) ||
-            (p.referenceNumber || '').toLowerCase().includes(q)
-          );
-        }
-
-        setProducts(data);
+        const res = await base44.functions.invoke('searchProducts', { query: params.toString() });
+        setProducts(res.data.products || []);
+        setHasMore(res.data.hasMore || false);
+        setTotalCount((page - 1) * 50 + (res.data.count || 0));
       } catch (e) {
         console.error(e);
+        setError(t('common:error') || 'Failed to load products');
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, [filters, sortBy, searchParams]);
+  }, [filters, sortBy, page, searchParams, t]);
 
-  const pageTitle = searchParams.get('isNewArrival') ? 'Neuheiten' :
-    searchParams.get('isCertifiedPreOwned') ? 'Certified Pre-Owned' :
-    searchParams.get('isVintage') ? 'Vintage Kollektion' :
-    searchParams.get('gender') === 'Men' ? "Herrenuhren" :
-    searchParams.get('gender') === 'Women' ? "Damenuhren" :
-    searchParams.get('search') ? `Ergebnisse für "${searchParams.get('search')}"` :
-    'Alle Uhren';
+  const getPageTitle = () => {
+    const search = searchParams.get('search');
+    if (searchParams.get('isNewArrival')) return t('common:shop.newArrivals');
+    if (searchParams.get('isCertifiedPreOwned')) return t('common:shop.certifiedPreOwned');
+    if (searchParams.get('isVintage')) return t('common:shop.vintage');
+    if (searchParams.get('gender') === 'Men') return t('common:shop.mensWatches');
+    if (searchParams.get('gender') === 'Women') return t('common:shop.womensWatches');
+    if (search) return t('common:shop.searchResults', { query: search });
+    return t('common:shop.allWatches');
+  };
 
-  const seoTitle = searchParams.get('isNewArrival') ? t('common:seo.shop.title') + ' — Neuheiten' :
-    searchParams.get('isCertifiedPreOwned') ? t('common:seo.shop.title') + ' — Certified Pre-Owned' :
-    searchParams.get('isVintage') ? t('common:seo.shop.title') + ' — Vintage' :
-    searchParams.get('search') ? `${t('common:seo.shop.title')} — ${searchParams.get('search')}` :
-    t('common:seo.shop.title');
+  const pageTitle = getPageTitle();
+  const seoTitle = `${t('common:seo.shop.title')} — ${pageTitle}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
       <SEO title={seoTitle} description={t('common:seo.shop.description')} />
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
+        <LocalizedLink to="/" className="hover:text-foreground">{t('common:home')}</LocalizedLink>
         <ChevronRight size={10} />
-        <LocalizedLink to="/shop" className="hover:text-foreground">Shop</LocalizedLink>
-        {pageTitle !== 'Alle Uhren' && (
+        <LocalizedLink to="/shop" className="hover:text-foreground">{t('common:shop.title')}</LocalizedLink>
+        {pageTitle !== t('common:shop.allWatches') && (
           <>
             <ChevronRight size={10} />
             <span className="text-foreground">{pageTitle}</span>
@@ -106,9 +129,9 @@ export default function Shop() {
 
       {/* Header */}
       <div className="mb-10">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">Kollektion</span>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">{t('common:collection')}</span>
         <h1 className="font-display text-3xl md:text-5xl font-light text-foreground tracking-tight">{pageTitle}</h1>
-        <p className="text-sm text-muted-foreground mt-2">{products.length} Zeitmesser</p>
+        <p className="text-sm text-muted-foreground mt-2">{products.length} {t('common:shop.title')}</p>
       </div>
 
       {/* Toolbar */}
@@ -117,7 +140,7 @@ export default function Shop() {
           onClick={() => setMobileFiltersOpen(true)}
           className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground"
         >
-          <SlidersHorizontal size={14} /> Filter
+          <SlidersHorizontal size={14} /> {t('common:shop.filters')}
         </button>
         <div className="flex items-center gap-4">
           <select
@@ -158,15 +181,44 @@ export default function Shop() {
                 </div>
               ))}
             </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <p className="text-destructive text-sm">{error}</p>
+            </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-muted-foreground text-sm">Keine Uhren gefunden, die Ihren Kriterien entsprechen.</p>
+              <p className="text-muted-foreground text-sm">{t('common:shop.noWatchesFound')}</p>
             </div>
           ) : (
             <div className={`grid grid-cols-2 ${gridCols === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
               {products.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {products.length > 0 && (
+            <div className="mt-12 flex items-center justify-center gap-4">
+              {page > 1 && (
+                <button
+                  onClick={() => setPage(page - 1)}
+                  className="px-4 py-2 border border-border text-xs uppercase tracking-[0.1em] hover:border-foreground transition-colors"
+                >
+                  {t('common:previous')}
+                </button>
+              )}
+              <span className="text-xs text-muted-foreground">
+                {t('common:page')} {page}
+              </span>
+              {hasMore && (
+                <button
+                  onClick={() => setPage(page + 1)}
+                  className="px-4 py-2 border border-border text-xs uppercase tracking-[0.1em] hover:border-foreground transition-colors"
+                >
+                  {t('common:next')}
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -177,7 +229,7 @@ export default function Shop() {
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl text-foreground">Filter</h2>
+              <h2 className="font-display text-xl text-foreground">{t('common:shop.filters')}</h2>
               <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground">
                 <X size={20} />
               </button>
@@ -187,7 +239,7 @@ export default function Shop() {
               onClick={() => setMobileFiltersOpen(false)}
               className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4"
             >
-              {products.length} Ergebnisse anzeigen
+              {t('common:shop.showResults', { count: products.length })}
             </button>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 import { ChevronDown, X } from 'lucide-react';
 import BrandFavicon from '@/components/shared/BrandFavicon';
+import { useTranslation } from 'react-i18next';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (
@@ -38,6 +39,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
 }
 
 export default function ShopFilters({ filters, setFilters }) {
+  const { t } = useTranslation();
   const [openGroups, setOpenGroups] = useState({ brand: true, condition: true });
 
   const toggleGroup = (key) => {
@@ -54,34 +56,34 @@ export default function ShopFilters({ filters, setFilters }) {
     <div>
       {activeCount > 0 && (
         <button
-          onClick={() => setFilters({ brand: [], condition: [], gender: [], caseMaterial: [], dialColor: [], movementType: [], priceMin: '', priceMax: '' })}
+          onClick={() => setFilters({ brand: [], condition: [], gender: [], caseMaterial: [], dialColor: [], movementType: [], availability: [], priceMin: '', priceMax: '' })}
           className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-primary mb-4 hover:text-foreground transition-colors"
         >
-          <X size={12} /> Alle Filter löschen
+          <X size={12} /> {t('common:shop.clearAllFilters')}
         </button>
       )}
 
-      <FilterGroup label="Marke" options={BRAND_DATA} selected={filters.brand} onChange={v => updateFilter('brand', v)} open={openGroups.brand} onToggle={() => toggleGroup('brand')} />
-      <FilterGroup label="Zustand" options={CONDITIONS} selected={filters.condition} onChange={v => updateFilter('condition', v)} open={openGroups.condition} onToggle={() => toggleGroup('condition')} />
-      <FilterGroup label="Geschlecht" options={GENDERS} selected={filters.gender} onChange={v => updateFilter('gender', v)} open={openGroups.gender} onToggle={() => toggleGroup('gender')} />
-      <FilterGroup label="Gehäusematerial" options={CASE_MATERIALS} selected={filters.caseMaterial} onChange={v => updateFilter('caseMaterial', v)} open={openGroups.caseMaterial} onToggle={() => toggleGroup('caseMaterial')} />
-      <FilterGroup label="Zifferblattfarbe" options={DIAL_COLORS} selected={filters.dialColor} onChange={v => updateFilter('dialColor', v)} open={openGroups.dialColor} onToggle={() => toggleGroup('dialColor')} />
-      <FilterGroup label="Uhrwerk" options={MOVEMENT_TYPES} selected={filters.movementType} onChange={v => updateFilter('movementType', v)} open={openGroups.movementType} onToggle={() => toggleGroup('movementType')} />
+      <FilterGroup label={t('common:shop.brand')} options={BRAND_DATA} selected={filters.brand} onChange={v => updateFilter('brand', v)} open={openGroups.brand} onToggle={() => toggleGroup('brand')} />
+      <FilterGroup label={t('common:shop.condition')} options={CONDITIONS} selected={filters.condition} onChange={v => updateFilter('condition', v)} open={openGroups.condition} onToggle={() => toggleGroup('condition')} />
+      <FilterGroup label={t('common:shop.gender')} options={GENDERS} selected={filters.gender} onChange={v => updateFilter('gender', v)} open={openGroups.gender} onToggle={() => toggleGroup('gender')} />
+      <FilterGroup label={t('common:shop.caseMaterial')} options={CASE_MATERIALS} selected={filters.caseMaterial} onChange={v => updateFilter('caseMaterial', v)} open={openGroups.caseMaterial} onToggle={() => toggleGroup('caseMaterial')} />
+      <FilterGroup label={t('common:shop.dialColor')} options={DIAL_COLORS} selected={filters.dialColor} onChange={v => updateFilter('dialColor', v)} open={openGroups.dialColor} onToggle={() => toggleGroup('dialColor')} />
+      <FilterGroup label={t('common:shop.movement')} options={MOVEMENT_TYPES} selected={filters.movementType} onChange={v => updateFilter('movementType', v)} open={openGroups.movementType} onToggle={() => toggleGroup('movementType')} />
 
       {/* Price range */}
       <div className="border-b border-border py-4">
-        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">Preisbereich</p>
+        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">{t('common:shop.priceRange')}</p>
         <div className="flex gap-2">
           <input
             type="number"
-            placeholder="Min"
+            placeholder={t('common:shop.min')}
             value={filters.priceMin}
             onChange={e => updateFilter('priceMin', e.target.value)}
             className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary"
           />
           <input
             type="number"
-            placeholder="Max"
+            placeholder={t('common:shop.max')}
             value={filters.priceMax}
             onChange={e => updateFilter('priceMax', e.target.value)}
             className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary"
