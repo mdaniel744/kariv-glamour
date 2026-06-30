@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
@@ -37,12 +37,12 @@ function OmegaProductCard({ product }) {
         <button onClick={(e) => {e.preventDefault();toggleWishlist(product);}} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
           <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
         </button>
-        <Link to={`/product/${product.id}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+        <LocalizedLink to={`/product/${product.id}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
           <Eye size={14} className="text-white" />
           <span className="text-[10px] tracking-[0.15em] uppercase text-white">Quick View</span>
-        </Link>
+        </LocalizedLink>
       </div>
-      <Link to={`/product/${product.id}`}>
+      <LocalizedLink to={`/product/${product.id}`}>
         <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
         <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{product.productTitle}</h3>
         <div className="flex items-center gap-3 text-[10px] mb-2 text-muted-foreground">
@@ -58,7 +58,7 @@ function OmegaProductCard({ product }) {
         </div>
         <p className="text-sm font-medium text-foreground">{formatPrice(product.price, product.currency)}</p>
         <span className="text-[10px] tracking-[0.12em] uppercase mt-2 inline-block group-hover:opacity-70 text-primary">View Details →</span>
-      </Link>
+      </LocalizedLink>
     </motion.div>);
 
 }
@@ -151,7 +151,7 @@ export default function OmegaProductGrid() {
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {OMEGA_QUICK_FILTERS.map((chip, i) =>
-          <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
+          <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
           )}
         </div>
 

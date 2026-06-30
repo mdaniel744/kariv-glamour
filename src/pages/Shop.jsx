@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import SEO from '@/components/SEO';
 import ProductCard from '@/components/shared/ProductCard';
@@ -92,9 +93,9 @@ export default function Shop() {
       <SEO title={seoTitle} description={t('common:seo.shop.description')} />
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <Link to="/" className="hover:text-foreground">Start</Link>
+        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
         <ChevronRight size={10} />
-        <Link to="/shop" className="hover:text-foreground">Shop</Link>
+        <LocalizedLink to="/shop" className="hover:text-foreground">Shop</LocalizedLink>
         {pageTitle !== 'Alle Uhren' && (
           <>
             <ChevronRight size={10} />

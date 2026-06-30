@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ShieldCheck, LockKeyhole, BadgeCheck, RotateCcw, Truck, Headset } from 'lucide-react';
 
 const TRUST_BADGES = [
@@ -26,9 +26,9 @@ export default function BpHero() {
             Buy your next luxury watch with confidence. Kariv Buyer Protection helps secure your payment, protect your order, verify seller standards, and support you throughout the entire purchase journey.
           </p>
           <div className="flex flex-wrap gap-3 mb-10">
-            <Link to="/shop" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">
+            <LocalizedLink to="/shop" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">
               Shop Luxury Watches
-            </Link>
+            </LocalizedLink>
             <a href="#how-it-works" className="inline-flex items-center justify-center px-6 py-3 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">
               How Buyer Protection Works
             </a>

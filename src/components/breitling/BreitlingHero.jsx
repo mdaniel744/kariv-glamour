@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 const ANCHORS = [
@@ -20,12 +20,12 @@ export default function BreitlingHero() {
           <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-[hsl(var(--primary))]">Breitling Uhren at Kariv Glamour</h1>
           <p className="text-base leading-relaxed max-w-xl mb-8 text-muted-foreground">Explore Breitling watches known for aviation heritage, chronograph design, robust sports-watch character, and iconic collections such as Navitimer, Chronomat, Superocean, Avenger and Premier.</p>
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/breitling-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Breitling Watches</Link>
+            <LocalizedLink to="/breitling-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Breitling Watches</LocalizedLink>
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">Explore Breitling Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ANCHORS.map((a, i) =>
-            <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
+            <LocalizedLink key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</LocalizedLink>
             )}
           </div>
         </motion.div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { GS_HERO_IMAGE } from '@/lib/grandSeikoData';
 
@@ -22,12 +22,12 @@ export default function GrandSeikoHero() {
             Explore Grand Seiko watches known for Japanese craftsmanship, refined finishing, nature-inspired dials, Spring Drive technology, GMT functionality, and collections such as Heritage, Elegance, Sport, Evolution 9 and Masterpiece.
           </p>
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/grand-seiko-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Grand Seiko Watches</Link>
+            <LocalizedLink to="/grand-seiko-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Grand Seiko Watches</LocalizedLink>
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">Explore Grand Seiko Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ANCHORS.map((a, i) =>
-            <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
+            <LocalizedLink key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</LocalizedLink>
             )}
           </div>
         </motion.div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { SlidersHorizontal, X } from 'lucide-react';
 import CartierFilterSidebar from './CartierFilterSidebar';
@@ -82,7 +82,7 @@ export default function CartierProductGrid() {
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {CARTIER_QUICK_FILTERS.map((chip, i) =>
-          <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
+          <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
           )}
         </div>
 
@@ -110,7 +110,7 @@ export default function CartierProductGrid() {
             filtered.length === 0 ?
             <div className="text-center py-20">
                 <p className="text-sm text-muted-foreground">Keine Cartier Uhren gefunden, die Ihren Kriterien entsprechen.</p>
-                <Link to="/cartier-uhr-kaufen" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Cartier Uhren ansehen</Link>
+                <LocalizedLink to="/cartier-uhr-kaufen" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Cartier Uhren ansehen</LocalizedLink>
               </div> :
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">

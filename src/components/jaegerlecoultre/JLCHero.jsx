@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { JLC_HERO_IMAGE } from '@/lib/jaegerLeCoultreData';
 
@@ -22,12 +22,12 @@ export default function JLCHero() {
             Explore Jaeger-LeCoultre watches known for refined Swiss watchmaking, the iconic Reverso case, ultra-thin dress watches, Polaris sport models, and timeless collections such as Master Control and Master Ultra Thin.
           </p>
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/jaeger-lecoultre-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Jaeger-LeCoultre Watches</Link>
+            <LocalizedLink to="/jaeger-lecoultre-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Jaeger-LeCoultre Watches</LocalizedLink>
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">Explore JLC Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ANCHORS.map((a, i) => (
-              <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
+              <LocalizedLink key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</LocalizedLink>
             ))}
           </div>
         </motion.div>

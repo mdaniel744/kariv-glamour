@@ -11,6 +11,8 @@ import enFilters from '@/locales/en/filters.json';
 import deFilters from '@/locales/de/filters.json';
 import enAdmin from '@/locales/en/admin.json';
 import deAdmin from '@/locales/de/admin.json';
+import enBrandComponents from '@/locales/en/brandComponents.json';
+import deBrandComponents from '@/locales/de/brandComponents.json';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -20,6 +22,7 @@ i18n.use(initReactI18next).init({
       products: enProducts,
       filters: enFilters,
       admin: enAdmin,
+      brandComponents: enBrandComponents,
     },
     de: {
       common: deCommon,
@@ -27,12 +30,13 @@ i18n.use(initReactI18next).init({
       products: deProducts,
       filters: deFilters,
       admin: deAdmin,
+      brandComponents: deBrandComponents,
     },
   },
   lng: 'de',
   fallbackLng: 'de',
   defaultNS: 'common',
-  ns: ['common', 'navigation', 'products', 'filters', 'admin'],
+  ns: ['common', 'navigation', 'products', 'filters', 'admin', 'brandComponents'],
   interpolation: {
     escapeValue: false,
   },

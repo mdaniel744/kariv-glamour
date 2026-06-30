@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BREITLING_COLLECTIONS } from '@/lib/breitlingData';
@@ -69,7 +69,7 @@ export default function BreitlingCollectionGrid() {
               transition={{ duration: 0.4, delay: i % 3 * 0.05 }}
               className="flex-shrink-0 snap-start w-[78%] sm:w-[45%] lg:w-[31%]">
               
-                <Link to={`/breitling/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
+                <LocalizedLink to={`/breitling/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   {/* Asset placeholder — add collection image here */}
                   <div className="aspect-[4/3] flex items-center justify-center bg-secondary">
                     <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
@@ -79,7 +79,7 @@ export default function BreitlingCollectionGrid() {
                     <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{c.shortDescription}</p>
                     <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Explore Collection →</span>
                   </div>
-                </Link>
+                </LocalizedLink>
               </motion.div>
             )}
           </div>

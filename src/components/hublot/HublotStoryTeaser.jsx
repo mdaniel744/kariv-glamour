@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 export default function HublotStoryTeaser() {
@@ -10,9 +10,9 @@ export default function HublotStoryTeaser() {
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Hublot Story</span>
           <h2 className="font-display text-3xl md:text-4xl font-light mb-6 text-foreground">Hublot Story</h2>
           <p className="text-base leading-relaxed mb-6 text-muted-foreground">
-            Hublot is recognized for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design. Its collections are known for strong visual identity, technical presence and a distinctive fusion of materials. Explore the <Link to="/hublot/big-bang" className="text-primary underline">Big Bang</Link>, <Link to="/hublot/classic-fusion" className="text-primary underline">Classic Fusion</Link>, <Link to="/guides" className="text-primary underline">modern materials</Link> and our selection of <Link to="/hublot-gebraucht" className="text-primary underline">pre-owned Hublot</Link> watches.
+            Hublot is recognized for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design. Its collections are known for strong visual identity, technical presence and a distinctive fusion of materials. Explore the <LocalizedLink to="/hublot/big-bang" className="text-primary underline">Big Bang</LocalizedLink>, <LocalizedLink to="/hublot/classic-fusion" className="text-primary underline">Classic Fusion</LocalizedLink>, <LocalizedLink to="/guides" className="text-primary underline">modern materials</LocalizedLink> and our selection of <LocalizedLink to="/hublot-gebraucht" className="text-primary underline">pre-owned Hublot</LocalizedLink> watches.
           </p>
-          <Link to="/hublot/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Read the Hublot Story</Link>
+          <LocalizedLink to="/hublot/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Read the Hublot Story</LocalizedLink>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] border border-border bg-card flex flex-col items-center justify-center">
           <span className="font-display text-3xl tracking-[0.2em] text-foreground/70">HUBLOT</span>

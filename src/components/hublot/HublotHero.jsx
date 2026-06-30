@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 const ANCHORS = [
@@ -19,12 +19,12 @@ export default function HublotHero() {
           <h1 className="font-display text-4xl md:text-6xl font-light leading-tight mb-6 text-foreground">Hublot Uhren at Kariv Glamour</h1>
           <p className="text-base leading-relaxed max-w-xl mb-8 text-muted-foreground">Explore Hublot watches known for bold design, modern materials, skeleton dials, chronographs, and distinctive collections such as Big Bang, Classic Fusion, Spirit of Big Bang and Square Bang.</p>
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/hublot-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Hublot Watches</Link>
+            <LocalizedLink to="/hublot-uhr" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Shop Hublot Watches</LocalizedLink>
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 border border-border text-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:border-primary hover:text-primary transition-colors">Explore Hublot Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ANCHORS.map((a, i) => (
-              <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</Link>
+              <LocalizedLink key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:opacity-70 transition-opacity">{a.label}</LocalizedLink>
             ))}
           </div>
         </motion.div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
 import { OMEGA_TRUST_POINTS, OMEGA_TRUST_LINKS } from '@/lib/omegaData';
@@ -21,7 +21,7 @@ export default function OmegaTrustSection() {
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
             {OMEGA_TRUST_LINKS.map((link, i) =>
-            <Link key={i} to={link.link} className="text-[10px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
+            <LocalizedLink key={i} to={link.link} className="text-[10px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</LocalizedLink>
             )}
           </div>
         </motion.div>

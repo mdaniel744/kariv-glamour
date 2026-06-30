@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ShieldCheck } from 'lucide-react';
 import { PATEK_TRUST_POINTS, PATEK_TRUST_LINKS } from '@/lib/patekData';
 
@@ -22,7 +22,7 @@ export default function PatekPhilippeTrustSection() {
         </div>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 pt-8 border-t border-border">
           {PATEK_TRUST_LINKS.map((link, i) =>
-          <Link key={i} to={link.link} className="text-[11px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
+          <LocalizedLink key={i} to={link.link} className="text-[11px] tracking-[0.12em] uppercase underline decoration-dotted hover:opacity-70 text-primary">{link.text}</LocalizedLink>
           )}
         </div>
       </div>

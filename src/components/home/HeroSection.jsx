@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -111,13 +111,12 @@ export default function HeroSection() {
                 {slide.description}
               </p>
 
-              <Link
-                to={slide.link}
+              <LocalizedLink                 to={slide.link}
                 className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:bg-primary/90 transition-colors group"
               >
                 {slide.cta}
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </LocalizedLink>
             </motion.div>
           </AnimatePresence>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import BrandLogo from '@/components/shared/BrandLogo';
 import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
@@ -108,8 +108,7 @@ export default function BrandMarquee() {
           }}
         >
           {items.map((brand, i) => (
-            <Link
-              key={`${brand.slug}-${i}`}
+            <LocalizedLink               key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
               className="flex-shrink-0 h-20 md:h-28 flex items-center justify-center group"
             >
@@ -120,7 +119,7 @@ export default function BrandMarquee() {
                 alt={`${brand.brandName} watches at Kariv Glamour`}
                 className="h-full w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-500"
               />
-            </Link>
+            </LocalizedLink>
           ))}
         </motion.div>
       </div>

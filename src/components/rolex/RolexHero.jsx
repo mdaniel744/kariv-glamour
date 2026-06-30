@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { ROLEX_HERO_IMAGE } from '@/lib/rolexData';
@@ -28,9 +28,9 @@ export default function RolexHero() {
           className="max-w-2xl">
           
           <div className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mb-6 text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">Start</Link>
+            <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
             <ChevronRight size={10} />
-            <Link to="/brands" className="hover:text-foreground">Marken</Link>
+            <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink>
             <ChevronRight size={10} />
             <span className="text-foreground">Rolex</span>
           </div>

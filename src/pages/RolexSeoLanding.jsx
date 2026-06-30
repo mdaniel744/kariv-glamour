@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ChevronRight, Heart } from 'lucide-react';
@@ -23,7 +23,7 @@ function SeoProductCard({ product }) {
           <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
         </button>
       </div>
-      <Link to={`/product/${product.id}`}>
+      <LocalizedLink to={`/product/${product.id}`}>
         <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
         <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{product.productTitle}</h3>
         <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
@@ -31,7 +31,7 @@ function SeoProductCard({ product }) {
           {product.yearOfProduction && <span>· {product.yearOfProduction}</span>}
         </div>
         <p className="text-sm font-medium text-foreground">{formatPrice(product.price, product.currency)}</p>
-      </Link>
+      </LocalizedLink>
     </motion.div>
   );
 }
@@ -63,16 +63,16 @@ export default function RolexSeoLanding({ slug }) {
   }, [slug]);
 
   if (!pageData) {
-    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Page Not Found</h1><Link to="/brands/rolex" className="text-sm underline text-primary">Return to Rolex</Link></div>);
+    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Page Not Found</h1><LocalizedLink to="/brands/rolex" className="text-sm underline text-primary">Return to Rolex</LocalizedLink></div>);
   }
 
   return (
     <div className="bg-background">
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">Start</Link><ChevronRight size={10} />
-          <Link to="/brands" className="hover:text-foreground">Marken</Link><ChevronRight size={10} />
-          <Link to="/brands/rolex" className="hover:text-foreground">Rolex</Link><ChevronRight size={10} />
+          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands/rolex" className="hover:text-foreground">Rolex</LocalizedLink><ChevronRight size={10} />
           <span className="text-foreground">{pageData.h1}</span>
         </div>
       </div>
@@ -90,7 +90,7 @@ export default function RolexSeoLanding({ slug }) {
       <div className="max-w-7xl mx-auto px-6 mb-10">
         <div className="flex flex-wrap gap-2 justify-center">
           {ROLEX_QUICK_FILTERS.map((chip, i) => (
-            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
           ))}
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function RolexSeoLanding({ slug }) {
             ) : products.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">{products.map(p => <SeoProductCard key={p.id} product={p} />)}</div>
             ) : (
-              <div className="text-center py-16"><p className="text-sm mb-4 text-muted-foreground">No Rolex watches currently available in this category.</p><Link to="/brands/rolex" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Rolex Watches</Link></div>
+              <div className="text-center py-16"><p className="text-sm mb-4 text-muted-foreground">No Rolex watches currently available in this category.</p><LocalizedLink to="/brands/rolex" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Rolex Watches</LocalizedLink></div>
             )}
           </div>
         </section>
@@ -119,8 +119,8 @@ export default function RolexSeoLanding({ slug }) {
               <p>Explore our full Rolex collection, browse by model family, or read our educational guides to deepen your understanding of Rolex watchmaking, maintenance, and heritage.</p>
             </div>
             <div className="mt-10 flex flex-wrap gap-4">
-              <Link to="/brands/rolex" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium transition-all hover:opacity-90 bg-primary text-primary-foreground">Shop Rolex Watches</Link>
-              <Link to="/rolex-gebraucht-kaufen" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:bg-secondary border-primary text-primary">Pre-Owned Rolex</Link>
+              <LocalizedLink to="/brands/rolex" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium transition-all hover:opacity-90 bg-primary text-primary-foreground">Shop Rolex Watches</LocalizedLink>
+              <LocalizedLink to="/rolex-gebraucht-kaufen" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:bg-secondary border-primary text-primary">Pre-Owned Rolex</LocalizedLink>
             </div>
           </div>
         </section>
@@ -129,7 +129,7 @@ export default function RolexSeoLanding({ slug }) {
       <section className="py-16 bg-secondary">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-display text-2xl md:text-3xl font-light mb-6 text-foreground">Explore the Full Rolex Collection</h2>
-          <Link to="/brands/rolex" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium transition-all hover:opacity-90 bg-primary text-primary-foreground">Visit Rolex Boutique</Link>
+          <LocalizedLink to="/brands/rolex" className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium transition-all hover:opacity-90 bg-primary text-primary-foreground">Visit Rolex Boutique</LocalizedLink>
         </div>
       </section>
 

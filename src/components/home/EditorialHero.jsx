@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
@@ -34,13 +34,12 @@ export default function EditorialHero() {
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-8 max-w-md">
               Wir kuratieren nicht nur Uhren — wir kuratieren Vertrauen. Jedes Zeitmesser durchläuft eine mehrstufige Authentifizierung durch zertifizierte Uhrmacher, bevor er Teil unserer Kollektion wird.
             </p>
-            <Link
-              to="/authentication"
+            <LocalizedLink               to="/authentication"
               className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium text-foreground hover:text-primary transition-colors group w-fit"
             >
               Unser Prozess
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </LocalizedLink>
           </div>
         </motion.div>
       </div>

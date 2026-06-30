@@ -1,0 +1,81 @@
+{
+  "eyebrow": {
+    "explore": "Explore",
+    "discover": "Discover",
+    "editorial": "Editorial",
+    "shop": "Shop",
+    "faq": "FAQ",
+    "trust": "Trust",
+    "collections": "Collections",
+    "maison": "The Maison",
+    "yourNextTimepiece": "Your Next Timepiece",
+    "readMore": "Read More"
+  },
+  "heading": {
+    "exploreMore": "Explore More from Kariv Glamour",
+    "discoverBrand": "Discover {{brand}} Watches",
+    "readMoreAbout": "Read More About {{brand}} Watches",
+    "shopBrand": "Shop {{brand}} Watches",
+    "findYourNext": "Find Your Next {{brand}}",
+    "brandFAQ": "{{brand}} FAQ",
+    "discoverCollections": "Discover {{brand}} Collections",
+    "buyingWithConfidence": "Buying {{brand}} Watches with Confidence"
+  },
+  "cta": {
+    "shopBrand": "Shop {{brand}} Watches",
+    "exploreBuyingGuide": "Explore {{brand}} Buying Guide",
+    "exploreCollection": "Explore Collection",
+    "readMore": "Read More",
+    "viewDetails": "View Details",
+    "quickView": "Quick View",
+    "discover": "Discover",
+    "readStory": "Read the {{brand}} Story"
+  },
+  "filters": {
+    "collection": "Collection",
+    "condition": "Condition",
+    "caseMaterial": "Case Material",
+    "dialColor": "Dial Color",
+    "gender": "Gender",
+    "bracelet": "Bracelet",
+    "movement": "Movement",
+    "boxPapers": "Box & Papers",
+    "availability": "Availability",
+    "filter": "Filter",
+    "any": "Any",
+    "boxOnly": "Box Only",
+    "papersOnly": "Papers Only",
+    "inStock": "In Stock",
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "comingSoon": "Coming Soon",
+    "newestArrivals": "Newest arrivals",
+    "priceLowToHigh": "Price low to high",
+    "priceHighToLow": "Price high to low",
+    "yearNewestFirst": "Year newest first",
+    "featured": "Featured"
+  },
+  "product": {
+    "new": "New",
+    "vintage": "Vintage",
+    "verified": "Verified",
+    "box": "Box",
+    "noBox": "No Box",
+    "papers": "Papers",
+    "noPapers": "No Papers",
+    "ref": "Ref.",
+    "watchesCount": "{{count}} {{brand}} watches",
+    "noMatches": "No {{brand}} watches currently match your filters. Please adjust or explore all collections.",
+    "showResults": "Show {{count}} results"
+  },
+  "finalCTA": {
+    "findYourNext": "Find Your Next {{brand}}",
+    "description": "Explore carefully selected {{brand}} watches and compare models, references, materials, conditions, and prices in one refined shopping experience."
+  },
+  "trust": {
+    "buyingWithConfidence": "Buying {{brand}} Watches with Confidence"
+  },
+  "story": {
+    "title": "The {{brand}} Story"
+  }
+}

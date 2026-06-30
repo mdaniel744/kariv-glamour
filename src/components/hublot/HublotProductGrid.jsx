@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { SlidersHorizontal, X } from 'lucide-react';
 import HublotFilterSidebar from './HublotFilterSidebar';
@@ -75,7 +75,7 @@ export default function HublotProductGrid() {
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {HUBLOT_QUICK_FILTERS.map((chip, i) => (
-            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</Link>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</LocalizedLink>
           ))}
         </div>
 
@@ -103,7 +103,7 @@ export default function HublotProductGrid() {
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-sm text-muted-foreground">Keine Hublot Uhren gefunden, die Ihren Kriterien entsprechen.</p>
-                <Link to="/hublot-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Hublot Uhren ansehen</Link>
+                <LocalizedLink to="/hublot-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Hublot Uhren ansehen</LocalizedLink>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">

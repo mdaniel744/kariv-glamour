@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Headset, ArrowRight, FileText, Truck, RotateCcw, ShieldCheck, Award, ClipboardList, Wrench, BookOpen, MessageCircle } from 'lucide-react';
 import BpSection from './BpSection';
 
@@ -26,10 +26,10 @@ export default function BpSupport() {
             Our support team is here to guide you before, during, and after your luxury watch purchase.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 bg-primary-foreground text-primary text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Contact Support</Link>
-            <Link to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">Browse FAQ</Link>
-            <Link to="/legal/returns-and-refunds" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">View Returns Policy</Link>
-            <Link to="/legal/shipping-and-delivery" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">View Shipping Policy</Link>
+            <LocalizedLink to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 bg-primary-foreground text-primary text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Contact Support</LocalizedLink>
+            <LocalizedLink to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">Browse FAQ</LocalizedLink>
+            <LocalizedLink to="/legal/returns-and-refunds" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">View Returns Policy</LocalizedLink>
+            <LocalizedLink to="/legal/shipping-and-delivery" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">View Shipping Policy</LocalizedLink>
           </div>
         </div>
       </section>
@@ -37,13 +37,13 @@ export default function BpSupport() {
       <BpSection title="Useful Buyer Resources" className="bg-secondary">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {RESOURCES.map((r, i) => (
-            <Link key={i} to={r.to} className="group flex items-center gap-4 bg-card border border-border rounded p-5 hover:border-primary/40 transition-colors">
+            <LocalizedLink key={i} to={r.to} className="group flex items-center gap-4 bg-card border border-border rounded p-5 hover:border-primary/40 transition-colors">
               <span className="flex items-center justify-center w-11 h-11 rounded-full bg-secondary border border-border flex-shrink-0">
                 <r.icon size={20} className="text-primary" strokeWidth={1.5} />
               </span>
               <span className="text-sm text-foreground font-medium flex-1">{r.title}</span>
               <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-            </Link>
+            </LocalizedLink>
           ))}
         </div>
       </BpSection>

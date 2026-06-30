@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import SEO from '@/components/SEO';
 import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
@@ -22,7 +22,7 @@ export default function Guides() {
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
       <SEO title={t('common:seo.guides.title')} description={t('common:seo.guides.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <Link to="/" className="hover:text-foreground">Start</Link>
+        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
         <ChevronRight size={10} />
         <span className="text-foreground">Guides</span>
       </div>
@@ -61,7 +61,7 @@ export default function Guides() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <Link to={`/guides/${guide.id}`} className="group block">
+              <LocalizedLink to={`/guides/${guide.id}`} className="group block">
                 <div className="aspect-[16/10] bg-card overflow-hidden mb-4">
                   {guide.featuredImage && (
                     <img src={guide.featuredImage} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -70,7 +70,7 @@ export default function Guides() {
                 <span className="text-[9px] tracking-[0.2em] uppercase text-primary mb-2 block">{guide.category}</span>
                 <h2 className="text-sm text-foreground group-hover:text-primary transition-colors leading-tight mb-2">{guide.title}</h2>
                 {guide.excerpt && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{guide.excerpt}</p>}
-              </Link>
+              </LocalizedLink>
             </motion.div>
           ))}
         </div>

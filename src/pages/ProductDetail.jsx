@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
@@ -77,7 +78,7 @@ export default function ProductDetail() {
     return (
       <div className="max-w-7xl mx-auto px-6 py-20 text-center">
         <h1 className="font-display text-2xl text-foreground">Produkt nicht gefunden</h1>
-        <Link to="/shop" className="text-primary text-sm mt-4 inline-block">Zurück zum Shop</Link>
+        <LocalizedLink to="/shop" className="text-primary text-sm mt-4 inline-block">Zurück zum Shop</LocalizedLink>
       </div>);
 
   }
@@ -113,13 +114,13 @@ export default function ProductDetail() {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">Start</Link>
+          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
           <ChevronRight size={10} />
-          <Link to="/shop" className="hover:text-foreground">Shop</Link>
+          <LocalizedLink to="/shop" className="hover:text-foreground">Shop</LocalizedLink>
           {product.brand &&
           <>
               <ChevronRight size={10} />
-              <Link to={`/brands/${brandSlug}`} className="hover:text-foreground">{product.brand}</Link>
+              <LocalizedLink to={`/brands/${brandSlug}`} className="hover:text-foreground">{product.brand}</LocalizedLink>
             </>
           }
           <ChevronRight size={10} />
@@ -162,12 +163,11 @@ export default function ProductDetail() {
           {/* Product info — sticky */}
           <div className="md:sticky md:top-32 md:self-start space-y-6">
             <div>
-              <Link
-                to={`/brands/${brandSlug}`}
+              <LocalizedLink                 to={`/brands/${brandSlug}`}
                 className="text-[10px] tracking-[0.2em] uppercase text-primary hover:underline">
                 
                 {product.brand}
-              </Link>
+              </LocalizedLink>
               <h1 className="text-2xl md:text-3xl mt-2 leading-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">
                 {product.productTitle}
               </h1>
@@ -233,13 +233,12 @@ export default function ProductDetail() {
                   <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : ''} />
                   {wishlisted ? 'Gespeichert' : 'Wunschliste'}
                 </button>
-                <Link
-                  to="/customer-service"
+                <LocalizedLink                   to="/customer-service"
                   className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors">
                   
                   <MessageCircle size={14} />
                   Experten fragen
-                </Link>
+                </LocalizedLink>
               </div>
             </div>
 
@@ -289,9 +288,9 @@ export default function ProductDetail() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-end justify-between mb-10">
               <h2 className="font-display text-2xl text-foreground font-light">Mehr von {product.brand}</h2>
-              <Link to={`/brands/${brandSlug}`} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors">
+              <LocalizedLink to={`/brands/${brandSlug}`} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors">
                 Alle {product.brand} ansehen →
-              </Link>
+              </LocalizedLink>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {related.map((p) => <ProductCard key={p.id} product={p} />)}

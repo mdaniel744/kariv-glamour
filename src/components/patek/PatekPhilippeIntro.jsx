@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 export default function PatekPhilippeIntro() {
@@ -11,17 +11,17 @@ export default function PatekPhilippeIntro() {
           <h2 className="text-3xl md:text-4xl mb-8 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">An Icon of Fine Watchmaking</h2>
           <p className="text-sm md:text-base leading-relaxed text-muted-foreground">
             Patek Philippe is one of the most respected names in haute horlogerie, admired for refined design, complex watchmaking, family heritage, and exceptional collector appeal. From elegant{' '}
-            <Link to="/patek-philippe/calatrava" className="underline decoration-dotted hover:opacity-70 text-primary">Calatrava watches</Link>{' '}
+            <LocalizedLink to="/patek-philippe/calatrava" className="underline decoration-dotted hover:opacity-70 text-primary">Calatrava watches</LocalizedLink>{' '}
             to highly coveted{' '}
-            <Link to="/patek-philippe-nautilus-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">Nautilus</Link>{' '}
+            <LocalizedLink to="/patek-philippe-nautilus-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">Nautilus</LocalizedLink>{' '}
             and{' '}
-            <Link to="/patek-philippe-aquanaut-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">Aquanaut</Link>{' '}
+            <LocalizedLink to="/patek-philippe-aquanaut-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">Aquanaut</LocalizedLink>{' '}
             models, Patek Philippe represents a world where craftsmanship, rarity, and tradition meet. Explore{' '}
-            <Link to="/patek-philippe/grand-complications" className="underline decoration-dotted hover:opacity-70 text-primary">complex watchmaking</Link>{' '}
+            <LocalizedLink to="/patek-philippe/grand-complications" className="underline decoration-dotted hover:opacity-70 text-primary">complex watchmaking</LocalizedLink>{' '}
             and discover the{' '}
-            <Link to="/welche-patek-philippe-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">collector appeal</Link>{' '}
+            <LocalizedLink to="/welche-patek-philippe-kaufen" className="underline decoration-dotted hover:opacity-70 text-primary">collector appeal</LocalizedLink>{' '}
             that defines this extraordinary brand. Understanding{' '}
-            <Link to="/condition-grading" className="underline decoration-dotted hover:opacity-70 text-primary">condition grading</Link>{' '}
+            <LocalizedLink to="/condition-grading" className="underline decoration-dotted hover:opacity-70 text-primary">condition grading</LocalizedLink>{' '}
             is essential when considering a Patek Philippe purchase.
           </p>
         </motion.div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { CARTIER_LOGO, CARTIER_HERO_IMAGE } from '@/lib/cartierData';
 
@@ -21,14 +21,14 @@ export default function CartierHero() {
           <h1 className="text-4xl md:text-6xl leading-tight mb-6 [font-family:'Cormorant_Garamond',_serif] text-[hsl(var(--primary))] font-bold">Cartier Watches at Kariv Glamour</h1>
           <p className="text-base leading-relaxed max-w-xl mb-8 text-muted-foreground">Explore elegant Cartier watches, from timeless Tank models to Santos de Cartier, Panthère de Cartier, Ballon Bleu, Baignoire and other iconic designs.</p>
           <div className="flex flex-wrap gap-3 mb-8">
-            <Link to="/cartier-uhr-kaufen" className="inline-flex items-center justify-center px-7 py-3.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-90 bg-primary text-primary-foreground">Shop Cartier Watches</Link>
+            <LocalizedLink to="/cartier-uhr-kaufen" className="inline-flex items-center justify-center px-7 py-3.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-90 bg-primary text-primary-foreground">Shop Cartier Watches</LocalizedLink>
             <a href="#collections" className="inline-flex items-center justify-center px-7 py-3.5 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:border-primary hover:text-primary border-border text-foreground">Discover Cartier Collections</a>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ANCHORS.map((a, i) => a.href ?
             <a key={i} href={a.href} className="text-[11px] tracking-[0.12em] uppercase hover:opacity-70 text-primary">{a.label}</a> :
 
-            <Link key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase hover:opacity-70 text-primary">{a.label}</Link>
+            <LocalizedLink key={i} to={a.to} className="text-[11px] tracking-[0.12em] uppercase hover:opacity-70 text-primary">{a.label}</LocalizedLink>
             )}
           </div>
         </motion.div>

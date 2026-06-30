@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ChevronDown } from 'lucide-react';
 import { PATEK_FAQS } from '@/lib/patekData';
 
@@ -39,7 +39,7 @@ export default function PatekPhilippeFAQ() {
         </div>
         <div>{PATEK_FAQS.map((faq, i) => <FaqItem key={i} faq={faq} index={i} />)}</div>
         <div className="mt-10 text-center">
-          <Link to="/customer-service" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">Contact Customer Service</Link>
+          <LocalizedLink to="/customer-service" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">Contact Customer Service</LocalizedLink>
         </div>
       </div>
     </section>);

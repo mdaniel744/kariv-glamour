@@ -1,0 +1,81 @@
+{
+  "eyebrow": {
+    "explore": "Entdecken",
+    "discover": "Entdecken",
+    "editorial": "Editorial",
+    "shop": "Shop",
+    "faq": "FAQ",
+    "trust": "Vertrauen",
+    "collections": "Kollektionen",
+    "maison": "Das Maison",
+    "yourNextTimepiece": "Ihre nächste Uhr",
+    "readMore": "Weiterlesen"
+  },
+  "heading": {
+    "exploreMore": "Mehr von Kariv Glamour entdecken",
+    "discoverBrand": "{{brand}} Uhren entdecken",
+    "readMoreAbout": "Mehr über {{brand}} Uhren lesen",
+    "shopBrand": "{{brand}} Uhren kaufen",
+    "findYourNext": "Finden Sie Ihre nächste {{brand}}",
+    "brandFAQ": "{{brand}} FAQ",
+    "discoverCollections": "{{brand}} Kollektionen entdecken",
+    "buyingWithConfidence": "{{brand}} Uhren zuversichtlich kaufen"
+  },
+  "cta": {
+    "shopBrand": "{{brand}} Uhren kaufen",
+    "exploreBuyingGuide": "{{brand}} Kaufberatung entdecken",
+    "exploreCollection": "Kollektion entdecken",
+    "readMore": "Weiterlesen",
+    "viewDetails": "Details ansehen",
+    "quickView": "Schnellansicht",
+    "discover": "Entdecken",
+    "readStory": "Die {{brand}} Geschichte lesen"
+  },
+  "filters": {
+    "collection": "Kollektion",
+    "condition": "Zustand",
+    "caseMaterial": "Gehäusematerial",
+    "dialColor": "Zifferblattfarbe",
+    "gender": "Geschlecht",
+    "bracelet": "Armband",
+    "movement": "Uhrwerk",
+    "boxPapers": "Box & Papiere",
+    "availability": "Verfügbarkeit",
+    "filter": "Filter",
+    "any": "Beliebig",
+    "boxOnly": "Nur Box",
+    "papersOnly": "Nur Papiere",
+    "inStock": "Auf Lager",
+    "sold": "Verkauft",
+    "reserved": "Reserviert",
+    "comingSoon": "Bald verfügbar",
+    "newestArrivals": "Neueste Ankünfte",
+    "priceLowToHigh": "Preis aufsteigend",
+    "priceHighToLow": "Preis absteigend",
+    "yearNewestFirst": "Jahr neueste zuerst",
+    "featured": "Empfohlen"
+  },
+  "product": {
+    "new": "Neu",
+    "vintage": "Vintage",
+    "verified": "Verifiziert",
+    "box": "Box",
+    "noBox": "Keine Box",
+    "papers": "Papiere",
+    "noPapers": "Keine Papiere",
+    "ref": "Ref.",
+    "watchesCount": "{{count}} {{brand}} Uhren",
+    "noMatches": "Keine {{brand}} Uhren entsprechen aktuell Ihren Filtern. Bitte anpassen oder alle Kollektionen entdecken.",
+    "showResults": "{{count}} Ergebnisse anzeigen"
+  },
+  "finalCTA": {
+    "findYourNext": "Finden Sie Ihre nächste {{brand}}",
+    "description": "Entdecken Sie sorgfältig ausgewählte {{brand}} Uhren und vergleichen Sie Modelle, Referenzen, Materialien, Zustände und Preise in einem refined Einkaufserlebnis."
+  },
+  "trust": {
+    "buyingWithConfidence": "{{brand}} Uhren zuversichtlich kaufen"
+  },
+  "story": {
+    "title": "Die {{brand}} Geschichte"
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { HUBLOT_INTERNAL_LINKS } from '@/lib/hublotData';
 
@@ -18,7 +18,7 @@ export default function HublotInternalLinks() {
               <ul className="space-y-2.5">
                 {group.links.map((l, j) => (
                   <li key={j}>
-                    <Link to={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{l.label}</Link>
+                    <LocalizedLink to={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{l.label}</LocalizedLink>
                   </li>
                 ))}
               </ul>
@@ -33,7 +33,7 @@ export default function HublotInternalLinks() {
                 <AccordionContent>
                   <ul className="space-y-2.5">
                     {group.links.map((l, j) => (
-                      <li key={j}><Link to={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{l.label}</Link></li>
+                      <li key={j}><LocalizedLink to={l.to} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{l.label}</LocalizedLink></li>
                     ))}
                   </ul>
                 </AccordionContent>

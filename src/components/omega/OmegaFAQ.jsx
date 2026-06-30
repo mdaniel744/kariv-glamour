@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ChevronDown } from 'lucide-react';
 import { OMEGA_FAQS } from '@/lib/omegaData';
 
@@ -15,7 +15,7 @@ function FaqItem({ faq, index }) {
       <div className="pb-5">
           <p className="text-xs leading-relaxed text-muted-foreground">
             {faq.answer.map((seg, i) => seg.link ?
-          <Link key={i} to={seg.link} className="underline decoration-dotted hover:opacity-70 text-primary">{seg.text}</Link> :
+          <LocalizedLink key={i} to={seg.link} className="underline decoration-dotted hover:opacity-70 text-primary">{seg.text}</LocalizedLink> :
           <span key={i}>{seg.text}</span>
           )}
           </p>

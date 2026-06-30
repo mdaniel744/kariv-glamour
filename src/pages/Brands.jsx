@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA } from '@/lib/constants';
@@ -24,7 +24,7 @@ export default function Brands() {
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
       <SEO title={t('common:seo.brands.title')} description={t('common:seo.brands.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <Link to="/" className="hover:text-foreground">Start</Link>
+        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
         <ChevronRight size={10} />
         <span className="text-foreground">Marken</span>
       </div>
@@ -46,7 +46,7 @@ export default function Brands() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
           >
-            <Link to={`/brands/${brand.slug}`} className="group block border border-border hover:border-primary/30 transition-all">
+            <LocalizedLink to={`/brands/${brand.slug}`} className="group block border border-border hover:border-primary/30 transition-all">
               <div className="aspect-[16/9] bg-card overflow-hidden relative">
                 {brand.heroImage ? (
                   <img src={brand.heroImage} alt={brand.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
@@ -66,7 +66,7 @@ export default function Brands() {
                   Kollektion entdecken <ArrowRight size={12} />
                 </span>
               </div>
-            </Link>
+            </LocalizedLink>
           </motion.div>
         ))}
       </div>

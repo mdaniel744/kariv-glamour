@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Eye, Award, Users, Globe, Heart, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import SEO from '@/components/SEO';
 import TrustBar from '@/components/shared/TrustBar';
 import { BRAND_DISCLAIMER } from '@/lib/constants';
@@ -26,7 +26,7 @@ export default function About() {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">Start</Link>
+          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
           <ChevronRight size={10} />
           <span className="text-foreground">Über uns</span>
         </div>

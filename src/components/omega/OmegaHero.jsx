@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { OMEGA_HERO_IMAGE } from '@/lib/omegaData';
@@ -25,9 +25,9 @@ export default function OmegaHero() {
       <div className="relative w-full px-6 md:px-12 lg:px-20 py-20 md:py-32 lg:py-40">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mb-6 text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">Start</Link>
+            <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
             <ChevronRight size={10} />
-            <Link to="/brands" className="hover:text-foreground">Marken</Link>
+            <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink>
             <ChevronRight size={10} />
             <span className="text-foreground">Omega</span>
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 export default function BreitlingStoryTeaser() {
@@ -10,9 +10,9 @@ export default function BreitlingStoryTeaser() {
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Breitling Story</span>
           <h2 className="font-display text-3xl md:text-4xl font-semibold mb-6 text-[hsl(var(--primary))]">Breitling Story</h2>
           <p className="text-base leading-relaxed mb-6 text-muted-foreground">
-            Breitling is recognized for its aviation heritage, chronograph expertise and identity as instruments for professionals. From the iconic <Link to="/breitling/navitimer" className="text-primary underline">Navitimer</Link> to the versatile <Link to="/breitling/chronomat" className="text-primary underline">Chronomat</Link>, the dive-ready <Link to="/breitling/superocean" className="text-primary underline">Superocean</Link> and the <Link to="/breitling/professional" className="text-primary underline">Professional</Link> line, Breitling watches combine technical character with purpose-built design. Explore our selection of <Link to="/breitling-uhr-gebraucht" className="text-primary underline">pre-owned Breitling</Link> watches.
+            Breitling is recognized for its aviation heritage, chronograph expertise and identity as instruments for professionals. From the iconic <LocalizedLink to="/breitling/navitimer" className="text-primary underline">Navitimer</LocalizedLink> to the versatile <LocalizedLink to="/breitling/chronomat" className="text-primary underline">Chronomat</LocalizedLink>, the dive-ready <LocalizedLink to="/breitling/superocean" className="text-primary underline">Superocean</LocalizedLink> and the <LocalizedLink to="/breitling/professional" className="text-primary underline">Professional</LocalizedLink> line, Breitling watches combine technical character with purpose-built design. Explore our selection of <LocalizedLink to="/breitling-uhr-gebraucht" className="text-primary underline">pre-owned Breitling</LocalizedLink> watches.
           </p>
-          <Link to="/breitling/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Read the Breitling Story</Link>
+          <LocalizedLink to="/breitling/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">Read the Breitling Story</LocalizedLink>
         </motion.div>
         {/* Asset placeholder — add Breitling story image here */}
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] border border-border bg-card flex flex-col items-center justify-center">

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PATEK_COLLECTIONS } from '@/lib/patekData';
@@ -24,7 +24,7 @@ export default function PatekPhilippeCollectionCarousel() {
           <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
             {PATEK_COLLECTIONS.map((col, i) =>
             <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[280px] md:w-[300px] snap-start group">
-                <Link to={`/patek-philippe/${col.slug}`} className="block">
+                <LocalizedLink to={`/patek-philippe/${col.slug}`} className="block">
                   <div className="relative aspect-[3/4] overflow-hidden mb-5 bg-card">
                     {col.image ?
                   <img src={col.image} alt={`Patek Philippe ${col.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
@@ -36,7 +36,7 @@ export default function PatekPhilippeCollectionCarousel() {
                   <h3 className="font-display text-xl font-light mb-2 text-foreground">{col.name}</h3>
                   <p className="text-xs leading-relaxed mb-4 line-clamp-3 text-muted-foreground">{col.description}</p>
                   <span className="text-[10px] tracking-[0.15em] uppercase group-hover:opacity-70 transition-opacity text-primary">Explore Collection →</span>
-                </Link>
+                </LocalizedLink>
               </motion.div>
             )}
           </div>

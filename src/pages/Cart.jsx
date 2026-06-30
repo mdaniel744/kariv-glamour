@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
 import { useSEO } from '@/hooks/useSEO';
@@ -17,9 +17,9 @@ export default function Cart() {
         <ShoppingBag size={48} className="text-muted-foreground/30 mx-auto mb-6" />
         <h1 className="font-display text-3xl text-foreground font-light mb-3">Ihr Warenkorb ist leer</h1>
         <p className="text-sm text-muted-foreground mb-8">Entdecken Sie unsere Kollektion authentifizierter Luxusuhren.</p>
-        <Link to="/shop" className="inline-flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:bg-primary/90 transition-colors">
+        <LocalizedLink to="/shop" className="inline-flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium px-8 py-4 hover:bg-primary/90 transition-colors">
           Weiter einkaufen
-        </Link>
+        </LocalizedLink>
       </div>
     );
   }
@@ -27,7 +27,7 @@ export default function Cart() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <Link to="/" className="hover:text-foreground">Start</Link>
+        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
         <ChevronRight size={10} />
         <span className="text-foreground">Warenkorb</span>
       </div>
@@ -47,17 +47,17 @@ export default function Cart() {
         <div className="md:col-span-2 space-y-6">
           {cartItems.map(item => (
             <div key={item.id} className="flex gap-5 border-b border-border pb-6">
-              <Link to={`/product/${item.id}`} className="w-24 h-24 md:w-32 md:h-32 bg-card flex-shrink-0 overflow-hidden">
+              <LocalizedLink to={`/product/${item.id}`} className="w-24 h-24 md:w-32 md:h-32 bg-card flex-shrink-0 overflow-hidden">
                 {item.featuredImage ? (
                   <img src={item.featuredImage} alt={item.productTitle} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 text-[10px]">Kein Bild</div>
                 )}
-              </Link>
+              </LocalizedLink>
               <div className="flex-1 flex flex-col justify-between">
                 <div>
                   <p className="text-[10px] tracking-[0.15em] uppercase text-primary">{item.brand}</p>
-                  <Link to={`/product/${item.id}`} className="text-sm text-foreground hover:text-primary transition-colors line-clamp-2">{item.productTitle}</Link>
+                  <LocalizedLink to={`/product/${item.id}`} className="text-sm text-foreground hover:text-primary transition-colors line-clamp-2">{item.productTitle}</LocalizedLink>
                   {item.referenceNumber && <p className="text-[10px] text-muted-foreground mt-1">Ref. {item.referenceNumber}</p>}
                 </div>
                 <div className="flex items-end justify-between mt-3">
@@ -96,9 +96,9 @@ export default function Cart() {
               Zur Kasse
             </button>
 
-            <Link to="/shop" className="flex items-center justify-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground transition-colors pt-2">
+            <LocalizedLink to="/shop" className="flex items-center justify-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground transition-colors pt-2">
               <ArrowLeft size={12} /> Weiter einkaufen
-            </Link>
+            </LocalizedLink>
 
             {/* Trust */}
             <div className="border-t border-border pt-5 space-y-3">

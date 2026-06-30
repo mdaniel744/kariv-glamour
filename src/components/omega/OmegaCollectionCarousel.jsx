@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { OMEGA_COLLECTIONS } from '@/lib/omegaData';
@@ -27,7 +27,7 @@ export default function OmegaCollectionCarousel() {
         <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
           {MAIN_COLLECTIONS.map((col, i) =>
           <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[280px] snap-start group">
-              <Link to={`/omega/${col.slug}`} className="block">
+              <LocalizedLink to={`/omega/${col.slug}`} className="block">
                 <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-card">
                   <img src={col.image} alt={`Omega ${col.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -35,7 +35,7 @@ export default function OmegaCollectionCarousel() {
                 <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{col.name}</h3>
                 <p className="text-xs leading-relaxed mb-3 line-clamp-2 text-muted-foreground">{col.description}</p>
                 <span className="text-[10px] tracking-[0.12em] uppercase transition-colors group-hover:opacity-70 text-primary">Explore Collection →</span>
-              </Link>
+              </LocalizedLink>
             </motion.div>
           )}
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA, BRAND_DISCLAIMER } from '@/lib/constants';
 import { useLocalizedField } from '@/lib/localize';
@@ -78,9 +79,9 @@ export default function BrandDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-16 max-w-7xl mx-auto">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-4">
-            <Link to="/" className="hover:text-foreground">Start</Link>
+            <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
             <ChevronRight size={10} />
-            <Link to="/brands" className="hover:text-foreground">Marken</Link>
+            <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink>
             <ChevronRight size={10} />
             <span className="text-foreground">{brandName}</span>
           </div>
@@ -120,13 +121,12 @@ export default function BrandDetail() {
             <h2 className="text-2xl mb-10 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Kollektionen</h2>
             <div className="flex gap-3 flex-wrap">
               {collections.map((col) =>
-            <Link
-              key={col.id}
+            <LocalizedLink               key={col.id}
               to={`/shop?brand=${encodeURIComponent(brandName)}`}
               className="border border-border px-5 py-3 text-xs text-foreground hover:border-primary hover:text-primary transition-colors">
               
                   {col.collectionName}
-                </Link>
+                </LocalizedLink>
             )}
             </div>
           </div>
@@ -141,9 +141,9 @@ export default function BrandDetail() {
               <h2 className="text-2xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Verfügbare Zeitmesser</h2>
               <p className="text-xs text-muted-foreground mt-1">{products.length} Uhr{products.length !== 1 ? 'en' : ''} verfügbar</p>
             </div>
-            <Link to={`/shop?brand=${encodeURIComponent(brandName)}`} className="text-[10px] tracking-[0.12em] uppercase text-primary hover:text-foreground">
+            <LocalizedLink to={`/shop?brand=${encodeURIComponent(brandName)}`} className="text-[10px] tracking-[0.12em] uppercase text-primary hover:text-foreground">
               Alle im Shop ansehen →
-            </Link>
+            </LocalizedLink>
           </div>
           {products.length > 0 ?
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -53,8 +53,7 @@ export default function PopularCollections() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}>
             
-              <Link
-              to={`/shop?brand=${encodeURIComponent(col.brand)}`}
+              <LocalizedLink               to={`/shop?brand=${encodeURIComponent(col.brand)}`}
               className="group block border border-border p-6 hover:border-primary/30 transition-colors">
               
                 <p className="text-[10px] tracking-[0.15em] uppercase text-primary mb-2">{col.brand}</p>
@@ -62,7 +61,7 @@ export default function PopularCollections() {
                 <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.12em] uppercase text-muted-foreground mt-3 group-hover:text-primary transition-colors">
                   Entdecken <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                 </span>
-              </Link>
+              </LocalizedLink>
             </motion.div>
           )}
         </div>

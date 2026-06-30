@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { ROLEX_INTERNAL_LINKS } from '@/lib/rolexData';
-
-const GROUPS = [
-{ title: 'Popular Rolex Searches', links: ROLEX_INTERNAL_LINKS.popularSearches },
-{ title: 'Iconic Rolex Models', links: ROLEX_INTERNAL_LINKS.iconicModels },
-{ title: 'Rolex Learning Guides', links: ROLEX_INTERNAL_LINKS.learningGuides },
-{ title: 'Related Luxury Watch Brands', links: ROLEX_INTERNAL_LINKS.relatedBrands },
-{ title: 'Related Watch Categories', links: ROLEX_INTERNAL_LINKS.relatedCategories }];
 
 
 function LinkColumn({ title, links }) {
@@ -17,7 +11,7 @@ function LinkColumn({ title, links }) {
       <h3 className="text-[10px] tracking-[0.2em] uppercase font-medium mb-4 text-primary">{title}</h3>
       <ul className="space-y-2.5">
         {links.map((link, i) =>
-        <li key={i}><Link to={link.link} className="text-xs leading-relaxed underline decoration-dotted hover:opacity-70 text-muted-foreground hover:text-foreground transition-colors">{link.text}</Link></li>
+        <li key={i}><LocalizedLink to={link.link} className="text-xs leading-relaxed underline decoration-dotted hover:opacity-70 text-muted-foreground hover:text-foreground transition-colors">{link.text}</LocalizedLink></li>
         )}
       </ul>
     </div>);
@@ -35,7 +29,7 @@ function MobileAccordion({ title, links }) {
       {open &&
       <ul className="pb-4 space-y-2.5">
           {links.map((link, i) =>
-        <li key={i}><Link to={link.link} className="text-xs underline decoration-dotted hover:opacity-70 text-muted-foreground hover:text-foreground transition-colors">{link.text}</Link></li>
+        <li key={i}><LocalizedLink to={link.link} className="text-xs underline decoration-dotted hover:opacity-70 text-muted-foreground hover:text-foreground transition-colors">{link.text}</LocalizedLink></li>
         )}
         </ul>
       }
@@ -43,13 +37,21 @@ function MobileAccordion({ title, links }) {
 
 }
 
+const GROUPS = [
+{ title: 'Popular Rolex Searches', links: ROLEX_INTERNAL_LINKS.popularSearches },
+{ title: 'Iconic Rolex Models', links: ROLEX_INTERNAL_LINKS.iconicModels },
+{ title: 'Rolex Learning Guides', links: ROLEX_INTERNAL_LINKS.learningGuides },
+{ title: 'Related Luxury Watch Brands', links: ROLEX_INTERNAL_LINKS.relatedBrands },
+{ title: 'Related Watch Categories', links: ROLEX_INTERNAL_LINKS.relatedCategories }];
+
 export default function RolexInternalLinkingHub() {
+  const { t } = useTranslation('brandComponents');
   return (
     <section className="py-16 md:py-24 bg-secondary">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Explore</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">Explore More from Kariv Glamour</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('eyebrow.explore')}</span>
+          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('heading.exploreMore')}</h2>
         </div>
         <div className="hidden md:grid grid-cols-5 gap-8">{GROUPS.map((g, i) => <LinkColumn key={i} title={g.title} links={g.links} />)}</div>
         <div className="md:hidden">{GROUPS.map((g, i) => <MobileAccordion key={i} title={g.title} links={g.links} />)}</div>

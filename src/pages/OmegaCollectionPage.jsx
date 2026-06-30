@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ChevronRight, Heart } from 'lucide-react';
@@ -44,16 +45,16 @@ export default function OmegaCollectionPage() {
   }, [slug]);
 
   if (!collection) {
-    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Collection Not Found</h1><Link to="/brands/omega" className="text-sm underline text-primary">Return to Omega</Link></div>);
+    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Collection Not Found</h1><LocalizedLink to="/brands/omega" className="text-sm underline text-primary">Return to Omega</LocalizedLink></div>);
   }
 
   return (
     <div className="bg-background">
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">Start</Link><ChevronRight size={10} />
-          <Link to="/brands" className="hover:text-foreground">Marken</Link><ChevronRight size={10} />
-          <Link to="/brands/omega" className="hover:text-foreground">Omega</Link><ChevronRight size={10} />
+          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands/omega" className="hover:text-foreground">Omega</LocalizedLink><ChevronRight size={10} />
           <span className="text-foreground">{collection.name}</span>
         </div>
       </div>
@@ -75,7 +76,7 @@ export default function OmegaCollectionPage() {
       <div className="max-w-7xl mx-auto px-6 mt-10">
         <div className="flex flex-wrap gap-2 justify-center">
           {OMEGA_QUICK_FILTERS.map((chip, i) => (
-            <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</Link>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
           ))}
         </div>
       </div>
@@ -87,7 +88,7 @@ export default function OmegaCollectionPage() {
               <h2 className="font-display text-2xl font-light text-foreground">Omega {collection.name} Watches</h2>
               <p className="text-xs mt-1 text-muted-foreground">{products.length} timepieces available</p>
             </div>
-            <Link to="/brands/omega" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Omega →</Link>
+            <LocalizedLink to="/brands/omega" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Omega →</LocalizedLink>
           </div>
 
           {loading ? (
@@ -108,7 +109,7 @@ export default function OmegaCollectionPage() {
                         <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
                       </button>
                     </div>
-                    <Link to={`/product/${p.id}`}>
+                    <LocalizedLink to={`/product/${p.id}`}>
                       <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{p.brand}</p>
                       <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{p.productTitle}</h3>
                       <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
@@ -116,7 +117,7 @@ export default function OmegaCollectionPage() {
                         {p.yearOfProduction && <span>· {p.yearOfProduction}</span>}
                       </div>
                       <p className="text-sm font-medium text-foreground">{formatPrice(p.price, p.currency)}</p>
-                    </Link>
+                    </LocalizedLink>
                   </motion.div>
                 );
               })}
@@ -124,7 +125,7 @@ export default function OmegaCollectionPage() {
           ) : (
             <div className="text-center py-16">
               <p className="text-sm mb-4 text-muted-foreground">No Omega {collection.name} watches currently available. Please check back soon.</p>
-              <Link to="/brands/omega" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Omega Watches</Link>
+              <LocalizedLink to="/brands/omega" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Omega Watches</LocalizedLink>
             </div>
           )}
         </div>

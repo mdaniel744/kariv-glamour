@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ChevronRight, Heart } from 'lucide-react';
@@ -38,16 +39,16 @@ export default function BreitlingCollectionPage() {
   }, [slug]);
 
   if (!collection) {
-    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-bold mb-4 text-foreground">Collection Not Found</h1><Link to="/brands/breitling" className="text-sm underline text-primary">Return to Breitling</Link></div>);
+    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-bold mb-4 text-foreground">Collection Not Found</h1><LocalizedLink to="/brands/breitling" className="text-sm underline text-primary">Return to Breitling</LocalizedLink></div>);
   }
 
   return (
     <div className="bg-background">
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">Start</Link><ChevronRight size={10} />
-          <Link to="/brands" className="hover:text-foreground">Marken</Link><ChevronRight size={10} />
-          <Link to="/brands/breitling" className="hover:text-foreground">Breitling</Link><ChevronRight size={10} />
+          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands/breitling" className="hover:text-foreground">Breitling</LocalizedLink><ChevronRight size={10} />
           <span className="text-foreground">{collection.name}</span>
         </div>
       </div>
@@ -65,7 +66,7 @@ export default function BreitlingCollectionPage() {
 
       <div className="max-w-7xl mx-auto px-6 mt-10">
         <div className="flex flex-wrap gap-2 justify-center">
-          {BREITLING_QUICK_FILTERS.map((chip, i) => <Link key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</Link>)}
+          {BREITLING_QUICK_FILTERS.map((chip, i) => <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</LocalizedLink>)}
         </div>
       </div>
 
@@ -76,7 +77,7 @@ export default function BreitlingCollectionPage() {
               <h2 className="font-display text-2xl font-semibold text-foreground">Breitling {collection.name}</h2>
               <p className="text-xs mt-1 text-muted-foreground">{products.length} timepieces available</p>
             </div>
-            <Link to="/brands/breitling" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Breitling →</Link>
+            <LocalizedLink to="/brands/breitling" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Breitling →</LocalizedLink>
           </div>
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">{[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}</div>
@@ -86,7 +87,7 @@ export default function BreitlingCollectionPage() {
                 const w = isInWishlist(p.id);
                 return (
                   <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
-                    <Link to={`/product/${p.id}`}>
+                    <LocalizedLink to={`/product/${p.id}`}>
                       <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
                         {p.featuredImage ? <img src={p.featuredImage} alt={p.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center text-muted-foreground/40"><span className="text-xs tracking-[0.3em] uppercase">Breitling</span></div>}
                         <button onClick={(e) => { e.preventDefault(); toggleWishlist(p); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/40 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><Heart size={14} className={w ? 'fill-primary text-primary' : 'text-white'} /></button>
@@ -95,7 +96,7 @@ export default function BreitlingCollectionPage() {
                       <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{p.productTitle}</h3>
                       <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">{p.referenceNumber && <span>Ref. {p.referenceNumber}</span>}{p.yearOfProduction && <span>· {p.yearOfProduction}</span>}</div>
                       <p className="text-sm font-medium text-foreground">{formatPrice(p.price, p.currency)}</p>
-                    </Link>
+                    </LocalizedLink>
                   </motion.div>
                 );
               })}
@@ -103,7 +104,7 @@ export default function BreitlingCollectionPage() {
           ) : (
             <div className="text-center py-16">
               <p className="text-sm mb-4 text-muted-foreground">No Breitling {collection.name} watches currently available. Please check back soon.</p>
-              <Link to="/brands/breitling" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Breitling Watches</Link>
+              <LocalizedLink to="/brands/breitling" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Breitling Watches</LocalizedLink>
             </div>
           )}
         </div>

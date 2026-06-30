@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ArrowRight } from 'lucide-react';
 import SectionHeading from '@/components/shared/SectionHeading';
 
@@ -33,7 +33,7 @@ export default function EditorialSection() {
         <SectionHeading index="06" title="Uhren-Guides & Editorial" subtitle="Experteneinblicke und Kaufleitfäden von unserem Team" linkTo="/guides" />
         <div className="grid md:grid-cols-3 gap-8">
           {guides.map((guide, i) => (
-            <Link key={i} to="/guides" className="group block">
+            <LocalizedLink key={i} to="/guides" className="group block">
               <div className="border border-border p-8 hover:border-primary/30 transition-colors h-full flex flex-col">
                 <span className="text-[9px] tracking-[0.2em] uppercase text-primary mb-4">{guide.tag}</span>
                 <h3 className="font-display text-xl text-foreground font-normal mb-3 group-hover:text-primary transition-colors leading-tight">
@@ -44,7 +44,7 @@ export default function EditorialSection() {
                   Weiterlesen <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </div>
-            </Link>
+            </LocalizedLink>
           ))}
         </div>
       </div>

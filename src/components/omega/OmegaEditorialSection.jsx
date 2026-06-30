@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 
 export default function OmegaEditorialSection({ section, reverse }) {
@@ -18,10 +18,10 @@ export default function OmegaEditorialSection({ section, reverse }) {
             <p className="text-sm leading-relaxed mb-6 text-muted-foreground">{section.description}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-2 mb-8">
               {section.internalLinks?.map((link, i) =>
-              <Link key={i} to={link.link} className="text-[11px] underline decoration-dotted hover:opacity-70 text-primary">{link.text}</Link>
+              <LocalizedLink key={i} to={link.link} className="text-[11px] underline decoration-dotted hover:opacity-70 text-primary">{link.text}</LocalizedLink>
               )}
             </div>
-            <Link to={section.link} className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:bg-background border-primary text-primary">{section.cta}</Link>
+            <LocalizedLink to={section.link} className="inline-flex items-center px-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium border transition-colors hover:bg-background border-primary text-primary">{section.cta}</LocalizedLink>
           </motion.div>
         </div>
       </div>

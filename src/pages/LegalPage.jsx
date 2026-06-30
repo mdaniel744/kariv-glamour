@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
@@ -48,7 +49,7 @@ export default function LegalPage() {
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
         <h1 className="font-display text-2xl text-foreground">Seite nicht gefunden</h1>
         <p className="text-sm text-muted-foreground mt-2">Diese Seite wurde noch nicht erstellt.</p>
-        <Link to="/" className="text-primary text-sm mt-4 inline-block">Zurück zur Startseite</Link>
+        <LocalizedLink to="/" className="text-primary text-sm mt-4 inline-block">Zurück zur Startseite</LocalizedLink>
       </div>
     );
   }
@@ -57,7 +58,7 @@ export default function LegalPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-8">
-        <Link to="/" className="hover:text-foreground">Start</Link>
+        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
         <ChevronRight size={10} />
         <span className="text-foreground">{page.title}</span>
       </div>

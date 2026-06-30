@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { motion } from 'framer-motion';
 import SectionHeading from '@/components/shared/SectionHeading';
 
@@ -32,14 +32,14 @@ export default function CategoryGrid() {
               transition={{ delay: i * 0.1 }}
               className={cat.span}
             >
-              <Link to={cat.to} className="block relative h-full overflow-hidden group">
+              <LocalizedLink to={cat.to} className="block relative h-full overflow-hidden group">
                 <img src={cat.image} alt={cat.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-5 md:p-7">
                   <h3 className="font-display text-lg md:text-xl text-white font-normal tracking-wide">{cat.title}</h3>
                   <p className="text-[10px] tracking-[0.15em] uppercase text-white/60 mt-1">{cat.subtitle}</p>
                 </div>
-              </Link>
+              </LocalizedLink>
             </motion.div>
           ))}
         </div>

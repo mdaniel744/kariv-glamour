@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Heart, ShieldCheck, Box, FileText } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
@@ -10,7 +10,7 @@ export default function BreitlingProductCard({ product }) {
   const wishlisted = isInWishlist(product.id);
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="group">
-      <Link to={`/product/${product.id}`} className="block">
+      <LocalizedLink to={`/product/${product.id}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
           {product.featuredImage ? (
             <img src={product.featuredImage} alt={product.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -45,7 +45,7 @@ export default function BreitlingProductCard({ product }) {
           </div>
           <p className="text-sm font-medium pt-1 text-foreground">{formatPrice(product.price, product.currency)}</p>
         </div>
-      </Link>
+      </LocalizedLink>
     </motion.div>
   );
 }
