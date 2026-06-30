@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import BrandLogo from '@/components/shared/BrandLogo';
-import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function BrandMarquee() {
   const [brands, setBrands] = useState([]);
-  const trackRef = useRef(null);
-  const containerRef = useRef(null);
-  const halfWidth = useRef(0);
-  const isDragging = useRef(false);
-  const [pause, setPause] = useState(false);
-  const x = useMotionValue(0);
+  const scrollRef = useRef(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -26,102 +22,56 @@ export default function BrandMarquee() {
     load();
   }, []);
 
-  useEffect(() => {
-    const measure = () => {
-      if (trackRef.current) {
-        halfWidth.current = trackRef.current.scrollWidth / 2;
-      }
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [brands]);
-
-  // Native non-passive wheel listener so we can preventDefault for horizontal scroll
-  useEffect(() => {
-    const el = containerRef.current;
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current;
     if (!el) return;
-    const handleWheel = (e) => {
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      if (delta !== 0) {
-        e.preventDefault();
-        x.set(wrapX(x.get() - delta));
-      }
-    };
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, [x]);
+    setCanPrev(el.scrollLeft > 10);
+    setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
 
-  const wrapX = (nx) => {
-    const hw = halfWidth.current;
-    if (hw <= 0) return nx;
-    while (nx <= -hw) nx += hw;
-    while (nx > 0) nx -= hw;
-    return nx;
+  useEffect(() => { updateArrows(); }, [updateArrows, brands]);
+
+  const scrollByDir = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.querySelector('[data-brand-card]')?.offsetWidth || 240;
+    el.scrollBy({ left: dir * (cardWidth + 40), behavior: 'smooth' });
   };
 
-  useAnimationFrame((t, delta) => {
-    if (pause || isDragging.current || halfWidth.current === 0) return;
-    const moveBy = -(delta / 1000) * 40; // 40px/s, drifting left
-    x.set(wrapX(x.get() + moveBy));
-  });
-
-  const nudge = (dir) => {
-    x.set(wrapX(x.get() + dir * 280));
-  };
-
-  const items = [...brands, ...brands];
-
-  if (items.length === 0) return null;
+  if (brands.length === 0) return null;
 
   return (
     <section className="py-16 md:py-24 border-y border-border">
       <div className="max-w-7xl mx-auto px-6 mb-10 flex items-center justify-between">
         <span className="text-[10px] tracking-[0.3em] uppercase text-primary font-medium">Ausgewählte Manufakturen</span>
         <div className="flex gap-2">
-          <button onClick={() => nudge(1)} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors" aria-label="Nach links scrollen">
+          <button onClick={() => scrollByDir(-1)} disabled={!canPrev} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-0 disabled:pointer-events-none" aria-label="Nach links scrollen">
             <ChevronLeft size={16} />
           </button>
-          <button onClick={() => nudge(-1)} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors" aria-label="Nach rechts scrollen">
+          <button onClick={() => scrollByDir(1)} disabled={!canNext} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-0 disabled:pointer-events-none" aria-label="Nach rechts scrollen">
             <ChevronRight size={16} />
           </button>
         </div>
       </div>
-      <div
-        ref={containerRef}
-        className="overflow-hidden"
-        onMouseEnter={() => setPause(true)}
-        onMouseLeave={() => setPause(false)}
-      >
-        <motion.div
-          ref={trackRef}
-          className="flex gap-10 md:gap-16 whitespace-nowrap cursor-grab active:cursor-grabbing select-none"
-          style={{ x }}
-          drag="x"
-          dragConstraints={false}
-          dragElastic={0.2}
-          dragMomentum={true}
-          onDragStart={() => { isDragging.current = true; setPause(true); }}
-          onDragEnd={() => {
-            isDragging.current = false;
-            x.set(wrapX(x.get()));
-          }}
-        >
-          {items.map((brand, i) => (
-            <LocalizedLink               key={`${brand.slug}-${i}`}
+      <div className="max-w-7xl mx-auto px-6">
+        <div ref={scrollRef} onScroll={updateArrows} className="flex gap-10 md:gap-14 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
+          {brands.map((brand, i) => (
+            <LocalizedLink
+              key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
-              className="flex-shrink-0 h-20 md:h-28 flex items-center justify-center group"
+              data-brand-card
+              className="flex-shrink-0 snap-start h-20 md:h-28 flex items-center justify-center group"
             >
               <BrandLogo
                 slug={brand.slug}
                 light={brand.brandLogoLight}
                 dark={brand.brandLogoDark}
                 alt={`${brand.brandName} watches at Kariv Glamour`}
-                className="h-full w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-500"
+                className="h-full w-auto object-contain opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
               />
             </LocalizedLink>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
