@@ -60,6 +60,9 @@ import IWCCollectionPage from '@/pages/IWCCollectionPage';
 import JaegerLeCoultrePage from '@/pages/JaegerLeCoultrePage';
 import JaegerLeCoultreSeoLanding from '@/pages/JaegerLeCoultreSeoLanding';
 import JaegerLeCoultreCollectionPage from '@/pages/JaegerLeCoultreCollectionPage';
+import TAGHeuerPage from '@/pages/TAGHeuerPage';
+import TAGHeuerSeoLanding from '@/pages/TAGHeuerSeoLanding';
+import TAGHeuerCollectionPage from '@/pages/TAGHeuerCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -117,6 +120,7 @@ const AuthenticatedApp = () => {
         <Route path="brands/grand-seiko" element={<GrandSeikoPage />} />
         <Route path="brands/iwc-schaffhausen" element={<IWCPage />} />
         <Route path="brands/jaeger-lecoultre" element={<JaegerLeCoultrePage />} />
+        <Route path="brands/tag-heuer" element={<TAGHeuerPage />} />
         <Route path="brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -312,6 +316,30 @@ const AuthenticatedApp = () => {
         <Route path="jaeger-lecoultre-master-chronograph" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-master-chronograph" />} />
         <Route path="jaeger-lecoultre/story" element={<JaegerLeCoultreSeoLanding slug="jaeger-lecoultre-story" />} />
         <Route path="jaeger-lecoultre/:slug" element={<JaegerLeCoultreCollectionPage />} />
+
+        {/* TAG Heuer SEO landing pages */}
+        <Route path="tag-heuer-uhr" element={<TAGHeuerSeoLanding slug="tag-heuer-uhr" />} />
+        <Route path="tag-heuer-uhren" element={<TAGHeuerSeoLanding slug="tag-heuer-uhren" />} />
+        <Route path="tag-heuer-watches" element={<TAGHeuerSeoLanding slug="tag-heuer-watches" />} />
+        <Route path="tag-heuer-uhr-herren" element={<TAGHeuerSeoLanding slug="tag-heuer-uhr-herren" />} />
+        <Route path="tag-heuer-uhren-herren" element={<TAGHeuerSeoLanding slug="tag-heuer-uhren-herren" />} />
+        <Route path="tag-heuer-damenuhr" element={<TAGHeuerSeoLanding slug="tag-heuer-damenuhr" />} />
+        <Route path="tag-heuer-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-kaufen" />} />
+        <Route path="tag-heuer-uhr-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-uhr-kaufen" />} />
+        <Route path="tag-heuer-carrera-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-carrera-kaufen" />} />
+        <Route path="tag-heuer-aquaracer-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-aquaracer-kaufen" />} />
+        <Route path="tag-heuer-formula-1-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-formula-1-kaufen" />} />
+        <Route path="tag-heuer-monaco-kaufen" element={<TAGHeuerSeoLanding slug="tag-heuer-monaco-kaufen" />} />
+        <Route path="tag-heuer-gebraucht" element={<TAGHeuerSeoLanding slug="tag-heuer-gebraucht" />} />
+        <Route path="tag-heuer-carrera-chronograph" element={<TAGHeuerSeoLanding slug="tag-heuer-carrera-chronograph" />} />
+        <Route path="tag-heuer-formula-1-chronograph" element={<TAGHeuerSeoLanding slug="tag-heuer-formula-1-chronograph" />} />
+        <Route path="tag-heuer-aquaracer-300m" element={<TAGHeuerSeoLanding slug="tag-heuer-aquaracer-300m" />} />
+        <Route path="tag-heuer-chronograph" element={<TAGHeuerSeoLanding slug="tag-heuer-chronograph" />} />
+        <Route path="welche-tag-heuer-kaufen" element={<TAGHeuerSeoLanding slug="welche-tag-heuer-kaufen" />} />
+        <Route path="tag-heuer-carrera-vs-formula-1" element={<TAGHeuerSeoLanding slug="tag-heuer-carrera-vs-formula-1" />} />
+        <Route path="tag-heuer-connected-calibre-e5-guide" element={<TAGHeuerSeoLanding slug="tag-heuer-connected-calibre-e5-guide" />} />
+        <Route path="tag-heuer/story" element={<TAGHeuerSeoLanding slug="tag-heuer-story" />} />
+        <Route path="tag-heuer/:slug" element={<TAGHeuerCollectionPage />} />
 
         <Route path="cart" element={<Cart />} />
         <Route path="wishlist" element={<Wishlist />} />
