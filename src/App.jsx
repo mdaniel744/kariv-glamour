@@ -72,6 +72,9 @@ import PaneraiCollectionPage from '@/pages/PaneraiCollectionPage';
 import BvlgariPage from '@/pages/BvlgariPage';
 import BvlgariSeoLanding from '@/pages/BvlgariSeoLanding';
 import BvlgariCollectionPage from '@/pages/BvlgariCollectionPage';
+import GirardPerregauxPage from '@/pages/GirardPerregauxPage';
+import GirardPerregauxSeoLanding from '@/pages/GirardPerregauxSeoLanding';
+import GirardPerregauxCollectionPage from '@/pages/GirardPerregauxCollectionPage';
 
 // Admin
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -133,6 +136,7 @@ const AuthenticatedApp = () => {
         <Route path="brands/tudor" element={<TudorPage />} />
         <Route path="brands/panerai" element={<PaneraiPage />} />
         <Route path="brands/bvlgari" element={<BvlgariPage />} />
+        <Route path="brands/girard-perregaux" element={<GirardPerregauxPage />} />
         <Route path="brands/:slug" element={<BrandDetail />} />
 
         {/* Rolex SEO landing pages */}
@@ -421,6 +425,25 @@ const AuthenticatedApp = () => {
         <Route path="bvlgari-octo-finissimo-guide" element={<BvlgariSeoLanding slug="bvlgari-octo-finissimo-guide" />} />
         <Route path="bvlgari/story" element={<BvlgariSeoLanding slug="bvlgari-story" />} />
         <Route path="bvlgari/:slug" element={<BvlgariCollectionPage />} />
+
+        {/* Girard-Perregaux SEO landing pages */}
+        <Route path="girard-perregaux-uhr" element={<GirardPerregauxSeoLanding slug="girard-perregaux-uhr" />} />
+        <Route path="girard-perregaux-uhren" element={<GirardPerregauxSeoLanding slug="girard-perregaux-uhren" />} />
+        <Route path="girard-perregaux-kaufen" element={<GirardPerregauxSeoLanding slug="girard-perregaux-kaufen" />} />
+        <Route path="girard-perregaux-uhr-kaufen" element={<GirardPerregauxSeoLanding slug="girard-perregaux-uhr-kaufen" />} />
+        <Route path="girard-perregaux-gebraucht" element={<GirardPerregauxSeoLanding slug="girard-perregaux-gebraucht" />} />
+        <Route path="girard-perregaux-gebraucht-kaufen" element={<GirardPerregauxSeoLanding slug="girard-perregaux-gebraucht-kaufen" />} />
+        <Route path="gebrauchte-girard-perregaux-uhren" element={<GirardPerregauxSeoLanding slug="gebrauchte-girard-perregaux-uhren" />} />
+        <Route path="girard-perregaux-laureato-kaufen" element={<GirardPerregauxSeoLanding slug="girard-perregaux-laureato-kaufen" />} />
+        <Route path="girard-perregaux-bridges" element={<GirardPerregauxSeoLanding slug="girard-perregaux-bridges" />} />
+        <Route path="girard-perregaux-alte-modelle" element={<GirardPerregauxSeoLanding slug="girard-perregaux-alte-modelle" />} />
+        <Route path="vintage-girard-perregaux-uhren" element={<GirardPerregauxSeoLanding slug="vintage-girard-perregaux-uhren" />} />
+        <Route path="girard-perregaux-jackpot" element={<GirardPerregauxSeoLanding slug="girard-perregaux-jackpot" />} />
+        <Route path="welche-girard-perregaux-uhr-kaufen" element={<GirardPerregauxSeoLanding slug="welche-girard-perregaux-uhr-kaufen" />} />
+        <Route path="girard-perregaux-laureato-guide" element={<GirardPerregauxSeoLanding slug="girard-perregaux-laureato-guide" />} />
+        <Route path="girard-perregaux-uhr-preis" element={<GirardPerregauxSeoLanding slug="girard-perregaux-uhr-preis" />} />
+        <Route path="girard-perregaux/story" element={<GirardPerregauxSeoLanding slug="girard-perregaux-story" />} />
+        <Route path="girard-perregaux/:slug" element={<GirardPerregauxCollectionPage />} />
 
         <Route path="cart" element={<Cart />} />
         <Route path="wishlist" element={<Wishlist />} />
