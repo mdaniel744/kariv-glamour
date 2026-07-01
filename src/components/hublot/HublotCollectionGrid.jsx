@@ -15,7 +15,7 @@ export default function HublotCollectionGrid() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('collectionCarousel.eyebrow')}</span>
-          <h2 className="text-3xl md:text-4xl mb-4 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('collectionCarousel.heading', { brand: BRAND })}</h2>
+          <h2 className="text-3xl md:text-4xl mb-4 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('collectionCarousel.heading', { brand: BRAND })}</h2>
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -26,7 +26,7 @@ export default function HublotCollectionGrid() {
                   <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display text-xl mb-2 text-foreground">{c.name}</h3>
+                  <h3 className="text-xl mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{c.name}</h3>
                   <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{localize(c, 'shortDescription')}</p>
                   <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('collectionCarousel.exploreCollection')} →</span>
                 </div>
