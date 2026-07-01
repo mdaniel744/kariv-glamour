@@ -8,7 +8,7 @@ export default function HublotIntro() {
   return (
     <section className="py-16 md:py-20 bg-secondary">
       <div className="max-w-3xl mx-auto px-6 text-center">
-        <h2 className="font-display text-3xl md:text-4xl font-light mb-6 text-foreground">
+        <h2 className="text-3xl md:text-4xl mb-6 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">
           {localize({ title_en: 'Bold Design and Modern Materials', title_de: 'Mutiges Design und moderne Materialien' }, 'title')}
         </h2>
         <p className="text-base leading-relaxed text-muted-foreground">
@@ -23,6 +23,6 @@ export default function HublotIntro() {
           {localize({ text_en: ' alongside new models.', text_de: ' neben neuen Modellen.' }, 'text')}
         </p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
