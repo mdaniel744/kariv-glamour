@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
 import { ChevronRight, Heart } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
@@ -9,19 +12,28 @@ import { formatPrice } from '@/lib/constants';
 import { OMEGA_COLLECTIONS, OMEGA_QUICK_FILTERS } from '@/lib/omegaData';
 import TrustBar from '@/components/shared/TrustBar';
 
+const BRAND = 'Omega';
+
 export default function OmegaCollectionPage() {
+  const { t } = useTranslation('brandComponents');
+  const { localize, locale } = useLocalizedField();
   const { slug } = useParams();
   const collection = OMEGA_COLLECTIONS.find(c => c.slug === slug);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { toggleWishlist, isInWishlist } = useCart();
 
+  useSEO({
+    title: collection ? localize(collection, 'description').slice(0, 60) : '',
+    description: collection ? localize(collection, 'description') : ''
+  });
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
         if (collection) {
-          const filterQuery = { brand: 'Omega' };
+          const filterQuery = { brand: BRAND };
           if (collection.parentCollection) {
             filterQuery.collection = collection.parentCollection;
           } else {
@@ -36,39 +48,31 @@ export default function OmegaCollectionPage() {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  useEffect(() => {
-    if (collection) {
-      document.title = `Omega ${collection.name} kaufen | Kariv Glamour`;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', collection.description);
-    }
-  }, [slug]);
-
   if (!collection) {
-    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Collection Not Found</h1><LocalizedLink to="/brands/omega" className="text-sm underline text-primary">Return to Omega</LocalizedLink></div>);
+    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">{t('collectionPage.notFound')}</h1><LocalizedLink to="/brands/omega" className="text-sm underline text-primary">{t('collectionPage.returnToBrand', { brand: BRAND })}</LocalizedLink></div>);
   }
 
   return (
     <div className="bg-background">
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink><ChevronRight size={10} />
-          <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink><ChevronRight size={10} />
-          <LocalizedLink to="/brands/omega" className="hover:text-foreground">Omega</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/" className="hover:text-foreground">{t('breadcrumb.home')}</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands" className="hover:text-foreground">{t('breadcrumb.brands')}</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands/omega" className="hover:text-foreground">{BRAND}</LocalizedLink><ChevronRight size={10} />
           <span className="text-foreground">{collection.name}</span>
         </div>
       </div>
 
       <section className="relative overflow-hidden py-20 md:py-32 bg-secondary border-b border-border">
         <div className="absolute inset-0">
-          <img src={collection.image} alt={`Omega ${collection.name}`} className="w-full h-full object-cover opacity-25" />
+          <img src={collection.image} alt={`${BRAND} ${collection.name}`} className="w-full h-full object-cover opacity-25" />
           <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/90 to-secondary/30" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl">
-            <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Omega Collection</span>
+            <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('collectionPage.collectionLabel', { brand: BRAND })}</span>
             <h1 className="font-display text-4xl md:text-5xl font-light mb-5 text-foreground">{collection.name}</h1>
-            <p className="text-sm leading-relaxed max-w-xl text-muted-foreground">{collection.description}</p>
+            <p className="text-sm leading-relaxed max-w-xl text-muted-foreground">{localize(collection, 'description')}</p>
           </motion.div>
         </div>
       </section>
@@ -76,7 +80,7 @@ export default function OmegaCollectionPage() {
       <div className="max-w-7xl mx-auto px-6 mt-10">
         <div className="flex flex-wrap gap-2 justify-center">
           {OMEGA_QUICK_FILTERS.map((chip, i) => (
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{localize(chip, 'label')}</LocalizedLink>
           ))}
         </div>
       </div>
@@ -85,10 +89,10 @@ export default function OmegaCollectionPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="font-display text-2xl font-light text-foreground">Omega {collection.name} Watches</h2>
-              <p className="text-xs mt-1 text-muted-foreground">{products.length} timepieces available</p>
+              <h2 className="font-display text-2xl font-light text-foreground">{t('collectionPage.watchesTitle', { brand: BRAND, collection: collection.name })}</h2>
+              <p className="text-xs mt-1 text-muted-foreground">{t('collectionPage.watchesAvailable', { count: products.length })}</p>
             </div>
-            <LocalizedLink to="/brands/omega" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Omega →</LocalizedLink>
+            <LocalizedLink to="/brands/omega" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">{t('collectionPage.allBrand', { brand: BRAND })} →</LocalizedLink>
           </div>
 
           {loading ? (
@@ -101,9 +105,9 @@ export default function OmegaCollectionPage() {
                   <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
                     <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
                       {p.featuredImage ? (
-                        <img src={p.featuredImage} alt={p.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img src={p.featuredImage} alt={localize(p, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">Omega</span></div>
+                        <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
                       )}
                       <button onClick={(e) => { e.preventDefault(); toggleWishlist(p); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
                         <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
@@ -111,9 +115,9 @@ export default function OmegaCollectionPage() {
                     </div>
                     <LocalizedLink to={`/product/${p.id}`}>
                       <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{p.brand}</p>
-                      <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{p.productTitle}</h3>
+                      <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(p, 'productTitle')}</h3>
                       <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
-                        {p.referenceNumber && <span>Ref. {p.referenceNumber}</span>}
+                        {p.referenceNumber && <span>{t('product.ref')} {p.referenceNumber}</span>}
                         {p.yearOfProduction && <span>· {p.yearOfProduction}</span>}
                       </div>
                       <p className="text-sm font-medium text-foreground">{formatPrice(p.price, p.currency)}</p>
@@ -124,8 +128,8 @@ export default function OmegaCollectionPage() {
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-sm mb-4 text-muted-foreground">No Omega {collection.name} watches currently available. Please check back soon.</p>
-              <LocalizedLink to="/brands/omega" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Omega Watches</LocalizedLink>
+              <p className="text-sm mb-4 text-muted-foreground">{t('collectionPage.noWatches', { brand: BRAND, collection: collection.name })}</p>
+              <LocalizedLink to="/brands/omega" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">{t('collectionPage.viewAll', { brand: BRAND })}</LocalizedLink>
             </div>
           )}
         </div>
