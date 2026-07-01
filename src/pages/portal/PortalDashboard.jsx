@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
+import { useTranslation } from 'react-i18next';
 import { Package, Heart, ShieldCheck, Store, ChevronRight } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
@@ -9,6 +10,7 @@ import { isDealer } from '@/lib/escrowConstants';
 import { Link } from 'react-router-dom';
 
 export default function PortalDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { localePath } = useLanguage();
   const [orders, setOrders] = useState([]);
@@ -20,15 +22,19 @@ export default function PortalDashboard() {
   }, [user]);
 
   const stats = [
-    { icon: Package, label: 'Active Orders', value: orders.filter(o => !['funds_released', 'cancelled'].includes(o.escrowStatus)).length, color: 'text-blue-500' },
-    { icon: ShieldCheck, label: 'In Escrow', value: orders.filter(o => ['funds_secured', 'shipped', 'verified'].includes(o.escrowStatus)).length, color: 'text-emerald-500' },
-    { icon: Package, label: 'Completed', value: orders.filter(o => o.escrowStatus === 'funds_released').length, color: 'text-primary' },
+    { icon: Package, label: t('pages.portal.activeOrders'), value: orders.filter(o => !['funds_released', 'cancelled'].includes(o.escrowStatus)).length, color: 'text-blue-500' },
+    { icon: ShieldCheck, label: t('pages.portal.inEscrow'), value: orders.filter(o => ['funds_secured', 'shipped', 'verified'].includes(o.escrowStatus)).length, color: 'text-emerald-500' },
+    { icon: Package, label: t('pages.portal.completed'), value: orders.filter(o => o.escrowStatus === 'funds_released').length, color: 'text-primary' },
   ];
+
+  const firstName = user?.full_name?.split(' ')[0];
 
   return (
     <div>
-      <h1 className="text-xl font-display text-foreground font-light mb-1">Welcome back, {user?.full_name?.split(' ')[0] || 'there'}</h1>
-      <p className="text-xs text-muted-foreground mb-8">Manage your orders, profile, and watch collection.</p>
+      <h1 className="text-xl font-display text-foreground font-light mb-1">
+        {firstName ? t('pages.portal.welcomeBack', { name: firstName }) : t('pages.portal.welcomeGeneric')}
+      </h1>
+      <p className="text-xs text-muted-foreground mb-8">{t('pages.portal.manageDesc')}</p>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 md:gap-4 mb-8">
@@ -47,12 +53,12 @@ export default function PortalDashboard() {
           <div className="flex items-center gap-4">
             <Store size={24} className="text-primary" />
             <div>
-              <p className="text-sm font-medium text-foreground">Want to sell watches on Kariv Glamour?</p>
-              <p className="text-xs text-muted-foreground">Apply for dealer status and start listing your timepieces.</p>
+              <p className="text-sm font-medium text-foreground">{t('pages.portal.dealerCTATitle')}</p>
+              <p className="text-xs text-muted-foreground">{t('pages.portal.dealerCTADesc')}</p>
             </div>
           </div>
           <Link to={localePath('/portal/become-dealer')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap flex items-center gap-1">
-            Apply <ChevronRight size={12} />
+            {t('pages.portal.apply')} <ChevronRight size={12} />
           </Link>
         </div>
       )}
@@ -60,16 +66,16 @@ export default function PortalDashboard() {
       {/* Recent orders */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-medium text-foreground">Recent Orders</h2>
-          <Link to={localePath('/portal/orders')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">View All</Link>
+          <h2 className="text-sm font-medium text-foreground">{t('pages.portal.recentOrders')}</h2>
+          <Link to={localePath('/portal/orders')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.viewAll')}</Link>
         </div>
         {loading ? (
           <div className="space-y-2">{[...Array(2)].map((_, i) => <div key={i} className="h-20 bg-card animate-pulse" />)}</div>
         ) : orders.length === 0 ? (
           <div className="border border-border p-8 text-center">
             <Package size={24} className="text-muted-foreground/40 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground mb-4">No orders yet.</p>
-            <Link to={localePath('/shop')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">Browse Watches</Link>
+            <p className="text-sm text-muted-foreground mb-4">{t('pages.portal.noOrders')}</p>
+            <Link to={localePath('/shop')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.browseWatches')}</Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -79,7 +85,7 @@ export default function PortalDashboard() {
                   <div className="flex items-center gap-3">
                     {order.products?.[0]?.featuredImage && <img src={order.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
                     <div>
-                      <p className="text-xs font-medium text-foreground">{order.products?.[0]?.productTitle || 'Order'}</p>
+                      <p className="text-xs font-medium text-foreground">{order.products?.[0]?.productTitle || t('pages.portal.order')}</p>
                       <p className="text-[10px] text-muted-foreground font-mono">{order.escrowReference}</p>
                     </div>
                   </div>

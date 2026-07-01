@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
+import { useLocalizedField } from '@/lib/localize';
 import { base44 } from '@/api/base44Client';
 import SEO from '@/components/SEO';
 import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
@@ -8,6 +9,7 @@ import { motion } from 'framer-motion';
 
 export default function Guides() {
   const { t } = useTranslation();
+  const { localize } = useLocalizedField();
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,16 +24,16 @@ export default function Guides() {
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
       <SEO title={t('common:seo.guides.title')} description={t('common:seo.guides.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
+        <LocalizedLink to="/" className="hover:text-foreground">{t('common:home')}</LocalizedLink>
         <ChevronRight size={10} />
-        <span className="text-foreground">Guides</span>
+        <span className="text-foreground">{t('pages.guides.breadcrumb')}</span>
       </div>
 
       <div className="mb-14 text-center">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">Wissen</span>
-        <h1 className="font-display text-4xl md:text-5xl font-light text-foreground tracking-tight mb-4">Uhren-Guides & Editorial</h1>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{t('pages.guides.eyebrow')}</span>
+        <h1 className="font-display text-4xl md:text-5xl font-light text-foreground tracking-tight mb-4">{t('pages.guides.title')}</h1>
         <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-          Experteneinblicke, Kaufleitfäden und horologisches Wissen von unserem Team von Uhrenspezialisten.
+          {t('pages.guides.subtitle')}
         </p>
       </div>
 
@@ -48,8 +50,8 @@ export default function Guides() {
       ) : guides.length === 0 ? (
         <div className="text-center py-20 border border-border">
           <BookOpen size={40} className="text-muted-foreground/30 mx-auto mb-4" />
-          <p className="text-muted-foreground text-sm mb-2">Unser Redaktionsteam bereitet neue Inhalte vor.</p>
-          <p className="text-xs text-muted-foreground/50">Bald verfügbar: Kaufleitfäden, Marken-Insights und Investitionstipps.</p>
+          <p className="text-muted-foreground text-sm mb-2">{t('pages.guides.emptyTitle')}</p>
+          <p className="text-xs text-muted-foreground/50">{t('pages.guides.emptyDesc')}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-8">
@@ -64,12 +66,12 @@ export default function Guides() {
               <LocalizedLink to={`/guides/${guide.id}`} className="group block">
                 <div className="aspect-[16/10] bg-card overflow-hidden mb-4">
                   {guide.featuredImage && (
-                    <img src={guide.featuredImage} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={guide.featuredImage} alt={localize(guide, 'title')} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   )}
                 </div>
                 <span className="text-[9px] tracking-[0.2em] uppercase text-primary mb-2 block">{guide.category}</span>
-                <h2 className="text-sm text-foreground group-hover:text-primary transition-colors leading-tight mb-2">{guide.title}</h2>
-                {guide.excerpt && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{guide.excerpt}</p>}
+                <h2 className="text-sm text-foreground group-hover:text-primary transition-colors leading-tight mb-2">{localize(guide, 'title')}</h2>
+                {guide.excerpt && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{localize(guide, 'excerpt')}</p>}
               </LocalizedLink>
             </motion.div>
           ))}

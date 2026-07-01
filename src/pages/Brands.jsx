@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
 import { base44 } from '@/api/base44Client';
 import { BRAND_DATA } from '@/lib/constants';
 import SEO from '@/components/SEO';
@@ -9,6 +10,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 
 export default function Brands() {
   const { t } = useTranslation();
+  const { localize } = useLocalizedField();
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
@@ -24,16 +26,16 @@ export default function Brands() {
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
       <SEO title={t('common:seo.brands.title')} description={t('common:seo.brands.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
-        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
+        <LocalizedLink to="/" className="hover:text-foreground">{t('common:home')}</LocalizedLink>
         <ChevronRight size={10} />
-        <span className="text-foreground">Marken</span>
+        <span className="text-foreground">{t('pages.brands.breadcrumb')}</span>
       </div>
 
       <div className="mb-14">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">Die Manufakturen</span>
-        <h1 className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight">Unsere Marken</h1>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">{t('pages.brands.eyebrow')}</span>
+        <h1 className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight">{t('pages.brands.title')}</h1>
         <p className="text-sm text-muted-foreground mt-3 max-w-xl">
-          Entdecken Sie Zeitmesser von den renommiertesten Uhrenherstellern der Welt. Jede Marke repräsentiert jahrhundertelange horologische Exzellenz.
+          {t('pages.brands.subtitle')}
         </p>
       </div>
 
@@ -60,10 +62,10 @@ export default function Brands() {
               <div className="p-6">
                 <h2 className="font-display text-xl text-foreground font-light group-hover:text-primary transition-colors">{brand.name}</h2>
                 {brand.shortDescription && (
-                  <p className="text-xs text-muted-foreground mt-2 line-clamp-2 leading-relaxed">{brand.shortDescription}</p>
+                  <p className="text-xs text-muted-foreground mt-2 line-clamp-2 leading-relaxed">{localize(brand, 'shortDescription')}</p>
                 )}
                 <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.12em] uppercase text-primary mt-4 group-hover:gap-3 transition-all">
-                  Kollektion entdecken <ArrowRight size={12} />
+                  {t('pages.brands.exploreCollection')} <ArrowRight size={12} />
                 </span>
               </div>
             </LocalizedLink>

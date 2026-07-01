@@ -3,6 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const COLLECTION_SLUGS = {
   'Rolex': { 'Submariner': 'rolex-submariner', 'Cosmograph Daytona': 'rolex-daytona', 'Datejust': 'rolex-datejust', 'GMT-Master II': 'rolex-gmt-master-ii' },
@@ -13,6 +14,7 @@ const COLLECTION_SLUGS = {
 };
 
 export default function PopularCollections() {
+  const { t } = useTranslation();
   const [collections, setCollections] = useState([]);
 
   useEffect(() => {
@@ -40,8 +42,8 @@ export default function PopularCollections() {
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
             
-            <h2 className="text-3xl md:text-4xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">Beliebte Kollektionen</h2>
-            <p className="text-sm text-muted-foreground mt-2 max-w-lg">Entdecken Sie die begehrtesten Uhren-Kollektionen</p>
+            <h2 className="text-3xl md:text-4xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('components.popularCollections.title')}</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-lg">{t('components.popularCollections.subtitle')}</p>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -59,13 +61,13 @@ export default function PopularCollections() {
                 <p className="text-[10px] tracking-[0.15em] uppercase text-primary mb-2">{col.brand}</p>
                 <h3 className="font-display text-lg text-foreground font-normal group-hover:text-primary transition-colors">{col.collectionName}</h3>
                 <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.12em] uppercase text-muted-foreground mt-3 group-hover:text-primary transition-colors">
-                  Entdecken <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+                  {t('components.popularCollections.discover')} <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </LocalizedLink>
             </motion.div>
           )}
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }

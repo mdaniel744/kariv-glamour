@@ -2,19 +2,21 @@ import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
+import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, Package, Heart, User, Store, LogOut } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 
 export default function PortalLayout() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
   const { localePath } = useLanguage();
 
   const navItems = [
-    { to: '/portal', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-    { to: '/portal/orders', icon: Package, label: 'My Orders' },
-    { to: '/portal/wishlist', icon: Heart, label: 'Wishlist' },
-    { to: '/portal/profile', icon: User, label: 'Profile' },
+    { to: '/portal', icon: LayoutDashboard, label: t('pages.portal.dashboard'), exact: true },
+    { to: '/portal/orders', icon: Package, label: t('pages.portal.orders') },
+    { to: '/portal/wishlist', icon: Heart, label: t('pages.portal.wishlist') },
+    { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];
 
   const handleLogout = () => logout();
@@ -29,7 +31,7 @@ export default function PortalLayout() {
               <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
             </span>
           </Link>
-          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">My Portal</p>
+          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{t('pages.portal.myPortal')}</p>
           {user && (
             <p className="text-xs text-foreground mt-3 truncate">{user.full_name || user.email}</p>
           )}
@@ -54,7 +56,7 @@ export default function PortalLayout() {
           ) : (
             <Link to={localePath('/portal/become-dealer')} className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${pathname.includes('become-dealer') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
               <Store size={15} />
-              Become a Dealer
+              {t('pages.portal.becomeDealer')}
             </Link>
           )}
 
@@ -69,7 +71,7 @@ export default function PortalLayout() {
         <div className="p-3 md:mt-auto">
           <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 rounded text-xs text-muted-foreground hover:text-destructive transition-colors w-full">
             <LogOut size={15} />
-            Sign Out
+            {t('pages.portal.signOut')}
           </button>
         </div>
       </aside>

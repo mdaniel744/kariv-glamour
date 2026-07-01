@@ -1,14 +1,17 @@
 import React from 'react';
 import { ShieldCheck, Lock, Truck, Award } from 'lucide-react';
-
-const trustItems = [
-{ icon: ShieldCheck, title: "Authentifiziert", desc: "Geprüft von Uhrmachern" },
-{ icon: Lock, title: "Sichere Zahlung", desc: "Käuferschutz inklusive" },
-{ icon: Truck, title: "Versicherter Versand", desc: "Weltweit, vollversichert" },
-{ icon: Award, title: "Zustandsbewertung", desc: "Detaillierte Zustandsberichte" }];
-
+import { useTranslation } from 'react-i18next';
 
 export default function TrustBar() {
+  const { t } = useTranslation();
+
+  const trustItems = [
+    { icon: ShieldCheck, title: t('components.trustBar.authenticated'), desc: t('components.trustBar.authenticatedDesc') },
+    { icon: Lock, title: t('components.trustBar.securePayment'), desc: t('components.trustBar.securePaymentDesc') },
+    { icon: Truck, title: t('components.trustBar.insuredShipping'), desc: t('components.trustBar.insuredShippingDesc') },
+    { icon: Award, title: t('components.trustBar.conditionReport'), desc: t('components.trustBar.conditionReportDesc') }
+  ];
+
   return (
     <div className="text-background py-14 md:py-16 bg-[hsl(var(--foreground))]">
       <div className="max-w-7xl mx-auto px-6">
@@ -22,6 +25,6 @@ export default function TrustBar() {
           )}
         </div>
       </div>
-    </div>);
-
+    </div>
+  );
 }

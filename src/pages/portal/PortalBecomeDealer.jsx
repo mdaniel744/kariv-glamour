@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useTranslation } from 'react-i18next';
 import { Store, Check, Clock, X } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 
 export default function PortalBecomeDealer() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const [application, setApplication] = useState(null);
@@ -31,11 +33,11 @@ export default function PortalBecomeDealer() {
         userFullName: user.full_name,
         ...form
       });
-      toast({ title: 'Application submitted! We will review it shortly.' });
+      toast({ title: t('pages.portal.applicationSubmitted') });
       const apps = await base44.entities.DealerApplications.filter({ userId: user.id }, '-created_date', 1);
       setApplication(apps[0]);
     } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({ title: t('common:error'), description: e.message, variant: 'destructive' });
     } finally {
       setSubmitting(false);
     }
@@ -47,8 +49,8 @@ export default function PortalBecomeDealer() {
         <div className="w-16 h-16 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
           <Check size={28} className="text-emerald-600 dark:text-emerald-400" />
         </div>
-        <h1 className="font-display text-xl text-foreground mb-2">You are an approved dealer!</h1>
-        <p className="text-sm text-muted-foreground mb-6">You can list and manage your watches from the Dealer Portal.</p>
+        <h1 className="font-display text-xl text-foreground mb-2">{t('pages.portal.becomeDealerApproved')}</h1>
+        <p className="text-sm text-muted-foreground mb-6">{t('pages.portal.becomeDealerApprovedDesc')}</p>
       </div>
     );
   }
@@ -61,8 +63,8 @@ export default function PortalBecomeDealer() {
         <div className="w-16 h-16 bg-amber-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
           <Clock size={28} className="text-amber-600 dark:text-amber-400" />
         </div>
-        <h1 className="font-display text-xl text-foreground mb-2">Application Under Review</h1>
-        <p className="text-sm text-muted-foreground">Your dealer application for <strong>{application.companyName}</strong> is being reviewed by our team. We'll notify you at {user.email} once a decision is made.</p>
+        <h1 className="font-display text-xl text-foreground mb-2">{t('pages.portal.becomeDealerPending')}</h1>
+        <p className="text-sm text-muted-foreground">{t('pages.portal.becomeDealerPendingDesc', { company: application.companyName, email: user.email })}</p>
       </div>
     );
   }
@@ -73,9 +75,9 @@ export default function PortalBecomeDealer() {
         <div className="w-16 h-16 bg-red-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
           <X size={28} className="text-red-600 dark:text-red-400" />
         </div>
-        <h1 className="font-display text-xl text-foreground mb-2">Application Not Approved</h1>
-        <p className="text-sm text-muted-foreground mb-6">Unfortunately, your previous application was not approved. {application.adminNotes || 'You may submit a new application below.'}</p>
-        <button onClick={() => setApplication(null)} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">Submit New Application</button>
+        <h1 className="font-display text-xl text-foreground mb-2">{t('pages.portal.becomeDealerRejected')}</h1>
+        <p className="text-sm text-muted-foreground mb-6">{t('pages.portal.becomeDealerRejectedDesc')} {application.adminNotes || ''}</p>
+        <button onClick={() => setApplication(null)} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.submitNewApplication')}</button>
       </div>
     );
   }
@@ -85,50 +87,50 @@ export default function PortalBecomeDealer() {
       <div className="flex items-center gap-3 mb-6">
         <Store size={24} className="text-primary" />
         <div>
-          <h1 className="text-xl font-display text-foreground font-light">Become a Dealer</h1>
-          <p className="text-xs text-muted-foreground">List and sell your watches on Kariv Glamour.</p>
+          <h1 className="text-xl font-display text-foreground font-light">{t('pages.portal.becomeDealerTitle')}</h1>
+          <p className="text-xs text-muted-foreground">{t('pages.portal.becomeDealerDesc')}</p>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Company Name *</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelCompanyName')}</label>
           <input value={form.companyName} onChange={e => setForm({...form, companyName: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Phone *</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelPhone')}</label>
             <input value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Tax ID / VAT</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelTaxId')}</label>
             <input value={form.taxId} onChange={e => setForm({...form, taxId: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Website</label>
-          <input value={form.website} onChange={e => setForm({...form, website: e.target.value})} placeholder="https://" className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelWebsite')}</label>
+          <input value={form.website} onChange={e => setForm({...form, website: e.target.value})} placeholder={t('pages.portal.placeholderWebsite')} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Business Address</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelBusinessAddress')}</label>
           <input value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Postal Code</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelPostalCode')}</label>
             <input value={form.postalCode} onChange={e => setForm({...form, postalCode: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">City</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelCity')}</label>
             <input value={form.city} onChange={e => setForm({...form, city: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Country</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelCountry')}</label>
           <input value={form.country} onChange={e => setForm({...form, country: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Tell us about your business</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.portal.labelMessage')}</label>
           <textarea value={form.message} onChange={e => setForm({...form, message: e.target.value})} rows={3} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
 
@@ -137,7 +139,7 @@ export default function PortalBecomeDealer() {
           disabled={!form.companyName || !form.phone || submitting}
           className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50"
         >
-          {submitting ? 'Submitting...' : 'Submit Application'}
+          {submitting ? t('pages.portal.submitting') : t('pages.portal.submitApplication')}
         </button>
       </div>
     </div>

@@ -38,24 +38,24 @@ export default function Home() {
       <BrandMarquee />
       <FeaturedProducts
         index="01"
-        title="Ausgewählte Zeitmesser"
-        subtitle="Handverlesene Auswahl aus unserem kuratierten Inventar"
+        title={t('components.featuredProducts.section01.title')}
+        subtitle={t('components.featuredProducts.section01.subtitle')}
         filter={{ featured: true }}
         linkTo="/shop"
         limit={4}
       />
       <FeaturedProducts
         index="02"
-        title="Neuheiten"
-        subtitle="Die neuesten Ergänzungen unserer Kollektion"
+        title={t('components.featuredProducts.section02.title')}
+        subtitle={t('components.featuredProducts.section02.subtitle')}
         filter={{ isNewArrival: true }}
         linkTo="/shop?isNewArrival=true"
         limit={4}
       />
       <FeaturedProducts
         index="03"
-        title="Certified Pre-Owned"
-        subtitle="Authentifizierte und geprüfte gebrauchte Luxusuhren"
+        title={t('components.featuredProducts.section03.title')}
+        subtitle={t('components.featuredProducts.section03.subtitle')}
         filter={{ isCertifiedPreOwned: true }}
         linkTo="/shop?isCertifiedPreOwned=true"
         limit={4}
