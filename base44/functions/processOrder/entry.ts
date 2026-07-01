@@ -68,6 +68,13 @@ Deno.serve(async (req) => {
       if (user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
       const { escrowStatus, paymentStatus, orderStatus, shippingStatus, trackingNumber } = body;
 
+      // Fetch order to prevent self-acceptance (admin cannot accept their own order)
+      const existingOrder = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!existingOrder) return Response.json({ error: 'Order not found' }, { status: 404 });
+      if (existingOrder.buyerId === user.id) {
+        return Response.json({ error: 'Security: You cannot manage an order you placed yourself. Another admin must handle it.' }, { status: 403 });
+      }
+
       const updateData = {};
       if (escrowStatus) updateData.escrowStatus = escrowStatus;
       if (paymentStatus) updateData.paymentStatus = paymentStatus;
@@ -77,7 +84,6 @@ Deno.serve(async (req) => {
 
       const updated = await base44.asServiceRole.entities.Orders.update(orderId, updateData);
 
-      // If funds are secured, notify dealer logic would go here
       // If funds released, update product to Sold
       if (escrowStatus === 'funds_released' && updated.products?.[0]?.productId) {
         await base44.asServiceRole.entities.Products.update(updated.products[0].productId, { availability: 'Sold' });
@@ -92,8 +98,25 @@ Deno.serve(async (req) => {
       if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
       if (order.buyerId !== user.id) return Response.json({ error: 'Not your order' }, { status: 403 });
       if (order.escrowStatus !== 'dealer_accepted') return Response.json({ error: 'Order not ready for payment' }, { status: 400 });
+      if (!['bank_transfer', 'crypto'].includes(paymentMethod)) return Response.json({ error: 'Invalid payment method' }, { status: 400 });
 
       const updated = await base44.asServiceRole.entities.Orders.update(orderId, { paymentMethod });
+      return Response.json({ order: updated });
+    }
+
+    // ACTION: confirm_payment_sent — buyer confirms they have sent the payment
+    if (action === 'confirm_payment_sent') {
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+      if (order.buyerId !== user.id) return Response.json({ error: 'Not your order' }, { status: 403 });
+      if (order.escrowStatus !== 'dealer_accepted') return Response.json({ error: 'Order not ready for payment' }, { status: 400 });
+      if (!order.paymentMethod) return Response.json({ error: 'Select a payment method first' }, { status: 400 });
+      if (order.paymentStatus === 'Awaiting Confirmation') return Response.json({ error: 'Payment already confirmed as sent' }, { status: 400 });
+
+      const updated = await base44.asServiceRole.entities.Orders.update(orderId, {
+        paymentStatus: 'Awaiting Confirmation',
+        notes: (order.notes || '') + `\n[${new Date().toISOString()}] Buyer confirmed payment sent via ${order.paymentMethod}.`
+      });
       return Response.json({ order: updated });
     }
 

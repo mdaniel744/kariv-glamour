@@ -48,12 +48,7 @@ export default function DealerLayout() {
             <LayoutDashboard size={15} />
             Buyer Portal
           </Link>
-          {user?.role === 'admin' && (
-            <Link to="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap text-muted-foreground hover:text-foreground">
-              <LayoutDashboard size={15} />
-              Admin Console
-            </Link>
-          )}
+
         </nav>
         <div className="p-3 md:mt-auto">
           <button onClick={() => logout()} className="flex items-center gap-3 px-3 py-2.5 rounded text-xs text-muted-foreground hover:text-destructive transition-colors w-full">

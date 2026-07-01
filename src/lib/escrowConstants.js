@@ -51,12 +51,6 @@ export const PAYMENT_METHODS = [
     }
   },
   {
-    key: 'credit_card',
-    label: 'Credit Card',
-    description: 'Pay securely with Visa, Mastercard, or American Express.',
-    icon: 'CreditCard'
-  },
-  {
     key: 'crypto',
     label: 'Cryptocurrency',
     description: 'Pay with BTC, ETH, or USDT. Funds held in escrow until delivery.',
@@ -78,7 +72,7 @@ export const USER_ROLES = {
 };
 
 export function isDealer(user) {
-  return user?.role === 'dealer' || user?.role === 'admin';
+  return user?.role === 'dealer';
 }
 
 export function isAdmin(user) {

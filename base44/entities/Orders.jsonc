@@ -75,6 +75,7 @@
       "type": "string",
       "enum": [
         "Pending",
+        "Awaiting Confirmation",
         "Paid",
         "Failed",
         "Refunded"
@@ -85,7 +86,6 @@
       "type": "string",
       "enum": [
         "bank_transfer",
-        "credit_card",
         "crypto"
       ]
     },

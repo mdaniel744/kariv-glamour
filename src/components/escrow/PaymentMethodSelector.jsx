@@ -55,9 +55,7 @@ export default function PaymentMethodSelector({ selected, onSelect, escrowRefere
                     <div className="flex justify-between pt-1"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{escrowReference}</span></div>
                   </div>
                 )}
-                {method.key === 'credit_card' && (
-                  <p className="text-xs text-muted-foreground">You will be redirected to our secure payment gateway after confirming your order.</p>
-                )}
+
               </div>
             )}
           </div>

@@ -96,9 +96,14 @@ export default function AdminOrders() {
                     </div>
                   )}
 
-                  {/* Payment method */}
+                  {/* Payment method + status */}
                   {o.paymentMethod && (
-                    <div className="text-[10px] text-[#8E8E93]">Payment: <span className="text-[#E5E5E5] capitalize">{o.paymentMethod.replace('_', ' ')}</span></div>
+                    <div className="text-[10px] text-[#8E8E93]">
+                      Payment: <span className="text-[#E5E5E5] capitalize">{o.paymentMethod.replace('_', ' ')}</span>
+                      {o.paymentStatus === 'Awaiting Confirmation' && (
+                        <span className="ml-2 text-amber-400 font-medium">⚠ Buyer sent payment — verify funds</span>
+                      )}
+                    </div>
                   )}
                 </div>
               )}

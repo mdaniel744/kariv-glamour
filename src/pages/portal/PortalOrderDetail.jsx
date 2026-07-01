@@ -19,6 +19,7 @@ export default function PortalOrderDetail() {
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [savingPayment, setSavingPayment] = useState(false);
+  const [confirmingPayment, setConfirmingPayment] = useState(false);
 
   useEffect(() => {
     base44.entities.Orders.get(id).then(o => {
@@ -40,6 +41,21 @@ export default function PortalOrderDetail() {
       alert(e.response?.data?.error || 'Failed to save payment method');
     } finally {
       setSavingPayment(false);
+    }
+  };
+
+  const handleConfirmPaymentSent = async () => {
+    setConfirmingPayment(true);
+    try {
+      const res = await base44.functions.invoke('processOrder', {
+        action: 'confirm_payment_sent',
+        orderId: id
+      });
+      setOrder(res.data.order);
+    } catch (e) {
+      alert(e.response?.data?.error || 'Failed to confirm payment');
+    } finally {
+      setConfirmingPayment(false);
     }
   };
 
@@ -88,18 +104,41 @@ export default function PortalOrderDetail() {
         </div>
       )}
 
-      {/* Payment instructions — when method is selected and payment pending */}
-      {order.paymentMethod && order.paymentStatus === 'Pending' && order.escrowStatus === 'dealer_accepted' && (
-        <div className="border border-amber-500/30 bg-amber-500/5 p-4 mb-6">
-          <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-2">Payment Instructions</p>
-          <p className="text-xs text-muted-foreground">
-            {order.paymentMethod === 'credit_card'
-              ? 'Click the button below to complete your secure credit card payment.'
-              : `Please send your payment using the reference ${order.escrowReference}. Our team will confirm receipt within 24 hours.`}
-          </p>
-          {order.paymentMethod === 'credit_card' && (
-            <button className="w-full mt-3 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase py-3">
-              Pay Now with Card
+      {/* Payment instructions — when method is selected and payment not yet confirmed */}
+      {order.paymentMethod && order.escrowStatus === 'dealer_accepted' && order.paymentStatus !== 'Paid' && (
+        <div className="border border-primary/30 bg-primary/5 p-5 mb-6">
+          <p className="text-xs font-medium text-primary mb-3">Payment Instructions</p>
+
+          {order.paymentMethod === 'bank_transfer' && (
+            <div className="space-y-1.5 text-xs mb-4">
+              <div className="flex justify-between"><span className="text-muted-foreground">Bank:</span><span className="text-foreground">{PAYMENT_METHODS[0].details.bankName}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">IBAN:</span><span className="text-foreground font-mono">{PAYMENT_METHODS[0].details.iban}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">BIC:</span><span className="text-foreground font-mono">{PAYMENT_METHODS[0].details.bic}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+            </div>
+          )}
+
+          {order.paymentMethod === 'crypto' && (
+            <div className="space-y-1.5 text-xs mb-4">
+              <div className="flex justify-between gap-2"><span className="text-muted-foreground whitespace-nowrap">BTC:</span><span className="text-foreground font-mono break-all">{PAYMENT_METHODS[1].details.btcAddress}</span></div>
+              <div className="flex justify-between gap-2"><span className="text-muted-foreground whitespace-nowrap">ETH/USDT:</span><span className="text-foreground font-mono break-all">{PAYMENT_METHODS[1].details.ethAddress}</span></div>
+              <p className="text-muted-foreground pt-1">{PAYMENT_METHODS[1].details.note}</p>
+              <div className="flex justify-between pt-1"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+            </div>
+          )}
+
+          {order.paymentStatus === 'Awaiting Confirmation' ? (
+            <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 mt-3 pt-3 border-t border-border">
+              <ShieldCheck size={14} />
+              <span>Payment sent — awaiting admin confirmation. You will be notified once funds are verified in escrow.</span>
+            </div>
+          ) : (
+            <button
+              onClick={handleConfirmPaymentSent}
+              disabled={confirmingPayment}
+              className="w-full mt-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50 hover:bg-primary/90 transition-colors"
+            >
+              {confirmingPayment ? 'Confirming...' : "I've Made the Payment"}
             </button>
           )}
         </div>
