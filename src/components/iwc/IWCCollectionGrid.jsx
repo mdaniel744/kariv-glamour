@@ -1,10 +1,16 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { IWC_COLLECTIONS } from '@/lib/iwcData';
 
+const BRAND = 'IWC Schaffhausen';
+
 export default function IWCCollectionGrid() {
+  const { t } = useTranslation('brandComponents');
+  const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -29,9 +35,9 @@ export default function IWCCollectionGrid() {
     <section id="collections" className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">IWC Schaffhausen Collections</span>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-[hsl(var(--primary))]">Discover IWC Collections</h2>
-          <p className="text-sm max-w-2xl mx-auto text-muted-foreground">Browse IWC&rsquo;s five strongest product families — from aviation-inspired pilot watches to dive-ready Aquatimer.</p>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('collectionCarousel.eyebrow')}</span>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-[hsl(var(--primary))]">{t('collectionCarousel.heading', { brand: 'IWC' })}</h2>
+          <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: 'IWC' })}</p>
         </div>
 
         <div className="relative">
@@ -48,15 +54,15 @@ export default function IWCCollectionGrid() {
                 <LocalizedLink to={`/iwc-schaffhausen/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
                     {c.image ?
-                  <img src={c.image} alt={`IWC Schaffhausen ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+                  <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
 
                   <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
                   }
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{c.name}</h3>
-                    <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{c.shortDescription}</p>
-                    <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Explore Collection &rarr;</span>
+                    <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{localize(c, 'shortDescription')}</p>
+                    <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('collectionCarousel.exploreCollection')} &rarr;</span>
                   </div>
                 </LocalizedLink>
               </motion.div>
@@ -65,5 +71,4 @@ export default function IWCCollectionGrid() {
         </div>
       </div>
     </section>);
-
 }

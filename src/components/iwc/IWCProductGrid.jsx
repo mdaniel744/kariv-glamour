@@ -1,19 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import IWCFilterSidebar from './IWCFilterSidebar';
 import IWCProductCard from './IWCProductCard';
 import { IWC_QUICK_FILTERS } from '@/lib/iwcData';
 
-const SORT_OPTIONS = [
-  { value: '-created_date', label: 'Featured' },
-  { value: 'newest', label: 'Neueste Ankünfte' },
-  { value: 'price', label: 'Preis: Niedrig zu Hoch' },
-  { value: '-price', label: 'Preis: Hoch zu Niedrig' },
-  { value: '-yearOfProduction', label: 'Jahr: Neueste zuerst' },
-  { value: 'limited', label: 'Limitierte Auflagen zuerst' },
-];
+const BRAND = 'IWC Schaffhausen';
 
 const parseSize = (s) => { if (!s) return null; const m = String(s).match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[1]) : null; };
 
@@ -44,6 +39,8 @@ const matchesFeature = (p, feat) => {
 };
 
 export default function IWCProductGrid() {
+  const { t } = useTranslation('brandComponents');
+  const { localize } = useLocalizedField();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
@@ -54,12 +51,21 @@ export default function IWCProductGrid() {
     const load = async () => {
       setLoading(true);
       try {
-        const data = await base44.entities.Products.filter({ brand: 'IWC Schaffhausen' }, '-created_date', 100);
+        const data = await base44.entities.Products.filter({ brand: BRAND }, '-created_date', 100);
         setProducts(data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };
     load();
   }, []);
+
+  const SORT_OPTIONS = [
+    { value: '-created_date', label: t('productGrid.sortFeatured') },
+    { value: 'newest', label: t('productGrid.sortNewest') },
+    { value: 'price', label: t('productGrid.sortPriceLow') },
+    { value: '-price', label: t('productGrid.sortPriceHigh') },
+    { value: '-yearOfProduction', label: t('productGrid.sortYearNewest') },
+    { value: 'limited', label: t('productGrid.sortLimited') },
+  ];
 
   const filtered = useMemo(() => {
     const f = filters;
@@ -73,7 +79,7 @@ export default function IWCProductGrid() {
     if (f.condition.length) result = result.filter(p => f.condition.includes(p.condition));
     if (f.gender.length) result = result.filter(p => f.gender.includes(p.gender));
     if (f.caseSize.length) result = result.filter(p => { const d = parseSize(p.caseDiameter); return d != null && f.caseSize.some(s => parseSize(s) === d); });
-    if (f.type.length) result = result.filter(p => f.type.some(t => (t === 'New' && ['New', 'Unworn'].includes(p.condition)) || (t === 'Pre-Owned' && !['New', 'Unworn'].includes(p.condition)) || (t === 'Vintage' && (p.isVintage || p.condition === 'Vintage'))));
+    if (f.type.length) result = result.filter(p => f.type.some(tp => (tp === 'New' && ['New', 'Unworn'].includes(p.condition)) || (tp === 'Pre-Owned' && !['New', 'Unworn'].includes(p.condition)) || (tp === 'Vintage' && (p.isVintage || p.condition === 'Vintage'))));
     if (f.boxPapers.length) result = result.filter(p => f.boxPapers.some(opt => (opt === 'Box included' && p.boxIncluded) || (opt === 'Papers included' && p.papersIncluded) || (opt === 'Full set' && p.boxIncluded && p.papersIncluded)));
     if (f.availability.length) result = result.filter(p => f.availability.includes(p.availability));
     if (f.priceMin) result = result.filter(p => p.price >= Number(f.priceMin));
@@ -93,21 +99,21 @@ export default function IWCProductGrid() {
     <section id="shop" className="py-16 md:py-24 bg-secondary">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">IWC Schaffhausen Boutique</span>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">Shop IWC Schaffhausen Uhren</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('productGrid.eyebrow')}</span>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {IWC_QUICK_FILTERS.map((chip, i) => (
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</LocalizedLink>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{localize(chip, 'label')}</LocalizedLink>
           ))}
         </div>
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
-            <SlidersHorizontal size={14} /> Filter
+            <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
-          <p className="hidden md:block text-xs text-muted-foreground">{filtered.length} Zeitmesser</p>
+          <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.timepieces', { count: filtered.length })}</p>
           <div className="flex items-center gap-2 ml-auto">
             <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
@@ -126,8 +132,8 @@ export default function IWCProductGrid() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-sm text-muted-foreground">Keine IWC Schaffhausen Uhren gefunden, die Ihren Kriterien entsprechen.</p>
-                <LocalizedLink to="/iwc-schaffhausen-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle IWC Uhren ansehen</LocalizedLink>
+                <p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p>
+                <LocalizedLink to="/iwc-schaffhausen-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">{t('seoLanding.viewAll', { brand: BRAND })}</LocalizedLink>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -142,12 +148,12 @@ export default function IWCProductGrid() {
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl text-foreground">Filter</h2>
+              <h2 className="font-display text-xl text-foreground">{t('productGrid.filter')}</h2>
               <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground"><X size={20} /></button>
             </div>
             <IWCFilterSidebar filters={filters} setFilters={setFilters} />
             <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4">
-              {filtered.length} Ergebnisse anzeigen
+              {t('productGrid.showResults', { count: filtered.length })}
             </button>
           </div>
         </div>
