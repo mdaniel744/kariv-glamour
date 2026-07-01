@@ -15,7 +15,7 @@ export default function HublotInternalLinks() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('eyebrow.explore')}</span>
-          <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('heading.exploreMore')}</h2>
+          <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('heading.exploreMore')}</h2>
         </div>
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-5 gap-8">
           {HUBLOT_INTERNAL_LINKS.map((group, i) =>
