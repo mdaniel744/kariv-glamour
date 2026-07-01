@@ -17,15 +17,37 @@ export default function RolexIntro() {
           {localize({ title_en: 'An Icon of Swiss Watchmaking', title_de: 'Ein Ikon der Schweizer Uhrmacherei' }, 'title')}
         </motion.h2>
         <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-sm md:text-base leading-relaxed text-muted-foreground">
-          Rolex watches are admired for their precision, durability, and unmistakable design language. From{' '}
-          <LocalizedLink to="/rolex/datejust" className="underline decoration-dotted hover:opacity-70 text-primary">elegant classics</LocalizedLink>{' '}
-          to{' '}
-          <LocalizedLink to="/rolex/submariner" className="underline decoration-dotted hover:opacity-70 text-primary">professional tool watches</LocalizedLink>, Rolex has created some of the most recognizable timepieces in modern watchmaking. At Kariv Glamour, customers can explore{' '}
-          <a href="#rolex-products" className="underline decoration-dotted hover:opacity-70 text-primary">carefully selected Rolex watches</a>{' '}
-          with clear product details, transparent{' '}
-          <LocalizedLink to="/condition-grading" className="underline decoration-dotted hover:opacity-70 text-primary">condition grading</LocalizedLink>, and a refined shopping experience.
+          {localize({
+            text_en: 'Rolex watches are admired for their precision, durability, and unmistakable design language. From ',
+            text_de: 'Rolex Uhren werden für ihre Präzision, Haltbarkeit und unverkennbare Designsprache bewundert. Von '
+          }, 'text')}
+          <LocalizedLink to="/rolex/datejust" className="underline decoration-dotted hover:opacity-70 text-primary">
+            {localize({ text_en: 'elegant classics', text_de: 'eleganten Klassikern' }, 'text')}
+          </LocalizedLink>{' '}
+          {localize({ text_en: ' to ', text_de: ' bis zu ' }, 'text')}
+          <LocalizedLink to="/rolex/submariner" className="underline decoration-dotted hover:opacity-70 text-primary">
+            {localize({ text_en: 'professional tool watches', text_de: 'professionellen Tool-Watches' }, 'text')}
+          </LocalizedLink>
+          {localize({
+            text_en: ', Rolex has created some of the most recognizable timepieces in modern watchmaking. At Kariv Glamour, customers can explore ',
+            text_de: ' hat Rolex einige der erkennbarsten Zeitmesser der modernen Uhrmacherei geschaffen. Bei Kariv Glamour können Kunden '
+          }, 'text')}
+          <a href="#rolex-products" className="underline decoration-dotted hover:opacity-70 text-primary">
+            {localize({ text_en: 'carefully selected Rolex watches', text_de: 'sorgfältig ausgewählte Rolex Uhren' }, 'text')}
+          </a>{' '}
+          {localize({
+            text_en: ' with clear product details, transparent ',
+            text_de: ' mit klaren Produktdetails, transparenter '
+          }, 'text')}
+          <LocalizedLink to="/condition-grading" className="underline decoration-dotted hover:opacity-70 text-primary">
+            {localize({ text_en: 'condition grading', text_de: 'Zustandsbewertung' }, 'text')}
+          </LocalizedLink>
+          {localize({
+            text_en: ', and a refined shopping experience.',
+            text_de: ' und einem verfeinerten Einkaufserlebnis entdecken.'
+          }, 'text')}
         </motion.p>
       </div>
-    </section>);
-
+    </section>
+  );
 }
