@@ -139,9 +139,12 @@
     "sortYearNewest": "Year newest first",
     "sortFeatured": "Featured",
     "sortPopular": "Most popular",
+    "sortLimited": "Limited editions first",
     "caseSize": "Case Size",
     "priceRange": "Price Range",
     "clearFilters": "Clear all filters",
+    "features": "Features",
+    "type": "Type",
     "timepieces": "{{count}} timepieces"
   },
   "faq": {
