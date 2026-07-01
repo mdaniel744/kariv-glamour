@@ -1,0 +1,86 @@
+{
+  "name": "TranslationSettings",
+  "type": "object",
+  "properties": {
+    "defaultProvider": {
+      "type": "string",
+      "enum": [
+        "llm_builtin",
+        "deepl",
+        "openai",
+        "google",
+        "microsoft",
+        "custom"
+      ],
+      "default": "llm_builtin"
+    },
+    "autoTranslateNewContent": {
+      "type": "boolean",
+      "default": true
+    },
+    "publishMode": {
+      "type": "string",
+      "enum": [
+        "publish_immediately",
+        "draft",
+        "needs_review",
+        "manual_approval"
+      ],
+      "default": "publish_immediately"
+    },
+    "browserDetectionMode": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "suggestion_popup",
+        "auto_redirect"
+      ],
+      "default": "suggestion_popup"
+    },
+    "protectManualEdits": {
+      "type": "boolean",
+      "default": true
+    },
+    "defaultTone": {
+      "type": "string",
+      "enum": [
+        "formal",
+        "informal"
+      ],
+      "default": "formal"
+    },
+    "deeplApiKey": {
+      "type": "string"
+    },
+    "openaiApiKey": {
+      "type": "string"
+    },
+    "googleApiKey": {
+      "type": "string"
+    },
+    "microsoftApiKey": {
+      "type": "string"
+    },
+    "customApiUrl": {
+      "type": "string"
+    },
+    "customApiKey": {
+      "type": "string"
+    },
+    "monthlyCharacterQuota": {
+      "type": "number",
+      "default": 500000
+    },
+    "charactersUsedThisMonth": {
+      "type": "number",
+      "default": 0
+    },
+    "quotaResetDate": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "defaultProvider"
+  ]
+}

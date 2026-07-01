@@ -1,0 +1,44 @@
+{
+  "name": "WebsiteString",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string"
+    },
+    "sourceText": {
+      "type": "string"
+    },
+    "sourceLanguage": {
+      "type": "string",
+      "enum": [
+        "en",
+        "de"
+      ],
+      "default": "en"
+    },
+    "englishText": {
+      "type": "string"
+    },
+    "germanText": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_translated",
+        "pending",
+        "translated",
+        "needs_review",
+        "approved"
+      ],
+      "default": "not_translated"
+    }
+  },
+  "required": [
+    "key",
+    "sourceText"
+  ]
+}

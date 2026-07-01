@@ -108,6 +108,11 @@ import AdminGuides from '@/pages/admin/AdminGuides';
 import AdminLegal from '@/pages/admin/AdminLegal';
 import AdminFAQ from '@/pages/admin/AdminFAQ';
 import AdminDealerApplications from '@/pages/admin/AdminDealerApplications';
+import AdminTranslationDashboard from '@/pages/admin/AdminTranslationDashboard';
+import AdminGlossary from '@/pages/admin/AdminGlossary';
+import AdminStrings from '@/pages/admin/AdminStrings';
+import AdminTranslationSettings from '@/pages/admin/AdminTranslationSettings';
+import AdminTranslationLogs from '@/pages/admin/AdminTranslationLogs';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -521,6 +526,11 @@ const AuthenticatedApp = () => {
           <Route path="legal" element={<AdminLegal />} />
           <Route path="faq" element={<AdminFAQ />} />
           <Route path="dealer-applications" element={<AdminDealerApplications />} />
+          <Route path="translations" element={<AdminTranslationDashboard />} />
+          <Route path="glossary" element={<AdminGlossary />} />
+          <Route path="strings" element={<AdminStrings />} />
+          <Route path="translation-settings" element={<AdminTranslationSettings />} />
+          <Route path="translation-logs" element={<AdminTranslationLogs />} />
         </Route>
       </Route>
 

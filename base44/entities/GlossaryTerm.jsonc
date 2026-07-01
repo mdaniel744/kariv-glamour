@@ -1,0 +1,39 @@
+{
+  "name": "GlossaryTerm",
+  "type": "object",
+  "properties": {
+    "originalTerm": {
+      "type": "string"
+    },
+    "englishTranslation": {
+      "type": "string"
+    },
+    "germanTranslation": {
+      "type": "string"
+    },
+    "ruleType": {
+      "type": "string",
+      "enum": [
+        "always_translate",
+        "never_translate",
+        "preserve_original",
+        "custom_instruction"
+      ],
+      "default": "always_translate"
+    },
+    "customInstruction": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "originalTerm",
+    "ruleType"
+  ]
+}

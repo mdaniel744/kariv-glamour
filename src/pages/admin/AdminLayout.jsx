@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store } from 'lucide-react';
+import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText } from 'lucide-react';
 
 function AdminDarkMode() {
   useEffect(() => {
@@ -29,7 +29,12 @@ export default function AdminLayout() {
     { to: '/admin/customers', icon: Users, label: t('customers') },
     { to: '/admin/guides', icon: BookOpen, label: t('guides') },
     { to: '/admin/legal', icon: FileText, label: t('legal') },
-    { to: '/admin/faq', icon: HelpCircle, label: t('faq') }
+    { to: '/admin/faq', icon: HelpCircle, label: t('faq') },
+    { to: '/admin/translations', icon: Languages, label: 'Translations' },
+    { to: '/admin/glossary', icon: BookMarked, label: 'Glossary' },
+    { to: '/admin/strings', icon: Type, label: 'Strings' },
+    { to: '/admin/translation-settings', icon: Settings, label: 'Translation Settings' },
+    { to: '/admin/translation-logs', icon: ScrollText, label: 'Translation Logs' }
   ];
 
   return (
