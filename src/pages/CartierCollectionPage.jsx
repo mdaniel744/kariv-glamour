@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
 import { ChevronRight, Heart } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
@@ -9,19 +12,28 @@ import { formatPrice } from '@/lib/constants';
 import { CARTIER_COLLECTIONS, CARTIER_QUICK_FILTERS } from '@/lib/cartierData';
 import TrustBar from '@/components/shared/TrustBar';
 
+const BRAND = 'Cartier';
+
 export default function CartierCollectionPage() {
+  const { t } = useTranslation('brandComponents');
+  const { localize, locale } = useLocalizedField();
   const { slug } = useParams();
   const collection = CARTIER_COLLECTIONS.find(c => c.slug === slug);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { toggleWishlist, isInWishlist } = useCart();
 
+  useSEO({
+    title: collection ? localize(collection, 'shortDescription').slice(0, 60) : '',
+    description: collection ? localize(collection, 'shortDescription') : ''
+  });
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
         if (collection) {
-          const data = await base44.entities.Products.filter({ brand: 'Cartier', collection: collection.name }, '-created_date', 50);
+          const data = await base44.entities.Products.filter({ brand: BRAND, collection: collection.name }, '-created_date', 50);
           setProducts(data);
         }
       } catch (e) { console.error(e); } finally { setLoading(false); }
@@ -30,46 +42,38 @@ export default function CartierCollectionPage() {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  useEffect(() => {
-    if (collection) {
-      document.title = `Cartier ${collection.name} kaufen | Kariv Glamour`;
-      const m = document.querySelector('meta[name="description"]');
-      if (m) m.setAttribute('content', collection.shortDescription);
-    }
-  }, [slug]);
-
   if (!collection) {
-    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">Collection Not Found</h1><LocalizedLink to="/brands/cartier" className="text-sm underline text-primary">Return to Cartier</LocalizedLink></div>);
+    return (<div className="max-w-4xl mx-auto px-6 py-32 text-center bg-background"><h1 className="font-display text-3xl font-light mb-4 text-foreground">{t('collectionPage.notFound')}</h1><LocalizedLink to="/brands/cartier" className="text-sm underline text-primary">{t('collectionPage.returnToBrand', { brand: BRAND })}</LocalizedLink></div>);
   }
 
   return (
     <div className="bg-background">
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-          <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink><ChevronRight size={10} />
-          <LocalizedLink to="/brands" className="hover:text-foreground">Marken</LocalizedLink><ChevronRight size={10} />
-          <LocalizedLink to="/brands/cartier" className="hover:text-foreground">Cartier</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/" className="hover:text-foreground">{t('breadcrumb.home')}</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands" className="hover:text-foreground">{t('breadcrumb.brands')}</LocalizedLink><ChevronRight size={10} />
+          <LocalizedLink to="/brands/cartier" className="hover:text-foreground">{BRAND}</LocalizedLink><ChevronRight size={10} />
           <span className="text-foreground">{collection.name}</span>
         </div>
       </div>
 
       <section className="relative overflow-hidden py-20 md:py-32 bg-foreground">
         <div className="absolute inset-0">
-          {collection.image && <img src={collection.image} alt={`Cartier ${collection.name}`} className="w-full h-full object-cover opacity-25" />}
+          {collection.image && <img src={collection.image} alt={`${BRAND} ${collection.name}`} className="w-full h-full object-cover opacity-25" />}
           <div className="absolute inset-0 bg-gradient-to-r from-foreground to-foreground/60" />
         </div>
         <div className="relative max-w-7xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl">
-            <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">Cartier Collection</span>
+            <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('collectionPage.collectionLabel', { brand: BRAND })}</span>
             <h1 className="font-display text-4xl md:text-5xl font-light mb-5 text-background">{collection.name}</h1>
-            <p className="text-sm leading-relaxed max-w-xl text-background/70">{collection.shortDescription}</p>
+            <p className="text-sm leading-relaxed max-w-xl text-background/70">{localize(collection, 'shortDescription')}</p>
           </motion.div>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-6 mt-10">
         <div className="flex flex-wrap gap-2 justify-center">
-          {CARTIER_QUICK_FILTERS.map((chip, i) => <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>)}
+          {CARTIER_QUICK_FILTERS.map((chip, i) => <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{localize(chip, 'label')}</LocalizedLink>)}
         </div>
       </div>
 
@@ -77,10 +81,10 @@ export default function CartierCollectionPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="font-display text-2xl font-light text-foreground">Cartier {collection.name} Watches</h2>
-              <p className="text-xs mt-1 text-muted-foreground">{products.length} timepieces available</p>
+              <h2 className="font-display text-2xl font-light text-foreground">{t('collectionPage.watchesTitle', { brand: BRAND, collection: collection.name })}</h2>
+              <p className="text-xs mt-1 text-muted-foreground">{t('collectionPage.watchesAvailable', { count: products.length })}</p>
             </div>
-            <LocalizedLink to="/brands/cartier" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">All Cartier →</LocalizedLink>
+            <LocalizedLink to="/brands/cartier" className="text-[10px] tracking-[0.12em] uppercase text-primary hover:opacity-70">{t('collectionPage.allBrand', { brand: BRAND })} →</LocalizedLink>
           </div>
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">{[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}</div>
@@ -92,12 +96,12 @@ export default function CartierCollectionPage() {
                   <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
                     <LocalizedLink to={`/product/${p.id}`}>
                       <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
-                        {p.featuredImage ? <img src={p.featuredImage} alt={p.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.3em] uppercase">Cartier</span></div>}
+                        {p.featuredImage ? <img src={p.featuredImage} alt={localize(p, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.3em] uppercase">{BRAND}</span></div>}
                         <button onClick={(e) => { e.preventDefault(); toggleWishlist(p); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm"><Heart size={14} className={w ? 'fill-primary text-primary' : 'text-white'} /></button>
                       </div>
                       <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{p.brand}</p>
-                      <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{p.productTitle}</h3>
-                      <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">{p.referenceNumber && <span>Ref. {p.referenceNumber}</span>}{p.yearOfProduction && <span>· {p.yearOfProduction}</span>}</div>
+                      <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(p, 'productTitle')}</h3>
+                      <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">{p.referenceNumber && <span>{t('product.ref')} {p.referenceNumber}</span>}{p.yearOfProduction && <span>· {p.yearOfProduction}</span>}</div>
                       <p className="text-sm font-medium text-foreground">{formatPrice(p.price, p.currency)}</p>
                     </LocalizedLink>
                   </motion.div>
@@ -106,8 +110,8 @@ export default function CartierCollectionPage() {
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-sm mb-4 text-muted-foreground">No Cartier {collection.name} watches currently available. Please check back soon.</p>
-              <LocalizedLink to="/brands/cartier" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">View All Cartier Watches</LocalizedLink>
+              <p className="text-sm mb-4 text-muted-foreground">{t('collectionPage.noWatches', { brand: BRAND, collection: collection.name })}</p>
+              <LocalizedLink to="/brands/cartier" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">{t('collectionPage.viewAll', { brand: BRAND })}</LocalizedLink>
             </div>
           )}
         </div>

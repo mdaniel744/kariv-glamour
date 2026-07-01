@@ -137,7 +137,12 @@
     "sortPriceLow": "Preis aufsteigend",
     "sortPriceHigh": "Preis absteigend",
     "sortYearNewest": "Jahr neueste zuerst",
-    "sortFeatured": "Empfohlen"
+    "sortFeatured": "Empfohlen",
+    "sortPopular": "Beliebteste",
+    "caseSize": "Gehäusegröße",
+    "priceRange": "Preisbereich",
+    "clearFilters": "Alle Filter löschen",
+    "timepieces": "{{count}} Zeitmesser"
   },
   "faq": {
     "eyebrow": "FAQ",

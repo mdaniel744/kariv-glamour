@@ -137,7 +137,12 @@
     "sortPriceLow": "Price low to high",
     "sortPriceHigh": "Price high to low",
     "sortYearNewest": "Year newest first",
-    "sortFeatured": "Featured"
+    "sortFeatured": "Featured",
+    "sortPopular": "Most popular",
+    "caseSize": "Case Size",
+    "priceRange": "Price Range",
+    "clearFilters": "Clear all filters",
+    "timepieces": "{{count}} timepieces"
   },
   "faq": {
     "eyebrow": "FAQ",
