@@ -14,7 +14,7 @@ export default function HublotStoryTeaser() {
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
         <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('story.title', { brand: BRAND })}</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-6 text-foreground">{t('story.title', { brand: BRAND })}</h2>
+          <h2 className="text-3xl md:text-4xl mb-6 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('story.title', { brand: BRAND })}</h2>
           <p className="text-base leading-relaxed mb-6 text-muted-foreground">
             {localize({ text_en: 'Hublot is recognized for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design. Its collections are known for strong visual identity, technical presence and a distinctive fusion of materials. Explore the ', text_de: 'Hublot wird anerkannt für seinen modernen Ansatz in der Luxusuhrenherstellung, der unerwartete Materialien, markante Architektur und zeitgenössisches Design verbindet. Seine Kollektionen sind bekannt für starke visuelle Identität, technische Präsenz und eine unverkennbare Fusion von Materialien. Entdecken Sie die ' }, 'text')}
             <LocalizedLink to="/hublot/big-bang" className="text-primary underline">{localize({ text_en: 'Big Bang', text_de: 'Big Bang' }, 'text')}</LocalizedLink>
@@ -33,6 +33,6 @@ export default function HublotStoryTeaser() {
           <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-3">Art of Fusion</span>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
