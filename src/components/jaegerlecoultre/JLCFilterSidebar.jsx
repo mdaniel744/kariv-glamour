@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
 import { JLC_COLLECTIONS, JLC_CASE_MATERIALS, JLC_DIAL_COLORS, JLC_FEATURES, JLC_BRACELETS, JLC_CASE_SIZES, JLC_MOVEMENTS, JLC_WATCH_SHAPES, JLC_TYPES, JLC_BOX_PAPERS, JLC_AVAILABILITY } from '@/lib/jaegerLeCoultreData';
@@ -30,6 +31,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
 }
 
 export default function JLCFilterSidebar({ filters, setFilters }) {
+  const { t } = useTranslation('brandComponents');
   const [openGroups, setOpenGroups] = useState({ collection: true, features: true });
   const toggleGroup = (k) => setOpenGroups(p => ({ ...p, [k]: !p[k] }));
   const update = (k, v) => setFilters(p => ({ ...p, [k]: v }));
@@ -41,24 +43,24 @@ export default function JLCFilterSidebar({ filters, setFilters }) {
     <div>
       {activeCount > 0 && (
         <button onClick={reset} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-primary mb-4 hover:text-foreground transition-colors">
-          <X size={12} /> Alle Filter löschen
+          <X size={12} /> {t('productGrid.clearFilters')}
         </button>
       )}
-      <FilterGroup label="Kollektion" options={collectionNames} selected={filters.collection} onChange={v => update('collection', v)} open={openGroups.collection} onToggle={() => toggleGroup('collection')} />
-      <FilterGroup label="JLC Features" options={JLC_FEATURES} selected={filters.features} onChange={v => update('features', v)} open={openGroups.features} onToggle={() => toggleGroup('features')} />
-      <FilterGroup label="Uhrenform" options={JLC_WATCH_SHAPES} selected={filters.watchShape} onChange={v => update('watchShape', v)} open={openGroups.watchShape} onToggle={() => toggleGroup('watchShape')} />
-      <FilterGroup label="Uhrwerk" options={JLC_MOVEMENTS} selected={filters.movementType} onChange={v => update('movementType', v)} open={openGroups.movementType} onToggle={() => toggleGroup('movementType')} />
-      <FilterGroup label="Gehäusematerial" options={JLC_CASE_MATERIALS} selected={filters.caseMaterial} onChange={v => update('caseMaterial', v)} open={openGroups.caseMaterial} onToggle={() => toggleGroup('caseMaterial')} />
-      <FilterGroup label="Zifferblattfarbe" options={JLC_DIAL_COLORS} selected={filters.dialColor} onChange={v => update('dialColor', v)} open={openGroups.dialColor} onToggle={() => toggleGroup('dialColor')} />
-      <FilterGroup label="Armband / Band" options={JLC_BRACELETS} selected={filters.braceletMaterial} onChange={v => update('braceletMaterial', v)} open={openGroups.braceletMaterial} onToggle={() => toggleGroup('braceletMaterial')} />
-      <FilterGroup label="Zustand" options={CONDITIONS} selected={filters.condition} onChange={v => update('condition', v)} open={openGroups.condition} onToggle={() => toggleGroup('condition')} />
-      <FilterGroup label="Geschlecht" options={GENDERS} selected={filters.gender} onChange={v => update('gender', v)} open={openGroups.gender} onToggle={() => toggleGroup('gender')} />
-      <FilterGroup label="Gehäusegröße" options={JLC_CASE_SIZES} selected={filters.caseSize} onChange={v => update('caseSize', v)} open={openGroups.caseSize} onToggle={() => toggleGroup('caseSize')} />
-      <FilterGroup label="Typ" options={JLC_TYPES} selected={filters.type} onChange={v => update('type', v)} open={openGroups.type} onToggle={() => toggleGroup('type')} />
-      <FilterGroup label="Box & Papers" options={JLC_BOX_PAPERS} selected={filters.boxPapers} onChange={v => update('boxPapers', v)} open={openGroups.boxPapers} onToggle={() => toggleGroup('boxPapers')} />
-      <FilterGroup label="Verfügbarkeit" options={JLC_AVAILABILITY} selected={filters.availability} onChange={v => update('availability', v)} open={openGroups.availability} onToggle={() => toggleGroup('availability')} />
+      <FilterGroup label={t('productGrid.collection')} options={collectionNames} selected={filters.collection} onChange={v => update('collection', v)} open={openGroups.collection} onToggle={() => toggleGroup('collection')} />
+      <FilterGroup label={t('productGrid.features')} options={JLC_FEATURES} selected={filters.features} onChange={v => update('features', v)} open={openGroups.features} onToggle={() => toggleGroup('features')} />
+      <FilterGroup label={t('productGrid.watchShape')} options={JLC_WATCH_SHAPES} selected={filters.watchShape} onChange={v => update('watchShape', v)} open={openGroups.watchShape} onToggle={() => toggleGroup('watchShape')} />
+      <FilterGroup label={t('productGrid.movement')} options={JLC_MOVEMENTS} selected={filters.movementType} onChange={v => update('movementType', v)} open={openGroups.movementType} onToggle={() => toggleGroup('movementType')} />
+      <FilterGroup label={t('productGrid.caseMaterial')} options={JLC_CASE_MATERIALS} selected={filters.caseMaterial} onChange={v => update('caseMaterial', v)} open={openGroups.caseMaterial} onToggle={() => toggleGroup('caseMaterial')} />
+      <FilterGroup label={t('productGrid.dialColor')} options={JLC_DIAL_COLORS} selected={filters.dialColor} onChange={v => update('dialColor', v)} open={openGroups.dialColor} onToggle={() => toggleGroup('dialColor')} />
+      <FilterGroup label={t('productGrid.bracelet')} options={JLC_BRACELETS} selected={filters.braceletMaterial} onChange={v => update('braceletMaterial', v)} open={openGroups.braceletMaterial} onToggle={() => toggleGroup('braceletMaterial')} />
+      <FilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onChange={v => update('condition', v)} open={openGroups.condition} onToggle={() => toggleGroup('condition')} />
+      <FilterGroup label={t('productGrid.gender')} options={GENDERS} selected={filters.gender} onChange={v => update('gender', v)} open={openGroups.gender} onToggle={() => toggleGroup('gender')} />
+      <FilterGroup label={t('productGrid.caseSize')} options={JLC_CASE_SIZES} selected={filters.caseSize} onChange={v => update('caseSize', v)} open={openGroups.caseSize} onToggle={() => toggleGroup('caseSize')} />
+      <FilterGroup label={t('productGrid.type')} options={JLC_TYPES} selected={filters.type} onChange={v => update('type', v)} open={openGroups.type} onToggle={() => toggleGroup('type')} />
+      <FilterGroup label={t('productGrid.boxPapers')} options={JLC_BOX_PAPERS} selected={filters.boxPapers} onChange={v => update('boxPapers', v)} open={openGroups.boxPapers} onToggle={() => toggleGroup('boxPapers')} />
+      <FilterGroup label={t('productGrid.availability')} options={JLC_AVAILABILITY} selected={filters.availability} onChange={v => update('availability', v)} open={openGroups.availability} onToggle={() => toggleGroup('availability')} />
       <div className="border-b border-border py-4">
-        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">Preisbereich</p>
+        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">{t('productGrid.priceRange')}</p>
         <div className="flex gap-2">
           <input type="number" placeholder="Min" value={filters.priceMin} onChange={e => update('priceMin', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />
           <input type="number" placeholder="Max" value={filters.priceMax} onChange={e => update('priceMax', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />
