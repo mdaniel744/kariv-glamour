@@ -1,16 +1,22 @@
 import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { HUBLOT_COLLECTIONS } from '@/lib/hublotData';
 
+const BRAND = 'Hublot';
+
 export default function HublotCollectionGrid() {
+  const { t } = useTranslation('brandComponents');
+  const { localize } = useLocalizedField();
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Hublot Collections</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-4 text-foreground">Discover Hublot Collections</h2>
-          <p className="text-sm max-w-2xl mx-auto text-muted-foreground">Browse Hublot's most important watch families and find the model that best matches your style.</p>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('collectionCarousel.eyebrow')}</span>
+          <h2 className="font-display text-3xl md:text-4xl font-light mb-4 text-foreground">{t('collectionCarousel.heading', { brand: BRAND })}</h2>
+          <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {HUBLOT_COLLECTIONS.map((c, i) => (
@@ -21,8 +27,8 @@ export default function HublotCollectionGrid() {
                 </div>
                 <div className="p-6">
                   <h3 className="font-display text-xl mb-2 text-foreground">{c.name}</h3>
-                  <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{c.shortDescription}</p>
-                  <span className="text-[10px] tracking-[0.15em] uppercase text-primary">Explore Collection →</span>
+                  <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{localize(c, 'shortDescription')}</p>
+                  <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('collectionCarousel.exploreCollection')} →</span>
                 </div>
               </LocalizedLink>
             </motion.div>

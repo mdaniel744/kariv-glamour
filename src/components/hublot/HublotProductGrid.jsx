@@ -1,24 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { useTranslation } from 'react-i18next';
+import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import HublotFilterSidebar from './HublotFilterSidebar';
 import HublotProductCard from './HublotProductCard';
 import { HUBLOT_QUICK_FILTERS } from '@/lib/hublotData';
 
-const SORT_OPTIONS = [
-  { value: '-created_date', label: 'Featured' },
-  { value: 'newest', label: 'Neueste Ankünfte' },
-  { value: 'price', label: 'Preis: Niedrig zu Hoch' },
-  { value: '-price', label: 'Preis: Hoch zu Niedrig' },
-  { value: '-yearOfProduction', label: 'Jahr: Neueste zuerst' },
-  { value: 'popular', label: 'Beliebteste' },
-  { value: 'limited', label: 'Limitierte Auflagen zuerst' },
-];
+const BRAND = 'Hublot';
 
 const parseSize = (s) => { if (!s) return null; const m = String(s).match(/(\d+(\.\d+)?)/); return m ? parseFloat(m[1]) : null; };
 
 export default function HublotProductGrid() {
+  const { t } = useTranslation('brandComponents');
+  const { localize } = useLocalizedField();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
@@ -29,12 +25,22 @@ export default function HublotProductGrid() {
     const load = async () => {
       setLoading(true);
       try {
-        const data = await base44.entities.Products.filter({ brand: 'Hublot' }, '-created_date', 100);
+        const data = await base44.entities.Products.filter({ brand: BRAND }, '-created_date', 100);
         setProducts(data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };
     load();
   }, []);
+
+  const SORT_OPTIONS = [
+    { value: '-created_date', label: t('productGrid.sortFeatured') },
+    { value: 'newest', label: t('productGrid.sortNewest') },
+    { value: 'price', label: t('productGrid.sortPriceLow') },
+    { value: '-price', label: t('productGrid.sortPriceHigh') },
+    { value: '-yearOfProduction', label: t('productGrid.sortYearNewest') },
+    { value: 'popular', label: t('productGrid.sortPopular') },
+    { value: 'limited', label: t('productGrid.sortLimited') },
+  ];
 
   const filtered = useMemo(() => {
     const f = filters;
@@ -69,21 +75,21 @@ export default function HublotProductGrid() {
     <section id="shop" className="py-16 md:py-24 bg-secondary">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
-          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">Hublot Boutique</span>
-          <h2 className="font-display text-3xl md:text-4xl font-light text-foreground">Shop Hublot Uhren</h2>
+          <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('productGrid.eyebrow')}</span>
+          <h2 className="font-display text-3xl md:text-4xl font-light text-foreground">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {HUBLOT_QUICK_FILTERS.map((chip, i) => (
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{chip.label}</LocalizedLink>
+            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{localize(chip, 'label')}</LocalizedLink>
           ))}
         </div>
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
-            <SlidersHorizontal size={14} /> Filter
+            <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
-          <p className="hidden md:block text-xs text-muted-foreground">{filtered.length} Zeitmesser</p>
+          <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.timepieces', { count: filtered.length })}</p>
           <div className="flex items-center gap-2 ml-auto">
             <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} className="bg-popover text-foreground">{o.label}</option>)}
@@ -102,8 +108,8 @@ export default function HublotProductGrid() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-sm text-muted-foreground">Keine Hublot Uhren gefunden, die Ihren Kriterien entsprechen.</p>
-                <LocalizedLink to="/hublot-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">Alle Hublot Uhren ansehen</LocalizedLink>
+                <p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p>
+                <LocalizedLink to="/hublot-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">{t('seoLanding.viewAll', { brand: BRAND })}</LocalizedLink>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -118,12 +124,12 @@ export default function HublotProductGrid() {
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl text-foreground">Filter</h2>
+              <h2 className="font-display text-xl text-foreground">{t('productGrid.filter')}</h2>
               <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground"><X size={20} /></button>
             </div>
             <HublotFilterSidebar filters={filters} setFilters={setFilters} />
             <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4">
-              {filtered.length} Ergebnisse anzeigen
+              {t('productGrid.showResults', { count: filtered.length })}
             </button>
           </div>
         </div>
