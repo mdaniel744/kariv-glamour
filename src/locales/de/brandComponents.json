@@ -77,5 +77,113 @@
   },
   "story": {
     "title": "Die {{brand}} Geschichte"
+  },
+  "hero": {
+    "boutique": "{{brand}} Boutique",
+    "title": "{{brand}} Uhren bei Kariv Glamour",
+    "description": "Entdecken Sie eine kuratierte Auswahl an {{brand}} Uhren — von zeitlosen Dress-Watches bis zu ikonischen Sammlermodellen.",
+    "shopCTA": "{{brand}} Uhren kaufen",
+    "discoverCollections": "{{brand}} Kollektionen entdecken",
+    "anchorCollections": "Kollektionen",
+    "anchorNewArrivals": "Neuheiten",
+    "anchorPreOwned": "Gebrauchte {{brand}}",
+    "anchorBuyingGuide": "{{brand}} Kaufberatung",
+    "anchorWatchmaking": "Uhrmacherei",
+    "anchorMaintenance": "Wartung"
+  },
+  "intro": {
+    "eyebrow": "Einleitung",
+    "title": "Ein Ikon der feinen Uhrmacherei"
+  },
+  "collectionCarousel": {
+    "eyebrow": "Kollektionen",
+    "heading": "{{brand}} Kollektionen entdecken",
+    "description": "Entdecken Sie die wichtigsten {{brand}} Uhrenfamilien, von zeitlosen Dress-Watches bis zu komplexen Meisterwerken und modernen Sport-Icons.",
+    "exploreCollection": "Kollektion entdecken"
+  },
+  "productGrid": {
+    "eyebrow": "Shop",
+    "heading": "{{brand}} Uhren kaufen",
+    "filter": "Filter",
+    "count": "{{count}} {{brand}} Uhren",
+    "noMatches": "Keine {{brand}} Uhren entsprechen aktuell Ihren Filtern. Bitte anpassen oder alle Kollektionen entdecken.",
+    "quickView": "Schnellansicht",
+    "viewDetails": "Details ansehen",
+    "box": "Box",
+    "noBox": "Keine Box",
+    "papers": "Papiere",
+    "noPapers": "Keine Papiere",
+    "new": "Neu",
+    "verified": "Verifiziert",
+    "boxPapers": "Box & Papiere",
+    "any": "Beliebig",
+    "boxOnly": "Nur Box",
+    "papersOnly": "Nur Papiere",
+    "availability": "Verfügbarkeit",
+    "inStock": "Auf Lager",
+    "sold": "Verkauft",
+    "reserved": "Reserviert",
+    "comingSoon": "Bald verfügbar",
+    "showResults": "{{count}} Ergebnisse anzeigen",
+    "condition": "Zustand",
+    "caseMaterial": "Gehäusematerial",
+    "dialColor": "Zifferblattfarbe",
+    "gender": "Geschlecht",
+    "bracelet": "Armband",
+    "movement": "Uhrwerk",
+    "watchShape": "Uhrenform",
+    "complication": "Komplikation",
+    "sortNewest": "Neueste Ankünfte",
+    "sortPriceLow": "Preis aufsteigend",
+    "sortPriceHigh": "Preis absteigend",
+    "sortYearNewest": "Jahr neueste zuerst",
+    "sortFeatured": "Empfohlen"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "heading": "{{brand}} FAQ",
+    "contactCS": "Kundenservice kontaktieren"
+  },
+  "trustSection": {
+    "eyebrow": "Vertrauen",
+    "heading": "{{brand}} Uhren zuversichtlich kaufen",
+    "description": "Bei Kariv Glamour verpflichten wir uns zu Transparenz, Authentizität und einem sammlerorientierten Einkaufserlebnis. Jede {{brand}} Uhr wird mit den Details präsentiert, die zählen."
+  },
+  "internalLinks": {
+    "popularSearches": "Beliebte {{brand}} Suchanfragen",
+    "iconicCollections": "Ikonische {{brand}} Kollektionen",
+    "complicationsGuides": "Komplikationen und Sammler-Guides",
+    "learningGuides": "{{brand}} Lern-Guides",
+    "relatedBrands": "Verwandte Luxusuhren-Marken",
+    "relatedCategories": "Verwandte Uhren-Kategorien"
+  },
+  "seoLanding": {
+    "boutique": "{{brand}} Boutique",
+    "availableWatches": "Verfügbare {{brand}} Uhren",
+    "noWatches": "Aktuell sind keine {{brand}} Uhren in dieser Kategorie verfügbar.",
+    "viewAll": "Alle {{brand}} Uhren ansehen",
+    "exploreFullCollection": "Die gesamte {{brand}} Kollektion entdecken",
+    "visitBoutique": "{{brand}} Boutique besuchen",
+    "pageNotFound": "Seite nicht gefunden",
+    "returnToBrand": "Zurück zu {{brand}}",
+    "guideText1": "Bei Kariv Glamour glauben wir, dass der Kauf einer {{brand}} Uhr eine informierte und zuversichtliche Erfahrung sein sollte. Egal, ob Sie Ihre erste {{brand}} in Betracht ziehen oder eine bestehende Sammlung erweitern — das Verständnis der Nuancen jeder Kollektion, jedes Zustands und jeder Referenz ist entscheidend.",
+    "guideText2": "Unser Team aus Uhrenexperten prüft jede Uhr sorgfältig und präsentiert sie mit transparenten Produktdetails, klarer Zustandsbewertung und Referenznummern-Sichtbarkeit. Wir verkaufen keine Replika- oder Fälschungsuhren, und jede Produktseite bietet die Informationen, die Sie für eine zuversichtliche Entscheidung benötigen.",
+    "guideText3": "Entdecken Sie unsere vollständige {{brand}} Kollektion, stöbern Sie nach Modelfamilien oder lesen Sie unsere Bildungsguides, um Ihr Verständnis von {{brand}} Uhrmacherei, Wartung und Erbe zu vertiefen.",
+    "shopWatches": "{{brand}} Uhren kaufen",
+    "preOwned": "Gebrauchte {{brand}}"
+  },
+  "collectionPage": {
+    "collectionLabel": "{{brand}} Kollektion",
+    "watchesAvailable": "{{count}} Zeitmesser verfügbar",
+    "allBrand": "Alle {{brand}}",
+    "noWatches": "Aktuell sind keine {{brand}} {{collection}} Uhren verfügbar. Bitte kommen Sie bald wieder.",
+    "viewAll": "Alle {{brand}} Uhren ansehen",
+    "notFound": "Kollektion nicht gefunden",
+    "returnToBrand": "Zurück zu {{brand}}",
+    "watchesTitle": "{{brand}} {{collection}} Uhren"
+  },
+  "breadcrumb": {
+    "home": "Start",
+    "brands": "Marken"
   }
 }

@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import RolexHero from '@/components/rolex/RolexHero';
 import RolexIntro from '@/components/rolex/RolexIntro';
 import RolexCollectionCarousel from '@/components/rolex/RolexCollectionCarousel';
@@ -13,29 +15,31 @@ import RolexFinalCTA from '@/components/rolex/RolexFinalCTA';
 import TrustBar from '@/components/shared/TrustBar';
 import { ROLEX_EDITORIAL_SECTIONS } from '@/lib/rolexData';
 
-export default function RolexPage() {
-  useEffect(() => {
-    document.title = 'Rolex kaufen | Neue & gebrauchte Rolex Uhren | Kariv Glamour';
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', 'Entdecken Sie Rolex Uhren bei Kariv Glamour. Kaufen Sie neue, gebrauchte und vintage Rolex Modelle wie Submariner, Daytona, Datejust, GMT-Master II, Day-Date und Oyster Perpetual mit transparenter Produktinformation.');
-    }
+const BRAND = 'Rolex';
 
-    // Breadcrumb structured data
+export default function RolexPage() {
+  const { localize } = useLocalizedField();
+  const seo = {
+    title_de: `${BRAND} kaufen | Neue & gebrauchte ${BRAND} Uhren | Kariv Glamour`,
+    title_en: `Buy ${BRAND} | New & Pre-Owned ${BRAND} Watches | Kariv Glamour`,
+    description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Kaufen Sie neue, gebrauchte und vintage ${BRAND} Modelle wie Submariner, Daytona, Datejust, GMT-Master II, Day-Date und Oyster Perpetual mit transparenter Produktinformation.`,
+    description_en: `Discover ${BRAND} watches at Kariv Glamour. Buy new, pre-owned, and vintage ${BRAND} models like Submariner, Daytona, Datejust, GMT-Master II, Day-Date, and Oyster Perpetual with transparent product information.`,
+  };
+  useSEO({ title: localize(seo, 'title'), description: localize(seo, 'description') });
+
+  useEffect(() => {
     const breadcrumbSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
+      '@context': 'https://schema.org', '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },
         { '@type': 'ListItem', position: 2, name: 'Brands', item: window.location.origin + '/brands' },
-        { '@type': 'ListItem', position: 3, name: 'Rolex', item: window.location.origin + '/brands/rolex' },
+        { '@type': 'ListItem', position: 3, name: BRAND, item: window.location.origin + '/brands/rolex' },
       ],
     };
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.text = JSON.stringify(breadcrumbSchema);
     document.head.appendChild(script);
-
     window.scrollTo(0, 0);
     return () => { document.head.removeChild(script); };
   }, []);

@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import IWCHero from '@/components/iwc/IWCHero';
 import IWCIntro from '@/components/iwc/IWCIntro';
 import IWCCollectionGrid from '@/components/iwc/IWCCollectionGrid';
@@ -11,16 +13,18 @@ import IWCFAQ from '@/components/iwc/IWCFAQ';
 import IWCFinalCTA from '@/components/iwc/IWCFinalCTA';
 
 export default function IWCPage() {
+  const { localize } = useLocalizedField();
+  const BRAND = 'IWC Schaffhausen';
+  useSEO({
+    title: localize({ title_de: `${BRAND} Uhr | ${BRAND} Uhren & Kollektionen | Kariv Glamour`, title_en: `${BRAND} Watch | ${BRAND} Watches & Collections | Kariv Glamour` }, 'title'),
+    description: localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie IWC Modelle aus Pilot\u2019s Watches, Portugieser, Portofino, Ingenieur und Aquatimer mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare IWC models from Pilot\u2019s Watches, Portugieser, Portofino, Ingenieur, and Aquatimer with transparent product information.` }, 'description'),
+  });
   useEffect(() => {
-    document.title = 'IWC Schaffhausen Uhr | IWC Schaffhausen Uhren & Kollektionen | Kariv Glamour';
-    const desc = 'Entdecken Sie IWC Schaffhausen Uhren bei Kariv Glamour. Vergleichen Sie IWC Modelle aus Pilot\u2019s Watches, Portugieser, Portofino, Ingenieur und Aquatimer mit transparenter Produktinformation.';
-    let m = document.querySelector('meta[name="description"]');
-    if (m) m.setAttribute('content', desc);
-    else { m = document.createElement('meta'); m.name = 'description'; m.content = desc; document.head.appendChild(m); }
+    const desc = localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie IWC Modelle aus Pilot\u2019s Watches, Portugieser, Portofino, Ingenieur und Aquatimer mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare IWC models from Pilot\u2019s Watches, Portugieser, Portofino, Ingenieur, and Aquatimer with transparent product information.` }, 'description');
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', name: 'IWC Schaffhausen Uhren at Kariv Glamour', description: desc, url: window.location.href },
+        { '@type': 'WebPage', name: `${BRAND} Watches at Kariv Glamour`, description: desc, url: window.location.href },
         { '@type': 'Organization', name: 'Kariv Glamour', url: window.location.origin },
         { '@type': 'BreadcrumbList', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },

@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import TAGHeuerHero from '@/components/tagheuer/TAGHeuerHero';
 import TAGHeuerIntro from '@/components/tagheuer/TAGHeuerIntro';
 import TAGHeuerCollectionGrid from '@/components/tagheuer/TAGHeuerCollectionGrid';
@@ -11,16 +13,18 @@ import TAGHeuerFAQ from '@/components/tagheuer/TAGHeuerFAQ';
 import TAGHeuerFinalCTA from '@/components/tagheuer/TAGHeuerFinalCTA';
 
 export default function TAGHeuerPage() {
+  const { localize } = useLocalizedField();
+  const BRAND = 'TAG Heuer';
+  useSEO({
+    title: localize({ title_de: `${BRAND} Uhr | ${BRAND} Uhren & Kollektionen | Kariv Glamour`, title_en: `${BRAND} Watch | ${BRAND} Watches & Collections | Kariv Glamour` }, 'title'),
+    description: localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Carrera, Aquaracer, Formula 1, Monaco, Connected und Link mit Chronographen, Motorsport-Heritage und Smartwatch-Features.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare models from Carrera, Aquaracer, Formula 1, Monaco, Connected, and Link with chronographs, motorsport heritage, and smartwatch features.` }, 'description'),
+  });
   useEffect(() => {
-    document.title = 'TAG Heuer Uhr | TAG Heuer Uhren & Kollektionen | Kariv Glamour';
-    const desc = 'Entdecken Sie TAG Heuer Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Carrera, Aquaracer, Formula 1, Monaco, Connected und Link mit Chronographen, Motorsport-Heritage und Smartwatch-Features.';
-    let m = document.querySelector('meta[name="description"]');
-    if (m) m.setAttribute('content', desc);
-    else { m = document.createElement('meta'); m.name = 'description'; m.content = desc; document.head.appendChild(m); }
+    const desc = localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Carrera, Aquaracer, Formula 1, Monaco, Connected und Link mit Chronographen, Motorsport-Heritage und Smartwatch-Features.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare models from Carrera, Aquaracer, Formula 1, Monaco, Connected, and Link with chronographs, motorsport heritage, and smartwatch features.` }, 'description');
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', name: 'TAG Heuer Uhren at Kariv Glamour', description: desc, url: window.location.href },
+        { '@type': 'WebPage', name: `${BRAND} Watches at Kariv Glamour`, description: desc, url: window.location.href },
         { '@type': 'Organization', name: 'Kariv Glamour', url: window.location.origin },
         { '@type': 'BreadcrumbList', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },

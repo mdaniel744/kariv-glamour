@@ -77,5 +77,113 @@
   },
   "story": {
     "title": "The {{brand}} Story"
+  },
+  "hero": {
+    "boutique": "{{brand}} Boutique",
+    "title": "{{brand}} Watches at Kariv Glamour",
+    "description": "Discover a curated selection of {{brand}} watches, from timeless dress watches to iconic collector models.",
+    "shopCTA": "Shop {{brand}} Watches",
+    "discoverCollections": "Discover {{brand}} Collections",
+    "anchorCollections": "Collections",
+    "anchorNewArrivals": "New Arrivals",
+    "anchorPreOwned": "Pre-Owned {{brand}}",
+    "anchorBuyingGuide": "{{brand}} Buying Guide",
+    "anchorWatchmaking": "Watchmaking",
+    "anchorMaintenance": "Maintenance"
+  },
+  "intro": {
+    "eyebrow": "Introduction",
+    "title": "An Icon of Fine Watchmaking"
+  },
+  "collectionCarousel": {
+    "eyebrow": "Collections",
+    "heading": "Discover {{brand}} Collections",
+    "description": "Explore the most important {{brand}} watch families, from timeless dress watches to complicated masterpieces and modern sports icons.",
+    "exploreCollection": "Explore Collection"
+  },
+  "productGrid": {
+    "eyebrow": "Shop",
+    "heading": "Shop {{brand}} Watches",
+    "filter": "Filter",
+    "count": "{{count}} {{brand}} watches",
+    "noMatches": "No {{brand}} watches currently match your filters. Please adjust or explore all collections.",
+    "quickView": "Quick View",
+    "viewDetails": "View Details",
+    "box": "Box",
+    "noBox": "No Box",
+    "papers": "Papers",
+    "noPapers": "No Papers",
+    "new": "New",
+    "verified": "Verified",
+    "boxPapers": "Box & Papers",
+    "any": "Any",
+    "boxOnly": "Box Only",
+    "papersOnly": "Papers Only",
+    "availability": "Availability",
+    "inStock": "In Stock",
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "comingSoon": "Coming Soon",
+    "showResults": "Show {{count}} results",
+    "condition": "Condition",
+    "caseMaterial": "Case Material",
+    "dialColor": "Dial Color",
+    "gender": "Gender",
+    "bracelet": "Bracelet",
+    "movement": "Movement",
+    "watchShape": "Watch Shape",
+    "complication": "Complication",
+    "sortNewest": "Newest arrivals",
+    "sortPriceLow": "Price low to high",
+    "sortPriceHigh": "Price high to low",
+    "sortYearNewest": "Year newest first",
+    "sortFeatured": "Featured"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "heading": "{{brand}} FAQ",
+    "contactCS": "Contact Customer Service"
+  },
+  "trustSection": {
+    "eyebrow": "Trust",
+    "heading": "Buying {{brand}} Watches with Confidence",
+    "description": "At Kariv Glamour, we are committed to transparency, authenticity, and a collector-focused shopping experience. Every {{brand}} watch is presented with the details that matter."
+  },
+  "internalLinks": {
+    "popularSearches": "Popular {{brand}} Searches",
+    "iconicCollections": "Iconic {{brand}} Collections",
+    "complicationsGuides": "Complications and Collector Guides",
+    "learningGuides": "{{brand}} Learning Guides",
+    "relatedBrands": "Related Luxury Watch Brands",
+    "relatedCategories": "Related Watch Categories"
+  },
+  "seoLanding": {
+    "boutique": "{{brand}} Boutique",
+    "availableWatches": "Available {{brand}} Watches",
+    "noWatches": "No {{brand}} watches currently available in this category.",
+    "viewAll": "View All {{brand}} Watches",
+    "exploreFullCollection": "Explore the Full {{brand}} Collection",
+    "visitBoutique": "Visit {{brand}} Boutique",
+    "pageNotFound": "Page Not Found",
+    "returnToBrand": "Return to {{brand}}",
+    "guideText1": "At Kariv Glamour, we believe that buying a {{brand}} should be an informed and confident experience. Whether you are considering your first {{brand}} or adding to an established collection, understanding the nuances of each collection, condition, and reference is essential.",
+    "guideText2": "Our team of horological experts carefully reviews each timepiece, presenting it with transparent product details, clear condition grading, and reference number visibility. We do not sell replica or counterfeit watches, and every product page provides the information you need to make a confident decision.",
+    "guideText3": "Explore our full {{brand}} collection, browse by model family, or read our educational guides to deepen your understanding of {{brand}} watchmaking, maintenance, and heritage.",
+    "shopWatches": "Shop {{brand}} Watches",
+    "preOwned": "Pre-Owned {{brand}}"
+  },
+  "collectionPage": {
+    "collectionLabel": "{{brand}} Collection",
+    "watchesAvailable": "{{count}} timepieces available",
+    "allBrand": "All {{brand}}",
+    "noWatches": "No {{brand}} {{collection}} watches currently available. Please check back soon.",
+    "viewAll": "View All {{brand}} Watches",
+    "notFound": "Collection Not Found",
+    "returnToBrand": "Return to {{brand}}",
+    "watchesTitle": "{{brand}} {{collection}} Watches"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "brands": "Brands"
   }
 }

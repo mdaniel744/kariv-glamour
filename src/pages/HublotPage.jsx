@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import HublotHero from '@/components/hublot/HublotHero';
 import HublotIntro from '@/components/hublot/HublotIntro';
 import HublotCollectionGrid from '@/components/hublot/HublotCollectionGrid';
@@ -11,16 +13,18 @@ import HublotFAQ from '@/components/hublot/HublotFAQ';
 import HublotFinalCTA from '@/components/hublot/HublotFinalCTA';
 
 export default function HublotPage() {
+  const { localize } = useLocalizedField();
+  const BRAND = 'Hublot';
+  useSEO({
+    title: localize({ title_de: `${BRAND} Uhr | ${BRAND} Uhren & Kollektionen | Kariv Glamour`, title_en: `${BRAND} Watch | ${BRAND} Watches & Collections | Kariv Glamour` }, 'title'),
+    description: localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie ${BRAND} Modelle wie Big Bang, Big Bang Unico, Classic Fusion, Spirit of Big Bang und Square Bang mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare ${BRAND} models like Big Bang, Big Bang Unico, Classic Fusion, Spirit of Big Bang, and Square Bang with transparent product information.` }, 'description'),
+  });
   useEffect(() => {
-    document.title = 'Hublot Uhr | Hublot Uhren & Kollektionen | Kariv Glamour';
-    const desc = 'Entdecken Sie Hublot Uhren bei Kariv Glamour. Vergleichen Sie Hublot Modelle wie Big Bang, Big Bang Unico, Classic Fusion, Spirit of Big Bang und Square Bang mit transparenter Produktinformation.';
-    let m = document.querySelector('meta[name="description"]');
-    if (m) m.setAttribute('content', desc);
-    else { m = document.createElement('meta'); m.name = 'description'; m.content = desc; document.head.appendChild(m); }
+    const desc = localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie ${BRAND} Modelle wie Big Bang, Big Bang Unico, Classic Fusion, Spirit of Big Bang und Square Bang mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare ${BRAND} models like Big Bang, Big Bang Unico, Classic Fusion, Spirit of Big Bang, and Square Bang with transparent product information.` }, 'description');
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', name: 'Hublot Uhren at Kariv Glamour', description: desc, url: window.location.href },
+        { '@type': 'WebPage', name: `${BRAND} Watches at Kariv Glamour`, description: desc, url: window.location.href },
         { '@type': 'Organization', name: 'Kariv Glamour', url: window.location.origin },
         { '@type': 'BreadcrumbList', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },

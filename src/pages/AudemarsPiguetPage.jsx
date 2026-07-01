@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import APHero from '@/components/audemarspiguet/APHero';
 import APIntro from '@/components/audemarspiguet/APIntro';
 import APCollectionGrid from '@/components/audemarspiguet/APCollectionGrid';
@@ -11,16 +13,18 @@ import APFAQ from '@/components/audemarspiguet/APFAQ';
 import APFinalCTA from '@/components/audemarspiguet/APFinalCTA';
 
 export default function AudemarsPiguetPage() {
+  const { localize } = useLocalizedField();
+  const BRAND = 'Audemars Piguet';
+  useSEO({
+    title: localize({ title_de: `${BRAND} Uhr | ${BRAND} Uhren & Kollektionen | Kariv Glamour`, title_en: `${BRAND} Watch | ${BRAND} Watches & Collections | Kariv Glamour` }, 'title'),
+    description: localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie AP Modelle wie Royal Oak, Royal Oak Offshore, Royal Oak Concept und Code 11.59 mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare AP models like Royal Oak, Royal Oak Offshore, Royal Oak Concept, and Code 11.59 with transparent product information.` }, 'description'),
+  });
   useEffect(() => {
-    document.title = 'Audemars Piguet Uhr | Audemars Piguet Uhren & Kollektionen | Kariv Glamour';
-    const desc = 'Entdecken Sie Audemars Piguet Uhren bei Kariv Glamour. Vergleichen Sie AP Modelle wie Royal Oak, Royal Oak Offshore, Royal Oak Concept und Code 11.59 mit transparenter Produktinformation.';
-    let m = document.querySelector('meta[name="description"]');
-    if (m) m.setAttribute('content', desc);
-    else { m = document.createElement('meta'); m.name = 'description'; m.content = desc; document.head.appendChild(m); }
+    const desc = localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie AP Modelle wie Royal Oak, Royal Oak Offshore, Royal Oak Concept und Code 11.59 mit transparenter Produktinformation.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare AP models like Royal Oak, Royal Oak Offshore, Royal Oak Concept, and Code 11.59 with transparent product information.` }, 'description');
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', name: 'Audemars Piguet Uhren at Kariv Glamour', description: desc, url: window.location.href },
+        { '@type': 'WebPage', name: `${BRAND} Watches at Kariv Glamour`, description: desc, url: window.location.href },
         { '@type': 'Organization', name: 'Kariv Glamour', url: window.location.origin },
         { '@type': 'BreadcrumbList', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },

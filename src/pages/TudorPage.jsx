@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
+import { useSEO } from '@/hooks/useSEO';
 import TudorHero from '@/components/tudor/TudorHero';
 import TudorIntro from '@/components/tudor/TudorIntro';
 import TudorCollectionGrid from '@/components/tudor/TudorCollectionGrid';
@@ -11,16 +13,18 @@ import TudorFAQ from '@/components/tudor/TudorFAQ';
 import TudorFinalCTA from '@/components/tudor/TudorFinalCTA';
 
 export default function TudorPage() {
+  const { localize } = useLocalizedField();
+  const BRAND = 'Tudor';
+  useSEO({
+    title: localize({ title_de: `${BRAND} Uhr | ${BRAND} Uhren & Kollektionen | Kariv Glamour`, title_en: `${BRAND} Watch | ${BRAND} Watches & Collections | Kariv Glamour` }, 'title'),
+    description: localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Black Bay, Pelagos, Tudor Royal, Ranger, 1926 und Clair de Rose mit Tauchuhr-Heritage, Tool-Watch-Charakter und Schweizer Präzision.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare models from Black Bay, Pelagos, Tudor Royal, Ranger, 1926, and Clair de Rose with dive-watch heritage, tool-watch character, and Swiss precision.` }, 'description'),
+  });
   useEffect(() => {
-    document.title = 'Tudor Uhr | Tudor Uhren & Kollektionen | Kariv Glamour';
-    const desc = 'Entdecken Sie Tudor Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Black Bay, Pelagos, Tudor Royal, Ranger, 1926 und Clair de Rose mit Tauchuhr-Heritage, Tool-Watch-Charakter und Schweizer Präzision.';
-    let m = document.querySelector('meta[name="description"]');
-    if (m) m.setAttribute('content', desc);
-    else { m = document.createElement('meta'); m.name = 'description'; m.content = desc; document.head.appendChild(m); }
+    const desc = localize({ description_de: `Entdecken Sie ${BRAND} Uhren bei Kariv Glamour. Vergleichen Sie Modelle aus Black Bay, Pelagos, Tudor Royal, Ranger, 1926 und Clair de Rose mit Tauchuhr-Heritage, Tool-Watch-Charakter und Schweizer Präzision.`, description_en: `Discover ${BRAND} watches at Kariv Glamour. Compare models from Black Bay, Pelagos, Tudor Royal, Ranger, 1926, and Clair de Rose with dive-watch heritage, tool-watch character, and Swiss precision.` }, 'description');
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', name: 'Tudor Uhren at Kariv Glamour', description: desc, url: window.location.href },
+        { '@type': 'WebPage', name: `${BRAND} Watches at Kariv Glamour`, description: desc, url: window.location.href },
         { '@type': 'Organization', name: 'Kariv Glamour', url: window.location.origin },
         { '@type': 'BreadcrumbList', itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin + '/' },
