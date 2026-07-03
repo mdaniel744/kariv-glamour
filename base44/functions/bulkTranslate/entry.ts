@@ -1,264 +1,243 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
-const TRANSLATABLE_ENTITIES = [
-  'Products',
-  'Brands',
-  'Collections',
-  'FAQ',
-  'LegalPages',
-  'WatchGuides'
-];
-
+const TRANSLATABLE_ENTITIES = ['Products', 'Brands', 'Collections', 'FAQ', 'LegalPages', 'WatchGuides'];
 const TRANSLATABLE_FIELDS = {
-  Products: [
-    'productTitle', 'productDescription', 'shortDescription', 'functions',
-    'serviceHistory', 'polishedStatus', 'originalPartsStatus', 'warrantyType',
-    'shippingInfo', 'scopeOfDelivery', 'metaTitle', 'metaDescription',
-    'seoKeywords', 'googleMerchantTitle', 'googleMerchantDescription'
-  ],
-  Brands: [
-    'brandName', 'shortDescription', 'longDescription', 'brandDisclaimer',
-    'seoTitle', 'seoDescription', 'seoKeywords', 'buyingGuideContent'
-  ],
-  Collections: [
-    'collectionName', 'description', 'seoTitle', 'seoDescription', 'seoKeywords'
-  ],
+  Products: ['productTitle', 'productDescription', 'shortDescription', 'functions', 'serviceHistory', 'polishedStatus', 'originalPartsStatus', 'warrantyType', 'shippingInfo', 'scopeOfDelivery', 'metaTitle', 'metaDescription', 'seoKeywords', 'googleMerchantTitle', 'googleMerchantDescription'],
+  Brands: ['brandName', 'shortDescription', 'longDescription', 'brandDisclaimer', 'seoTitle', 'seoDescription', 'seoKeywords', 'buyingGuideContent'],
+  Collections: ['collectionName', 'description', 'seoTitle', 'seoDescription', 'seoKeywords'],
   FAQ: ['question', 'answer'],
   LegalPages: ['title', 'content', 'seoTitle', 'seoDescription'],
-  WatchGuides: [
-    'title', 'content', 'excerpt', 'seoTitle', 'seoDescription', 'seoKeywords'
-  ]
+  WatchGuides: ['title', 'content', 'excerpt', 'seoTitle', 'seoDescription', 'seoKeywords']
 };
-
-const MAX_REQUEST_SIZE = 10 * 1024; // 10 KB
 const BATCH_SIZE = 50;
-const MAX_BATCHES = 100; // Limit total batches to prevent runaway costs
+const MAX_BATCHES = 20;        // hard cap: 20 batches × 50 = max 1000 records
+const MAX_RECORDS = 500;       // absolute record limit per invocation
+const MAX_TEXT_LENGTH = 10000;
 
 function detectLanguage(text) {
-  const sample = text.toLowerCase();
-  const germanIndicators = [' der ', ' die ', ' das ', ' und ', ' mit ', ' für ', ' von ', ' zu ', ' den ', ' eine ', ' ist ', ' auf ', ' auch ', ' sich ', ' bei ', ' dem ', ' nicht ', ' wie ', ' wir ', ' ihnen ', ' ihre ', ' über '];
-  const englishIndicators = [' the ', ' and ', ' with ', ' for ', ' from ', ' to ', ' is ', ' on ', ' also ', ' are ', ' was ', ' this ', ' that ', ' have ', ' has ', ' your ', ' you ', ' our ', ' we ', ' a ', ' an '];
-
-  let deCount = 0;
-  let enCount = 0;
-  for (const w of germanIndicators) {
-    if (sample.includes(w)) deCount++;
-  }
-  for (const w of englishIndicators) {
-    if (sample.includes(w)) enCount++;
-  }
-  return deCount > enCount ? 'de' : 'en';
+  const sample = ' ' + text.toLowerCase() + ' ';
+  const de = [' der ', ' die ', ' das ', ' und ', ' mit ', ' für ', ' von ', ' zu ', ' den ', ' eine ', ' ist ', ' auf ', ' auch ', ' sich ', ' bei ', ' dem ', ' nicht ', ' wie ', ' wir ', ' ihnen ', ' ihre ', ' über '];
+  const en = [' the ', ' and ', ' with ', ' for ', ' from ', ' to ', ' is ', ' on ', ' also ', ' are ', ' was ', ' this ', ' that ', ' have ', ' has ', ' your ', ' you ', ' our ', ' we ', ' a ', ' an '];
+  let deC = 0, enC = 0;
+  for (const w of de) { if (sample.includes(w)) deC++; }
+  for (const w of en) { if (sample.includes(w)) enC++; }
+  return deC > enC ? 'de' : 'en';
 }
 
-async function translateRecord(base44, entityName, record) {
+function sanitizeHtml(dirty) {
+  if (!dirty || typeof dirty !== 'string') return '';
+  let s = dirty;
+  s = s.replace(/<script[\s\S]*?<\/script>/gi, '');
+  s = s.replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
+  s = s.replace(/<object[\s\S]*?<\/object>/gi, '');
+  s = s.replace(/<embed[\s\S]*?<\/embed>/gi, '');
+  s = s.replace(/<style[\s\S]*?<\/style>/gi, '');
+  s = s.replace(/<form[\s\S]*?<\/form>/gi, '');
+  s = s.replace(/\son\w+\s*=\s*"[^"]*"/gi, '');
+  s = s.replace(/\son\w+\s*=\s*'[^']*'/gi, '');
+  s = s.replace(/\son\w+\s*=\s*[^\s>]+/gi, '');
+  s = s.replace(/javascript:/gi, '');
+  s = s.replace(/\sstyle\s*=\s*"[^"]*"/gi, '');
+  s = s.replace(/\sstyle\s*=\s*'[^']*'/gi, '');
+  return s;
+}
+
+async function requireAdmin(base44) {
+  let user = null;
+  try { user = await base44.auth.me(); } catch { return null; }
+  if (!user || user.role !== 'admin') return null;
+  return user;
+}
+
+async function translateRecord(base44, entityName, record, force) {
   const fieldsToTranslate = TRANSLATABLE_FIELDS[entityName];
-  if (!fieldsToTranslate) return { skipped: true };
+  if (!fieldsToTranslate) return { skipped: true, reason: 'Entity not supported' };
 
   let sourceLang = null;
   const sourceData = {};
-
   for (const field of fieldsToTranslate) {
     const enValue = record[`${field}_en`];
     const deValue = record[`${field}_de`];
     const baseValue = record[field];
-
-    if (enValue && !deValue) {
-      sourceData[field] = enValue;
-      if (!sourceLang) sourceLang = 'en';
-    } else if (deValue && !enValue) {
-      sourceData[field] = deValue;
-      if (!sourceLang) sourceLang = 'de';
-    } else if (!enValue && !deValue && baseValue) {
-      sourceData[field] = baseValue;
-      if (!sourceLang) {
-        sourceLang = detectLanguage(String(baseValue));
-      }
-    }
+    if (enValue && !deValue) { sourceData[field] = enValue; if (!sourceLang) sourceLang = 'en'; }
+    else if (deValue && !enValue) { sourceData[field] = deValue; if (!sourceLang) sourceLang = 'de'; }
+    else if (!enValue && !deValue && baseValue) { sourceData[field] = baseValue; if (!sourceLang) sourceLang = detectLanguage(String(baseValue)); }
   }
 
-  if (Object.keys(sourceData).length === 0) {
-    return { skipped: true, reason: 'No translatable content' };
-  }
+  if (Object.keys(sourceData).length === 0) return { skipped: true, reason: 'No translatable content' };
 
   const targetLang = sourceLang === 'en' ? 'de' : 'en';
   const targetSuffix = `_${targetLang}`;
 
+  // Skip already-translated records unless force=true
   const toTranslate = {};
   for (const [field, value] of Object.entries(sourceData)) {
-    if (!record[`${field}${targetSuffix}`]) {
-      toTranslate[field] = value;
+    if (!record[`${field}${targetSuffix}`] || force) {
+      toTranslate[field] = String(value).substring(0, MAX_TEXT_LENGTH);
     }
   }
 
-  if (Object.keys(toTranslate).length === 0) {
-    return { skipped: true, reason: `All ${targetLang} fields populated` };
-  }
+  if (Object.keys(toTranslate).length === 0) return { skipped: true, reason: `All ${targetLang} fields populated` };
 
   const sourceLanguageName = sourceLang === 'de' ? 'German' : 'English';
   const targetLanguageName = targetLang === 'de' ? 'German' : 'English';
 
   const prompt = `You are a professional translator for luxury watch industry content. Translate the following JSON fields from ${sourceLanguageName} to ${targetLanguageName}.
-
 CRITICAL RULES:
-- Preserve technical watch terms exactly as-is: Tourbillon, Reverso, Submariner, GMT-Master, Royal Oak, Nautilus, Aquanaut, Calatrava, Speedmaster, Seamaster, Planet Ocean, Constellation, Portugieser, Ingenieur, Big Bang, Classic Fusion, Spirit of Big Bang, Navitimer, Chronomat, Superocean, Atmos, Master Compressor, Polaris, Duometre, Hybris Mechanica, etc.
-- Preserve brand names exactly: Rolex, Patek Philippe, Omega, Cartier, Hublot, Breitling, Audemars Piguet, Grand Seiko, IWC, Jaeger-LeCoultre, Tudor, Panerai, Bvlgari, TAG Heuer, Girard-Perregaux, etc.
-- Preserve reference numbers, model numbers, and measurements exactly (e.g., "ref. 126610LN", "40mm", "300m").
-- Preserve any HTML or markdown formatting.
+- Preserve technical watch terms exactly as-is.
+- Preserve brand names exactly.
+- Preserve reference numbers, model numbers, and measurements exactly.
+- Preserve any HTML formatting.
 - Translate naturally and professionally for a luxury e-commerce context.
-- For SEO fields (seoKeywords), translate each keyword/phrase, keeping them comma-separated.
+- For SEO fields, translate each keyword/phrase, keeping them comma-separated.
 
 Source data (JSON):
 ${JSON.stringify(toTranslate, null, 2)}
-
 Return ONLY a JSON object with the exact same keys, translated to ${targetLanguageName}.`;
 
   const schemaProperties = {};
-  for (const field of Object.keys(toTranslate)) {
-    schemaProperties[field] = { type: 'string' };
-  }
+  for (const field of Object.keys(toTranslate)) { schemaProperties[field] = { type: 'string' }; }
 
   const llmResponse = await base44.asServiceRole.integrations.Core.InvokeLLM({
-    prompt,
-    response_json_schema: {
-      type: 'object',
-      properties: schemaProperties
-    }
+    prompt, response_json_schema: { type: 'object', properties: schemaProperties }
   });
 
   const updateData = {};
   for (const [field, translatedValue] of Object.entries(llmResponse)) {
     if (translatedValue && typeof translatedValue === 'string') {
-      updateData[`${field}${targetSuffix}`] = translatedValue;
+      const sanitized = sanitizeHtml(translatedValue).substring(0, MAX_TEXT_LENGTH);
+      updateData[`${field}${targetSuffix}`] = sanitized;
     }
   }
 
-  if (Object.keys(updateData).length === 0) {
-    return { skipped: true, reason: 'LLM returned no translations' };
-  }
+  if (Object.keys(updateData).length === 0) return { skipped: true, reason: 'LLM returned no translations' };
 
   await base44.asServiceRole.entities[entityName].update(record.id, updateData);
 
-  return {
-    translated: true,
-    source: sourceLang,
-    target: targetLang,
-    fields: Object.keys(updateData)
-  };
+  return { translated: true, source: sourceLang, target: targetLang, fields: Object.keys(updateData) };
 }
 
 Deno.serve(async (req) => {
   try {
-    // Check request size
-    const contentLength = req.headers.get('content-length');
-    if (contentLength && parseInt(contentLength) > MAX_REQUEST_SIZE) {
-      return Response.json({ error: 'Request payload too large' }, { status: 413 });
-    }
-
     const base44 = createClientFromRequest(req);
 
-    // Auth: FAIL CLOSED. Manual admin invocation only.
-    let user = null;
-    try {
-      user = await base44.auth.me();
-    } catch {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    if (!user || user.role !== 'admin') {
-      return Response.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    // FAIL CLOSED: require authenticated admin
+    const user = await requireAdmin(base44);
+    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await req.json().catch(() => ({}));
-    const entitiesToProcess = body.entity_name
-      ? [body.entity_name]
-      : TRANSLATABLE_ENTITIES;
+    const force = body.force === true;
+    const requestedEntity = body.entity_name;
 
+    // Validate entity_name if provided
+    if (requestedEntity && !TRANSLATABLE_FIELDS[requestedEntity]) {
+      return Response.json({ error: 'Invalid or unsupported entity_name' }, { status: 400 });
+    }
+
+    // Reject unexpected properties
+    const allowedKeys = ['entity_name', 'force'];
+    const unexpectedKeys = Object.keys(body).filter(k => !allowedKeys.includes(k));
+    if (unexpectedKeys.length > 0) {
+      return Response.json({ error: 'Unexpected properties in request' }, { status: 400 });
+    }
+
+    // Fetch settings for quota
+    let settings = null;
+    try {
+      const list = await base44.asServiceRole.entities.TranslationSettings.list('-created_date', 1);
+      settings = list && list.length > 0 ? list[0] : null;
+    } catch { /* optional */ }
+
+    const entitiesToProcess = requestedEntity ? [requestedEntity] : TRANSLATABLE_ENTITIES;
     const results = {};
+    let totalProcessed = 0;
+    let quotaExceeded = false;
 
     for (const entityName of entitiesToProcess) {
+      if (quotaExceeded) break;
       if (!TRANSLATABLE_FIELDS[entityName]) {
-        results[entityName] = { error: 'Entity not supported', total: 0, translated: 0, skipped: 0, errors: [] };
+        results[entityName] = { error: 'Entity not supported', total: 0, translated: 0, skipped: 0, failed: 0, remaining: 0 };
         continue;
       }
 
       try {
-        const entityResult = {
-          total: 0,
-          translated: 0,
-          skipped: 0,
-          errors: [],
-          details: [],
-          batch_count: 0
-        };
-
+        const entityResult = { total: 0, translated: 0, skipped: 0, failed: 0, remaining: 0, batchCount: 0, errors: [] };
         let batchIndex = 0;
         let skip = 0;
         let hasMore = true;
 
-        while (hasMore && batchIndex < MAX_BATCHES) {
+        while (hasMore && batchIndex < MAX_BATCHES && totalProcessed < MAX_RECORDS && !quotaExceeded) {
           const batch = await base44.asServiceRole.entities[entityName].list('-created_date', BATCH_SIZE, skip);
+          if (!batch || batch.length === 0) { hasMore = false; break; }
 
-          if (!batch || batch.length === 0) {
-            hasMore = false;
-            break;
-          }
-
-          entityResult.batch_count++;
+          batchIndex++;              // FIX: increment on every batch
+          entityResult.batchCount = batchIndex;
 
           for (const record of batch) {
             entityResult.total++;
+            totalProcessed++;
+
+            if (totalProcessed > MAX_RECORDS) {
+              entityResult.remaining++;
+              hasMore = false;
+              break;
+            }
+
             try {
-              const result = await translateRecord(base44, entityName, record);
+              const result = await translateRecord(base44, entityName, record, force);
               if (result.translated) {
                 entityResult.translated++;
-                entityResult.details.push({
-                  id: record.id,
-                  fields: result.fields,
-                  source: result.source,
-                  target: result.target
-                });
+                // Check quota after each translation
+                if (settings) {
+                  const used = settings.charactersUsedThisMonth || 0;
+                  const quota = settings.monthlyCharacterQuota || 500000;
+                  if (used > quota * 0.95) {
+                    quotaExceeded = true;
+                    entityResult.remaining++;
+                    hasMore = false;
+                    break;
+                  }
+                }
               } else {
                 entityResult.skipped++;
               }
             } catch (recordError) {
-              entityResult.errors.push({
-                id: record.id,
-                error: recordError instanceof Error ? recordError.message : String(recordError)
-              });
+              entityResult.failed++;
+              entityResult.errors.push({ id: record.id, error: 'Translation failed for this record' });
+              // Continue to next record — one failure does not restart the batch
             }
           }
 
-          // Pagination: advance offset if we got a full batch
-          if (batch.length === BATCH_SIZE) {
+          // Advance pagination offset
+          if (batch.length === BATCH_SIZE && hasMore) {
             skip += BATCH_SIZE;
           } else {
             hasMore = false;
           }
         }
 
-        // Check if we hit the batch limit
-        if (batchIndex >= MAX_BATCHES && hasMore) {
-          entityResult.warning = `Stopped after ${MAX_BATCHES} batches to prevent runaway costs. More records may exist.`;
+        if (batchIndex >= MAX_BATCHES) {
+          entityResult.warning = `Stopped after ${MAX_BATCHES} batches. More records may exist.`;
+        }
+        if (quotaExceeded) {
+          entityResult.warning = 'Translation stopped: quota threshold reached.';
         }
 
         results[entityName] = entityResult;
       } catch (entityError) {
-        results[entityName] = {
-          error: entityError instanceof Error ? entityError.message : String(entityError),
-          total: 0,
-          translated: 0,
-          skipped: 0,
-          errors: []
-        };
+        results[entityName] = { error: 'Processing failed', total: 0, translated: 0, skipped: 0, failed: 0, remaining: 0 };
       }
     }
 
     const summary = {
       entities_processed: Object.keys(results).length,
-      total_records: Object.values(results).reduce((sum, r) => sum + (r.total || 0), 0),
-      total_translated: Object.values(results).reduce((sum, r) => sum + (r.translated || 0), 0),
-      total_skipped: Object.values(results).reduce((sum, r) => sum + (r.skipped || 0), 0),
-      total_errors: Object.values(results).reduce((sum, r) => sum + (r.errors?.length || 0), 0)
+      total_records: Object.values(results).reduce((s, r) => s + (r.total || 0), 0),
+      total_translated: Object.values(results).reduce((s, r) => s + (r.translated || 0), 0),
+      total_skipped: Object.values(results).reduce((s, r) => s + (r.skipped || 0), 0),
+      total_failed: Object.values(results).reduce((s, r) => s + (r.failed || 0), 0),
+      total_remaining: Object.values(results).reduce((s, r) => s + (r.remaining || 0), 0),
+      quota_exceeded: quotaExceeded,
+      max_records_limit: MAX_RECORDS
     };
 
     return Response.json({ success: true, summary, details: results });

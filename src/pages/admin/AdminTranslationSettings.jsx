@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Settings, Save, Check } from 'lucide-react';
+import { Settings, Save, Check, Lock } from 'lucide-react';
 
 export default function AdminTranslationSettings() {
   const [settings, setSettings] = useState(null);
@@ -17,8 +17,8 @@ export default function AdminTranslationSettings() {
       } else {
         setSettings({
           defaultProvider: 'llm_builtin',
-          autoTranslateNewContent: true,
-          publishMode: 'publish_immediately',
+          autoTranslateNewContent: false,
+          publishMode: 'manual_approval',
           browserDetectionMode: 'suggestion_popup',
           protectManualEdits: true,
           defaultTone: 'formal',
@@ -34,10 +34,19 @@ export default function AdminTranslationSettings() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Strip any API key fields that might exist on old records
+      const safeSettings = { ...settings };
+      delete safeSettings.deeplApiKey;
+      delete safeSettings.openaiApiKey;
+      delete safeSettings.googleApiKey;
+      delete safeSettings.microsoftApiKey;
+      delete safeSettings.customApiUrl;
+      delete safeSettings.customApiKey;
+
       if (settings.id) {
-        await base44.entities.TranslationSettings.update(settings.id, settings);
+        await base44.entities.TranslationSettings.update(settings.id, safeSettings);
       } else {
-        const created = await base44.entities.TranslationSettings.create(settings);
+        const created = await base44.entities.TranslationSettings.create(safeSettings);
         setSettings(created);
       }
       setSaved(true);
@@ -103,7 +112,7 @@ export default function AdminTranslationSettings() {
               <button onClick={() => update('autoTranslateNewContent', !settings.autoTranslateNewContent)} className={`w-10 h-5 rounded-full transition-colors ${settings.autoTranslateNewContent ? 'bg-primary' : 'bg-muted'}`}>
                 <span className={`block w-4 h-4 bg-background rounded-full transition-transform ${settings.autoTranslateNewContent ? 'translate-x-5' : 'translate-x-1'}`} />
               </button>
-              <p className="text-[10px] text-muted-foreground mt-1">Automatically trigger translation when new content is created</p>
+              <p className="text-[10px] text-muted-foreground mt-1">When enabled, admins must manually queue translations for new content via the translation dashboard</p>
             </div>
             <div>
               <label className="text-[10px] tracking-wider uppercase text-muted-foreground block mb-1">Publish Mode</label>
@@ -159,26 +168,32 @@ export default function AdminTranslationSettings() {
         </div>
       </div>
 
-      {/* API Keys */}
+      {/* API Keys — now managed via environment variables */}
       <div className="border border-border rounded-lg p-6 mt-6">
-        <h2 className="text-sm font-display font-semibold text-foreground mb-4">External Provider API Keys</h2>
-        <p className="text-[10px] text-muted-foreground mb-4">API keys are stored securely. The built-in LLM provider requires no key. Only configure keys if using an external provider.</p>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-[10px] tracking-wider uppercase text-muted-foreground block mb-1">DeepL API Key</label>
-            <input type="password" value={settings.deeplApiKey || ''} onChange={e => update('deeplApiKey', e.target.value)} className="w-full bg-background border border-border text-sm text-foreground px-3 py-2 rounded" placeholder="DeepL API key" />
+        <div className="flex items-center gap-2 mb-2">
+          <Lock size={16} className="text-primary" />
+          <h2 className="text-sm font-display font-semibold text-foreground">External Provider API Keys</h2>
+        </div>
+        <p className="text-[10px] text-muted-foreground mb-4">
+          API keys are no longer stored in the database. They are managed securely as environment variables in the
+          Base44 Dashboard under <strong>Settings → Environment Variables</strong>. The built-in LLM provider requires no key.
+        </p>
+        <div className="grid md:grid-cols-2 gap-3">
+          <div className="flex items-center justify-between px-4 py-3 bg-muted/30 rounded text-xs">
+            <span className="text-muted-foreground">DeepL API Key</span>
+            <span className="text-foreground font-medium">DEEPL_API_KEY</span>
           </div>
-          <div>
-            <label className="text-[10px] tracking-wider uppercase text-muted-foreground block mb-1">OpenAI API Key</label>
-            <input type="password" value={settings.openaiApiKey || ''} onChange={e => update('openaiApiKey', e.target.value)} className="w-full bg-background border border-border text-sm text-foreground px-3 py-2 rounded" placeholder="sk-..." />
+          <div className="flex items-center justify-between px-4 py-3 bg-muted/30 rounded text-xs">
+            <span className="text-muted-foreground">OpenAI API Key</span>
+            <span className="text-foreground font-medium">OPENAI_API_KEY</span>
           </div>
-          <div>
-            <label className="text-[10px] tracking-wider uppercase text-muted-foreground block mb-1">Google Translate API Key</label>
-            <input type="password" value={settings.googleApiKey || ''} onChange={e => update('googleApiKey', e.target.value)} className="w-full bg-background border border-border text-sm text-foreground px-3 py-2 rounded" placeholder="Google API key" />
+          <div className="flex items-center justify-between px-4 py-3 bg-muted/30 rounded text-xs">
+            <span className="text-muted-foreground">Google Translate API Key</span>
+            <span className="text-foreground font-medium">GOOGLE_TRANSLATE_API_KEY</span>
           </div>
-          <div>
-            <label className="text-[10px] tracking-wider uppercase text-muted-foreground block mb-1">Microsoft Translator API Key</label>
-            <input type="password" value={settings.microsoftApiKey || ''} onChange={e => update('microsoftApiKey', e.target.value)} className="w-full bg-background border border-border text-sm text-foreground px-3 py-2 rounded" placeholder="Azure key" />
+          <div className="flex items-center justify-between px-4 py-3 bg-muted/30 rounded text-xs">
+            <span className="text-muted-foreground">Microsoft Translator API Key</span>
+            <span className="text-foreground font-medium">MICROSOFT_TRANSLATOR_API_KEY</span>
           </div>
         </div>
       </div>

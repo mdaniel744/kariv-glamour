@@ -16,7 +16,7 @@
     },
     "autoTranslateNewContent": {
       "type": "boolean",
-      "default": true
+      "default": false
     },
     "publishMode": {
       "type": "string",
@@ -26,7 +26,7 @@
         "needs_review",
         "manual_approval"
       ],
-      "default": "publish_immediately"
+      "default": "manual_approval"
     },
     "browserDetectionMode": {
       "type": "string",
@@ -48,24 +48,6 @@
         "informal"
       ],
       "default": "formal"
-    },
-    "deeplApiKey": {
-      "type": "string"
-    },
-    "openaiApiKey": {
-      "type": "string"
-    },
-    "googleApiKey": {
-      "type": "string"
-    },
-    "microsoftApiKey": {
-      "type": "string"
-    },
-    "customApiUrl": {
-      "type": "string"
-    },
-    "customApiKey": {
-      "type": "string"
     },
     "monthlyCharacterQuota": {
       "type": "number",
