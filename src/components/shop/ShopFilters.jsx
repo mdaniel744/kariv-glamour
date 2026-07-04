@@ -56,7 +56,11 @@ export default function ShopFilters({ filters, setFilters }) {
     <div>
       {activeCount > 0 && (
         <button
-          onClick={() => setFilters({ brand: [], condition: [], gender: [], caseMaterial: [], dialColor: [], movementType: [], availability: [], priceMin: '', priceMax: '' })}
+          onClick={() => setFilters({
+            search: '', brand: [], condition: [], gender: [], caseMaterial: [],
+            dialColor: [], movementType: [], availability: [], priceMin: '', priceMax: '',
+            yearFrom: '', yearTo: '', isNewArrival: null, isCertifiedPreOwned: null, isVintage: null
+          })}
           className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-primary mb-4 hover:text-foreground transition-colors"
         >
           <X size={12} /> {t('common:shop.clearAllFilters')}
@@ -86,6 +90,27 @@ export default function ShopFilters({ filters, setFilters }) {
             placeholder={t('common:shop.max')}
             value={filters.priceMax}
             onChange={e => updateFilter('priceMax', e.target.value)}
+            className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary"
+          />
+        </div>
+      </div>
+
+      {/* Year range */}
+      <div className="border-b border-border py-4">
+        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">{t('common:shop.yearRange') || 'Year Range'}</p>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            placeholder={t('common:shop.from') || 'From'}
+            value={filters.yearFrom}
+            onChange={e => updateFilter('yearFrom', e.target.value)}
+            className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary"
+          />
+          <input
+            type="number"
+            placeholder={t('common:shop.to') || 'To'}
+            value={filters.yearTo}
+            onChange={e => updateFilter('yearTo', e.target.value)}
             className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary"
           />
         </div>

@@ -145,7 +145,14 @@
         "Pending",
         "Not Verified"
       ],
-      "default": "Pending"
+      "default": "Pending",
+      "rls": {
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
     },
     "authenticityCertificate": {
       "type": "boolean"
@@ -169,10 +176,12 @@
       "type": "string"
     },
     "price": {
-      "type": "number"
+      "type": "number",
+      "minimum": 0
     },
     "salePrice": {
-      "type": "number"
+      "type": "number",
+      "minimum": 0
     },
     "currency": {
       "type": "string",
@@ -190,7 +199,8 @@
     },
     "stockQuantity": {
       "type": "number",
-      "default": 1
+      "default": 1,
+      "minimum": 0
     },
     "sku": {
       "type": "string"
@@ -287,7 +297,7 @@
       "type": "boolean",
       "default": false
     },
-    "isLimitedEdition": {
+    "isPublished": {
       "type": "boolean",
       "default": false
     }
@@ -296,5 +306,39 @@
     "productTitle",
     "brand",
     "price"
-  ]
+  ],
+  "rls": {
+    "read": true,
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "dealer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

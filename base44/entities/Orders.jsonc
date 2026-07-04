@@ -11,7 +11,13 @@
     "buyerId": {
       "type": "string"
     },
+    "buyerEmail": {
+      "type": "string"
+    },
     "dealerId": {
+      "type": "string"
+    },
+    "dealerEmail": {
       "type": "string"
     },
     "dealerName": {
@@ -89,6 +95,106 @@
         "crypto"
       ]
     },
+    "paymentProvider": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "providerCheckoutId": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "providerPaymentId": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "transactionHash": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "paymentCurrency": {
+      "type": "string"
+    },
+    "paymentNetwork": {
+      "type": "string"
+    },
+    "paymentAmount": {
+      "type": "number"
+    },
+    "reservationExpiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
     "escrowReference": {
       "type": "string"
     },
@@ -103,7 +209,8 @@
       "default": "Pending"
     },
     "totalAmount": {
-      "type": "number"
+      "type": "number",
+      "minimum": 0
     },
     "currency": {
       "type": "string",
@@ -142,12 +249,56 @@
       "type": "string"
     },
     "notes": {
-      "type": "string"
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
     }
   },
   "required": [
     "customerName",
     "customerEmail",
     "totalAmount"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.buyerId": "{{user.id}}"
+        },
+        {
+          "data.dealerId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }
