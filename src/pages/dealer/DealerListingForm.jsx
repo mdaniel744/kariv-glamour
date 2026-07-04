@@ -69,7 +69,7 @@ export default function DealerListingForm() {
     setSaving(true);
     try {
       const { authenticationStatus, ...rest } = product;
-      const payload = { ...rest, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
+      const payload = { ...rest, dealerId: user.id, dealerEmail: user.email, dealerName: user.full_name || user.email, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
       if (isEdit) {
         await base44.entities.Products.update(id, payload);
       } else {

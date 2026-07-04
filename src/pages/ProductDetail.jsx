@@ -58,8 +58,9 @@ export default function ProductDetail() {
       try {
         const data = await base44.entities.Products.get(id);
         setProduct(data);
-        if (data.dealerId) {
-          base44.entities.DealerProfile.filter({ userId: data.dealerId }, '-created_date', 1)
+        const dealerUserId = data.dealerId || data.created_by_id;
+        if (dealerUserId) {
+          base44.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
             .then(p => setDealerProfile(p[0] || null))
             .catch(() => {});
         }
@@ -277,8 +278,10 @@ export default function ProductDetail() {
             </div>
 
             {/* Dealer info */}
-            {product.dealerId && (
-              <LocalizedLink to={`/dealer-profile/${product.dealerId}`} className="block border border-border p-4 hover:border-primary transition-colors group">
+            {(product.dealerId || product.created_by_id) && (() => {
+              const dealerUserId = product.dealerId || product.created_by_id;
+              return (
+              <LocalizedLink to={`/dealer-profile/${dealerUserId}`} className="block border border-border p-4 hover:border-primary transition-colors group">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
                     {dealerProfile?.logoImage ? (
@@ -300,7 +303,8 @@ export default function ProductDetail() {
                   <ChevronRight size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
               </LocalizedLink>
-            )}
+              );
+            })()}
           </div>
         </div>
 
