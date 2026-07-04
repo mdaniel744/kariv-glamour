@@ -25,12 +25,12 @@ export const ESCROW_STATUS_LABELS = {
 };
 
 export const ESCROW_STATUS_DESCRIPTIONS = {
-  pending_review: 'Our Kariv team is verifying availability with the dealer.',
-  dealer_accepted: 'The dealer confirmed availability. Please proceed with payment.',
-  funds_secured: 'Your payment is secured. The dealer has been instructed to ship.',
-  shipped: 'Your watch is on the way. Tracking information will appear here.',
-  verified: 'You have confirmed receipt. Funds will be released to the dealer shortly.',
-  funds_released: 'Transaction complete. Funds have been released to the dealer.',
+  pending_review: 'Your order has been placed. Our Kariv team is verifying availability with the dealer.',
+  dealer_accepted: 'The dealer has confirmed availability. Please proceed with your payment to secure the order.',
+  funds_secured: 'Your payment has been received and is secured in our escrow. The dealer has been instructed to ship your watch. Funds will only be released to the dealer 14 days after you confirm delivery.',
+  shipped: 'Your watch has been shipped. Tracking information is shown below. Once you receive your watch, please confirm delivery to start the 14-day inspection period.',
+  verified: 'You have confirmed delivery. Your payment will be held in escrow for 14 days from delivery confirmation before being released to the dealer, giving you time to inspect the watch.',
+  funds_released: 'Transaction complete. The 14-day inspection period has ended and funds have been released to the dealer.',
   cancelled: 'This order has been cancelled.'
 };
 

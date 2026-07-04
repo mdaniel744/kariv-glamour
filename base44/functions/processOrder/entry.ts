@@ -416,6 +416,38 @@ Deno.serve(async (req) => {
     }
 
     // ════════════════════════════════════════════════════════════════
+    // ACTION: confirm_delivery — buyer confirms they received the watch
+    // Transitions shipped → verified, starts the 14-day inspection hold
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'confirm_delivery') {
+      const orderId = body.orderId;
+      if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+
+      // Ownership check — only the buyer who owns the order can confirm delivery
+      if (order.buyerId !== user.id) {
+        return Response.json({ error: 'Not your order' }, { status: 403 });
+      }
+
+      // State check — can only confirm delivery when order is shipped
+      if (order.escrowStatus !== 'shipped') {
+        return Response.json({ error: 'Order must be in shipped state to confirm delivery' }, { status: 400 });
+      }
+
+      const confirmedAt = new Date().toISOString();
+      const updated = await base44.asServiceRole.entities.Orders.update(orderId, {
+        escrowStatus: 'verified',
+        shippingStatus: 'Delivered',
+        deliveryConfirmedAt: confirmedAt,
+        notes: (order.notes || '') + '\n[' + confirmedAt + '] Buyer confirmed delivery. 14-day inspection period started.'
+      });
+
+      return Response.json({ order: updated });
+    }
+
+    // ════════════════════════════════════════════════════════════════
     // ACTION: cancel — buyer cancels their own pending order
     // ════════════════════════════════════════════════════════════════
     if (action === 'cancel') {

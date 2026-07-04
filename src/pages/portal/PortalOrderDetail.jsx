@@ -49,6 +49,18 @@ export default function PortalOrderDetail() {
     }
   };
 
+  const handleConfirmDelivery = async () => {
+    try {
+      const res = await base44.functions.invoke('processOrder', {
+        action: 'confirm_delivery',
+        orderId: id
+      });
+      setOrder(res.data.order);
+    } catch (e) {
+      alert(e.response?.data?.error || 'Failed to confirm delivery');
+    }
+  };
+
   const handleConfirmPaymentSent = async () => {
     setConfirmingPayment(true);
     try {
@@ -213,6 +225,38 @@ export default function PortalOrderDetail() {
                 <h2 className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{t('pages.portal.tracking')}</h2>
               </div>
               <p className="text-xs text-foreground font-mono">{order.trackingNumber}</p>
+            </div>
+          )}
+
+          {order.escrowStatus === 'shipped' && (
+            <div className="border border-primary/30 bg-primary/5 p-5">
+              <div className="flex items-start gap-3 mb-3">
+                <Package size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.confirmDeliveryTitle', { defaultValue: 'Confirm Delivery' })}</p>
+                  <p className="text-[11px] text-muted-foreground">{t('pages.portal.confirmDeliveryDesc', { defaultValue: 'Have you received your watch? Confirm delivery to start the 14-day inspection period. Your payment will be held in escrow during this time before being released to the dealer.' })}</p>
+                </div>
+              </div>
+              <button
+                onClick={handleConfirmDelivery}
+                className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 hover:bg-primary/90 transition-colors"
+              >
+                {t('pages.portal.iReceivedMyWatch', { defaultValue: "I've Received My Watch" })}
+              </button>
+            </div>
+          )}
+
+          {order.escrowStatus === 'verified' && order.deliveryConfirmedAt && (
+            <div className="border border-primary/30 bg-primary/5 p-5">
+              <div className="flex items-start gap-3">
+                <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString()}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends.' })}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 

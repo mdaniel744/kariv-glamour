@@ -104,6 +104,7 @@ import AdminProducts from '@/pages/admin/AdminProducts';
 import AdminBrands from '@/pages/admin/AdminBrands';
 import AdminCollections from '@/pages/admin/AdminCollections';
 import AdminOrders from '@/pages/admin/AdminOrders';
+import AdminOrderDetail from '@/pages/admin/AdminOrderDetail';
 import AdminCustomers from '@/pages/admin/AdminCustomers';
 import AdminGuides from '@/pages/admin/AdminGuides';
 import AdminLegal from '@/pages/admin/AdminLegal';
@@ -523,6 +524,7 @@ const AuthenticatedApp = () => {
           <Route path="brands" element={<AdminBrands />} />
           <Route path="collections" element={<AdminCollections />} />
           <Route path="orders" element={<AdminOrders />} />
+          <Route path="orders/:id" element={<AdminOrderDetail />} />
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="guides" element={<AdminGuides />} />
           <Route path="legal" element={<AdminLegal />} />

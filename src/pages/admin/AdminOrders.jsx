@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
@@ -99,14 +100,17 @@ export default function AdminOrders() {
             <div key={o.id} className="bg-[#111] border border-white/5">
               <div className="p-4">
                 <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-3">
+                  <Link to={`/admin/orders/${o.id}`} className="flex items-center gap-3 group">
                     {o.products?.[0]?.featuredImage && <img src={o.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
                     <div>
-                      <p className="text-xs text-[#E5E5E5] font-medium">{o.customerName}</p>
+                      <p className="text-xs text-[#E5E5E5] font-medium group-hover:text-[#C5A367] transition-colors flex items-center gap-1">
+                        {o.customerName}
+                        <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </p>
                       <p className="text-[10px] text-[#8E8E93]">{o.customerEmail}</p>
                       <p className="text-[10px] text-[#8E8E93] font-mono">{o.escrowReference}</p>
                     </div>
-                  </div>
+                  </Link>
                   <div className="text-right">
                     <p className="text-sm text-[#C5A367] font-medium mb-1">{formatPrice(o.totalAmount)}</p>
                     <EscrowStatusBadge status={o.escrowStatus} />
