@@ -88,11 +88,7 @@
         }
       ]
     },
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "create": true,
     "update": {
       "user_condition": {
         "role": "admin"
