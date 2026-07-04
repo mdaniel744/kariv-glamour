@@ -76,10 +76,14 @@ export default function Checkout() {
           phoneNumber: billing.phone
         });
       }
+      // Generate idempotency key for this checkout attempt
+      // Repeated submissions with the same key return the existing order
+      const idempotencyKey = `checkout-${id}-${user.id}-${Date.now()}`;
       const res = await base44.functions.invoke('processOrder', {
         action: 'create',
         productId: id,
-        shippingDetails: effectiveShipping
+        shippingDetails: effectiveShipping,
+        idempotencyKey
       });
       setOrder(res.data.order);
       setDone(true);
