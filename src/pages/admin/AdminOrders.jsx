@@ -4,7 +4,7 @@ import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import { ESCROW_STATUS_LABELS } from '@/lib/escrowConstants';
-import { ChevronDown, Truck } from 'lucide-react';
+import { ChevronDown, Truck, FileCheck2, ExternalLink } from 'lucide-react';
 
 export default function AdminOrders() {
   const { toast } = useToast();
@@ -102,6 +102,22 @@ export default function AdminOrders() {
                       Payment: <span className="text-[#E5E5E5] capitalize">{o.paymentMethod.replace('_', ' ')}</span>
                       {o.paymentStatus === 'Awaiting Confirmation' && (
                         <span className="ml-2 text-amber-400 font-medium">⚠ Buyer sent payment — verify funds</span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Payment proof */}
+                  {o.paymentProofUrl && (
+                    <div className="text-[10px] text-[#8E8E93]">
+                      <p className="tracking-[0.1em] uppercase mb-1 flex items-center gap-1"><FileCheck2 size={10} /> Proof of Payment</p>
+                      {o.paymentProofUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+                        <a href={o.paymentProofUrl} target="_blank" rel="noopener noreferrer" className="inline-block">
+                          <img src={o.paymentProofUrl} alt="Payment proof" className="w-24 h-24 object-cover border border-white/10 hover:border-[#C5A367] transition-colors" />
+                        </a>
+                      ) : (
+                        <a href={o.paymentProofUrl} target="_blank" rel="noopener noreferrer" className="text-[#C5A367] hover:underline flex items-center gap-1">
+                          <ExternalLink size={10} /> View proof document
+                        </a>
                       )}
                     </div>
                   )}

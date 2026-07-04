@@ -11,6 +11,7 @@ import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import PaymentMethodSelector from '@/components/escrow/PaymentMethodSelector';
 import { ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
 import CryptoCheckoutButton from '@/components/escrow/CryptoCheckoutButton';
+import PaymentProofUploader from '@/components/escrow/PaymentProofUploader';
 
 const ICON_MAP = { Building2, CreditCard, Bitcoin };
 
@@ -23,6 +24,7 @@ export default function PortalOrderDetail() {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [savingPayment, setSavingPayment] = useState(false);
   const [confirmingPayment, setConfirmingPayment] = useState(false);
+  const [paymentProofUrl, setPaymentProofUrl] = useState(null);
 
   useEffect(() => {
     base44.entities.Orders.get(id).then(o => {
@@ -52,7 +54,8 @@ export default function PortalOrderDetail() {
     try {
       const res = await base44.functions.invoke('processOrder', {
         action: 'confirm_payment_sent',
-        orderId: id
+        orderId: id,
+        paymentProofUrl
       });
       setOrder(res.data.order);
     } catch (e) {
@@ -131,13 +134,25 @@ export default function PortalOrderDetail() {
               <span>{t('pages.portal.paymentSent', { defaultValue: 'Payment sent — awaiting admin confirmation. You will be notified once funds are verified in escrow.' })}</span>
             </div>
           ) : (
-            <button
-              onClick={handleConfirmPaymentSent}
-              disabled={confirmingPayment}
-              className="w-full mt-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50 hover:bg-primary/90 transition-colors"
-            >
-              {confirmingPayment ? t('pages.portal.confirming', { defaultValue: 'Confirming...' }) : t('pages.portal.iMadePayment', { defaultValue: "I've Made the Payment" })}
-            </button>
+            <>
+              <PaymentProofUploader
+                paymentMethod={order.paymentMethod}
+                onUploaded={setPaymentProofUrl}
+                proofUrl={order.paymentProofUrl}
+              />
+              <button
+                onClick={handleConfirmPaymentSent}
+                disabled={confirmingPayment || !paymentProofUrl}
+                className="w-full mt-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50 hover:bg-primary/90 transition-colors"
+              >
+                {confirmingPayment ? t('pages.portal.confirming', { defaultValue: 'Confirming...' }) : t('pages.portal.iMadePayment', { defaultValue: "I've Made the Payment" })}
+              </button>
+              {!paymentProofUrl && (
+                <p className="text-[10px] text-muted-foreground mt-2 text-center">
+                  {t('pages.portal.uploadProofRequired', { defaultValue: 'Please upload your proof of payment to confirm.' })}
+                </p>
+              )}
+            </>
           )}
         </div>
       )}
