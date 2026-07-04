@@ -135,6 +135,14 @@ export default function PortalOrderDetail() {
             </div>
           ) : (
             <>
+              {order.paymentStatus === 'Justification Requested' && order.justificationMessage && (
+                <div className="mb-4 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs">
+                  <p className="font-medium mb-1 flex items-center gap-1.5">
+                    <ShieldCheck size={14} /> Action Required: Additional Information Needed
+                  </p>
+                  <p className="whitespace-pre-wrap">{order.justificationMessage}</p>
+                </div>
+              )}
               <PaymentProofUploader
                 paymentMethod={order.paymentMethod}
                 onUploaded={setPaymentProofUrl}
@@ -145,7 +153,11 @@ export default function PortalOrderDetail() {
                 disabled={confirmingPayment || !paymentProofUrl}
                 className="w-full mt-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50 hover:bg-primary/90 transition-colors"
               >
-                {confirmingPayment ? t('pages.portal.confirming', { defaultValue: 'Confirming...' }) : t('pages.portal.iMadePayment', { defaultValue: "I've Made the Payment" })}
+                {confirmingPayment
+                  ? t('pages.portal.confirming', { defaultValue: 'Confirming...' })
+                  : order.paymentStatus === 'Justification Requested'
+                    ? t('pages.portal.reuploadProof', { defaultValue: 'Re-upload Proof of Payment' })
+                    : t('pages.portal.iMadePayment', { defaultValue: "I've Made the Payment" })}
               </button>
               {!paymentProofUrl && (
                 <p className="text-[10px] text-muted-foreground mt-2 text-center">

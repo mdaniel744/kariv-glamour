@@ -11,6 +11,9 @@ export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const [justSubject, setJustSubject] = useState('');
+  const [justMessage, setJustMessage] = useState('');
+  const [sendingJust, setSendingJust] = useState(false);
 
   useEffect(() => {
     base44.entities.Orders.list('-created_date', 50).then(setOrders).catch(console.error).finally(() => setLoading(false));
@@ -28,6 +31,26 @@ export default function AdminOrders() {
       setOrders(prev => prev.map(o => o.id === id ? { ...o, escrowStatus, orderStatus, paymentStatus, shippingStatus } : o));
       toast({ title: `Escrow status updated to ${ESCROW_STATUS_LABELS[escrowStatus]}` });
     } catch (e) { toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' }); }
+  };
+
+  const requestJustification = async (id) => {
+    if (!justSubject.trim() || !justMessage.trim()) {
+      toast({ title: 'Error', description: 'Subject and message are required', variant: 'destructive' });
+      return;
+    }
+    setSendingJust(true);
+    try {
+      const res = await base44.functions.invoke('processOrder', {
+        action: 'request_justification', orderId: id, subject: justSubject, message: justMessage
+      });
+      setOrders(prev => prev.map(o => o.id === id ? { ...o, paymentStatus: 'Justification Requested', justificationMessage: justMessage } : o));
+      setJustSubject(''); setJustMessage('');
+      toast({ title: 'Justification request emailed to buyer' });
+    } catch (e) {
+      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+    } finally {
+      setSendingJust(false);
+    }
   };
 
   const updateTracking = async (id, trackingNumber) => {
@@ -119,6 +142,40 @@ export default function AdminOrders() {
                           <ExternalLink size={10} /> View proof document
                         </a>
                       )}
+                    </div>
+                  )}
+
+                  {/* Justification already requested */}
+                  {o.paymentStatus === 'Justification Requested' && (
+                    <div className="text-[10px] text-amber-400 font-medium">
+                      ⚠ Justification requested — buyer notified by email
+                    </div>
+                  )}
+
+                  {/* Request justification form */}
+                  {o.paymentStatus === 'Awaiting Confirmation' && (
+                    <div className="border-t border-white/5 pt-3">
+                      <p className="text-[10px] tracking-[0.1em] uppercase text-amber-400 mb-1.5">Request Further Justification</p>
+                      <input
+                        value={justSubject}
+                        onChange={e => setJustSubject(e.target.value)}
+                        placeholder="Email subject..."
+                        className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367]"
+                      />
+                      <textarea
+                        value={justMessage}
+                        onChange={e => setJustMessage(e.target.value)}
+                        placeholder="Message to buyer (e.g. proof is unreadable, please re-upload a clearer image)..."
+                        rows={3}
+                        className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367] resize-none"
+                      />
+                      <button
+                        onClick={() => requestJustification(o.id)}
+                        disabled={sendingJust}
+                        className="w-full bg-amber-600/20 border border-amber-600/40 text-amber-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-amber-600/30 disabled:opacity-50"
+                      >
+                        {sendingJust ? 'Sending...' : 'Send Email to Buyer'}
+                      </button>
                     </div>
                   )}
                 </div>

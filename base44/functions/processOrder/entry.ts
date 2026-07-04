@@ -276,8 +276,50 @@ Deno.serve(async (req) => {
       const updated = await base44.asServiceRole.entities.Orders.update(orderId, {
         paymentStatus: 'Awaiting Confirmation',
         paymentProofUrl: paymentProofUrl,
+        justificationMessage: '',
         notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Buyer confirmed payment sent via ' + order.paymentMethod + '. Proof uploaded: ' + paymentProofUrl
       });
+      return Response.json({ order: updated });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // ACTION: request_justification — admin emails buyer for more info
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'request_justification') {
+      if (user.role !== 'admin') {
+        return Response.json({ error: 'Admin access required' }, { status: 403 });
+      }
+
+      const orderId = body.orderId;
+      const subject = body.subject;
+      const message = body.message;
+
+      if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+      if (!subject || typeof subject !== 'string' || !subject.trim()) {
+        return Response.json({ error: 'Email subject is required' }, { status: 400 });
+      }
+      if (!message || typeof message !== 'string' || !message.trim()) {
+        return Response.json({ error: 'Email message is required' }, { status: 400 });
+      }
+
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+
+      // Send email to the buyer
+      if (order.buyerEmail) {
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: order.buyerEmail,
+          subject: subject.trim(),
+          body: message.trim()
+        });
+      }
+
+      const updated = await base44.asServiceRole.entities.Orders.update(orderId, {
+        paymentStatus: 'Justification Requested',
+        justificationMessage: message.trim(),
+        notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Admin requested justification (subject: ' + subject.trim() + ')'
+      });
+
       return Response.json({ order: updated });
     }
 

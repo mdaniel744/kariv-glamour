@@ -82,6 +82,7 @@
       "enum": [
         "Pending",
         "Awaiting Confirmation",
+        "Justification Requested",
         "Paid",
         "Failed",
         "Refunded"
@@ -165,6 +166,9 @@
       "type": "number"
     },
     "paymentProofUrl": {
+      "type": "string"
+    },
+    "justificationMessage": {
       "type": "string"
     },
     "reservationExpiresAt": {
