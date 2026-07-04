@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/languageContext';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -143,9 +144,14 @@ export default function Navbar() {
                   <User size={18} />
                 </LocalizedLink>
               ) : (
-                <LocalizedLink to="/login" className="text-[10px] tracking-[0.12em] uppercase text-foreground hover:text-primary transition-colors">
-                  Sign In
-                </LocalizedLink>
+                <div className="flex items-center gap-3">
+                  <Link to="/login" className="text-[10px] tracking-[0.12em] uppercase text-foreground hover:text-primary transition-colors">
+                    Sign In
+                  </Link>
+                  <Link to="/register" className="text-[10px] tracking-[0.12em] uppercase text-primary-foreground bg-primary px-3 py-2 hover:bg-primary/90 transition-colors">
+                    Sign Up
+                  </Link>
+                </div>
               )}
             </div>
           </div>
@@ -339,8 +345,8 @@ export default function Navbar() {
               <LocalizedLink to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('customerService')}</LocalizedLink>
               {!isAuthenticated && (
                 <div className="pt-4 mt-2 border-t border-border space-y-1">
-                  <LocalizedLink to="/login" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Sign In</LocalizedLink>
-                  <LocalizedLink to="/register" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Create Account</LocalizedLink>
+                  <Link to="/login" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Sign In</Link>
+                  <Link to="/register" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Create Account</Link>
                 </div>
               )}
               <div className="pt-2"><LanguageSwitcher /></div>
