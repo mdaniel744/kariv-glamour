@@ -72,7 +72,7 @@ export function isDealer(user) {
 }
 
 export function isAdmin(user) {
-  return user?.role === 'admin';
+  return user?.role === 'admin' || user?.role === 'super_admin';
 }
 
 // Valid escrow state transitions — enforced server-side in processOrder
