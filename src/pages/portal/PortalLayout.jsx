@@ -61,7 +61,7 @@ export default function PortalLayout() {
             </Link>
           )}
 
-          {user?.role === 'admin' && (
+          {['admin', 'super_admin'].includes(user?.role) && (
             <Link to="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-muted-foreground hover:text-foreground hover:bg-muted">
               <LayoutDashboard size={15} />
               Admin Console
