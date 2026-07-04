@@ -68,7 +68,8 @@ export default function DealerListingForm() {
     }
     setSaving(true);
     try {
-      const payload = { ...product, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
+      const { authenticationStatus, ...rest } = product;
+      const payload = { ...rest, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
       if (isEdit) {
         await base44.entities.Products.update(id, payload);
       } else {
