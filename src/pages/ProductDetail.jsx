@@ -8,12 +8,13 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { useSEO } from '@/hooks/useSEO';
-import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock } from 'lucide-react';
+import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
+import StarRating from '@/components/dealer/StarRating';
 
 export default function ProductDetail() {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export default function ProductDetail() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [related, setRelated] = useState([]);
+  const [dealerProfile, setDealerProfile] = useState(null);
 
   // SEO — uses localized fields, updates when product loads
   const seoTitle = product ? localize(product, 'metaTitle') || localize(product, 'productTitle') : undefined;
@@ -56,6 +58,11 @@ export default function ProductDetail() {
       try {
         const data = await base44.entities.Products.get(id);
         setProduct(data);
+        if (data.dealerId) {
+          base44.entities.DealerProfile.filter({ userId: data.dealerId }, '-created_date', 1)
+            .then(p => setDealerProfile(p[0] || null))
+            .catch(() => {});
+        }
         const rel = await base44.entities.Products.filter({ brand: data.brand }, '-created_date', 4);
         setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
@@ -268,6 +275,32 @@ export default function ProductDetail() {
                 </div>
               )}
             </div>
+
+            {/* Dealer info */}
+            {product.dealerId && (
+              <LocalizedLink to={`/dealer-profile/${product.dealerId}`} className="block border border-border p-4 hover:border-primary transition-colors group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {dealerProfile?.logoImage ? (
+                      <img src={dealerProfile.logoImage} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <Store size={16} className="text-primary" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">Sold By</p>
+                    <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">{dealerProfile?.displayName || product.dealerName || 'View Dealer Profile'}</p>
+                    {dealerProfile?.averageRating > 0 && (
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <StarRating rating={Math.round(dealerProfile.averageRating)} size={10} />
+                        <span className="text-[10px] text-muted-foreground">{dealerProfile.averageRating.toFixed(1)} ({dealerProfile.totalReviews} reviews)</span>
+                      </div>
+                    )}
+                  </div>
+                  <ChevronRight size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+              </LocalizedLink>
+            )}
           </div>
         </div>
 

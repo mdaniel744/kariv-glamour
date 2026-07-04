@@ -1,0 +1,136 @@
+{
+  "name": "DealerProfile",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "logoImage": {
+      "type": "string"
+    },
+    "bannerImage": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "specialties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "establishedYear": {
+      "type": "number"
+    },
+    "responseTime": {
+      "type": "string"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "websiteUrl": {
+      "type": "string"
+    },
+    "verifiedStatus": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "pending",
+        "unverified"
+      ],
+      "default": "pending",
+      "rls": {
+        "write": {
+          "$or": [
+            {
+              "user_condition": {
+                "role": "admin"
+              }
+            },
+            {
+              "user_condition": {
+                "role": "super_admin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "averageRating": {
+      "type": "number",
+      "default": 0
+    },
+    "totalReviews": {
+      "type": "number",
+      "default": 0
+    },
+    "totalSales": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "userId",
+    "displayName"
+  ],
+  "rls": {
+    "read": true,
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "dealer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "super_admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Plus, LogOut, Store } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Plus, LogOut, Store, UserCircle } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ export default function DealerLayout() {
     { to: '/dealer', icon: LayoutDashboard, label: t('pages.dealer.dashboard'), exact: true },
     { to: '/dealer/listings', icon: Package, label: t('pages.dealer.listings') },
     { to: '/dealer/sales', icon: ShoppingCart, label: t('pages.dealer.sales') },
+    { to: '/dealer/profile', icon: UserCircle, label: 'Dealer Profile' },
   ];
 
   return (

@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@/lib/constants';
-import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin, Flag, AlertTriangle, X } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin, Flag, AlertTriangle, X, Star } from 'lucide-react';
 import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
@@ -393,6 +393,21 @@ export default function PortalOrderDetail() {
           )}
         </div>
       </div>
+
+      {order.escrowStatus === 'funds_released' && order.dealerId && (
+        <div className="mt-6 border border-primary/30 bg-primary/5 p-5">
+          <div className="flex items-start gap-3">
+            <Star size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-xs font-medium text-primary mb-1">Rate Your Dealer</p>
+              <p className="text-[11px] text-muted-foreground mb-3">How was your experience with {order.dealerName || 'this dealer'}? Your feedback helps other buyers make informed decisions.</p>
+              <Link to={localePath(`/dealer-profile/${order.dealerId}`)} className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
+                Leave a Review →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mt-6">
         <EscrowTrustBadge />

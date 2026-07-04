@@ -38,6 +38,7 @@ import SellTrade from '@/pages/SellTrade';
 import Guides from '@/pages/Guides';
 import LegalPage from '@/pages/LegalPage';
 import Checkout from '@/pages/Checkout';
+import DealerProfile from '@/pages/DealerProfile';
 import PortalLayout from '@/pages/portal/PortalLayout';
 import PortalDashboard from '@/pages/portal/PortalDashboard';
 import PortalOrders from '@/pages/portal/PortalOrders';
@@ -50,6 +51,7 @@ import DealerDashboard from '@/pages/dealer/DealerDashboard';
 import DealerListings from '@/pages/dealer/DealerListings';
 import DealerListingForm from '@/pages/dealer/DealerListingForm';
 import DealerSales from '@/pages/dealer/DealerSales';
+import DealerProfileSettings from '@/pages/dealer/DealerProfileSettings';
 import RoleGuard from '@/components/RoleGuard';
 import RolexPage from '@/pages/RolexPage';
 import RolexSeoLanding from '@/pages/RolexSeoLanding';
@@ -489,6 +491,7 @@ const AuthenticatedApp = () => {
         <Route path="guides" element={<Guides />} />
         <Route path="legal/:slug" element={<LegalPage />} />
         <Route path="checkout/:id" element={<Checkout />} />
+        <Route path="dealer-profile/:id" element={<DealerProfile />} />
 
         {/* Buyer Portal — protected */}
         <Route path="portal" element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
@@ -510,6 +513,7 @@ const AuthenticatedApp = () => {
             <Route path="listings" element={<DealerListings />} />
             <Route path="listings/:id" element={<DealerListingForm />} />
             <Route path="sales" element={<DealerSales />} />
+            <Route path="profile" element={<DealerProfileSettings />} />
           </Route>
         </Route>
 
