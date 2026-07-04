@@ -4,7 +4,7 @@ import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import { ESCROW_STATUS_LABELS } from '@/lib/escrowConstants';
-import { ChevronDown, Truck, FileCheck2, ExternalLink } from 'lucide-react';
+import { ChevronDown, Truck, FileCheck2, ExternalLink, Send } from 'lucide-react';
 
 export default function AdminOrders() {
   const { toast } = useToast();
@@ -14,6 +14,9 @@ export default function AdminOrders() {
   const [justSubject, setJustSubject] = useState('');
   const [justMessage, setJustMessage] = useState('');
   const [sendingJust, setSendingJust] = useState(false);
+  const [msgSubject, setMsgSubject] = useState('');
+  const [msgBody, setMsgBody] = useState('');
+  const [sendingMsg, setSendingMsg] = useState(false);
 
   useEffect(() => {
     base44.entities.Orders.list('-created_date', 50).then(setOrders).catch(console.error).finally(() => setLoading(false));
@@ -50,6 +53,28 @@ export default function AdminOrders() {
       toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
     } finally {
       setSendingJust(false);
+    }
+  };
+
+  const sendMessage = async (id) => {
+    if (!msgBody.trim()) {
+      toast({ title: 'Error', description: 'Message is required', variant: 'destructive' });
+      return;
+    }
+    setSendingMsg(true);
+    try {
+      await base44.functions.invoke('processOrder', {
+        action: 'admin_reply',
+        orderId: id,
+        subject: msgSubject.trim(),
+        message: msgBody.trim()
+      });
+      setMsgSubject(''); setMsgBody('');
+      toast({ title: 'Message sent to buyer' });
+    } catch (e) {
+      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+    } finally {
+      setSendingMsg(false);
     }
   };
 
@@ -144,6 +169,31 @@ export default function AdminOrders() {
                       )}
                     </div>
                   )}
+
+                  {/* Message buyer — always available */}
+                  <div className="border-t border-white/5 pt-3">
+                    <p className="text-[10px] tracking-[0.1em] uppercase text-[#C5A367] mb-1.5 flex items-center gap-1"><Send size={10} /> Message Buyer</p>
+                    <input
+                      value={msgSubject}
+                      onChange={e => setMsgSubject(e.target.value)}
+                      placeholder="Subject (optional)..."
+                      className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367]"
+                    />
+                    <textarea
+                      value={msgBody}
+                      onChange={e => setMsgBody(e.target.value)}
+                      placeholder="Type a message to the buyer... (will be emailed and appear in their Mails tab)"
+                      rows={3}
+                      className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367] resize-none"
+                    />
+                    <button
+                      onClick={() => sendMessage(o.id)}
+                      disabled={sendingMsg || !msgBody.trim()}
+                      className="w-full bg-[#C5A367]/10 border border-[#C5A367]/30 text-[#C5A367] text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-[#C5A367]/20 disabled:opacity-50"
+                    >
+                      {sendingMsg ? 'Sending...' : 'Send Message to Buyer'}
+                    </button>
+                  </div>
 
                   {/* Justification already requested */}
                   {o.paymentStatus === 'Justification Requested' && (
