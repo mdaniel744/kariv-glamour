@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@/lib/constants';
-import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin, Flag, AlertTriangle, X } from 'lucide-react';
 import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
@@ -25,11 +25,21 @@ export default function PortalOrderDetail() {
   const [savingPayment, setSavingPayment] = useState(false);
   const [confirmingPayment, setConfirmingPayment] = useState(false);
   const [paymentProofUrl, setPaymentProofUrl] = useState(null);
+  const [dispute, setDispute] = useState(null);
+  const [showFlagForm, setShowFlagForm] = useState(false);
+  const [flagReason, setFlagReason] = useState('');
+  const [flagDescription, setFlagDescription] = useState('');
+  const [flagging, setFlagging] = useState(false);
 
   useEffect(() => {
-    base44.entities.Orders.get(id).then(o => {
+    Promise.all([
+      base44.entities.Orders.get(id),
+      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).catch(() => [])
+    ]).then(([o, disputes]) => {
       setOrder(o);
       setPaymentMethod(o.paymentMethod);
+      const openDispute = disputes.find(d => ['open', 'under_review'].includes(d.status));
+      setDispute(openDispute || disputes[0] || null);
     }).catch(console.error).finally(() => setLoading(false));
   }, [id]);
 
@@ -49,15 +59,31 @@ export default function PortalOrderDetail() {
     }
   };
 
-  const handleConfirmDelivery = async () => {
+  const handleFlagOrder = async () => {
+    if (!flagReason) {
+      alert('Please select a reason');
+      return;
+    }
+    if (!flagDescription.trim()) {
+      alert('Please describe the issue');
+      return;
+    }
+    setFlagging(true);
     try {
       const res = await base44.functions.invoke('processOrder', {
-        action: 'confirm_delivery',
-        orderId: id
+        action: 'flag_order',
+        orderId: id,
+        reason: flagReason,
+        description: flagDescription.trim()
       });
-      setOrder(res.data.order);
+      setDispute(res.data.dispute);
+      setShowFlagForm(false);
+      setFlagReason('');
+      setFlagDescription('');
     } catch (e) {
-      alert(e.response?.data?.error || 'Failed to confirm delivery');
+      alert(e.response?.data?.error || 'Failed to flag order');
+    } finally {
+      setFlagging(false);
     }
   };
 
@@ -230,33 +256,132 @@ export default function PortalOrderDetail() {
 
           {order.escrowStatus === 'shipped' && (
             <div className="border border-primary/30 bg-primary/5 p-5">
-              <div className="flex items-start gap-3 mb-3">
+              <div className="flex items-start gap-3">
                 <Package size={18} className="text-primary flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.confirmDeliveryTitle', { defaultValue: 'Confirm Delivery' })}</p>
-                  <p className="text-[11px] text-muted-foreground">{t('pages.portal.confirmDeliveryDesc', { defaultValue: 'Have you received your watch? Confirm delivery to start the 14-day inspection period. Your payment will be held in escrow during this time before being released to the dealer.' })}</p>
+                  <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inTransit', { defaultValue: 'Watch In Transit' })}</p>
+                  <p className="text-[11px] text-muted-foreground">{t('pages.portal.courierDeliveryNote', { defaultValue: 'Your watch is on its way. Delivery will be confirmed by our courier service. Once confirmed, your 14-day inspection period will begin automatically — no action needed from you.' })}</p>
                 </div>
               </div>
-              <button
-                onClick={handleConfirmDelivery}
-                className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 hover:bg-primary/90 transition-colors"
-              >
-                {t('pages.portal.iReceivedMyWatch', { defaultValue: "I've Received My Watch" })}
-              </button>
             </div>
           )}
 
           {order.escrowStatus === 'verified' && order.deliveryConfirmedAt && (
-            <div className="border border-primary/30 bg-primary/5 p-5">
-              <div className="flex items-start gap-3">
-                <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })}</p>
-                  <p className="text-[11px] text-muted-foreground">
-                    {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString()}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends.' })}
-                  </p>
+            <div className="space-y-4">
+              <div className="border border-primary/30 bg-primary/5 p-5">
+                <div className="flex items-start gap-3">
+                  <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString()}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends, unless you file a dispute.' })}
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              {/* Open dispute */}
+              {dispute && ['open', 'under_review'].includes(dispute.status) && (
+                <div className="border border-amber-500/40 bg-amber-500/5 p-5">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-medium text-amber-500 mb-1">{t('pages.portal.disputeOpen', { defaultValue: 'Dispute Case Open' })}</p>
+                      <p className="text-[11px] text-muted-foreground mb-2">
+                        {t('pages.portal.disputeOpenDesc', { defaultValue: 'You flagged this order. Our mediation team is reviewing your case. Escrow funds are frozen until the dispute is resolved.' })}
+                      </p>
+                      <div className="text-[11px] text-muted-foreground space-y-0.5">
+                        <p><span className="text-foreground">Reason:</span> {dispute.reason.replace(/_/g, ' ')}</p>
+                        <p><span className="text-foreground">Status:</span> <span className="capitalize">{dispute.status.replace(/_/g, ' ')}</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Flag order button — only if no open dispute */}
+              {!dispute && !showFlagForm && (
+                <div className="border border-destructive/30 bg-destructive/5 p-5">
+                  <div className="flex items-start gap-3 mb-3">
+                    <Flag size={18} className="text-destructive flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-medium text-destructive mb-1">{t('pages.portal.flagOrder', { defaultValue: 'Flag This Order' })}</p>
+                      <p className="text-[11px] text-muted-foreground">{t('pages.portal.flagOrderDesc', { defaultValue: 'Experiencing an issue with your watch? Flag this order to open a dispute case. Our mediation team will review and resolve it per our buyer protection policy. Funds remain frozen in escrow until resolved.' })}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowFlagForm(true)}
+                    className="w-full border border-destructive/40 text-destructive text-[11px] tracking-[0.15em] uppercase font-medium py-3 hover:bg-destructive/10 transition-colors"
+                  >
+                    {t('pages.portal.openDispute', { defaultValue: 'Open a Dispute' })}
+                  </button>
+                </div>
+              )}
+
+              {/* Flag form */}
+              {showFlagForm && !dispute && (
+                <div className="border border-destructive/30 bg-destructive/5 p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-medium text-destructive flex items-center gap-2">
+                      <Flag size={14} /> {t('pages.portal.openDispute', { defaultValue: 'Open a Dispute' })}
+                    </p>
+                    <button onClick={() => setShowFlagForm(false)} className="text-muted-foreground hover:text-foreground">
+                      <X size={14} />
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">Reason</label>
+                      <select
+                        value={flagReason}
+                        onChange={e => setFlagReason(e.target.value)}
+                        className="w-full bg-background border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary"
+                      >
+                        <option value="">Select a reason...</option>
+                        <option value="authenticity_issue">Authenticity Issue</option>
+                        <option value="condition_mismatch">Condition Mismatch</option>
+                        <option value="item_not_received">Item Not Received</option>
+                        <option value="damaged_in_transit">Damaged in Transit</option>
+                        <option value="not_as_described">Not As Described</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">Describe the Issue</label>
+                      <textarea
+                        value={flagDescription}
+                        onChange={e => setFlagDescription(e.target.value)}
+                        placeholder="Please provide details about the issue..."
+                        rows={4}
+                        className="w-full bg-background border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary resize-none"
+                      />
+                    </div>
+                    <button
+                      onClick={handleFlagOrder}
+                      disabled={flagging || !flagReason || !flagDescription.trim()}
+                      className="w-full bg-destructive text-destructive-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 hover:bg-destructive/90 disabled:opacity-50"
+                    >
+                      {flagging ? 'Submitting...' : 'Submit Dispute Case'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Resolved dispute */}
+              {dispute && !['open', 'under_review'].includes(dispute.status) && (
+                <div className="border border-border bg-card p-5">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck size={18} className="text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-medium text-foreground mb-1">{t('pages.portal.disputeResolved', { defaultValue: 'Dispute Resolved' })}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        <span className="capitalize">{dispute.status.replace(/_/g, ' ')}</span>
+                      </p>
+                      {dispute.resolution && <p className="text-[11px] text-muted-foreground mt-1">{dispute.resolution}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

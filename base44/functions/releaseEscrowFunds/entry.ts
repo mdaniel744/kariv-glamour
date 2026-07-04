@@ -25,13 +25,21 @@ Deno.serve(async (req) => {
     // Find all orders in "verified" status
     const verifiedOrders = await base44.asServiceRole.entities.Orders.filter({ escrowStatus: 'verified' });
 
+    // Fetch all open/under_review disputes to exclude those orders from auto-release
+    const openDisputes = await base44.asServiceRole.entities.Dispute.filter({ status: 'open' });
+    const underReviewDisputes = await base44.asServiceRole.entities.Dispute.filter({ status: 'under_review' });
+    const frozenOrderIds = new Set();
+    [...openDisputes, ...underReviewDisputes].forEach(d => { if (d.orderId) frozenOrderIds.add(d.orderId); });
+
     const eligible = verifiedOrders.filter(o => {
       if (!o.deliveryConfirmedAt) return false;
+      if (frozenOrderIds.has(o.id)) return false; // Skip orders with open disputes
       return new Date(o.deliveryConfirmedAt) <= cutoff;
     });
 
     let released = 0;
     let errors = 0;
+    let skippedDispute = frozenOrderIds.size;
 
     for (const order of eligible) {
       try {
@@ -72,6 +80,7 @@ Deno.serve(async (req) => {
       eligible: eligible.length,
       released,
       errors,
+      skippedDispute,
       cutoff: cutoff.toISOString()
     });
   } catch (error) {

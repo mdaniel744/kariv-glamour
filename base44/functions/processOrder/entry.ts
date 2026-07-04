@@ -416,20 +416,19 @@ Deno.serve(async (req) => {
     }
 
     // ════════════════════════════════════════════════════════════════
-    // ACTION: confirm_delivery — buyer confirms they received the watch
+    // ACTION: confirm_courier_delivery — admin marks delivery confirmed by courier
     // Transitions shipped → verified, starts the 14-day inspection hold
     // ════════════════════════════════════════════════════════════════
-    if (action === 'confirm_delivery') {
+    if (action === 'confirm_courier_delivery') {
+      if (user.role !== 'admin') {
+        return Response.json({ error: 'Admin access required' }, { status: 403 });
+      }
+
       const orderId = body.orderId;
       if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
 
       const order = await base44.asServiceRole.entities.Orders.get(orderId);
       if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
-
-      // Ownership check — only the buyer who owns the order can confirm delivery
-      if (order.buyerId !== user.id) {
-        return Response.json({ error: 'Not your order' }, { status: 403 });
-      }
 
       // State check — can only confirm delivery when order is shipped
       if (order.escrowStatus !== 'shipped') {
@@ -441,10 +440,140 @@ Deno.serve(async (req) => {
         escrowStatus: 'verified',
         shippingStatus: 'Delivered',
         deliveryConfirmedAt: confirmedAt,
-        notes: (order.notes || '') + '\n[' + confirmedAt + '] Buyer confirmed delivery. 14-day inspection period started.'
+        notes: (order.notes || '') + '\n[' + confirmedAt + '] Courier confirmed delivery. 14-day inspection period started.'
       });
 
+      // Notify buyer that delivery was confirmed and inspection period has begun
+      if (order.buyerEmail) {
+        try {
+          await base44.asServiceRole.integrations.Core.SendEmail({
+            to: order.buyerEmail,
+            subject: 'Delivery Confirmed — 14-Day Inspection Period Started',
+            body: 'Dear ' + order.customerName + ',\n\nOur courier service has confirmed delivery of your order ' + order.escrowReference + '. Your 14-day inspection period has now begun.\n\nDuring this period, your payment is held securely in escrow. If you have any concerns about the watch, you may flag this order to open a dispute case and our mediation team will review it.\n\nIf no dispute is filed within 14 days, funds will be automatically released to the dealer and the transaction will be marked complete.\n\nBest regards,\nThe Kariv Glamour Team'
+          });
+        } catch (e) { /* email failure should not block */ }
+      }
+
       return Response.json({ order: updated });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // ACTION: flag_order — buyer flags the order during the 14-day window
+    // Opens a dispute case; freezes escrow auto-release until resolved
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'flag_order') {
+      const orderId = body.orderId;
+      const reason = body.reason;
+      const description = body.description;
+      if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+      if (!reason || !['authenticity_issue', 'condition_mismatch', 'item_not_received', 'damaged_in_transit', 'not_as_described', 'other'].includes(reason)) {
+        return Response.json({ error: 'Valid reason is required' }, { status: 400 });
+      }
+      if (!description || typeof description !== 'string' || !description.trim()) {
+        return Response.json({ error: 'Description is required' }, { status: 400 });
+      }
+
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+
+      // Ownership check — only the buyer who owns the order can flag it
+      if (order.buyerId !== user.id) {
+        return Response.json({ error: 'Not your order' }, { status: 403 });
+      }
+
+      // State check — can only flag during the inspection period (verified status)
+      if (order.escrowStatus !== 'verified') {
+        return Response.json({ error: 'Order can only be flagged during the inspection period' }, { status: 400 });
+      }
+
+      // Check for existing open dispute
+      const existing = await base44.asServiceRole.entities.Dispute.filter({ orderId: orderId });
+      const hasOpen = existing && existing.some(d => ['open', 'under_review'].includes(d.status));
+      if (hasOpen) {
+        return Response.json({ error: 'A dispute is already open for this order' }, { status: 400 });
+      }
+
+      const dispute = await base44.asServiceRole.entities.Dispute.create({
+        orderId: orderId,
+        escrowReference: order.escrowReference,
+        buyerId: order.buyerId,
+        buyerEmail: order.buyerEmail,
+        buyerName: order.customerName,
+        dealerId: order.dealerId,
+        dealerName: order.dealerName,
+        reason: reason,
+        description: description.trim(),
+        status: 'open'
+      });
+
+      // Update order notes
+      await base44.asServiceRole.entities.Orders.update(orderId, {
+        notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Buyer flagged order. Reason: ' + reason + '. Dispute case opened.'
+      });
+
+      return Response.json({ dispute: dispute });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // ACTION: resolve_dispute — admin/mediator resolves a dispute case
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'resolve_dispute') {
+      if (user.role !== 'admin') {
+        return Response.json({ error: 'Admin access required' }, { status: 403 });
+      }
+
+      const disputeId = body.disputeId;
+      const resolution = body.resolution;
+      const mediatorNotes = body.mediatorNotes;
+      const outcome = body.outcome; // 'resolved_buyer' | 'resolved_dealer'
+      const orderAction = body.orderAction; // 'release_funds' | 'refund' | null
+
+      if (!disputeId) return Response.json({ error: 'Dispute ID is required' }, { status: 400 });
+      if (!['resolved_buyer', 'resolved_dealer', 'withdrawn'].includes(outcome)) {
+        return Response.json({ error: 'Valid outcome is required' }, { status: 400 });
+      }
+
+      const dispute = await base44.asServiceRole.entities.Dispute.get(disputeId);
+      if (!dispute) return Response.json({ error: 'Dispute not found' }, { status: 404 });
+
+      const updated = await base44.asServiceRole.entities.Dispute.update(disputeId, {
+        status: outcome,
+        resolution: resolution || '',
+        mediatorNotes: mediatorNotes || '',
+        resolvedAt: new Date().toISOString()
+      });
+
+      // If mediator decides in buyer's favor with refund, cancel the order
+      if (orderAction === 'refund') {
+        const order = await base44.asServiceRole.entities.Orders.get(dispute.orderId);
+        if (order) {
+          await base44.asServiceRole.entities.Orders.update(dispute.orderId, {
+            escrowStatus: 'cancelled',
+            orderStatus: 'Refunded',
+            paymentStatus: 'Refunded'
+          });
+          if (order.products && order.products[0] && order.products[0].productId) {
+            await base44.asServiceRole.entities.Products.update(order.products[0].productId, { availability: 'In Stock' });
+          }
+        }
+      }
+
+      // If mediator decides in dealer's favor, release funds
+      if (orderAction === 'release_funds') {
+        const order = await base44.asServiceRole.entities.Orders.get(dispute.orderId);
+        if (order) {
+          await base44.asServiceRole.entities.Orders.update(dispute.orderId, {
+            escrowStatus: 'funds_released',
+            orderStatus: 'Delivered',
+            paymentStatus: 'Paid'
+          });
+          if (order.products && order.products[0] && order.products[0].productId) {
+            await base44.asServiceRole.entities.Products.update(order.products[0].productId, { availability: 'Sold' });
+          }
+        }
+      }
+
+      return Response.json({ dispute: updated });
     }
 
     // ════════════════════════════════════════════════════════════════

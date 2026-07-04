@@ -1,0 +1,128 @@
+{
+  "name": "Dispute",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "escrowReference": {
+      "type": "string"
+    },
+    "buyerId": {
+      "type": "string"
+    },
+    "buyerEmail": {
+      "type": "string"
+    },
+    "buyerName": {
+      "type": "string"
+    },
+    "dealerId": {
+      "type": "string"
+    },
+    "dealerName": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "authenticity_issue",
+        "condition_mismatch",
+        "item_not_received",
+        "damaged_in_transit",
+        "not_as_described",
+        "other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "under_review",
+        "resolved_buyer",
+        "resolved_dealer",
+        "withdrawn"
+      ],
+      "default": "open"
+    },
+    "mediatorNotes": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "resolution": {
+      "type": "string",
+      "rls": {
+        "read": {
+          "$or": [
+            {
+              "data.buyerId": "{{user.id}}"
+            },
+            {
+              "user_condition": {
+                "role": "admin"
+              }
+            }
+          ]
+        },
+        "write": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
+    },
+    "resolvedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "orderId",
+    "buyerId",
+    "reason",
+    "description"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.buyerId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

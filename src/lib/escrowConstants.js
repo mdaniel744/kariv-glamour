@@ -27,9 +27,9 @@ export const ESCROW_STATUS_LABELS = {
 export const ESCROW_STATUS_DESCRIPTIONS = {
   pending_review: 'Your order has been placed. Our Kariv team is verifying availability with the dealer.',
   dealer_accepted: 'The dealer has confirmed availability. Please proceed with your payment to secure the order.',
-  funds_secured: 'Your payment has been received and is secured in our escrow. The dealer has been instructed to ship your watch. Funds will only be released to the dealer 14 days after you confirm delivery.',
-  shipped: 'Your watch has been shipped. Tracking information is shown below. Once you receive your watch, please confirm delivery to start the 14-day inspection period.',
-  verified: 'You have confirmed delivery. Your payment will be held in escrow for 14 days from delivery confirmation before being released to the dealer, giving you time to inspect the watch.',
+  funds_secured: 'Your payment has been received and is secured in our escrow. The dealer has been instructed to ship your watch. Funds will only be released to the dealer after the 14-day inspection period following courier-confirmed delivery.',
+  shipped: 'Your watch has been shipped. Tracking information is shown below. Once the courier confirms delivery, the 14-day inspection period will begin automatically.',
+  verified: 'Delivery has been confirmed by our courier service. Your 14-day inspection period is now active. If you have any concerns, you may flag this order to open a dispute case. Funds will be released to the dealer after the inspection period if no dispute is filed.',
   funds_released: 'Transaction complete. The 14-day inspection period has ended and funds have been released to the dealer.',
   cancelled: 'This order has been cancelled.'
 };
@@ -39,7 +39,7 @@ export const ESCROW_STEPS = [
   { key: 'dealer_accepted', label: 'Dealer Confirmed', description: 'Awaiting your payment' },
   { key: 'funds_secured', label: 'Payment Secured', description: 'Payment confirmed' },
   { key: 'shipped', label: 'Shipped', description: 'Watch in transit' },
-  { key: 'verified', label: 'Delivered', description: 'You confirmed receipt' },
+  { key: 'verified', label: 'Delivered', description: 'Courier confirmed delivery' },
   { key: 'funds_released', label: 'Complete', description: 'Funds released' }
 ];
 

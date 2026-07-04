@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import { ESCROW_STATUS_LABELS, ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
-import { ArrowLeft, Truck, FileCheck2, ExternalLink, Send, ShieldCheck, Package, CreditCard, Bitcoin, Building2 } from 'lucide-react';
+import { ArrowLeft, Truck, FileCheck2, ExternalLink, Send, ShieldCheck, Package, CreditCard, Bitcoin, Building2, Flag, AlertTriangle, Gavel } from 'lucide-react';
 
 const PAYMENT_ICONS = { bank_transfer: Building2, crypto: Bitcoin };
 
@@ -21,15 +21,21 @@ export default function AdminOrderDetail() {
   const [sendingMsg, setSendingMsg] = useState(false);
   const [trackingInput, setTrackingInput] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [dispute, setDispute] = useState(null);
+  const [resolutionNotes, setResolutionNotes] = useState('');
+  const [resolving, setResolving] = useState(false);
 
   useEffect(() => {
     Promise.all([
       base44.entities.Orders.get(id),
-      base44.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).catch(() => [])
-    ]).then(([o, msgs]) => {
+      base44.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).catch(() => []),
+      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).catch(() => [])
+    ]).then(([o, msgs, disputes]) => {
       setOrder(o);
       setMessages(msgs);
       setTrackingInput(o.trackingNumber || '');
+      const openDispute = disputes.find(d => ['open', 'under_review'].includes(d.status));
+      setDispute(openDispute || disputes[0] || null);
     }).catch(console.error).finally(() => setLoading(false));
   }, [id]);
 
@@ -96,6 +102,44 @@ export default function AdminOrderDetail() {
       try { await base44.entities.OrderMessage.update(mid, { isRead: true }); } catch (e) {}
     });
     setMessages(prev => prev.map(m => unreadIds.includes(m.id) ? { ...m, isRead: true } : m));
+  };
+
+  const confirmCourierDelivery = async () => {
+    setUpdatingStatus(true);
+    try {
+      const res = await base44.functions.invoke('processOrder', {
+        action: 'confirm_courier_delivery',
+        orderId: id
+      });
+      setOrder(res.data.order);
+      toast({ title: 'Courier delivery confirmed — 14-day inspection period started' });
+    } catch (e) {
+      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
+  const resolveDispute = async (outcome, orderAction) => {
+    setResolving(true);
+    try {
+      const res = await base44.functions.invoke('processOrder', {
+        action: 'resolve_dispute',
+        disputeId: dispute.id,
+        outcome,
+        resolution: resolutionNotes.trim(),
+        mediatorNotes: resolutionNotes.trim(),
+        orderAction
+      });
+      setDispute(res.data.dispute);
+      await refreshOrder();
+      setResolutionNotes('');
+      toast({ title: 'Dispute resolved' });
+    } catch (e) {
+      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+    } finally {
+      setResolving(false);
+    }
   };
 
   if (loading) return <div className="space-y-3">{[...Array(6)].map((_, i) => <div key={i} className="h-16 bg-[#111] animate-pulse" />)}</div>;
@@ -214,14 +258,22 @@ export default function AdminOrderDetail() {
                 </div>
               )}
               {order.escrowStatus === 'shipped' && (
-                <p className="text-[10px] text-[#8E8E93] py-2 text-center">Awaiting buyer to confirm delivery.</p>
+                <div>
+                  <p className="text-[10px] text-[#8E8E93] mb-2 text-center">Courier confirmation pending.</p>
+                  <button onClick={confirmCourierDelivery} disabled={updatingStatus} className="w-full bg-emerald-600/20 border border-emerald-600/40 text-emerald-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-emerald-600/30 disabled:opacity-50">
+                    {updatingStatus ? 'Updating...' : 'Mark as Delivered (Courier Confirmed)'}
+                  </button>
+                </div>
               )}
               {order.escrowStatus === 'verified' && (
                 <div className="text-[10px] text-[#8E8E93] py-2 text-center">
-                  <p>Delivery confirmed by buyer.</p>
-                  <p className="mt-1 text-[#C5A367]">Funds auto-release 14 days after delivery confirmation.</p>
+                  <p>Courier confirmed delivery.</p>
+                  <p className="mt-1 text-[#C5A367]">Funds auto-release 14 days after delivery.</p>
                   {order.deliveryConfirmedAt && (
                     <p className="mt-1 text-[#8E8E93]">Confirmed: {new Date(order.deliveryConfirmedAt).toLocaleDateString()}</p>
+                  )}
+                  {dispute && ['open', 'under_review'].includes(dispute.status) && (
+                    <p className="mt-1 text-amber-400 font-medium">⚠ Dispute open — escrow frozen</p>
                   )}
                 </div>
               )}
@@ -283,6 +335,66 @@ export default function AdminOrderDetail() {
           {sendingMsg ? 'Sending...' : 'Send Message to Buyer'}
         </button>
       </div>
+
+      {/* Dispute resolution */}
+      {dispute && ['open', 'under_review'].includes(dispute.status) && (
+        <div className="border border-amber-600/30 bg-amber-950/10 p-5 mb-6">
+          <h2 className="text-[10px] tracking-[0.2em] uppercase text-amber-400 mb-3 flex items-center gap-1.5">
+            <Gavel size={11} /> Dispute Case — Mediation Required
+          </h2>
+          <div className="space-y-2 text-xs mb-4">
+            <div className="flex justify-between"><span className="text-[#8E8E93]">Reason</span><span className="text-[#E5E5E5] capitalize">{dispute.reason.replace(/_/g, ' ')}</span></div>
+            <div className="flex justify-between"><span className="text-[#8E8E93]">Status</span><span className="text-amber-400 capitalize">{dispute.status.replace(/_/g, ' ')}</span></div>
+            <div className="flex justify-between"><span className="text-[#8E8E93]">Filed</span><span className="text-[#E5E5E5]">{new Date(dispute.created_date).toLocaleString()}</span></div>
+          </div>
+          <div className="bg-[#0A0A0B] border border-white/5 p-3 mb-4">
+            <p className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-1">Buyer's Description</p>
+            <p className="text-xs text-[#E5E5E5] whitespace-pre-wrap">{dispute.description}</p>
+          </div>
+          <textarea
+            value={resolutionNotes}
+            onChange={e => setResolutionNotes(e.target.value)}
+            placeholder="Mediator notes / resolution details..."
+            rows={3}
+            className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-3 outline-none focus:border-amber-600 resize-none"
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => resolveDispute('resolved_buyer', 'refund')}
+              disabled={resolving}
+              className="bg-red-600/20 border border-red-600/40 text-red-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-red-600/30 disabled:opacity-50"
+            >
+              {resolving ? 'Resolving...' : 'Resolve for Buyer (Refund)'}
+            </button>
+            <button
+              onClick={() => resolveDispute('resolved_dealer', 'release_funds')}
+              disabled={resolving}
+              className="bg-emerald-600/20 border border-emerald-600/40 text-emerald-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-emerald-600/30 disabled:opacity-50"
+            >
+              {resolving ? 'Resolving...' : 'Resolve for Dealer (Release)'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Resolved dispute summary */}
+      {dispute && !['open', 'under_review'].includes(dispute.status) && (
+        <div className="border border-white/5 bg-[#111] p-5 mb-6">
+          <h2 className="text-[10px] tracking-[0.2em] uppercase text-[#8E8E93] mb-3 flex items-center gap-1.5">
+            <Flag size={11} /> Dispute Resolved
+          </h2>
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between"><span className="text-[#8E8E93]">Reason</span><span className="text-[#E5E5E5] capitalize">{dispute.reason.replace(/_/g, ' ')}</span></div>
+            <div className="flex justify-between"><span className="text-[#8E8E93]">Outcome</span><span className="text-[#C5A367] capitalize">{dispute.status.replace(/_/g, ' ')}</span></div>
+            {dispute.resolution && (
+              <div className="pt-2 border-t border-white/5">
+                <p className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-1">Resolution</p>
+                <p className="text-[#E5E5E5]">{dispute.resolution}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Conversation thread */}
       {messages.length > 0 && (
