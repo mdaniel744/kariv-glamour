@@ -47,7 +47,7 @@ export default function ShopFilters({ filters, setFilters }) {
   };
 
   const updateFilter = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters({ ...filters, [key]: value });
   };
 
   const activeCount = Object.values(filters).filter(v => Array.isArray(v) ? v.length > 0 : v).length;
