@@ -4,6 +4,7 @@ import { useLocalizedField } from '@/lib/localize';
 import LocalizedLink from '@/components/LocalizedLink';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { IWC_FAQS } from '@/lib/iwcData';
+import SafeHtml from '@/components/shared/SafeHtml';
 
 const BRAND = 'IWC Schaffhausen';
 
@@ -32,7 +33,7 @@ export default function IWCFAQ() {
           <AccordionItem key={i} value={`q-${i}`}>
               <AccordionTrigger className="text-base font-display text-foreground hover:no-underline">{localize(f, 'q')}</AccordionTrigger>
               <AccordionContent>
-                <div className="text-sm leading-relaxed text-muted-foreground [&_a]:underline [&_a]:text-primary" dangerouslySetInnerHTML={{ __html: localize(f, 'a') }} />
+                <SafeHtml className="text-sm leading-relaxed text-muted-foreground [&_a]:underline [&_a]:text-primary" html={localize(f, 'a')} />
               </AccordionContent>
             </AccordionItem>
           )}

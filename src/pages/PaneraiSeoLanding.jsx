@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
+import SafeHtml from '@/components/shared/SafeHtml';
 import { base44 } from '@/api/base44Client';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
@@ -107,7 +108,7 @@ export default function PaneraiSeoLanding({ slug }) {
         <section className="pb-16 md:pb-24">
           <div className="max-w-3xl mx-auto px-6">
             <div className="space-y-6 text-sm leading-relaxed text-muted-foreground [&_a]:underline [&_a]:text-primary">
-              {guideContent.map((para, i) => <p key={i} dangerouslySetInnerHTML={{ __html: para }} />)}
+              {guideContent.map((para, i) => <SafeHtml key={i} as="p" html={para} />)}
             </div>
             <div className="mt-10 flex flex-wrap gap-4">
               <LocalizedLink to="/brands/panerai" className="inline-flex items-center px-8 py-4 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('seoLanding.shopWatches', { brand: BRAND })}</LocalizedLink>
