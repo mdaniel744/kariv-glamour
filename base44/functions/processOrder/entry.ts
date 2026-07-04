@@ -246,7 +246,13 @@ Deno.serve(async (req) => {
     // ════════════════════════════════════════════════════════════════
     if (action === 'confirm_payment_sent') {
       const orderId = body.orderId;
+      const paymentProofUrl = body.paymentProofUrl;
       if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+
+      // Require proof of payment upload
+      if (!paymentProofUrl || typeof paymentProofUrl !== 'string') {
+        return Response.json({ error: 'Proof of payment is required' }, { status: 400 });
+      }
 
       const order = await base44.asServiceRole.entities.Orders.get(orderId);
       if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
@@ -269,7 +275,8 @@ Deno.serve(async (req) => {
 
       const updated = await base44.asServiceRole.entities.Orders.update(orderId, {
         paymentStatus: 'Awaiting Confirmation',
-        notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Buyer confirmed payment sent via ' + order.paymentMethod + '.'
+        paymentProofUrl: paymentProofUrl,
+        notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Buyer confirmed payment sent via ' + order.paymentMethod + '. Proof uploaded: ' + paymentProofUrl
       });
       return Response.json({ order: updated });
     }

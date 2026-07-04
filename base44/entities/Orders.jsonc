@@ -164,6 +164,9 @@
     "paymentAmount": {
       "type": "number"
     },
+    "paymentProofUrl": {
+      "type": "string"
+    },
     "reservationExpiresAt": {
       "type": "string",
       "format": "date-time",
