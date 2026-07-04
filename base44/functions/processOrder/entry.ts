@@ -171,8 +171,9 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Order not found' }, { status: 404 });
       }
 
-      // Prevent self-acceptance: admin cannot manage their own order
-      if (existingOrder.buyerId === user.id) {
+      // Prevent self-acceptance: non-admins cannot manage their own order.
+      // Admins are exempt so they can manage all orders (including test orders they placed).
+      if (existingOrder.buyerId === user.id && user.role !== 'admin') {
         return Response.json({ error: 'You cannot manage an order you placed yourself' }, { status: 403 });
       }
 
