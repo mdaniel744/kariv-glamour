@@ -3,7 +3,7 @@ import { Outlet, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Package, Heart, User, Store, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 
 export default function PortalLayout() {
@@ -15,6 +15,7 @@ export default function PortalLayout() {
   const navItems = [
     { to: '/portal', icon: LayoutDashboard, label: t('pages.portal.dashboard'), exact: true },
     { to: '/portal/orders', icon: Package, label: t('pages.portal.orders') },
+    { to: '/portal/mails', icon: Mail, label: 'Mails' },
     { to: '/portal/wishlist', icon: Heart, label: t('pages.portal.wishlist') },
     { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];

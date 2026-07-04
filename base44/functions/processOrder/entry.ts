@@ -320,7 +320,99 @@ Deno.serve(async (req) => {
         notes: (order.notes || '') + '\n[' + new Date().toISOString() + '] Admin requested justification (subject: ' + subject.trim() + ')'
       });
 
+      // Create a mail record so the buyer can see and respond in their Mails tab
+      await base44.asServiceRole.entities.OrderMessage.create({
+        orderId: orderId,
+        buyerId: order.buyerId,
+        buyerEmail: order.buyerEmail,
+        buyerName: order.customerName,
+        orderReference: order.escrowReference,
+        subject: subject.trim(),
+        body: message.trim(),
+        sender: 'admin',
+        isRead: false
+      });
+
       return Response.json({ order: updated });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // ACTION: send_message — buyer replies in a mail thread
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'send_message') {
+      const orderId = body.orderId;
+      const subject = body.subject;
+      const message = body.message;
+
+      if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+      if (!message || typeof message !== 'string' || !message.trim()) {
+        return Response.json({ error: 'Message is required' }, { status: 400 });
+      }
+
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+
+      // Only the buyer who owns the order can send messages
+      if (order.buyerId !== user.id) {
+        return Response.json({ error: 'Not your order' }, { status: 403 });
+      }
+
+      const msg = await base44.asServiceRole.entities.OrderMessage.create({
+        orderId: orderId,
+        buyerId: user.id,
+        buyerEmail: order.buyerEmail,
+        buyerName: order.customerName,
+        orderReference: order.escrowReference,
+        subject: (subject || '').trim() || 'Re: ' + (order.escrowReference || 'Your Order'),
+        body: message.trim(),
+        sender: 'buyer',
+        isRead: false
+      });
+
+      return Response.json({ message: msg });
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // ACTION: admin_reply — admin replies in a mail thread
+    // ════════════════════════════════════════════════════════════════
+    if (action === 'admin_reply') {
+      if (user.role !== 'admin') {
+        return Response.json({ error: 'Admin access required' }, { status: 403 });
+      }
+
+      const orderId = body.orderId;
+      const subject = body.subject;
+      const message = body.message;
+
+      if (!orderId) return Response.json({ error: 'Order ID is required' }, { status: 400 });
+      if (!message || typeof message !== 'string' || !message.trim()) {
+        return Response.json({ error: 'Message is required' }, { status: 400 });
+      }
+
+      const order = await base44.asServiceRole.entities.Orders.get(orderId);
+      if (!order) return Response.json({ error: 'Order not found' }, { status: 404 });
+
+      if (order.buyerEmail) {
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: order.buyerEmail,
+          subject: (subject || '').trim() || 'Re: ' + (order.escrowReference || 'Your Order'),
+          body: message.trim()
+        });
+      }
+
+      const msg = await base44.asServiceRole.entities.OrderMessage.create({
+        orderId: orderId,
+        buyerId: order.buyerId,
+        buyerEmail: order.buyerEmail,
+        buyerName: order.customerName,
+        orderReference: order.escrowReference,
+        subject: (subject || '').trim() || 'Re: ' + (order.escrowReference || 'Your Order'),
+        body: message.trim(),
+        sender: 'admin',
+        isRead: false
+      });
+
+      return Response.json({ message: msg });
     }
 
     // ════════════════════════════════════════════════════════════════

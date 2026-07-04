@@ -42,6 +42,7 @@ import PortalLayout from '@/pages/portal/PortalLayout';
 import PortalDashboard from '@/pages/portal/PortalDashboard';
 import PortalOrders from '@/pages/portal/PortalOrders';
 import PortalOrderDetail from '@/pages/portal/PortalOrderDetail';
+import PortalMails from '@/pages/portal/PortalMails';
 import PortalProfile from '@/pages/portal/PortalProfile';
 import PortalBecomeDealer from '@/pages/portal/PortalBecomeDealer';
 import DealerLayout from '@/pages/dealer/DealerLayout';
@@ -494,6 +495,7 @@ const AuthenticatedApp = () => {
             <Route index element={<PortalDashboard />} />
             <Route path="orders" element={<PortalOrders />} />
             <Route path="orders/:id" element={<PortalOrderDetail />} />
+            <Route path="mails" element={<PortalMails />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<PortalProfile />} />
             <Route path="become-dealer" element={<PortalBecomeDealer />} />

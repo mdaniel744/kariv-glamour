@@ -1,0 +1,73 @@
+{
+  "name": "OrderMessage",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "buyerId": {
+      "type": "string"
+    },
+    "buyerEmail": {
+      "type": "string"
+    },
+    "buyerName": {
+      "type": "string"
+    },
+    "orderReference": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "sender": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "buyer"
+      ]
+    },
+    "isRead": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "orderId",
+    "buyerId",
+    "body",
+    "sender"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.buyerId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
