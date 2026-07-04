@@ -9,7 +9,8 @@ import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import PaymentMethodSelector from '@/components/escrow/PaymentMethodSelector';
-import { ESCROW_STATUS_DESCRIPTIONS, PAYMENT_METHODS } from '@/lib/escrowConstants';
+import { ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
+import CryptoCheckoutButton from '@/components/escrow/CryptoCheckoutButton';
 
 const ICON_MAP = { Building2, CreditCard, Bitcoin };
 
@@ -113,20 +114,15 @@ export default function PortalOrderDetail() {
 
           {order.paymentMethod === 'bank_transfer' && (
             <div className="space-y-1.5 text-xs mb-4">
-              <div className="flex justify-between"><span className="text-muted-foreground">Bank:</span><span className="text-foreground">{PAYMENT_METHODS[0].details.bankName}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">IBAN:</span><span className="text-foreground font-mono">{PAYMENT_METHODS[0].details.iban}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">BIC:</span><span className="text-foreground font-mono">{PAYMENT_METHODS[0].details.bic}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+              <p className="text-muted-foreground">
+                {t('pages.portal.bankTransferInfo', { defaultValue: 'Bank transfer details will be provided after the dealer confirms availability. Use your Escrow Reference as the payment reference.' })}
+              </p>
+              <div className="flex justify-between pt-1"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
             </div>
           )}
 
           {order.paymentMethod === 'crypto' && (
-            <div className="space-y-1.5 text-xs mb-4">
-              <div className="flex justify-between gap-2"><span className="text-muted-foreground whitespace-nowrap">BTC:</span><span className="text-foreground font-mono break-all">{PAYMENT_METHODS[1].details.btcAddress}</span></div>
-              <div className="flex justify-between gap-2"><span className="text-muted-foreground whitespace-nowrap">ETH/USDT:</span><span className="text-foreground font-mono break-all">{PAYMENT_METHODS[1].details.ethAddress}</span></div>
-              <p className="text-muted-foreground pt-1">{PAYMENT_METHODS[1].details.note}</p>
-              <div className="flex justify-between pt-1"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
-            </div>
+            <CryptoCheckoutButton orderId={order.id} escrowReference={order.escrowReference} />
           )}
 
           {order.paymentStatus === 'Awaiting Confirmation' ? (
