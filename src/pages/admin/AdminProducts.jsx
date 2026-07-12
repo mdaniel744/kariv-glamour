@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
-import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Upload, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
+import ProductCategorySidebar from '@/components/admin/ProductCategorySidebar';
 
 export default function AdminProducts() {
   const { t } = useTranslation('admin');
@@ -13,11 +14,14 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.Products.list('-created_date', 50);
+      const data = await base44.entities.Products.list('-created_date', 200);
       setProducts(data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -159,10 +163,33 @@ export default function AdminProducts() {
     );
   }
 
+  const filtered = products.filter(p => {
+    if (selectedBrand && p.brand !== selectedBrand) return false;
+    if (selectedCollection && (p.collection || '— Unclassified') !== selectedCollection) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return (p.productTitle_de || p.productTitle || '').toLowerCase().includes(q) ||
+             (p.referenceNumber || '').toLowerCase().includes(q) ||
+             (p.model || '').toLowerCase().includes(q);
+    }
+    return true;
+  });
+
+  const handleSelectBrand = (brand) => { setSelectedBrand(brand); setSelectedCollection(null); };
+  const handleSelectCollection = (brand, col) => { setSelectedBrand(brand); setSelectedCollection(col); };
+  const handleSelectAll = () => { setSelectedBrand(null); setSelectedCollection(null); };
+
+  const headerLabel = selectedCollection || selectedBrand || 'All Products';
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-display text-[#E5E5E5] font-light">{t('products')}</h1>
+        <div>
+          <h1 className="text-xl font-display text-[#E5E5E5] font-light">{t('products')}</h1>
+          {filtered.length !== products.length && (
+            <p className="text-[10px] text-[#8E8E93] mt-0.5">{filtered.length} of {products.length} · {headerLabel}</p>
+          )}
+        </div>
         <button onClick={openNew} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-4 py-2.5 hover:bg-[#B8944F] transition-colors">
           <Plus size={14} /> {t('addProduct')}
         </button>
@@ -178,23 +205,50 @@ export default function AdminProducts() {
           <button onClick={openNew} className="text-[#C5A367] text-xs">{t('addFirst')}</button>
         </div>
       ) : (
-        <div className="space-y-2">
-          {products.map(p => (
-            <div key={p.id} className="flex items-center gap-4 bg-[#111] border border-white/5 p-3">
-              <div className="w-12 h-12 bg-[#1A1A1A] flex-shrink-0 overflow-hidden">
-                {p.featuredImage && <img src={p.featuredImage} alt="" className="w-full h-full object-cover" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-[#E5E5E5] truncate">{p.productTitle_de || p.productTitle}</p>
-                <p className="text-[10px] text-[#8E8E93]">{p.brand} · {p.condition} · {p.availability}</p>
-              </div>
-              <span className="text-xs text-[#C5A367] font-medium">{formatPrice(p.price)}</span>
-              <div className="flex gap-2">
-                <button onClick={() => openEdit(p)} className="text-[#8E8E93] hover:text-[#C5A367]"><Pencil size={14} /></button>
-                <button onClick={() => handleDelete(p.id)} className="text-[#8E8E93] hover:text-red-400"><Trash2 size={14} /></button>
-              </div>
+        <div className="flex gap-4">
+          <ProductCategorySidebar
+            products={products}
+            selectedBrand={selectedBrand}
+            selectedCollection={selectedCollection}
+            onSelectBrand={handleSelectBrand}
+            onSelectCollection={handleSelectCollection}
+            onSelectAll={handleSelectAll}
+          />
+          <div className="flex-1 min-w-0">
+            <div className="relative mb-3">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
+              <input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search by title, reference, or model..."
+                className="w-full bg-[#111] border border-white/5 text-xs text-[#E5E5E5] pl-9 pr-3 py-2.5 outline-none focus:border-[#C5A367]"
+              />
             </div>
-          ))}
+            {filtered.length === 0 ? (
+              <div className="text-center py-12 border border-white/5">
+                <p className="text-[#8E8E93] text-sm">No products match this filter.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filtered.map(p => (
+                  <div key={p.id} className="flex items-center gap-4 bg-[#111] border border-white/5 p-3">
+                    <div className="w-12 h-12 bg-[#1A1A1A] flex-shrink-0 overflow-hidden">
+                      {p.featuredImage && <img src={p.featuredImage} alt="" className="w-full h-full object-cover" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-[#E5E5E5] truncate">{p.productTitle_de || p.productTitle}</p>
+                      <p className="text-[10px] text-[#8E8E93]">{p.brand}{p.collection ? ` · ${p.collection}` : ''} · {p.condition} · {p.availability}</p>
+                    </div>
+                    <span className="text-xs text-[#C5A367] font-medium">{formatPrice(p.price)}</span>
+                    <div className="flex gap-2">
+                      <button onClick={() => openEdit(p)} className="text-[#8E8E93] hover:text-[#C5A367]"><Pencil size={14} /></button>
+                      <button onClick={() => handleDelete(p.id)} className="text-[#8E8E93] hover:text-red-400"><Trash2 size={14} /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
