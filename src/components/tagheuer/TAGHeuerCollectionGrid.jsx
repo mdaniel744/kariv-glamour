@@ -5,6 +5,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TH_COLLECTIONS } from '@/lib/tagHeuerData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'TAG Heuer';
 
@@ -31,6 +32,8 @@ export default function TAGHeuerCollectionGrid() {
     el.scrollBy({ left: dir * (cardWidth + 24), behavior: 'smooth' });
   };
 
+  const { collections } = useBrandCollections(BRAND, TH_COLLECTIONS);
+
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
@@ -49,7 +52,7 @@ export default function TAGHeuerCollectionGrid() {
           </button>
 
           <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
-            {TH_COLLECTIONS.map((c, i) =>
+            {collections.map((c, i) =>
               <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[60%] lg:w-[31%]">
                 <LocalizedLink to={`/tag-heuer/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">

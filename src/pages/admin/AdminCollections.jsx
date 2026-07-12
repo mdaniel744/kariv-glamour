@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DATA } from '@/lib/constants';
-import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 
@@ -13,6 +13,7 @@ export default function AdminCollections() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
+  const [uploading, setUploading] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -23,6 +24,16 @@ export default function AdminCollections() {
 
   const openNew = () => { setForm({ brand: '', slug: '', collectionName_de: '', collectionName_en: '', description_de: '', description_en: '' }); setEditing('new'); };
   const openEdit = (c) => { setForm({ ...c }); setEditing(c.id); };
+
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setForm(prev => ({ ...prev, heroImage: file_url }));
+    } catch (e) { toast({ title: t('error'), description: 'Upload failed', variant: "destructive" }); }
+    finally { setUploading(false); }
+  };
 
   const handleSave = async () => {
     try {
@@ -64,6 +75,23 @@ export default function AdminCollections() {
             <input value={form.slug || ''} onChange={e => setForm({...form, slug: e.target.value})} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]" />
           </div>
           <BilingualField label={t('fields.description')} name="description" form={form} setForm={setForm} type="textarea" />
+          <div>
+            <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">Collection Image</label>
+            {form.heroImage ? (
+              <div className="relative w-full max-w-sm">
+                <img src={form.heroImage} alt="Collection" className="w-full aspect-[4/3] object-cover border border-white/10" />
+                <button onClick={() => setForm({ ...form, heroImage: '' })} className="absolute top-2 right-2 w-7 h-7 bg-black/60 text-white flex items-center justify-center hover:bg-black/80"><X size={14} /></button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border border-dashed border-white/15 cursor-pointer hover:border-[#C5A367] transition-colors">
+                {uploading ? <span className="text-xs text-[#8E8E93]">Uploading...</span> : <>
+                  <Upload size={20} className="text-[#8E8E93] mb-2" />
+                  <span className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93]">Upload Image</span>
+                </>}
+                <input type="file" accept="image/*" className="hidden" onChange={e => handleImageUpload(e.target.files?.[0])} />
+              </label>
+            )}
+          </div>
           <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3"><Save size={14} /> {t('save')}</button>
         </div>
       </div>
@@ -82,9 +110,12 @@ export default function AdminCollections() {
         <div className="space-y-2">
           {items.map(c => (
             <div key={c.id} className="flex items-center justify-between bg-[#111] border border-white/5 p-3">
-              <div>
-                <p className="text-xs text-[#E5E5E5]">{c.collectionName_de || c.collectionName}</p>
-                <p className="text-[10px] text-[#8E8E93]">{c.brand}</p>
+              <div className="flex items-center gap-3">
+                {c.heroImage && <img src={c.heroImage} alt="" className="w-10 h-10 object-cover" />}
+                <div>
+                  <p className="text-xs text-[#E5E5E5]">{c.collectionName_de || c.collectionName}</p>
+                  <p className="text-[10px] text-[#8E8E93]">{c.brand}</p>
+                </div>
               </div>
               <div className="flex gap-2">
                 <button onClick={() => openEdit(c)} className="text-[#8E8E93] hover:text-[#C5A367]"><Pencil size={14} /></button>

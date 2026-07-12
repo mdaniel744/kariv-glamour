@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { CARTIER_COLLECTIONS } from '@/lib/cartierData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Cartier';
 
 export default function CartierCollectionGrid() {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
+  const { collections } = useBrandCollections(BRAND, CARTIER_COLLECTIONS);
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
@@ -19,7 +21,7 @@ export default function CartierCollectionGrid() {
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>
         </div>
         <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar">
-          {CARTIER_COLLECTIONS.map((c, i) =>
+          {collections.map((c, i) =>
             <motion.div key={c.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 4 * 0.05 }} className="flex-shrink-0 snap-start min-w-[80%] sm:min-w-[45%] lg:min-w-[30%]">
               <LocalizedLink to={`/cartier/${c.slug}`} className="group block border border-border bg-card transition-colors hover:border-primary/40">
                 <div className="aspect-[4/3] overflow-hidden flex items-center justify-center bg-secondary">

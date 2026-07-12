@@ -5,6 +5,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ROLEX_COLLECTIONS } from '@/lib/rolexData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Rolex';
 
@@ -13,6 +14,7 @@ export default function RolexCollectionCarousel() {
   const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 320, behavior: 'smooth' }); };
+  const { collections } = useBrandCollections(BRAND, ROLEX_COLLECTIONS);
 
   return (
     <section id="rolex-collections" className="py-16 md:py-24 bg-background">
@@ -29,7 +31,7 @@ export default function RolexCollectionCarousel() {
         </div>
 
         <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
-          {ROLEX_COLLECTIONS.map((col, i) =>
+          {collections.map((col, i) =>
             <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }} className="flex-shrink-0 w-[280px] snap-start group">
               <LocalizedLink to={`/rolex/${col.slug}`} className="block">
                 <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-card">

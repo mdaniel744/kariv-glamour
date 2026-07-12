@@ -5,6 +5,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BREITLING_COLLECTIONS } from '@/lib/breitlingData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Breitling';
 
@@ -31,6 +32,8 @@ export default function BreitlingCollectionGrid() {
     el.scrollBy({ left: dir * (cardWidth + 24), behavior: 'smooth' });
   };
 
+  const { collections } = useBrandCollections(BRAND, BREITLING_COLLECTIONS);
+
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
@@ -49,11 +52,11 @@ export default function BreitlingCollectionGrid() {
           </button>
 
           <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
-            {BREITLING_COLLECTIONS.map((c, i) =>
+            {collections.map((c, i) =>
               <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[45%] lg:w-[31%]">
                 <LocalizedLink to={`/breitling/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
-                  <div className="aspect-[4/3] flex items-center justify-center bg-secondary">
-                    <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
+                  <div className="aspect-[4/3] overflow-hidden flex items-center justify-center bg-secondary">
+                    {c.image ? <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>}
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl mb-2 font-display font-semibold text-foreground">{c.name}</h3>

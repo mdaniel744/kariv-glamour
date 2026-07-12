@@ -5,6 +5,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BVLGARI_COLLECTIONS } from '@/lib/bvlgariData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Bvlgari';
 
@@ -23,6 +24,8 @@ export default function BvlgariCollectionGrid() {
   }, []);
 
   useEffect(() => { updateArrows(); }, [updateArrows]);
+
+  const { collections } = useBrandCollections(BRAND, BVLGARI_COLLECTIONS);
 
   const scrollByDir = (dir) => {
     const el = scrollRef.current;
@@ -49,7 +52,7 @@ export default function BvlgariCollectionGrid() {
           </button>
 
           <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
-            {BVLGARI_COLLECTIONS.map((c, i) =>
+            {collections.map((c, i) =>
               <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[60%] lg:w-[31%]">
                 <LocalizedLink to={`/bvlgari/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">

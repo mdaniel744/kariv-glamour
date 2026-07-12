@@ -5,6 +5,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PATEK_COLLECTIONS } from '@/lib/patekData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Patek Philippe';
 
@@ -13,6 +14,7 @@ export default function PatekPhilippeCollectionCarousel() {
   const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 340, behavior: 'smooth' }); };
+  const { collections } = useBrandCollections(BRAND, PATEK_COLLECTIONS);
 
   return (
     <section id="patek-collections" className="py-16 md:py-24 bg-background">
@@ -28,7 +30,7 @@ export default function PatekPhilippeCollectionCarousel() {
           <button onClick={() => scroll(1)} className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full shadow-md transition-all hover:opacity-90 bg-primary text-primary-foreground"><ChevronRight size={18} /></button>
 
           <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
-            {PATEK_COLLECTIONS.map((col, i) =>
+            {collections.map((col, i) =>
               <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[280px] md:w-[300px] snap-start group">
                 <LocalizedLink to={`/patek-philippe/${col.slug}`} className="block">
                   <div className="relative aspect-[3/4] overflow-hidden mb-5 bg-card">

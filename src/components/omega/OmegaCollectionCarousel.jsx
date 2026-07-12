@@ -5,15 +5,17 @@ import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { OMEGA_COLLECTIONS } from '@/lib/omegaData';
+import { useBrandCollections } from '@/hooks/useBrandCollections';
 
 const BRAND = 'Omega';
-const MAIN_COLLECTIONS = OMEGA_COLLECTIONS.filter((c) => c.parentCollection === null);
 
 export default function OmegaCollectionCarousel() {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 320, behavior: 'smooth' }); };
+  const { collections } = useBrandCollections(BRAND, OMEGA_COLLECTIONS);
+  const MAIN_COLLECTIONS = collections.filter((c) => c.parentCollection === null);
 
   return (
     <section id="omega-collections" className="py-16 md:py-24 bg-background">
