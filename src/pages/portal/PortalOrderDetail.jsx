@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { useLanguage } from '@/lib/languageContext';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
+import LocalizedLink from '@/components/LocalizedLink';
 import { formatPrice } from '@/lib/constants';
 import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin, Flag, AlertTriangle, X, Star } from 'lucide-react';
 import EscrowTimeline from '@/components/escrow/EscrowTimeline';
@@ -15,10 +15,9 @@ import PaymentProofUploader from '@/components/escrow/PaymentProofUploader';
 
 const ICON_MAP = { Building2, CreditCard, Bitcoin };
 
-export default function PortalOrderDetail() {
+export default function PortalOrderDetail({ id: providedId }) {
   const { t } = useTranslation();
-  const { id } = useParams();
-  const { localePath } = useLanguage();
+  const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -34,7 +33,7 @@ export default function PortalOrderDetail() {
   useEffect(() => {
     Promise.all([
       base44.entities.Orders.get(id),
-      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).catch(() => [])
+      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
     ]).then(([o, disputes]) => {
       setOrder(o);
       setPaymentMethod(o.paymentMethod);
@@ -110,9 +109,9 @@ export default function PortalOrderDetail() {
 
   return (
     <div>
-      <Link to={localePath('/portal/orders')} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
+      <LocalizedLink to="/portal/orders" className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft size={10} /> {t('pages.portal.backToOrders')}
-      </Link>
+      </LocalizedLink>
 
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -401,9 +400,9 @@ export default function PortalOrderDetail() {
             <div className="flex-1">
               <p className="text-xs font-medium text-primary mb-1">Rate Your Dealer</p>
               <p className="text-[11px] text-muted-foreground mb-3">How was your experience with {order.dealerName || 'this dealer'}? Your feedback helps other buyers make informed decisions.</p>
-              <Link to={localePath(`/dealer-profile/${order.dealerId}`)} className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
+              <LocalizedLink to={`/dealer-profile/${order.dealerId}`} className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
                 Leave a Review →
-              </Link>
+              </LocalizedLink>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLanguage } from '@/lib/languageContext';
 
 /**
@@ -11,8 +11,18 @@ import { useLanguage } from '@/lib/languageContext';
  */
 export default function LocalizedLink({ to, children, ...props }) {
   const { localePath } = useLanguage();
+  const href = localePath(to);
+
+  if (typeof href === 'string' && (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:'))) {
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link to={localePath(to)} {...props}>
+    <Link href={href} {...props}>
       {children}
     </Link>
   );

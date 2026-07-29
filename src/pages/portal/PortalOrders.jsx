@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Package, ChevronRight } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
@@ -11,13 +11,12 @@ import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 export default function PortalOrders() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { localePath } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     base44.entities.Orders.filter({ buyerId: user.id }, '-created_date', 50)
-      .then(setOrders).catch(console.error).finally(() => setLoading(false));
+      .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   return (
@@ -30,12 +29,12 @@ export default function PortalOrders() {
         <div className="border border-border p-12 text-center">
           <Package size={32} className="text-muted-foreground/40 mx-auto mb-4" />
           <p className="text-sm text-muted-foreground mb-4">{t('pages.portal.noOrdersDesc')}</p>
-          <Link to={localePath('/shop')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.browseWatches')}</Link>
+          <LocalizedLink to="/shop" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.browseWatches')}</LocalizedLink>
         </div>
       ) : (
         <div className="space-y-3">
           {orders.map(order => (
-            <Link key={order.id} to={localePath(`/portal/orders/${order.id}`)} className="block bg-card border border-border p-4 hover:border-primary transition-colors">
+            <LocalizedLink key={order.id} to={`/portal/orders/${order.id}`} className="block bg-card border border-border p-4 hover:border-primary transition-colors">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   {order.products?.[0]?.featuredImage ? (
@@ -55,7 +54,7 @@ export default function PortalOrders() {
                 </div>
                 <ChevronRight size={16} className="text-muted-foreground flex-shrink-0" />
               </div>
-            </Link>
+            </LocalizedLink>
           ))}
         </div>
       )}

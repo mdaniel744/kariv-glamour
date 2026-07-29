@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, ShieldCheck, Truck, Package } from 'lucide-react';
+import { ShoppingCart, ShieldCheck, Truck } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
@@ -18,7 +18,7 @@ export default function DealerSales() {
 
   useEffect(() => {
     base44.entities.Orders.filter({ dealerId: user.id }, '-created_date', 50)
-      .then(setSales).catch(console.error).finally(() => setLoading(false));
+      .then(data => setSales(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   const needsShipping = sales.filter(s => s.escrowStatus === 'funds_secured');

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useCart } from '@/lib/cartContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useAuth } from '@/lib/AuthContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
-import { useSEO } from '@/hooks/useSEO';
-import { Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
+import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
@@ -16,65 +15,72 @@ import TrustBar from '@/components/shared/TrustBar';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 import StarRating from '@/components/dealer/StarRating';
 
-export default function ProductDetail() {
+function productIdFromPath() {
+  if (typeof window === 'undefined') return null;
+  const match = window.location.pathname.match(/\/product\/([^/?#]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = [] }) {
   const { t } = useTranslation();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { addToCart, isInCart, toggleWishlist, isInWishlist } = useCart();
+  const id = idProp || productIdFromPath();
+  const { toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
   const { localePath } = useLanguage();
   const { isAuthenticated } = useAuth();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(initialProduct);
+  const [loading, setLoading] = useState(!initialProduct);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [related, setRelated] = useState([]);
+  const [related, setRelated] = useState(initialRelated);
   const [dealerProfile, setDealerProfile] = useState(null);
 
-  // SEO — uses localized fields, updates when product loads
-  const seoTitle = product ? localize(product, 'metaTitle') || localize(product, 'productTitle') : undefined;
-  const seoDescription = product ? localize(product, 'metaDescription') || localize(product, 'shortDescription') : undefined;
-  const seoImage = product?.featuredImage;
-  const productJsonLd = product ? {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": seoTitle,
-    "description": seoDescription,
-    "image": seoImage,
-    "brand": { "@type": "Brand", "name": product.brand },
-    "offers": {
-      "@type": "Offer",
-      "price": product.salePrice || product.price,
-      "priceCurrency": product.currency || "EUR",
-      "availability": product.availability === 'In Stock' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      "itemCondition": product.condition ? `https://schema.org/${product.condition === 'New' ? 'NewCondition' : 'UsedCondition'}` : undefined
-    }
-  } : null;
-  useSEO({ title: seoTitle, description: seoDescription, image: seoImage, type: 'product', jsonLd: productJsonLd });
-
   useEffect(() => {
+    let mounted = true;
+
+    const loadDealer = (data) => {
+      const dealerUserId = data?.dealerId || data?.created_by_id;
+      if (!dealerUserId) return;
+      base44.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
+        .then((profiles) => {
+          if (mounted) setDealerProfile(profiles[0] || null);
+        })
+        .catch(() => {});
+    };
+
+    if (initialProduct?.id === id) {
+      setProduct(initialProduct);
+      setRelated(initialRelated);
+      setLoading(false);
+      loadDealer(initialProduct);
+      window.scrollTo(0, 0);
+      return () => {
+        mounted = false;
+      };
+    }
+
     const load = async () => {
       setLoading(true);
       try {
         const data = await base44.entities.Products.get(id);
+        if (!mounted) return;
         setProduct(data);
-        const dealerUserId = data.dealerId || data.created_by_id;
-        if (dealerUserId) {
-          base44.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
-            .then(p => setDealerProfile(p[0] || null))
-            .catch(() => {});
-        }
-        const rel = await base44.entities.Products.filter({ brand: data.brand }, '-created_date', 4);
-        setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
+        loadDealer(data);
+        const rel = asArray(await base44.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
+        if (mounted) setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
         console.error(e);
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
-    load();
+
+    if (id) load();
     window.scrollTo(0, 0);
-  }, [id]);
+    return () => {
+      mounted = false;
+    };
+  }, [id, initialProduct, initialRelated]);
 
   if (loading) {
     return (
@@ -102,7 +108,6 @@ export default function ProductDetail() {
 
   const images = product.productImages?.length > 0 ? product.productImages :
   product.featuredImage ? [product.featuredImage] : [];
-  const inCart = isInCart(product.id);
   const wishlisted = isInWishlist(product.id);
   const brandSlug = product.brand?.toLowerCase().replace(/\s+/g, '-');
 
@@ -232,7 +237,7 @@ export default function ProductDetail() {
                 onClick={() => {
                   if (product.availability === 'Sold' || product.availability === 'Reserved') return;
                   if (isAuthenticated) {
-                    navigate(localePath(`/checkout/${product.id}`));
+                    window.location.assign(localePath(`/checkout/${product.id}`));
                   } else {
                     setShowAuthModal(true);
                   }

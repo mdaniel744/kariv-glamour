@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { GP_COLLECTIONS, GP_CASE_MATERIALS, GP_MOVEMENTS, GP_DIAL_COLORS, GP_FEATURES, GP_WATCH_TYPES, GP_BRACELETS, GP_CASE_SIZES, GP_TYPES, GP_BOX_PAPERS, GP_AVAILABILITY } from '@/lib/girardPerregauxData';
+import { GP_COLLECTIONS, GP_CASE_MATERIALS, GP_MOVEMENTS, GP_DIAL_COLORS, GP_FEATURES, GP_WATCH_TYPES, GP_BRACELETS, GP_CASE_SIZES, GP_BOX_PAPERS, GP_AVAILABILITY } from '@/lib/girardPerregauxData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (

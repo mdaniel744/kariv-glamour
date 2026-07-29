@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useToast } from '@/components/ui/use-toast';
 import { ArrowLeft, Save, Upload, X } from 'lucide-react';
-import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
+import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 
-export default function DealerListingForm() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+export default function DealerListingForm({ id: providedId }) {
+  const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
+  const router = useRouter();
   const { user } = useAuth();
   const { localePath } = useLanguage();
   const { toast } = useToast();
@@ -76,7 +76,7 @@ export default function DealerListingForm() {
         await base44.entities.Products.create(payload);
       }
       toast({ title: isEdit ? 'Listing updated!' : 'Listing created!' });
-      navigate(localePath('/dealer/listings'));
+      router.push(localePath('/dealer/listings'));
     } catch (e) {
       toast({ title: 'Error', description: e.message, variant: 'destructive' });
     } finally { setSaving(false); }
@@ -87,7 +87,7 @@ export default function DealerListingForm() {
 
   return (
     <div className="max-w-2xl">
-      <button onClick={() => navigate(localePath('/dealer/listings'))} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
+      <button onClick={() => router.push(localePath('/dealer/listings'))} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft size={10} /> Back to Listings
       </button>
       <h1 className="text-xl font-display text-foreground font-light mb-6">{isEdit ? 'Edit Listing' : 'List a New Watch'}</h1>

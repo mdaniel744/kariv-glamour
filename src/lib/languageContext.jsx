@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import i18n from '@/lib/i18n';
+import { I18nextProvider } from 'react-i18next';
+import { createI18nInstance } from '@/lib/i18n';
 
 const LanguageContext = createContext();
 
 const SUPPORTED_LOCALES = ['de', 'en'];
 const DEFAULT_LOCALE = 'de';
 
-function detectLocaleFromPath(pathname) {
+export function detectLocaleFromPath(pathname) {
   const segments = pathname.split('/').filter(Boolean);
   if (segments.length > 0 && SUPPORTED_LOCALES.includes(segments[0])) {
     return segments[0];
@@ -21,39 +21,47 @@ function detectBrowserLocale() {
   return browserLang.toLowerCase().startsWith('en') ? 'en' : 'de';
 }
 
-export function LanguageProvider({ children }) {
-  const location = useLocation();
-  const navigate = useNavigate();
+function resolveInitialLocale(initialLocale) {
+  if (SUPPORTED_LOCALES.includes(initialLocale)) return initialLocale;
+  const fromPath = typeof window !== 'undefined' ? detectLocaleFromPath(window.location.pathname) : null;
+  if (fromPath) return fromPath;
+  return (typeof localStorage !== 'undefined' && localStorage.getItem('kariv-locale')) || detectBrowserLocale();
+}
 
+export function LanguageProvider({ children, initialLocale }) {
   const [locale, setLocaleState] = useState(() => {
-    const fromPath = detectLocaleFromPath(location.pathname);
-    if (fromPath) {
-      localStorage.setItem('kariv-locale', fromPath);
-      return fromPath;
-    }
-    return localStorage.getItem('kariv-locale') || detectBrowserLocale();
+    const resolvedLocale = resolveInitialLocale(initialLocale);
+    if (typeof localStorage !== 'undefined') localStorage.setItem('kariv-locale', resolvedLocale);
+    return resolvedLocale;
   });
+  const [i18nInstance] = useState(() => createI18nInstance(resolveInitialLocale(initialLocale)));
 
   // Sync locale when URL changes (e.g. user navigates to /en/... directly)
   useEffect(() => {
-    const fromPath = detectLocaleFromPath(location.pathname);
-    if (fromPath && fromPath !== locale) {
-      setLocaleState(fromPath);
-      localStorage.setItem('kariv-locale', fromPath);
-    }
-  }, [location.pathname]);
+    const syncFromLocation = () => {
+      const fromPath = detectLocaleFromPath(window.location.pathname);
+      if (fromPath) {
+        setLocaleState(fromPath);
+        localStorage.setItem('kariv-locale', fromPath);
+      }
+    };
+
+    syncFromLocation();
+    window.addEventListener('popstate', syncFromLocation);
+    return () => window.removeEventListener('popstate', syncFromLocation);
+  }, []);
 
   // Sync i18next language + <html lang="...">
   useEffect(() => {
-    i18n.changeLanguage(locale);
+    i18nInstance.changeLanguage(locale);
     document.documentElement.lang = locale;
-  }, [locale]);
+  }, [i18nInstance, locale]);
 
   const setLocale = (newLocale) => {
     setLocaleState(newLocale);
     localStorage.setItem('kariv-locale', newLocale);
     // Rewrite the URL to include the new locale prefix
-    const currentPath = location.pathname;
+    const currentPath = window.location.pathname;
     const segments = currentPath.split('/').filter(Boolean);
     if (SUPPORTED_LOCALES.includes(segments[0])) {
       segments[0] = newLocale;
@@ -61,7 +69,7 @@ export function LanguageProvider({ children }) {
       segments.unshift(newLocale);
     }
     const newPath = '/' + segments.join('/');
-    navigate(newPath + location.search + location.hash);
+    window.location.href = newPath + window.location.search + window.location.hash;
   };
 
   const localePath = (path) => {
@@ -71,9 +79,11 @@ export function LanguageProvider({ children }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, localePath, supportedLocales: SUPPORTED_LOCALES }}>
-      {children}
-    </LanguageContext.Provider>
+    <I18nextProvider i18n={i18nInstance}>
+      <LanguageContext.Provider value={{ locale, setLocale, localePath, supportedLocales: SUPPORTED_LOCALES }}>
+        {children}
+      </LanguageContext.Provider>
+    </I18nextProvider>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
@@ -57,7 +58,7 @@ export default function PatekPhilippeSeoLanding({ slug }) {
       setLoading(true);
       try {
         const query = { brand: BRAND, ...(pageData?.collectionFilter || {}) };
-        const data = await base44.entities.Products.filter(query, '-created_date', 50);
+        const data = asArray(await base44.entities.Products.filter(query, '-created_date', 50));
         setProducts(data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
@@ -20,7 +21,7 @@ export default function AdminOrders() {
   const [sendingMsg, setSendingMsg] = useState(false);
 
   useEffect(() => {
-    base44.entities.Orders.list('-created_date', 50).then(setOrders).catch(console.error).finally(() => setLoading(false));
+    base44.entities.Orders.list('-created_date', 50).then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const updateEscrow = async (id, escrowStatus) => {
@@ -100,7 +101,7 @@ export default function AdminOrders() {
             <div key={o.id} className="bg-[#111] border border-white/5">
               <div className="p-4">
                 <div className="flex items-start justify-between mb-2">
-                  <Link to={`/admin/orders/${o.id}`} className="flex items-center gap-3 group">
+                  <LocalizedLink to={`/admin/orders/${o.id}`} className="flex items-center gap-3 group">
                     {o.products?.[0]?.featuredImage && <img src={o.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
                     <div>
                       <p className="text-xs text-[#E5E5E5] font-medium group-hover:text-[#C5A367] transition-colors flex items-center gap-1">
@@ -110,7 +111,7 @@ export default function AdminOrders() {
                       <p className="text-[10px] text-[#8E8E93]">{o.customerEmail}</p>
                       <p className="text-[10px] text-[#8E8E93] font-mono">{o.escrowReference}</p>
                     </div>
-                  </Link>
+                  </LocalizedLink>
                   <div className="text-right">
                     <p className="text-sm text-[#C5A367] font-medium mb-1">{formatPrice(o.totalAmount)}</p>
                     <EscrowStatusBadge status={o.escrowStatus} />

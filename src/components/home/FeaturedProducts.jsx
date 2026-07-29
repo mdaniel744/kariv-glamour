@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import ProductCard from '@/components/shared/ProductCard';
 import SectionHeading from '@/components/shared/SectionHeading';
 
@@ -10,7 +11,7 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await base44.entities.Products.filter(filter, '-created_date', limit);
+        const data = asArray(await base44.entities.Products.filter(filter, '-created_date', limit));
         setProducts(data);
       } catch (e) {
         console.error(e);

@@ -14,8 +14,8 @@ export default function AdminCustomers() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Customers.list('-created_date', 50).catch(() => []),
-      base44.entities.OrderMessage.list('-created_date', 200).catch(() => [])
+      base44.entities.Customers.list('-created_date', 50).then(asArray).catch(() => []),
+      base44.entities.OrderMessage.list('-created_date', 200).then(asArray).catch(() => [])
     ]).then(([custs, msgs]) => {
       setCustomers(custs);
       setMessages(msgs);

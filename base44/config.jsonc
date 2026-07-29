@@ -1,9 +1,9 @@
 {
   "name": "untitled",
   "site": {
-    "installCommand": "npm install",
-    "buildCommand": "npm run build",
-    "serveCommand": "npm run dev",
-    "outputDirectory": "./dist"
+    "installCommand": "pnpm install",
+    "buildCommand": "pnpm run build",
+    "serveCommand": "pnpm run dev",
+    "outputDirectory": "./.next"
   }
 }

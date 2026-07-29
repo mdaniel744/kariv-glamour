@@ -1,33 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
-import { formatPrice } from '@/lib/constants';
 import StarRating from '@/components/dealer/StarRating';
 import DealerReviewCard from '@/components/dealer/DealerReviewCard';
 import DealerReviewForm from '@/components/dealer/DealerReviewForm';
 import ProductCard from '@/components/shared/ProductCard';
-import { BadgeCheck, MapPin, Clock, Globe, ShieldCheck, Star, ChevronRight, Package } from 'lucide-react';
+import { BadgeCheck, MapPin, Clock, Globe, ShieldCheck, Star, Package } from 'lucide-react';
 
-export default function DealerProfile() {
-  const { id } = useParams();
-  const { localePath } = useLanguage();
+export default function DealerProfile({
+  id: idProp,
+  initialProfile = null,
+  initialListings = [],
+  initialReviews = [],
+}) {
+  const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const { user } = useAuth();
-  const [profile, setProfile] = useState(null);
-  const [listings, setListings] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [profile, setProfile] = useState(initialProfile);
+  const [listings, setListings] = useState(initialListings);
+  const [reviews, setReviews] = useState(initialReviews);
   const [eligibleOrder, setEligibleOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialProfile && initialListings.length === 0 && initialReviews.length === 0);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [profiles, dealerListings, dealerReviews] = await Promise.all([
-          base44.entities.DealerProfile.filter({ userId: id }, '-created_date', 1).catch(() => []),
-          base44.entities.Products.filter({ dealerId: id }, '-created_date', 50).catch(() => []),
-          base44.entities.DealerReview.filter({ dealerId: id }, '-created_date', 50).catch(() => [])
-        ]);
+        const hasInitialData = initialProfile || initialListings.length > 0 || initialReviews.length > 0;
+        const [profiles, dealerListings, dealerReviews] = hasInitialData
+          ? [[initialProfile].filter(Boolean), initialListings, initialReviews]
+          : await Promise.all([
+              base44.entities.DealerProfile.filter({ userId: id }, '-created_date', 1).then(asArray).catch(() => []),
+              base44.entities.Products.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => []),
+              base44.entities.DealerReview.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => [])
+            ]);
 
         setProfile(profiles[0] || null);
         setListings(dealerListings);
@@ -35,10 +40,10 @@ export default function DealerProfile() {
 
         // Check if current user has a completed order with this dealer (eligible to review)
         if (user) {
-          const myOrders = await base44.entities.Orders.filter({ buyerId: user.id, dealerId: id }, '-created_date', 50).catch(() => []);
+          const myOrders = asArray(await base44.entities.Orders.filter({ buyerId: user.id, dealerId: id }, '-created_date', 50).then(asArray).catch(() => []));
           const completed = myOrders.find(o =>
             ['funds_released', 'verified'].includes(o.escrowStatus) &&
-            !reviews.find(r => r.orderId === o.id)
+            !dealerReviews.find(r => r.orderId === o.id)
           );
           if (completed) setEligibleOrder(completed);
         }
@@ -50,7 +55,7 @@ export default function DealerProfile() {
     };
     load();
     window.scrollTo(0, 0);
-  }, [id, user]);
+  }, [id, user, initialProfile, initialListings, initialReviews]);
 
   if (loading) {
     return (

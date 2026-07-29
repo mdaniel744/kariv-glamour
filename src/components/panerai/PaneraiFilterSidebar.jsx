@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { PANERAI_COLLECTIONS, PANERAI_CASE_MATERIALS, PANERAI_MOVEMENTS, PANERAI_DIAL_COLORS, PANERAI_FEATURES, PANERAI_WATCH_TYPES, PANERAI_BRACELETS, PANERAI_CASE_SIZES, PANERAI_TYPES, PANERAI_BOX_PAPERS, PANERAI_AVAILABILITY } from '@/lib/paneraiData';
+import { PANERAI_COLLECTIONS, PANERAI_CASE_MATERIALS, PANERAI_MOVEMENTS, PANERAI_DIAL_COLORS, PANERAI_FEATURES, PANERAI_WATCH_TYPES, PANERAI_BRACELETS, PANERAI_CASE_SIZES, PANERAI_BOX_PAPERS, PANERAI_AVAILABILITY } from '@/lib/paneraiData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (

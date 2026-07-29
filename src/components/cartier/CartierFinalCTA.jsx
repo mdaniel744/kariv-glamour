@@ -1,7 +1,6 @@
 import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 
 const BRAND = 'Cartier';
 

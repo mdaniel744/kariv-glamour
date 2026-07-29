@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n, { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import enCommon from '@/locales/en/common.json';
@@ -14,7 +14,7 @@ import deAdmin from '@/locales/de/admin.json';
 import enBrandComponents from '@/locales/en/brandComponents.json';
 import deBrandComponents from '@/locales/de/brandComponents.json';
 
-i18n.use(initReactI18next).init({
+export const i18nConfig = {
   resources: {
     en: {
       common: enCommon,
@@ -40,6 +40,18 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-});
+  initImmediate: false,
+};
+
+i18n.use(initReactI18next).init(i18nConfig);
+
+export function createI18nInstance(locale = 'de') {
+  const instance = createInstance();
+  instance.use(initReactI18next).init({
+    ...i18nConfig,
+    lng: locale,
+  });
+  return instance;
+}
 
 export default i18n;

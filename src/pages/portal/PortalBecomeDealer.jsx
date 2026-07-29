@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +35,7 @@ export default function PortalBecomeDealer() {
         ...form
       });
       toast({ title: t('pages.portal.applicationSubmitted') });
-      const apps = await base44.entities.DealerApplications.filter({ userId: user.id }, '-created_date', 1);
+      const apps = asArray(await base44.entities.DealerApplications.filter({ userId: user.id }, '-created_date', 1));
       setApplication(apps[0]);
     } catch (e) {
       toast({ title: t('common:error'), description: e.message, variant: 'destructive' });

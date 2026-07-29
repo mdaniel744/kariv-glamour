@@ -1,15 +1,15 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
-import { Link } from 'react-router-dom';
-import { Package, ShoppingCart, ShieldCheck, Plus, ChevronRight } from 'lucide-react';
+import { Package, ShoppingCart, ShieldCheck, Plus } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
+import LocalizedLink from '@/components/LocalizedLink';
 
 export default function DealerDashboard() {
   const { user } = useAuth();
-  const { localePath } = useLanguage();
   const [listings, setListings] = useState([]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,9 +42,9 @@ export default function DealerDashboard() {
           <h1 className="text-xl font-display text-foreground font-light">Dealer Dashboard</h1>
           <p className="text-xs text-muted-foreground">Manage your listings and sales.</p>
         </div>
-        <Link to={localePath('/dealer/listings/new')} className="flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
+        <LocalizedLink to="/dealer/listings/new" className="flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
           <Plus size={14} /> List Watch
-        </Link>
+        </LocalizedLink>
       </div>
 
       <div className="grid grid-cols-3 gap-3 md:gap-4 mb-8">
@@ -65,7 +65,7 @@ export default function DealerDashboard() {
             <p className="text-sm font-medium text-foreground">Funds Secured — Ship Now!</p>
             <p className="text-xs text-muted-foreground">You have {sales.filter(s => s.escrowStatus === 'funds_secured').length} order(s) with funds secured in escrow. Please ship immediately.</p>
           </div>
-          <Link to={localePath('/dealer/sales')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap">View Sales</Link>
+          <LocalizedLink to="/dealer/sales" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap">View Sales</LocalizedLink>
         </div>
       )}
 
@@ -73,7 +73,7 @@ export default function DealerDashboard() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-medium text-foreground">Recent Sales</h2>
-          <Link to={localePath('/dealer/sales')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">View All</Link>
+          <LocalizedLink to="/dealer/sales" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">View All</LocalizedLink>
         </div>
         {loading ? (
           <div className="space-y-2">{[...Array(2)].map((_, i) => <div key={i} className="h-16 bg-card animate-pulse" />)}</div>
@@ -82,7 +82,7 @@ export default function DealerDashboard() {
         ) : (
           <div className="space-y-2">
             {sales.map(sale => (
-              <Link key={sale.id} to={localePath('/dealer/sales')} className="block bg-card border border-border p-3 hover:border-primary transition-colors">
+              <LocalizedLink key={sale.id} to="/dealer/sales" className="block bg-card border border-border p-3 hover:border-primary transition-colors">
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-foreground truncate">{sale.products?.[0]?.productTitle || 'Sale'}</p>
@@ -93,7 +93,7 @@ export default function DealerDashboard() {
                     <EscrowStatusBadge status={sale.escrowStatus} />
                   </div>
                 </div>
-              </Link>
+              </LocalizedLink>
             ))}
           </div>
         )}
@@ -103,26 +103,26 @@ export default function DealerDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-medium text-foreground">Recent Listings</h2>
-          <Link to={localePath('/dealer/listings')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">View All</Link>
+          <LocalizedLink to="/dealer/listings" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">View All</LocalizedLink>
         </div>
         {loading ? (
           <div className="space-y-2">{[...Array(2)].map((_, i) => <div key={i} className="h-16 bg-card animate-pulse" />)}</div>
         ) : listings.length === 0 ? (
           <div className="border border-border p-6 text-center">
             <p className="text-xs text-muted-foreground mb-3">No listings yet.</p>
-            <Link to={localePath('/dealer/listings/new')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</Link>
+            <LocalizedLink to="/dealer/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</LocalizedLink>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {listings.map(p => (
-              <Link key={p.id} to={localePath(`/dealer/listings/${p.id}`)} className="bg-card border border-border hover:border-primary transition-colors">
+              <LocalizedLink key={p.id} to={`/dealer/listings/${p.id}`} className="bg-card border border-border hover:border-primary transition-colors">
                 {p.featuredImage ? <img src={p.featuredImage} alt="" className="w-full aspect-square object-cover" /> : <div className="w-full aspect-square bg-muted" />}
                 <div className="p-2">
                   <p className="text-[9px] tracking-[0.1em] uppercase text-primary truncate">{p.brand}</p>
                   <p className="text-[10px] text-foreground truncate">{p.productTitle}</p>
                   <p className="text-xs text-foreground mt-0.5">{formatPrice(p.price)}</p>
                 </div>
-              </Link>
+              </LocalizedLink>
             ))}
           </div>
         )}

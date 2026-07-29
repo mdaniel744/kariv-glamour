@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { TUDOR_COLLECTIONS, TUDOR_CASE_MATERIALS, TUDOR_MOVEMENTS, TUDOR_DIAL_COLORS, TUDOR_FEATURES, TUDOR_WATCH_TYPES, TUDOR_BRACELETS, TUDOR_CASE_SIZES, TUDOR_TYPES, TUDOR_BOX_PAPERS, TUDOR_AVAILABILITY } from '@/lib/tudorData';
+import { TUDOR_COLLECTIONS, TUDOR_CASE_MATERIALS, TUDOR_MOVEMENTS, TUDOR_DIAL_COLORS, TUDOR_FEATURES, TUDOR_WATCH_TYPES, TUDOR_BRACELETS, TUDOR_CASE_SIZES, TUDOR_BOX_PAPERS, TUDOR_AVAILABILITY } from '@/lib/tudorData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (

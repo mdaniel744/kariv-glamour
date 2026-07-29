@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { TH_COLLECTIONS, TH_CASE_MATERIALS, TH_MOVEMENTS, TH_DIAL_COLORS, TH_FEATURES, TH_WATCH_TYPES, TH_BRACELETS, TH_CASE_SIZES, TH_TYPES, TH_BOX_PAPERS, TH_AVAILABILITY } from '@/lib/tagHeuerData';
+import { TH_COLLECTIONS, TH_CASE_MATERIALS, TH_MOVEMENTS, TH_DIAL_COLORS, TH_FEATURES, TH_WATCH_TYPES, TH_BRACELETS, TH_CASE_SIZES, TH_BOX_PAPERS, TH_AVAILABILITY } from '@/lib/tagHeuerData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (

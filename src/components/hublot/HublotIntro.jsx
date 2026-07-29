@@ -1,6 +1,5 @@
 import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 
 export default function HublotIntro() {

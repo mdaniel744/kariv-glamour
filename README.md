@@ -50,13 +50,16 @@ Open the local URL printed by Vite.
 For frontend-only development, create or update `.env.local` in the project root:
 
 ```bash
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
+NEXT_PUBLIC_BASE44_APP_ID=your_app_id
+NEXT_PUBLIC_BASE44_SERVER_URL=https://base44.app
+NEXT_PUBLIC_BASE44_APP_BASE_URL=https://base44.app
 ```
 
-`VITE_BASE44_APP_ID` identifies the Base44 app.
+`NEXT_PUBLIC_BASE44_APP_ID` identifies the Base44 app.
 
-`VITE_BASE44_APP_BASE_URL` tells the Base44 Vite plugin where to send local `/api` requests. Point it at your deployed Base44 app URL when you want the local frontend to use the hosted backend.
+`NEXT_PUBLIC_BASE44_SERVER_URL` tells the Next.js frontend where to send Base44 API requests.
+
+`NEXT_PUBLIC_BASE44_APP_BASE_URL` is used for Base44 auth redirects. For most local development against the hosted backend, `https://base44.app` is correct.
 
 When you use `base44 dev`, the command injects the local Base44 values for you, so `.env.local` is mainly needed for frontend-only workflows.
 

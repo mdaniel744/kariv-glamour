@@ -1,20 +1,30 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
-import SEO from '@/components/SEO';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
-import { SORT_OPTIONS } from '@/lib/constants';
 import { SlidersHorizontal, X, Grid3X3, LayoutGrid, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
 
 const PAGE_SIZE = 24;
+const LOCAL_SEARCH_LIMIT = 500;
+
+const SEARCH_SORTS = {
+  newest: '-created_date',
+  oldest: 'created_date',
+  price_low: 'price',
+  price_high: '-price',
+  name_asc: 'productTitle',
+  name_desc: '-productTitle'
+};
 
 // Default filter state
 const DEFAULT_FILTERS = {
   search: '',
   brand: [],
+  collection: [],
   condition: [],
   gender: [],
   caseMaterial: [],
@@ -35,6 +45,7 @@ function parseFiltersFromURL(searchParams) {
   const filters = { ...DEFAULT_FILTERS };
   filters.search = searchParams.get('search') || '';
   filters.brand = searchParams.getAll('brand');
+  filters.collection = searchParams.getAll('collection');
   filters.condition = searchParams.getAll('condition');
   filters.gender = searchParams.getAll('gender');
   filters.caseMaterial = searchParams.getAll('caseMaterial');
@@ -56,6 +67,7 @@ function serializeFiltersToURL(filters, page, sortBy) {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
   if (filters.brand.length) filters.brand.forEach(b => params.append('brand', b));
+  if (filters.collection.length) filters.collection.forEach(c => params.append('collection', c));
   if (filters.condition.length) filters.condition.forEach(c => params.append('condition', c));
   if (filters.gender.length) filters.gender.forEach(g => params.append('gender', g));
   if (filters.caseMaterial.length) filters.caseMaterial.forEach(m => params.append('caseMaterial', m));
@@ -79,12 +91,14 @@ function buildSearchPayload(filters, page, sortBy) {
   const payload = {
     search: filters.search || '',
     brands: filters.brand,
-    collections: [],
+    collections: filters.collection,
     categories: [],
     conditions: filters.condition,
     availability: filters.availability,
     genders: filters.gender,
     materials: filters.caseMaterial,
+    dialColors: filters.dialColor,
+    movementTypes: filters.movementType,
     minPrice: filters.priceMin ? Number(filters.priceMin) : null,
     maxPrice: filters.priceMax ? Number(filters.priceMax) : null,
     yearFrom: filters.yearFrom ? Number(filters.yearFrom) : null,
@@ -105,6 +119,7 @@ function buildSearchPayload(filters, page, sortBy) {
 function hasActiveFilters(filters) {
   return !!(filters.search ||
     filters.brand.length ||
+    filters.collection.length ||
     filters.condition.length ||
     filters.gender.length ||
     filters.caseMaterial.length ||
@@ -125,9 +140,113 @@ function filterCacheKey(filters) {
   return JSON.stringify(filters);
 }
 
+function normalizeText(text) {
+  return typeof text === 'string' ? text.toLowerCase().trim() : '';
+}
+
+function matchesTextSearch(product, query) {
+  if (!query) return true;
+  const fields = [
+    product.productTitle,
+    product.productTitle_en,
+    product.productTitle_de,
+    product.brand,
+    product.collection,
+    product.referenceNumber,
+    product.model,
+    product.productDescription,
+    product.productDescription_en,
+    product.productDescription_de
+  ];
+  return fields.some(value => normalizeText(value).includes(query));
+}
+
+function sortProducts(products, sortKey) {
+  const sortField = SEARCH_SORTS[sortKey] || SEARCH_SORTS.newest;
+  const sortMultiplier = sortField.startsWith('-') ? -1 : 1;
+  const actualField = sortField.replace(/^-/, '');
+
+  return [...products].sort((a, b) => {
+    const av = a[actualField];
+    const bv = b[actualField];
+    if (av === bv) return String(a.id || '').localeCompare(String(b.id || ''));
+    if (av === null || av === undefined) return 1;
+    if (bv === null || bv === undefined) return -1;
+    if (typeof av === 'string') return sortMultiplier * av.localeCompare(String(bv));
+    return sortMultiplier * (Number(av) - Number(bv));
+  });
+}
+
+async function searchProductsLocally(payload) {
+  const allProducts = asArray(await base44.entities.Products.list(SEARCH_SORTS[payload.sort] || SEARCH_SORTS.newest, LOCAL_SEARCH_LIMIT));
+  const searchQuery = normalizeText(payload.search);
+  const minPrice = payload.minPrice ?? null;
+  const maxPrice = payload.maxPrice ?? null;
+  const yearFrom = payload.yearFrom ?? null;
+  const yearTo = payload.yearTo ?? null;
+
+  const filtered = allProducts.filter(product => {
+    if (payload.brands?.length && !payload.brands.includes(product.brand)) return false;
+    if (payload.collections?.length && !payload.collections.includes(product.collection)) return false;
+    if (payload.conditions?.length && !payload.conditions.includes(product.condition)) return false;
+    if (payload.availability?.length && !payload.availability.includes(product.availability)) return false;
+    if (payload.genders?.length && !payload.genders.includes(product.gender)) return false;
+    if (payload.materials?.length && !payload.materials.includes(product.caseMaterial)) return false;
+    if (payload.dialColors?.length && !payload.dialColors.includes(product.dialColor)) return false;
+    if (payload.movementTypes?.length && !payload.movementTypes.includes(product.movementType)) return false;
+    if (payload.isNewArrival === true && product.isNewArrival !== true) return false;
+    if (payload.isCertifiedPreOwned === true && product.isCertifiedPreOwned !== true) return false;
+    if (payload.isVintage === true && product.isVintage !== true) return false;
+    if (minPrice !== null && Number(product.price || 0) < minPrice) return false;
+    if (maxPrice !== null && Number(product.price || 0) > maxPrice) return false;
+    if (yearFrom !== null && Number(product.yearOfProduction || 0) < yearFrom) return false;
+    if (yearTo !== null && Number(product.yearOfProduction || 0) > yearTo) return false;
+    return matchesTextSearch(product, searchQuery);
+  });
+
+  const sorted = sortProducts(filtered, payload.sort);
+  const page = Math.max(1, Number(payload.page) || 1);
+  const pageSize = Math.max(1, Math.min(Number(payload.pageSize) || PAGE_SIZE, 48));
+  const totalCount = sorted.length;
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const startIndex = (page - 1) * pageSize;
+
+  return {
+    items: sorted.slice(startIndex, startIndex + pageSize),
+    totalCount,
+    totalPages,
+    hasMore: page < totalPages
+  };
+}
+
+async function searchProducts(payload) {
+  try {
+    const response = await base44.functions.invoke('searchProducts', payload);
+    const data = response?.data || response || {};
+    const items = asArray(data.items ?? data);
+    return {
+      items,
+      totalCount: data.totalCount ?? items.length,
+      totalPages: data.totalPages ?? Math.ceil(items.length / PAGE_SIZE),
+      hasMore: data.hasMore ?? false
+    };
+  } catch (error) {
+    const status = error?.response?.status || error?.status;
+    if (status && status !== 404 && status !== 405) throw error;
+    return searchProductsLocally(payload);
+  }
+}
+
 export default function Shop() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useUrlSearchParams();
   const { t } = useTranslation();
+  const sortOptions = [
+    { value: 'newest', label: t('common:shop.sortNewest') },
+    { value: 'price_low', label: t('common:shop.sortPriceLow') },
+    { value: 'price_high', label: t('common:shop.sortPriceHigh') },
+    { value: 'name_asc', label: t('common:shop.sortNameAsc') },
+    { value: 'name_desc', label: t('common:shop.sortNameDesc') },
+  ];
 
   // Initialize state from URL
   const [filters, setFilters] = useState(() => parseFiltersFromURL(searchParams));
@@ -182,15 +301,15 @@ export default function Shop() {
       setError(null);
       try {
         const payload = buildSearchPayload(filters, page, sortBy);
-        const res = await base44.functions.invoke('searchProducts', payload);
+        const results = await searchProducts(payload);
 
         // Ignore stale responses — only process if this is the latest request
         if (currentRequestId !== requestIdRef.current) return;
 
-        setProducts(res.data.items || []);
-        setTotalCount(res.data.totalCount || 0);
-        setTotalPages(res.data.totalPages || 0);
-        setHasMore(res.data.hasMore || false);
+        setProducts(results.items || []);
+        setTotalCount(results.totalCount || 0);
+        setTotalPages(results.totalPages || 0);
+        setHasMore(results.hasMore || false);
       } catch (e) {
         if (currentRequestId !== requestIdRef.current) return;
         console.error(e);
@@ -235,13 +354,13 @@ export default function Shop() {
     setLoading(true);
     setError(null);
     const payload = buildSearchPayload(filters, page, sortBy);
-    base44.functions.invoke('searchProducts', payload)
-      .then(res => {
+    searchProducts(payload)
+      .then(results => {
         if (currentRequestId !== requestIdRef.current) return;
-        setProducts(res.data.items || []);
-        setTotalCount(res.data.totalCount || 0);
-        setTotalPages(res.data.totalPages || 0);
-        setHasMore(res.data.hasMore || false);
+        setProducts(results.items || []);
+        setTotalCount(results.totalCount || 0);
+        setTotalPages(results.totalPages || 0);
+        setHasMore(results.hasMore || false);
       })
       .catch(e => {
         if (currentRequestId !== requestIdRef.current) return;
@@ -256,6 +375,8 @@ export default function Shop() {
     if (filters.isNewArrival) return t('common:shop.newArrivals');
     if (filters.isCertifiedPreOwned) return t('common:shop.certifiedPreOwned');
     if (filters.isVintage) return t('common:shop.vintage');
+    if (filters.collection.length === 1) return `${filters.brand[0] ? `${filters.brand[0]} ` : ''}${filters.collection[0]}`;
+    if (filters.brand.length === 1) return `${filters.brand[0]} ${t('common:shop.title')}`;
     if (filters.gender.includes('Men') && filters.gender.length === 1) return t('common:shop.mensWatches');
     if (filters.gender.includes('Women') && filters.gender.length === 1) return t('common:shop.womensWatches');
     if (filters.search) return t('common:shop.searchResults', { query: filters.search });
@@ -263,13 +384,10 @@ export default function Shop() {
   };
 
   const pageTitle = getPageTitle();
-  const seoTitle = `${t('common:seo.shop.title')} — ${pageTitle}`;
   const activeFilterCount = hasActiveFilters(filters);
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
-      <SEO title={seoTitle} description={t('common:seo.shop.description')} />
-
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
         <LocalizedLink to="/" className="hover:text-foreground">{t('common:home')}</LocalizedLink>
@@ -321,7 +439,7 @@ export default function Shop() {
             onChange={e => handleSortChange(e.target.value)}
             className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary"
           >
-            {SORT_OPTIONS.map(opt => (
+            {sortOptions.map(opt => (
               <option key={opt.value} value={opt.value} className="bg-popover text-foreground">{opt.label}</option>
             ))}
           </select>

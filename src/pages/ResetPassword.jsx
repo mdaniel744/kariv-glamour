@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Lock, Loader2, AlertTriangle } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import { getSafeReturnUrl } from "@/lib/authRedirect";
+import { useLanguage } from "@/lib/languageContext";
+import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
+import LocalizedLink from "@/components/LocalizedLink";
 
 export default function ResetPassword() {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useUrlSearchParams();
+  const { localePath } = useLanguage();
   const resetToken = searchParams.get("token");
 
   const [newPassword, setNewPassword] = useState("");
@@ -29,7 +32,7 @@ export default function ResetPassword() {
       await base44.auth.resetPassword({ resetToken, newPassword });
       // Redirect to login with returnTo for next auth step
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
+      window.location.href = `${localePath('/login')}?returnTo=${encodeURIComponent(returnTo)}`;
     } catch (err) {
       setError(err.message || "Failed to reset password");
     } finally {
@@ -44,9 +47,9 @@ export default function ResetPassword() {
         title="Invalid reset link"
         subtitle="This password reset link is missing or invalid"
         footer={
-          <Link to="/forgot-password" className="text-primary font-medium hover:underline">
+          <LocalizedLink to="/forgot-password" className="text-primary font-medium hover:underline">
             Request a new link
-          </Link>
+          </LocalizedLink>
         }
       >
         <p className="text-sm text-foreground text-center">

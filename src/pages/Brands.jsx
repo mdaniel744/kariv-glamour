@@ -3,19 +3,20 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { BRAND_DATA } from '@/lib/constants';
-import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 
-export default function Brands() {
+export default function Brands({ initialBrands = [] }) {
   const { t } = useTranslation();
   const { localize } = useLocalizedField();
-  const [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState(initialBrands);
 
   useEffect(() => {
-    base44.entities.Brands.list('-created_date', 50).then(setBrands).catch(console.error);
-  }, []);
+    if (initialBrands.length > 0) return;
+    base44.entities.Brands.list('-created_date', 50).then(data => setBrands(asArray(data))).catch(console.error);
+  }, [initialBrands]);
 
   const allBrands = BRAND_DATA.map(bd => {
     const dbBrand = brands.find(b => b.slug === bd.slug);
@@ -24,7 +25,6 @@ export default function Brands() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
-      <SEO title={t('common:seo.brands.title')} description={t('common:seo.brands.description')} />
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-6">
         <LocalizedLink to="/" className="hover:text-foreground">{t('common:home')}</LocalizedLink>
         <ChevronRight size={10} />

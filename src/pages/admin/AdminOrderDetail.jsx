@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import { ESCROW_STATUS_LABELS, ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
-import { ArrowLeft, Truck, FileCheck2, ExternalLink, Send, ShieldCheck, Package, CreditCard, Bitcoin, Building2, Flag, AlertTriangle, Gavel } from 'lucide-react';
+import { ArrowLeft, Truck, FileCheck2, ExternalLink, Send, ShieldCheck, Package, CreditCard, Bitcoin, Building2, Flag, Gavel } from 'lucide-react';
+import LocalizedLink from '@/components/LocalizedLink';
 
 const PAYMENT_ICONS = { bank_transfer: Building2, crypto: Bitcoin };
 
-export default function AdminOrderDetail() {
-  const { id } = useParams();
+export default function AdminOrderDetail({ id: providedId }) {
+  const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const { toast } = useToast();
   const [order, setOrder] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -28,8 +29,8 @@ export default function AdminOrderDetail() {
   useEffect(() => {
     Promise.all([
       base44.entities.Orders.get(id),
-      base44.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).catch(() => []),
-      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).catch(() => [])
+      base44.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).then(asArray).catch(() => []),
+      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
     ]).then(([o, msgs, disputes]) => {
       setOrder(o);
       setMessages(msgs);
@@ -149,9 +150,9 @@ export default function AdminOrderDetail() {
 
   return (
     <div>
-      <Link to="/admin/orders" className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] hover:text-[#E5E5E5] mb-4">
+      <LocalizedLink to="/admin/orders" className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] hover:text-[#E5E5E5] mb-4">
         <ArrowLeft size={10} /> Back to Orders
-      </Link>
+      </LocalizedLink>
 
       {/* Header */}
       <div className="flex items-start justify-between mb-6">

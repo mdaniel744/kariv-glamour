@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import StarRating from './StarRating';
 import { useToast } from '@/components/ui/use-toast';
@@ -33,11 +34,11 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
       });
 
       // Recalculate dealer average
-      const allReviews = await base44.entities.DealerReview.filter({ dealerId }, '-created_date', 500);
+      const allReviews = asArray(await base44.entities.DealerReview.filter({ dealerId }, '-created_date', 500));
       const avg = allReviews.length > 0
         ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length
         : 0;
-      const profiles = await base44.entities.DealerProfile.filter({ userId: dealerId }, '-created_date', 1);
+      const profiles = asArray(await base44.entities.DealerProfile.filter({ userId: dealerId }, '-created_date', 1));
       if (profiles.length > 0) {
         await base44.entities.DealerProfile.update(profiles[0].id, {
           averageRating: Math.round(avg * 10) / 10,

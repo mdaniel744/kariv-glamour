@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
-import { BVLGARI_COLLECTIONS, BVLGARI_CASE_MATERIALS, BVLGARI_MOVEMENTS, BVLGARI_DIAL_COLORS, BVLGARI_FEATURES, BVLGARI_WATCH_TYPES, BVLGARI_BRACELETS, BVLGARI_CASE_SIZES, BVLGARI_TYPES, BVLGARI_BOX_PAPERS, BVLGARI_AVAILABILITY } from '@/lib/bvlgariData';
+import { BVLGARI_COLLECTIONS, BVLGARI_CASE_MATERIALS, BVLGARI_MOVEMENTS, BVLGARI_DIAL_COLORS, BVLGARI_FEATURES, BVLGARI_WATCH_TYPES, BVLGARI_BRACELETS, BVLGARI_CASE_SIZES, BVLGARI_BOX_PAPERS, BVLGARI_AVAILABILITY } from '@/lib/bvlgariData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
   return (

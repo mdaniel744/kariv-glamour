@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +10,9 @@ import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { getSafeReturnUrl } from "@/lib/authRedirect";
 import { useAuth } from "@/lib/AuthContext";
+import { useLanguage } from "@/lib/languageContext";
+import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
+import LocalizedLink from "@/components/LocalizedLink";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -20,17 +22,18 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams] = useUrlSearchParams();
+  const { localePath } = useLanguage();
   const { isAuthenticated } = useAuth();
 
   // Redirect authenticated users away from register
   useEffect(() => {
     if (isAuthenticated) {
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      navigate(returnTo);
+      const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+      window.location.replace(destination);
     }
-  }, [isAuthenticated, navigate, searchParams]);
+  }, [isAuthenticated, localePath, searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +62,7 @@ export default function Register() {
         base44.auth.setToken(result.access_token);
       }
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      window.location.href = returnTo;
+      window.location.href = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     } catch (err) {
       setError(err.message || "Invalid verification code");
     } finally {
@@ -82,7 +85,8 @@ export default function Register() {
 
   const handleGoogle = () => {
     const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-    base44.auth.loginWithProvider("google", returnTo);
+    const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+    base44.auth.loginWithProvider("google", destination);
   };
 
   if (showOtp) {
@@ -147,9 +151,9 @@ export default function Register() {
       footer={
         <>
           Already have an account?{" "}
-          <Link to={`/login${searchParams.toString() ? '?' + searchParams.toString() : ''}`} className="text-primary font-medium hover:underline">
+          <LocalizedLink to={`/login${searchParams.toString() ? '?' + searchParams.toString() : ''}`} className="text-primary font-medium hover:underline">
             Log in
-          </Link>
+          </LocalizedLink>
         </>
       }
     >

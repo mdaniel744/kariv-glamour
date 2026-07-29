@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { Settings, Save, Check, Lock } from 'lucide-react';
 
 export default function AdminTranslationSettings() {
@@ -11,7 +12,7 @@ export default function AdminTranslationSettings() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.TranslationSettings.list('-created_date', 1);
+      const data = asArray(await base44.entities.TranslationSettings.list('-created_date', 1));
       if (data && data.length > 0) {
         setSettings(data[0]);
       } else {

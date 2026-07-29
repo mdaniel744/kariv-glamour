@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { useLanguage } from '@/lib/languageContext';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
 
 export default function PortalMails() {
-  const { localePath } = useLanguage();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +16,7 @@ export default function PortalMails() {
   useEffect(() => {
     if (!user) return;
     base44.entities.OrderMessage.filter({ buyerId: user.id }, '-created_date', 200)
-      .then(setMessages)
+      .then(data => setMessages(asArray(data)))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [user]);
@@ -134,9 +133,9 @@ export default function PortalMails() {
             <Package size={12} className="text-muted-foreground" />
             <p className="text-[10px] text-muted-foreground font-mono">{selectedThread.orderReference}</p>
           </div>
-          <Link to={localePath('/portal/orders/' + selectedThread.orderId)} className="text-[10px] text-primary hover:underline mb-4 inline-block">
+          <LocalizedLink to={'/portal/orders/' + selectedThread.orderId} className="text-[10px] text-primary hover:underline mb-4 inline-block">
             View Order Details →
-          </Link>
+          </LocalizedLink>
 
           {/* Conversation */}
           <div className="space-y-3 mb-6">

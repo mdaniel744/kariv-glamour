@@ -57,7 +57,7 @@ export default function ShopFilters({ filters, setFilters }) {
       {activeCount > 0 && (
         <button
           onClick={() => setFilters({
-            search: '', brand: [], condition: [], gender: [], caseMaterial: [],
+            search: '', brand: [], collection: [], condition: [], gender: [], caseMaterial: [],
             dialColor: [], movementType: [], availability: [], priceMin: '', priceMax: '',
             yearFrom: '', yearTo: '', isNewArrival: null, isCertifiedPreOwned: null, isVintage: null
           })}

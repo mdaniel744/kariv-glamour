@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { BookMarked, Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 
 const RULE_LABELS = {
@@ -18,7 +19,7 @@ export default function AdminGlossary() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.GlossaryTerm.list('-created_date', 200);
+      const data = asArray(await base44.entities.GlossaryTerm.list('-created_date', 200));
       setTerms(data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   }, []);

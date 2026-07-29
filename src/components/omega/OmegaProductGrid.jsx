@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
@@ -25,7 +26,7 @@ export default function OmegaProductGrid() {
     const load = async () => {
       setLoading(true);
       try {
-        let data = await base44.entities.Products.filter({ brand: BRAND }, sortBy, 50);
+        let data = asArray(await base44.entities.Products.filter({ brand: BRAND }, sortBy, 50));
         if (filters.collection.length) data = data.filter((p) => filters.collection.includes(p.collection));
         if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
         if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));

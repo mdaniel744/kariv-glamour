@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Lock } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function EscrowTrustBadge({ variant = 'full' }) {
   if (variant === 'compact') {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ShieldCheck, Lock } from 'lucide-react';
 
 export default function BuyNowAuthModal({ open, onClose, continueTo }) {
@@ -22,18 +22,18 @@ export default function BuyNowAuthModal({ open, onClose, continueTo }) {
         </DialogHeader>
 
         <div className="space-y-3 mt-4">
-          <Link
+          <LocalizedLink
             to={`/register${returnUrl}`}
             className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors"
           >
             Register Now
-          </Link>
-          <Link
+          </LocalizedLink>
+          <LocalizedLink
             to={`/login${returnUrl}`}
             className="w-full flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.15em] uppercase font-medium py-4 text-foreground hover:border-primary transition-colors"
           >
             I Already Have an Account
-          </Link>
+          </LocalizedLink>
         </div>
 
         <div className="flex items-center justify-center gap-2 mt-4 text-[10px] text-muted-foreground">

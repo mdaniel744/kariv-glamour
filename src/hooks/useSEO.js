@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/languageContext';
 
 const SITE_NAME = 'Kariv Glamour';
@@ -58,12 +57,25 @@ function removeJsonLd(id) {
  * @param {boolean} [opts.noindex] - If true, add noindex robots directive
  */
 export function useSEO({ title, description, image, type = 'website', jsonLd, noindex = false }) {
-  const location = useLocation();
   const { locale } = useLanguage();
+  const [pathname, setPathname] = useState(() => (typeof window === 'undefined' ? `/${locale}` : window.location.pathname));
 
   useEffect(() => {
+    const syncPathname = () => setPathname(window.location.pathname);
+    window.addEventListener('popstate', syncPathname);
+    window.addEventListener('kariv:urlchange', syncPathname);
+    return () => {
+      window.removeEventListener('popstate', syncPathname);
+      window.removeEventListener('kariv:urlchange', syncPathname);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Native App Router pages provide complete server-rendered metadata.
+    // Keep this hook only for routes still served by the legacy SPA fallback.
+    if (document.body.dataset.nextNative === 'true') return;
+
     const origin = window.location.origin;
-    const pathname = location.pathname;
     const currentUrl = origin + pathname;
 
     // Build hreflang alternate URLs by swapping the locale segment
@@ -119,5 +131,5 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     return () => {
       removeJsonLd('seo-jsonld');
     };
-  }, [title, description, image, type, jsonLd, noindex, locale, location.pathname]);
+  }, [title, description, image, type, jsonLd, noindex, locale, pathname]);
 }

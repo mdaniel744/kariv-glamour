@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save, Upload, Search } from 'lucide-react';
@@ -21,7 +22,7 @@ export default function AdminProducts() {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.Products.list('-created_date', 200);
+      const data = asArray(await base44.entities.Products.list('-created_date', 200));
       setProducts(data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }

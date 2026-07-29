@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -15,7 +16,7 @@ export default function AdminBrands() {
 
   const load = async () => {
     setLoading(true);
-    try { setBrands(await base44.entities.Brands.list('-created_date', 50)); } catch (e) { console.error(e); }
+    try { setBrands(asArray(await base44.entities.Brands.list('-created_date', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
 

@@ -1,24 +1,25 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
-import { Package, Heart, ShieldCheck, Store, ChevronRight } from 'lucide-react';
+import { Package, ShieldCheck, Store, ChevronRight } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import { isDealer } from '@/lib/escrowConstants';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 
 export default function PortalDashboard() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { localePath } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     base44.entities.Orders.filter({ buyerId: user.id }, '-created_date', 5)
-      .then(setOrders).catch(console.error).finally(() => setLoading(false));
+      .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   const stats = [
@@ -57,9 +58,9 @@ export default function PortalDashboard() {
               <p className="text-xs text-muted-foreground">{t('pages.portal.dealerCTADesc')}</p>
             </div>
           </div>
-          <Link to={localePath('/portal/become-dealer')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap flex items-center gap-1">
+          <LocalizedLink to="/portal/become-dealer" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap flex items-center gap-1">
             {t('pages.portal.apply')} <ChevronRight size={12} />
-          </Link>
+          </LocalizedLink>
         </div>
       )}
 
@@ -67,7 +68,7 @@ export default function PortalDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-medium text-foreground">{t('pages.portal.recentOrders')}</h2>
-          <Link to={localePath('/portal/orders')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.viewAll')}</Link>
+          <LocalizedLink to="/portal/orders" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.viewAll')}</LocalizedLink>
         </div>
         {loading ? (
           <div className="space-y-2">{[...Array(2)].map((_, i) => <div key={i} className="h-20 bg-card animate-pulse" />)}</div>
@@ -75,12 +76,12 @@ export default function PortalDashboard() {
           <div className="border border-border p-8 text-center">
             <Package size={24} className="text-muted-foreground/40 mx-auto mb-3" />
             <p className="text-sm text-muted-foreground mb-4">{t('pages.portal.noOrders')}</p>
-            <Link to={localePath('/shop')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.browseWatches')}</Link>
+            <LocalizedLink to="/shop" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.browseWatches')}</LocalizedLink>
           </div>
         ) : (
           <div className="space-y-3">
             {orders.map(order => (
-              <Link key={order.id} to={localePath(`/portal/orders/${order.id}`)} className="block bg-card border border-border p-4 hover:border-primary transition-colors">
+              <LocalizedLink key={order.id} to={`/portal/orders/${order.id}`} className="block bg-card border border-border p-4 hover:border-primary transition-colors">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     {order.products?.[0]?.featuredImage && <img src={order.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
@@ -94,7 +95,7 @@ export default function PortalDashboard() {
                     <EscrowStatusBadge status={order.escrowStatus} />
                   </div>
                 </div>
-              </Link>
+              </LocalizedLink>
             ))}
           </div>
         )}

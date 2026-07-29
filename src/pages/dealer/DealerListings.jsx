@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { Plus, Package } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 
 export default function DealerListings() {
   const { user } = useAuth();
-  const { localePath } = useLanguage();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     base44.entities.Products.filter({ created_by_id: user.id }, '-created_date', 50)
-      .then(setListings).catch(console.error).finally(() => setLoading(false));
+      .then(data => setListings(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   const handleDelete = async (id) => {
@@ -29,9 +28,9 @@ export default function DealerListings() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-display text-foreground font-light">My Listings</h1>
-        <Link to={localePath('/dealer/listings/new')} className="flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
+        <LocalizedLink to="/dealer/listings/new" className="flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
           <Plus size={14} /> List Watch
-        </Link>
+        </LocalizedLink>
       </div>
 
       {loading ? (
@@ -40,7 +39,7 @@ export default function DealerListings() {
         <div className="border border-border p-12 text-center">
           <Package size={32} className="text-muted-foreground/40 mx-auto mb-4" />
           <p className="text-sm text-muted-foreground mb-4">No listings yet.</p>
-          <Link to={localePath('/dealer/listings/new')} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</Link>
+          <LocalizedLink to="/dealer/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</LocalizedLink>
         </div>
       ) : (
         <div className="space-y-3">
@@ -56,7 +55,7 @@ export default function DealerListings() {
                 </div>
               </div>
               <div className="flex gap-2 flex-shrink-0">
-                <Link to={localePath(`/dealer/listings/${p.id}`)} className="text-[10px] tracking-[0.1em] uppercase border border-border px-3 py-2 text-foreground hover:border-primary">Edit</Link>
+                <LocalizedLink to={`/dealer/listings/${p.id}`} className="text-[10px] tracking-[0.1em] uppercase border border-border px-3 py-2 text-foreground hover:border-primary">Edit</LocalizedLink>
                 <button onClick={() => handleDelete(p.id)} className="text-[10px] tracking-[0.1em] uppercase border border-red-500/30 text-red-600 dark:text-red-400 px-3 py-2 hover:bg-red-500/10">Delete</button>
               </div>
             </div>

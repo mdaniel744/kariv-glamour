@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import BrandLogo from '@/components/shared/BrandLogo';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,7 @@ export default function BrandMarquee() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await base44.entities.Brands.list();
+        const data = asArray(await base44.entities.Brands.list());
         setBrands(data.filter(b => b.brandLogoLight));
       } catch (e) {
         console.error(e);

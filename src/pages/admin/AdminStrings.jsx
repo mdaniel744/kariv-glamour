@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { Type, Plus, Trash2, Edit2, X, Check, Search, Languages } from 'lucide-react';
 
 const STATUS_LABELS = {
@@ -20,7 +21,7 @@ export default function AdminStrings() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.WebsiteString.list('-created_date', 200);
+      const data = asArray(await base44.entities.WebsiteString.list('-created_date', 200));
       setStrings(data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   }, []);

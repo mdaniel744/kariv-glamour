@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLocalizedField } from '@/lib/localize';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import SEO from '@/components/SEO';
-import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
+import { BookOpen, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Guides() {
@@ -15,7 +16,7 @@ export default function Guides() {
 
   useEffect(() => {
     base44.entities.WatchGuides.filter({ published: true }, '-created_date', 50)
-      .then(setGuides)
+      .then(data => setGuides(asArray(data)))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);

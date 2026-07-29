@@ -1,7 +1,11 @@
+'use client';
+
 import React, { useEffect } from 'react';
-import { Outlet, useLocation, Link } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText } from 'lucide-react';
+import LocalizedLink from '@/components/LocalizedLink';
+import { useLanguage } from '@/lib/languageContext';
 
 function AdminDarkMode() {
   useEffect(() => {
@@ -15,9 +19,10 @@ function AdminDarkMode() {
   return null;
 }
 
-export default function AdminLayout() {
+export default function AdminLayout({ children }) {
   const { t } = useTranslation('admin');
-  const { pathname } = useLocation();
+  const pathname = usePathname();
+  const { localePath } = useLanguage();
 
   const navItems = [
     { to: '/admin', icon: LayoutDashboard, label: t('dashboard'), exact: true },
@@ -43,18 +48,19 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-background flex">
       <aside className="w-56 border-r border-border flex-shrink-0 hidden md:block">
         <div className="p-5 border-b border-border">
-          <Link to="/">
+          <LocalizedLink to="/">
             <span className="font-display text-sm tracking-[0.08em] text-foreground">
               <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
             </span>
-          </Link>
+          </LocalizedLink>
           <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">Admin Console</p>
         </div>
         <nav className="p-3 space-y-0.5">
            {navItems.map(item => {
-             const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
+             const target = localePath(item.to);
+             const active = item.exact ? pathname === target : pathname.startsWith(target);
              return (
-               <Link
+               <LocalizedLink
                  key={item.to}
                  to={item.to}
                  className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs transition-colors ${
@@ -63,7 +69,7 @@ export default function AdminLayout() {
                >
                  <item.icon size={15} />
                  {item.label}
-               </Link>
+               </LocalizedLink>
              );
            })}
          </nav>
@@ -71,7 +77,7 @@ export default function AdminLayout() {
 
       <main className="flex-1 overflow-y-auto">
         <div className="p-6 md:p-8">
-          <Outlet />
+          {children}
         </div>
       </main>
     </div>

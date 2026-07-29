@@ -21,7 +21,8 @@ const ALLOWED_GENDERS = ['Men', 'Women', 'Unisex'];
 const ALLOWED_BOOLEANS = [true, false, null];
 
 const MAX_PAGE_SIZE = 48;
-const MAX_FETCH = 500; // hard cap on records scanned per request
+const FETCH_BATCH = 500;
+const MAX_SCAN = 5000;
 
 function validateStringArray(arr, allowedValues, fieldName) {
   if (arr === null || arr === undefined) return [];
@@ -79,6 +80,8 @@ Deno.serve(async (req) => {
     const availability = validateStringArray(body.availability, ALLOWED_AVAILABILITY, 'availability');
     const genders = validateStringArray(body.genders, ALLOWED_GENDERS, 'genders');
     const materials = validateStringArray(body.materials, null, 'materials');
+    const dialColors = validateStringArray(body.dialColors, null, 'dialColors');
+    const movementTypes = validateStringArray(body.movementTypes, null, 'movementTypes');
 
     // ── Validate numeric filters ──
     const minPrice = validateNumber(body.minPrice, 'minPrice', 0, 100000000);
@@ -110,9 +113,9 @@ Deno.serve(async (req) => {
     const pageSize = Math.min(Math.max(1, requestedPageSize), MAX_PAGE_SIZE);
 
     // ── Build query for entity filter ──
-    // We use asServiceRole because product visibility is enforced by
-    // only returning published/available products in the response.
-    const query = {};
+    // Public search only returns published products. User-mode entity
+    // access also enforces the Products row-level read policy.
+    const query = { isPublished: true };
 
     // Single-value equality filters (work with entity filter)
     if (brands.length === 1) query.brand = brands[0];
@@ -121,6 +124,8 @@ Deno.serve(async (req) => {
     if (availability.length === 1) query.availability = availability[0];
     if (genders.length === 1) query.gender = genders[0];
     if (materials.length === 1) query.caseMaterial = materials[0];
+    if (dialColors.length === 1) query.dialColor = dialColors[0];
+    if (movementTypes.length === 1) query.movementType = movementTypes[0];
 
     // Boolean filters
     if (isNewArrival === true) query.isNewArrival = true;
@@ -136,13 +141,16 @@ Deno.serve(async (req) => {
       query.price = { $lte: maxPrice };
     }
 
-    // ── Fetch with pagination (fetch enough for current page + counting) ──
-    // We fetch up to MAX_FETCH records to perform multi-select filtering
-    // and text search server-side, then paginate the results.
-    const skip = 0;
-    const fetchLimit = MAX_FETCH;
-
-    let allProducts = await base44.asServiceRole.entities.Products.filter(query, sortField, fetchLimit, skip);
+    // ── Fetch in batches so products beyond the first 500 stay searchable ──
+    // User-mode entity access deliberately respects the Products RLS policy.
+    let allProducts = [];
+    let skip = 0;
+    while (skip < MAX_SCAN) {
+      const batch = await base44.entities.Products.filter(query, sortField, FETCH_BATCH, skip);
+      allProducts = allProducts.concat(batch);
+      if (batch.length < FETCH_BATCH) break;
+      skip += FETCH_BATCH;
+    }
 
     // ── Server-side post-filtering for multi-select fields ──
     if (brands.length > 1) {
@@ -162,6 +170,12 @@ Deno.serve(async (req) => {
     }
     if (materials.length > 1) {
       allProducts = allProducts.filter(function(p) { return materials.includes(p.caseMaterial); });
+    }
+    if (dialColors.length > 1) {
+      allProducts = allProducts.filter(function(p) { return dialColors.includes(p.dialColor); });
+    }
+    if (movementTypes.length > 1) {
+      allProducts = allProducts.filter(function(p) { return movementTypes.includes(p.movementType); });
     }
 
     // ── Year range filter ──
@@ -226,6 +240,8 @@ Deno.serve(async (req) => {
     if (availability.length) appliedFilters.availability = availability;
     if (genders.length) appliedFilters.genders = genders;
     if (materials.length) appliedFilters.materials = materials;
+    if (dialColors.length) appliedFilters.dialColors = dialColors;
+    if (movementTypes.length) appliedFilters.movementTypes = movementTypes;
     if (minPrice !== null) appliedFilters.minPrice = minPrice;
     if (maxPrice !== null) appliedFilters.maxPrice = maxPrice;
     if (yearFrom !== null) appliedFilters.yearFrom = yearFrom;

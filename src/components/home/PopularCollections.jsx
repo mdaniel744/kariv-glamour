@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,7 @@ export default function PopularCollections() {
   const [collections, setCollections] = useState([]);
 
   useEffect(() => {
-    base44.entities.Collections.list('brand', 50).then(setCollections).catch(console.error);
+    base44.entities.Collections.list('brand', 50).then(data => setCollections(asArray(data))).catch(console.error);
   }, []);
 
   // Group by brand and pick top collections

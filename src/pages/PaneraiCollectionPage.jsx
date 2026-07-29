@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
@@ -14,10 +14,10 @@ import TrustBar from '@/components/shared/TrustBar';
 
 const BRAND = 'Panerai';
 
-export default function PaneraiCollectionPage() {
+export default function PaneraiCollectionPage({ slug: slugProp }) {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
-  const { slug } = useParams();
+  const slug = slugProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const collection = PANERAI_COLLECTIONS.find(c => c.slug === slug);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export default function PaneraiCollectionPage() {
       setLoading(true);
       try {
         if (collection) {
-          const data = await base44.entities.Products.filter({ brand: BRAND, collection: collection.name }, '-created_date', 50);
+          const data = asArray(await base44.entities.Products.filter({ brand: BRAND, collection: collection.name }, '-created_date', 50));
           setProducts(data);
         }
       } catch (e) { console.error(e); } finally { setLoading(false); }

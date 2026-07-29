@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import LocalizedLink from '@/components/LocalizedLink';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useLocalizedField } from '@/lib/localize';
-import { useSEO } from '@/hooks/useSEO';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight } from 'lucide-react';
 
-export default function LegalPage() {
-  const { slug } = useParams();
-  const [page, setPage] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { localize } = useLocalizedField();
-
-  const seoTitle = page ? localize(page, 'seoTitle') || localize(page, 'title') : undefined;
-  const seoDescription = page ? localize(page, 'seoDescription') : undefined;
-  useSEO({ title: seoTitle, description: seoDescription, type: 'article' });
+export default function LegalPage({ slug: slugProp, initialPage = null }) {
+  const slug = slugProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
+  const [page, setPage] = useState(initialPage);
+  const [loading, setLoading] = useState(!initialPage);
+  const { localize, locale } = useLocalizedField();
+  const copy = locale === 'de'
+    ? { home: 'Start', notFound: 'Seite nicht gefunden', missing: 'Diese Seite wurde noch nicht erstellt.', back: 'Zurück zur Startseite' }
+    : { home: 'Home', notFound: 'Page not found', missing: 'This page has not been created yet.', back: 'Back to the homepage' };
 
   useEffect(() => {
+    if (initialPage?.slug === slug) {
+      setPage(initialPage);
+      setLoading(false);
+      window.scrollTo(0, 0);
+      return;
+    }
+
     const load = async () => {
       setLoading(true);
       try {
-        const pages = await base44.entities.LegalPages.filter({ slug });
+        const pages = asArray(await base44.entities.LegalPages.filter({ slug }));
         if (pages.length > 0) setPage(pages[0]);
       } catch (e) {
         console.error(e);
@@ -31,7 +36,7 @@ export default function LegalPage() {
     };
     load();
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, initialPage]);
 
   if (loading) {
     return (
@@ -47,9 +52,9 @@ export default function LegalPage() {
   if (!page) {
     return (
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <h1 className="font-display text-2xl text-foreground">Seite nicht gefunden</h1>
-        <p className="text-sm text-muted-foreground mt-2">Diese Seite wurde noch nicht erstellt.</p>
-        <LocalizedLink to="/" className="text-primary text-sm mt-4 inline-block">Zurück zur Startseite</LocalizedLink>
+        <h1 className="font-display text-2xl text-foreground">{copy.notFound}</h1>
+        <p className="text-sm text-muted-foreground mt-2">{copy.missing}</p>
+        <LocalizedLink to="/" className="text-primary text-sm mt-4 inline-block">{copy.back}</LocalizedLink>
       </div>
     );
   }
@@ -58,9 +63,9 @@ export default function LegalPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-8">
-        <LocalizedLink to="/" className="hover:text-foreground">Start</LocalizedLink>
+        <LocalizedLink to="/" className="hover:text-foreground">{copy.home}</LocalizedLink>
         <ChevronRight size={10} />
-        <span className="text-foreground">{page.title}</span>
+        <span className="text-foreground">{localize(page, 'title')}</span>
       </div>
 
       <h1 className="font-display text-3xl md:text-4xl font-light text-foreground mb-8">{localize(page, 'title')}</h1>

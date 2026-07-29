@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 
 /**
  * Fetches collections for a brand from the database, falling back to
@@ -16,8 +17,9 @@ export function useBrandCollections(brandName, fallbackData = []) {
   useEffect(() => {
     let mounted = true;
     base44.entities.Collections.filter({ brand: brandName }, 'collectionName', 100)
-      .then(records => {
+      .then(response => {
         if (!mounted) return;
+        const records = asArray(response);
         if (records.length > 0) {
           setCollections(records.map(r => ({
             id: r.id,

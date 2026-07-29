@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DATA } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
@@ -17,7 +18,7 @@ export default function AdminCollections() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(await base44.entities.Collections.list('brand', 50)); } catch (e) { console.error(e); }
+    try { setItems(asArray(await base44.entities.Collections.list('brand', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);

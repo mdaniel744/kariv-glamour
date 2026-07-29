@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Languages, RefreshCw, AlertCircle, CheckCircle2, Clock, FileText } from 'lucide-react';
+import { Languages, RefreshCw, AlertCircle } from 'lucide-react';
 
 const STATUS_COLORS = {
   translated: 'text-emerald-500',

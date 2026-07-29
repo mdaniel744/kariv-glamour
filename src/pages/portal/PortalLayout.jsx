@@ -1,15 +1,18 @@
+'use client';
+
 import React from 'react';
-import { Outlet, useLocation, Link } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
+import LocalizedLink from '@/components/LocalizedLink';
 
-export default function PortalLayout() {
+export default function PortalLayout({ children }) {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const { localePath } = useLanguage();
 
   const navItems = [
@@ -27,11 +30,11 @@ export default function PortalLayout() {
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border flex-shrink-0">
         <div className="p-5 border-b border-border">
-          <Link to="/" className="block">
+          <LocalizedLink to="/" className="block">
             <span className="font-display text-sm tracking-[0.08em] text-foreground">
               <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
             </span>
-          </Link>
+          </LocalizedLink>
           <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{t('pages.portal.myPortal')}</p>
           {user && (
             <p className="text-xs text-foreground mt-3 truncate">{user.full_name || user.email}</p>
@@ -41,31 +44,31 @@ export default function PortalLayout() {
           {navItems.map(item => {
             const active = item.exact ? pathname === localePath(item.to) : pathname.startsWith(localePath(item.to));
             return (
-              <Link key={item.to} to={localePath(item.to)} className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
+              <LocalizedLink key={item.to} to={item.to} className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
                 <item.icon size={15} />
                 {item.label}
-              </Link>
+              </LocalizedLink>
             );
           })}
 
           {/* Dealer link — show if dealer, or "Become Dealer" if not */}
           {isDealer(user) ? (
-            <Link to={localePath('/dealer')} className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-primary hover:bg-primary/10">
+            <LocalizedLink to="/dealer" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-primary hover:bg-primary/10">
               <Store size={15} />
               Dealer Portal
-            </Link>
+            </LocalizedLink>
           ) : (
-            <Link to={localePath('/portal/become-dealer')} className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${pathname.includes('become-dealer') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
+            <LocalizedLink to="/portal/become-dealer" className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${pathname.includes('become-dealer') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
               <Store size={15} />
               {t('pages.portal.becomeDealer')}
-            </Link>
+            </LocalizedLink>
           )}
 
           {['admin', 'super_admin'].includes(user?.role) && (
-            <Link to="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-muted-foreground hover:text-foreground hover:bg-muted">
+            <LocalizedLink to="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-muted-foreground hover:text-foreground hover:bg-muted">
               <LayoutDashboard size={15} />
               Admin Console
-            </Link>
+            </LocalizedLink>
           )}
         </nav>
 
@@ -80,7 +83,7 @@ export default function PortalLayout() {
       {/* Content */}
       <main className="flex-1 overflow-y-auto">
         <div className="p-6 md:p-8">
-          <Outlet />
+          {children}
         </div>
       </main>
     </div>

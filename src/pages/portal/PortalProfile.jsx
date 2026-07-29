@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { User, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 
 export default function PortalProfile() {
   const { user } = useAuth();

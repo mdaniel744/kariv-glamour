@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@/lib/constants';
-import { ShieldCheck, Lock, Check, ArrowLeft, Truck, RotateCcw, Award } from 'lucide-react';
+import { ShieldCheck, Lock, Check, ArrowLeft, Truck, RotateCcw } from 'lucide-react';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
-import SEO from '@/components/SEO';
 import LocalizedLink from '@/components/LocalizedLink';
 
-export default function Checkout() {
+export default function Checkout({ id: idProp, initialProduct = null }) {
   const { t } = useTranslation();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { user, isAuthenticated, isLoadingAuth } = useAuth();
+  const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
+  const { user, isLoadingAuth } = useAuth();
   const { localePath } = useLanguage();
   const { localize } = useLocalizedField();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(initialProduct);
+  const [loading, setLoading] = useState(!initialProduct);
   const [submitting, setSubmitting] = useState(false);
   const [order, setOrder] = useState(null);
   const [done, setDone] = useState(false);
@@ -36,8 +33,13 @@ export default function Checkout() {
   const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
+    if (initialProduct?.id === id) {
+      setProduct(initialProduct);
+      setLoading(false);
+      return;
+    }
     base44.entities.Products.get(id).then(setProduct).catch(console.error).finally(() => setLoading(false));
-  }, [id]);
+  }, [id, initialProduct]);
 
   useEffect(() => {
     if (user) {
@@ -104,7 +106,6 @@ export default function Checkout() {
   if (done && order) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-16">
-        <SEO title={t('pages.checkout.orderPlacedTitle')} />
         <div className="text-center py-6">
           <div className="w-16 h-16 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check size={28} className="text-emerald-600 dark:text-emerald-400" />
@@ -131,12 +132,10 @@ export default function Checkout() {
 
   return (
     <div>
-      <SEO title={t('pages.checkout.orderTitle')} />
-
       {/* Hero header */}
       <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 py-10 md:py-14">
-          <button onClick={() => navigate(localePath(`/product/${id}`))} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
+          <button onClick={() => window.location.assign(localePath(`/product/${id}`))} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft size={10} /> {t('pages.checkout.backToProduct')}
           </button>
           <h1 className="font-display text-3xl md:text-4xl text-foreground font-light">{t('pages.checkout.yourOrder')}</h1>

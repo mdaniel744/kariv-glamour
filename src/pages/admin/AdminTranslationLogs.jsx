@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { ScrollText, RefreshCw, AlertCircle } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -17,7 +18,7 @@ export default function AdminTranslationLogs() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.TranslationJob.list('-created_date', 100);
+      const data = asArray(await base44.entities.TranslationJob.list('-created_date', 100));
       setJobs(data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   }, []);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -17,7 +18,7 @@ export default function AdminFAQ() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(await base44.entities.FAQ.list('sortOrder', 50)); } catch (e) { console.error(e); }
+    try { setItems(asArray(await base44.entities.FAQ.list('sortOrder', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);

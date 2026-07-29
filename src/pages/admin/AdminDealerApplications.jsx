@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useToast } from '@/components/ui/use-toast';
-import { Check, X, Clock, Store } from 'lucide-react';
+import { Check, X, Store } from 'lucide-react';
 
 export default function AdminDealerApplications() {
   const { toast } = useToast();
@@ -16,7 +17,7 @@ export default function AdminDealerApplications() {
   const load = async () => {
     setLoading(true);
     try {
-      const apps = await base44.entities.DealerApplications.list('-created_date', 50);
+      const apps = asArray(await base44.entities.DealerApplications.list('-created_date', 50));
       setApplications(apps);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }

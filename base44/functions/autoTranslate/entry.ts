@@ -58,7 +58,7 @@ function buildGlossaryPrompt(glossaryTerms, targetLangName) {
 async function requireAdmin(base44) {
   let user = null;
   try { user = await base44.auth.me(); } catch { return null; }
-  if (!user || user.role !== 'admin') return null;
+  if (!user || !['admin', 'super_admin'].includes(user.role)) return null;
   return user;
 }
 

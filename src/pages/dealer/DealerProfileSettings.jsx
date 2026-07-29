@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/lib/languageContext';
-import { Link } from 'react-router-dom';
+import LocalizedLink from '@/components/LocalizedLink';
 import { ArrowLeft, Save, Upload, X, ExternalLink } from 'lucide-react';
 
 export default function DealerProfileSettings() {
@@ -31,7 +32,7 @@ export default function DealerProfileSettings() {
   useEffect(() => {
     const load = async () => {
       try {
-        const profiles = await base44.entities.DealerProfile.filter({ userId: user.id }, '-created_date', 1);
+        const profiles = asArray(await base44.entities.DealerProfile.filter({ userId: user.id }, '-created_date', 1));
         if (profiles.length > 0) {
           const p = profiles[0];
           setProfileId(p.id);
@@ -121,9 +122,9 @@ export default function DealerProfileSettings() {
 
   return (
     <div className="max-w-2xl">
-      <Link to={localePath('/dealer')} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
+      <LocalizedLink to="/dealer" className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft size={10} /> Back to Dashboard
-      </Link>
+      </LocalizedLink>
       <h1 className="text-xl font-display text-foreground font-light mb-2">Public Dealer Profile</h1>
       <p className="text-xs text-muted-foreground mb-6">This is what buyers see when they view your dealer profile. A complete profile builds trust and increases sales.</p>
 
