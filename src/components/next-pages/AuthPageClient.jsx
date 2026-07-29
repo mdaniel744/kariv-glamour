@@ -4,10 +4,10 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const AUTH_PAGES = {
-  login: dynamic(() => import('@/pages/Login')),
-  register: dynamic(() => import('@/pages/Register')),
-  forgotPassword: dynamic(() => import('@/pages/ForgotPassword')),
-  resetPassword: dynamic(() => import('@/pages/ResetPassword')),
+  login: dynamic(() => import('@/page-content/Login')),
+  register: dynamic(() => import('@/page-content/Register')),
+  forgotPassword: dynamic(() => import('@/page-content/ForgotPassword')),
+  resetPassword: dynamic(() => import('@/page-content/ResetPassword')),
 };
 
 export default function AuthPageClient({ pageKey }) {

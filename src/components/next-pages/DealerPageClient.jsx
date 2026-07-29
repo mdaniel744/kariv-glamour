@@ -4,11 +4,11 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const DEALER_PAGES = {
-  dashboard: dynamic(() => import('@/pages/dealer/DealerDashboard')),
-  listings: dynamic(() => import('@/pages/dealer/DealerListings')),
-  listingForm: dynamic(() => import('@/pages/dealer/DealerListingForm')),
-  sales: dynamic(() => import('@/pages/dealer/DealerSales')),
-  profile: dynamic(() => import('@/pages/dealer/DealerProfileSettings')),
+  dashboard: dynamic(() => import('@/page-content/dealer/DealerDashboard')),
+  listings: dynamic(() => import('@/page-content/dealer/DealerListings')),
+  listingForm: dynamic(() => import('@/page-content/dealer/DealerListingForm')),
+  sales: dynamic(() => import('@/page-content/dealer/DealerSales')),
+  profile: dynamic(() => import('@/page-content/dealer/DealerProfileSettings')),
 };
 
 export default function DealerPageClient({ pageKey, id }) {

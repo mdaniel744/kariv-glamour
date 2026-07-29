@@ -1,5 +1,5 @@
 import ProtectedArea from '@/components/next-pages/ProtectedArea';
-import AdminLayout from '@/pages/admin/AdminLayout';
+import AdminLayout from '@/page-content/admin/AdminLayout';
 
 export const metadata = {
   title: 'Admin Console',

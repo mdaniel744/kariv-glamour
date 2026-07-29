@@ -1,5 +1,5 @@
 import ProtectedArea from '@/components/next-pages/ProtectedArea';
-import PortalLayout from '@/pages/portal/PortalLayout';
+import PortalLayout from '@/page-content/portal/PortalLayout';
 
 export const metadata = {
   robots: { index: false, follow: false },

@@ -4,14 +4,14 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const PUBLIC_PAGES = {
-  about: dynamic(() => import('@/pages/About')),
-  authentication: dynamic(() => import('@/pages/Authentication')),
-  buyerProtection: dynamic(() => import('@/pages/BuyerProtection')),
-  customerService: dynamic(() => import('@/pages/CustomerService')),
-  sellTrade: dynamic(() => import('@/pages/SellTrade')),
-  guides: dynamic(() => import('@/pages/Guides')),
-  cart: dynamic(() => import('@/pages/Cart')),
-  wishlist: dynamic(() => import('@/pages/Wishlist')),
+  about: dynamic(() => import('@/page-content/About')),
+  authentication: dynamic(() => import('@/page-content/Authentication')),
+  buyerProtection: dynamic(() => import('@/page-content/BuyerProtection')),
+  customerService: dynamic(() => import('@/page-content/CustomerService')),
+  sellTrade: dynamic(() => import('@/page-content/SellTrade')),
+  guides: dynamic(() => import('@/page-content/Guides')),
+  cart: dynamic(() => import('@/page-content/Cart')),
+  wishlist: dynamic(() => import('@/page-content/Wishlist')),
 };
 
 export default function PublicPageClient({ pageKey }) {

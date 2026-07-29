@@ -4,21 +4,21 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const LANDING_PAGES = {
-  rolex: dynamic(() => import('@/pages/RolexSeoLanding')),
-  patekPhilippe: dynamic(() => import('@/pages/PatekPhilippeSeoLanding')),
-  omega: dynamic(() => import('@/pages/OmegaSeoLanding')),
-  cartier: dynamic(() => import('@/pages/CartierSeoLanding')),
-  hublot: dynamic(() => import('@/pages/HublotSeoLanding')),
-  breitling: dynamic(() => import('@/pages/BreitlingSeoLanding')),
-  audemarsPiguet: dynamic(() => import('@/pages/AudemarsPiguetSeoLanding')),
-  grandSeiko: dynamic(() => import('@/pages/GrandSeikoSeoLanding')),
-  iwc: dynamic(() => import('@/pages/IWCSeoLanding')),
-  jaegerLeCoultre: dynamic(() => import('@/pages/JaegerLeCoultreSeoLanding')),
-  tagHeuer: dynamic(() => import('@/pages/TAGHeuerSeoLanding')),
-  tudor: dynamic(() => import('@/pages/TudorSeoLanding')),
-  panerai: dynamic(() => import('@/pages/PaneraiSeoLanding')),
-  bvlgari: dynamic(() => import('@/pages/BvlgariSeoLanding')),
-  girardPerregaux: dynamic(() => import('@/pages/GirardPerregauxSeoLanding')),
+  rolex: dynamic(() => import('@/page-content/RolexSeoLanding')),
+  patekPhilippe: dynamic(() => import('@/page-content/PatekPhilippeSeoLanding')),
+  omega: dynamic(() => import('@/page-content/OmegaSeoLanding')),
+  cartier: dynamic(() => import('@/page-content/CartierSeoLanding')),
+  hublot: dynamic(() => import('@/page-content/HublotSeoLanding')),
+  breitling: dynamic(() => import('@/page-content/BreitlingSeoLanding')),
+  audemarsPiguet: dynamic(() => import('@/page-content/AudemarsPiguetSeoLanding')),
+  grandSeiko: dynamic(() => import('@/page-content/GrandSeikoSeoLanding')),
+  iwc: dynamic(() => import('@/page-content/IWCSeoLanding')),
+  jaegerLeCoultre: dynamic(() => import('@/page-content/JaegerLeCoultreSeoLanding')),
+  tagHeuer: dynamic(() => import('@/page-content/TAGHeuerSeoLanding')),
+  tudor: dynamic(() => import('@/page-content/TudorSeoLanding')),
+  panerai: dynamic(() => import('@/page-content/PaneraiSeoLanding')),
+  bvlgari: dynamic(() => import('@/page-content/BvlgariSeoLanding')),
+  girardPerregaux: dynamic(() => import('@/page-content/GirardPerregauxSeoLanding')),
 };
 
 export default function SeoLandingRouteClient({ pageKey, slug }) {

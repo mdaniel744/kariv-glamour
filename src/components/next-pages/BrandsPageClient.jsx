@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Brands from '@/pages/Brands';
+import Brands from '@/page-content/Brands';
 
 export default function BrandsPageClient({ brands }) {
   return <Brands initialBrands={brands} />;

@@ -17,6 +17,6 @@
     "types": [],
     "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "pages/**/*.js", "pages/**/*.jsx", "src/components/**/*.js", "src/pages/**/*.jsx", "src/Layout.jsx"],
+  "include": ["next-env.d.ts", "pages/**/*.js", "pages/**/*.jsx", "src/components/**/*.js", "src/page-content/**/*.jsx", "src/Layout.jsx"],
   "exclude": ["node_modules", ".next", "dist", "src/components/ui", "src/api", "src/lib"]
 }

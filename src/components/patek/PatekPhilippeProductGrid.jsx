@@ -9,6 +9,7 @@ import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { PATEK_QUICK_FILTERS, PATEK_COMPLICATIONS } from '@/lib/patekData';
+import { productSlug } from '@/lib/slug';
 
 const BRAND = 'Patek Philippe';
 
@@ -33,12 +34,12 @@ function PatekProductCard({ product }) {
         <button onClick={(e) => { e.preventDefault(); toggleWishlist(product); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
           <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
         </button>
-        <LocalizedLink to={`/product/${product.id}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+        <LocalizedLink to={`/product/${productSlug(product)}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
           <Eye size={14} className="text-white" />
           <span className="text-[10px] tracking-[0.15em] uppercase text-white">{t('productGrid.quickView')}</span>
         </LocalizedLink>
       </div>
-      <LocalizedLink to={`/product/${product.id}`}>
+      <LocalizedLink to={`/product/${productSlug(product)}`}>
         <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
         <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(product, 'productTitle')}</h3>
         <div className="flex items-center gap-3 text-[10px] mb-2 text-muted-foreground">

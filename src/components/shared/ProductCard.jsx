@@ -6,6 +6,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { productSlug } from '@/lib/slug';
 
 export default function ProductCard({ product }) {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ export default function ProductCard({ product }) {
       transition={{ duration: 0.5 }}
       className="group"
     >
-      <LocalizedLink to={`/product/${product.id}`} className="block">
+      <LocalizedLink to={`/product/${productSlug(product)}`} className="block">
         <div className="product-image-grid relative mb-4">
           {product.featuredImage ? (
             <img

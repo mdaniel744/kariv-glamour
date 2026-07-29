@@ -3,6 +3,7 @@ import { SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import { BRAND_COLLECTION_ROUTES } from '@/lib/brandCollectionRegistry';
 import { getLegalPages, getPublishedProducts } from '@/lib/base44Server';
 import { getSiteUrl, SUPPORTED_LOCALES } from '@/lib/seo';
+import { productSlug } from '@/lib/slug';
 
 export const revalidate = 3600;
 
@@ -140,15 +141,16 @@ export default async function sitemap() {
     }
 
     for (const product of products) {
+      const slug = productSlug(product);
       entries.push({
-        url: localized(`/product/${product.id}`),
+        url: localized(`/product/${slug}`),
         lastModified: product.updated_date || product.created_date || new Date(),
         changeFrequency: 'daily',
         priority: 0.8,
         alternates: {
           languages: {
-            de: `${siteUrl}/de/product/${product.id}`,
-            en: `${siteUrl}/en/product/${product.id}`,
+            de: `${siteUrl}/de/product/${slug}`,
+            en: `${siteUrl}/en/product/${slug}`,
           },
         },
       });

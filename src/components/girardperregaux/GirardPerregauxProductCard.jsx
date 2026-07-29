@@ -6,6 +6,7 @@ import { Heart, ShieldCheck, Box, FileText } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
 import { motion } from 'framer-motion';
+import { productSlug } from '@/lib/slug';
 
 const BRAND = 'Girard-Perregaux';
 
@@ -16,7 +17,7 @@ export default function GirardPerregauxProductCard({ product }) {
   const wishlisted = isInWishlist(product.id);
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="group">
-      <LocalizedLink to={`/product/${product.id}`} className="block">
+      <LocalizedLink to={`/product/${productSlug(product)}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
           {product.featuredImage ? (
             <img src={product.featuredImage} alt={localize(product, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />

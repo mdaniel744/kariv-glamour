@@ -4,13 +4,13 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const PORTAL_PAGES = {
-  dashboard: dynamic(() => import('@/pages/portal/PortalDashboard')),
-  orders: dynamic(() => import('@/pages/portal/PortalOrders')),
-  orderDetail: dynamic(() => import('@/pages/portal/PortalOrderDetail')),
-  mails: dynamic(() => import('@/pages/portal/PortalMails')),
-  wishlist: dynamic(() => import('@/pages/Wishlist')),
-  profile: dynamic(() => import('@/pages/portal/PortalProfile')),
-  becomeDealer: dynamic(() => import('@/pages/portal/PortalBecomeDealer')),
+  dashboard: dynamic(() => import('@/page-content/portal/PortalDashboard')),
+  orders: dynamic(() => import('@/page-content/portal/PortalOrders')),
+  orderDetail: dynamic(() => import('@/page-content/portal/PortalOrderDetail')),
+  mails: dynamic(() => import('@/page-content/portal/PortalMails')),
+  wishlist: dynamic(() => import('@/page-content/Wishlist')),
+  profile: dynamic(() => import('@/page-content/portal/PortalProfile')),
+  becomeDealer: dynamic(() => import('@/page-content/portal/PortalBecomeDealer')),
 };
 
 export default function PortalPageClient({ pageKey, id }) {

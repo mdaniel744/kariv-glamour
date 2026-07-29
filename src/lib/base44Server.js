@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient } from '@base44/sdk';
 import { asArray } from '@/lib/base44Data';
+import { productSlug } from '@/lib/slug';
 
 const appId = process.env.NEXT_PUBLIC_BASE44_APP_ID || process.env.VITE_BASE44_APP_ID;
 const serverUrl = process.env.NEXT_PUBLIC_BASE44_SERVER_URL || process.env.VITE_BASE44_SERVER_URL || 'https://base44.app';
@@ -40,6 +41,24 @@ export async function getProductById(id) {
   } catch (error) {
     if (isNotFound(error)) return null;
     console.error('Unable to load product from Base44:', error?.message || error);
+    return null;
+  }
+}
+
+export async function getProductBySlug(slug) {
+  if (!base44Server || !slug) return null;
+  try {
+    const exactMatches = asArray(
+      await withTimeout(base44Server.entities.Products.filter({ slug }, '-created_date', 1, 0))
+    );
+    if (exactMatches[0]) return exactMatches[0];
+
+    // ~27 of 35 live products have no real `slug` value yet — fall back to
+    // matching against a title-derived slug across the published catalog.
+    const products = await getPublishedProducts();
+    return products.find((p) => productSlug(p) === slug) || null;
+  } catch (error) {
+    console.error('Unable to load product by slug from Base44:', error?.message || error);
     return null;
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import DealerProfile from '@/pages/DealerProfile';
+import DealerProfile from '@/page-content/DealerProfile';
 
 export default function DealerProfilePageClient({ dealerId, profile, listings, reviews }) {
   return (

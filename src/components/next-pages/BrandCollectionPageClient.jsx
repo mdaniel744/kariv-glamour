@@ -4,21 +4,21 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const COLLECTION_PAGES = {
-  rolex: dynamic(() => import('@/pages/RolexCollectionPage')),
-  patekPhilippe: dynamic(() => import('@/pages/PatekPhilippeCollectionPage')),
-  omega: dynamic(() => import('@/pages/OmegaCollectionPage')),
-  cartier: dynamic(() => import('@/pages/CartierCollectionPage')),
-  hublot: dynamic(() => import('@/pages/HublotCollectionPage')),
-  breitling: dynamic(() => import('@/pages/BreitlingCollectionPage')),
-  audemarsPiguet: dynamic(() => import('@/pages/AudemarsPiguetCollectionPage')),
-  grandSeiko: dynamic(() => import('@/pages/GrandSeikoCollectionPage')),
-  iwc: dynamic(() => import('@/pages/IWCCollectionPage')),
-  jaegerLeCoultre: dynamic(() => import('@/pages/JaegerLeCoultreCollectionPage')),
-  tagHeuer: dynamic(() => import('@/pages/TAGHeuerCollectionPage')),
-  tudor: dynamic(() => import('@/pages/TudorCollectionPage')),
-  panerai: dynamic(() => import('@/pages/PaneraiCollectionPage')),
-  bvlgari: dynamic(() => import('@/pages/BvlgariCollectionPage')),
-  girardPerregaux: dynamic(() => import('@/pages/GirardPerregauxCollectionPage')),
+  rolex: dynamic(() => import('@/page-content/RolexCollectionPage')),
+  patekPhilippe: dynamic(() => import('@/page-content/PatekPhilippeCollectionPage')),
+  omega: dynamic(() => import('@/page-content/OmegaCollectionPage')),
+  cartier: dynamic(() => import('@/page-content/CartierCollectionPage')),
+  hublot: dynamic(() => import('@/page-content/HublotCollectionPage')),
+  breitling: dynamic(() => import('@/page-content/BreitlingCollectionPage')),
+  audemarsPiguet: dynamic(() => import('@/page-content/AudemarsPiguetCollectionPage')),
+  grandSeiko: dynamic(() => import('@/page-content/GrandSeikoCollectionPage')),
+  iwc: dynamic(() => import('@/page-content/IWCCollectionPage')),
+  jaegerLeCoultre: dynamic(() => import('@/page-content/JaegerLeCoultreCollectionPage')),
+  tagHeuer: dynamic(() => import('@/page-content/TAGHeuerCollectionPage')),
+  tudor: dynamic(() => import('@/page-content/TudorCollectionPage')),
+  panerai: dynamic(() => import('@/page-content/PaneraiCollectionPage')),
+  bvlgari: dynamic(() => import('@/page-content/BvlgariCollectionPage')),
+  girardPerregaux: dynamic(() => import('@/page-content/GirardPerregauxCollectionPage')),
 };
 
 export default function BrandCollectionPageClient({ pageKey, slug }) {

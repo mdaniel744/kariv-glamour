@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ProductDetail from '@/pages/ProductDetail';
+import ProductDetail from '@/page-content/ProductDetail';
 
 export default function ProductDetailPageClient({ product, relatedProducts }) {
   return (
