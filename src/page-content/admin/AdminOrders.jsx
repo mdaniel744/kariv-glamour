@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,7 +21,7 @@ export default function AdminOrders() {
   const [sendingMsg, setSendingMsg] = useState(false);
 
   useEffect(() => {
-    base44.entities.Orders.list('-created_date', 50).then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
+    dataClient.entities.Orders.list('-created_date', 50).then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const updateEscrow = async (id, escrowStatus) => {
@@ -30,7 +30,7 @@ export default function AdminOrders() {
       const paymentStatus = ['funds_secured', 'shipped', 'verified', 'funds_released'].includes(escrowStatus) ? 'Paid' : 'Pending';
       const shippingStatus = escrowStatus === 'shipped' ? 'Shipped' : escrowStatus === 'verified' || escrowStatus === 'funds_released' ? 'Delivered' : 'Pending';
 
-      await base44.functions.invoke('processOrder', {
+      await dataClient.functions.invoke('processOrder', {
         action: 'update_escrow', orderId: id, escrowStatus, orderStatus, paymentStatus, shippingStatus
       });
       setOrders(prev => prev.map(o => o.id === id ? { ...o, escrowStatus, orderStatus, paymentStatus, shippingStatus } : o));
@@ -45,7 +45,7 @@ export default function AdminOrders() {
     }
     setSendingJust(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'request_justification', orderId: id, subject: justSubject, message: justMessage
       });
       setOrders(prev => prev.map(o => o.id === id ? { ...o, paymentStatus: 'Justification Requested', justificationMessage: justMessage } : o));
@@ -65,7 +65,7 @@ export default function AdminOrders() {
     }
     setSendingMsg(true);
     try {
-      await base44.functions.invoke('processOrder', {
+      await dataClient.functions.invoke('processOrder', {
         action: 'admin_reply',
         orderId: id,
         subject: msgSubject.trim(),
@@ -82,7 +82,7 @@ export default function AdminOrders() {
 
   const updateTracking = async (id, trackingNumber) => {
     try {
-      await base44.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber });
+      await dataClient.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber });
       setOrders(prev => prev.map(o => o.id === id ? { ...o, trackingNumber } : o));
       toast({ title: 'Tracking number updated' });
     } catch (e) { toast({ title: 'Error', description: e.message, variant: 'destructive' }); }

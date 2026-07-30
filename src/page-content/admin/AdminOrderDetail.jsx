@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
@@ -28,9 +28,9 @@ export default function AdminOrderDetail({ id: providedId }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Orders.get(id),
-      base44.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).then(asArray).catch(() => []),
-      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
+      dataClient.entities.Orders.get(id),
+      dataClient.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).then(asArray).catch(() => []),
+      dataClient.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
     ]).then(([o, msgs, disputes]) => {
       setOrder(o);
       setMessages(msgs);
@@ -41,7 +41,7 @@ export default function AdminOrderDetail({ id: providedId }) {
   }, [id]);
 
   const refreshOrder = async () => {
-    const o = await base44.entities.Orders.get(id);
+    const o = await dataClient.entities.Orders.get(id);
     setOrder(o);
   };
 
@@ -51,7 +51,7 @@ export default function AdminOrderDetail({ id: providedId }) {
       const orderStatus = newEscrowStatus === 'funds_released' ? 'Delivered' : newEscrowStatus === 'shipped' ? 'Shipped' : newEscrowStatus === 'cancelled' ? 'Cancelled' : 'Processing';
       const paymentStatus = ['funds_secured', 'shipped', 'verified', 'funds_released'].includes(newEscrowStatus) ? 'Paid' : 'Pending';
       const shippingStatus = newEscrowStatus === 'shipped' ? 'Shipped' : newEscrowStatus === 'verified' || newEscrowStatus === 'funds_released' ? 'Delivered' : 'Pending';
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'update_escrow', orderId: id, escrowStatus: newEscrowStatus, orderStatus, paymentStatus, shippingStatus
       });
       setOrder(res.data.order);
@@ -66,7 +66,7 @@ export default function AdminOrderDetail({ id: providedId }) {
   const saveTracking = async () => {
     if (!trackingInput.trim()) return;
     try {
-      await base44.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber: trackingInput.trim() });
+      await dataClient.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber: trackingInput.trim() });
       setOrder(prev => ({ ...prev, trackingNumber: trackingInput.trim() }));
       toast({ title: 'Tracking number updated' });
     } catch (e) {
@@ -81,7 +81,7 @@ export default function AdminOrderDetail({ id: providedId }) {
     }
     setSendingMsg(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'admin_reply',
         orderId: id,
         subject: msgSubject.trim(),
@@ -100,7 +100,7 @@ export default function AdminOrderDetail({ id: providedId }) {
   const markMessagesRead = () => {
     const unreadIds = messages.filter(m => m.sender === 'buyer' && !m.isRead).map(m => m.id);
     unreadIds.forEach(async mid => {
-      try { await base44.entities.OrderMessage.update(mid, { isRead: true }); } catch (e) {}
+      try { await dataClient.entities.OrderMessage.update(mid, { isRead: true }); } catch (e) {}
     });
     setMessages(prev => prev.map(m => unreadIds.includes(m.id) ? { ...m, isRead: true } : m));
   };
@@ -108,7 +108,7 @@ export default function AdminOrderDetail({ id: providedId }) {
   const confirmCourierDelivery = async () => {
     setUpdatingStatus(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'confirm_courier_delivery',
         orderId: id
       });
@@ -124,7 +124,7 @@ export default function AdminOrderDetail({ id: providedId }) {
   const resolveDispute = async (outcome, orderAction) => {
     setResolving(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'resolve_dispute',
         disputeId: dispute.id,
         outcome,

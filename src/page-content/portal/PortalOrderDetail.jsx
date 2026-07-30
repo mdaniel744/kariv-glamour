@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -32,8 +32,8 @@ export default function PortalOrderDetail({ id: providedId }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Orders.get(id),
-      base44.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
+      dataClient.entities.Orders.get(id),
+      dataClient.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
     ]).then(([o, disputes]) => {
       setOrder(o);
       setPaymentMethod(o.paymentMethod);
@@ -45,7 +45,7 @@ export default function PortalOrderDetail({ id: providedId }) {
   const handleSelectPayment = async () => {
     setSavingPayment(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'select_payment',
         orderId: id,
         paymentMethod
@@ -69,7 +69,7 @@ export default function PortalOrderDetail({ id: providedId }) {
     }
     setFlagging(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'flag_order',
         orderId: id,
         reason: flagReason,
@@ -89,7 +89,7 @@ export default function PortalOrderDetail({ id: providedId }) {
   const handleConfirmPaymentSent = async () => {
     setConfirmingPayment(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'confirm_payment_sent',
         orderId: id,
         paymentProofUrl

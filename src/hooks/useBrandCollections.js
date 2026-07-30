@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 
 /**
@@ -16,7 +16,7 @@ export function useBrandCollections(brandName, fallbackData = []) {
 
   useEffect(() => {
     let mounted = true;
-    base44.entities.Collections.filter({ brand: brandName }, 'collectionName', 100)
+    dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName', 100)
       .then(response => {
         if (!mounted) return;
         const records = asArray(response);

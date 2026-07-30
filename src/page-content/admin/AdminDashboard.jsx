@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { Package, ShoppingCart, Users, Tag } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 
@@ -11,10 +11,10 @@ export default function AdminDashboard() {
     const load = async () => {
       try {
         const [products, orders, customers, brands] = await Promise.all([
-          base44.entities.Products.list('-created_date', 1),
-          base44.entities.Orders.list('-created_date', 5),
-          base44.entities.Customers.list('-created_date', 1),
-          base44.entities.Brands.list('-created_date', 1)
+          dataClient.entities.Products.list('-created_date', 1),
+          dataClient.entities.Orders.list('-created_date', 5),
+          dataClient.entities.Customers.list('-created_date', 1),
+          dataClient.entities.Brands.list('-created_date', 1)
         ]);
         setStats({ products: products.length, orders: orders.length, customers: customers.length, brands: brands.length });
         setRecentOrders(orders);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DATA } from '@/lib/constants';
-import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 
@@ -14,27 +14,16 @@ export default function AdminCollections() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
-  const [uploading, setUploading] = useState(false);
 
   const load = async () => {
     setLoading(true);
-    try { setItems(asArray(await base44.entities.Collections.list('brand', 50))); } catch (e) { console.error(e); }
+    try { setItems(asArray(await dataClient.entities.Collections.list('brand', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
 
   const openNew = () => { setForm({ brand: '', slug: '', collectionName_de: '', collectionName_en: '', description_de: '', description_en: '' }); setEditing('new'); };
   const openEdit = (c) => { setForm({ ...c }); setEditing(c.id); };
-
-  const handleImageUpload = async (file) => {
-    if (!file) return;
-    setUploading(true);
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setForm(prev => ({ ...prev, heroImage: file_url }));
-    } catch (e) { toast({ title: t('error'), description: 'Upload failed', variant: "destructive" }); }
-    finally { setUploading(false); }
-  };
 
   const handleSave = async () => {
     try {
@@ -44,15 +33,15 @@ export default function AdminCollections() {
         description: form.description_de || form.description_en || form.description || '',
         slug: form.slug || (form.collectionName_de || form.collectionName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await base44.entities.Collections.create(payload); toast({ title: t('collectionCreated') }); }
-      else { await base44.entities.Collections.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await dataClient.entities.Collections.create(payload); toast({ title: t('collectionCreated') }); }
+      else { await dataClient.entities.Collections.update(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await base44.entities.Collections.delete(id); load(); } catch (e) { toast({ title: t('error'), variant: "destructive" }); }
+    try { await dataClient.entities.Collections.delete(id); load(); } catch (e) { toast({ title: t('error'), variant: "destructive" }); }
   };
 
   if (editing !== null) {
@@ -78,20 +67,19 @@ export default function AdminCollections() {
           <BilingualField label={t('fields.description')} name="description" form={form} setForm={setForm} type="textarea" />
           <div>
             <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">Collection Image</label>
-            {form.heroImage ? (
-              <div className="relative w-full max-w-sm">
+            {form.heroImage && (
+              <div className="relative w-full max-w-sm mb-2">
                 <img src={form.heroImage} alt="Collection" className="w-full aspect-[4/3] object-cover border border-white/10" />
                 <button onClick={() => setForm({ ...form, heroImage: '' })} className="absolute top-2 right-2 w-7 h-7 bg-black/60 text-white flex items-center justify-center hover:bg-black/80"><X size={14} /></button>
               </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border border-dashed border-white/15 cursor-pointer hover:border-[#C5A367] transition-colors">
-                {uploading ? <span className="text-xs text-[#8E8E93]">Uploading...</span> : <>
-                  <Upload size={20} className="text-[#8E8E93] mb-2" />
-                  <span className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93]">Upload Image</span>
-                </>}
-                <input type="file" accept="image/*" className="hidden" onChange={e => handleImageUpload(e.target.files?.[0])} />
-              </label>
             )}
+            <input
+              type="url"
+              value={form.heroImage || ''}
+              onChange={(e) => setForm({ ...form, heroImage: e.target.value })}
+              placeholder="https://ik.imagekit.io/..."
+              className="w-full max-w-sm bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
+            />
           </div>
           <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3"><Save size={14} /> {t('save')}</button>
         </div>

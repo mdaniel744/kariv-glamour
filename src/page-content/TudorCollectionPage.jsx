@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
@@ -37,9 +37,9 @@ export default function TudorCollectionPage({ slug: slugProp }) {
       setLoading(true);
       try {
         if (effectiveName) {
-          let data = asArray(await base44.entities.Products.filter({ brand: BRAND, collection: effectiveName }, '-created_date', 50));
+          let data = asArray(await dataClient.entities.Products.filter({ brand: BRAND, collection: effectiveName }, '-created_date', 50));
           if (data.length === 0 && blackBaySub) {
-            data = asArray(await base44.entities.Products.filter({ brand: BRAND, collection: 'Black Bay' }, '-created_date', 50));
+            data = asArray(await dataClient.entities.Products.filter({ brand: BRAND, collection: 'Black Bay' }, '-created_date', 50));
             if (blackBaySub.name !== 'Black Bay') {
               const sub = blackBaySub.name.toLowerCase();
               data = data.filter((p) => {

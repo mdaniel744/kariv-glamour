@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -12,14 +12,14 @@ export default function DealerListings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.Products.filter({ created_by_id: user.id }, '-created_date', 50)
+    dataClient.entities.Products.filter({ created_by_id: user.id }, '-created_date', 50)
       .then(data => setListings(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this listing?')) return;
     try {
-      await base44.entities.Products.delete(id);
+      await dataClient.entities.Products.delete(id);
       setListings(prev => prev.filter(p => p.id !== id));
     } catch (e) { alert('Failed to delete listing'); }
   };

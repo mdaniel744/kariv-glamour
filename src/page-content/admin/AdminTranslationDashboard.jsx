@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { Languages, RefreshCw, AlertCircle } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -26,7 +26,7 @@ export default function AdminTranslationDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke('translationStatus', {});
+      const res = await dataClient.functions.invoke('translationStatus', {});
       setData(res.data);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load status');
@@ -41,7 +41,7 @@ export default function AdminTranslationDashboard() {
     const key = `${entityName}_${contentId}`;
     setTranslating(prev => ({ ...prev, [key]: true }));
     try {
-      await base44.functions.invoke('processTranslation', {
+      await dataClient.functions.invoke('processTranslation', {
         entity_name: entityName,
         entity_id: contentId,
         trigger_type: 'manual'

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -15,7 +15,7 @@ export default function PortalMails() {
 
   useEffect(() => {
     if (!user) return;
-    base44.entities.OrderMessage.filter({ buyerId: user.id }, '-created_date', 200)
+    dataClient.entities.OrderMessage.filter({ buyerId: user.id }, '-created_date', 200)
       .then(data => setMessages(asArray(data)))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -44,7 +44,7 @@ export default function PortalMails() {
     try {
       const lastSubject = selectedThread.messages[selectedThread.messages.length - 1]?.subject || 'Re: Your Order';
       const replySubject = lastSubject.startsWith('Re:') ? lastSubject : 'Re: ' + lastSubject;
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'send_message',
         orderId: selectedThread.orderId,
         subject: replySubject,
@@ -62,7 +62,7 @@ export default function PortalMails() {
   const markAsRead = async (msgIds) => {
     for (const id of msgIds) {
       try {
-        await base44.entities.OrderMessage.update(id, { isRead: true });
+        await dataClient.entities.OrderMessage.update(id, { isRead: true });
       } catch (e) { /* best effort */ }
     }
     setMessages(prev => prev.map(m => msgIds.includes(m.id) ? { ...m, isRead: true } : m));

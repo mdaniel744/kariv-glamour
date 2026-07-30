@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -32,7 +32,7 @@ export default function DealerProfileSettings() {
   useEffect(() => {
     const load = async () => {
       try {
-        const profiles = asArray(await base44.entities.DealerProfile.filter({ userId: user.id }, '-created_date', 1));
+        const profiles = asArray(await dataClient.entities.DealerProfile.filter({ userId: user.id }, '-created_date', 1));
         if (profiles.length > 0) {
           const p = profiles[0];
           setProfileId(p.id);
@@ -61,7 +61,7 @@ export default function DealerProfileSettings() {
     const setUploading = field === 'logoImage' ? setUploadingLogo : setUploadingBanner;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await dataClient.integrations.Core.UploadFile({ file });
       setForm(prev => ({ ...prev, [field]: file_url }));
     } catch (e) {
       toast({ title: 'Upload failed', variant: 'destructive' });
@@ -104,9 +104,9 @@ export default function DealerProfileSettings() {
       };
 
       if (profileId) {
-        await base44.entities.DealerProfile.update(profileId, payload);
+        await dataClient.entities.DealerProfile.update(profileId, payload);
       } else {
-        const created = await base44.entities.DealerProfile.create(payload);
+        const created = await dataClient.entities.DealerProfile.create(payload);
         setProfileId(created.id);
       }
       toast({ title: 'Profile saved!' });

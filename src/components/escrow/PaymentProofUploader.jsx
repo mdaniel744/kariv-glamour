@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, FileCheck2, Loader2 } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useTranslation } from 'react-i18next';
 
 export default function PaymentProofUploader({ paymentMethod, onUploaded, proofUrl }) {
@@ -29,7 +29,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
     setError(null);
     setUploading(true);
     try {
-      const res = await base44.integrations.Core.UploadFile({ file });
+      const res = await dataClient.integrations.Core.UploadFile({ file });
       const url = res.file_url || res.data?.file_url;
       setPreviewUrl(url);
       onUploaded(url);

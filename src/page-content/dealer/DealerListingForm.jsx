@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -32,7 +32,7 @@ export default function DealerListingForm({ id: providedId }) {
 
   useEffect(() => {
     if (isEdit) {
-      base44.entities.Products.get(id).then(p => setProduct(p)).catch(console.error);
+      dataClient.entities.Products.get(id).then(p => setProduct(p)).catch(console.error);
     }
   }, [id]);
 
@@ -42,7 +42,7 @@ export default function DealerListingForm({ id: providedId }) {
     try {
       const urls = [];
       for (const file of files) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const { file_url } = await dataClient.integrations.Core.UploadFile({ file });
         urls.push(file_url);
       }
       setProduct(prev => ({
@@ -71,9 +71,9 @@ export default function DealerListingForm({ id: providedId }) {
       const { authenticationStatus, ...rest } = product;
       const payload = { ...rest, dealerId: user.id, dealerEmail: user.email, dealerName: user.full_name || user.email, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
       if (isEdit) {
-        await base44.entities.Products.update(id, payload);
+        await dataClient.entities.Products.update(id, payload);
       } else {
-        await base44.entities.Products.create(payload);
+        await dataClient.entities.Products.create(payload);
       }
       toast({ title: isEdit ? 'Listing updated!' : 'Listing created!' });
       router.push(localePath('/dealer/listings'));

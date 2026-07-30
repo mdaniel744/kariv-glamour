@@ -8,13 +8,12 @@ import { isAdmin, isDealer } from '@/lib/escrowConstants';
 
 export default function ProtectedArea({ children, requireDealer = false, requireAdmin = false }) {
   const pathname = usePathname();
-  const { user, isAuthenticated, isLoadingAuth, authChecked, checkUserAuth } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth, authChecked } = useAuth();
   const { localePath } = useLanguage();
 
-  useEffect(() => {
-    if (!authChecked && !isLoadingAuth) checkUserAuth();
-  }, [authChecked, checkUserAuth, isLoadingAuth]);
-
+  // Real enforcement happens in middleware.js (clerkMiddleware + role check)
+  // before this component ever renders — this is just the loading-state UI
+  // and a client-side fallback in case of a stale/cached page.
   useEffect(() => {
     if (authChecked && !isLoadingAuth && !isAuthenticated) {
       window.location.replace(`${localePath('/login')}?returnTo=${encodeURIComponent(pathname)}`);

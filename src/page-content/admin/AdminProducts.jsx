@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
-import { Plus, Pencil, Trash2, X, Save, Upload, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 import ProductCategorySidebar from '@/components/admin/ProductCategorySidebar';
@@ -22,7 +22,7 @@ export default function AdminProducts() {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const data = asArray(await base44.entities.Products.list('-created_date', 200));
+      const data = asArray(await dataClient.entities.Products.list('-created_date', 200));
       setProducts(data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -52,10 +52,10 @@ export default function AdminProducts() {
         slug: (form.productTitle_de || form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
       if (editing === 'new') {
-        await base44.entities.Products.create(payload);
+        await dataClient.entities.Products.create(payload);
         toast({ title: t('productCreated') });
       } else {
-        await base44.entities.Products.update(editing, payload);
+        await dataClient.entities.Products.update(editing, payload);
         toast({ title: t('productUpdated') });
       }
       setEditing(null);
@@ -68,7 +68,7 @@ export default function AdminProducts() {
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirmProduct'))) return;
     try {
-      await base44.entities.Products.delete(id);
+      await dataClient.entities.Products.delete(id);
       toast({ title: t('productDeleted') });
       loadProducts();
     } catch (e) {
@@ -76,15 +76,8 @@ export default function AdminProducts() {
     }
   };
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setForm(prev => ({ ...prev, featuredImage: file_url, productImages: [...(prev.productImages || []), file_url] }));
-    } catch (e) {
-      toast({ title: t('uploadFailed'), variant: "destructive" });
-    }
+  const handleImageUrlChange = (url) => {
+    setForm(prev => ({ ...prev, featuredImage: url, productImages: url ? [url, ...(prev.productImages || []).filter((u) => u !== prev.featuredImage)] : (prev.productImages || []) }));
   };
 
   const Field = ({ label, name, type = 'text', options, ...props }) => (
@@ -151,10 +144,13 @@ export default function AdminProducts() {
             {form.featuredImage && (
               <img src={form.featuredImage} alt="" className="w-20 h-20 object-cover border border-white/10" />
             )}
-            <label className="cursor-pointer flex items-center gap-2 border border-white/10 px-4 py-2 text-xs text-[#8E8E93] hover:border-[#C5A367] hover:text-[#C5A367] transition-colors">
-              <Upload size={14} /> {t('uploadImage')}
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-            </label>
+            <input
+              type="url"
+              value={form.featuredImage || ''}
+              onChange={(e) => handleImageUrlChange(e.target.value)}
+              placeholder="https://ik.imagekit.io/..."
+              className="flex-1 bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
+            />
           </div>
         </div>
         <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3 hover:bg-[#B8944F] transition-colors">

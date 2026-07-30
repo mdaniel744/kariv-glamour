@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useSignIn } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, ArrowLeft, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import LocalizedLink from "@/components/LocalizedLink";
+import { useLanguage } from "@/lib/languageContext";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const { signIn, isLoaded } = useSignIn();
+  const { localePath } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isLoaded) return;
     setLoading(true);
     try {
-      await base44.auth.resetPasswordRequest(email);
+      await signIn.create({ strategy: "reset_password_email_code", identifier: email });
     } catch {
-      // Always show success regardless
+      // Always show success regardless, matching the previous behavior
+      // (don't reveal whether an account exists for this email)
     } finally {
       setLoading(false);
       setSent(true);
@@ -37,9 +42,17 @@ export default function ForgotPassword() {
       }
     >
       {sent ? (
-        <p className="text-sm text-foreground text-center">
-          If an account exists with that email, you'll receive a password reset link shortly.
-        </p>
+        <div className="text-center space-y-4">
+          <p className="text-sm text-foreground">
+            If an account exists with that email, you'll receive a code shortly.
+          </p>
+          <LocalizedLink
+            to={`/reset-password?email=${encodeURIComponent(email)}`}
+            className="inline-block bg-primary text-primary-foreground text-xs tracking-[0.15em] uppercase px-6 py-3"
+          >
+            Enter code
+          </LocalizedLink>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

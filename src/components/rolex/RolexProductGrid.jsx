@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { motion } from 'framer-motion';
 import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function RolexProductGrid() {
     const load = async () => {
       setLoading(true);
       try {
-        let data = asArray(await base44.entities.Products.filter({ brand: BRAND }, sortBy, 50));
+        let data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, sortBy, 50));
         if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
         if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));
         if (filters.dialColor.length) data = data.filter((p) => filters.dialColor.includes(p.dialColor));

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useLocalizedField } from '@/lib/localize';
 import { Mail, Phone, MapPin, Clock, ChevronDown, ChevronRight } from 'lucide-react';
@@ -18,7 +18,7 @@ export default function CustomerService() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    base44.entities.FAQ.filter({}, 'sortOrder', 20).then(data => setFaqs(asArray(data))).catch(console.error);
+    dataClient.entities.FAQ.filter({}, 'sortOrder', 20).then(data => setFaqs(asArray(data))).catch(console.error);
   }, []);
 
   const handleSubmit = (e) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { BRAND_DATA, BRAND_DISCLAIMER } from '@/lib/constants';
 import { useLocalizedField } from '@/lib/localize';
@@ -62,14 +62,14 @@ export default function BrandDetail({
     const load = async () => {
       setLoading(true);
       try {
-        const brands = asArray(await base44.entities.Brands.filter({ slug }));
+        const brands = asArray(await dataClient.entities.Brands.filter({ slug }));
         if (brands.length > 0) setBrand(brands[0]);
 
         const brandName = staticBrand?.name || slug;
-        const prods = asArray(await base44.entities.Products.filter({ brand: brandName }, '-created_date', 50));
+        const prods = asArray(await dataClient.entities.Products.filter({ brand: brandName }, '-created_date', 50));
         setProducts(prods);
 
-        const cols = asArray(await base44.entities.Collections.filter({ brand: brandName }, 'collectionName', 50));
+        const cols = asArray(await dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName', 50));
         setCollections(cols);
       } catch (e) {
         console.error(e);

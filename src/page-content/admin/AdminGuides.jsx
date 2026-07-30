@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
@@ -18,7 +18,7 @@ export default function AdminGuides() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(asArray(await base44.entities.WatchGuides.list('-created_date', 50))); } catch (e) { console.error(e); }
+    try { setItems(asArray(await dataClient.entities.WatchGuides.list('-created_date', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
@@ -35,15 +35,15 @@ export default function AdminGuides() {
         content: form.content_de || form.content_en || form.content || '',
         slug: form.slug || (form.title_de || form.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await base44.entities.WatchGuides.create(payload); toast({ title: t('guideCreated') }); }
-      else { await base44.entities.WatchGuides.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await dataClient.entities.WatchGuides.create(payload); toast({ title: t('guideCreated') }); }
+      else { await dataClient.entities.WatchGuides.update(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await base44.entities.WatchGuides.delete(id); load(); } catch (e) { console.error(e); }
+    try { await dataClient.entities.WatchGuides.delete(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

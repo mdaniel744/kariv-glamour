@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useToast } from '@/components/ui/use-toast';
 import { Users, Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
 
@@ -14,8 +14,8 @@ export default function AdminCustomers() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Customers.list('-created_date', 50).then(asArray).catch(() => []),
-      base44.entities.OrderMessage.list('-created_date', 200).then(asArray).catch(() => [])
+      dataClient.entities.Customers.list('-created_date', 50).then(asArray).catch(() => []),
+      dataClient.entities.OrderMessage.list('-created_date', 200).then(asArray).catch(() => [])
     ]).then(([custs, msgs]) => {
       setCustomers(custs);
       setMessages(msgs);
@@ -81,7 +81,7 @@ export default function AdminCustomers() {
     if (!replyText.trim()) return;
     setSending(true);
     try {
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'admin_reply',
         orderId,
         message: replyText.trim()
@@ -99,7 +99,7 @@ export default function AdminCustomers() {
   const markThreadAsRead = (thread) => {
     const unreadIds = thread.messages.filter(m => m.sender === 'buyer' && !m.isRead).map(m => m.id);
     unreadIds.forEach(async id => {
-      try { await base44.entities.OrderMessage.update(id, { isRead: true }); } catch (e) {}
+      try { await dataClient.entities.OrderMessage.update(id, { isRead: true }); } catch (e) {}
     });
     setMessages(prev => prev.map(m => unreadIds.includes(m.id) ? { ...m, isRead: true } : m));
   };

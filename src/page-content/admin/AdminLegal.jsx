@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
@@ -16,7 +16,7 @@ export default function AdminLegal() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(asArray(await base44.entities.LegalPages.list('title', 50))); } catch (e) { console.error(e); }
+    try { setItems(asArray(await dataClient.entities.LegalPages.list('title', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
@@ -34,15 +34,15 @@ export default function AdminLegal() {
         seoDescription: form.seoDescription_de || form.seoDescription_en || form.seoDescription || '',
         slug: form.slug || (form.title_de || form.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await base44.entities.LegalPages.create(payload); toast({ title: t('pageCreated') }); }
-      else { await base44.entities.LegalPages.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await dataClient.entities.LegalPages.create(payload); toast({ title: t('pageCreated') }); }
+      else { await dataClient.entities.LegalPages.update(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await base44.entities.LegalPages.delete(id); load(); } catch (e) { console.error(e); }
+    try { await dataClient.entities.LegalPages.delete(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

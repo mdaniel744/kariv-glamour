@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { Type, Plus, Trash2, Edit2, X, Check, Search, Languages } from 'lucide-react';
 
@@ -21,7 +21,7 @@ export default function AdminStrings() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = asArray(await base44.entities.WebsiteString.list('-created_date', 200));
+      const data = asArray(await dataClient.entities.WebsiteString.list('-created_date', 200));
       setStrings(data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   }, []);
@@ -31,7 +31,7 @@ export default function AdminStrings() {
   const handleDelete = async (id) => {
     if (!confirm('Delete this string?')) return;
     try {
-      await base44.entities.WebsiteString.delete(id);
+      await dataClient.entities.WebsiteString.delete(id);
       setStrings(prev => prev.filter(s => s.id !== id));
     } catch (e) { console.error(e); }
   };
@@ -127,9 +127,9 @@ function StringForm({ string, onClose, onSaved }) {
     setSaving(true);
     try {
       if (string) {
-        await base44.entities.WebsiteString.update(string.id, form);
+        await dataClient.entities.WebsiteString.update(string.id, form);
       } else {
-        await base44.entities.WebsiteString.create(form);
+        await dataClient.entities.WebsiteString.create(form);
       }
       onSaved();
     } catch (e) { console.error(e); alert('Failed to save'); } finally { setSaving(false); }
@@ -141,7 +141,7 @@ function StringForm({ string, onClose, onSaved }) {
     try {
       const targetLang = form.sourceLanguage === 'en' ? 'de' : 'en';
       const targetField = targetLang === 'de' ? 'germanText' : 'englishText';
-      const res = await base44.integrations.Core.InvokeLLM({
+      const res = await dataClient.integrations.Core.InvokeLLM({
         prompt: `Translate the following text to ${targetLang === 'de' ? 'German' : 'English'}. Preserve any HTML tags. Return only the translation.\n\nText: ${form.sourceText}`,
         response_json_schema: { type: 'object', properties: { translation: { type: 'string' } } }
       });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useToast } from '@/components/ui/use-toast';
 import { Check, X, Store } from 'lucide-react';
@@ -17,7 +17,7 @@ export default function AdminDealerApplications() {
   const load = async () => {
     setLoading(true);
     try {
-      const apps = asArray(await base44.entities.DealerApplications.list('-created_date', 50));
+      const apps = asArray(await dataClient.entities.DealerApplications.list('-created_date', 50));
       setApplications(apps);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -25,9 +25,9 @@ export default function AdminDealerApplications() {
 
   const handleApprove = async (app) => {
     try {
-      await base44.entities.DealerApplications.update(app.id, { status: 'approved' });
+      await dataClient.entities.DealerApplications.update(app.id, { status: 'approved' });
       // Update user role to dealer — admin can update other users
-      await base44.entities.User.update(app.userId, { role: 'dealer', isDealerApproved: true, dealerApplicationStatus: 'approved', dealerCompanyName: app.companyName, dealerPhone: app.phone });
+      await dataClient.entities.User.update(app.userId, { role: 'dealer', isDealerApproved: true, dealerApplicationStatus: 'approved', dealerCompanyName: app.companyName, dealerPhone: app.phone });
       toast({ title: `Approved ${app.companyName} — user is now a dealer` });
       load();
     } catch (e) {
@@ -37,7 +37,7 @@ export default function AdminDealerApplications() {
 
   const handleReject = async (app) => {
     try {
-      await base44.entities.DealerApplications.update(app.id, { status: 'rejected' });
+      await dataClient.entities.DealerApplications.update(app.id, { status: 'rejected' });
       toast({ title: `Rejected ${app.companyName}` });
       load();
     } catch (e) {

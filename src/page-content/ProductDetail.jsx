@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useCart } from '@/lib/cartContext';
 import { useLanguage } from '@/lib/languageContext';
-import { useAuth } from '@/lib/AuthContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
@@ -12,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
-import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 import StarRating from '@/components/dealer/StarRating';
 
 function productIdFromPath() {
@@ -27,10 +25,8 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const { toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
   const { localePath } = useLanguage();
-  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(initialProduct);
   const [loading, setLoading] = useState(!initialProduct);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [related, setRelated] = useState(initialRelated);
   const [dealerProfile, setDealerProfile] = useState(null);
@@ -41,7 +37,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
     const loadDealer = (data) => {
       const dealerUserId = data?.dealerId || data?.created_by_id;
       if (!dealerUserId) return;
-      base44.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
+      dataClient.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
         .then((profiles) => {
           if (mounted) setDealerProfile(profiles[0] || null);
         })
@@ -62,11 +58,11 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
     const load = async () => {
       setLoading(true);
       try {
-        const data = await base44.entities.Products.get(id);
+        const data = await dataClient.entities.Products.get(id);
         if (!mounted) return;
         setProduct(data);
         loadDealer(data);
-        const rel = asArray(await base44.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
+        const rel = asArray(await dataClient.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
         if (mounted) setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
         console.error(e);
@@ -234,23 +230,12 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             {/* Actions */}
             <div className="space-y-3">
               <button
-                onClick={() => {
-                  if (product.availability === 'Sold' || product.availability === 'Reserved') return;
-                  if (isAuthenticated) {
-                    window.location.assign(localePath(`/checkout/${product.id}`));
-                  } else {
-                    setShowAuthModal(true);
-                  }
-                }}
-                className={`w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 transition-colors ${product.availability === 'Sold' || product.availability === 'Reserved' ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
+                disabled
+                title="Online checkout is being rebuilt on our new platform — please contact us to purchase this piece."
+                className="w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 bg-muted text-muted-foreground cursor-not-allowed">
                 <Lock size={16} />
-                {product.availability === 'Sold' ? t('pages.productDetail.soldOut') : product.availability === 'Reserved' ? t('pages.productDetail.reserved') : t('pages.productDetail.buyNow')}
+                {t('pages.productDetail.buyNow')}
               </button>
-              <BuyNowAuthModal
-                open={showAuthModal}
-                onClose={() => setShowAuthModal(false)}
-                continueTo={localePath(`/checkout/${product.id}`)}
-              />
               <div className="flex gap-3">
                 <button
                   onClick={() => toggleWishlist(product)}

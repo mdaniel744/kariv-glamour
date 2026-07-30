@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
@@ -18,7 +18,7 @@ export default function AdminFAQ() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(asArray(await base44.entities.FAQ.list('sortOrder', 50))); } catch (e) { console.error(e); }
+    try { setItems(asArray(await dataClient.entities.FAQ.list('sortOrder', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
@@ -33,15 +33,15 @@ export default function AdminFAQ() {
         question: form.question_de || form.question_en || form.question || '',
         answer: form.answer_de || form.answer_en || form.answer || ''
       };
-      if (editing === 'new') { await base44.entities.FAQ.create(payload); toast({ title: t('faqCreated') }); }
-      else { await base44.entities.FAQ.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await dataClient.entities.FAQ.create(payload); toast({ title: t('faqCreated') }); }
+      else { await dataClient.entities.FAQ.update(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await base44.entities.FAQ.delete(id); load(); } catch (e) { console.error(e); }
+    try { await dataClient.entities.FAQ.delete(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

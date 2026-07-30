@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
-import { Plus, Pencil, Trash2, X, Save, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 
@@ -16,7 +16,7 @@ export default function AdminBrands() {
 
   const load = async () => {
     setLoading(true);
-    try { setBrands(asArray(await base44.entities.Brands.list('-created_date', 50))); } catch (e) { console.error(e); }
+    try { setBrands(asArray(await dataClient.entities.Brands.list('-created_date', 50))); } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
 
@@ -40,25 +40,16 @@ export default function AdminBrands() {
         seoDescription: form.seoDescription_de || form.seoDescription_en || form.seoDescription || '',
         slug: form.slug || (form.brandName_de || form.brandName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await base44.entities.Brands.create(payload); toast({ title: t('brandCreated') }); }
-      else { await base44.entities.Brands.update(editing, payload); toast({ title: t('brandUpdated') }); }
+      if (editing === 'new') { await dataClient.entities.Brands.create(payload); toast({ title: t('brandCreated') }); }
+      else { await dataClient.entities.Brands.update(editing, payload); toast({ title: t('brandUpdated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirmBrand'))) return;
-    try { await base44.entities.Brands.delete(id); toast({ title: t('brandDeleted') }); load(); }
+    try { await dataClient.entities.Brands.delete(id); toast({ title: t('brandDeleted') }); load(); }
     catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
-  };
-
-  const handleImageUpload = async (e, field) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setForm(prev => ({ ...prev, [field]: file_url }));
-    } catch { toast({ title: t('uploadFailed'), variant: "destructive" }); }
   };
 
   if (editing !== null) {
@@ -85,10 +76,13 @@ export default function AdminBrands() {
                 <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{field === 'brandLogoLight' ? t('fields.logo') + ' (Light)' : field === 'brandLogoDark' ? t('fields.logo') + ' (Dark)' : t('fields.heroImage')}</label>
                 <div className="flex items-center gap-3">
                   {form[field] && <img src={form[field]} alt="" className="w-16 h-16 object-cover border border-white/10" />}
-                  <label className="cursor-pointer border border-white/10 px-3 py-2 text-xs text-[#8E8E93] hover:border-[#C5A367]">
-                    <Upload size={12} className="inline mr-1" /> {t('upload')}
-                    <input type="file" accept="image/*" onChange={e => handleImageUpload(e, field)} className="hidden" />
-                  </label>
+                  <input
+                    type="url"
+                    value={form[field] || ''}
+                    onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
+                    placeholder="https://ik.imagekit.io/..."
+                    className="w-48 bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
+                  />
                 </div>
               </div>
             ))}

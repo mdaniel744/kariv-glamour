@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Bitcoin, Check, ShieldCheck, Loader2 } from 'lucide-react';
 import { PAYMENT_METHODS } from '@/lib/escrowConstants';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 
 const ICON_MAP = { Building2, Bitcoin };
 
@@ -16,7 +16,7 @@ export default function PaymentMethodSelector({ selected, onSelect, escrowRefere
     if (selected === 'crypto' && orderId && !cryptoCheckoutUrl) {
       setCryptoLoading(true);
       setCryptoError(null);
-      base44.functions.invoke('createCryptoCheckout', { orderId })
+      dataClient.functions.invoke('createCryptoCheckout', { orderId })
         .then(res => {
           setCryptoCheckoutUrl(res.data.checkoutUrl);
         })

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLocalizedField } from '@/lib/localize';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import SEO from '@/components/SEO';
 import { BookOpen, ChevronRight } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function Guides() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.WatchGuides.filter({ published: true }, '-created_date', 50)
+    dataClient.entities.WatchGuides.filter({ published: true }, '-created_date', 50)
       .then(data => setGuides(asArray(data)))
       .catch(console.error)
       .finally(() => setLoading(false));

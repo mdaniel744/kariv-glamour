@@ -95,7 +95,10 @@ export default function Cart() {
               <span className="font-display text-2xl text-foreground">{formatPrice(cartTotal)}</span>
             </div>
 
-            <button className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
+            <button
+              disabled
+              title="Online checkout is being rebuilt on our new platform — please contact us to purchase."
+              className="w-full bg-muted text-muted-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 cursor-not-allowed">
               {t('pages.cart.checkout')}
             </button>
 

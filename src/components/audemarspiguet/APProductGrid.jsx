@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
@@ -26,7 +26,7 @@ export default function APProductGrid() {
     const load = async () => {
       setLoading(true);
       try {
-        const data = asArray(await base44.entities.Products.filter({ brand: BRAND }, '-created_date', 100));
+        const data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, '-created_date', 100));
         setProducts(data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ export default function PortalDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.Orders.filter({ buyerId: user.id }, '-created_date', 5)
+    dataClient.entities.Orders.filter({ buyerId: user.id }, '-created_date', 5)
       .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 

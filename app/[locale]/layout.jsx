@@ -1,5 +1,6 @@
 import '@/index.css';
 import { notFound } from 'next/navigation';
+import { ClerkProvider } from '@clerk/nextjs';
 import SiteChrome from '@/components/layout/SiteChrome';
 import Providers from '../providers';
 
@@ -38,27 +39,11 @@ export default async function LocaleLayout({ children, params }) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body data-next-native="true">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.base44SharedInstances = window.base44SharedInstances || {};
-              window.base44SharedInstances.analytics = {
-                instance: {
-                  requestsQueue: [],
-                  isProcessing: false,
-                  isHeartBeatProcessing: false,
-                  wasInitializationTracked: true,
-                  sessionContext: { user_id: null, session_id: "local-migration" },
-                  sessionStartTime: null,
-                  config: { enabled: false }
-                }
-              };
-            `,
-          }}
-        />
-        <Providers initialLocale={locale}>
-          <SiteChrome>{children}</SiteChrome>
-        </Providers>
+        <ClerkProvider>
+          <Providers initialLocale={locale}>
+            <SiteChrome>{children}</SiteChrome>
+          </Providers>
+        </ClerkProvider>
       </body>
     </html>
   );

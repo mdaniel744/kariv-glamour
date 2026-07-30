@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { useSignIn } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,7 @@ export default function Login() {
   const [searchParams] = useUrlSearchParams();
   const { localePath } = useLanguage();
   const { isAuthenticated } = useAuth();
+  const { signIn, setActive, isLoaded } = useSignIn();
 
   // Redirect authenticated users away from login
   useEffect(() => {
@@ -32,23 +33,34 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isLoaded) return;
     setError("");
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      const result = await signIn.create({ identifier: email, password });
+      if (result.status !== "complete") {
+        setError("Additional verification is required for this account.");
+        return;
+      }
+      await setActive({ session: result.createdSessionId });
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
       window.location.href = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setError(err.errors?.[0]?.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogle = () => {
+    if (!isLoaded) return;
     const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
     const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
-    base44.auth.loginWithProvider("google", destination);
+    signIn.authenticateWithRedirect({
+      strategy: "oauth_google",
+      redirectUrl: localePath("/sso-callback"),
+      redirectUrlComplete: destination,
+    });
   };
 
   return (

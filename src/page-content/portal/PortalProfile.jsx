@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Save } from 'lucide-react';
@@ -33,7 +33,7 @@ export default function PortalProfile() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await base44.auth.updateMe({
+      await dataClient.auth.updateMe({
         phoneNumber: profile.phoneNumber,
         streetAddress: profile.streetAddress,
         city: profile.city,

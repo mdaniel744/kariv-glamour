@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
@@ -178,7 +178,7 @@ function sortProducts(products, sortKey) {
 }
 
 async function searchProductsLocally(payload) {
-  const allProducts = asArray(await base44.entities.Products.list(SEARCH_SORTS[payload.sort] || SEARCH_SORTS.newest, LOCAL_SEARCH_LIMIT));
+  const allProducts = asArray(await dataClient.entities.Products.list(SEARCH_SORTS[payload.sort] || SEARCH_SORTS.newest, LOCAL_SEARCH_LIMIT));
   const searchQuery = normalizeText(payload.search);
   const minPrice = payload.minPrice ?? null;
   const maxPrice = payload.maxPrice ?? null;
@@ -221,7 +221,7 @@ async function searchProductsLocally(payload) {
 
 async function searchProducts(payload) {
   try {
-    const response = await base44.functions.invoke('searchProducts', payload);
+    const response = await dataClient.functions.invoke('searchProducts', payload);
     const data = response?.data || response || {};
     const items = asArray(data.items ?? data);
     return {

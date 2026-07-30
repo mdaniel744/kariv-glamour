@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
@@ -17,7 +17,7 @@ export default function DealerSales() {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    base44.entities.Orders.filter({ dealerId: user.id }, '-created_date', 50)
+    dataClient.entities.Orders.filter({ dealerId: user.id }, '-created_date', 50)
       .then(data => setSales(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Bitcoin, Loader2, ExternalLink } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 
 export default function CryptoCheckoutButton({ orderId, escrowReference }) {
   const [checkoutUrl, setCheckoutUrl] = useState(null);
@@ -11,7 +11,7 @@ export default function CryptoCheckoutButton({ orderId, escrowReference }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke('createCryptoCheckout', { orderId });
+      const res = await dataClient.functions.invoke('createCryptoCheckout', { orderId });
       setCheckoutUrl(res.data.checkoutUrl);
     } catch (e) {
       setError(e.response?.data?.error || 'Failed to initialize crypto payment');

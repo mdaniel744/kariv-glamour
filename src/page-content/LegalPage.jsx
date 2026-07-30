@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useLocalizedField } from '@/lib/localize';
 import ReactMarkdown from 'react-markdown';
@@ -26,7 +26,7 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
     const load = async () => {
       setLoading(true);
       try {
-        const pages = asArray(await base44.entities.LegalPages.filter({ slug }));
+        const pages = asArray(await dataClient.entities.LegalPages.filter({ slug }));
         if (pages.length > 0) setPage(pages[0]);
       } catch (e) {
         console.error(e);

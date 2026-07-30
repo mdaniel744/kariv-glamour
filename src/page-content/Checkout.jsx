@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
@@ -39,7 +39,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
       setLoading(false);
       return;
     }
-    base44.entities.Products.get(id).then(setProduct).catch(console.error).finally(() => setLoading(false));
+    dataClient.entities.Products.get(id).then(setProduct).catch(console.error).finally(() => setLoading(false));
   }, [id, initialProduct]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
     try {
       // Save billing address to user profile if changed
       if (user) {
-        await base44.auth.updateMe({
+        await dataClient.auth.updateMe({
           streetAddress: billing.street,
           city: billing.city,
           postalCode: billing.postalCode,
@@ -82,7 +82,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
       // Generate idempotency key for this checkout attempt
       // Repeated submissions with the same key return the existing order
       const idempotencyKey = `checkout-${id}-${user.id}-${Date.now()}`;
-      const res = await base44.functions.invoke('processOrder', {
+      const res = await dataClient.functions.invoke('processOrder', {
         action: 'create',
         productId: id,
         shippingDetails: effectiveShipping,

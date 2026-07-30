@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { BookMarked, Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export default function AdminGlossary() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = asArray(await base44.entities.GlossaryTerm.list('-created_date', 200));
+      const data = asArray(await dataClient.entities.GlossaryTerm.list('-created_date', 200));
       setTerms(data);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   }, []);
@@ -29,14 +29,14 @@ export default function AdminGlossary() {
   const handleDelete = async (id) => {
     if (!confirm('Delete this glossary term?')) return;
     try {
-      await base44.entities.GlossaryTerm.delete(id);
+      await dataClient.entities.GlossaryTerm.delete(id);
       setTerms(prev => prev.filter(t => t.id !== id));
     } catch (e) { console.error(e); }
   };
 
   const handleToggleActive = async (term) => {
     try {
-      await base44.entities.GlossaryTerm.update(term.id, { isActive: !term.isActive });
+      await dataClient.entities.GlossaryTerm.update(term.id, { isActive: !term.isActive });
       setTerms(prev => prev.map(t => t.id === term.id ? { ...t, isActive: !t.isActive } : t));
     } catch (e) { console.error(e); }
   };
@@ -129,9 +129,9 @@ function GlossaryForm({ term, onClose, onSaved }) {
     setSaving(true);
     try {
       if (term) {
-        await base44.entities.GlossaryTerm.update(term.id, form);
+        await dataClient.entities.GlossaryTerm.update(term.id, form);
       } else {
-        await base44.entities.GlossaryTerm.create(form);
+        await dataClient.entities.GlossaryTerm.create(form);
       }
       onSaved();
     } catch (e) { console.error(e); alert('Failed to save'); } finally { setSaving(false); }

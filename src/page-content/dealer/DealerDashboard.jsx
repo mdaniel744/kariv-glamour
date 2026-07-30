@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { useAuth } from '@/lib/AuthContext';
 import { Package, ShoppingCart, ShieldCheck, Plus } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
@@ -18,8 +18,8 @@ export default function DealerDashboard() {
     const load = async () => {
       try {
         const [myListings, mySales] = await Promise.all([
-          base44.entities.Products.filter({ created_by_id: user.id }, '-created_date', 5),
-          base44.entities.Orders.filter({ dealerId: user.id }, '-created_date', 5)
+          dataClient.entities.Products.filter({ created_by_id: user.id }, '-created_date', 5),
+          dataClient.entities.Orders.filter({ dealerId: user.id }, '-created_date', 5)
         ]);
         setListings(myListings);
         setSales(mySales);

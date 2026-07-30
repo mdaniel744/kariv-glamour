@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { useSignUp } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,7 @@ export default function Register() {
   const [searchParams] = useUrlSearchParams();
   const { localePath } = useLanguage();
   const { isAuthenticated } = useAuth();
+  const { signUp, setActive, isLoaded } = useSignUp();
 
   // Redirect authenticated users away from register
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isLoaded) return;
     setError("");
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -44,49 +46,59 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await base44.auth.register({ email, password });
+      await signUp.create({ emailAddress: email, password });
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setShowOtp(true);
     } catch (err) {
-      setError(err.message || "Registration failed");
+      setError(err.errors?.[0]?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   const handleVerify = async () => {
+    if (!isLoaded) return;
     setError("");
     setLoading(true);
     try {
-      const result = await base44.auth.verifyOtp({ email, otpCode });
-      if (result?.access_token) {
-        base44.auth.setToken(result.access_token);
+      const result = await signUp.attemptEmailAddressVerification({ code: otpCode });
+      if (result.status !== "complete") {
+        setError("Verification incomplete — please try again.");
+        return;
       }
+      await setActive({ session: result.createdSessionId });
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
       window.location.href = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     } catch (err) {
-      setError(err.message || "Invalid verification code");
+      setError(err.errors?.[0]?.message || "Invalid verification code");
     } finally {
       setLoading(false);
     }
   };
 
   const handleResend = async () => {
+    if (!isLoaded) return;
     setError("");
     try {
-      await base44.auth.resendOtp(email);
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       toast({
         title: "Code sent",
         description: "Check your email for the new code.",
       });
     } catch (err) {
-      setError(err.message || "Failed to resend code");
+      setError(err.errors?.[0]?.message || "Failed to resend code");
     }
   };
 
   const handleGoogle = () => {
+    if (!isLoaded) return;
     const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
     const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
-    base44.auth.loginWithProvider("google", destination);
+    signUp.authenticateWithRedirect({
+      strategy: "oauth_google",
+      redirectUrl: localePath("/sso-callback"),
+      redirectUrlComplete: destination,
+    });
   };
 
   if (showOtp) {

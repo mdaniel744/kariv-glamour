@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { BRAND_DATA } from '@/lib/constants';
 import { motion } from 'framer-motion';
@@ -15,7 +15,7 @@ export default function Brands({ initialBrands = [] }) {
 
   useEffect(() => {
     if (initialBrands.length > 0) return;
-    base44.entities.Brands.list('-created_date', 50).then(data => setBrands(asArray(data))).catch(console.error);
+    dataClient.entities.Brands.list('-created_date', 50).then(data => setBrands(asArray(data))).catch(console.error);
   }, [initialBrands]);
 
   const allBrands = BRAND_DATA.map(bd => {

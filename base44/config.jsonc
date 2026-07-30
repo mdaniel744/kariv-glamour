@@ -1,9 +1,0 @@
-{
-  "name": "untitled",
-  "site": {
-    "installCommand": "pnpm install",
-    "buildCommand": "pnpm run build",
-    "serveCommand": "pnpm run dev",
-    "outputDirectory": "./.next"
-  }
-}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
 import StarRating from '@/components/dealer/StarRating';
@@ -29,9 +29,9 @@ export default function DealerProfile({
         const [profiles, dealerListings, dealerReviews] = hasInitialData
           ? [[initialProfile].filter(Boolean), initialListings, initialReviews]
           : await Promise.all([
-              base44.entities.DealerProfile.filter({ userId: id }, '-created_date', 1).then(asArray).catch(() => []),
-              base44.entities.Products.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => []),
-              base44.entities.DealerReview.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => [])
+              dataClient.entities.DealerProfile.filter({ userId: id }, '-created_date', 1).then(asArray).catch(() => []),
+              dataClient.entities.Products.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => []),
+              dataClient.entities.DealerReview.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => [])
             ]);
 
         setProfile(profiles[0] || null);
@@ -40,7 +40,7 @@ export default function DealerProfile({
 
         // Check if current user has a completed order with this dealer (eligible to review)
         if (user) {
-          const myOrders = asArray(await base44.entities.Orders.filter({ buyerId: user.id, dealerId: id }, '-created_date', 50).then(asArray).catch(() => []));
+          const myOrders = asArray(await dataClient.entities.Orders.filter({ buyerId: user.id, dealerId: id }, '-created_date', 50).then(asArray).catch(() => []));
           const completed = myOrders.find(o =>
             ['funds_released', 'verified'].includes(o.escrowStatus) &&
             !dealerReviews.find(r => r.orderId === o.id)
