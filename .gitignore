@@ -32,3 +32,6 @@ dist-ssr
 .env
 .vite
 base44/.app.jsonc
+
+# clerk configuration (can include secrets)
+/.clerk/

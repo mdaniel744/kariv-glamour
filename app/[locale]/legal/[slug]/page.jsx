@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import LegalPageClient from '@/components/next-pages/LegalPageClient';
 import { getLegalPageBySlug } from '@/lib/base44Server';
 import { localizedField, localizedMetadata, SUPPORTED_LOCALES } from '@/lib/seo';
@@ -33,7 +33,7 @@ export default async function LegalRoute({ params }) {
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
   const page = await getLegalPageBySlug(slug);
-  if (!page) notFound();
+  if (!page) redirect(`/${locale}/customer-service`);
 
   return <LegalPageClient slug={slug} page={page} />;
 }

@@ -202,7 +202,7 @@ export const OMEGA_INTERNAL_LINKS = {
     { text_en: 'Breitling watches', text_de: 'Breitling Uhren', link: '/brands/breitling' },
     { text_en: 'TAG Heuer watches', text_de: 'TAG Heuer Uhren', link: '/brands/tag-heuer' },
     { text_en: 'Tudor watches', text_de: 'Tudor Uhren', link: '/brands/tudor' },
-    { text_en: 'IWC Schaffhausen watches', text_de: 'IWC Schaffhausen Uhren', link: '/brands/iwc' },
+    { text_en: 'IWC Schaffhausen watches', text_de: 'IWC Schaffhausen Uhren', link: '/brands/iwc-schaffhausen' },
     { text_en: 'Cartier watches', text_de: 'Cartier Uhren', link: '/brands/cartier' },
     { text_en: 'Grand Seiko watches', text_de: 'Grand Seiko Uhren', link: '/brands/grand-seiko' },
     { text_en: 'Patek Philippe watches', text_de: 'Patek Philippe Uhren', link: '/brands/patek-philippe' },

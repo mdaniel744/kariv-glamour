@@ -12,44 +12,60 @@ export const PATEK_THEME = {
   silver: '#BCC6CC',
 };
 
-// Uploaded reference images
-const UP = {
+// Legacy fallbacks for collection cards. Dashboard collection records override these.
+const COLLECTION_FALLBACKS = {
   goldenEllipse: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/8ddd693a6_PatekPhilippeGoldenEllipse.png',
   nautilus: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/066fee3d9_PatekPhilippeNautilusKaufen.png',
-  threeWatchesGrey: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/f13bd47e5_PatekPhilippekaufen.jpg',
   pocketWatch: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/efe687a14_PatekPhilippepocketwatch.jpg',
   threeWatches2: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/abb6efa87_Patekphilippe.jpg',
   brownDress: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/11d4ce6fa_PatekPhilippeBrown.png',
-};
-
-// Unsplash supplementary images
-const UNSPLASH = {
   watch1: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
   watch2: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=800&q=80',
   watch3: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80',
-  watch4: 'https://images.unsplash.com/photo-1524592094714-0f06555e7420?auto=format&fit=crop&w=800&q=80',
   watch5: 'https://images.unsplash.com/photo-1495856458515-0637183dbd1e?auto=format&fit=crop&w=800&q=80',
   watch6: 'https://images.unsplash.com/photo-1606293459339-aaa4e5e9b1f4?auto=format&fit=crop&w=800&q=80',
   watch7: 'https://images.unsplash.com/photo-1612817159949-195b6119e6d5?auto=format&fit=crop&w=800&q=80',
   watch8: 'https://images.unsplash.com/photo-1639024471283-0350c0f7a7e6?auto=format&fit=crop&w=800&q=80',
 };
 
-export const PATEK_HERO_IMAGE = UP.threeWatchesGrey;
+const PATEK_ASSET_BASE = '/brand-assets/patek-philippe';
+
+export const PATEK_LOGO = `${PATEK_ASSET_BASE}/patek-philippe-logo.webp`;
+export const PATEK_HERO_IMAGE = `${PATEK_ASSET_BASE}/patek-philippe-watches-to-buy.jpg`;
+
+const IMG = {
+  aquanaut: `${PATEK_ASSET_BASE}/buy-patek-philippe-aquanaut.webp`,
+  calatrava: `${PATEK_ASSET_BASE}/buy-patek-philippe-calatrava.jpg`,
+  cubitus: `${PATEK_ASSET_BASE}/buy-patek-philippe-cubitus.jpg`,
+  grandComplications: `${PATEK_ASSET_BASE}/buy-patek-philippe-grand-complications.jpg`,
+  nautilus: `${PATEK_ASSET_BASE}/buy-patek-philippe-nautilus.webp`,
+  watches: `${PATEK_ASSET_BASE}/buy-patek-philippe-watches.jpg`,
+  boxPapers: `${PATEK_ASSET_BASE}/patek-philippe-boxes-and-papers.jpg`,
+  buyingGuide: `${PATEK_ASSET_BASE}/patek-philippe-buying-guide.jpg`,
+  buyingWatchGuide: `${PATEK_ASSET_BASE}/patek-philippe-buying-watch-guide.webp`,
+  grandComplicationsGuide: `${PATEK_ASSET_BASE}/patek-philippe-grand-complications-guide.jpg`,
+  nautilusGuide: `${PATEK_ASSET_BASE}/patek-philippe-nautilus-guide.jpg`,
+  watchmaking: `${PATEK_ASSET_BASE}/patek-philippe-watchmaking.jpg`,
+  story: `${PATEK_ASSET_BASE}/patek-philippe-story.jpg`,
+  watchesToBuy: `${PATEK_ASSET_BASE}/patek-philippe-watches-to-buy.jpg`,
+  preOwned: `${PATEK_ASSET_BASE}/pre-owned-patek-philippe.jpg`,
+  maintenance: `${PATEK_ASSET_BASE}/patek-philippe-maintenance.avif`,
+};
 
 // Patek Philippe Collections
 export const PATEK_COLLECTIONS = [
-  { id: 'nautilus', name: 'Nautilus', slug: 'nautilus', description_en: 'A modern luxury sports icon known for its distinctive case shape, integrated bracelet, and strong collector demand.', description_de: 'Ein modernes Luxus-Sportuhr-Icon, bekannt für seine markante Gehäuseform, das integrierte Armband und die starke Sammlernachfrage.', image: UP.nautilus, displayOrder: 1 },
-  { id: 'aquanaut', name: 'Aquanaut', slug: 'aquanaut', description_en: 'A contemporary and sporty Patek Philippe collection with a relaxed character, modern proportions, and everyday versatility.', description_de: 'Eine zeitgenössische und sportliche Patek Philippe Kollektion mit entspanntem Charakter, modernen Proportionen und alltäglicher Vielseitigkeit.', image: UNSPLASH.watch1, displayOrder: 2 },
-  { id: 'cubitus', name: 'Cubitus', slug: 'cubitus', description_en: 'A bold modern Patek Philippe collection with a distinctive square-inspired design and elegant contemporary appeal.', description_de: 'Eine mutige moderne Patek Philippe Kollektion mit einem markanten, von Quadraten inspirierten Design und eleganter zeitgenössischer Anziehungskraft.', image: UNSPLASH.watch2, displayOrder: 3 },
-  { id: 'calatrava', name: 'Calatrava', slug: 'calatrava', description_en: 'A timeless dress watch collection known for purity, elegance, refined proportions, and classic round case design.', description_de: 'Eine zeitlose Dress-Watch-Kollektion, bekannt für Reinheit, Eleganz, verfeinerte Proportionen und klassisches rundes Gehäusedesign.', image: UP.brownDress, displayOrder: 4 },
-  { id: 'complications', name: 'Complications', slug: 'complications', description_en: 'A sophisticated collection for collectors who appreciate useful and poetic watch functions such as calendars, travel time, and moon phases.', description_de: 'Eine anspruchsvolle Kollektion für Sammler, die nützliche und poetische Uhrfunktionen wie Kalender, Travel Time und Mondphasen schätzen.', image: UNSPLASH.watch3, displayOrder: 5 },
-  { id: 'grand-complications', name: 'Grand Complications', slug: 'grand-complications', description_en: 'The highest expression of Patek Philippe watchmaking, created for collectors drawn to perpetual calendars, minute repeaters, chronographs, and advanced mechanical artistry.', description_de: 'Die höchste Ausdrucksform der Patek Philippe Uhrmacherei, geschaffen für Sammler, die von ewigen Kalendern, Minutenrepetierern, Chronographen und fortgeschrittener mechanischer Kunstfertigkeit fasziniert sind.', image: UP.threeWatches2, displayOrder: 6 },
-  { id: 'twenty-4', name: 'Twenty~4', slug: 'twenty-4', description_en: 'A refined collection created for elegant daily wear, with feminine proportions and modern versatility.', description_de: 'Eine verfeinerte Kollektion für eleganten täglichen Gebrauch, mit femininen Proportionen und moderner Vielseitigkeit.', image: UNSPLASH.watch5, displayOrder: 7 },
-  { id: 'golden-ellipse', name: 'Golden Ellipse', slug: 'golden-ellipse', description_en: 'A distinctive Patek Philippe design icon recognized for its harmonious elliptical case and refined elegance.', description_de: 'Ein markantes Patek Philippe Design-Icon, bekannt für sein harmonisches elliptisches Gehäuse und verfeinerte Eleganz.', image: UP.goldenEllipse, displayOrder: 8 },
-  { id: 'gondolo', name: 'Gondolo', slug: 'gondolo', description_en: 'A shaped-watch collection inspired by Art Deco design, geometric lines, and classic elegance.', description_de: 'Eine Shaped-Watch-Kollektion, inspiriert von Art-Deco-Design, geometrischen Linien und klassischer Eleganz.', image: UNSPLASH.watch6, displayOrder: 9 },
-  { id: 'grandmaster-chime', name: 'Grandmaster Chime', slug: 'grandmaster-chime', description_en: 'One of the most complicated and prestigious Patek Philippe creations, associated with exceptional mechanical mastery and collector significance.', description_de: 'Eine der kompliziertesten und prestigeträchtigsten Patek Philippe Kreationen, verbunden mit außergewöhnlicher mechanischer Meisterschaft und Sammlerbedeutung.', image: UNSPLASH.watch7, displayOrder: 10 },
-  { id: 'pocket-watches', name: 'Pocket Watches', slug: 'pocket-watches', description_en: 'A heritage-focused category for collectors interested in traditional timekeeping and historical watchmaking.', description_de: 'Eine heritage-orientierte Kategorie für Sammler, die sich für traditionelle Zeitmessung und historische Uhrmacherei interessieren.', image: UP.pocketWatch, displayOrder: 11 },
-  { id: 'rare-handcrafts', name: 'Rare Handcrafts', slug: 'rare-handcrafts', description_en: 'A highly artistic category for rare collectible pieces that showcase decorative crafts such as engraving, enameling, and gem-setting.', description_de: 'Eine hochgradig künstlerische Kategorie für seltene Sammlerstücke, die dekorative Handwerkskünste wie Gravur, Email und Edelsteinbesatz präsentieren.', image: UNSPLASH.watch8, displayOrder: 12 },
+  { id: 'nautilus', name: 'Nautilus', slug: 'nautilus', description_en: 'A modern luxury sports icon known for its distinctive case shape, integrated bracelet, and strong collector demand.', description_de: 'Ein modernes Luxus-Sportuhr-Icon, bekannt für seine markante Gehäuseform, das integrierte Armband und die starke Sammlernachfrage.', image: COLLECTION_FALLBACKS.nautilus, displayOrder: 1 },
+  { id: 'aquanaut', name: 'Aquanaut', slug: 'aquanaut', description_en: 'A contemporary and sporty Patek Philippe collection with a relaxed character, modern proportions, and everyday versatility.', description_de: 'Eine zeitgenössische und sportliche Patek Philippe Kollektion mit entspanntem Charakter, modernen Proportionen und alltäglicher Vielseitigkeit.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 2 },
+  { id: 'cubitus', name: 'Cubitus', slug: 'cubitus', description_en: 'A bold modern Patek Philippe collection with a distinctive square-inspired design and elegant contemporary appeal.', description_de: 'Eine mutige moderne Patek Philippe Kollektion mit einem markanten, von Quadraten inspirierten Design und eleganter zeitgenössischer Anziehungskraft.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 3 },
+  { id: 'calatrava', name: 'Calatrava', slug: 'calatrava', description_en: 'A timeless dress watch collection known for purity, elegance, refined proportions, and classic round case design.', description_de: 'Eine zeitlose Dress-Watch-Kollektion, bekannt für Reinheit, Eleganz, verfeinerte Proportionen und klassisches rundes Gehäusedesign.', image: COLLECTION_FALLBACKS.brownDress, displayOrder: 4 },
+  { id: 'complications', name: 'Complications', slug: 'complications', description_en: 'A sophisticated collection for collectors who appreciate useful and poetic watch functions such as calendars, travel time, and moon phases.', description_de: 'Eine anspruchsvolle Kollektion für Sammler, die nützliche und poetische Uhrfunktionen wie Kalender, Travel Time und Mondphasen schätzen.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 5 },
+  { id: 'grand-complications', name: 'Grand Complications', slug: 'grand-complications', description_en: 'The highest expression of Patek Philippe watchmaking, created for collectors drawn to perpetual calendars, minute repeaters, chronographs, and advanced mechanical artistry.', description_de: 'Die höchste Ausdrucksform der Patek Philippe Uhrmacherei, geschaffen für Sammler, die von ewigen Kalendern, Minutenrepetierern, Chronographen und fortgeschrittener mechanischer Kunstfertigkeit fasziniert sind.', image: COLLECTION_FALLBACKS.threeWatches2, displayOrder: 6 },
+  { id: 'twenty-4', name: 'Twenty~4', slug: 'twenty-4', description_en: 'A refined collection created for elegant daily wear, with feminine proportions and modern versatility.', description_de: 'Eine verfeinerte Kollektion für eleganten täglichen Gebrauch, mit femininen Proportionen und moderner Vielseitigkeit.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 7 },
+  { id: 'golden-ellipse', name: 'Golden Ellipse', slug: 'golden-ellipse', description_en: 'A distinctive Patek Philippe design icon recognized for its harmonious elliptical case and refined elegance.', description_de: 'Ein markantes Patek Philippe Design-Icon, bekannt für sein harmonisches elliptisches Gehäuse und verfeinerte Eleganz.', image: COLLECTION_FALLBACKS.goldenEllipse, displayOrder: 8 },
+  { id: 'gondolo', name: 'Gondolo', slug: 'gondolo', description_en: 'A shaped-watch collection inspired by Art Deco design, geometric lines, and classic elegance.', description_de: 'Eine Shaped-Watch-Kollektion, inspiriert von Art-Deco-Design, geometrischen Linien und klassischer Eleganz.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 9 },
+  { id: 'grandmaster-chime', name: 'Grandmaster Chime', slug: 'grandmaster-chime', description_en: 'One of the most complicated and prestigious Patek Philippe creations, associated with exceptional mechanical mastery and collector significance.', description_de: 'Eine der kompliziertesten und prestigeträchtigsten Patek Philippe Kreationen, verbunden mit außergewöhnlicher mechanischer Meisterschaft und Sammlerbedeutung.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 10 },
+  { id: 'pocket-watches', name: 'Pocket Watches', slug: 'pocket-watches', description_en: 'A heritage-focused category for collectors interested in traditional timekeeping and historical watchmaking.', description_de: 'Eine heritage-orientierte Kategorie für Sammler, die sich für traditionelle Zeitmessung und historische Uhrmacherei interessieren.', image: COLLECTION_FALLBACKS.pocketWatch, displayOrder: 11 },
+  { id: 'rare-handcrafts', name: 'Rare Handcrafts', slug: 'rare-handcrafts', description_en: 'A highly artistic category for rare collectible pieces that showcase decorative crafts such as engraving, enameling, and gem-setting.', description_de: 'Eine hochgradig künstlerische Kategorie für seltene Sammlerstücke, die dekorative Handwerkskünste wie Gravur, Email und Edelsteinbesatz präsentieren.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 12 },
 ];
 
 // Quick filter chips for product grid
@@ -75,14 +91,14 @@ export const PATEK_COMPLICATIONS = [
 
 // SEO Cards
 export const PATEK_SEO_CARDS = [
-  { title_en: 'Buy Patek Philippe', title_de: 'Patek Philippe kaufen', description_en: 'Explore Patek Philippe watches through Kariv Glamour with refined product presentation, transparent details, and a premium shopping experience.', description_de: 'Entdecken Sie Patek Philippe Uhren bei Kariv Glamour mit verfeinerter Produktpräsentation, transparenten Details und einem Premium-Einkaufserlebnis.', link: '/patek-philippe-kaufen', image: UP.threeWatchesGrey },
-  { title_en: 'Buy Pre-Owned Patek Philippe', title_de: 'Patek Philippe gebraucht kaufen', description_en: 'Discover pre-owned Patek Philippe watches with clear condition grading, box and papers information, service history details, and collector-focused product data.', description_de: 'Entdecken Sie gebrauchte Patek Philippe Uhren mit klarer Zustandsbewertung, Box- und Papiere-Informationen, Service-Historie und sammlerorientierten Produktdaten.', link: '/patek-philippe-gebraucht-kaufen', image: UNSPLASH.watch1 },
-  { title_en: 'Buy Patek Philippe Nautilus', title_de: 'Patek Philippe Nautilus kaufen', description_en: 'Browse Patek Philippe Nautilus watches, one of the most recognizable luxury sports watch families in modern collecting.', description_de: 'Stöbern Sie durch Patek Philippe Nautilus Uhren, eine der erkennbarsten Luxus-Sportuhren-Familien im modernen Sammeln.', link: '/patek-philippe-nautilus-kaufen', image: UP.nautilus },
-  { title_en: 'Buy Patek Philippe Aquanaut', title_de: 'Patek Philippe Aquanaut kaufen', description_en: 'Explore Patek Philippe Aquanaut watches, known for their modern sporty character and strong collector interest.', description_de: 'Entdecken Sie Patek Philippe Aquanaut Uhren, bekannt für ihren modernen sportlichen Charakter und starkes Sammlerinteresse.', link: '/patek-philippe-aquanaut-kaufen', image: UNSPLASH.watch2 },
-  { title_en: 'Buy Patek Philippe Calatrava', title_de: 'Patek Philippe Calatrava kaufen', description_en: 'Shop Patek Philippe Calatrava watches, admired for classic elegance, pure lines, and dress-watch refinement.', description_de: 'Shoppen Sie Patek Philippe Calatrava Uhren, bewundert für klassische Eleganz, reine Linien und Dress-Watch-Raffinesse.', link: '/patek-philippe-calatrava-kaufen', image: UP.brownDress },
-  { title_en: 'Buy Patek Philippe Cubitus', title_de: 'Patek Philippe Cubitus kaufen', description_en: 'Discover the Patek Philippe Cubitus collection, a contemporary expression of shaped-case design and modern elegance.', description_de: 'Entdecken Sie die Patek Philippe Cubitus Kollektion, ein zeitgenössischer Ausdruck von Shaped-Case-Design und moderner Eleganz.', link: '/patek-philippe-cubitus-kaufen', image: UNSPLASH.watch3 },
-  { title_en: 'Buy Patek Philippe Grand Complications', title_de: 'Patek Philippe Grand Complications kaufen', description_en: 'Explore Patek Philippe Grand Complications for collectors drawn to advanced mechanical watchmaking and rare horological artistry.', description_de: 'Entdecken Sie Patek Philippe Grand Complications für Sammler, die von fortgeschrittener mechanischer Uhrmacherei und seltener horologischer Kunstfertigkeit fasziniert sind.', link: '/patek-philippe-grand-complications-kaufen', image: UP.threeWatches2 },
-  { title_en: 'Which Patek Philippe to Buy?', title_de: 'Welche Patek Philippe kaufen?', description_en: 'Read the Patek Philippe buying guide to compare collections, references, materials, complications, and ownership considerations.', description_de: 'Lesen Sie die Patek Philippe Kaufberatung, um Kollektionen, Referenzen, Materialien, Komplikationen und Besitzüberlegungen zu vergleichen.', link: '/welche-patek-philippe-kaufen', image: UNSPLASH.watch4 },
+  { title_en: 'Buy Patek Philippe', title_de: 'Patek Philippe kaufen', description_en: 'Explore Patek Philippe watches through Kariv Glamour with refined product presentation, transparent details, and a premium shopping experience.', description_de: 'Entdecken Sie Patek Philippe Uhren bei Kariv Glamour mit verfeinerter Produktpräsentation, transparenten Details und einem Premium-Einkaufserlebnis.', link: '/patek-philippe-kaufen', image: IMG.watches },
+  { title_en: 'Buy Pre-Owned Patek Philippe', title_de: 'Patek Philippe gebraucht kaufen', description_en: 'Discover pre-owned Patek Philippe watches with clear condition grading, box and papers information, service history details, and collector-focused product data.', description_de: 'Entdecken Sie gebrauchte Patek Philippe Uhren mit klarer Zustandsbewertung, Box- und Papiere-Informationen, Service-Historie und sammlerorientierten Produktdaten.', link: '/patek-philippe-gebraucht-kaufen', image: IMG.preOwned },
+  { title_en: 'Buy Patek Philippe Nautilus', title_de: 'Patek Philippe Nautilus kaufen', description_en: 'Browse Patek Philippe Nautilus watches, one of the most recognizable luxury sports watch families in modern collecting.', description_de: 'Stöbern Sie durch Patek Philippe Nautilus Uhren, eine der erkennbarsten Luxus-Sportuhren-Familien im modernen Sammeln.', link: '/patek-philippe-nautilus-kaufen', image: IMG.nautilus },
+  { title_en: 'Buy Patek Philippe Aquanaut', title_de: 'Patek Philippe Aquanaut kaufen', description_en: 'Explore Patek Philippe Aquanaut watches, known for their modern sporty character and strong collector interest.', description_de: 'Entdecken Sie Patek Philippe Aquanaut Uhren, bekannt für ihren modernen sportlichen Charakter und starkes Sammlerinteresse.', link: '/patek-philippe-aquanaut-kaufen', image: IMG.aquanaut },
+  { title_en: 'Buy Patek Philippe Calatrava', title_de: 'Patek Philippe Calatrava kaufen', description_en: 'Shop Patek Philippe Calatrava watches, admired for classic elegance, pure lines, and dress-watch refinement.', description_de: 'Shoppen Sie Patek Philippe Calatrava Uhren, bewundert für klassische Eleganz, reine Linien und Dress-Watch-Raffinesse.', link: '/patek-philippe-calatrava-kaufen', image: IMG.calatrava },
+  { title_en: 'Buy Patek Philippe Cubitus', title_de: 'Patek Philippe Cubitus kaufen', description_en: 'Discover the Patek Philippe Cubitus collection, a contemporary expression of shaped-case design and modern elegance.', description_de: 'Entdecken Sie die Patek Philippe Cubitus Kollektion, ein zeitgenössischer Ausdruck von Shaped-Case-Design und moderner Eleganz.', link: '/patek-philippe-cubitus-kaufen', image: IMG.cubitus },
+  { title_en: 'Buy Patek Philippe Grand Complications', title_de: 'Patek Philippe Grand Complications kaufen', description_en: 'Explore Patek Philippe Grand Complications for collectors drawn to advanced mechanical watchmaking and rare horological artistry.', description_de: 'Entdecken Sie Patek Philippe Grand Complications für Sammler, die von fortgeschrittener mechanischer Uhrmacherei und seltener horologischer Kunstfertigkeit fasziniert sind.', link: '/patek-philippe-grand-complications-kaufen', image: IMG.grandComplications },
+  { title_en: 'Which Patek Philippe to Buy?', title_de: 'Welche Patek Philippe kaufen?', description_en: 'Read the Patek Philippe buying guide to compare collections, references, materials, complications, and ownership considerations.', description_de: 'Lesen Sie die Patek Philippe Kaufberatung, um Kollektionen, Referenzen, Materialien, Komplikationen und Besitzüberlegungen zu vergleichen.', link: '/welche-patek-philippe-kaufen', image: IMG.buyingWatchGuide },
 ];
 
 // Editorial sections data (Story, Watchmaking, Maintenance)
@@ -95,7 +111,7 @@ export const PATEK_EDITORIAL_SECTIONS = [
     description_de: 'Patek Philippe ist einer der respektiertesten Namen der Haute Horlogerie, mit einem Erbe, das in der Genfer Uhrmacherei verwurzelt ist und einer Legacy, die durch Familienbesitz über Generationen geprägt wurde. Von den frühesten Taschenuhren bis zur ikonischen Nautilus und den außergewöhnlichen Grand Complications — die Patek Philippe Geschichte ist eine von seltener Handwerkskunst, Sammlerprestige und unerschütterlichem Engagement für feine Uhrmacherei. Bei Kariv Glamour feiern wir dieses Erbe mit sorgfältig ausgewählten Patek Philippe Zeitmessern, die jeweils mit voller Transparenz und fachkundiger Einsicht präsentiert werden.',
     cta_en: 'Read the Patek Philippe Story', cta_de: 'Die Patek Philippe Geschichte lesen',
     link: '/patek-philippe/story',
-    image: UP.brownDress,
+    image: IMG.story,
     internalLinks: [
       { text_en: 'Patek Philippe heritage', text_de: 'Patek Philippe Erbe', link: '/patek-philippe/story' },
       { text_en: 'Geneva watchmaking', text_de: 'Genfer Uhrmacherei', link: '/patek-philippe/watchmaking' },
@@ -112,7 +128,7 @@ export const PATEK_EDITORIAL_SECTIONS = [
     description_de: 'Die Patek Philippe Uhrmacherei repräsentiert den Höhepunkt feiner mechanischer Kunstfertigkeit, mit hand-finierten Werken, exquisitem Gehäusedesign und einer außergewöhnlichen Vielfalt an Komplikationen. Von einfachen Time-Only-Calatrava-Uhren bis zu ewigen Kalendern, Minutenrepetierern und Tourbillons — jeder Zeitmesser spiegelt ein tiefes Engagement für Präzision und Tradition wider. Sammler schätzen Patek Philippe für seine Referenznummern, Werktypen, Gehäusematerialien und Produktionszeiträume, die alle zur Geschichte hinter jeder Uhr beitragen. Bei Kariv Glamour helfen wir Ihnen, die Handwerkskunst hinter jeder Patek Philippe zu verstehen, damit Sie eine informierte und zuversichtliche Entscheidung treffen können.',
     cta_en: 'Explore Patek Philippe Watchmaking', cta_de: 'Patek Philippe Uhrmacherei entdecken',
     link: '/patek-philippe/watchmaking',
-    image: UP.pocketWatch,
+    image: IMG.watchmaking,
     internalLinks: [
       { text_en: 'complications', text_de: 'Komplikationen', link: '/patek-philippe/complications' },
       { text_en: 'Grand Complications', text_de: 'Grand Complications', link: '/patek-philippe/grand-complications' },
@@ -129,7 +145,7 @@ export const PATEK_EDITORIAL_SECTIONS = [
     description_de: 'Die richtige Pflege erhält die Schönheit, Zuverlässigkeit und den Wert einer Patek Philippe Uhr. Regelmäßige Wartung durch qualifizierte Fachleute, Wasserdichtigkeitsprüfungen, sichere Aufbewahrung und das Vermeiden von Stößen und magnetischer Exposition sind wesentlich. Lederarmbänder sollten vor Feuchtigkeit und Schweiß geschützt werden, während komplizierte Uhren besondere Aufmerksamkeit erfordern. Für gebrauchte und sammelbare Patek Philippe Uhren ist die Erhaltung von Box, Papieren, Archives Extract, Service-Dokumenten und Originalrechnungen besonders wichtig für den langfristigen Wert. Kariv Glamour bietet Beratung, um Ihre Uhr zuverlässig zu pflegen.',
     cta_en: 'Learn About Patek Philippe Maintenance', cta_de: 'Mehr über Patek Philippe Wartung erfahren',
     link: '/patek-philippe/maintenance',
-    image: UP.threeWatches2,
+    image: IMG.maintenance,
     internalLinks: [
       { text_en: 'service history', text_de: 'Service-Historie', link: '/watch-guides/service-history' },
       { text_en: 'box and papers', text_de: 'Box und Papiere', link: '/watch-guides/box-and-papers' },
@@ -142,13 +158,13 @@ export const PATEK_EDITORIAL_SECTIONS = [
 
 // Read More carousel cards
 export const PATEK_READ_MORE = [
-  { title_en: 'Patek Philippe Story', title_de: 'Patek Philippe Geschichte', description_en: 'Explore the heritage, family legacy, and collector appeal behind one of the most respected names in fine watchmaking.', description_de: 'Entdecken Sie das Erbe, die Familienlegacy und die Sammleranziehungskraft hinter einem der respektiertesten Namen der feinen Uhrmacherei.', link: '/patek-philippe/story', image: UP.brownDress },
-  { title_en: 'Patek Philippe Watchmaking', title_de: 'Patek Philippe Uhrmacherei', description_en: 'Learn about movements, complications, finishing, materials, and the details that define Patek Philippe watchmaking.', description_de: 'Erfahren Sie über Werke, Komplikationen, Finissierung, Materialien und die Details, die Patek Philippe Uhrmacherei definieren.', link: '/patek-philippe/watchmaking', image: UP.pocketWatch },
-  { title_en: 'Patek Philippe Maintenance', title_de: 'Patek Philippe Wartung', description_en: 'Understand how to care for a Patek Philippe watch and preserve its condition, documentation, and long-term appeal.', description_de: 'Verstehen Sie, wie Sie eine Patek Philippe Uhr pflegen und ihren Zustand, ihre Dokumentation und ihren langfristigen Wert erhalten.', link: '/patek-philippe/maintenance', image: UP.threeWatches2 },
-  { title_en: 'Patek Philippe Buying Guide', title_de: 'Patek Philippe Kaufberatung', description_en: 'Compare popular Patek Philippe collections and learn what to check before buying new, pre-owned, or vintage models.', description_de: 'Vergleichen Sie beliebte Patek Philippe Kollektionen und erfahren Sie, worauf Sie vor dem Kauf neuer, gebraucher oder Vintage-Modelle achten sollten.', link: '/welche-patek-philippe-kaufen', image: UNSPLASH.watch4 },
-  { title_en: 'Box, Papers and Archives Extract', title_de: 'Box, Papiere und Archives Extract', description_en: 'Learn why original documentation, archives extract, service history, and purchase records matter when buying Patek Philippe.', description_de: 'Erfahren Sie, warum Originaldokumentation, Archives Extract, Service-Historie und Kaufaufzeichnungen beim Patek Philippe Kauf wichtig sind.', link: '/patek-philippe-archives-extract-guide', image: UNSPLASH.watch5 },
-  { title_en: 'Patek Philippe Nautilus Guide', title_de: 'Patek Philippe Nautilus Guide', description_en: 'Explore the design, demand, and buying considerations behind the Patek Philippe Nautilus collection.', description_de: 'Entdecken Sie Design, Nachfrage und Kaufüberlegungen hinter der Patek Philippe Nautilus Kollektion.', link: '/patek-philippe-nautilus-kaufen', image: UP.nautilus },
-  { title_en: 'Patek Philippe Grand Complications Guide', title_de: 'Patek Philippe Grand Complications Guide', description_en: 'Learn why Grand Complications represent the highest level of mechanical artistry and collector interest.', description_de: 'Erfahren Sie, warum Grand Complications die höchste Stufe mechanischer Kunstfertigkeit und Sammlerinteresse repräsentieren.', link: '/patek-philippe-grand-complications-kaufen', image: UP.threeWatchesGrey },
+  { title_en: 'Patek Philippe Story', title_de: 'Patek Philippe Geschichte', description_en: 'Explore the heritage, family legacy, and collector appeal behind one of the most respected names in fine watchmaking.', description_de: 'Entdecken Sie das Erbe, die Familienlegacy und die Sammleranziehungskraft hinter einem der respektiertesten Namen der feinen Uhrmacherei.', link: '/patek-philippe/story', image: IMG.story },
+  { title_en: 'Patek Philippe Watchmaking', title_de: 'Patek Philippe Uhrmacherei', description_en: 'Learn about movements, complications, finishing, materials, and the details that define Patek Philippe watchmaking.', description_de: 'Erfahren Sie über Werke, Komplikationen, Finissierung, Materialien und die Details, die Patek Philippe Uhrmacherei definieren.', link: '/patek-philippe/watchmaking', image: IMG.watchmaking },
+  { title_en: 'Patek Philippe Maintenance', title_de: 'Patek Philippe Wartung', description_en: 'Understand how to care for a Patek Philippe watch and preserve its condition, documentation, and long-term appeal.', description_de: 'Verstehen Sie, wie Sie eine Patek Philippe Uhr pflegen und ihren Zustand, ihre Dokumentation und ihren langfristigen Wert erhalten.', link: '/patek-philippe/maintenance', image: IMG.maintenance },
+  { title_en: 'Patek Philippe Buying Guide', title_de: 'Patek Philippe Kaufberatung', description_en: 'Compare popular Patek Philippe collections and learn what to check before buying new, pre-owned, or vintage models.', description_de: 'Vergleichen Sie beliebte Patek Philippe Kollektionen und erfahren Sie, worauf Sie vor dem Kauf neuer, gebraucher oder Vintage-Modelle achten sollten.', link: '/welche-patek-philippe-kaufen', image: IMG.buyingGuide },
+  { title_en: 'Box, Papers and Archives Extract', title_de: 'Box, Papiere und Archives Extract', description_en: 'Learn why original documentation, archives extract, service history, and purchase records matter when buying Patek Philippe.', description_de: 'Erfahren Sie, warum Originaldokumentation, Archives Extract, Service-Historie und Kaufaufzeichnungen beim Patek Philippe Kauf wichtig sind.', link: '/patek-philippe-archives-extract-guide', image: IMG.boxPapers },
+  { title_en: 'Patek Philippe Nautilus Guide', title_de: 'Patek Philippe Nautilus Guide', description_en: 'Explore the design, demand, and buying considerations behind the Patek Philippe Nautilus collection.', description_de: 'Entdecken Sie Design, Nachfrage und Kaufüberlegungen hinter der Patek Philippe Nautilus Kollektion.', link: '/patek-philippe-nautilus-kaufen', image: IMG.nautilusGuide },
+  { title_en: 'Patek Philippe Grand Complications Guide', title_de: 'Patek Philippe Grand Complications Guide', description_en: 'Learn why Grand Complications represent the highest level of mechanical artistry and collector interest.', description_de: 'Erfahren Sie, warum Grand Complications die höchste Stufe mechanischer Kunstfertigkeit und Sammlerinteresse repräsentieren.', link: '/patek-philippe-grand-complications-kaufen', image: IMG.grandComplicationsGuide },
 ];
 
 // Internal linking hub
@@ -192,9 +208,9 @@ export const PATEK_INTERNAL_LINKS = {
   relatedBrands: [
     { text_en: 'Rolex watches', text_de: 'Rolex Uhren', link: '/brands/rolex' },
     { text_en: 'Audemars Piguet watches', text_de: 'Audemars Piguet Uhren', link: '/brands/audemars-piguet' },
-    { text_en: 'Vacheron Constantin watches', text_de: 'Vacheron Constantin Uhren', link: '/brands/vacheron-constantin' },
-    { text_en: 'A. Lange & Söhne watches', text_de: 'A. Lange & Söhne Uhren', link: '/brands/a-lange-soehne' },
-    { text_en: 'Breguet watches', text_de: 'Breguet Uhren', link: '/brands/breguet' },
+    { text_en: 'Hublot watches', text_de: 'Hublot Uhren', link: '/brands/hublot' },
+    { text_en: 'Grand Seiko watches', text_de: 'Grand Seiko Uhren', link: '/brands/grand-seiko' },
+    { text_en: 'Girard-Perregaux watches', text_de: 'Girard-Perregaux Uhren', link: '/brands/girard-perregaux' },
     { text_en: 'Jaeger-LeCoultre watches', text_de: 'Jaeger-LeCoultre Uhren', link: '/brands/jaeger-lecoultre' },
     { text_en: 'Cartier watches', text_de: 'Cartier Uhren', link: '/brands/cartier' },
     { text_en: 'Omega watches', text_de: 'Omega Uhren', link: '/brands/omega' },

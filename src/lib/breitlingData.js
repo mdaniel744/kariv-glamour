@@ -109,7 +109,7 @@ export const BREITLING_INTERNAL_LINKS = [
       { label_en: 'Omega watches', label_de: 'Omega Uhren', to: '/brands/omega' },
       { label_en: 'TAG Heuer watches', label_de: 'TAG Heuer Uhren', to: '/brands/tag-heuer' },
       { label_en: 'Tudor watches', label_de: 'Tudor Uhren', to: '/brands/tudor' },
-      { label_en: 'IWC watches', label_de: 'IWC Uhren', to: '/brands/iwc' },
+      { label_en: 'IWC watches', label_de: 'IWC Uhren', to: '/brands/iwc-schaffhausen' },
       { label_en: 'Panerai watches', label_de: 'Panerai Uhren', to: '/brands/panerai' },
       { label_en: 'Hublot watches', label_de: 'Hublot Uhren', to: '/brands/hublot' },
     ],

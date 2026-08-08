@@ -3,7 +3,6 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useCart } from '@/lib/cartContext';
-import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
@@ -24,7 +23,6 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const id = idProp || productIdFromPath();
   const { toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
-  const { localePath } = useLanguage();
   const [product, setProduct] = useState(initialProduct);
   const [loading, setLoading] = useState(!initialProduct);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -80,8 +78,8 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-16">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <div className="aspect-square bg-card animate-pulse" />
           <div className="space-y-4">
             <div className="h-4 bg-card w-32" />
@@ -95,7 +93,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-20 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20 text-center">
         <h1 className="font-display text-2xl text-foreground">{t('pages.productDetail.notFound')}</h1>
         <LocalizedLink to="/shop" className="text-primary text-sm mt-4 inline-block">{t('pages.productDetail.backToShop')}</LocalizedLink>
       </div>
@@ -130,8 +128,8 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   return (
     <div>
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-4">
+        <div className="no-scrollbar flex items-center gap-2 overflow-x-auto whitespace-nowrap text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
           <LocalizedLink to="/" className="hover:text-foreground">{t('pages.productDetail.home')}</LocalizedLink>
           <ChevronRight size={10} />
           <LocalizedLink to="/shop" className="hover:text-foreground">{t('pages.productDetail.shop')}</LocalizedLink>
@@ -142,20 +140,20 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </>
           }
           <ChevronRight size={10} />
-          <span className="text-foreground truncate max-w-[200px]">{localize(product, 'productTitle')}</span>
+          <span className="max-w-[220px] truncate text-foreground sm:max-w-sm">{localize(product, 'productTitle')}</span>
         </div>
       </div>
 
       {/* Main product */}
-      <div className="max-w-7xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-14 md:pb-20">
+        <div className="grid gap-7 md:grid-cols-2 md:gap-16">
           {/* Image gallery */}
-          <div>
+          <div className="min-w-0">
             <motion.div
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="aspect-square bg-card overflow-hidden mb-4">
+              className="aspect-[4/5] overflow-hidden bg-card mb-3 sm:aspect-square md:mb-4">
               
               {images.length > 0 ?
               <img src={images[selectedImage]} alt={localize(product, 'productTitle')} className="w-full h-full object-cover" /> :
@@ -163,12 +161,13 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               }
             </motion.div>
             {images.length > 1 &&
-            <div className="flex gap-2">
+            <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
                 {images.map((img, i) =>
               <button
                 key={i}
                 onClick={() => setSelectedImage(i)}
-                className={`w-16 h-16 border ${i === selectedImage ? 'border-primary' : 'border-border'} overflow-hidden`}>
+                className={`h-16 w-16 flex-shrink-0 overflow-hidden border ${i === selectedImage ? 'border-primary' : 'border-border'}`}
+                aria-label={`View product image ${i + 1}`}>
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
               )}
@@ -177,7 +176,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
           </div>
 
           {/* Product info — sticky */}
-          <div className="md:sticky md:top-32 md:self-start space-y-6">
+          <div className="min-w-0 space-y-5 md:sticky md:top-32 md:self-start md:space-y-6">
             <div>
               <LocalizedLink                 to={`/brands/${brandSlug}`}
                 className="text-[10px] tracking-[0.2em] uppercase text-primary hover:underline">
@@ -193,16 +192,16 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
             {/* Price */}
             <div className="border-y border-border py-5">
-              <div className="flex items-baseline gap-3">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 {product.salePrice && product.salePrice < product.price ?
                 <>
-                    <span className="font-display text-3xl text-primary">{formatPrice(product.salePrice)}</span>
+                    <span className="font-display text-2xl text-primary sm:text-3xl">{formatPrice(product.salePrice)}</span>
                     <span className="text-sm text-muted-foreground line-through">{formatPrice(product.price)}</span>
                   </> :
-                <span className="font-display text-3xl text-foreground">{formatPrice(product.price)}</span>
+                <span className="font-display text-2xl text-foreground sm:text-3xl">{formatPrice(product.price)}</span>
                 }
               </div>
-              <div className="flex items-center gap-4 mt-3">
+              <div className="mt-3 flex flex-wrap items-center gap-2 sm:gap-4">
                 <span className={`text-[10px] tracking-[0.1em] uppercase px-2 py-1 ${product.availability === 'In Stock' ? 'bg-emerald-600/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-600/15 text-red-600 dark:text-red-400'}`}>
                   {product.availability === 'In Stock' ? t('pages.productDetail.inStock') : product.availability || t('pages.productDetail.inStock')}
                 </span>
@@ -213,16 +212,16 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </div>
 
             {/* Quick specs */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {[
               { label: t('pages.productDetail.box'), value: product.boxIncluded ? t('pages.productDetail.included') : t('pages.productDetail.notIncluded') },
               { label: t('pages.productDetail.papers'), value: product.papersIncluded ? t('pages.productDetail.included') : t('pages.productDetail.notIncluded') },
               { label: t('pages.productDetail.year'), value: product.yearOfProduction || 'N/A' },
               { label: t('pages.productDetail.size'), value: product.caseDiameter || 'N/A' }].
               map((item) =>
-              <div key={item.label} className="bg-card border border-border p-3">
-                  <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">{item.label}</p>
-                  <p className="text-xs text-foreground mt-0.5">{item.value}</p>
+              <div key={item.label} className="min-w-0 bg-card border border-border p-3">
+                  <p className="text-[9px] tracking-[0.15em] uppercase leading-snug text-muted-foreground">{item.label}</p>
+                  <p className="text-xs text-foreground mt-0.5 break-words">{item.value}</p>
                 </div>
               )}
             </div>
@@ -236,15 +235,15 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
                 <Lock size={16} />
                 {t('pages.productDetail.buyNow')}
               </button>
-              <div className="flex gap-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   onClick={() => toggleWishlist(product)}
-                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors">
+                  className="flex min-h-12 items-center justify-center gap-2 border border-border px-3 py-3 text-[11px] tracking-[0.12em] uppercase text-foreground transition-colors hover:border-primary">
                   <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : ''} />
                   {wishlisted ? t('pages.productDetail.saved') : t('pages.productDetail.wishlist')}
                 </button>
                 <LocalizedLink                   to="/customer-service"
-                  className="flex-1 flex items-center justify-center gap-2 border border-border text-[11px] tracking-[0.12em] uppercase text-foreground py-3 hover:border-primary transition-colors">
+                  className="flex min-h-12 items-center justify-center gap-2 border border-border px-3 py-3 text-[11px] tracking-[0.12em] uppercase text-foreground transition-colors hover:border-primary">
                   <MessageCircle size={14} />
                   {t('pages.productDetail.askExpert')}
                 </LocalizedLink>
@@ -252,7 +251,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </div>
 
             {/* Trust cluster */}
-            <div className="border border-border p-5 space-y-3">
+            <div className="border border-border p-4 space-y-3 sm:p-5">
               <h3 className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium">{t('pages.productDetail.guaranteeTitle')}</h3>
               {[
               { icon: ShieldCheck, text: product.authenticationStatus === 'Authenticated' ? t('pages.productDetail.guarantee1') : t('pages.productDetail.guarantee1Pending') },
@@ -262,7 +261,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               map((item, i) =>
               <div key={i} className="flex items-center gap-3">
                   <item.icon size={14} className="text-primary flex-shrink-0" />
-                  <span className="text-xs text-muted-foreground">{item.text}</span>
+                  <span className="text-xs leading-relaxed text-muted-foreground">{item.text}</span>
                 </div>
               )}
             </div>
@@ -299,7 +298,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
         </div>
 
         {/* Description & Specs */}
-        <div className="mt-20 grid md:grid-cols-2 gap-16">
+        <div className="mt-14 grid gap-12 md:mt-20 md:grid-cols-2 md:gap-16">
           {localize(product, 'productDescription') &&
           <div>
               <h2 className="font-display text-2xl text-foreground font-light mb-6">{t('pages.productDetail.aboutTitle')}</h2>
@@ -310,9 +309,9 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             <h2 className="font-display text-2xl text-foreground font-light mb-6">{t('pages.productDetail.specsTitle')}</h2>
             <div className="space-y-0">
               {specs.map((spec, i) =>
-              <div key={i} className="flex justify-between py-3 border-b border-border">
-                  <span className="text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{spec.label}</span>
-                  <span className="text-xs text-foreground">{spec.value}</span>
+              <div key={i} className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] items-start gap-4 border-b border-border py-3">
+                  <span className="text-[10px] tracking-[0.12em] uppercase leading-snug text-muted-foreground">{spec.label}</span>
+                  <span className="min-w-0 break-words text-right text-xs text-foreground">{spec.value}</span>
                 </div>
               )}
             </div>
@@ -323,14 +322,14 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
       {/* Related */}
       {related.length > 0 &&
       <div className="border-t border-border py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-end justify-between mb-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
               <h2 className="font-display text-2xl text-foreground font-light">{t('pages.productDetail.moreFrom')} {product.brand}</h2>
               <LocalizedLink to={`/brands/${brandSlug}`} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors">
                 {t('pages.productDetail.viewAll')} {product.brand} →
               </LocalizedLink>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
               {related.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>

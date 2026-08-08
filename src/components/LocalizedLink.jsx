@@ -7,7 +7,7 @@ import { useLanguage } from '@/lib/languageContext';
  * the current locale to the target path.
  *
  * Usage: <LocalizedLink to="/shop">Shop</LocalizedLink>
- * Renders: <Link to="/de/shop">Shop</Link>  (when locale is 'de')
+ * Renders the same path with the active locale prefix.
  */
 export default function LocalizedLink({ to, children, ...props }) {
   const { localePath } = useLanguage();

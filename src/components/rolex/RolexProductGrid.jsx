@@ -70,8 +70,8 @@ export default function RolexProductGrid() {
     const { toggleWishlist, isInWishlist } = useCart();
     const wishlisted = isInWishlist(product.id);
     return (
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group">
-        <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group min-w-0">
+        <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-card md:mb-4">
           {product.featuredImage ?
             <img src={product.featuredImage} alt={product.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
             <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
@@ -82,22 +82,27 @@ export default function RolexProductGrid() {
               <span className="text-[9px] tracking-[0.15em] uppercase px-2 py-1 flex items-center gap-1 bg-foreground/10 text-foreground"><ShieldCheck size={10} /> {t('productGrid.verified')}</span>
             }
           </div>
-          <button onClick={(e) => { e.preventDefault(); toggleWishlist(product); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-100 transition-opacity bg-black/40 backdrop-blur-sm md:opacity-0 md:group-hover:opacity-100"
+            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
             <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
           </button>
-          <LocalizedLink to={`/product/${productSlug(product)}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+          <LocalizedLink to={`/product/${productSlug(product)}`} className="absolute inset-x-0 bottom-0 hidden p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100 md:flex items-center gap-2">
             <Eye size={14} className="text-white" />
             <span className="text-[10px] tracking-[0.15em] uppercase text-white">{t('productGrid.quickView')}</span>
           </LocalizedLink>
         </div>
-        <LocalizedLink to={`/product/${productSlug(product)}`}>
+        <LocalizedLink to={`/product/${productSlug(product)}`} className="block min-w-0">
           <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
           <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{product.productTitle}</h3>
-          <div className="flex items-center gap-3 text-[10px] mb-2 text-muted-foreground">
+          <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
             {product.referenceNumber && <span>{t('productGrid.ref')} {product.referenceNumber}</span>}
             {product.yearOfProduction && <span>· {product.yearOfProduction}</span>}
           </div>
-          <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
+          <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-muted-foreground">
             {product.condition && <span>{product.condition}</span>}
             <span>·</span>
             <span>{product.boxIncluded ? t('productGrid.box') : t('productGrid.noBox')}</span>
@@ -152,7 +157,7 @@ export default function RolexProductGrid() {
 
   return (
     <section id="rolex-products" className="py-16 md:py-24 bg-secondary">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('productGrid.eyebrow')}</span>
           <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('productGrid.heading', { brand: BRAND })}</h2>
@@ -164,12 +169,12 @@ export default function RolexProductGrid() {
           )}
         </div>
 
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
+        <div className="mb-8 flex items-center justify-between gap-4 border-b border-border pb-4">
           <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
             <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
           <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.count', { count: products.length, brand: BRAND })}</p>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary">
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="max-w-[60vw] bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary sm:max-w-none">
             {SORT_OPTIONS.map((opt) => <option key={opt.value} value={opt.value} className="bg-popover text-foreground">{opt.label}</option>)}
           </select>
         </div>
@@ -178,7 +183,7 @@ export default function RolexProductGrid() {
           <aside className="hidden md:block w-56 flex-shrink-0"><FilterContent /></aside>
           <div className="flex-1">
             {loading ?
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
                 {[...Array(6)].map((_, i) =>
                   <div key={i} className="animate-pulse">
                     <div className="aspect-[3/4] mb-4 bg-card" />
@@ -189,7 +194,7 @@ export default function RolexProductGrid() {
               </div> :
               products.length === 0 ?
                 <div className="text-center py-20"><p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p></div> :
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">{products.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">{products.map((p) => <ProductCard key={p.id} product={p} />)}</div>
             }
           </div>
         </div>

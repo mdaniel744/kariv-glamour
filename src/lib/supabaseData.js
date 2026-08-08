@@ -8,7 +8,31 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID || '7efd71bc-0287-4f40-8a2f-1de330c49522';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const hasSupabaseConfig = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+let warnedMissingSupabaseConfig = false;
+
+function getSupabase() {
+  if (hasSupabaseConfig) return supabase;
+
+  if (!warnedMissingSupabaseConfig) {
+    warnedMissingSupabaseConfig = true;
+    console.warn(
+      'Supabase env vars are missing. Catalog reads will return empty data until NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.'
+    );
+  }
+
+  return null;
+}
+
+function requireSupabase() {
+  const client = getSupabase();
+  if (!client) {
+    throw new Error('Supabase env vars are required for this operation.');
+  }
+  return client;
+}
+
+export const supabase = hasSupabaseConfig ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 // ---- translation merge ----
 // Base44 stored per-language fields as `field_de`/`field_en` directly on the
@@ -17,7 +41,10 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // localizedField() keep working unchanged.
 async function fetchTranslationsById(entityType, ids) {
   if (!ids.length) return {};
-  const { data, error } = await supabase
+  const client = getSupabase();
+  if (!client) return {};
+
+  const { data, error } = await client
     .from('translations')
     .select('entity_id, field_name, locale, value')
     .eq('entity_type', entityType)
@@ -137,7 +164,10 @@ function mapCollection(row, brandsById, translationsById) {
 // ---- in-memory per-request loaders (catalog is tiny — ~35 products) ----
 
 async function loadBrandsById() {
-  const { data, error } = await supabase.from('brands').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return {};
+
+  const { data, error } = await client.from('brands').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const byId = {};
   for (const row of data || []) byId[row.id] = row;
@@ -145,7 +175,10 @@ async function loadBrandsById() {
 }
 
 async function loadCollectionsById() {
-  const { data, error } = await supabase.from('collections').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return {};
+
+  const { data, error } = await client.from('collections').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const byId = {};
   for (const row of data || []) byId[row.id] = row;
@@ -153,8 +186,11 @@ async function loadCollectionsById() {
 }
 
 export async function loadAllProductsShaped() {
+  const client = getSupabase();
+  if (!client) return [];
+
   const [{ data: products, error }, brandsById, collectionsById] = await Promise.all([
-    supabase.from('products').select('*').eq('store_id', STORE_ID),
+    client.from('products').select('*').eq('store_id', STORE_ID),
     loadBrandsById(),
     loadCollectionsById(),
   ]);
@@ -270,14 +306,20 @@ function mapGuide(row, translationsById) {
 }
 
 export async function loadAllFaqsShaped() {
-  const { data, error } = await supabase.from('faqs').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return [];
+
+  const { data, error } = await client.from('faqs').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const translationsById = await fetchTranslationsById('faq', (data || []).map((r) => r.id));
   return (data || []).map((row) => mapFaq(row, translationsById));
 }
 
 export async function loadAllGuidesShaped() {
-  const { data, error } = await supabase.from('guides').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return [];
+
+  const { data, error } = await client.from('guides').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const translationsById = await fetchTranslationsById('guide', (data || []).map((r) => r.id));
   return (data || []).map((row) => mapGuide(row, translationsById));
@@ -303,7 +345,10 @@ function mapLegalPage(row, translationsById) {
 }
 
 export async function loadAllLegalPagesShaped() {
-  const { data, error } = await supabase.from('legal_pages').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return [];
+
+  const { data, error } = await client.from('legal_pages').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const translationsById = await fetchTranslationsById('legal_page', (data || []).map((r) => r.id));
   return (data || []).map((row) => mapLegalPage(row, translationsById));
@@ -328,7 +373,10 @@ function mapWebsiteString(row, translationsById) {
 }
 
 export async function loadAllWebsiteStringsShaped() {
-  const { data, error } = await supabase.from('website_strings').select('*').eq('store_id', STORE_ID);
+  const client = getSupabase();
+  if (!client) return [];
+
+  const { data, error } = await client.from('website_strings').select('*').eq('store_id', STORE_ID);
   if (error) throw error;
   const translationsById = await fetchTranslationsById('website_string', (data || []).map((r) => r.id));
   return (data || []).map((row) => mapWebsiteString(row, translationsById));
@@ -344,7 +392,8 @@ export const WebsiteString = makeEntity(loadAllWebsiteStringsShaped);
 // (same ownership-check pattern as every other Clerk-authenticated write).
 // Not built yet — see the admin/dealer write layer task.
 export async function submitDealerApplication({ dealerUserId, companyName, contactEmail, phone, taxId, website, address, country, message }) {
-  const { error } = await supabase.from('dealer_applications').insert({
+  const client = requireSupabase();
+  const { error } = await client.from('dealer_applications').insert({
     store_id: STORE_ID,
     dealer_user_id: dealerUserId,
     company_name: companyName,

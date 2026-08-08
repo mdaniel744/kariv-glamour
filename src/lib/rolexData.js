@@ -11,8 +11,13 @@ export const ROLEX_THEME = {
   brownCharcoal: '#2A2018',
 };
 
-// Watch images from Unsplash
-const IMG = {
+const ROLEX_ASSET_BASE = '/brand-assets/rolex';
+
+export const ROLEX_LOGO = `${ROLEX_ASSET_BASE}/rolex-logo.svg`;
+export const ROLEX_HERO_IMAGE = `${ROLEX_ASSET_BASE}/rolex-green-background-crown.jpg`;
+
+// Legacy fallbacks for collection cards. Dashboard collection records override these.
+const COLLECTION_FALLBACKS = {
   watch1: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
   watch2: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=800&q=80',
   watch3: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80',
@@ -23,28 +28,48 @@ const IMG = {
   watch8: 'https://images.unsplash.com/photo-1639024471283-0350c0f7a7e6?auto=format&fit=crop&w=800&q=80',
 };
 
-export const ROLEX_HERO_IMAGE = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1600&q=80';
+const IMG = {
+  buyRolexWatch: `${ROLEX_ASSET_BASE}/buy-rolex-watch.avif`,
+  preOwnedRolex: `${ROLEX_ASSET_BASE}/pre-owned-rolex-watches.avif`,
+  maintenance: `${ROLEX_ASSET_BASE}/rolex-watch-maintenance.avif`,
+  watchmaking: `${ROLEX_ASSET_BASE}/rolex-watchmaking.avif`,
+  datejustGroup: `${ROLEX_ASSET_BASE}/buy-rolex-datejust-watches.jpg`,
+  datejustLifestyle: `${ROLEX_ASSET_BASE}/buy-rolex-datejust.webp`,
+  daytonaLifestyle: `${ROLEX_ASSET_BASE}/buy-rolex-daytona.webp`,
+  gmtMasterGroup: `${ROLEX_ASSET_BASE}/buy-rolex-gmt-master-ii-watches.jpg`,
+  gmtMasterLifestyle: `${ROLEX_ASSET_BASE}/buy-rolex-gmt-master-ii.jpg`,
+  submarinerLifestyle: `${ROLEX_ASSET_BASE}/buy-rolex-submariner.jpg`,
+  dialMacro: `${ROLEX_ASSET_BASE}/buy-rolex.jpg`,
+  preOwnedLuxury: `${ROLEX_ASSET_BASE}/pre-owned-luxury-rolex-watch.webp`,
+  boxPapers: `${ROLEX_ASSET_BASE}/rolex-box-and-papers.webp`,
+  daytonaGuide: `${ROLEX_ASSET_BASE}/rolex-daytona-guide.jpg`,
+  legacy: `${ROLEX_ASSET_BASE}/rolex-legacy.jpg`,
+  service: `${ROLEX_ASSET_BASE}/rolex-premium-service-maintenance.jpg`,
+  submarinerGuide: `${ROLEX_ASSET_BASE}/rolex-submariner-guide.jpg`,
+  story: `${ROLEX_ASSET_BASE}/the-rolex-story.jpg`,
+  buyingGuide: `${ROLEX_ASSET_BASE}/which-rolex-watch-to-buy.jpg`,
+};
 
 // Rolex Collections
 export const ROLEX_COLLECTIONS = [
-  { id: 'land-dweller', name: 'Land-Dweller', slug: 'land-dweller', description_en: 'A modern Rolex collection with integrated bracelet design and forward-looking watchmaking character.', description_de: 'Eine moderne Rolex Kollektion mit integriertem Armbanddesign und zukunftsorientiertem Uhrmachercharakter.', image: IMG.watch1, displayOrder: 1 },
-  { id: 'air-king', name: 'Air-King', slug: 'air-king', description_en: 'A distinctive aviation-inspired Rolex made for those drawn to precision, legibility, and exploration.', description_de: 'Eine markante, von der Luftfahrt inspirierte Rolex für alle, die Präzision, Ablesbarkeit und Entdeckergeist schätzen.', image: IMG.watch2, displayOrder: 2 },
-  { id: 'daytona', name: 'Cosmograph Daytona', slug: 'daytona', description_en: 'The legendary Rolex chronograph associated with motorsport, speed, and high collectability.', description_de: 'Der legendäre Rolex Chronograph, assoziiert mit Motorsport, Geschwindigkeit und hoher Sammlerbegehrlichkeit.', image: IMG.watch3, displayOrder: 3 },
-  { id: 'datejust', name: 'Datejust', slug: 'datejust', description_en: 'A timeless Rolex classic known for everyday elegance, versatility, and enduring design.', description_de: 'Ein zeitloser Rolex Klassiker, bekannt für alltägliche Eleganz, Vielseitigkeit und beständiges Design.', image: IMG.watch4, displayOrder: 4 },
-  { id: 'lady-datejust', name: 'Lady-Datejust', slug: 'lady-datejust', description_en: 'A refined Rolex collection designed with elegant proportions and feminine sophistication.', description_de: 'Eine verfeinerte Rolex Kollektion mit eleganten Proportionen und femininer Raffinesse.', image: IMG.watch5, displayOrder: 5 },
-  { id: 'day-date', name: 'Day-Date', slug: 'day-date', description_en: 'A prestigious Rolex icon, often associated with precious metals, status, and timeless authority.', description_de: 'Eine prestigeträchtige Rolex Ikone, oft assoziiert mit Edelmetallen, Status und zeitloser Autorität.', image: IMG.watch6, displayOrder: 6 },
-  { id: 'deepsea', name: 'Deepsea', slug: 'deepsea', description_en: 'A professional Rolex diving watch built for extreme underwater performance.', description_de: 'Eine professionelle Rolex Taucheruhr, gebaut für extreme Unterwasserleistung.', image: IMG.watch7, displayOrder: 7 },
-  { id: 'explorer', name: 'Explorer', slug: 'explorer', description_en: 'A robust Rolex tool watch inspired by adventure, endurance, and mountain exploration.', description_de: 'Eine robuste Rolex Tool-Watch, inspiriert von Abenteuer, Ausdauer und Bergexploration.', image: IMG.watch8, displayOrder: 8 },
-  { id: 'explorer-ii', name: 'Explorer II', slug: 'explorer-ii', description_en: 'A practical Rolex watch designed for exploration, legibility, and second-time-zone functionality.', description_de: 'Eine praktische Rolex Uhr, konzipiert für Exploration, Ablesbarkeit und Zweitzeitzonen-Funktionalität.', image: IMG.watch1, displayOrder: 9 },
-  { id: 'gmt-master-ii', name: 'GMT-Master II', slug: 'gmt-master-ii', description_en: 'A cosmopolitan Rolex travel watch designed to display multiple time zones with ease.', description_de: 'Eine kosmopolitische Rolex Reisewatch, konzipiert für die einfache Anzeige mehrerer Zeitzonen.', image: IMG.watch2, displayOrder: 10 },
-  { id: 'oyster-perpetual', name: 'Oyster Perpetual', slug: 'oyster-perpetual', description_en: 'The purest expression of Rolex watchmaking, combining clean design and everyday durability.', description_de: 'Die reinste Ausdrucksform der Rolex Uhrmacherei, die klares Design und alltägliche Haltbarkeit vereint.', image: IMG.watch3, displayOrder: 11 },
-  { id: 'sea-dweller', name: 'Sea-Dweller', slug: 'sea-dweller', description_en: 'A professional diver\u2019s Rolex built for serious depth, strength, and performance.', description_de: 'Eine professionelle Taucher-Rolex, gebaut für ernsthafte Tiefe, Stärke und Leistung.', image: IMG.watch4, displayOrder: 12 },
-  { id: 'sky-dweller', name: 'Sky-Dweller', slug: 'sky-dweller', description_en: 'A sophisticated Rolex travel watch combining annual calendar functionality with dual-time display.', description_de: 'Eine anspruchsvolle Rolex Reisewatch, die Jahreskalender-Funktionalität mit Dual-Zeitanzeige vereint.', image: IMG.watch5, displayOrder: 13 },
-  { id: 'submariner', name: 'Submariner', slug: 'submariner', description_en: 'One of the world\u2019s most recognized luxury dive watches, admired for its strength and timeless design.', description_de: 'Eine der weltweit bekanntesten Luxus-Taucheruhren, bewundert für ihre Stärke und zeitloses Design.', image: IMG.watch6, displayOrder: 14 },
-  { id: 'yacht-master', name: 'Yacht-Master', slug: 'yacht-master', description_en: 'A nautical-inspired Rolex sports watch blending elegance, functionality, and luxury.', description_de: 'Eine nautisch inspirierte Rolex Sportuhr, die Eleganz, Funktionalität und Luxus vereint.', image: IMG.watch7, displayOrder: 15 },
-  { id: 'yacht-master-ii', name: 'Yacht-Master II', slug: 'yacht-master-ii', description_en: 'A highly technical Rolex regatta chronograph created for competitive sailing.', description_de: 'Ein hochtechnischer Rolex Regatta-Chronograph, geschaffen für den Segelwettbewerb.', image: IMG.watch8, displayOrder: 16 },
-  { id: '1908', name: '1908', slug: '1908', description_en: 'A refined dress watch collection that reflects Rolex elegance, heritage, and modern watchmaking.', description_de: 'Eine verfeinerte Dress-Watch-Kollektion, die Rolex Eleganz, Erbe und moderne Uhrmacherei widerspiegelt.', image: IMG.watch1, displayOrder: 17 },
-  { id: 'milgauss', name: 'Milgauss', slug: 'milgauss', description_en: 'A distinctive discontinued Rolex model with strong collector interest in the pre-owned market.', description_de: 'Ein markantes eingestelltes Rolex Modell mit starkem Sammlerinteresse auf dem Gebrauchtmarkt.', image: IMG.watch2, displayOrder: 18 },
+  { id: 'land-dweller', name: 'Land-Dweller', slug: 'land-dweller', description_en: 'A modern Rolex collection with integrated bracelet design and forward-looking watchmaking character.', description_de: 'Eine moderne Rolex Kollektion mit integriertem Armbanddesign und zukunftsorientiertem Uhrmachercharakter.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 1 },
+  { id: 'air-king', name: 'Air-King', slug: 'air-king', description_en: 'A distinctive aviation-inspired Rolex made for those drawn to precision, legibility, and exploration.', description_de: 'Eine markante, von der Luftfahrt inspirierte Rolex für alle, die Präzision, Ablesbarkeit und Entdeckergeist schätzen.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 2 },
+  { id: 'daytona', name: 'Cosmograph Daytona', slug: 'daytona', description_en: 'The legendary Rolex chronograph associated with motorsport, speed, and high collectability.', description_de: 'Der legendäre Rolex Chronograph, assoziiert mit Motorsport, Geschwindigkeit und hoher Sammlerbegehrlichkeit.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 3 },
+  { id: 'datejust', name: 'Datejust', slug: 'datejust', description_en: 'A timeless Rolex classic known for everyday elegance, versatility, and enduring design.', description_de: 'Ein zeitloser Rolex Klassiker, bekannt für alltägliche Eleganz, Vielseitigkeit und beständiges Design.', image: COLLECTION_FALLBACKS.watch4, displayOrder: 4 },
+  { id: 'lady-datejust', name: 'Lady-Datejust', slug: 'lady-datejust', description_en: 'A refined Rolex collection designed with elegant proportions and feminine sophistication.', description_de: 'Eine verfeinerte Rolex Kollektion mit eleganten Proportionen und femininer Raffinesse.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 5 },
+  { id: 'day-date', name: 'Day-Date', slug: 'day-date', description_en: 'A prestigious Rolex icon, often associated with precious metals, status, and timeless authority.', description_de: 'Eine prestigeträchtige Rolex Ikone, oft assoziiert mit Edelmetallen, Status und zeitloser Autorität.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 6 },
+  { id: 'deepsea', name: 'Deepsea', slug: 'deepsea', description_en: 'A professional Rolex diving watch built for extreme underwater performance.', description_de: 'Eine professionelle Rolex Taucheruhr, gebaut für extreme Unterwasserleistung.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 7 },
+  { id: 'explorer', name: 'Explorer', slug: 'explorer', description_en: 'A robust Rolex tool watch inspired by adventure, endurance, and mountain exploration.', description_de: 'Eine robuste Rolex Tool-Watch, inspiriert von Abenteuer, Ausdauer und Bergexploration.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 8 },
+  { id: 'explorer-ii', name: 'Explorer II', slug: 'explorer-ii', description_en: 'A practical Rolex watch designed for exploration, legibility, and second-time-zone functionality.', description_de: 'Eine praktische Rolex Uhr, konzipiert für Exploration, Ablesbarkeit und Zweitzeitzonen-Funktionalität.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 9 },
+  { id: 'gmt-master-ii', name: 'GMT-Master II', slug: 'gmt-master-ii', description_en: 'A cosmopolitan Rolex travel watch designed to display multiple time zones with ease.', description_de: 'Eine kosmopolitische Rolex Reisewatch, konzipiert für die einfache Anzeige mehrerer Zeitzonen.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 10 },
+  { id: 'oyster-perpetual', name: 'Oyster Perpetual', slug: 'oyster-perpetual', description_en: 'The purest expression of Rolex watchmaking, combining clean design and everyday durability.', description_de: 'Die reinste Ausdrucksform der Rolex Uhrmacherei, die klares Design und alltägliche Haltbarkeit vereint.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 11 },
+  { id: 'sea-dweller', name: 'Sea-Dweller', slug: 'sea-dweller', description_en: 'A professional diver\u2019s Rolex built for serious depth, strength, and performance.', description_de: 'Eine professionelle Taucher-Rolex, gebaut für ernsthafte Tiefe, Stärke und Leistung.', image: COLLECTION_FALLBACKS.watch4, displayOrder: 12 },
+  { id: 'sky-dweller', name: 'Sky-Dweller', slug: 'sky-dweller', description_en: 'A sophisticated Rolex travel watch combining annual calendar functionality with dual-time display.', description_de: 'Eine anspruchsvolle Rolex Reisewatch, die Jahreskalender-Funktionalität mit Dual-Zeitanzeige vereint.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 13 },
+  { id: 'submariner', name: 'Submariner', slug: 'submariner', description_en: 'One of the world\u2019s most recognized luxury dive watches, admired for its strength and timeless design.', description_de: 'Eine der weltweit bekanntesten Luxus-Taucheruhren, bewundert für ihre Stärke und zeitloses Design.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 14 },
+  { id: 'yacht-master', name: 'Yacht-Master', slug: 'yacht-master', description_en: 'A nautical-inspired Rolex sports watch blending elegance, functionality, and luxury.', description_de: 'Eine nautisch inspirierte Rolex Sportuhr, die Eleganz, Funktionalität und Luxus vereint.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 15 },
+  { id: 'yacht-master-ii', name: 'Yacht-Master II', slug: 'yacht-master-ii', description_en: 'A highly technical Rolex regatta chronograph created for competitive sailing.', description_de: 'Ein hochtechnischer Rolex Regatta-Chronograph, geschaffen für den Segelwettbewerb.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 16 },
+  { id: '1908', name: '1908', slug: '1908', description_en: 'A refined dress watch collection that reflects Rolex elegance, heritage, and modern watchmaking.', description_de: 'Eine verfeinerte Dress-Watch-Kollektion, die Rolex Eleganz, Erbe und moderne Uhrmacherei widerspiegelt.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 17 },
+  { id: 'milgauss', name: 'Milgauss', slug: 'milgauss', description_en: 'A distinctive discontinued Rolex model with strong collector interest in the pre-owned market.', description_de: 'Ein markantes eingestelltes Rolex Modell mit starkem Sammlerinteresse auf dem Gebrauchtmarkt.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 18 },
 ];
 
 // Quick filter chips for product grid
@@ -61,14 +86,14 @@ export const ROLEX_QUICK_FILTERS = [
 
 // SEO Cards
 export const ROLEX_SEO_CARDS = [
-  { title_en: 'Buy Rolex', title_de: 'Rolex kaufen', description_en: 'Explore Rolex watches available through Kariv Glamour, with transparent product details and a refined online shopping experience.', description_de: 'Entdecken Sie bei Kariv Glamour verfügbare Rolex Uhren mit transparenten Produktdetails und einem verfeinerten Online-Einkaufserlebnis.', link: '/rolex-kaufen', image: IMG.watch1 },
-  { title_en: 'Buy Pre-Owned Rolex', title_de: 'Rolex gebraucht kaufen', description_en: 'Discover pre-owned Rolex watches with clear condition grading, box and papers information, and detailed product presentation.', description_de: 'Entdecken Sie gebrauchte Rolex Uhren mit klarer Zustandsbewertung, Box- und Papiere-Informationen und detaillierter Produktpräsentation.', link: '/rolex-gebraucht-kaufen', image: IMG.watch2 },
-  { title_en: 'Used Rolex Watches', title_de: 'Gebrauchte Rolex Uhren', description_en: 'Browse used Rolex watches across popular collections such as Datejust, Submariner, Daytona, GMT-Master II and Oyster Perpetual.', description_de: 'Stöbern Sie durch gebrauchte Rolex Uhren beliebter Kollektionen wie Datejust, Submariner, Daytona, GMT-Master II und Oyster Perpetual.', link: '/gebrauchte-rolex-uhren', image: IMG.watch3 },
-  { title_en: 'Buy Rolex Submariner', title_de: 'Rolex Submariner kaufen', description_en: 'Explore one of the most iconic Rolex dive watches, known for its robust design and timeless appeal.', description_de: 'Entdecken Sie eine der ikonischsten Rolex Taucheruhren, bekannt für robustes Design und zeitlose Anziehungskraft.', link: '/rolex-submariner-kaufen', image: IMG.watch4 },
-  { title_en: 'Buy Rolex Daytona', title_de: 'Rolex Daytona kaufen', description_en: 'Discover Rolex Daytona watches, the legendary chronograph associated with motorsport and collectability.', description_de: 'Entdecken Sie Rolex Daytona Uhren, den legendären Chronographen, assoziiert mit Motorsport und Sammlerbegehrlichkeit.', link: '/rolex-daytona-kaufen', image: IMG.watch5 },
-  { title_en: 'Buy Rolex Datejust', title_de: 'Rolex Datejust kaufen', description_en: 'Shop Rolex Datejust watches, a versatile classic suitable for daily wear, formal style, and long-term ownership.', description_de: 'Shoppen Sie Rolex Datejust Uhren, ein vielseitiger Klassiker für täglichen Gebrauch, formellen Stil und langfristigen Besitz.', link: '/rolex-datejust-kaufen', image: IMG.watch6 },
-  { title_en: 'Buy Rolex GMT-Master II', title_de: 'Rolex GMT-Master II kaufen', description_en: 'Explore Rolex GMT-Master II watches, designed for travelers and collectors who appreciate multi-time-zone functionality.', description_de: 'Entdecken Sie Rolex GMT-Master II Uhren, konzipiert für Reisende und Sammler, die Multizeitzone-Funktionalität schätzen.', link: '/rolex-gmt-master-ii-kaufen', image: IMG.watch7 },
-  { title_en: 'Which Rolex to Buy?', title_de: 'Welche Rolex kaufen?', description_en: 'Read the Rolex buying guide to understand which Rolex model may suit your lifestyle, taste, and collecting goals.', description_de: 'Lesen Sie die Rolex Kaufberatung, um zu verstehen, welches Rolex Modell zu Ihrem Lebensstil, Geschmack und Sammlerzielen passt.', link: '/welche-rolex-kaufen', image: IMG.watch8 },
+  { title_en: 'Buy Rolex', title_de: 'Rolex kaufen', description_en: 'Explore Rolex watches available through Kariv Glamour, with transparent product details and a refined online shopping experience.', description_de: 'Entdecken Sie bei Kariv Glamour verfügbare Rolex Uhren mit transparenten Produktdetails und einem verfeinerten Online-Einkaufserlebnis.', link: '/rolex-kaufen', image: IMG.dialMacro },
+  { title_en: 'Buy Pre-Owned Rolex', title_de: 'Rolex gebraucht kaufen', description_en: 'Discover pre-owned Rolex watches with clear condition grading, box and papers information, and detailed product presentation.', description_de: 'Entdecken Sie gebrauchte Rolex Uhren mit klarer Zustandsbewertung, Box- und Papiere-Informationen und detaillierter Produktpräsentation.', link: '/rolex-gebraucht-kaufen', image: IMG.preOwnedLuxury },
+  { title_en: 'Used Rolex Watches', title_de: 'Gebrauchte Rolex Uhren', description_en: 'Browse used Rolex watches across popular collections such as Datejust, Submariner, Daytona, GMT-Master II and Oyster Perpetual.', description_de: 'Stöbern Sie durch gebrauchte Rolex Uhren beliebter Kollektionen wie Datejust, Submariner, Daytona, GMT-Master II und Oyster Perpetual.', link: '/gebrauchte-rolex-uhren', image: IMG.preOwnedRolex },
+  { title_en: 'Buy Rolex Submariner', title_de: 'Rolex Submariner kaufen', description_en: 'Explore one of the most iconic Rolex dive watches, known for its robust design and timeless appeal.', description_de: 'Entdecken Sie eine der ikonischsten Rolex Taucheruhren, bekannt für robustes Design und zeitlose Anziehungskraft.', link: '/rolex-submariner-kaufen', image: IMG.submarinerLifestyle },
+  { title_en: 'Buy Rolex Daytona', title_de: 'Rolex Daytona kaufen', description_en: 'Discover Rolex Daytona watches, the legendary chronograph associated with motorsport and collectability.', description_de: 'Entdecken Sie Rolex Daytona Uhren, den legendären Chronographen, assoziiert mit Motorsport und Sammlerbegehrlichkeit.', link: '/rolex-daytona-kaufen', image: IMG.daytonaLifestyle },
+  { title_en: 'Buy Rolex Datejust', title_de: 'Rolex Datejust kaufen', description_en: 'Shop Rolex Datejust watches, a versatile classic suitable for daily wear, formal style, and long-term ownership.', description_de: 'Shoppen Sie Rolex Datejust Uhren, ein vielseitiger Klassiker für täglichen Gebrauch, formellen Stil und langfristigen Besitz.', link: '/rolex-datejust-kaufen', image: IMG.datejustGroup },
+  { title_en: 'Buy Rolex GMT-Master II', title_de: 'Rolex GMT-Master II kaufen', description_en: 'Explore Rolex GMT-Master II watches, designed for travelers and collectors who appreciate multi-time-zone functionality.', description_de: 'Entdecken Sie Rolex GMT-Master II Uhren, konzipiert für Reisende und Sammler, die Multizeitzone-Funktionalität schätzen.', link: '/rolex-gmt-master-ii-kaufen', image: IMG.gmtMasterGroup },
+  { title_en: 'Which Rolex to Buy?', title_de: 'Welche Rolex kaufen?', description_en: 'Read the Rolex buying guide to understand which Rolex model may suit your lifestyle, taste, and collecting goals.', description_de: 'Lesen Sie die Rolex Kaufberatung, um zu verstehen, welches Rolex Modell zu Ihrem Lebensstil, Geschmack und Sammlerzielen passt.', link: '/welche-rolex-kaufen', image: IMG.buyingGuide },
 ];
 
 // Editorial sections data (Story, Watchmaking, Maintenance)
@@ -80,7 +105,7 @@ export const ROLEX_EDITORIAL_SECTIONS = [
     description_en: 'Rolex has shaped the world of fine watchmaking for over a century, combining relentless innovation with an unmistakable design language. From the first waterproof Oyster case to the professional tool watches that accompanied explorers, divers, and aviators, the Rolex story is one of precision, prestige, and cultural recognition. At Kariv Glamour, we celebrate this heritage by offering carefully selected Rolex timepieces, each presented with full transparency and expert insight.',
     description_de: 'Rolex hat die Welt der feinen Uhrmacherei für über ein Jahrhundert geprägt und unermüdliche Innovation mit einer unverkennbaren Designsprache verbunden. Vom ersten wasserdichten Oyster-Gehäuse bis zu den professionellen Tool-Watches, die Entdecker, Taucher und Piloten begleiteten — die Rolex Story ist eine von Präzision, Prestige und kultureller Anerkennung. Bei Kariv Glamour feiern wir dieses Erbe mit sorgfältig ausgewählten Rolex Zeitmessern, die mit voller Transparenz und fachkundiger Einsicht präsentiert werden.',
     cta_en: 'Read the Rolex Story', cta_de: 'Die Rolex Story lesen',
-    link: '/rolex/story', image: IMG.watch5,
+    link: '/rolex/story', image: IMG.story,
     internalLinks: [
       { text_en: 'Rolex heritage', text_de: 'Rolex Erbe', link: '/rolex/story' },
       { text_en: 'professional watches', text_de: 'professionelle Uhren', link: '/rolex/submariner' },
@@ -94,9 +119,9 @@ export const ROLEX_EDITORIAL_SECTIONS = [
     description_en: 'Rolex watchmaking stands for precision, robust case construction, and reliable automatic movements. From the legendary Oyster case to carefully selected materials, bracelets, and bezels, every component is engineered for longevity and performance. At Kariv Glamour, we help you understand the craftsmanship behind each Rolex, so you can make an informed and confident decision.',
     description_de: 'Rolex Uhrmacherei steht für Präzision, robuste Gehäusekonstruktion und zuverlässige automatische Werke. Vom legendären Oyster-Gehäuse bis zu sorgfältig ausgewählten Materialien, Armbändern und Lünetten — jede Komponente ist für Langlebigkeit und Leistung konstruiert. Bei Kariv Glamour helfen wir Ihnen, die Handwerkskunst hinter jeder Rolex zu verstehen, damit Sie eine informierte und zuversichtliche Entscheidung treffen können.',
     cta_en: 'Explore Rolex Watchmaking', cta_de: 'Rolex Uhrmacherei entdecken',
-    link: '/rolex/watchmaking', image: IMG.watch6,
+    link: '/rolex/watchmaking', image: IMG.watchmaking,
     internalLinks: [
-      { text_en: 'Oyster case', text_de: 'Oyster-Gehäuse', link: '/rolex/oyster-case-guide' },
+      { text_en: 'Oyster case', text_de: 'Oyster-Gehäuse', link: '/rolex/watchmaking' },
       { text_en: 'automatic movements', text_de: 'automatische Werke', link: '/watch-guides/mechanical-vs-quartz-watches' },
       { text_en: 'materials', text_de: 'Materialien', link: '/watch-guides/watch-case-materials' },
       { text_en: 'bracelets', text_de: 'Armbänder', link: '/watch-guides/watch-bracelet-guide' },
@@ -109,7 +134,7 @@ export const ROLEX_EDITORIAL_SECTIONS = [
     description_en: 'Proper care preserves the beauty, reliability, and value of a Rolex watch. Regular servicing, water resistance checks, bracelet and case care, careful storage, and avoiding shocks, magnets, and unauthorized modifications all contribute to long-term performance. For pre-owned Rolex watches, documentation and service history are especially important. Kariv Glamour provides guidance to help you maintain your timepiece with confidence.',
     description_de: 'Die richtige Pflege erhält die Schönheit, Zuverlässigkeit und den Wert einer Rolex Uhr. Regelmäßige Wartung, Wasserdichtigkeitsprüfungen, Armband- und Gehäusepflege, sorgfältige Aufbewahrung und das Vermeiden von Stößen, Magneten und unbefugten Modifikationen tragen zur langfristigen Leistung bei. Für gebrauchte Rolex Uhren sind Dokumentation und Service-Historie besonders wichtig. Kariv Glamour bietet Orientierung, damit Sie Ihren Zeitmesser zuversichtlich pflegen können.',
     cta_en: 'Learn About Rolex Maintenance', cta_de: 'Mehr über Rolex Wartung erfahren',
-    link: '/rolex/maintenance', image: IMG.watch7,
+    link: '/rolex/maintenance', image: IMG.service,
     internalLinks: [
       { text_en: 'service history', text_de: 'Service-Historie', link: '/watch-guides/service-history' },
       { text_en: 'box and papers', text_de: 'Box und Papiere', link: '/rolex-box-papers-guide' },
@@ -121,13 +146,13 @@ export const ROLEX_EDITORIAL_SECTIONS = [
 
 // Read More carousel cards
 export const ROLEX_READ_MORE = [
-  { title_en: 'Rolex Story', title_de: 'Rolex Story', description_en: 'Explore the heritage, milestones, and enduring appeal behind one of the world\u2019s most recognized watchmakers.', description_de: 'Entdecken Sie das Erbe, die Meilensteine und die bleibende Anziehungskraft hinter einem der bekanntesten Uhrmacher der Welt.', link: '/rolex/story', image: IMG.watch1 },
-  { title_en: 'Rolex Watchmaking', title_de: 'Rolex Uhrmacherei', description_en: 'Learn about the precision, materials, movements, and design principles that shape Rolex watches.', description_de: 'Erfahren Sie mehr über Präzision, Materialien, Werke und Designprinzipien, die Rolex Uhren formen.', link: '/rolex/watchmaking', image: IMG.watch2 },
-  { title_en: 'Rolex Maintenance', title_de: 'Rolex Wartung', description_en: 'Understand how to care for a Rolex watch and preserve its condition, reliability, and long-term value.', description_de: 'Verstehen Sie, wie Sie eine Rolex Uhr pflegen und ihren Zustand, ihre Zuverlässigkeit und ihren langfristigen Wert erhalten.', link: '/rolex/maintenance', image: IMG.watch3 },
-  { title_en: 'Rolex Buying Guide', title_de: 'Rolex Kaufberatung', description_en: 'Compare popular Rolex collections and learn what to check before buying a new or pre-owned Rolex.', description_de: 'Vergleichen Sie beliebte Rolex Kollektionen und erfahren Sie, worauf Sie vor dem Kauf einer neuen oder gebrauchten Rolex achten sollten.', link: '/welche-rolex-kaufen', image: IMG.watch4 },
-  { title_en: 'Box and Papers', title_de: 'Box und Papiere', description_en: 'Learn why original box, warranty card, service documents, and purchase history matter when buying a Rolex.', description_de: 'Erfahren Sie, warum Originalbox, Garantiekarte, Servicedokumente und Kaufhistorie beim Rolex Kauf wichtig sind.', link: '/rolex-box-papers-guide', image: IMG.watch5 },
-  { title_en: 'Rolex Submariner Guide', title_de: 'Rolex Submariner Guide', description_en: 'Explore the design, appeal, and buying considerations behind the Rolex Submariner.', description_de: 'Entdecken Sie Design, Anziehungskraft und Überlegungen zum Kauf der Rolex Submariner.', link: '/rolex-submariner-kaufen', image: IMG.watch6 },
-  { title_en: 'Rolex Daytona Guide', title_de: 'Rolex Daytona Guide', description_en: 'Learn why the Rolex Daytona remains one of the most desired chronographs in luxury watch collecting.', description_de: 'Erfahren Sie, warum die Rolex Daytona einer der begehrtesten Chronographen im Luxusuhren-Sammeln bleibt.', link: '/rolex-daytona-kaufen', image: IMG.watch7 },
+  { title_en: 'Rolex Story', title_de: 'Rolex Story', description_en: 'Explore the heritage, milestones, and enduring appeal behind one of the world\u2019s most recognized watchmakers.', description_de: 'Entdecken Sie das Erbe, die Meilensteine und die bleibende Anziehungskraft hinter einem der bekanntesten Uhrmacher der Welt.', link: '/rolex/story', image: IMG.story },
+  { title_en: 'Rolex Watchmaking', title_de: 'Rolex Uhrmacherei', description_en: 'Learn about the precision, materials, movements, and design principles that shape Rolex watches.', description_de: 'Erfahren Sie mehr über Präzision, Materialien, Werke und Designprinzipien, die Rolex Uhren formen.', link: '/rolex/watchmaking', image: IMG.watchmaking },
+  { title_en: 'Rolex Maintenance', title_de: 'Rolex Wartung', description_en: 'Understand how to care for a Rolex watch and preserve its condition, reliability, and long-term value.', description_de: 'Verstehen Sie, wie Sie eine Rolex Uhr pflegen und ihren Zustand, ihre Zuverlässigkeit und ihren langfristigen Wert erhalten.', link: '/rolex/maintenance', image: IMG.maintenance },
+  { title_en: 'Rolex Buying Guide', title_de: 'Rolex Kaufberatung', description_en: 'Compare popular Rolex collections and learn what to check before buying a new or pre-owned Rolex.', description_de: 'Vergleichen Sie beliebte Rolex Kollektionen und erfahren Sie, worauf Sie vor dem Kauf einer neuen oder gebrauchten Rolex achten sollten.', link: '/welche-rolex-kaufen', image: IMG.buyingGuide },
+  { title_en: 'Box and Papers', title_de: 'Box und Papiere', description_en: 'Learn why original box, warranty card, service documents, and purchase history matter when buying a Rolex.', description_de: 'Erfahren Sie, warum Originalbox, Garantiekarte, Servicedokumente und Kaufhistorie beim Rolex Kauf wichtig sind.', link: '/rolex-box-papers-guide', image: IMG.boxPapers },
+  { title_en: 'Rolex Submariner Guide', title_de: 'Rolex Submariner Guide', description_en: 'Explore the design, appeal, and buying considerations behind the Rolex Submariner.', description_de: 'Entdecken Sie Design, Anziehungskraft und Überlegungen zum Kauf der Rolex Submariner.', link: '/rolex-submariner-kaufen', image: IMG.submarinerGuide },
+  { title_en: 'Rolex Daytona Guide', title_de: 'Rolex Daytona Guide', description_en: 'Learn why the Rolex Daytona remains one of the most desired chronographs in luxury watch collecting.', description_de: 'Erfahren Sie, warum die Rolex Daytona einer der begehrtesten Chronographen im Luxusuhren-Sammeln bleibt.', link: '/rolex-daytona-kaufen', image: IMG.daytonaGuide },
 ];
 
 // Internal linking hub

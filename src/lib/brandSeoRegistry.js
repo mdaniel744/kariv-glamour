@@ -43,7 +43,15 @@ export const SEO_LANDING_ROUTES = GROUPS.flatMap((group) =>
 );
 
 const ROUTES_BY_SLUG = new Map(SEO_LANDING_ROUTES.map((route) => [route.slug, route]));
+const GROUPS_BY_KEY = new Map(GROUPS.map((group) => [group.key, group]));
 
 export function getSeoLandingRoute(slug) {
   return ROUTES_BY_SLUG.get(slug) || null;
+}
+
+export function getSeoLandingRouteForBrandPath(routeKey, slug) {
+  const group = GROUPS_BY_KEY.get(routeKey);
+  if (!group || !slug) return null;
+
+  return getSeoLandingRoute(`${group.brandSlug}-${slug}`);
 }

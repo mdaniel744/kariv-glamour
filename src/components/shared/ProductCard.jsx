@@ -20,10 +20,10 @@ export default function ProductCard({ product }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="group"
+      className="group min-w-0"
     >
-      <LocalizedLink to={`/product/${productSlug(product)}`} className="block">
-        <div className="product-image-grid relative mb-4">
+      <LocalizedLink to={`/product/${productSlug(product)}`} className="block min-w-0">
+        <div className="product-image-grid relative mb-3 md:mb-4">
           {product.featuredImage ? (
             <img
               src={product.featuredImage}
@@ -31,8 +31,8 @@ export default function ProductCard({ product }) {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground/40">
-              <span className="text-xs tracking-[0.2em] uppercase">{t('components.productCard.noImage')}</span>
+            <div className="w-full h-full flex items-center justify-center px-2 text-center text-muted-foreground/40">
+              <span className="text-[10px] tracking-[0.18em] uppercase md:text-xs md:tracking-[0.2em]">{t('components.productCard.noImage')}</span>
             </div>
           )}
 
@@ -54,13 +54,15 @@ export default function ProductCard({ product }) {
           {/* Wishlist */}
           <button
             onClick={e => { e.preventDefault(); toggleWishlist(product); }}
-            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/40 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            type="button"
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/40 backdrop-blur-sm rounded-full opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
+            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           >
             <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
           </button>
 
           {/* Quick view overlay */}
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute inset-x-0 bottom-0 hidden p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100 md:block">
             <span className="text-[10px] tracking-[0.15em] uppercase text-white">{t('components.productCard.viewDetails')}</span>
           </div>
         </div>
@@ -69,7 +71,7 @@ export default function ProductCard({ product }) {
         <div className="space-y-1.5">
           <p className="text-[10px] tracking-[0.15em] uppercase text-primary font-medium">{product.brand}</p>
           <h3 className="text-sm text-foreground font-body leading-tight line-clamp-2">{localize(product, 'productTitle')}</h3>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             {product.salePrice && product.salePrice < product.price ? (
               <>
                 <span className="text-sm text-primary font-medium">{formatPrice(product.salePrice)}</span>

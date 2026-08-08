@@ -3,14 +3,20 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('kariv-theme') || 'light';
-    }
-    return 'light';
-  });
+  const [theme, setTheme] = useState('light');
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem('kariv-theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      setTheme(savedTheme);
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
@@ -18,7 +24,7 @@ export function ThemeProvider({ children }) {
       root.classList.remove('dark');
     }
     localStorage.setItem('kariv-theme', theme);
-  }, [theme]);
+  }, [hydrated, theme]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 

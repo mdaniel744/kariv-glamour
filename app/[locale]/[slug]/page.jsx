@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import SeoLandingRouteClient from '@/components/next-pages/SeoLandingRouteClient';
 import { getSeoLandingRoute } from '@/lib/brandSeoRegistry';
 import {
@@ -10,6 +10,18 @@ import {
 } from '@/lib/seo';
 
 export const revalidate = 900;
+
+const LEGACY_REDIRECTS = {
+  'authentication-process': '/authentication',
+  'certified-pre-owned': '/shop?isCertifiedPreOwned=true',
+  'condition-grading': '/buyer-protection',
+  contact: '/customer-service',
+  'mens-watches': '/shop?gender=Men',
+  'returns-and-refunds': '/customer-service',
+  'shipping-policy': '/customer-service',
+  'vintage-watches': '/shop?isVintage=true',
+  'womens-watches': '/shop?gender=Women',
+};
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
@@ -39,7 +51,11 @@ export default async function SeoLandingPage({ params }) {
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
   const route = getSeoLandingRoute(slug);
-  if (!route) notFound();
+  if (!route) {
+    const redirectPath = LEGACY_REDIRECTS[slug];
+    if (redirectPath) redirect(`/${locale}${redirectPath}`);
+    notFound();
+  }
 
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/${locale}/${slug}`;

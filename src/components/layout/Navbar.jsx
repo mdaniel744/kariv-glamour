@@ -12,6 +12,40 @@ import BrandFavicon from '@/components/shared/BrandFavicon';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const LOGOS = {
+  desktop: {
+    light: '/logos/kariv-glamour-desktop-green.png',
+    dark: '/logos/kariv-glamour-desktop-white.png',
+  },
+  mobile: {
+    light: '/logos/kariv-glamour-mobile-green.png',
+    dark: '/logos/kariv-glamour-mobile-white.png',
+  },
+};
+
+function KarivLogo({ theme }) {
+  const mode = theme === 'dark' ? 'dark' : 'light';
+
+  return (
+    <>
+      <img
+        src={LOGOS.desktop[mode]}
+        alt="Kariv Glamour"
+        className="hidden md:block h-14 w-[280px] lg:w-[320px] object-cover object-center"
+        draggable={false}
+      />
+      <span className="block md:hidden h-10 w-16 overflow-hidden">
+        <img
+          src={LOGOS.mobile[mode]}
+          alt="Kariv Glamour"
+          className="h-full w-full scale-[1.85] object-cover object-center"
+          draggable={false}
+        />
+      </span>
+    </>
+  );
+}
+
 
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
@@ -65,6 +99,23 @@ export default function Navbar() {
   const toggleSecurity = () => {setSecurityOpen((prev) => !prev);setBuyOpen(false);};
   const closeMobile = () => {setMobileOpen(false);setMobileExpanded(null);};
 
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closeMobile();
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileOpen]);
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
@@ -88,16 +139,19 @@ export default function Navbar() {
         {/* Main nav */}
         <div className="w-full mx-auto px-4 md:px-6">
           {/* Row 1: logo + visible search + actions */}
-          <div className="flex items-center justify-between h-16 md:h-20 gap-3 md:gap-6">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-foreground">
+          <div className="flex items-center justify-between h-14 md:h-20 gap-2 md:gap-6">
+            <div className="flex min-w-0 items-center gap-2 md:gap-3">
+              <button
+                type="button"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="-ml-2 flex h-10 w-10 items-center justify-center text-foreground md:hidden"
+                aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={mobileOpen}
+              >
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
-              <LocalizedLink to="/" className="flex-shrink-0">
-                <h1 className="text-xl md:text-2xl tracking-[0.08em] [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">KARIV GLAMOUR
-
-
-                </h1>
+              <LocalizedLink to="/" onClick={closeMobile} className="flex-shrink-0 flex items-center" aria-label="Kariv Glamour home">
+                <KarivLogo theme={theme} />
               </LocalizedLink>
             </div>
 
@@ -118,11 +172,16 @@ export default function Navbar() {
             </form>
 
             {/* Actions */}
-            <div className="flex items-center gap-3 md:gap-4">
-              <button onClick={toggleTheme} className="md:hidden text-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
+            <div className="flex shrink-0 items-center gap-1 md:gap-4">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden"
+                aria-label="Toggle theme"
+              >
                 {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
-              <LocalizedLink to="/wishlist" className="relative text-foreground hover:text-primary transition-colors">
+              <LocalizedLink to="/wishlist" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Wishlist">
                 <Heart size={18} />
                 {wishlistCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -130,7 +189,7 @@ export default function Navbar() {
                   </span>
                 }
               </LocalizedLink>
-              <LocalizedLink to="/cart" className="relative text-foreground hover:text-primary transition-colors">
+              <LocalizedLink to="/cart" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Cart">
                 <ShoppingBag size={18} />
                 {cartCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -139,11 +198,15 @@ export default function Navbar() {
                 }
               </LocalizedLink>
               {isAuthenticated ? (
-                <LocalizedLink to={isDealer(user) ? '/dealer' : '/portal'} className="text-foreground hover:text-primary transition-colors">
+                <LocalizedLink to={isDealer(user) ? '/dealer' : '/portal'} className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Account">
                   <User size={18} />
                 </LocalizedLink>
               ) : (
-                <div className="flex items-center gap-3">
+                <>
+                <LocalizedLink to="/login" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden" aria-label="Sign in">
+                  <User size={18} />
+                </LocalizedLink>
+                <div className="hidden items-center gap-3 md:flex">
                   <LocalizedLink to="/login" className="text-[10px] tracking-[0.12em] uppercase text-foreground hover:text-primary transition-colors">
                     Sign In
                   </LocalizedLink>
@@ -151,6 +214,7 @@ export default function Navbar() {
                     Sign Up
                   </LocalizedLink>
                 </div>
+                </>
               )}
             </div>
           </div>
@@ -256,9 +320,12 @@ export default function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -300 }}
           transition={{ type: 'tween', duration: 0.3 }}
-          className="fixed inset-0 z-40 bg-background pt-20 overflow-y-auto">
+          className="fixed left-0 right-0 top-[102px] bottom-0 z-40 overflow-y-auto overscroll-contain border-t border-border bg-background"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation">
           
-            <div className="p-6 space-y-1">
+            <div className="px-6 py-5 pb-10 space-y-1">
               {/* Buy a watch — expandable */}
               <div>
                 <button
