@@ -35,7 +35,7 @@ export default function PatekPhilippeCollectionCarousel() {
                 <LocalizedLink to={`/patek-philippe/${col.slug}`} className="block">
                   <div className="relative aspect-[3/4] overflow-hidden mb-5 bg-card">
                     {col.image ?
-                      <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+                      <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-contain p-6 md:p-8 group-hover:scale-105 transition-transform duration-700" /> :
                       <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
                     }
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

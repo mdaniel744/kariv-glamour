@@ -3,6 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
+import { BREITLING_STORY_IMAGE } from '@/lib/breitlingData';
 
 const BRAND = 'Breitling';
 
@@ -30,9 +31,8 @@ export default function BreitlingStoryTeaser() {
           </p>
           <LocalizedLink to="/breitling/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('cta.readStory', { brand: BRAND })}</LocalizedLink>
         </motion.div>
-        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] border border-border bg-card flex flex-col items-center justify-center">
-          <span className="font-display text-3xl tracking-[0.2em] text-foreground/70">BREITLING</span>
-          <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-3">Since 1884</span>
+        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] overflow-hidden border border-border bg-card">
+          <img src={BREITLING_STORY_IMAGE} alt={`${BRAND} Story`} className="w-full h-full object-cover" />
         </motion.div>
       </div>
     </section>

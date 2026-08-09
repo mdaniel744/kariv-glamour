@@ -10,7 +10,7 @@ export default function RolexReadMoreCarousel() {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
-  const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 340, behavior: 'smooth' }); };
+  const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 400, behavior: 'smooth' }); };
 
   return (
     <section className="py-16 md:py-24 bg-background">
@@ -28,10 +28,10 @@ export default function RolexReadMoreCarousel() {
 
         <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x no-scrollbar">
           {ROLEX_READ_MORE.map((card, i) =>
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[300px] snap-start group">
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[82vw] max-w-[22rem] sm:w-80 lg:w-96 lg:max-w-[24rem] snap-start group">
               <LocalizedLink to={card.link} className="block">
-                <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-card">
-                  <img src={card.image} alt={localize(card, 'title')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="relative h-44 sm:h-52 lg:h-56 w-full overflow-hidden mb-4 bg-card">
+                  <img src={card.image} alt={localize(card, 'title')} loading="lazy" className="block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 <h3 className="font-display text-lg font-light mb-2 text-foreground">{localize(card, 'title')}</h3>
                 <p className="text-xs leading-relaxed mb-3 line-clamp-2 text-muted-foreground">{localize(card, 'description')}</p>

@@ -3,6 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
+import { HUBLOT_STORY_IMAGE } from '@/lib/hublotData';
 
 const BRAND = 'Hublot';
 
@@ -28,9 +29,8 @@ export default function HublotStoryTeaser() {
           </p>
           <LocalizedLink to="/hublot/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('cta.readStory', { brand: BRAND })}</LocalizedLink>
         </motion.div>
-        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] border border-border bg-card flex flex-col items-center justify-center">
-          <span className="font-display text-3xl tracking-[0.2em] text-foreground/70">HUBLOT</span>
-          <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-3">Art of Fusion</span>
+        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] border border-border bg-card overflow-hidden">
+          <img src={HUBLOT_STORY_IMAGE} alt={`${BRAND} watchmaking story`} className="w-full h-full object-cover" />
         </motion.div>
       </div>
     </section>);

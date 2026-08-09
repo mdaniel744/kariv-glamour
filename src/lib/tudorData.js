@@ -2,43 +2,56 @@
 // Tudor is positioned as robust Swiss luxury with tool-watch character,
 // Black Bay heritage, dive watches, sport models, and versatile everyday luxury.
 
-const IMG_HERO = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/1ce2737fe_tudor-watch-hub-new-watches-cover-bpm.jpg';
-const IMG_BB_BLUE = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d46e230c9_TudorBlackbayblueuhr.png';
-const IMG_BB58_LEATHER = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/a678b51ee_TudorBlackBay5839mmSteelCaseBrownLeatherStrapM79030N-0002.webp';
-const IMG_BB58_STEEL = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/4f808f5ce_TUDORBlackBay58M7939A1A0NU-0002.jpg';
-const IMG_1926_BLUE = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/aabac9495_TUDORBlackBayBlueDial31mmLadiesWatchM79600-0002.jpg';
-const IMG_BB_GMT = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/49c1e1d6f_TudorBlackBayGMT.png';
-const IMG_BB_GMT_SG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/58a90def6_TudorMensWatchBlackBayGMTSGM79833MN-0001.jpg';
+const TUDOR_PAGE_ASSET_BASE = '/brand-assets/tudor/page';
+const TUDOR_COLLECTION_ASSET_BASE = '/brand-assets/tudor/collections';
 
-export const TUDOR_HERO_IMAGE = IMG_HERO;
-export const TUDOR_STORY_IMAGE = IMG_BB58_LEATHER;
+export const TUDOR_PAGE_IMAGES = {
+  hero: `${TUDOR_PAGE_ASSET_BASE}/tudor-hero.avif`,
+  story: `${TUDOR_PAGE_ASSET_BASE}/tudor-story.avif`,
+  preOwned: `${TUDOR_PAGE_ASSET_BASE}/tudor-preowned-watches.jpg`,
+  blackBay: `${TUDOR_PAGE_ASSET_BASE}/tudor-black-bay-watch.webp`,
+  pelagos: `${TUDOR_PAGE_ASSET_BASE}/tudor-pelagos-guide.png`,
+  royal: `${TUDOR_PAGE_ASSET_BASE}/tudor-royal-guide.avif`,
+};
+
+const COLLECTION_IMAGES = {
+  blackBay: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-black-bay-collection.png`,
+  pelagos: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-pelagos-collection.png`,
+  royal: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-royal-collection.png`,
+  ranger: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-ranger-collection.png`,
+  nineteenTwentySix: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-1926-collection.png`,
+  clairDeRose: `${TUDOR_COLLECTION_ASSET_BASE}/tudor-clair-de-rose-collection.png`,
+};
+
+export const TUDOR_HERO_IMAGE = TUDOR_PAGE_IMAGES.hero;
+export const TUDOR_STORY_IMAGE = TUDOR_PAGE_IMAGES.story;
 
 export const TUDOR_COLLECTIONS = [
-  { id: 1, name: 'Black Bay', slug: 'black-bay', image: IMG_BB_BLUE,
+  { id: 1, name: 'Black Bay', slug: 'black-bay', image: COLLECTION_IMAGES.blackBay,
     shortDescription_en: "Tudor's most recognizable watch family, known for vintage-inspired dive-watch design, strong daily wearability, GMT models, chronographs and modern tool-watch character.",
     shortDescription_de: "Tudors bekannteste Uhrenfamilie, bekannt für vintage-inspiriertes Tauchuhr-Design, starke Alltagstauglichkeit, GMT-Modelle, Chronographen und modernen Tool-Watch-Charakter." },
-  { id: 2, name: 'Pelagos', slug: 'pelagos', image: '',
+  { id: 2, name: 'Pelagos', slug: 'pelagos', image: COLLECTION_IMAGES.pelagos,
     shortDescription_en: "A professional Tudor dive-watch collection with technical materials, high water resistance, strong legibility and serious sport-watch appeal.",
     shortDescription_de: "Eine professionelle Tudor Tauchuhr-Kollektion mit technischen Materialien, hoher Wasserfestigkeit, starker Ablesbarkeit und ernsthaftem Sport-Uhren-Anspruch." },
-  { id: 3, name: 'Tudor Royal', slug: 'tudor-royal', image: '',
+  { id: 3, name: 'Tudor Royal', slug: 'tudor-royal', image: COLLECTION_IMAGES.royal,
     shortDescription_en: "A versatile Tudor collection with integrated bracelet design, day-date options, refined everyday styling and sizes for men and women.",
     shortDescription_de: "Eine vielseitige Tudor Kollektion mit integriertem Armband-Design, Day-Date-Optionen, verfeinertem Alltags-Stil und Größen für Herren und Damen." },
-  { id: 4, name: 'Ranger', slug: 'ranger', image: '',
+  { id: 4, name: 'Ranger', slug: 'ranger', image: COLLECTION_IMAGES.ranger,
     shortDescription_en: "A clean field-watch collection with rugged simplicity, strong legibility and tool-watch character.",
     shortDescription_de: "Eine klare Field-Watch-Kollektion mit robuster Einfachheit, starker Ablesbarkeit und Tool-Watch-Charakter." },
-  { id: 5, name: '1926', slug: '1926', image: IMG_1926_BLUE,
+  { id: 5, name: '1926', slug: '1926', image: COLLECTION_IMAGES.nineteenTwentySix,
     shortDescription_en: "A classic Tudor collection focused on elegant proportions, everyday wear, automatic movements and accessible Swiss luxury.",
     shortDescription_de: "Eine klassische Tudor Kollektion mit eleganten Proportionen, Alltags-Tragkomfort, Automatik-Uhrwerken und zugänglichem Schweizer Luxus." },
-  { id: 6, name: 'Clair de Rose', slug: 'clair-de-rose', image: '',
+  { id: 6, name: 'Clair de Rose', slug: 'clair-de-rose', image: COLLECTION_IMAGES.clairDeRose,
     shortDescription_en: "A women's Tudor collection with refined case sizes, elegant dials and a more delicate luxury-watch profile.",
     shortDescription_de: "Eine Tudor Damenuhren-Kollektion mit verfeinerten Gehäusegrößen, eleganten Zifferblättern und einem dezenteren Luxus-Uhren-Profil." },
 ];
 
 export const TUDOR_BLACK_BAY_SUBFAMILIES = [
   { name: 'Black Bay 54', slug: 'black-bay-54', image: '' },
-  { name: 'Black Bay 58', slug: 'black-bay-58', image: IMG_BB58_LEATHER },
+  { name: 'Black Bay 58', slug: 'black-bay-58', image: TUDOR_PAGE_IMAGES.blackBay },
   { name: 'Black Bay Pro', slug: 'black-bay-pro', image: '' },
-  { name: 'Black Bay GMT', slug: 'black-bay-gmt', image: IMG_BB_GMT },
+  { name: 'Black Bay GMT', slug: 'black-bay-gmt', image: COLLECTION_IMAGES.blackBay },
   { name: 'Black Bay Chrono', slug: 'black-bay-chrono', image: '' },
   { name: 'Black Bay Bronze', slug: 'black-bay-bronze', image: '' },
   { name: 'Black Bay Ceramic', slug: 'black-bay-ceramic', image: '' },
@@ -67,40 +80,40 @@ export const TUDOR_QUICK_FILTERS = [
 ];
 
 export const TUDOR_SEO_CARDS = [
-  { title_en: 'Tudor Watch', title_de: 'Tudor Uhr', link: '/tudor-uhr',
+  { title_en: 'Tudor Watch', title_de: 'Tudor Uhr', link: '/tudor-uhr', image: TUDOR_PAGE_IMAGES.hero,
     description_en: 'Explore Tudor watches at Kariv Glamour — Black Bay heritage, Pelagos dive watches, Tudor Royal, 1926 and Ranger models.',
     description_de: 'Entdecken Sie Tudor Uhren bei Kariv Glamour — Black Bay Heritage, Pelagos Tauchuhren, Tudor Royal, 1926 und Ranger Modelle.' },
-  { title_en: 'Buy Tudor Watch', title_de: 'Tudor Uhr kaufen', link: '/tudor-uhr-kaufen',
+  { title_en: 'Buy Tudor Watch', title_de: 'Tudor Uhr kaufen', link: '/tudor-uhr-kaufen', image: TUDOR_PAGE_IMAGES.blackBay,
     description_en: 'Buy Tudor watches at Kariv Glamour — new and pre-owned models with transparent product information and condition grading.',
     description_de: 'Tudor Uhren kaufen bei Kariv Glamour — neue und gebrauchte Modelle mit transparenter Produktinformation und Zustandsbewertung.' },
-  { title_en: 'Tudor Black Bay Watch', title_de: 'Tudor Black Bay Uhr', link: '/tudor-black-bay-uhr',
+  { title_en: 'Tudor Black Bay Watch', title_de: 'Tudor Black Bay Uhr', link: '/tudor-black-bay-uhr', image: TUDOR_PAGE_IMAGES.blackBay,
     description_en: 'Discover the Tudor Black Bay collection — vintage-inspired dive watches with snowflake hands, rotating bezel and robust character.',
     description_de: 'Entdecken Sie die Tudor Black Bay Kollektion — vintage-inspirierte Tauchuhren mit Snowflake-Zeigern, drehbarer Lünette und robustem Charakter.' },
-  { title_en: "Tudor Men's Watches", title_de: 'Tudor Uhr Herren', link: '/tudor-uhr-herren',
+  { title_en: "Tudor Men's Watches", title_de: 'Tudor Uhr Herren', link: '/tudor-uhr-herren', image: TUDOR_PAGE_IMAGES.pelagos,
     description_en: "Tudor men's watches at Kariv Glamour — Black Bay, Pelagos, Ranger and Tudor Royal models for men.",
     description_de: 'Tudor Herrenuhren bei Kariv Glamour — Black Bay, Pelagos, Ranger und Tudor Royal Modelle für Männer.' },
-  { title_en: 'Tudor Royal Watch', title_de: 'Tudor Royal Uhr', link: '/tudor-royal-uhr',
+  { title_en: 'Tudor Royal Watch', title_de: 'Tudor Royal Uhr', link: '/tudor-royal-uhr', image: TUDOR_PAGE_IMAGES.royal,
     description_en: 'Discover Tudor Royal — versatile watches with integrated bracelet, day-date and refined everyday styling.',
     description_de: 'Entdecken Sie Tudor Royal — vielseitige Uhren mit integriertem Armband, Day-Date und verfeinertem Alltags-Stil.' },
-  { title_en: "Tudor Women's Watches", title_de: 'Tudor Uhr Damen', link: '/tudor-uhr-damen',
+  { title_en: "Tudor Women's Watches", title_de: 'Tudor Uhr Damen', link: '/tudor-uhr-damen', image: TUDOR_PAGE_IMAGES.story,
     description_en: "Tudor women's watches at Kariv Glamour — Clair de Rose, 1926 and Tudor Royal models in elegant, smaller case sizes.",
     description_de: 'Tudor Damenuhren bei Kariv Glamour — Clair de Rose, 1926 und Tudor Royal Modelle in eleganten, kleineren Gehäusen.' },
 ];
 
 export const TUDOR_READ_MORE = [
-  { title_en: 'Tudor Story', title_de: 'Tudor Story', link: '/tudor/story',
+  { title_en: 'Tudor Story', title_de: 'Tudor Story', link: '/tudor/story', image: TUDOR_PAGE_IMAGES.story,
     description_en: "Explore Tudor's heritage of robust Swiss watchmaking, tool-watch character and Black Bay dive-watch tradition.",
     description_de: 'Entdecken Sie Tudors Heritage von robuster Schweizer Uhrmacherkunst, Tool-Watch-Charakter und Black Bay Tauchuhr-Tradition.' },
-  { title_en: 'Tudor Black Bay Guide', title_de: 'Tudor Black Bay Guide', link: '/tudor-black-bay-guide',
+  { title_en: 'Tudor Black Bay Guide', title_de: 'Tudor Black Bay Guide', link: '/tudor-black-bay-guide', image: TUDOR_PAGE_IMAGES.blackBay,
     description_en: 'Understand the Tudor Black Bay family — from Black Bay 54 to 58, GMT, Chrono and Bronze.',
     description_de: 'Verstehen Sie die Tudor Black Bay Familie — von Black Bay 54 über 58 bis GMT, Chrono und Bronze.' },
-  { title_en: 'Tudor Pelagos Guide', title_de: 'Tudor Pelagos Guide', link: '/tudor/pelagos',
+  { title_en: 'Tudor Pelagos Guide', title_de: 'Tudor Pelagos Guide', link: '/tudor/pelagos', image: TUDOR_PAGE_IMAGES.pelagos,
     description_en: 'Discover the Tudor Pelagos — a professional dive watch with titanium, 500M water resistance and technical tool-watch character.',
     description_de: 'Entdecken Sie die Tudor Pelagos — eine professionelle Tauchuhr mit Titan, 500M Wasserfestigkeit und technischem Tool-Watch-Charakter.' },
-  { title_en: 'Tudor Royal Guide', title_de: 'Tudor Royal Guide', link: '/tudor/tudor-royal',
+  { title_en: 'Tudor Royal Guide', title_de: 'Tudor Royal Guide', link: '/tudor/tudor-royal', image: TUDOR_PAGE_IMAGES.royal,
     description_en: 'Understand Tudor Royal — integrated bracelet, day-date and everyday luxury for men and women.',
     description_de: 'Verstehen Sie Tudor Royal — integriertes Armband, Day-Date und Alltagsluxus für Herren und Damen.' },
-  { title_en: 'Buying Pre-Owned Tudor', title_de: 'Gebrauchte Tudor kaufen', link: '/tudor-gebraucht',
+  { title_en: 'Buying Pre-Owned Tudor', title_de: 'Gebrauchte Tudor kaufen', link: '/tudor-gebraucht', image: TUDOR_PAGE_IMAGES.preOwned,
     description_en: 'What to check before buying a used Tudor — condition, box and papers, reference number, and authentication.',
     description_de: 'Was Sie vor dem Kauf einer gebrauchten Tudor prüfen sollten — Zustand, Box und Papiere, Referenznummer und Authentifizierung.' },
 ];

@@ -5,28 +5,36 @@
 
 const IMG_SERPENTI = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/cc9634d7e_BvlgariStainlessSteelSerpentiTubogas35mmGreyDialLadies.webp';
 const IMG_ALUMINIUM = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/aa6055397_BvlgariAluminiumUhr.jpg';
-const IMG_CHRONOGRAPH = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0d5b84b72_BVLGARICHRONOGRAPH.png';
+const BVLGARI_COLLECTION_ASSET_BASE = '/brand-assets/bvlgari/collections';
+
+const COLLECTION_IMAGES = {
+  serpenti: `${BVLGARI_COLLECTION_ASSET_BASE}/bvlgari-serpenti-collection.png`,
+  octoFinissimo: `${BVLGARI_COLLECTION_ASSET_BASE}/bvlgari-octo-finissimo-collection.png`,
+  octoRoma: `${BVLGARI_COLLECTION_ASSET_BASE}/bvlgari-octo-roma-collection.png`,
+  lvcea: `${BVLGARI_COLLECTION_ASSET_BASE}/bvlgari-lvcea-collection.png`,
+  aluminium: `${BVLGARI_COLLECTION_ASSET_BASE}/bvlgari-aluminium-collection.png`,
+};
 
 export const BVLGARI_HERO_IMAGE = IMG_SERPENTI;
 export const BVLGARI_STORY_IMAGE = IMG_ALUMINIUM;
 
 export const BVLGARI_COLLECTIONS = [
-  { id: 1, name: 'Serpenti', slug: 'serpenti', image: IMG_SERPENTI,
+  { id: 1, name: 'Serpenti', slug: 'serpenti', image: COLLECTION_IMAGES.serpenti,
     shortDescription_en: "Bvlgari's most iconic jewellery-watch collection, known for serpent-inspired design, wraparound bracelets, gem-set details and strong women's luxury appeal.",
     shortDescription_de: "Bvlgaris ikonischste Schmuckuhren-Kollektion, bekannt für schlangeninspiriertes Design, Wickelarmbänder, Edelsteinbesatz und starken weiblichen Luxus-Appeal." },
-  { id: 2, name: 'Octo Finissimo', slug: 'octo-finissimo', image: IMG_CHRONOGRAPH,
+  { id: 2, name: 'Octo Finissimo', slug: 'octo-finissimo', image: COLLECTION_IMAGES.octoFinissimo,
     shortDescription_en: "A modern Bvlgari watch family known for ultra-thin architecture, angular Roman-inspired design, integrated bracelets and mechanical watchmaking innovation.",
     shortDescription_de: "Eine moderne Bvlgari-Uhrenfamilie, bekannt für ultradünne Architektur, eckiges römisches Design, integrierte Armbänder und mechanische Uhrmacher-Innovation." },
-  { id: 3, name: 'Octo Roma', slug: 'octo-roma', image: '',
+  { id: 3, name: 'Octo Roma', slug: 'octo-roma', image: COLLECTION_IMAGES.octoRoma,
     shortDescription_en: "A refined Octo collection with softened geometry, automatic movements and a more classic expression of Bvlgari's Roman design language.",
     shortDescription_de: "Eine verfeinerte Octo-Kollektion mit weicherer Geometrie, automatischen Uhrwerken und einem klassischeren Ausdruck von Bvlgaris römischer Designsprache." },
   { id: 4, name: 'Bulgari Bulgari', slug: 'bulgari-bulgari', image: '',
     shortDescription_en: "A signature Bvlgari watch line recognized for its engraved bezel, clean luxury styling and strong brand identity.",
     shortDescription_de: "Eine signature Bvlgari-Uhrenlinie, die für ihre gravierte Lünette, ihr klares Luxus-Styling und ihre starke Markenidentität bekannt ist." },
-  { id: 5, name: 'Lvcea', slug: 'lvcea', image: '',
+  { id: 5, name: 'Lvcea', slug: 'lvcea', image: COLLECTION_IMAGES.lvcea,
     shortDescription_en: "An elegant women's Bvlgari watch collection combining jewellery-inspired details, feminine proportions and everyday luxury wearability.",
     shortDescription_de: "Eine elegante Bvlgari-Damenuhren-Kollektion, die schmuckinspirierte Details, feminine Proportionen und alltägliche Luxus-Tragbarkeit vereint." },
-  { id: 6, name: 'Aluminium', slug: 'aluminium', image: IMG_ALUMINIUM,
+  { id: 6, name: 'Aluminium', slug: 'aluminium', image: COLLECTION_IMAGES.aluminium,
     shortDescription_en: "A casual Bvlgari sport-watch collection with lightweight materials, bold contrast and modern everyday character.",
     shortDescription_de: "Eine sportliche Bvlgari-Uhren-Kollektion mit leichten Materialien, starkem Kontrast und modernem Alltagscharakter." },
   { id: 7, name: 'High Jewellery Watches', slug: 'high-jewellery-watches', image: '',

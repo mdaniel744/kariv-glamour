@@ -32,8 +32,8 @@ export default function IWCHero() {
           </div>
         </motion.div>
         <div className="flex items-center justify-center">
-          <div className="aspect-square w-full max-w-md relative overflow-hidden bg-secondary">
-            <img src={IWC_HERO_IMAGE} alt={`${BRAND} Pilot watch`} className="w-full h-full object-cover" />
+          <div className="aspect-square w-full max-w-md relative overflow-hidden bg-card">
+            <img src={IWC_HERO_IMAGE} alt={`${BRAND} Pilot watch`} className="w-full h-full object-contain p-4 md:p-6" />
           </div>
         </div>
       </div>

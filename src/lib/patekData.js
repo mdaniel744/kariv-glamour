@@ -12,23 +12,23 @@ export const PATEK_THEME = {
   silver: '#BCC6CC',
 };
 
-// Legacy fallbacks for collection cards. Dashboard collection records override these.
-const COLLECTION_FALLBACKS = {
-  goldenEllipse: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/8ddd693a6_PatekPhilippeGoldenEllipse.png',
-  nautilus: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/066fee3d9_PatekPhilippeNautilusKaufen.png',
-  pocketWatch: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/efe687a14_PatekPhilippepocketwatch.jpg',
-  threeWatches2: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/abb6efa87_Patekphilippe.jpg',
-  brownDress: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/11d4ce6fa_PatekPhilippeBrown.png',
-  watch1: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-  watch2: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=800&q=80',
-  watch3: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80',
-  watch5: 'https://images.unsplash.com/photo-1495856458515-0637183dbd1e?auto=format&fit=crop&w=800&q=80',
-  watch6: 'https://images.unsplash.com/photo-1606293459339-aaa4e5e9b1f4?auto=format&fit=crop&w=800&q=80',
-  watch7: 'https://images.unsplash.com/photo-1612817159949-195b6119e6d5?auto=format&fit=crop&w=800&q=80',
-  watch8: 'https://images.unsplash.com/photo-1639024471283-0350c0f7a7e6?auto=format&fit=crop&w=800&q=80',
-};
-
 const PATEK_ASSET_BASE = '/brand-assets/patek-philippe';
+const PATEK_COLLECTION_ASSET_BASE = `${PATEK_ASSET_BASE}/collections`;
+
+const COLLECTION_IMAGES = {
+  nautilus: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-nautilus-collection.png`,
+  aquanaut: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-aquanaut-collection.png`,
+  cubitus: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-cubitus-collection.png`,
+  calatrava: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-calatrava-collection.png`,
+  complications: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-complications-collection.png`,
+  grandComplications: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-grand-complications-collection.png`,
+  twenty4: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-twenty-4-collection.png`,
+  goldenEllipse: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-golden-ellipse-collection.png`,
+  gondolo: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-gondolo-collection.png`,
+  grandmasterChime: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-grandmaster-chime-collection.png`,
+  pocketWatches: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-pocket-watches-collection.png`,
+  rareHandcrafts: `${PATEK_COLLECTION_ASSET_BASE}/patek-philippe-rare-handcrafts-collection.png`,
+};
 
 export const PATEK_LOGO = `${PATEK_ASSET_BASE}/patek-philippe-logo.webp`;
 export const PATEK_HERO_IMAGE = `${PATEK_ASSET_BASE}/patek-philippe-watches-to-buy.jpg`;
@@ -54,18 +54,18 @@ const IMG = {
 
 // Patek Philippe Collections
 export const PATEK_COLLECTIONS = [
-  { id: 'nautilus', name: 'Nautilus', slug: 'nautilus', description_en: 'A modern luxury sports icon known for its distinctive case shape, integrated bracelet, and strong collector demand.', description_de: 'Ein modernes Luxus-Sportuhr-Icon, bekannt für seine markante Gehäuseform, das integrierte Armband und die starke Sammlernachfrage.', image: COLLECTION_FALLBACKS.nautilus, displayOrder: 1 },
-  { id: 'aquanaut', name: 'Aquanaut', slug: 'aquanaut', description_en: 'A contemporary and sporty Patek Philippe collection with a relaxed character, modern proportions, and everyday versatility.', description_de: 'Eine zeitgenössische und sportliche Patek Philippe Kollektion mit entspanntem Charakter, modernen Proportionen und alltäglicher Vielseitigkeit.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 2 },
-  { id: 'cubitus', name: 'Cubitus', slug: 'cubitus', description_en: 'A bold modern Patek Philippe collection with a distinctive square-inspired design and elegant contemporary appeal.', description_de: 'Eine mutige moderne Patek Philippe Kollektion mit einem markanten, von Quadraten inspirierten Design und eleganter zeitgenössischer Anziehungskraft.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 3 },
-  { id: 'calatrava', name: 'Calatrava', slug: 'calatrava', description_en: 'A timeless dress watch collection known for purity, elegance, refined proportions, and classic round case design.', description_de: 'Eine zeitlose Dress-Watch-Kollektion, bekannt für Reinheit, Eleganz, verfeinerte Proportionen und klassisches rundes Gehäusedesign.', image: COLLECTION_FALLBACKS.brownDress, displayOrder: 4 },
-  { id: 'complications', name: 'Complications', slug: 'complications', description_en: 'A sophisticated collection for collectors who appreciate useful and poetic watch functions such as calendars, travel time, and moon phases.', description_de: 'Eine anspruchsvolle Kollektion für Sammler, die nützliche und poetische Uhrfunktionen wie Kalender, Travel Time und Mondphasen schätzen.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 5 },
-  { id: 'grand-complications', name: 'Grand Complications', slug: 'grand-complications', description_en: 'The highest expression of Patek Philippe watchmaking, created for collectors drawn to perpetual calendars, minute repeaters, chronographs, and advanced mechanical artistry.', description_de: 'Die höchste Ausdrucksform der Patek Philippe Uhrmacherei, geschaffen für Sammler, die von ewigen Kalendern, Minutenrepetierern, Chronographen und fortgeschrittener mechanischer Kunstfertigkeit fasziniert sind.', image: COLLECTION_FALLBACKS.threeWatches2, displayOrder: 6 },
-  { id: 'twenty-4', name: 'Twenty~4', slug: 'twenty-4', description_en: 'A refined collection created for elegant daily wear, with feminine proportions and modern versatility.', description_de: 'Eine verfeinerte Kollektion für eleganten täglichen Gebrauch, mit femininen Proportionen und moderner Vielseitigkeit.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 7 },
-  { id: 'golden-ellipse', name: 'Golden Ellipse', slug: 'golden-ellipse', description_en: 'A distinctive Patek Philippe design icon recognized for its harmonious elliptical case and refined elegance.', description_de: 'Ein markantes Patek Philippe Design-Icon, bekannt für sein harmonisches elliptisches Gehäuse und verfeinerte Eleganz.', image: COLLECTION_FALLBACKS.goldenEllipse, displayOrder: 8 },
-  { id: 'gondolo', name: 'Gondolo', slug: 'gondolo', description_en: 'A shaped-watch collection inspired by Art Deco design, geometric lines, and classic elegance.', description_de: 'Eine Shaped-Watch-Kollektion, inspiriert von Art-Deco-Design, geometrischen Linien und klassischer Eleganz.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 9 },
-  { id: 'grandmaster-chime', name: 'Grandmaster Chime', slug: 'grandmaster-chime', description_en: 'One of the most complicated and prestigious Patek Philippe creations, associated with exceptional mechanical mastery and collector significance.', description_de: 'Eine der kompliziertesten und prestigeträchtigsten Patek Philippe Kreationen, verbunden mit außergewöhnlicher mechanischer Meisterschaft und Sammlerbedeutung.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 10 },
-  { id: 'pocket-watches', name: 'Pocket Watches', slug: 'pocket-watches', description_en: 'A heritage-focused category for collectors interested in traditional timekeeping and historical watchmaking.', description_de: 'Eine heritage-orientierte Kategorie für Sammler, die sich für traditionelle Zeitmessung und historische Uhrmacherei interessieren.', image: COLLECTION_FALLBACKS.pocketWatch, displayOrder: 11 },
-  { id: 'rare-handcrafts', name: 'Rare Handcrafts', slug: 'rare-handcrafts', description_en: 'A highly artistic category for rare collectible pieces that showcase decorative crafts such as engraving, enameling, and gem-setting.', description_de: 'Eine hochgradig künstlerische Kategorie für seltene Sammlerstücke, die dekorative Handwerkskünste wie Gravur, Email und Edelsteinbesatz präsentieren.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 12 },
+  { id: 'nautilus', name: 'Nautilus', slug: 'nautilus', description_en: 'A modern luxury sports icon known for its distinctive case shape, integrated bracelet, and strong collector demand.', description_de: 'Ein modernes Luxus-Sportuhr-Icon, bekannt für seine markante Gehäuseform, das integrierte Armband und die starke Sammlernachfrage.', image: COLLECTION_IMAGES.nautilus, displayOrder: 1 },
+  { id: 'aquanaut', name: 'Aquanaut', slug: 'aquanaut', description_en: 'A contemporary and sporty Patek Philippe collection with a relaxed character, modern proportions, and everyday versatility.', description_de: 'Eine zeitgenössische und sportliche Patek Philippe Kollektion mit entspanntem Charakter, modernen Proportionen und alltäglicher Vielseitigkeit.', image: COLLECTION_IMAGES.aquanaut, displayOrder: 2 },
+  { id: 'cubitus', name: 'Cubitus', slug: 'cubitus', description_en: 'A bold modern Patek Philippe collection with a distinctive square-inspired design and elegant contemporary appeal.', description_de: 'Eine mutige moderne Patek Philippe Kollektion mit einem markanten, von Quadraten inspirierten Design und eleganter zeitgenössischer Anziehungskraft.', image: COLLECTION_IMAGES.cubitus, displayOrder: 3 },
+  { id: 'calatrava', name: 'Calatrava', slug: 'calatrava', description_en: 'A timeless dress watch collection known for purity, elegance, refined proportions, and classic round case design.', description_de: 'Eine zeitlose Dress-Watch-Kollektion, bekannt für Reinheit, Eleganz, verfeinerte Proportionen und klassisches rundes Gehäusedesign.', image: COLLECTION_IMAGES.calatrava, displayOrder: 4 },
+  { id: 'complications', name: 'Complications', slug: 'complications', description_en: 'A sophisticated collection for collectors who appreciate useful and poetic watch functions such as calendars, travel time, and moon phases.', description_de: 'Eine anspruchsvolle Kollektion für Sammler, die nützliche und poetische Uhrfunktionen wie Kalender, Travel Time und Mondphasen schätzen.', image: COLLECTION_IMAGES.complications, displayOrder: 5 },
+  { id: 'grand-complications', name: 'Grand Complications', slug: 'grand-complications', description_en: 'The highest expression of Patek Philippe watchmaking, created for collectors drawn to perpetual calendars, minute repeaters, chronographs, and advanced mechanical artistry.', description_de: 'Die höchste Ausdrucksform der Patek Philippe Uhrmacherei, geschaffen für Sammler, die von ewigen Kalendern, Minutenrepetierern, Chronographen und fortgeschrittener mechanischer Kunstfertigkeit fasziniert sind.', image: COLLECTION_IMAGES.grandComplications, displayOrder: 6 },
+  { id: 'twenty-4', name: 'Twenty~4', slug: 'twenty-4', description_en: 'A refined collection created for elegant daily wear, with feminine proportions and modern versatility.', description_de: 'Eine verfeinerte Kollektion für eleganten täglichen Gebrauch, mit femininen Proportionen und moderner Vielseitigkeit.', image: COLLECTION_IMAGES.twenty4, displayOrder: 7 },
+  { id: 'golden-ellipse', name: 'Golden Ellipse', slug: 'golden-ellipse', description_en: 'A distinctive Patek Philippe design icon recognized for its harmonious elliptical case and refined elegance.', description_de: 'Ein markantes Patek Philippe Design-Icon, bekannt für sein harmonisches elliptisches Gehäuse und verfeinerte Eleganz.', image: COLLECTION_IMAGES.goldenEllipse, displayOrder: 8 },
+  { id: 'gondolo', name: 'Gondolo', slug: 'gondolo', description_en: 'A shaped-watch collection inspired by Art Deco design, geometric lines, and classic elegance.', description_de: 'Eine Shaped-Watch-Kollektion, inspiriert von Art-Deco-Design, geometrischen Linien und klassischer Eleganz.', image: COLLECTION_IMAGES.gondolo, displayOrder: 9 },
+  { id: 'grandmaster-chime', name: 'Grandmaster Chime', slug: 'grandmaster-chime', description_en: 'One of the most complicated and prestigious Patek Philippe creations, associated with exceptional mechanical mastery and collector significance.', description_de: 'Eine der kompliziertesten und prestigeträchtigsten Patek Philippe Kreationen, verbunden mit außergewöhnlicher mechanischer Meisterschaft und Sammlerbedeutung.', image: COLLECTION_IMAGES.grandmasterChime, displayOrder: 10 },
+  { id: 'pocket-watches', name: 'Pocket Watches', slug: 'pocket-watches', description_en: 'A heritage-focused category for collectors interested in traditional timekeeping and historical watchmaking.', description_de: 'Eine heritage-orientierte Kategorie für Sammler, die sich für traditionelle Zeitmessung und historische Uhrmacherei interessieren.', image: COLLECTION_IMAGES.pocketWatches, displayOrder: 11 },
+  { id: 'rare-handcrafts', name: 'Rare Handcrafts', slug: 'rare-handcrafts', description_en: 'A highly artistic category for rare collectible pieces that showcase decorative crafts such as engraving, enameling, and gem-setting.', description_de: 'Eine hochgradig künstlerische Kategorie für seltene Sammlerstücke, die dekorative Handwerkskünste wie Gravur, Email und Edelsteinbesatz präsentieren.', image: COLLECTION_IMAGES.rareHandcrafts, displayOrder: 12 },
 ];
 
 // Quick filter chips for product grid

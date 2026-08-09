@@ -1,4 +1,19 @@
 // Hublot-specific filter option lists
+const HUBLOT_PAGE_ASSET_BASE = '/brand-assets/hublot/page';
+
+export const HUBLOT_PAGE_IMAGES = {
+  hero: `${HUBLOT_PAGE_ASSET_BASE}/hublot-hero.png`,
+  story: `${HUBLOT_PAGE_ASSET_BASE}/hublot-story.jpg`,
+  brandStory: `${HUBLOT_PAGE_ASSET_BASE}/hublot-brand-story.jpg`,
+  bigBangGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-big-bang-guide.jpg`,
+  classicFusionGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-classic-fusion-guide.jpg`,
+  materialsGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-materials-guide.webp`,
+  preOwnedGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-pre-owned-guide.webp`,
+};
+
+export const HUBLOT_HERO_IMAGE = HUBLOT_PAGE_IMAGES.hero;
+export const HUBLOT_STORY_IMAGE = HUBLOT_PAGE_IMAGES.story;
+
 export const HUBLOT_COLLECTIONS = [
   { id: 1, name: 'Big Bang', slug: 'big-bang', shortDescription_en: 'Hublot\u2019s bold luxury sports-watch family, known for strong case design, modern materials, skeleton dials and high wrist presence.', shortDescription_de: 'Hublots markante Luxus-Sportuhren-Familie, bekannt für starkes Gehäusedesign, moderne Materialien, Skeleton-Zifferblätter und starke Handgelenkspräsenz.' },
   { id: 2, name: 'Big Bang Original', slug: 'big-bang-original', shortDescription_en: 'A design-focused Big Bang line connected to Hublot\u2019s original bold case architecture and signature luxury-sport identity.', shortDescription_de: 'Eine designfokussierte Big Bang Linie, verbunden mit Hublots ursprünglicher markanter Gehäusearchitektur und signature Luxus-Sport-Identität.' },
@@ -37,20 +52,20 @@ export const HUBLOT_QUICK_FILTERS = [
 ];
 
 export const HUBLOT_SEO_CARDS = [
-  { title_en: 'Hublot Watch', title_de: 'Hublot Uhr', description_en: 'Explore Hublot watches through Kariv Glamour with clear product details, refined presentation and a premium shopping experience.', description_de: 'Entdecken Sie Hublot Uhren bei Kariv Glamour mit klaren Produktdetails, verfeinerter Präsentation und einem Premium-Einkaufserlebnis.', link: '/hublot-uhr' },
-  { title_en: 'Hublot Watches', title_de: 'Hublot Uhren', description_en: 'Browse Hublot watches by collection, material, movement, case size, condition and price.', description_de: 'Stöbern Sie durch Hublot Uhren nach Kollektion, Material, Uhrwerk, Gehäusegröße, Zustand und Preis.', link: '/hublot-uhren' },
-  { title_en: 'Pre-Owned Hublot', title_de: 'Hublot gebraucht', description_en: 'Discover pre-owned Hublot watches with transparent condition grading, box and papers information, and product-specific details.', description_de: 'Entdecken Sie gebrauchte Hublot Uhren mit transparenter Zustandsbewertung, Box und Papers Informationen und produktspezifischen Details.', link: '/hublot-gebraucht' },
-  { title_en: 'Hublot Big Bang', title_de: 'Hublot Big Bang', description_en: 'Discover Hublot Big Bang watches, known for bold luxury-sport design, strong materials and modern wrist presence.', description_de: 'Entdecken Sie Hublot Big Bang Uhren, bekannt für mutiges Luxus-Sport-Design, starke Materialien und moderne Handgelenkspräsenz.', link: '/hublot/big-bang' },
-  { title_en: 'Hublot Classic Fusion', title_de: 'Hublot Classic Fusion', description_en: 'Explore Hublot Classic Fusion watches with cleaner styling, modern materials and refined everyday luxury character.', description_de: 'Entdecken Sie Hublot Classic Fusion Uhren mit cleanerem Stil, modernen Materialien und verfeinertem alltäglichen Luxus-Charakter.', link: '/hublot/classic-fusion' },
-  { title_en: 'Hublot Spirit of Big Bang', title_de: 'Hublot Spirit of Big Bang', description_en: 'Browse Spirit of Big Bang watches with tonneau-shaped cases, technical design and strong Hublot identity.', description_de: 'Stöbern Sie durch Spirit of Big Bang Uhren mit tonneauförmigen Gehäusen, technischem Design und starker Hublot-Identität.', link: '/hublot/spirit-of-big-bang' },
+  { title_en: 'Hublot Watch', title_de: 'Hublot Uhr', description_en: 'Explore Hublot watches through Kariv Glamour with clear product details, refined presentation and a premium shopping experience.', description_de: 'Entdecken Sie Hublot Uhren bei Kariv Glamour mit klaren Produktdetails, verfeinerter Präsentation und einem Premium-Einkaufserlebnis.', link: '/hublot-uhr', image: HUBLOT_PAGE_IMAGES.hero },
+  { title_en: 'Hublot Watches', title_de: 'Hublot Uhren', description_en: 'Browse Hublot watches by collection, material, movement, case size, condition and price.', description_de: 'Stöbern Sie durch Hublot Uhren nach Kollektion, Material, Uhrwerk, Gehäusegröße, Zustand und Preis.', link: '/hublot-uhren', image: HUBLOT_PAGE_IMAGES.brandStory },
+  { title_en: 'Pre-Owned Hublot', title_de: 'Hublot gebraucht', description_en: 'Discover pre-owned Hublot watches with transparent condition grading, box and papers information, and product-specific details.', description_de: 'Entdecken Sie gebrauchte Hublot Uhren mit transparenter Zustandsbewertung, Box und Papers Informationen und produktspezifischen Details.', link: '/hublot-gebraucht', image: HUBLOT_PAGE_IMAGES.preOwnedGuide },
+  { title_en: 'Hublot Big Bang', title_de: 'Hublot Big Bang', description_en: 'Discover Hublot Big Bang watches, known for bold luxury-sport design, strong materials and modern wrist presence.', description_de: 'Entdecken Sie Hublot Big Bang Uhren, bekannt für mutiges Luxus-Sport-Design, starke Materialien und moderne Handgelenkspräsenz.', link: '/hublot/big-bang', image: HUBLOT_PAGE_IMAGES.bigBangGuide },
+  { title_en: 'Hublot Classic Fusion', title_de: 'Hublot Classic Fusion', description_en: 'Explore Hublot Classic Fusion watches with cleaner styling, modern materials and refined everyday luxury character.', description_de: 'Entdecken Sie Hublot Classic Fusion Uhren mit cleanerem Stil, modernen Materialien und verfeinertem alltäglichen Luxus-Charakter.', link: '/hublot/classic-fusion', image: HUBLOT_PAGE_IMAGES.classicFusionGuide },
+  { title_en: 'Hublot Spirit of Big Bang', title_de: 'Hublot Spirit of Big Bang', description_en: 'Browse Spirit of Big Bang watches with tonneau-shaped cases, technical design and strong Hublot identity.', description_de: 'Stöbern Sie durch Spirit of Big Bang Uhren mit tonneauförmigen Gehäusen, technischem Design und starker Hublot-Identität.', link: '/hublot/spirit-of-big-bang', image: HUBLOT_PAGE_IMAGES.materialsGuide },
 ];
 
 export const HUBLOT_READ_MORE = [
-  { title_en: 'Hublot Story', title_de: 'Hublot Story', description_en: 'Explore Hublot\u2019s modern design identity, material fusion and bold approach to luxury watchmaking.', description_de: 'Entdecken Sie Hublots moderne Design-Identität, Materialfusion und mutigen Ansatz der Luxusuhrenherstellung.', link: '/hublot/story' },
-  { title_en: 'Hublot Big Bang Guide', title_de: 'Hublot Big Bang Guide', description_en: 'Learn what makes the Big Bang one of Hublot\u2019s most recognizable luxury sports-watch collections.', description_de: 'Erfahren Sie, was den Big Bang zu einer von Hublots erkennbarsten Luxus-Sportuhren-Kollektionen macht.', link: '/hublot/big-bang' },
-  { title_en: 'Hublot Classic Fusion Guide', title_de: 'Hublot Classic Fusion Guide', description_en: 'Compare Classic Fusion models and understand why this line offers a more refined Hublot look.', description_de: 'Vergleichen Sie Classic Fusion Modelle und verstehen Sie, warum diese Linie einen verfeinerten Hublot-Look bietet.', link: '/hublot/classic-fusion' },
-  { title_en: 'Buying Pre-Owned Hublot Watches', title_de: 'Gebrauchte Hublot Uhren kaufen', description_en: 'Understand condition, box and papers, service history and what to check before buying a used Hublot.', description_de: 'Verstehen Sie Zustand, Box und Papers, Service-Historie und worauf Sie vor dem Kauf einer gebrauchten Hublot achten sollten.', link: '/hublot-gebraucht' },
-  { title_en: 'Hublot Materials Guide', title_de: 'Hublot Material-Guide', description_en: 'Learn about ceramic, titanium, sapphire, carbon, King Gold and other materials used in modern luxury watches.', description_de: 'Erfahren Sie über Keramik, Titan, Saphir, Carbon, King Gold und weitere Materialien, die in modernen Luxusuhren verwendet werden.', link: '/guides' },
+  { title_en: 'Hublot Story', title_de: 'Hublot Story', description_en: 'Explore Hublot\u2019s modern design identity, material fusion and bold approach to luxury watchmaking.', description_de: 'Entdecken Sie Hublots moderne Design-Identität, Materialfusion und mutigen Ansatz der Luxusuhrenherstellung.', link: '/hublot/story', image: HUBLOT_PAGE_IMAGES.story },
+  { title_en: 'Hublot Big Bang Guide', title_de: 'Hublot Big Bang Guide', description_en: 'Learn what makes the Big Bang one of Hublot\u2019s most recognizable luxury sports-watch collections.', description_de: 'Erfahren Sie, was den Big Bang zu einer von Hublots erkennbarsten Luxus-Sportuhren-Kollektionen macht.', link: '/hublot/big-bang', image: HUBLOT_PAGE_IMAGES.bigBangGuide },
+  { title_en: 'Hublot Classic Fusion Guide', title_de: 'Hublot Classic Fusion Guide', description_en: 'Compare Classic Fusion models and understand why this line offers a more refined Hublot look.', description_de: 'Vergleichen Sie Classic Fusion Modelle und verstehen Sie, warum diese Linie einen verfeinerten Hublot-Look bietet.', link: '/hublot/classic-fusion', image: HUBLOT_PAGE_IMAGES.classicFusionGuide },
+  { title_en: 'Buying Pre-Owned Hublot Watches', title_de: 'Gebrauchte Hublot Uhren kaufen', description_en: 'Understand condition, box and papers, service history and what to check before buying a used Hublot.', description_de: 'Verstehen Sie Zustand, Box und Papers, Service-Historie und worauf Sie vor dem Kauf einer gebrauchten Hublot achten sollten.', link: '/hublot-gebraucht', image: HUBLOT_PAGE_IMAGES.preOwnedGuide },
+  { title_en: 'Hublot Materials Guide', title_de: 'Hublot Material-Guide', description_en: 'Learn about ceramic, titanium, sapphire, carbon, King Gold and other materials used in modern luxury watches.', description_de: 'Erfahren Sie über Keramik, Titan, Saphir, Carbon, King Gold und weitere Materialien, die in modernen Luxusuhren verwendet werden.', link: '/guides', image: HUBLOT_PAGE_IMAGES.materialsGuide },
 ];
 
 export const HUBLOT_INTERNAL_LINKS = [

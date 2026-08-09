@@ -20,10 +20,17 @@ export default function HublotSeoCards() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {HUBLOT_SEO_CARDS.map((card, i) =>
           <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }}>
-              <LocalizedLink to={card.link} className="group block border border-border bg-card p-8 hover:border-primary/40 transition-colors">
-                <h3 className="text-xl mb-3 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{localize(card, 'title')}</h3>
-                <p className="text-xs leading-relaxed mb-5 text-muted-foreground">{localize(card, 'description')}</p>
-                <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('cta.discover')} →</span>
+              <LocalizedLink to={card.link} className="group block h-full overflow-hidden border border-border bg-card hover:border-primary/40 transition-colors">
+                {card.image && (
+                  <div className="aspect-[16/10] overflow-hidden bg-secondary">
+                    <img src={card.image} alt={localize(card, 'title')} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  </div>
+                )}
+                <div className="p-6 md:p-8">
+                  <h3 className="text-xl mb-3 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{localize(card, 'title')}</h3>
+                  <p className="text-xs leading-relaxed mb-5 text-muted-foreground">{localize(card, 'description')}</p>
+                  <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('cta.discover')} →</span>
+                </div>
               </LocalizedLink>
             </motion.div>
           )}

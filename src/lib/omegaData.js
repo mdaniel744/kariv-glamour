@@ -16,34 +16,66 @@ export const OMEGA_THEME = {
   greyText: '#4A4A4A',
 };
 
-// Uploaded Omega reference images
+const OMEGA_COLLECTION_ASSET_BASE = '/brand-assets/omega/collections';
+const OMEGA_PAGE_ASSET_BASE = '/brand-assets/omega/page';
+
+export const OMEGA_LOGO_IMAGE = `${OMEGA_PAGE_ASSET_BASE}/omega-logo.svg`;
+
+const PAGE_IMAGES = {
+  hero: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-watches.jpg`,
+  buyOmega: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-watches.jpg`,
+  moonwatch: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-moonwatch.webp`,
+  planetOcean: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-planet-ocean.webp`,
+  seamaster: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-seamaster.jpg`,
+  seamasterDiver300m: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-seamaster-diver-300m.png`,
+  preOwnedSpeedmaster: `${OMEGA_PAGE_ASSET_BASE}/buy-preowned-omega-speedmaster.jpeg`,
+  preOwned: `${OMEGA_PAGE_ASSET_BASE}/buy-preowned-omega-watch.webp`,
+  boxAndPapers: `${OMEGA_PAGE_ASSET_BASE}/omega-box-and-papers.jpg`,
+  redLogo: `${OMEGA_PAGE_ASSET_BASE}/omega-red-logo.webp`,
+  seamasterGuide: `${OMEGA_PAGE_ASSET_BASE}/omega-seamaster-guide.jpg`,
+  speedmasterGuide: `${OMEGA_PAGE_ASSET_BASE}/omega-speedmaster-guide.jpg`,
+  buyingGuide: `${OMEGA_PAGE_ASSET_BASE}/omega-watch-buying-guide.webp`,
+  maintenance: `${OMEGA_PAGE_ASSET_BASE}/omega-watch-maintenance.jpeg`,
+  watchmaking: `${OMEGA_PAGE_ASSET_BASE}/omega-watch-making.jpg`,
+  story: `${OMEGA_PAGE_ASSET_BASE}/omega-watch-story.webp`,
+  whichOmega: `${OMEGA_PAGE_ASSET_BASE}/which-omega-watch-to-buy.jpg`,
+};
+
+// Local fallback media for collection data. Database records override this when configured.
 const UP = {
-  seamaster: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/1ec68cd81_Omega3watch.jpg',
-  deville: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/1f699156c_Omega-DeVille-Prestige-blue-2_670a661e-540a-4921-8aa8-b1eb6b737cb1.webp',
-  speedmaster: 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/83c7b0bb5_omega-watches-hero-1.jpg',
+  seamaster: PAGE_IMAGES.seamaster,
+  deville: PAGE_IMAGES.buyingGuide,
+  speedmaster: PAGE_IMAGES.speedmasterGuide,
 };
 
-// Unsplash watch images
+const COLLECTION_IMAGES = {
+  seamaster: `${OMEGA_COLLECTION_ASSET_BASE}/omega-seamaster-collection.png`,
+  speedmaster: `${OMEGA_COLLECTION_ASSET_BASE}/omega-speedmaster-collection.png`,
+  constellation: `${OMEGA_COLLECTION_ASSET_BASE}/omega-constellation-collection.png`,
+  deVille: `${OMEGA_COLLECTION_ASSET_BASE}/omega-de-ville-collection.png`,
+};
+
+// Local Omega reference images used by fallback cards and subcollections.
 const IMG = {
-  watch1: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-  watch2: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=800&q=80',
-  watch3: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80',
-  watch4: 'https://images.unsplash.com/photo-1524592094714-0f06555e7420?auto=format&fit=crop&w=800&q=80',
-  watch5: 'https://images.unsplash.com/photo-1495856458515-0637183dbd1e?auto=format&fit=crop&w=800&q=80',
-  watch6: 'https://images.unsplash.com/photo-1606293459339-aaa4e5e9b1f4?auto=format&fit=crop&w=800&q=80',
-  watch7: 'https://images.unsplash.com/photo-1612817159949-195b6119e6d5?auto=format&fit=crop&w=800&q=80',
-  watch8: 'https://images.unsplash.com/photo-1639024471283-0350c0f7a7e6?auto=format&fit=crop&w=800&q=80',
+  watch1: PAGE_IMAGES.buyOmega,
+  watch2: PAGE_IMAGES.preOwned,
+  watch3: PAGE_IMAGES.moonwatch,
+  watch4: PAGE_IMAGES.seamasterDiver300m,
+  watch5: PAGE_IMAGES.planetOcean,
+  watch6: PAGE_IMAGES.watchmaking,
+  watch7: PAGE_IMAGES.boxAndPapers,
+  watch8: PAGE_IMAGES.maintenance,
 };
 
-export const OMEGA_HERO_IMAGE = UP.speedmaster;
+export const OMEGA_HERO_IMAGE = PAGE_IMAGES.hero;
 
 // Omega Collections (flat list with parentCollection)
 export const OMEGA_COLLECTIONS = [
   // Main collections
-  { id: 'seamaster', name: 'Seamaster', slug: 'seamaster', parentCollection: null, description_en: "Omega's ocean-inspired collection, created for those drawn to dive watches, maritime design and robust everyday performance.", description_de: "Omegas ozean-inspirierte Kollektion, geschaffen für Liebhaber von Taucheruhren, maritimem Design und robuster Alltagsleistung.", image: UP.seamaster, displayOrder: 1 },
-  { id: 'speedmaster', name: 'Speedmaster', slug: 'speedmaster', parentCollection: null, description_en: "Omega's legendary chronograph family, strongly associated with racing, space exploration and the Moonwatch legacy.", description_de: "Omegas legendäre Chronographen-Familie, stark verbunden mit Motorsport, Weltraumforschung und der Moonwatch-Tradition.", image: UP.speedmaster, displayOrder: 2 },
-  { id: 'constellation', name: 'Constellation', slug: 'constellation', parentCollection: null, description_en: 'An elegant Omega collection recognized for distinctive case details, integrated bracelet styling and refined daily luxury.', description_de: 'Eine elegante Omega-Kollektion, bekannt für markante Gehäusedetails, integriertes Armband-Styling und verfeinerten alltäglichen Luxus.', image: IMG.watch3, displayOrder: 3 },
-  { id: 'de-ville', name: 'De Ville', slug: 'de-ville', parentCollection: null, description_en: "A refined Omega dress-watch family focused on elegance, classic styling and sophisticated watchmaking.", description_de: 'Eine verfeinerte Omega Dress-Watch-Familie mit Fokus auf Eleganz, klassisches Styling und anspruchsvolle Uhrmacherei.', image: UP.deville, displayOrder: 4 },
+  { id: 'seamaster', name: 'Seamaster', slug: 'seamaster', parentCollection: null, description_en: "Omega's ocean-inspired collection, created for those drawn to dive watches, maritime design and robust everyday performance.", description_de: "Omegas ozean-inspirierte Kollektion, geschaffen für Liebhaber von Taucheruhren, maritimem Design und robuster Alltagsleistung.", image: COLLECTION_IMAGES.seamaster, displayOrder: 1 },
+  { id: 'speedmaster', name: 'Speedmaster', slug: 'speedmaster', parentCollection: null, description_en: "Omega's legendary chronograph family, strongly associated with racing, space exploration and the Moonwatch legacy.", description_de: "Omegas legendäre Chronographen-Familie, stark verbunden mit Motorsport, Weltraumforschung und der Moonwatch-Tradition.", image: COLLECTION_IMAGES.speedmaster, displayOrder: 2 },
+  { id: 'constellation', name: 'Constellation', slug: 'constellation', parentCollection: null, description_en: 'An elegant Omega collection recognized for distinctive case details, integrated bracelet styling and refined daily luxury.', description_de: 'Eine elegante Omega-Kollektion, bekannt für markante Gehäusedetails, integriertes Armband-Styling und verfeinerten alltäglichen Luxus.', image: COLLECTION_IMAGES.constellation, displayOrder: 3 },
+  { id: 'de-ville', name: 'De Ville', slug: 'de-ville', parentCollection: null, description_en: "A refined Omega dress-watch family focused on elegance, classic styling and sophisticated watchmaking.", description_de: 'Eine verfeinerte Omega Dress-Watch-Familie mit Fokus auf Eleganz, klassisches Styling und anspruchsvolle Uhrmacherei.', image: COLLECTION_IMAGES.deVille, displayOrder: 4 },
 
   // Seamaster subcollections
   { id: 'seamaster-aqua-terra', name: 'Seamaster Aqua Terra 150M', slug: 'seamaster-aqua-terra', parentCollection: 'Seamaster', description_en: 'A versatile Seamaster model blending sport, elegance and everyday wearability with a refined nautical character.', description_de: 'Ein vielseitiges Seamaster-Modell, das Sport, Eleganz und alltägliche Tragbarkeit mit einem nautischen Charakter vereint.', image: IMG.watch4, displayOrder: 5 },
@@ -88,14 +120,14 @@ export const OMEGA_QUICK_FILTERS = [
 
 // SEO Cards
 export const OMEGA_SEO_CARDS = [
-  { title_en: 'Buy Omega', title_de: 'Omega kaufen', description_en: 'Explore Omega watches through Kariv Glamour with refined product presentation, transparent product details and a smooth luxury shopping experience.', description_de: 'Entdecken Sie Omega Uhren bei Kariv Glamour mit verfeinerter Produktpräsentation, transparenten Produktdetails und einem reibungslosen Luxus-Einkaufserlebnis.', link: '/omega-kaufen', image: IMG.watch1 },
-  { title_en: 'Buy Pre-Owned Omega', title_de: 'Omega gebraucht kaufen', description_en: 'Discover pre-owned Omega watches with clear condition grading, box and papers information, service history details and collector-friendly product data.', description_de: 'Entdecken Sie gebrauchte Omega Uhren mit klarer Zustandsbewertung, Box und Papiere Informationen, Service-Historie und sammlerfreundlichen Produktdaten.', link: '/omega-gebraucht-kaufen', image: IMG.watch2 },
-  { title_en: 'Buy Omega Speedmaster', title_de: 'Omega Speedmaster kaufen', description_en: 'Browse Omega Speedmaster watches, including Moonwatch-inspired chronographs and modern Speedmaster references.', description_de: 'Stöbern Sie durch Omega Speedmaster Uhren, inklusive Moonwatch-inspirierter Chronographen und moderner Speedmaster-Referenzen.', link: '/omega-speedmaster-kaufen', image: UP.speedmaster },
-  { title_en: 'Buy Omega Seamaster', title_de: 'Omega Seamaster kaufen', description_en: 'Explore Omega Seamaster watches, from Aqua Terra and Diver 300M models to Planet Ocean and Ultra Deep references.', description_de: 'Entdecken Sie Omega Seamaster Uhren, von Aqua Terra und Diver 300M bis Planet Ocean und Ultra Deep Referenzen.', link: '/omega-seamaster-kaufen', image: UP.seamaster },
-  { title_en: 'Buy Omega Moonwatch', title_de: 'Omega Moonwatch kaufen', description_en: 'Discover the Omega Speedmaster Moonwatch, one of the most recognized chronographs in watch history.', description_de: 'Entdecken Sie die Omega Speedmaster Moonwatch, einen der bekanntesten Chronographen der Uhrengeschichte.', link: '/omega-moonwatch-kaufen', image: IMG.watch3 },
-  { title_en: 'Buy Omega Seamaster Diver 300M', title_de: 'Omega Seamaster Diver 300M kaufen', description_en: 'Shop Omega Seamaster Diver 300M watches with distinctive styling, professional dive-watch character and strong everyday appeal.', description_de: 'Shoppen Sie Omega Seamaster Diver 300M Uhren mit markantem Styling, professionellem Taucheruhren-Charakter und starkem alltäglichen Appeal.', link: '/omega-seamaster-diver-300m-kaufen', image: IMG.watch4 },
-  { title_en: 'Buy Omega Planet Ocean', title_de: 'Omega Planet Ocean kaufen', description_en: 'Explore Omega Seamaster Planet Ocean watches, designed for depth, durability and powerful dive-watch presence.', description_de: 'Entdecken Sie Omega Seamaster Planet Ocean Uhren, konzipiert für Tiefe, Haltbarkeit und kraftvolle Taucheruhren-Präsenz.', link: '/omega-seamaster-planet-ocean-kaufen', image: IMG.watch5 },
-  { title_en: 'Which Omega to Buy?', title_de: 'Welche Omega kaufen?', description_en: 'Read the Omega buying guide to compare Speedmaster, Seamaster, Constellation and De Ville collections.', description_de: 'Lesen Sie die Omega Kaufberatung, um Speedmaster, Seamaster, Constellation und De Ville Kollektionen zu vergleichen.', link: '/welche-omega-kaufen', image: IMG.watch6 },
+  { title_en: 'Buy Omega', title_de: 'Omega kaufen', description_en: 'Explore Omega watches through Kariv Glamour with refined product presentation, transparent product details and a smooth luxury shopping experience.', description_de: 'Entdecken Sie Omega Uhren bei Kariv Glamour mit verfeinerter Produktpräsentation, transparenten Produktdetails und einem reibungslosen Luxus-Einkaufserlebnis.', link: '/omega-kaufen', image: PAGE_IMAGES.buyOmega },
+  { title_en: 'Buy Pre-Owned Omega', title_de: 'Omega gebraucht kaufen', description_en: 'Discover pre-owned Omega watches with clear condition grading, box and papers information, service history details and collector-friendly product data.', description_de: 'Entdecken Sie gebrauchte Omega Uhren mit klarer Zustandsbewertung, Box und Papiere Informationen, Service-Historie und sammlerfreundlichen Produktdaten.', link: '/omega-gebraucht-kaufen', image: PAGE_IMAGES.preOwned },
+  { title_en: 'Buy Omega Speedmaster', title_de: 'Omega Speedmaster kaufen', description_en: 'Browse Omega Speedmaster watches, including Moonwatch-inspired chronographs and modern Speedmaster references.', description_de: 'Stöbern Sie durch Omega Speedmaster Uhren, inklusive Moonwatch-inspirierter Chronographen und moderner Speedmaster-Referenzen.', link: '/omega-speedmaster-kaufen', image: PAGE_IMAGES.preOwnedSpeedmaster },
+  { title_en: 'Buy Omega Seamaster', title_de: 'Omega Seamaster kaufen', description_en: 'Explore Omega Seamaster watches, from Aqua Terra and Diver 300M models to Planet Ocean and Ultra Deep references.', description_de: 'Entdecken Sie Omega Seamaster Uhren, von Aqua Terra und Diver 300M bis Planet Ocean und Ultra Deep Referenzen.', link: '/omega-seamaster-kaufen', image: PAGE_IMAGES.seamaster },
+  { title_en: 'Buy Omega Moonwatch', title_de: 'Omega Moonwatch kaufen', description_en: 'Discover the Omega Speedmaster Moonwatch, one of the most recognized chronographs in watch history.', description_de: 'Entdecken Sie die Omega Speedmaster Moonwatch, einen der bekanntesten Chronographen der Uhrengeschichte.', link: '/omega-moonwatch-kaufen', image: PAGE_IMAGES.moonwatch },
+  { title_en: 'Buy Omega Seamaster Diver 300M', title_de: 'Omega Seamaster Diver 300M kaufen', description_en: 'Shop Omega Seamaster Diver 300M watches with distinctive styling, professional dive-watch character and strong everyday appeal.', description_de: 'Shoppen Sie Omega Seamaster Diver 300M Uhren mit markantem Styling, professionellem Taucheruhren-Charakter und starkem alltäglichen Appeal.', link: '/omega-seamaster-diver-300m-kaufen', image: PAGE_IMAGES.seamasterDiver300m },
+  { title_en: 'Buy Omega Planet Ocean', title_de: 'Omega Planet Ocean kaufen', description_en: 'Explore Omega Seamaster Planet Ocean watches, designed for depth, durability and powerful dive-watch presence.', description_de: 'Entdecken Sie Omega Seamaster Planet Ocean Uhren, konzipiert für Tiefe, Haltbarkeit und kraftvolle Taucheruhren-Präsenz.', link: '/omega-seamaster-planet-ocean-kaufen', image: PAGE_IMAGES.planetOcean },
+  { title_en: 'Which Omega to Buy?', title_de: 'Welche Omega kaufen?', description_en: 'Read the Omega buying guide to compare Speedmaster, Seamaster, Constellation and De Ville collections.', description_de: 'Lesen Sie die Omega Kaufberatung, um Speedmaster, Seamaster, Constellation und De Ville Kollektionen zu vergleichen.', link: '/welche-omega-kaufen', image: PAGE_IMAGES.whichOmega },
 ];
 
 // Editorial sections data (Story, Watchmaking, Maintenance)
@@ -108,7 +140,7 @@ export const OMEGA_EDITORIAL_SECTIONS = [
     description_de: 'Omega hat ein Erbe von Präzision, Innovation und Abenteuer aufgebaut. Von der Zeitmessung der Olympischen Spiele über die Begleitung von Astronauten auf dem Mond bis hin zur Ausrüstung von Tauchern mit der Seamaster und der Definition des modernen Chronographen mit der Speedmaster — die Omega Story umfasst über ein Jahrhundert uhrmacherischer Leistung. Bei Kariv Glamour feiern wir dieses Erbe mit sorgfältig ausgewählten Omega Zeitmessern, die mit voller Transparenz und fachkundiger Einsicht präsentiert werden.',
     cta_en: 'Read the Omega Story', cta_de: 'Die Omega Story lesen',
     link: '/omega/story',
-    image: UP.speedmaster,
+    image: PAGE_IMAGES.story,
     internalLinks: [
       { text_en: 'Omega heritage', text_de: 'Omega Erbe', link: '/omega/story' },
       { text_en: 'space exploration', text_de: 'Weltraumforschung', link: '/omega-speedmaster-kaufen' },
@@ -125,7 +157,7 @@ export const OMEGA_EDITORIAL_SECTIONS = [
     description_de: 'Omega Uhrmacherei steht für Präzision, Innovation und Zuverlässigkeit. Von der revolutionären Co-Axial-Hemmung über die Master Chronometer Zertifizierung, antimagnetische Leistung und sorgfältig konstruierte Taucheruhren — jede Omega wird nach höchsten Standards gefertigt. Bei Kariv Glamour helfen wir Ihnen, die Handwerkskunst hinter jeder Omega zu verstehen, einschließlich Kalibernummern, Werksarten, Wasserdichtigkeit und dem Unterschied zwischen Dress Watches, Sportuhren und Chronographen.',
     cta_en: 'Explore Omega Watchmaking', cta_de: 'Omega Uhrmacherei entdecken',
     link: '/omega/watchmaking',
-    image: IMG.watch6,
+    image: PAGE_IMAGES.watchmaking,
     internalLinks: [
       { text_en: 'Co-Axial movements', text_de: 'Co-Axial Werke', link: '/omega/co-axial-guide' },
       { text_en: 'Master Chronometer', text_de: 'Master Chronometer', link: '/omega/master-chronometer-guide' },
@@ -143,7 +175,7 @@ export const OMEGA_EDITORIAL_SECTIONS = [
     description_de: 'Die richtige Pflege erhält die Schönheit, Zuverlässigkeit und den Wert einer Omega Uhr. Regelmäßige Wartung, Wasserdichtigkeitsprüfungen, Armband- und Bandpflege, Leder- und Kautschukband-Schutz sowie das Süßwasserspülen nach Salzwasser bei Taucheruhren tragen zur langfristigen Leistung bei. Bei gebrauchten und sammlerwürdigen Omega Uhren ist das Erhalten von Box, Papieren, Garantiekarten, Servicedokumenten und Rechnungen besonders wichtig. Kariv Glamour bietet Beratung, damit Sie Ihren Zeitmesser zuversichtlich pflegen können.',
     cta_en: 'Learn About Omega Maintenance', cta_de: 'Mehr über Omega Wartung erfahren',
     link: '/omega/maintenance',
-    image: UP.seamaster,
+    image: PAGE_IMAGES.maintenance,
     internalLinks: [
       { text_en: 'service history', text_de: 'Service-Historie', link: '/watch-guides/service-history' },
       { text_en: 'box and papers', text_de: 'Box und Papiere', link: '/watch-guides/box-and-papers' },
@@ -157,13 +189,13 @@ export const OMEGA_EDITORIAL_SECTIONS = [
 
 // Read More carousel cards
 export const OMEGA_READ_MORE = [
-  { title_en: 'Omega Story', title_de: 'Omega Story', description_en: 'Explore Omega\u2019s heritage, precision identity, sport timing, space history and ocean-focused watchmaking.', description_de: 'Entdecken Sie Omegas Erbe, Präzisionsidentität, Sportzeitmessung, Weltraumgeschichte und ozean-orientierte Uhrmacherei.', link: '/omega/story', image: UP.speedmaster },
-  { title_en: 'Omega Watchmaking', title_de: 'Omega Uhrmacherei', description_en: 'Learn about Co-Axial movements, Master Chronometer performance, calibres, materials and technical details.', description_de: 'Erfahren Sie über Co-Axial Werke, Master Chronometer Leistung, Kaliber, Materialien und technische Details.', link: '/omega/watchmaking', image: IMG.watch6 },
-  { title_en: 'Omega Maintenance', title_de: 'Omega Wartung', description_en: 'Understand how to care for an Omega watch and preserve its condition, reliability, documentation and long-term appeal.', description_de: 'Verstehen Sie, wie Sie eine Omega Uhr pflegen und ihren Zustand, ihre Zuverlässigkeit, Dokumentation und langfristige Anziehungskraft erhalten.', link: '/omega/maintenance', image: UP.seamaster },
-  { title_en: 'Omega Buying Guide', title_de: 'Omega Kaufberatung', description_en: 'Compare Speedmaster, Seamaster, Constellation and De Ville to find the Omega model that fits your lifestyle.', description_de: 'Vergleichen Sie Speedmaster, Seamaster, Constellation und De Ville, um das Omega-Modell zu finden, das zu Ihrem Lebensstil passt.', link: '/welche-omega-kaufen', image: IMG.watch3 },
-  { title_en: 'Omega Speedmaster Guide', title_de: 'Omega Speedmaster Guide', description_en: 'Learn why the Speedmaster remains one of the most recognized chronographs in luxury watch collecting.', description_de: 'Erfahren Sie, warum die Speedmaster einer der bekanntesten Chronographen im Luxusuhren-Sammeln bleibt.', link: '/omega-speedmaster-kaufen', image: IMG.watch4 },
-  { title_en: 'Omega Seamaster Guide', title_de: 'Omega Seamaster Guide', description_en: 'Explore the Seamaster family, including Aqua Terra, Diver 300M, Planet Ocean and Ultra Deep models.', description_de: 'Entdecken Sie die Seamaster-Familie, einschließlich Aqua Terra, Diver 300M, Planet Ocean und Ultra Deep Modelle.', link: '/omega-seamaster-kaufen', image: IMG.watch5 },
-  { title_en: 'Omega Box and Papers', title_de: 'Omega Box und Papiere', description_en: 'Learn why original documentation, warranty cards, service records and purchase history matter when buying Omega.', description_de: 'Erfahren Sie, warum Originaldokumentation, Garantiekarten, Servicunterlagen und Kaufhistorie beim Kauf von Omega wichtig sind.', link: '/watch-guides/box-and-papers', image: IMG.watch7 },
+  { title_en: 'Omega Story', title_de: 'Omega Story', description_en: 'Explore Omega\u2019s heritage, precision identity, sport timing, space history and ocean-focused watchmaking.', description_de: 'Entdecken Sie Omegas Erbe, Präzisionsidentität, Sportzeitmessung, Weltraumgeschichte und ozean-orientierte Uhrmacherei.', link: '/omega/story', image: PAGE_IMAGES.story },
+  { title_en: 'Omega Watchmaking', title_de: 'Omega Uhrmacherei', description_en: 'Learn about Co-Axial movements, Master Chronometer performance, calibres, materials and technical details.', description_de: 'Erfahren Sie über Co-Axial Werke, Master Chronometer Leistung, Kaliber, Materialien und technische Details.', link: '/omega/watchmaking', image: PAGE_IMAGES.watchmaking },
+  { title_en: 'Omega Maintenance', title_de: 'Omega Wartung', description_en: 'Understand how to care for an Omega watch and preserve its condition, reliability, documentation and long-term appeal.', description_de: 'Verstehen Sie, wie Sie eine Omega Uhr pflegen und ihren Zustand, ihre Zuverlässigkeit, Dokumentation und langfristige Anziehungskraft erhalten.', link: '/omega/maintenance', image: PAGE_IMAGES.maintenance },
+  { title_en: 'Omega Buying Guide', title_de: 'Omega Kaufberatung', description_en: 'Compare Speedmaster, Seamaster, Constellation and De Ville to find the Omega model that fits your lifestyle.', description_de: 'Vergleichen Sie Speedmaster, Seamaster, Constellation und De Ville, um das Omega-Modell zu finden, das zu Ihrem Lebensstil passt.', link: '/welche-omega-kaufen', image: PAGE_IMAGES.buyingGuide },
+  { title_en: 'Omega Speedmaster Guide', title_de: 'Omega Speedmaster Guide', description_en: 'Learn why the Speedmaster remains one of the most recognized chronographs in luxury watch collecting.', description_de: 'Erfahren Sie, warum die Speedmaster einer der bekanntesten Chronographen im Luxusuhren-Sammeln bleibt.', link: '/omega-speedmaster-kaufen', image: PAGE_IMAGES.speedmasterGuide },
+  { title_en: 'Omega Seamaster Guide', title_de: 'Omega Seamaster Guide', description_en: 'Explore the Seamaster family, including Aqua Terra, Diver 300M, Planet Ocean and Ultra Deep models.', description_de: 'Entdecken Sie die Seamaster-Familie, einschließlich Aqua Terra, Diver 300M, Planet Ocean und Ultra Deep Modelle.', link: '/omega-seamaster-kaufen', image: PAGE_IMAGES.seamasterGuide },
+  { title_en: 'Omega Box and Papers', title_de: 'Omega Box und Papiere', description_en: 'Learn why original documentation, warranty cards, service records and purchase history matter when buying Omega.', description_de: 'Erfahren Sie, warum Originaldokumentation, Garantiekarten, Servicunterlagen und Kaufhistorie beim Kauf von Omega wichtig sind.', link: '/watch-guides/box-and-papers', image: PAGE_IMAGES.boxAndPapers },
 ];
 
 // Internal linking hub

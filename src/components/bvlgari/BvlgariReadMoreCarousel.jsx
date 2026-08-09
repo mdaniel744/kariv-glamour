@@ -18,8 +18,8 @@ export default function BvlgariReadMoreCarousel() {
         </div>
         <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar">
           {BVLGARI_READ_MORE.map((card, i) =>
-            <LocalizedLink key={i} to={card.link} className="group flex-shrink-0 snap-start min-w-[80%] sm:min-w-[45%] lg:min-w-[30%] block border border-border bg-card hover:border-primary/40 transition-colors">
-              <div className="aspect-[16/10] flex items-center justify-center bg-secondary">
+            <LocalizedLink key={i} to={card.link} className="group flex-shrink-0 snap-start w-[82vw] max-w-[22rem] sm:w-80 lg:w-96 lg:max-w-[24rem] block overflow-hidden border border-border bg-card hover:border-primary/40 transition-colors">
+              <div className="h-44 sm:h-52 lg:h-56 w-full flex items-center justify-center bg-secondary">
                 <span className="font-display text-lg text-foreground/60 group-hover:text-foreground transition-colors">{localize(card, 'title')}</span>
               </div>
               <div className="p-6">

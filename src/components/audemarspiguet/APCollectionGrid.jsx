@@ -23,7 +23,10 @@ export default function APCollectionGrid() {
     setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
   }, []);
 
+  const { collections } = useBrandCollections(BRAND, AP_COLLECTIONS);
+
   useEffect(() => { updateArrows(); }, [updateArrows]);
+  useEffect(() => { updateArrows(); }, [collections.length, updateArrows]);
 
   const scrollByDir = (dir) => {
     const el = scrollRef.current;
@@ -31,8 +34,6 @@ export default function APCollectionGrid() {
     const cardWidth = el.querySelector('[data-collection-card]')?.offsetWidth || 320;
     el.scrollBy({ left: dir * (cardWidth + 24), behavior: 'smooth' });
   };
-
-  const { collections } = useBrandCollections(BRAND, AP_COLLECTIONS);
 
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">
@@ -57,7 +58,7 @@ export default function APCollectionGrid() {
                 <LocalizedLink to={`/audemars-piguet/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
                     {c.image ? (
-                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" />
                     ) : (
                       <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
                     )}

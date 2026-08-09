@@ -9,6 +9,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID || '7efd71bc-0287-4f40-8a2f-1de330c49522';
 
 const hasSupabaseConfig = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+export const isCatalogDatabaseConfigured = hasSupabaseConfig;
 let warnedMissingSupabaseConfig = false;
 
 function getSupabase() {

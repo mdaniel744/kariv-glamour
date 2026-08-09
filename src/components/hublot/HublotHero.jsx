@@ -2,6 +2,7 @@ import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { HUBLOT_HERO_IMAGE } from '@/lib/hublotData';
 
 const BRAND = 'Hublot';
 
@@ -31,10 +32,8 @@ export default function HublotHero() {
           </div>
         </motion.div>
         <div className="flex items-center justify-center">
-          <div className="aspect-[4/5] w-full max-w-sm border border-border bg-secondary flex flex-col items-center justify-center relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-primary/40" />
-            <span className="font-display text-3xl md:text-4xl tracking-[0.2em] text-foreground">HUBLOT</span>
-            <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-3">Art of Fusion</span>
+          <div className="aspect-[4/5] w-full max-w-sm border border-border bg-card relative overflow-hidden">
+            <img src={HUBLOT_HERO_IMAGE} alt={`${BRAND} Big Bang watch`} className="w-full h-full object-cover" />
           </div>
         </div>
       </div>

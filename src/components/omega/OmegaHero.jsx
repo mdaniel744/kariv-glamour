@@ -3,7 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
-import { OMEGA_HERO_IMAGE } from '@/lib/omegaData';
+import { OMEGA_HERO_IMAGE, OMEGA_LOGO_IMAGE } from '@/lib/omegaData';
 
 const BRAND = 'Omega';
 
@@ -36,6 +36,7 @@ export default function OmegaHero() {
             <span className="text-foreground">{BRAND}</span>
           </div>
 
+          <img src={OMEGA_LOGO_IMAGE} alt={BRAND} className="mb-6 h-12 w-auto max-w-[180px] object-contain" />
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-5 text-primary">{t('hero.boutique', { brand: BRAND })}</span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">{t('hero.title', { brand: BRAND })}</h1>
           <p className="text-sm md:text-base leading-relaxed mb-10 max-w-xl text-muted-foreground">{t('hero.description', { brand: BRAND })}</p>

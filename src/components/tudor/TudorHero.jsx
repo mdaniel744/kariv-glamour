@@ -34,7 +34,7 @@ export default function TudorHero() {
         </motion.div>
         <div className="flex items-center justify-center">
           <div className="aspect-square w-full max-w-md relative overflow-hidden bg-secondary">
-            <img src={TUDOR_HERO_IMAGE} alt={`${BRAND} watch collection`} className="w-full h-full object-cover" />
+            <img src={TUDOR_HERO_IMAGE} alt={`${BRAND} watch collection`} className="w-full h-full object-contain p-5 md:p-7" />
           </div>
         </div>
       </div>

@@ -3,29 +3,43 @@
 // luminous dials, cushion cases, crown-protecting bridge, military/diving heritage,
 // and masculine tool-watch styling.
 
-const IMG_LUMINOR_MARINA = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/adaf5b6ae_LuminorMarina44mmPanerai.jpg';
-const IMG_LUMINOR_BLUE = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/5e675af64_PaneraiLuminorPAM01085.jpg';
-const IMG_SUBMERSIBLE_CARBON = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/4ff4ed57d_PaneraiLuminorSubmersibleCarbonHerrenuhr.webp';
-const IMG_LUMINOR_BROWN = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b4d15186c_PaneraiLuminor.png';
-const IMG_LUMINOR_STEALTH = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/0681edc57_PaneraiUhren-SetinklWechselarmbandLuminorMarinaPAM01662kaufen.jpg';
+const PANERAI_PAGE_ASSET_BASE = '/brand-assets/panerai/page';
+const PANERAI_COLLECTION_ASSET_BASE = '/brand-assets/panerai/collections';
 
-export const PANERAI_HERO_IMAGE = IMG_LUMINOR_MARINA;
-export const PANERAI_STORY_IMAGE = IMG_LUMINOR_BROWN;
+export const PANERAI_PAGE_IMAGES = {
+  hero: `${PANERAI_PAGE_ASSET_BASE}/panerai-hero.avif`,
+  luminor: `${PANERAI_PAGE_ASSET_BASE}/panerai-luminor-guide.avif`,
+  radiomir: `${PANERAI_PAGE_ASSET_BASE}/panerai-radiomir-guide.avif`,
+  submersible: `${PANERAI_PAGE_ASSET_BASE}/panerai-submersible-guide.avif`,
+  story: `${PANERAI_PAGE_ASSET_BASE}/panerai-story.png`,
+  preOwned: `${PANERAI_PAGE_ASSET_BASE}/panerai-preowned-guide.webp`,
+};
+
+const COLLECTION_IMAGES = {
+  luminor: `${PANERAI_COLLECTION_ASSET_BASE}/panerai-luminor-collection.png`,
+  luminorMarina: `${PANERAI_COLLECTION_ASSET_BASE}/panerai-luminor-marina-collection.png`,
+  radiomir: `${PANERAI_COLLECTION_ASSET_BASE}/panerai-radiomir-collection.png`,
+  submersible: `${PANERAI_COLLECTION_ASSET_BASE}/panerai-submersible-collection.png`,
+  luminorDue: `${PANERAI_COLLECTION_ASSET_BASE}/panerai-luminor-due-collection.png`,
+};
+
+export const PANERAI_HERO_IMAGE = PANERAI_PAGE_IMAGES.hero;
+export const PANERAI_STORY_IMAGE = PANERAI_PAGE_IMAGES.story;
 
 export const PANERAI_COLLECTIONS = [
-  { id: 1, name: 'Luminor', slug: 'luminor', image: IMG_LUMINOR_BLUE,
+  { id: 1, name: 'Luminor', slug: 'luminor', image: COLLECTION_IMAGES.luminor,
     shortDescription_en: "Panerai's most recognizable watch family, known for its bold cushion case, crown-protecting bridge, luminous dial design and strong everyday presence.",
     shortDescription_de: "Panerais bekannteste Uhrenfamilie, bekannt für das markante Cushion-Gehäuse, die kronenschützende Brücke, leuchtende Zifferblätter und starke Alltagspräsenz." },
-  { id: 2, name: 'Luminor Marina', slug: 'luminor-marina', image: IMG_LUMINOR_MARINA,
+  { id: 2, name: 'Luminor Marina', slug: 'luminor-marina', image: COLLECTION_IMAGES.luminorMarina,
     shortDescription_en: "A key Luminor subfamily with small seconds, strong Panerai identity and broad appeal among collectors looking for classic Panerai design.",
     shortDescription_de: "Eine wichtige Luminor-Subfamilie mit kleinen Sekunden, starker Panerai-Identität und breiter Beliebtheit bei Sammlern, die klassisches Panerai-Design suchen." },
-  { id: 3, name: 'Radiomir', slug: 'radiomir', image: '',
+  { id: 3, name: 'Radiomir', slug: 'radiomir', image: COLLECTION_IMAGES.radiomir,
     shortDescription_en: "A historic Panerai collection with cushion-shaped cases, wire lugs, vintage military character and a cleaner dress-tool watch profile.",
     shortDescription_de: "Eine historische Panerai-Kollektion mit Cushion-Gehäusen, Drahtbandstegen, militärischem Vintage-Charakter und einem saubereren Dress-Tool-Watch-Profil." },
-  { id: 4, name: 'Submersible', slug: 'submersible', image: IMG_SUBMERSIBLE_CARBON,
+  { id: 4, name: 'Submersible', slug: 'submersible', image: COLLECTION_IMAGES.submersible,
     shortDescription_en: "Panerai's technical dive-watch collection, built around water resistance, rotating bezels, bold materials and sport-focused design.",
     shortDescription_de: "Panerais technische Tauchuhr-Kollektion, konzipiert für Wasserfestigkeit, drehbare Lünetten, mutige Materialien und sportliches Design." },
-  { id: 5, name: 'Luminor Due', slug: 'luminor-due', image: '',
+  { id: 5, name: 'Luminor Due', slug: 'luminor-due', image: COLLECTION_IMAGES.luminorDue,
     shortDescription_en: "A slimmer and more refined Panerai collection with lighter proportions, elegant styling and versatile sizes for daily wear.",
     shortDescription_de: "Eine schlankere und verfeinerte Panerai-Kollektion mit leichteren Proportionen, elegantem Stil und vielseitigen Größen für das tägliche Tragen." },
 ];
@@ -52,40 +66,40 @@ export const PANERAI_QUICK_FILTERS = [
 ];
 
 export const PANERAI_SEO_CARDS = [
-  { title_en: 'Panerai Watch', title_de: 'Panerai Uhr', link: '/panerai-uhr',
+  { title_en: 'Panerai Watch', title_de: 'Panerai Uhr', link: '/panerai-uhr', image: PANERAI_PAGE_IMAGES.hero,
     description_en: 'Explore Panerai watches at Kariv Glamour — Luminor, Radiomir, Submersible and Luminor Due with bold design and diving heritage.',
     description_de: 'Entdecken Sie Panerai Uhren bei Kariv Glamour — Luminor, Radiomir, Submersible und Luminor Due mit markantem Design und Taucher-Heritage.' },
-  { title_en: 'Panerai Watches', title_de: 'Panerai Uhren', link: '/panerai-uhren',
+  { title_en: 'Panerai Watches', title_de: 'Panerai Uhren', link: '/panerai-uhren', image: PANERAI_PAGE_IMAGES.luminor,
     description_en: 'Panerai watches at Kariv Glamour — cushion cases, crown-protecting bridge and luminous dials.',
     description_de: 'Panerai Uhren bei Kariv Glamour — Cushion-Gehäuse, kronenschützende Brücke und leuchtende Zifferblätter.' },
-  { title_en: "Panerai Men's Watches", title_de: 'Panerai Uhr Herren', link: '/panerai-uhr-herren',
+  { title_en: "Panerai Men's Watches", title_de: 'Panerai Uhr Herren', link: '/panerai-uhr-herren', image: PANERAI_PAGE_IMAGES.preOwned,
     description_en: "Panerai men's watches at Kariv Glamour — Luminor, Radiomir and Submersible models for men.",
     description_de: 'Panerai Herrenuhren bei Kariv Glamour — Luminor, Radiomir und Submersible Modelle für Männer.' },
-  { title_en: 'Panerai Luminor', title_de: 'Panerai Luminor', link: '/panerai/luminor',
+  { title_en: 'Panerai Luminor', title_de: 'Panerai Luminor', link: '/panerai/luminor', image: PANERAI_PAGE_IMAGES.luminor,
     description_en: 'Discover the Panerai Luminor collection — the bold cushion case with crown-protecting bridge and luminous dial.',
     description_de: 'Entdecken Sie die Panerai Luminor Kollektion — das markante Cushion-Gehäuse mit kronenschützender Brücke und leuchtendem Zifferblatt.' },
-  { title_en: 'Panerai Luminor Marina', title_de: 'Panerai Luminor Marina', link: '/panerai/luminor-marina',
+  { title_en: 'Panerai Luminor Marina', title_de: 'Panerai Luminor Marina', link: '/panerai/luminor-marina', image: PANERAI_PAGE_IMAGES.story,
     description_en: 'Discover the Panerai Luminor Marina — small seconds, strong Panerai identity and classic design.',
     description_de: 'Entdecken Sie die Panerai Luminor Marina — kleine Sekunden, starke Panerai-Identität und klassisches Design.' },
-  { title_en: 'Panerai Submersible', title_de: 'Panerai Submersible', link: '/panerai/submersible',
+  { title_en: 'Panerai Submersible', title_de: 'Panerai Submersible', link: '/panerai/submersible', image: PANERAI_PAGE_IMAGES.submersible,
     description_en: 'Discover the Panerai Submersible — technical dive watches with rotating bezel and bold materials.',
     description_de: 'Entdecken Sie die Panerai Submersible — technische Tauchuhren mit drehbarer Lünette und mutigen Materialien.' },
 ];
 
 export const PANERAI_READ_MORE = [
-  { title_en: 'Panerai Story', title_de: 'Panerai Story', link: '/panerai/story',
+  { title_en: 'Panerai Story', title_de: 'Panerai Story', link: '/panerai/story', image: PANERAI_PAGE_IMAGES.story,
     description_en: "Explore Panerai's heritage of Italian design, Swiss watchmaking and military diving tradition.",
     description_de: 'Entdecken Sie Panerais Heritage von italienischem Design, Schweizer Uhrmacherkunst und militärischer Taucher-Tradition.' },
-  { title_en: 'Panerai Luminor Guide', title_de: 'Panerai Luminor Guide', link: '/panerai/luminor',
+  { title_en: 'Panerai Luminor Guide', title_de: 'Panerai Luminor Guide', link: '/panerai/luminor', image: PANERAI_PAGE_IMAGES.luminor,
     description_en: 'Understand the Panerai Luminor family — cushion case, crown-protecting bridge and luminous dials.',
     description_de: 'Verstehen Sie die Panerai Luminor Familie — Cushion-Gehäuse, kronenschützende Brücke und leuchtende Zifferblätter.' },
-  { title_en: 'Panerai Radiomir Guide', title_de: 'Panerai Radiomir Guide', link: '/panerai/radiomir',
+  { title_en: 'Panerai Radiomir Guide', title_de: 'Panerai Radiomir Guide', link: '/panerai/radiomir', image: PANERAI_PAGE_IMAGES.radiomir,
     description_en: 'Discover the Panerai Radiomir — historic cushion cases, wire lugs and military vintage character.',
     description_de: 'Entdecken Sie die Panerai Radiomir — historische Cushion-Gehäuse, Drahtbandstege und militärischen Vintage-Charakter.' },
-  { title_en: 'Panerai Submersible Guide', title_de: 'Panerai Submersible Guide', link: '/panerai/submersible',
+  { title_en: 'Panerai Submersible Guide', title_de: 'Panerai Submersible Guide', link: '/panerai/submersible', image: PANERAI_PAGE_IMAGES.submersible,
     description_en: 'Understand the Panerai Submersible — technical dive watches with rotating bezel and sporty design.',
     description_de: 'Verstehen Sie die Panerai Submersible — technische Tauchuhren mit drehbarer Lünette und sportlichem Design.' },
-  { title_en: 'Buying Pre-Owned Panerai', title_de: 'Gebrauchte Panerai kaufen', link: '/panerai-gebraucht',
+  { title_en: 'Buying Pre-Owned Panerai', title_de: 'Gebrauchte Panerai kaufen', link: '/panerai-gebraucht', image: PANERAI_PAGE_IMAGES.preOwned,
     description_en: 'What to check before buying a used Panerai — condition, box and papers, reference number, and authentication.',
     description_de: 'Was Sie vor dem Kauf einer gebrauchten Panerai prüfen sollten — Zustand, Box und Papiere, Referenznummer und Authentifizierung.' },
 ];

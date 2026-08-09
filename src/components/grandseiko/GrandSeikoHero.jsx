@@ -32,8 +32,8 @@ export default function GrandSeikoHero() {
           </div>
         </motion.div>
         <div className="flex items-center justify-center">
-          <div className="aspect-square w-full max-w-md relative overflow-hidden bg-secondary">
-            <img src={GS_HERO_IMAGE} alt={`${BRAND} Evolution 9`} className="w-full h-full object-cover" />
+          <div className="aspect-square w-full max-w-md relative overflow-hidden bg-card">
+            <img src={GS_HERO_IMAGE} alt={`${BRAND} Spring Drive watch`} className="w-full h-full object-contain p-4 md:p-6" />
           </div>
         </div>
       </div>

@@ -34,8 +34,8 @@ export default function RolexCollectionCarousel() {
           {collections.map((col, i) =>
             <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }} className="flex-shrink-0 w-[280px] snap-start group">
               <LocalizedLink to={`/rolex/${col.slug}`} className="block">
-                <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-card">
-                  <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-secondary">
+                  <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <h3 className="font-display text-lg font-light mb-2 text-foreground">{col.name}</h3>

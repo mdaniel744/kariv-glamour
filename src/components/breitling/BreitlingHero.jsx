@@ -2,6 +2,7 @@ import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { BREITLING_HERO_IMAGE } from '@/lib/breitlingData';
 
 const BRAND = 'Breitling';
 
@@ -32,10 +33,8 @@ export default function BreitlingHero() {
           </div>
         </motion.div>
         <div className="flex items-center justify-center">
-          <div className="aspect-[4/5] w-full max-w-sm border border-border bg-secondary flex flex-col items-center justify-center relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-primary/40" />
-            <span className="font-display text-3xl md:text-4xl tracking-[0.2em] text-foreground">BREITLING</span>
-            <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-3">Instruments for Professionals</span>
+          <div className="aspect-square w-full max-w-md border border-border bg-white relative overflow-hidden">
+            <img src={BREITLING_HERO_IMAGE} alt={`${BRAND} Navitimer`} className="w-full h-full object-cover" />
           </div>
         </div>
       </div>

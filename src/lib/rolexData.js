@@ -16,16 +16,28 @@ const ROLEX_ASSET_BASE = '/brand-assets/rolex';
 export const ROLEX_LOGO = `${ROLEX_ASSET_BASE}/rolex-logo.svg`;
 export const ROLEX_HERO_IMAGE = `${ROLEX_ASSET_BASE}/rolex-green-background-crown.jpg`;
 
-// Legacy fallbacks for collection cards. Dashboard collection records override these.
-const COLLECTION_FALLBACKS = {
-  watch1: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-  watch2: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=800&q=80',
-  watch3: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80',
-  watch4: 'https://images.unsplash.com/photo-1524592094714-0f06555e7420?auto=format&fit=crop&w=800&q=80',
-  watch5: 'https://images.unsplash.com/photo-1495856458515-0637183dbd1e?auto=format&fit=crop&w=800&q=80',
-  watch6: 'https://images.unsplash.com/photo-1606293459339-aaa4e5e9b1f4?auto=format&fit=crop&w=800&q=80',
-  watch7: 'https://images.unsplash.com/photo-1612817159949-195b6119e6d5?auto=format&fit=crop&w=800&q=80',
-  watch8: 'https://images.unsplash.com/photo-1639024471283-0350c0f7a7e6?auto=format&fit=crop&w=800&q=80',
+const COLLECTION_ASSET_BASE = `${ROLEX_ASSET_BASE}/collections`;
+
+// Local carousel fallbacks for collection cards. Dashboard collection records override these.
+const COLLECTION_IMAGES = {
+  '1908': `${COLLECTION_ASSET_BASE}/rolex-1908.png`,
+  'air-king': `${COLLECTION_ASSET_BASE}/rolex-air-king.png`,
+  daytona: `${COLLECTION_ASSET_BASE}/rolex-cosmograph-daytona.png`,
+  datejust: `${COLLECTION_ASSET_BASE}/rolex-datejust.png`,
+  'day-date': `${COLLECTION_ASSET_BASE}/rolex-day-date.png`,
+  deepsea: `${COLLECTION_ASSET_BASE}/rolex-deepsea.png`,
+  explorer: `${COLLECTION_ASSET_BASE}/rolex-explorer.png`,
+  'explorer-ii': `${COLLECTION_ASSET_BASE}/rolex-explorer-ii.png`,
+  'gmt-master-ii': `${COLLECTION_ASSET_BASE}/rolex-gmt-master-ii.png`,
+  'lady-datejust': `${COLLECTION_ASSET_BASE}/rolex-lady-datejust.png`,
+  'land-dweller': `${COLLECTION_ASSET_BASE}/rolex-land-dweller.png`,
+  milgauss: `${COLLECTION_ASSET_BASE}/rolex-milgauss.png`,
+  'oyster-perpetual': `${COLLECTION_ASSET_BASE}/rolex-oyster-perpetual.png`,
+  'sea-dweller': `${COLLECTION_ASSET_BASE}/rolex-sea-dweller.png`,
+  'sky-dweller': `${COLLECTION_ASSET_BASE}/rolex-sky-dweller.png`,
+  submariner: `${COLLECTION_ASSET_BASE}/rolex-submariner.png`,
+  'yacht-master': `${COLLECTION_ASSET_BASE}/rolex-yacht-master.png`,
+  'yacht-master-ii': `${COLLECTION_ASSET_BASE}/rolex-yacht-master-ii.png`,
 };
 
 const IMG = {
@@ -52,24 +64,24 @@ const IMG = {
 
 // Rolex Collections
 export const ROLEX_COLLECTIONS = [
-  { id: 'land-dweller', name: 'Land-Dweller', slug: 'land-dweller', description_en: 'A modern Rolex collection with integrated bracelet design and forward-looking watchmaking character.', description_de: 'Eine moderne Rolex Kollektion mit integriertem Armbanddesign und zukunftsorientiertem Uhrmachercharakter.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 1 },
-  { id: 'air-king', name: 'Air-King', slug: 'air-king', description_en: 'A distinctive aviation-inspired Rolex made for those drawn to precision, legibility, and exploration.', description_de: 'Eine markante, von der Luftfahrt inspirierte Rolex für alle, die Präzision, Ablesbarkeit und Entdeckergeist schätzen.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 2 },
-  { id: 'daytona', name: 'Cosmograph Daytona', slug: 'daytona', description_en: 'The legendary Rolex chronograph associated with motorsport, speed, and high collectability.', description_de: 'Der legendäre Rolex Chronograph, assoziiert mit Motorsport, Geschwindigkeit und hoher Sammlerbegehrlichkeit.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 3 },
-  { id: 'datejust', name: 'Datejust', slug: 'datejust', description_en: 'A timeless Rolex classic known for everyday elegance, versatility, and enduring design.', description_de: 'Ein zeitloser Rolex Klassiker, bekannt für alltägliche Eleganz, Vielseitigkeit und beständiges Design.', image: COLLECTION_FALLBACKS.watch4, displayOrder: 4 },
-  { id: 'lady-datejust', name: 'Lady-Datejust', slug: 'lady-datejust', description_en: 'A refined Rolex collection designed with elegant proportions and feminine sophistication.', description_de: 'Eine verfeinerte Rolex Kollektion mit eleganten Proportionen und femininer Raffinesse.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 5 },
-  { id: 'day-date', name: 'Day-Date', slug: 'day-date', description_en: 'A prestigious Rolex icon, often associated with precious metals, status, and timeless authority.', description_de: 'Eine prestigeträchtige Rolex Ikone, oft assoziiert mit Edelmetallen, Status und zeitloser Autorität.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 6 },
-  { id: 'deepsea', name: 'Deepsea', slug: 'deepsea', description_en: 'A professional Rolex diving watch built for extreme underwater performance.', description_de: 'Eine professionelle Rolex Taucheruhr, gebaut für extreme Unterwasserleistung.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 7 },
-  { id: 'explorer', name: 'Explorer', slug: 'explorer', description_en: 'A robust Rolex tool watch inspired by adventure, endurance, and mountain exploration.', description_de: 'Eine robuste Rolex Tool-Watch, inspiriert von Abenteuer, Ausdauer und Bergexploration.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 8 },
-  { id: 'explorer-ii', name: 'Explorer II', slug: 'explorer-ii', description_en: 'A practical Rolex watch designed for exploration, legibility, and second-time-zone functionality.', description_de: 'Eine praktische Rolex Uhr, konzipiert für Exploration, Ablesbarkeit und Zweitzeitzonen-Funktionalität.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 9 },
-  { id: 'gmt-master-ii', name: 'GMT-Master II', slug: 'gmt-master-ii', description_en: 'A cosmopolitan Rolex travel watch designed to display multiple time zones with ease.', description_de: 'Eine kosmopolitische Rolex Reisewatch, konzipiert für die einfache Anzeige mehrerer Zeitzonen.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 10 },
-  { id: 'oyster-perpetual', name: 'Oyster Perpetual', slug: 'oyster-perpetual', description_en: 'The purest expression of Rolex watchmaking, combining clean design and everyday durability.', description_de: 'Die reinste Ausdrucksform der Rolex Uhrmacherei, die klares Design und alltägliche Haltbarkeit vereint.', image: COLLECTION_FALLBACKS.watch3, displayOrder: 11 },
-  { id: 'sea-dweller', name: 'Sea-Dweller', slug: 'sea-dweller', description_en: 'A professional diver\u2019s Rolex built for serious depth, strength, and performance.', description_de: 'Eine professionelle Taucher-Rolex, gebaut für ernsthafte Tiefe, Stärke und Leistung.', image: COLLECTION_FALLBACKS.watch4, displayOrder: 12 },
-  { id: 'sky-dweller', name: 'Sky-Dweller', slug: 'sky-dweller', description_en: 'A sophisticated Rolex travel watch combining annual calendar functionality with dual-time display.', description_de: 'Eine anspruchsvolle Rolex Reisewatch, die Jahreskalender-Funktionalität mit Dual-Zeitanzeige vereint.', image: COLLECTION_FALLBACKS.watch5, displayOrder: 13 },
-  { id: 'submariner', name: 'Submariner', slug: 'submariner', description_en: 'One of the world\u2019s most recognized luxury dive watches, admired for its strength and timeless design.', description_de: 'Eine der weltweit bekanntesten Luxus-Taucheruhren, bewundert für ihre Stärke und zeitloses Design.', image: COLLECTION_FALLBACKS.watch6, displayOrder: 14 },
-  { id: 'yacht-master', name: 'Yacht-Master', slug: 'yacht-master', description_en: 'A nautical-inspired Rolex sports watch blending elegance, functionality, and luxury.', description_de: 'Eine nautisch inspirierte Rolex Sportuhr, die Eleganz, Funktionalität und Luxus vereint.', image: COLLECTION_FALLBACKS.watch7, displayOrder: 15 },
-  { id: 'yacht-master-ii', name: 'Yacht-Master II', slug: 'yacht-master-ii', description_en: 'A highly technical Rolex regatta chronograph created for competitive sailing.', description_de: 'Ein hochtechnischer Rolex Regatta-Chronograph, geschaffen für den Segelwettbewerb.', image: COLLECTION_FALLBACKS.watch8, displayOrder: 16 },
-  { id: '1908', name: '1908', slug: '1908', description_en: 'A refined dress watch collection that reflects Rolex elegance, heritage, and modern watchmaking.', description_de: 'Eine verfeinerte Dress-Watch-Kollektion, die Rolex Eleganz, Erbe und moderne Uhrmacherei widerspiegelt.', image: COLLECTION_FALLBACKS.watch1, displayOrder: 17 },
-  { id: 'milgauss', name: 'Milgauss', slug: 'milgauss', description_en: 'A distinctive discontinued Rolex model with strong collector interest in the pre-owned market.', description_de: 'Ein markantes eingestelltes Rolex Modell mit starkem Sammlerinteresse auf dem Gebrauchtmarkt.', image: COLLECTION_FALLBACKS.watch2, displayOrder: 18 },
+  { id: 'land-dweller', name: 'Land-Dweller', slug: 'land-dweller', description_en: 'A modern Rolex collection with integrated bracelet design and forward-looking watchmaking character.', description_de: 'Eine moderne Rolex Kollektion mit integriertem Armbanddesign und zukunftsorientiertem Uhrmachercharakter.', image: COLLECTION_IMAGES['land-dweller'], displayOrder: 1 },
+  { id: 'air-king', name: 'Air-King', slug: 'air-king', description_en: 'A distinctive aviation-inspired Rolex made for those drawn to precision, legibility, and exploration.', description_de: 'Eine markante, von der Luftfahrt inspirierte Rolex für alle, die Präzision, Ablesbarkeit und Entdeckergeist schätzen.', image: COLLECTION_IMAGES['air-king'], displayOrder: 2 },
+  { id: 'daytona', name: 'Cosmograph Daytona', slug: 'daytona', description_en: 'The legendary Rolex chronograph associated with motorsport, speed, and high collectability.', description_de: 'Der legendäre Rolex Chronograph, assoziiert mit Motorsport, Geschwindigkeit und hoher Sammlerbegehrlichkeit.', image: COLLECTION_IMAGES.daytona, displayOrder: 3 },
+  { id: 'datejust', name: 'Datejust', slug: 'datejust', description_en: 'A timeless Rolex classic known for everyday elegance, versatility, and enduring design.', description_de: 'Ein zeitloser Rolex Klassiker, bekannt für alltägliche Eleganz, Vielseitigkeit und beständiges Design.', image: COLLECTION_IMAGES.datejust, displayOrder: 4 },
+  { id: 'lady-datejust', name: 'Lady-Datejust', slug: 'lady-datejust', description_en: 'A refined Rolex collection designed with elegant proportions and feminine sophistication.', description_de: 'Eine verfeinerte Rolex Kollektion mit eleganten Proportionen und femininer Raffinesse.', image: COLLECTION_IMAGES['lady-datejust'], displayOrder: 5 },
+  { id: 'day-date', name: 'Day-Date', slug: 'day-date', description_en: 'A prestigious Rolex icon, often associated with precious metals, status, and timeless authority.', description_de: 'Eine prestigeträchtige Rolex Ikone, oft assoziiert mit Edelmetallen, Status und zeitloser Autorität.', image: COLLECTION_IMAGES['day-date'], displayOrder: 6 },
+  { id: 'deepsea', name: 'Deepsea', slug: 'deepsea', description_en: 'A professional Rolex diving watch built for extreme underwater performance.', description_de: 'Eine professionelle Rolex Taucheruhr, gebaut für extreme Unterwasserleistung.', image: COLLECTION_IMAGES.deepsea, displayOrder: 7 },
+  { id: 'explorer', name: 'Explorer', slug: 'explorer', description_en: 'A robust Rolex tool watch inspired by adventure, endurance, and mountain exploration.', description_de: 'Eine robuste Rolex Tool-Watch, inspiriert von Abenteuer, Ausdauer und Bergexploration.', image: COLLECTION_IMAGES.explorer, displayOrder: 8 },
+  { id: 'explorer-ii', name: 'Explorer II', slug: 'explorer-ii', description_en: 'A practical Rolex watch designed for exploration, legibility, and second-time-zone functionality.', description_de: 'Eine praktische Rolex Uhr, konzipiert für Exploration, Ablesbarkeit und Zweitzeitzonen-Funktionalität.', image: COLLECTION_IMAGES['explorer-ii'], displayOrder: 9 },
+  { id: 'gmt-master-ii', name: 'GMT-Master II', slug: 'gmt-master-ii', description_en: 'A cosmopolitan Rolex travel watch designed to display multiple time zones with ease.', description_de: 'Eine kosmopolitische Rolex Reisewatch, konzipiert für die einfache Anzeige mehrerer Zeitzonen.', image: COLLECTION_IMAGES['gmt-master-ii'], displayOrder: 10 },
+  { id: 'oyster-perpetual', name: 'Oyster Perpetual', slug: 'oyster-perpetual', description_en: 'The purest expression of Rolex watchmaking, combining clean design and everyday durability.', description_de: 'Die reinste Ausdrucksform der Rolex Uhrmacherei, die klares Design und alltägliche Haltbarkeit vereint.', image: COLLECTION_IMAGES['oyster-perpetual'], displayOrder: 11 },
+  { id: 'sea-dweller', name: 'Sea-Dweller', slug: 'sea-dweller', description_en: 'A professional diver\u2019s Rolex built for serious depth, strength, and performance.', description_de: 'Eine professionelle Taucher-Rolex, gebaut für ernsthafte Tiefe, Stärke und Leistung.', image: COLLECTION_IMAGES['sea-dweller'], displayOrder: 12 },
+  { id: 'sky-dweller', name: 'Sky-Dweller', slug: 'sky-dweller', description_en: 'A sophisticated Rolex travel watch combining annual calendar functionality with dual-time display.', description_de: 'Eine anspruchsvolle Rolex Reisewatch, die Jahreskalender-Funktionalität mit Dual-Zeitanzeige vereint.', image: COLLECTION_IMAGES['sky-dweller'], displayOrder: 13 },
+  { id: 'submariner', name: 'Submariner', slug: 'submariner', description_en: 'One of the world\u2019s most recognized luxury dive watches, admired for its strength and timeless design.', description_de: 'Eine der weltweit bekanntesten Luxus-Taucheruhren, bewundert für ihre Stärke und zeitloses Design.', image: COLLECTION_IMAGES.submariner, displayOrder: 14 },
+  { id: 'yacht-master', name: 'Yacht-Master', slug: 'yacht-master', description_en: 'A nautical-inspired Rolex sports watch blending elegance, functionality, and luxury.', description_de: 'Eine nautisch inspirierte Rolex Sportuhr, die Eleganz, Funktionalität und Luxus vereint.', image: COLLECTION_IMAGES['yacht-master'], displayOrder: 15 },
+  { id: 'yacht-master-ii', name: 'Yacht-Master II', slug: 'yacht-master-ii', description_en: 'A highly technical Rolex regatta chronograph created for competitive sailing.', description_de: 'Ein hochtechnischer Rolex Regatta-Chronograph, geschaffen für den Segelwettbewerb.', image: COLLECTION_IMAGES['yacht-master-ii'], displayOrder: 16 },
+  { id: '1908', name: '1908', slug: '1908', description_en: 'A refined dress watch collection that reflects Rolex elegance, heritage, and modern watchmaking.', description_de: 'Eine verfeinerte Dress-Watch-Kollektion, die Rolex Eleganz, Erbe und moderne Uhrmacherei widerspiegelt.', image: COLLECTION_IMAGES['1908'], displayOrder: 17 },
+  { id: 'milgauss', name: 'Milgauss', slug: 'milgauss', description_en: 'A distinctive discontinued Rolex model with strong collector interest in the pre-owned market.', description_de: 'Ein markantes eingestelltes Rolex Modell mit starkem Sammlerinteresse auf dem Gebrauchtmarkt.', image: COLLECTION_IMAGES.milgauss, displayOrder: 18 },
 ];
 
 // Quick filter chips for product grid

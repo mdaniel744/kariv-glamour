@@ -23,7 +23,10 @@ export default function TAGHeuerCollectionGrid() {
     setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
   }, []);
 
+  const { collections } = useBrandCollections(BRAND, TH_COLLECTIONS);
+
   useEffect(() => { updateArrows(); }, [updateArrows]);
+  useEffect(() => { updateArrows(); }, [collections.length, updateArrows]);
 
   const scrollByDir = (dir) => {
     const el = scrollRef.current;
@@ -31,8 +34,6 @@ export default function TAGHeuerCollectionGrid() {
     const cardWidth = el.querySelector('[data-collection-card]')?.offsetWidth || 320;
     el.scrollBy({ left: dir * (cardWidth + 24), behavior: 'smooth' });
   };
-
-  const { collections } = useBrandCollections(BRAND, TH_COLLECTIONS);
 
   return (
     <section id="collections" className="py-16 md:py-24 bg-background">

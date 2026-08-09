@@ -33,7 +33,7 @@ export default function APHero() {
         </motion.div>
         <div className="flex items-center justify-center">
           <div className="aspect-square w-full max-w-md relative overflow-hidden bg-black">
-            <img src={AP_HERO_IMAGE} alt={`${BRAND} Royal Oak`} className="w-full h-full object-cover" />
+            <img src={AP_HERO_IMAGE} alt={`${BRAND} Royal Oak Offshore`} className="w-full h-full object-contain p-8 md:p-10" />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
-import { AP_HERO_IMAGE } from '@/lib/audemarsPiguetData';
+import { AP_STORY_IMAGE } from '@/lib/audemarsPiguetData';
 
 const BRAND = 'Audemars Piguet';
 
@@ -32,7 +32,7 @@ export default function APStoryTeaser() {
           <LocalizedLink to="/audemars-piguet/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('cta.readStory', { brand: BRAND })}</LocalizedLink>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] overflow-hidden bg-black">
-          <img src={AP_HERO_IMAGE} alt={`${BRAND} Royal Oak`} className="w-full h-full object-cover" />
+          <img src={AP_STORY_IMAGE} alt={`${BRAND} Royal Oak`} className="w-full h-full object-cover" />
         </motion.div>
       </div>
     </section>

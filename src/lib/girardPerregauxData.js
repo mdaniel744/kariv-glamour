@@ -3,27 +3,33 @@
 // dress watches, Art Deco cases, visible mechanics, and collector value.
 
 const IMG_LAUREATO_BLUE = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/d226e4bce_GirardPerregauxLaureato-Edelstahl-ArmbandEdelstahl-38mm.webp';
-const IMG_LAUREATO_GREY = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2da79a201_GirardPerregaux.webp';
-const IMG_SKELETON = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/2b2241fcd_LaureatoAbsoluteLightShade44mm81071-43-2022-1CXUhrGirard-Perregaux.png';
 const IMG_FIFTY_GOLD = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b9e660ab8_LAUREATOFIFTY39mm81008-63-3412-1CMUhrGirard-Perregaux.png';
+const GP_COLLECTION_ASSET_BASE = '/brand-assets/girard-perregaux/collections';
+
+const GP_COLLECTION_IMAGES = {
+  laureato: `${GP_COLLECTION_ASSET_BASE}/girard-perregaux-laureato-collection.png`,
+  nineteenSixtySix: `${GP_COLLECTION_ASSET_BASE}/girard-perregaux-1966-collection.png`,
+  bridges: `${GP_COLLECTION_ASSET_BASE}/girard-perregaux-bridges-collection.png`,
+  catsEye: `${GP_COLLECTION_ASSET_BASE}/girard-perregaux-cats-eye-collection.png`,
+};
 
 export const GP_HERO_IMAGE = IMG_LAUREATO_BLUE;
 export const GP_STORY_IMAGE = IMG_FIFTY_GOLD;
 
 export const GP_COLLECTIONS = [
-  { id: 1, name: 'Laureato', slug: 'laureato', image: IMG_LAUREATO_GREY,
+  { id: 1, name: 'Laureato', slug: 'laureato', image: GP_COLLECTION_IMAGES.laureato,
     shortDescription_en: "Girard-Perregaux's sport-chic luxury watch family, known for its octagonal bezel, integrated bracelet, balanced proportions and in-house Swiss precision.",
     shortDescription_de: "Girard-Perregaux' Sport-chic-Uhrenfamilie, bekannt für ihre achteckige Lünette, das integrierte Armband, die ausgewogenen Proportionen und die hausinterne Schweizer Präzision." },
-  { id: 2, name: '1966', slug: '1966', image: '',
+  { id: 2, name: '1966', slug: '1966', image: GP_COLLECTION_IMAGES.nineteenSixtySix,
     shortDescription_en: "A refined dress-watch collection with clean round cases, mechanical elegance, moonphase, calendar and classic automatic models.",
     shortDescription_de: "Eine verfeinerte Dress-Watch-Kollektion mit runden Gehäusen, mechanischer Eleganz, Mondphase, Kalender und klassischen Automatik-Modellen." },
-  { id: 3, name: 'Vintage 1945', slug: 'vintage-1945', image: IMG_FIFTY_GOLD,
+  { id: 3, name: 'Vintage 1945', slug: 'vintage-1945', image: '',
     shortDescription_en: "An Art Deco-inspired Girard-Perregaux collection with rectangular cases, curved geometry and strong interest among vintage and collector-watch buyers.",
     shortDescription_de: "Eine Art-Deco-inspirierte Girard-Perregaux-Kollektion mit rechteckigen Gehäusen, geschwungener Geometrie und starkem Interesse bei Vintage- und Sammleruhren-Käufern." },
-  { id: 4, name: 'Bridges', slug: 'bridges', image: IMG_SKELETON,
+  { id: 4, name: 'Bridges', slug: 'bridges', image: GP_COLLECTION_IMAGES.bridges,
     shortDescription_en: "A high-horology collection where Girard-Perregaux's signature bridge architecture makes the movement visible from the dial side.",
     shortDescription_de: "Eine Haute-Horlogerie-Kollektion, in der Girard-Perregaux' signature Brücken-Architektur das Uhrwerk von der Zifferblattseite sichtbar macht." },
-  { id: 5, name: "Cat's Eye", slug: 'cats-eye', image: '',
+  { id: 5, name: "Cat's Eye", slug: 'cats-eye', image: GP_COLLECTION_IMAGES.catsEye,
     shortDescription_en: "A feminine haute horlogerie collection with oval cases, gem-set details and refined complications.",
     shortDescription_de: "Eine feminine Haute-Horlogerie-Kollektion mit ovalen Gehäusen, Edelsteinbesatz und verfeinerten Komplikationen." },
   { id: 6, name: 'Legacy / Vintage Models', slug: 'legacy-vintage-models', image: '',

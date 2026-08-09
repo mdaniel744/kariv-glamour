@@ -57,7 +57,7 @@ export default function GirardPerregauxCollectionGrid() {
                 <LocalizedLink to={`/girard-perregaux/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
                     {c.image ?
-                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+                  <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" /> :
                       <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
                     }
                   </div>

@@ -3,39 +3,56 @@
 // dive watches (Aquaracer), sport watches (Formula 1), the square Monaco icon,
 // and the Connected Calibre E5 luxury smartwatch collection.
 
-const CARRERA_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/88ab5b23e_TAGHeuerCarreraChronographTourbillon.jpg';
-const CARRERA_BLACK_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/ca316f251_TAGHeuer-TAGHEUERCARRERACHRONOGRAPHEXTREMESPORT.jpg';
-const AQUARACER_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/e9071e8e4_TAGHeuer-TAGHEUERAQUARACERPROFESSIONAL300DATE.jpg';
-const FORMULA1_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/fc258a510_TAGHeuerFormula1.webp';
-const MONACO_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/9400ebe8a_LuxuriseHerrenuhrTAGHeuer.png';
-const AQUARACER_GMT_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/04e5c027b_TAGHeuerUhrAquaracer.jpg';
+const TAG_HEUER_COLLECTION_ASSET_BASE = '/brand-assets/tag-heuer/collections';
+const TAG_HEUER_PAGE_ASSET_BASE = '/brand-assets/tag-heuer/page';
 
-export const TH_HERO_IMAGE = CARRERA_BLACK_IMG;
-export const TH_STORY_IMAGE = MONACO_IMG;
+const COLLECTION_IMAGES = {
+  carrera: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-carrera-collection.png`,
+  formula1: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-formula-1-collection.png`,
+  aquaracer: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-aquaracer-collection.png`,
+  monaco: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-monaco-collection.png`,
+  connected: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-connected-collection.png`,
+  connectedCalibreE5: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-connected-calibre-e5-collection.png`,
+  link: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-link-collection.png`,
+  monza: `${TAG_HEUER_COLLECTION_ASSET_BASE}/tag-heuer-monza-collection.png`,
+};
+
+export const TH_PAGE_IMAGES = {
+  hero: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-hero.png`,
+  story: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-hero.avif`,
+  carreraChronograph: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-carrera-chronograph.avif`,
+  connectedCalibreE5: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-connected-calibre-e5.avif`,
+  preOwned: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-pre-owned.jpg`,
+  aquaracer300m: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-aquaracer-300m.png`,
+  carreraVsFormula1: `${TAG_HEUER_PAGE_ASSET_BASE}/tag-heuer-carrera-vs-formula-1.webp`,
+};
+
+export const TH_HERO_IMAGE = TH_PAGE_IMAGES.hero;
+export const TH_STORY_IMAGE = TH_PAGE_IMAGES.story;
 
 export const TH_COLLECTIONS = [
-  { id: 1, name: 'Carrera', slug: 'carrera', image: CARRERA_IMG,
+  { id: 1, name: 'Carrera', slug: 'carrera', image: COLLECTION_IMAGES.carrera,
     shortDescription_en: "TAG Heuer's racing-inspired collection, known for chronographs, clean sport-dress design, and strong motorsport heritage.",
     shortDescription_de: 'TAG Heuers Rennbahn-inspirierte Kollektion, bekannt für Chronographen, klares Sport-Dress-Design und starke Motorsport-Heritage.' },
-  { id: 2, name: 'Formula 1', slug: 'formula-1', image: FORMULA1_IMG,
+  { id: 2, name: 'Formula 1', slug: 'formula-1', image: COLLECTION_IMAGES.formula1,
     shortDescription_en: 'A sporty TAG Heuer collection with bold racing character, everyday durability, quartz and automatic options, and chronograph models.',
     shortDescription_de: 'Eine sportliche TAG Heuer Kollektion mit mutigem Renncharakter, alltäglicher Haltbarkeit, Quarz- und Automatik-Optionen und Chronograph-Modellen.' },
-  { id: 3, name: 'Aquaracer', slug: 'aquaracer', image: AQUARACER_IMG,
+  { id: 3, name: 'Aquaracer', slug: 'aquaracer', image: COLLECTION_IMAGES.aquaracer,
     shortDescription_en: 'A robust TAG Heuer dive and adventure collection, including 300M models built for water resistance, outdoor performance, and sport style.',
     shortDescription_de: 'Eine robuste TAG Heuer Tauch- und Abenteuer-Kollektion, einschließlich 300M Modelle für Wasserfestigkeit, Outdoor-Performance und Sport-Stil.' },
-  { id: 4, name: 'Monaco', slug: 'monaco', image: MONACO_IMG,
+  { id: 4, name: 'Monaco', slug: 'monaco', image: COLLECTION_IMAGES.monaco,
     shortDescription_en: 'A square-case TAG Heuer icon associated with racing heritage, bold design, and chronograph character.',
     shortDescription_de: 'Ein TAG Heuer Quadratgehäuse-Ikonen, der mit Rennsport-Heritage, mutigem Design und Chronograph-Charakter verbunden ist.' },
-  { id: 5, name: 'Connected', slug: 'connected', image: '',
+  { id: 5, name: 'Connected', slug: 'connected', image: COLLECTION_IMAGES.connected,
     shortDescription_en: "TAG Heuer's luxury smartwatch collection, including Connected Calibre E5 models for sport, wellness, golf, running, and digital performance.",
     shortDescription_de: 'TAG Heuers Luxus-Smartwatch-Kollektion, einschließlich Connected Calibre E5 Modelle für Sport, Wellness, Golf, Laufen und digitale Performance.' },
-  { id: 6, name: 'Connected Calibre E5', slug: 'connected-calibre-e5', image: '',
+  { id: 6, name: 'Connected Calibre E5', slug: 'connected-calibre-e5', image: COLLECTION_IMAGES.connectedCalibreE5,
     shortDescription_en: "TAG Heuer's latest generation luxury smartwatch with Calibre E5, offering sport, golf, running, and wellness features in 40 mm and 45 mm cases.",
     shortDescription_de: 'TAG Heuers neueste Generation Luxus-Smartwatch mit Calibre E5 — bietet Sport-, Golf-, Lauf- und Wellness-Funktionen in 40 mm und 45 mm Gehäusen.' },
-  { id: 7, name: 'Link', slug: 'link', image: '',
+  { id: 7, name: 'Link', slug: 'link', image: COLLECTION_IMAGES.link,
     shortDescription_en: 'A refined TAG Heuer collection known for its integrated bracelet style and smooth everyday luxury character.',
     shortDescription_de: 'Eine verfeinerte TAG Heuer Kollektion, bekannt für ihren integrierten Armband-Stil und den sanften, alltäglichen Luxus-Charakter.' },
-  { id: 8, name: 'Monza', slug: 'monza', image: '',
+  { id: 8, name: 'Monza', slug: 'monza', image: COLLECTION_IMAGES.monza,
     shortDescription_en: 'A heritage-inspired TAG Heuer line with strong motorsport identity, best handled as a vintage, special edition, or collector-focused page.',
     shortDescription_de: 'Eine heritage-inspirierte TAG Heuer Linie mit starker Motorsport-Identität — am besten als Vintage-, Sonderedition- oder sammlerfokussierte Seite behandelt.' },
 ];
@@ -64,42 +81,54 @@ export const TH_QUICK_FILTERS = [
 
 export const TH_SEO_CARDS = [
   { title_en: 'TAG Heuer Watch', title_de: 'TAG Heuer Uhr', link: '/tag-heuer-uhr',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'Explore TAG Heuer watches at Kariv Glamour — motorsport heritage, racing chronographs, Aquaracer dive watches, Formula 1 sport models, Monaco, and Connected smartwatches.',
     description_de: 'Entdecken Sie TAG Heuer Uhren bei Kariv Glamour — Motorsport-Heritage, Renn-Chronographen, Aquaracer Tauchuhren, Formula 1 Sportmodelle, Monaco und Connected Smartwatches.' },
   { title_en: 'TAG Heuer Carrera', title_de: 'TAG Heuer Carrera', link: '/tag-heuer/carrera',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: 'Discover the TAG Heuer Carrera collection — racing-inspired chronographs with Heuer 02 caliber, clean design, and motorsport heritage.',
     description_de: 'Entdecken Sie die TAG Heuer Carrera Kollektion — Rennsport-inspirierte Chronographen mit Heuer 02 Kaliber, klarem Design und Motorsport-Heritage.' },
   { title_en: 'TAG Heuer Aquaracer', title_de: 'TAG Heuer Aquaracer', link: '/tag-heuer/aquaracer',
+    image: TH_PAGE_IMAGES.aquaracer300m,
     description_en: 'Discover TAG Heuer Aquaracer dive watches — 300M water resistance, ceramic bezels, and robust construction for adventure and sport.',
     description_de: 'Entdecken Sie TAG Heuer Aquaracer Tauchuhren — 300M Wasserfestigkeit, keramische Lünetten und robuste Konstruktion für Abenteuer und Sport.' },
   { title_en: 'TAG Heuer Formula 1', title_de: 'TAG Heuer Formula 1', link: '/tag-heuer/formula-1',
+    image: TH_PAGE_IMAGES.carreraVsFormula1,
     description_en: 'Discover TAG Heuer Formula 1 — sporty watches with racing character, quartz and automatic options, and chronograph models.',
     description_de: 'Entdecken Sie TAG Heuer Formula 1 — sportliche Uhren mit Renncharakter, Quarz- und Automatik-Optionen und Chronograph-Modellen.' },
   { title_en: 'TAG Heuer Monaco', title_de: 'TAG Heuer Monaco', link: '/tag-heuer/monaco',
+    image: TH_PAGE_IMAGES.story,
     description_en: 'Discover the TAG Heuer Monaco — a square-case chronograph with racing heritage and bold, iconic design.',
     description_de: 'Entdecken Sie die TAG Heuer Monaco — ein Quadratgehäuse-Chronograph mit Rennsport-Heritage und mutigem, ikonischen Design.' },
   { title_en: 'TAG Heuer Connected Calibre E5', title_de: 'TAG Heuer Connected Calibre E5', link: '/tag-heuer/connected-calibre-e5',
+    image: TH_PAGE_IMAGES.connectedCalibreE5,
     description_en: 'Discover TAG Heuer Connected Calibre E5 — luxury smartwatches with sport, golf, running, and wellness features in 40 mm and 45 mm.',
     description_de: 'Entdecken Sie TAG Heuer Connected Calibre E5 — Luxus-Smartwatches mit Sport-, Golf-, Lauf- und Wellness-Funktionen in 40 mm und 45 mm.' },
 ];
 
 export const TH_READ_MORE = [
   { title_en: 'TAG Heuer Story', title_de: 'TAG Heuer Story', link: '/tag-heuer/story',
+    image: TH_PAGE_IMAGES.story,
     description_en: "Explore TAG Heuer's heritage of motorsport, timing, and chronograph excellence — from Carrera to Monaco.",
     description_de: 'Entdecken Sie TAG Heuers Heritage von Motorsport, Zeitmessung und Chronographen-Exzellenz — von Carrera bis Monaco.' },
   { title_en: 'Carrera vs Formula 1', title_de: 'Carrera vs Formula 1', link: '/tag-heuer-carrera-vs-formula-1',
+    image: TH_PAGE_IMAGES.carreraVsFormula1,
     description_en: 'Compare TAG Heuer Carrera and Formula 1 — two iconic collections with different character and price points.',
     description_de: 'Vergleichen Sie TAG Heuer Carrera und Formula 1 — zwei ikonische Kollektionen mit unterschiedlichem Charakter und Preis.' },
   { title_en: 'Connected Calibre E5 Guide', title_de: 'Connected Calibre E5 Guide', link: '/tag-heuer-connected-calibre-e5-guide',
+    image: TH_PAGE_IMAGES.connectedCalibreE5,
     description_en: 'Understand TAG Heuer Connected Calibre E5 — the luxury smartwatch with sport, golf, and wellness features.',
     description_de: 'Verstehen Sie TAG Heuer Connected Calibre E5 — die Luxus-Smartwatch mit Sport-, Golf- und Wellness-Funktionen.' },
   { title_en: 'Aquaracer 300M', title_de: 'Aquaracer 300M', link: '/tag-heuer-aquaracer-300m',
+    image: TH_PAGE_IMAGES.aquaracer300m,
     description_en: 'Discover the TAG Heuer Aquaracer 300M — a professional dive watch with 300M water resistance and ceramic bezel.',
     description_de: 'Entdecken Sie die TAG Heuer Aquaracer 300M — eine professionelle Tauchuhr mit 300M Wasserfestigkeit und keramischer Lünette.' },
   { title_en: 'Carrera Chronograph', title_de: 'Carrera Chronograph', link: '/tag-heuer-carrera-chronograph',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: 'Discover TAG Heuer Carrera chronographs — racing chronographs with Heuer 02 caliber and precise timing.',
     description_de: 'Entdecken Sie TAG Heuer Carrera Chronographen — Rennsport-Chronographen mit Heuer 02 Kaliber und präziser Zeitmessung.' },
   { title_en: 'Buying Pre-Owned TAG Heuer', title_de: 'Gebrauchte TAG Heuer kaufen', link: '/tag-heuer-gebraucht',
+    image: TH_PAGE_IMAGES.preOwned,
     description_en: 'What to check before buying a used TAG Heuer — condition, box and papers, reference number, and authentication.',
     description_de: 'Was Sie vor dem Kauf einer gebrauchten TAG Heuer prüfen sollten — Zustand, Box und Papiere, Referenznummer und Authentifizierung.' },
 ];
@@ -200,6 +229,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-uhr': {
     h1_en: 'TAG Heuer Watch', h1_de: 'TAG Heuer Uhr',
     title_en: 'TAG Heuer Watch | Kariv Glamour', title_de: 'TAG Heuer Uhr | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'Discover TAG Heuer watches at Kariv Glamour — motorsport heritage, chronographs, Aquaracer, Formula 1, Monaco, and Connected.',
     description_de: 'Entdecken Sie TAG Heuer Uhren bei Kariv Glamour — Motorsport-Heritage, Chronographen, Aquaracer, Formula 1, Monaco und Connected.',
     intro_en: "Explore TAG Heuer watches at Kariv Glamour — with motorsport heritage, racing chronographs, robust Aquaracer dive watches, Formula 1 sport models, the square Monaco icon, and the Connected Calibre E5 smartwatch collection.",
@@ -209,6 +239,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-uhren': {
     h1_en: 'TAG Heuer Watches', h1_de: 'TAG Heuer Uhren',
     title_en: 'TAG Heuer Watches | Kariv Glamour', title_de: 'TAG Heuer Uhren | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'TAG Heuer watches at Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco, Connected, and Link collections.',
     description_de: 'TAG Heuer Uhren bei Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco, Connected und Link Kollektionen.',
     intro_en: 'Browse TAG Heuer watches by collection, model, movement, case size, condition, and price.',
@@ -218,6 +249,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-watches': {
     h1_en: 'TAG Heuer Watches', h1_de: 'TAG Heuer Watches',
     title_en: 'TAG Heuer Watches | Kariv Glamour', title_de: 'TAG Heuer Watches | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'TAG Heuer watches at Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco, and Connected.',
     description_de: 'TAG Heuer Watches bei Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco und Connected.',
     intro_en: 'Discover TAG Heuer watches at Kariv Glamour — motorsport heritage, chronographs, and smartwatches.',
@@ -227,6 +259,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-uhr-herren': {
     h1_en: "TAG Heuer Men's Watches", h1_de: 'TAG Heuer Uhr Herren',
     title_en: "TAG Heuer Men's Watches | Kariv Glamour", title_de: 'TAG Heuer Uhr Herren | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: "TAG Heuer men's watches at Kariv Glamour — Carrera, Aquaracer, Formula 1, and Monaco models for men.",
     description_de: 'TAG Heuer Uhr Herren bei Kariv Glamour — Carrera, Aquaracer, Formula 1 und Monaco Modelle für Männer.',
     intro_en: "Discover TAG Heuer watches for men — from Carrera to Aquaracer, Formula 1, and Monaco.",
@@ -236,6 +269,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-uhren-herren': {
     h1_en: "TAG Heuer Men's Watches", h1_de: 'TAG Heuer Uhren Herren',
     title_en: "TAG Heuer Men's Watches | Kariv Glamour", title_de: 'TAG Heuer Uhren Herren | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: "TAG Heuer men's watches at Kariv Glamour — racing chronographs, dive watches, and sport watches for men.",
     description_de: 'TAG Heuer Uhren Herren bei Kariv Glamour — Renn-Chronographen, Tauchuhren und Sportuhren für Männer.',
     intro_en: "Browse TAG Heuer watches for men — chronographs, dive watches, and sport models.",
@@ -245,6 +279,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-damenuhr': {
     h1_en: "TAG Heuer Women's Watch", h1_de: 'TAG Heuer Damenuhr',
     title_en: "TAG Heuer Women's Watch | Kariv Glamour", title_de: 'TAG Heuer Damenuhr | Kariv Glamour',
+    image: TH_PAGE_IMAGES.preOwned,
     description_en: "TAG Heuer women's watches at Kariv Glamour — elegant sport watches in smaller case sizes.",
     description_de: 'TAG Heuer Damenuhren bei Kariv Glamour — elegante Sportuhren in kleineren Gehäusegrößen.',
     intro_en: "Discover TAG Heuer women's watches — elegant sport watches in smaller case sizes with quartz and automatic options.",
@@ -254,6 +289,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-kaufen': {
     h1_en: 'Buy TAG Heuer', h1_de: 'TAG Heuer kaufen',
     title_en: 'Buy TAG Heuer | Kariv Glamour', title_de: 'TAG Heuer kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'Buy TAG Heuer at Kariv Glamour — new and pre-owned models with transparent product information.',
     description_de: 'TAG Heuer kaufen bei Kariv Glamour — neue und gebrauchte Modelle mit transparenter Produktinformation.',
     intro_en: 'Buy TAG Heuer at Kariv Glamour: new and pre-owned models with transparent product information.',
@@ -263,6 +299,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-uhr-kaufen': {
     h1_en: 'Buy TAG Heuer Watch', h1_de: 'TAG Heuer Uhr kaufen',
     title_en: 'Buy TAG Heuer Watch | Kariv Glamour', title_de: 'TAG Heuer Uhr kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'Buy TAG Heuer watch at Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco, and Connected.',
     description_de: 'TAG Heuer Uhr kaufen bei Kariv Glamour — Carrera, Aquaracer, Formula 1, Monaco und Connected.',
     intro_en: 'Buy TAG Heuer watch at Kariv Glamour — discover models from the Carrera, Aquaracer, Formula 1, Monaco, Connected, and Link collections.',
@@ -272,6 +309,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-carrera-kaufen': {
     h1_en: 'Buy TAG Heuer Carrera', h1_de: 'TAG Heuer Carrera kaufen',
     title_en: 'Buy TAG Heuer Carrera | Kariv Glamour', title_de: 'TAG Heuer Carrera kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: 'Buy TAG Heuer Carrera at Kariv Glamour — racing chronographs with Heuer 02 caliber.',
     description_de: 'TAG Heuer Carrera kaufen bei Kariv Glamour — Renn-Chronographen mit Heuer 02 Kaliber.',
     intro_en: 'Buy TAG Heuer Carrera at Kariv Glamour — racing-inspired chronographs with automatic caliber and clean design.',
@@ -281,6 +319,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-aquaracer-kaufen': {
     h1_en: 'Buy TAG Heuer Aquaracer', h1_de: 'TAG Heuer Aquaracer kaufen',
     title_en: 'Buy TAG Heuer Aquaracer | Kariv Glamour', title_de: 'TAG Heuer Aquaracer kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.aquaracer300m,
     description_en: 'Buy TAG Heuer Aquaracer at Kariv Glamour — dive watches with 300M water resistance.',
     description_de: 'TAG Heuer Aquaracer kaufen bei Kariv Glamour — Tauchuhren mit 300M Wasserfestigkeit.',
     intro_en: 'Buy TAG Heuer Aquaracer at Kariv Glamour — robust dive watches with 300M water resistance and ceramic bezel.',
@@ -290,6 +329,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-formula-1-kaufen': {
     h1_en: 'Buy TAG Heuer Formula 1', h1_de: 'TAG Heuer Formula 1 kaufen',
     title_en: 'Buy TAG Heuer Formula 1 | Kariv Glamour', title_de: 'TAG Heuer Formula 1 kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraVsFormula1,
     description_en: 'Buy TAG Heuer Formula 1 at Kariv Glamour — sport watches with racing character.',
     description_de: 'TAG Heuer Formula 1 kaufen bei Kariv Glamour — Sportuhren mit Renncharakter.',
     intro_en: 'Buy TAG Heuer Formula 1 at Kariv Glamour — sporty watches with racing character, quartz and automatic options.',
@@ -299,6 +339,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-monaco-kaufen': {
     h1_en: 'Buy TAG Heuer Monaco', h1_de: 'TAG Heuer Monaco kaufen',
     title_en: 'Buy TAG Heuer Monaco | Kariv Glamour', title_de: 'TAG Heuer Monaco kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.story,
     description_en: 'Buy TAG Heuer Monaco at Kariv Glamour — square-case chronograph with racing heritage.',
     description_de: 'TAG Heuer Monaco kaufen bei Kariv Glamour — Quadratgehäuse-Chronograph mit Rennsport-Heritage.',
     intro_en: 'Buy TAG Heuer Monaco at Kariv Glamour — the iconic square chronograph with racing connection.',
@@ -308,6 +349,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-gebraucht': {
     h1_en: 'Pre-Owned TAG Heuer', h1_de: 'TAG Heuer gebraucht',
     title_en: 'Pre-Owned TAG Heuer | Kariv Glamour', title_de: 'TAG Heuer gebraucht | Kariv Glamour',
+    image: TH_PAGE_IMAGES.preOwned,
     description_en: 'Pre-owned TAG Heuer watches at Kariv Glamour with transparent condition grading.',
     description_de: 'Gebrauchte TAG Heuer Uhren bei Kariv Glamour mit transparenter Zustandsbewertung.',
     intro_en: 'Discover pre-owned TAG Heuer watches with clear condition grading, box and papers, and detailed product data.',
@@ -317,6 +359,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-carrera-chronograph': {
     h1_en: 'TAG Heuer Carrera Chronograph', h1_de: 'TAG Heuer Carrera Chronograph',
     title_en: 'TAG Heuer Carrera Chronograph | Kariv Glamour', title_de: 'TAG Heuer Carrera Chronograph | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: 'TAG Heuer Carrera Chronograph — racing chronographs with Heuer 02 caliber and precise timing.',
     description_de: 'TAG Heuer Carrera Chronograph — Rennsport-Chronographen mit Heuer 02 Kaliber und präziser Zeitmessung.',
     intro_en: 'Discover TAG Heuer Carrera chronographs — racing-inspired chronographs with Heuer 02 automatic caliber and tachymeter bezel.',
@@ -330,6 +373,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-formula-1-chronograph': {
     h1_en: 'TAG Heuer Formula 1 Chronograph', h1_de: 'TAG Heuer Formula 1 Chronograph',
     title_en: 'TAG Heuer Formula 1 Chronograph | Kariv Glamour', title_de: 'TAG Heuer Formula 1 Chronograph | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraVsFormula1,
     description_en: 'TAG Heuer Formula 1 Chronograph — sporty chronographs with racing character.',
     description_de: 'TAG Heuer Formula 1 Chronograph — sportliche Chronographen mit Renncharakter.',
     intro_en: 'Discover TAG Heuer Formula 1 chronographs — sporty chronographs with bold racing character and quartz or automatic movement.',
@@ -343,6 +387,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-aquaracer-300m': {
     h1_en: 'TAG Heuer Aquaracer 300M', h1_de: 'TAG Heuer Aquaracer 300M',
     title_en: 'TAG Heuer Aquaracer 300M | Kariv Glamour', title_de: 'TAG Heuer Aquaracer 300M | Kariv Glamour',
+    image: TH_PAGE_IMAGES.aquaracer300m,
     description_en: 'TAG Heuer Aquaracer 300M — professional dive watch with 300M water resistance.',
     description_de: 'TAG Heuer Aquaracer 300M — professionelle Tauchuhr mit 300M Wasserfestigkeit.',
     intro_en: 'Discover the TAG Heuer Aquaracer 300M — a professional dive watch with 300M water resistance, ceramic bezel, and screw-down crown.',
@@ -356,6 +401,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-chronograph': {
     h1_en: 'TAG Heuer Chronograph', h1_de: 'TAG Heuer Chronograph',
     title_en: 'TAG Heuer Chronograph | Kariv Glamour', title_de: 'TAG Heuer Chronograph | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraChronograph,
     description_en: 'TAG Heuer chronographs — racing chronographs from Carrera to Monaco.',
     description_de: 'TAG Heuer Chronograph — Rennsport-Chronographen von Carrera bis Monaco.',
     intro_en: 'Discover TAG Heuer chronographs — from Carrera to Monaco to Formula 1, with Heuer 02 caliber and precise timing.',
@@ -369,6 +415,7 @@ export const TH_SEO_PAGES = {
   'welche-tag-heuer-kaufen': {
     h1_en: 'Which TAG Heuer to Buy?', h1_de: 'Welche TAG Heuer kaufen?',
     title_en: 'Which TAG Heuer to Buy | Kariv Glamour', title_de: 'Welche TAG Heuer kaufen | Kariv Glamour',
+    image: TH_PAGE_IMAGES.hero,
     description_en: 'TAG Heuer buying guide — compare Carrera, Aquaracer, Formula 1, Monaco, and Connected.',
     description_de: 'TAG Heuer Kaufberatung — vergleichen Sie Carrera, Aquaracer, Formula 1, Monaco und Connected.',
     intro_en: 'Which TAG Heuer watch is right for you? Compare collections, movements, case sizes, and features to make the right decision.',
@@ -388,6 +435,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-carrera-vs-formula-1': {
     h1_en: 'TAG Heuer Carrera vs Formula 1', h1_de: 'TAG Heuer Carrera vs Formula 1',
     title_en: 'TAG Heuer Carrera vs Formula 1 | Kariv Glamour', title_de: 'TAG Heuer Carrera vs Formula 1 | Kariv Glamour',
+    image: TH_PAGE_IMAGES.carreraVsFormula1,
     description_en: 'Comparison of TAG Heuer Carrera and Formula 1 — two iconic collections with different character.',
     description_de: 'Vergleich der TAG Heuer Carrera und Formula 1 — zwei ikonische Kollektionen mit unterschiedlichem Charakter.',
     intro_en: 'The comparison between TAG Heuer Carrera and Formula 1: Both are sporty watches, but the Carrera is a premium racing chronograph with Heuer 02 automatic caliber, while the Formula 1 is a more accessible sport watch with quartz and automatic options.',
@@ -407,6 +455,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-connected-calibre-e5-guide': {
     h1_en: 'TAG Heuer Connected Calibre E5 Guide', h1_de: 'TAG Heuer Connected Calibre E5 Guide',
     title_en: 'TAG Heuer Connected Calibre E5 Guide | Kariv Glamour', title_de: 'TAG Heuer Connected Calibre E5 Guide | Kariv Glamour',
+    image: TH_PAGE_IMAGES.connectedCalibreE5,
     description_en: 'Understand TAG Heuer Connected Calibre E5 — the luxury smartwatch with sport, golf, and wellness features.',
     description_de: 'Verstehen Sie TAG Heuer Connected Calibre E5 — die Luxus-Smartwatch mit Sport-, Golf- und Wellness-Funktionen.',
     intro_en: 'The TAG Heuer Connected Calibre E5 is the latest generation of TAG Heuer\'s luxury smartwatch with sport, golf, running, and wellness features in 40 mm and 45 mm cases.',
@@ -426,6 +475,7 @@ export const TH_SEO_PAGES = {
   'tag-heuer-story': {
     h1_en: 'TAG Heuer Story', h1_de: 'TAG Heuer Story',
     title_en: 'TAG Heuer Story | Kariv Glamour', title_de: 'TAG Heuer Story | Kariv Glamour',
+    image: TH_PAGE_IMAGES.story,
     description_en: 'The TAG Heuer story — motorsport heritage, racing chronographs, and sport watches from Carrera to Monaco.',
     description_de: 'Die TAG Heuer Story — Motorsport-Heritage, Renn-Chronographen und Sportuhren von Carrera bis Monaco.',
     intro_en: "TAG Heuer stands for motorsport heritage, racing chronographs, and sport watches — from Carrera to Monaco to Aquaracer, Formula 1, and Connected smartwatch.",

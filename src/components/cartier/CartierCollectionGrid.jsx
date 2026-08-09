@@ -24,9 +24,9 @@ export default function CartierCollectionGrid() {
           {collections.map((c, i) =>
             <motion.div key={c.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 4 * 0.05 }} className="flex-shrink-0 snap-start min-w-[80%] sm:min-w-[45%] lg:min-w-[30%]">
               <LocalizedLink to={`/cartier/${c.slug}`} className="group block border border-border bg-card transition-colors hover:border-primary/40">
-                <div className="aspect-[4/3] overflow-hidden flex items-center justify-center bg-secondary">
+                <div className="aspect-[4/5] overflow-hidden flex items-center justify-center bg-secondary">
                   {c.image ?
-                    <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+                    <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" /> :
                     <span className="font-display text-2xl text-primary">{c.name}</span>
                   }
                 </div>

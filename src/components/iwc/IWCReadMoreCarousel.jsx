@@ -18,9 +18,15 @@ export default function IWCReadMoreCarousel() {
         </div>
         <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar">
           {IWC_READ_MORE.map((card, i) =>
-          <LocalizedLink key={i} to={card.link} className="group flex-shrink-0 snap-start min-w-[80%] sm:min-w-[45%] lg:min-w-[30%] block border border-border bg-card hover:border-primary/40 transition-colors">
-              <div className="aspect-[16/10] flex items-center justify-center bg-secondary">
-                <span className="font-display text-lg text-foreground/60 group-hover:text-foreground transition-colors">{localize(card, 'title')}</span>
+          <LocalizedLink key={i} to={card.link} className="group flex-shrink-0 snap-start w-[82vw] max-w-[22rem] sm:w-80 lg:w-96 lg:max-w-[24rem] block overflow-hidden border border-border bg-card hover:border-primary/40 transition-colors">
+              <div className="h-44 sm:h-52 lg:h-56 w-full overflow-hidden bg-secondary">
+                {card.image ? (
+                  <img src={card.image} alt={localize(card, 'title')} loading="lazy" className="block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center">
+                    <span className="font-display text-lg text-foreground/60 group-hover:text-foreground transition-colors">{localize(card, 'title')}</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="text-lg mb-2 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{localize(card, 'title')}</h3>

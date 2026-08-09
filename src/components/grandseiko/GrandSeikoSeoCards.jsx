@@ -20,10 +20,17 @@ export default function GrandSeikoSeoCards() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {GS_SEO_CARDS.map((card, i) =>
           <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }}>
-              <LocalizedLink to={card.link} className="group block border border-border bg-card p-8 hover:border-primary/40 transition-colors">
+              <LocalizedLink to={card.link} className="group block overflow-hidden border border-border bg-card hover:border-primary/40 transition-colors">
+                {card.image && (
+                  <div className="h-44 sm:h-52 w-full overflow-hidden bg-secondary">
+                    <img src={card.image} alt={localize(card, 'title')} loading="lazy" className="block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  </div>
+                )}
+                <div className="p-8">
                 <h3 className="text-xl mb-3 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{localize(card, 'title')}</h3>
                 <p className="text-xs leading-relaxed mb-5 text-muted-foreground">{localize(card, 'description')}</p>
                 <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('cta.discover')} &rarr;</span>
+                </div>
               </LocalizedLink>
             </motion.div>
           )}

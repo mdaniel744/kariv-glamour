@@ -2,13 +2,26 @@
 // Grand Seiko is positioned around Japanese craftsmanship, precision,
 // nature-inspired dials, Spring Drive, and the Grammar of Design.
 
+const GS_PAGE_ASSET_BASE = '/brand-assets/grand-seiko/page';
+
+export const GS_PAGE_IMAGES = {
+  hero: `${GS_PAGE_ASSET_BASE}/grand-seiko-hero.png`,
+  story: `${GS_PAGE_ASSET_BASE}/grand-seiko-story.webp`,
+  shunbunGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-shunbun-guide.webp`,
+  shunbunVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-shunbun-vs-snowflake.webp`,
+  snowflakeGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-snowflake-guide.jpg`,
+  springDriveGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-spring-drive-guide.webp`,
+  springDriveVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-spring-drive-vs-snowflake.jpg`,
+  preOwned: `${GS_PAGE_ASSET_BASE}/grand-seiko-pre-owned.jpg`,
+};
+
 const EVOLUTION9_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/4a6c12570_GrandSeikoEvolution9.jpg';
 const HERITAGE_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/b9cc089d5_GrandSeikoHeritage.webp';
 const MENS_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/a0b5ed446_GrandSeikoMenUhr.jpg';
 const LADIES_IMG = 'https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/dafceffa4_Grand_Seiko_Ladies_Automatic.webp';
 
-export const GS_HERO_IMAGE = EVOLUTION9_IMG;
-export const GS_STORY_IMAGE = MENS_IMG;
+export const GS_HERO_IMAGE = GS_PAGE_IMAGES.hero;
+export const GS_STORY_IMAGE = GS_PAGE_IMAGES.story;
 
 export const GS_COLLECTIONS = [
   { id: 1, name: 'Heritage', slug: 'heritage', image: HERITAGE_IMG, shortDescription_en: 'The heart of Grand Seiko — balanced design and the pure essentials of watchmaking, home to iconic models like the Snowflake and Shunbun.', shortDescription_de: 'Das Herz von Grand Seiko — ausgewogenes Design und die reinen Essentials der Uhrmacherei, Heimat ikonischer Modelle wie Snowflake und Shunbun.' },
@@ -41,21 +54,21 @@ export const GS_QUICK_FILTERS = [
 ];
 
 export const GS_SEO_CARDS = [
-  { title_en: 'Grand Seiko Watch', title_de: 'Grand Seiko Uhr', description_en: 'Explore Grand Seiko watches at Kariv Glamour — Japanese craftsmanship, Spring Drive technology and nature-inspired dials with transparent product details.', description_de: 'Entdecken Sie Grand Seiko Uhren bei Kariv Glamour — japanische Handwerkskunst, Spring Drive Technologie und naturinspirierte Zifferblätter mit transparenten Produktdetails.', link: '/grand-seiko-uhr' },
-  { title_en: 'Grand Seiko Watches', title_de: 'Grand Seiko Uhren', description_en: 'Browse the full Grand Seiko collection including Heritage, Elegance, Sport, Evolution 9 and Masterpiece.', description_de: 'Stöbern Sie durch die gesamte Grand Seiko Kollektion inklusive Heritage, Elegance, Sport, Evolution 9 und Masterpiece.', link: '/grand-seiko-uhren' },
-  { title_en: 'Grand Seiko Snowflake', title_de: 'Grand Seiko Snowflake', description_en: 'Discover the Grand Seiko Snowflake (SBGA211) — a Heritage Collection Spring Drive model with a textured white dial inspired by Japanese snow.', description_de: 'Entdecken Sie den Grand Seiko Snowflake (SBGA211) — ein Heritage Collection Spring Drive Modell mit strukturiertem weißen Zifferblatt, inspiriert von japanischem Schnee.', link: '/grand-seiko-snowflake' },
-  { title_en: 'Grand Seiko Shunbun', title_de: 'Grand Seiko Shunbun', description_en: 'Explore the Grand Seiko Shunbun (SBGA413) — a 62GS-inspired case with a dial expressing a brief spring scene, powered by Spring Drive.', description_de: 'Entdecken Sie den Grand Seiko Shunbun (SBGA413) — ein 62GS-inspiriertes Gehäuse mit einem Zifferblatt, das eine kurze Frühlingsszene ausdrückt, angetrieben von Spring Drive.', link: '/grand-seiko-shunbun' },
-  { title_en: 'Grand Seiko Spring Drive', title_de: 'Grand Seiko Spring Drive', description_en: 'Learn about Grand Seiko Spring Drive — the unique movement combining mechanical precision with quartz accuracy for one-second-a-day precision.', description_de: 'Erfahren Sie mehr über Grand Seiko Spring Drive — das einzigartige Uhrwerk, das mechanische Präzision mit Quarzgenauigkeit für eine Sekunde pro Tag Präzision verbindet.', link: '/grand-seiko-spring-drive' },
-  { title_en: 'Grand Seiko GMT', title_de: 'Grand Seiko GMT', description_en: 'Browse Grand Seiko GMT watches for travel — dual-time functionality with Spring Drive or mechanical movements.', description_de: 'Stöbern Sie durch Grand Seiko GMT Uhren für Reisen — Dual-Zeit-Funktionalität mit Spring Drive oder mechanischen Uhrwerken.', link: '/grand-seiko-gmt' },
+  { title_en: 'Grand Seiko Watch', title_de: 'Grand Seiko Uhr', description_en: 'Explore Grand Seiko watches at Kariv Glamour — Japanese craftsmanship, Spring Drive technology and nature-inspired dials with transparent product details.', description_de: 'Entdecken Sie Grand Seiko Uhren bei Kariv Glamour — japanische Handwerkskunst, Spring Drive Technologie und naturinspirierte Zifferblätter mit transparenten Produktdetails.', link: '/grand-seiko-uhr', image: GS_PAGE_IMAGES.hero },
+  { title_en: 'Grand Seiko Watches', title_de: 'Grand Seiko Uhren', description_en: 'Browse the full Grand Seiko collection including Heritage, Elegance, Sport, Evolution 9 and Masterpiece.', description_de: 'Stöbern Sie durch die gesamte Grand Seiko Kollektion inklusive Heritage, Elegance, Sport, Evolution 9 und Masterpiece.', link: '/grand-seiko-uhren', image: GS_PAGE_IMAGES.story },
+  { title_en: 'Grand Seiko Snowflake', title_de: 'Grand Seiko Snowflake', description_en: 'Discover the Grand Seiko Snowflake (SBGA211) — a Heritage Collection Spring Drive model with a textured white dial inspired by Japanese snow.', description_de: 'Entdecken Sie den Grand Seiko Snowflake (SBGA211) — ein Heritage Collection Spring Drive Modell mit strukturiertem weißen Zifferblatt, inspiriert von japanischem Schnee.', link: '/grand-seiko-snowflake', image: GS_PAGE_IMAGES.snowflakeGuide },
+  { title_en: 'Grand Seiko Shunbun', title_de: 'Grand Seiko Shunbun', description_en: 'Explore the Grand Seiko Shunbun (SBGA413) — a 62GS-inspired case with a dial expressing a brief spring scene, powered by Spring Drive.', description_de: 'Entdecken Sie den Grand Seiko Shunbun (SBGA413) — ein 62GS-inspiriertes Gehäuse mit einem Zifferblatt, das eine kurze Frühlingsszene ausdrückt, angetrieben von Spring Drive.', link: '/grand-seiko-shunbun', image: GS_PAGE_IMAGES.shunbunGuide },
+  { title_en: 'Grand Seiko Spring Drive', title_de: 'Grand Seiko Spring Drive', description_en: 'Learn about Grand Seiko Spring Drive — the unique movement combining mechanical precision with quartz accuracy for one-second-a-day precision.', description_de: 'Erfahren Sie mehr über Grand Seiko Spring Drive — das einzigartige Uhrwerk, das mechanische Präzision mit Quarzgenauigkeit für eine Sekunde pro Tag Präzision verbindet.', link: '/grand-seiko-spring-drive', image: GS_PAGE_IMAGES.springDriveGuide },
+  { title_en: 'Grand Seiko GMT', title_de: 'Grand Seiko GMT', description_en: 'Browse Grand Seiko GMT watches for travel — dual-time functionality with Spring Drive or mechanical movements.', description_de: 'Stöbern Sie durch Grand Seiko GMT Uhren für Reisen — Dual-Zeit-Funktionalität mit Spring Drive oder mechanischen Uhrwerken.', link: '/grand-seiko-gmt', image: GS_PAGE_IMAGES.springDriveVsSnowflake },
 ];
 
 export const GS_READ_MORE = [
-  { title_en: 'Grand Seiko Story', title_de: 'Grand Seiko Story', description_en: 'Explore Grand Seiko\'s heritage of Japanese craftsmanship, the Grammar of Design, and the pursuit of the pure essentials of watchmaking.', description_de: 'Entdecken Sie Grand Seikos Erbe japanischer Handwerkskunst, die Grammar of Design und die Verfolgung der reinen Essentials der Uhrmacherei.', link: '/grand-seiko/story' },
-  { title_en: 'Snowflake Guide', title_de: 'Snowflake Guide', description_en: 'Learn what makes the Grand Seiko Snowflake one of the most beloved nature-inspired dials in watchmaking.', description_de: 'Erfahren Sie, was den Grand Seiko Snowflake zu einem der beliebtesten naturinspirierten Zifferblätter der Uhrmacherei macht.', link: '/grand-seiko-snowflake' },
-  { title_en: 'Shunbun Guide', title_de: 'Shunbun Guide', description_en: 'Discover the Grand Seiko Shunbun — a 62GS-inspired case design with a dial capturing a fleeting spring moment.', description_de: 'Entdecken Sie den Grand Seiko Shunbun — ein 62GS-inspiriertes Gehäusedesign mit einem Zifferblatt, das einen flüchtigen Frühlingsmoment einfängt.', link: '/grand-seiko-shunbun' },
-  { title_en: 'Spring Drive Guide', title_de: 'Spring Drive Guide', description_en: 'Understand Grand Seiko Spring Drive technology — the movement that unites mechanical and electronic precision.', description_de: 'Verstehen Sie Grand Seiko Spring Drive Technologie — das Uhrwerk, das mechanische und elektronische Präzision vereint.', link: '/grand-seiko-spring-drive-guide' },
-  { title_en: 'Snowflake vs Shunbun', title_de: 'Snowflake vs Shunbun', description_en: 'Compare the Grand Seiko Snowflake and Shunbun — two iconic nature-inspired Spring Drive models.', description_de: 'Vergleichen Sie den Grand Seiko Snowflake und Shunbun — zwei ikonische naturinspirierte Spring Drive Modelle.', link: '/grand-seiko-snowflake-vs-shunbun' },
-  { title_en: 'Buying Pre-Owned Grand Seiko', title_de: 'Gebrauchte Grand Seiko kaufen', description_en: 'What to check before buying a used Grand Seiko — condition, Zaratsu polishing, box and papers, and movement verification.', description_de: 'Worauf Sie vor dem Kauf einer gebrauchten Grand Seiko achten sollten — Zustand, Zaratsu-Politur, Box und Papers und Uhrwerk-Verifizierung.', link: '/grand-seiko-gebraucht' },
+  { title_en: 'Grand Seiko Story', title_de: 'Grand Seiko Story', description_en: 'Explore Grand Seiko\'s heritage of Japanese craftsmanship, the Grammar of Design, and the pursuit of the pure essentials of watchmaking.', description_de: 'Entdecken Sie Grand Seikos Erbe japanischer Handwerkskunst, die Grammar of Design und die Verfolgung der reinen Essentials der Uhrmacherei.', link: '/grand-seiko/story', image: GS_PAGE_IMAGES.story },
+  { title_en: 'Snowflake Guide', title_de: 'Snowflake Guide', description_en: 'Learn what makes the Grand Seiko Snowflake one of the most beloved nature-inspired dials in watchmaking.', description_de: 'Erfahren Sie, was den Grand Seiko Snowflake zu einem der beliebtesten naturinspirierten Zifferblätter der Uhrmacherei macht.', link: '/grand-seiko-snowflake', image: GS_PAGE_IMAGES.snowflakeGuide },
+  { title_en: 'Shunbun Guide', title_de: 'Shunbun Guide', description_en: 'Discover the Grand Seiko Shunbun — a 62GS-inspired case design with a dial capturing a fleeting spring moment.', description_de: 'Entdecken Sie den Grand Seiko Shunbun — ein 62GS-inspiriertes Gehäusedesign mit einem Zifferblatt, das einen flüchtigen Frühlingsmoment einfängt.', link: '/grand-seiko-shunbun', image: GS_PAGE_IMAGES.shunbunGuide },
+  { title_en: 'Spring Drive Guide', title_de: 'Spring Drive Guide', description_en: 'Understand Grand Seiko Spring Drive technology — the movement that unites mechanical and electronic precision.', description_de: 'Verstehen Sie Grand Seiko Spring Drive Technologie — das Uhrwerk, das mechanische und elektronische Präzision vereint.', link: '/grand-seiko-spring-drive-guide', image: GS_PAGE_IMAGES.springDriveGuide },
+  { title_en: 'Snowflake vs Shunbun', title_de: 'Snowflake vs Shunbun', description_en: 'Compare the Grand Seiko Snowflake and Shunbun — two iconic nature-inspired Spring Drive models.', description_de: 'Vergleichen Sie den Grand Seiko Snowflake und Shunbun — zwei ikonische naturinspirierte Spring Drive Modelle.', link: '/grand-seiko-snowflake-vs-shunbun', image: GS_PAGE_IMAGES.shunbunVsSnowflake },
+  { title_en: 'Buying Pre-Owned Grand Seiko', title_de: 'Gebrauchte Grand Seiko kaufen', description_en: 'What to check before buying a used Grand Seiko — condition, Zaratsu polishing, box and papers, and movement verification.', description_de: 'Worauf Sie vor dem Kauf einer gebrauchten Grand Seiko achten sollten — Zustand, Zaratsu-Politur, Box und Papers und Uhrwerk-Verifizierung.', link: '/grand-seiko-gebraucht', image: GS_PAGE_IMAGES.preOwned },
 ];
 
 export const GS_INTERNAL_LINKS = [

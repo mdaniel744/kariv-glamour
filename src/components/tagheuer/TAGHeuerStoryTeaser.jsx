@@ -34,7 +34,7 @@ export default function TAGHeuerStoryTeaser() {
           <LocalizedLink to="/tag-heuer/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('cta.readStory', { brand: BRAND })}</LocalizedLink>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="aspect-[4/5] overflow-hidden bg-secondary">
-          <img src={TH_STORY_IMAGE} alt={`${BRAND} Monaco watch detail`} className="w-full h-full object-cover" />
+          <img src={TH_STORY_IMAGE} alt={`${BRAND} chronograph detail`} className="w-full h-full object-cover" />
         </motion.div>
       </div>
     </section>
