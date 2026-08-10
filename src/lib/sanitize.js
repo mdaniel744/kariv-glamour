@@ -48,9 +48,12 @@ function registerDomPurifyHooks(purifier) {
   if (hooksRegistered) return;
   hooksRegistered = true;
 
-  // `style` only ever carries `text-align` on a fixed set of block tags —
-  // no Supabase Storage on this platform, so `src` still has to be a real
-  // http(s) URL (same convention as every other image field in the app).
+  // `style` only ever carries `text-align` on a fixed set of block tags.
+  // `src` must be a real http(s) URL — covers both externally-hosted images
+  // (ImageKit) and the platform's own Supabase Storage bucket
+  // (store-images, public-read), which serves images over https:// too.
+  // This is a scheme check, not a domain allowlist — tighten to a specific
+  // host allowlist only if that's ever actually needed.
   purifier.addHook('uponSanitizeAttribute', (node, data) => {
     if (data.attrName === 'style') {
       const tag = node.tagName?.toLowerCase();
