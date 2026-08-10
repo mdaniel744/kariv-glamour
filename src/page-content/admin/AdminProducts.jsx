@@ -8,6 +8,7 @@ import { Plus, Pencil, Trash2, X, Save, Search } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 import ProductCategorySidebar from '@/components/admin/ProductCategorySidebar';
+import ImageUploader from '@/components/shared/ImageUploader';
 
 export default function AdminProducts() {
   const { t } = useTranslation('admin');
@@ -141,18 +142,12 @@ export default function AdminProducts() {
         </div>
         <div className="mb-6">
           <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-2">{t('fields.productImage')}</label>
-          <div className="flex items-center gap-4">
-            {form.featuredImage && (
-              <img src={form.featuredImage} alt="" className="w-20 h-20 object-cover border border-white/10" />
-            )}
-            <input
-              type="url"
-              value={form.featuredImage || ''}
-              onChange={(e) => handleImageUrlChange(e.target.value)}
-              placeholder="https://ik.imagekit.io/..."
-              className="flex-1 bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
-            />
-          </div>
+          <ImageUploader
+            value={form.featuredImage}
+            onChange={handleImageUrlChange}
+            previewClassName="w-20 h-20 object-cover border border-white/10"
+            dropzoneClassName="bg-[#0A0A0B] border-white/10 hover:border-[#C5A367]/50"
+          />
         </div>
         <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3 hover:bg-[#B8944F] transition-colors">
           <Save size={14} /> {t('saveProduct')}

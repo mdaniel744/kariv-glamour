@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getMyDealerListing, createDealerListing, updateDealerListing } from '@/actions/products';
-import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useToast } from '@/components/ui/use-toast';
 import { ArrowLeft, Save, X } from 'lucide-react';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
+import ImageUploader from '@/components/shared/ImageUploader';
 
 export default function PortalListingForm({ id: providedId }) {
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const router = useRouter();
-  const { user } = useAuth();
   const { localePath } = useLanguage();
   const { toast } = useToast();
   const isEdit = id && id !== 'new';
 
   const [saving, setSaving] = useState(false);
-  const [imageUrlInput, setImageUrlInput] = useState('');
   const [product, setProduct] = useState({
     productTitle: '', brand: '', model: '', referenceNumber: '', condition: 'Excellent',
     yearOfProduction: '', gender: 'Men', caseDiameter: '', caseMaterial: 'Stainless Steel',
@@ -36,15 +34,13 @@ export default function PortalListingForm({ id: providedId }) {
     }
   }, [id]);
 
-  const addImageUrl = () => {
-    const url = imageUrlInput.trim();
+  const handleImageUploaded = (url) => {
     if (!url) return;
     setProduct(prev => ({
       ...prev,
       productImages: [...prev.productImages, url],
       featuredImage: prev.featuredImage || url,
     }));
-    setImageUrlInput('');
   };
 
   const removeImage = (idx) => {
@@ -88,23 +84,20 @@ export default function PortalListingForm({ id: providedId }) {
       {/* Images */}
       <div className="mb-6">
         <label className={labelClass}>Photos</label>
-        <div className="flex flex-wrap gap-3 mb-3">
+        <div className="flex flex-wrap gap-3">
           {product.productImages.map((img, i) => (
             <div key={i} className="relative w-24 h-24 group">
               <img src={img} alt="" className="w-full h-full object-cover" />
               <button onClick={() => removeImage(i)} className="absolute top-1 right-1 w-5 h-5 bg-background/80 rounded-full flex items-center justify-center"><X size={12} /></button>
             </div>
           ))}
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="url"
-            value={imageUrlInput}
-            onChange={(e) => setImageUrlInput(e.target.value)}
-            placeholder="https://ik.imagekit.io/..."
-            className={inputClass}
+          <ImageUploader
+            value=""
+            onChange={handleImageUploaded}
+            label="Add photo"
+            previewClassName="w-24 h-24 object-cover"
+            dropzoneClassName="w-24 h-24 !py-0"
           />
-          <button onClick={addImageUrl} className="flex-shrink-0 border border-border px-4 py-2.5 text-xs uppercase tracking-[0.1em] text-foreground hover:border-primary">Add</button>
         </div>
       </div>
 

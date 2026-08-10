@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
+import ImageUploader from '@/components/shared/ImageUploader';
 
 export default function AdminBrands() {
   const { t } = useTranslation('admin');
@@ -75,16 +76,12 @@ export default function AdminBrands() {
             {['brandLogoLight', 'brandLogoDark', 'heroImage'].map(field => (
               <div key={field}>
                 <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{field === 'brandLogoLight' ? t('fields.logo') + ' (Light)' : field === 'brandLogoDark' ? t('fields.logo') + ' (Dark)' : t('fields.heroImage')}</label>
-                <div className="flex items-center gap-3">
-                  {form[field] && <img src={form[field]} alt="" className="w-16 h-16 object-cover border border-white/10" />}
-                  <input
-                    type="url"
-                    value={form[field] || ''}
-                    onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
-                    placeholder="https://ik.imagekit.io/..."
-                    className="w-48 bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
-                  />
-                </div>
+                <ImageUploader
+                  value={form[field]}
+                  onChange={(url) => setForm(prev => ({ ...prev, [field]: url }))}
+                  previewClassName="w-16 h-16 object-cover border border-white/10"
+                  dropzoneClassName="bg-[#0A0A0B] border-white/10 hover:border-[#C5A367]/50"
+                />
               </div>
             ))}
           </div>

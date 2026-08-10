@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
-import { X, FileCheck2 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Upload, X, FileCheck2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { uploadImage } from '@/actions/storage';
 
-// No Supabase Storage on this platform — matches the paste-an-external-URL
-// convention used everywhere else (see PortalListingForm.jsx's image field).
 export default function PaymentProofUploader({ paymentMethod, onUploaded, proofUrl }) {
   const { t } = useTranslation();
-  const [urlInput, setUrlInput] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(proofUrl || null);
+  const fileInputRef = useRef(null);
 
-  const handleAdd = () => {
-    const url = urlInput.trim();
-    if (!/^https?:\/\//.test(url)) {
-      setError(t('pages.portal.invalidProofUrl', { defaultValue: 'Please paste a valid link (starting with https://).' }));
+  const handleFile = async (file) => {
+    if (!file) return;
+
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      setError(t('pages.portal.invalidFileType', { defaultValue: 'Please upload an image or PDF file.' }));
       return;
     }
+    if (file.size > 10 * 1024 * 1024) {
+      setError(t('pages.portal.fileTooLarge', { defaultValue: 'File must be under 10MB.' }));
+      return;
+    }
+
     setError(null);
-    setPreviewUrl(url);
-    onUploaded(url);
-    setUrlInput('');
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await uploadImage(formData);
+      if (res.ok) {
+        setPreviewUrl(res.url);
+        onUploaded(res.url);
+      } else {
+        setError(res.error);
+      }
+    } catch {
+      setError('Upload failed.');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleRemove = () => {
@@ -28,8 +49,8 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
   };
 
   const labelText = paymentMethod === 'crypto'
-    ? t('pages.portal.uploadCryptoProof', { defaultValue: 'Paste your transaction link (block explorer URL)' })
-    : t('pages.portal.uploadBankProof', { defaultValue: 'Paste a link to your bank transfer receipt' });
+    ? t('pages.portal.uploadCryptoProof', { defaultValue: 'Upload Crypto Transfer Screenshot' })
+    : t('pages.portal.uploadBankProof', { defaultValue: 'Upload Bank Transfer Receipt' });
 
   return (
     <div className="mb-4">
@@ -38,25 +59,32 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
       </label>
 
       {!previewUrl ? (
-        <div className="flex gap-2">
-          <input
-            type="url"
-            value={urlInput}
-            onChange={e => setUrlInput(e.target.value)}
-            placeholder="https://..."
-            className="flex-1 bg-card border border-border px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary"
-          />
-          <button
-            type="button"
-            onClick={handleAdd}
-            className="flex-shrink-0 border border-border px-4 py-2.5 text-xs uppercase tracking-[0.1em] text-foreground hover:border-primary"
-          >
-            {t('pages.portal.add', { defaultValue: 'Add' })}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files?.[0]); }}
+          disabled={uploading}
+          className={`w-full border-2 border-dashed transition-colors py-8 flex flex-col items-center gap-2 text-muted-foreground disabled:opacity-50 ${dragOver ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
+        >
+          {uploading ? (
+            <Loader2 size={20} className="animate-spin text-primary" />
+          ) : (
+            <Upload size={20} />
+          )}
+          <span className="text-xs">
+            {uploading
+              ? t('pages.portal.uploading', { defaultValue: 'Uploading...' })
+              : t('pages.portal.clickToUpload', { defaultValue: 'Click or drag to upload proof of payment' })}
+          </span>
+          <span className="text-[10px] text-muted-foreground/60">
+            {t('pages.portal.acceptedFormats', { defaultValue: 'PNG, JPG, or PDF — max 10MB' })}
+          </span>
+        </button>
       ) : (
         <div className="flex items-center gap-3 border border-border p-3 bg-card">
-          {previewUrl.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+          {previewUrl.match(/\.(jpg|jpeg|png|webp|gif|avif)$/i) ? (
             <img src={previewUrl} alt="Payment proof" className="w-12 h-12 object-cover rounded" />
           ) : (
             <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded">
@@ -65,7 +93,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
           )}
           <div className="flex-1 min-w-0">
             <p className="text-xs text-foreground truncate">
-              {t('pages.portal.proofUploaded', { defaultValue: 'Proof of payment added' })}
+              {t('pages.portal.proofUploaded', { defaultValue: 'Proof of payment uploaded' })}
             </p>
             <p className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
               <FileCheck2 size={10} /> {t('pages.portal.readyToConfirm', { defaultValue: 'Ready to confirm' })}
@@ -80,6 +108,14 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
           </button>
         </div>
       )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,application/pdf"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+        className="hidden"
+      />
 
       {error && <p className="text-[11px] text-destructive mt-2">{error}</p>}
     </div>

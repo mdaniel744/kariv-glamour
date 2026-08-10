@@ -7,6 +7,7 @@ import { BRAND_DATA } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
+import ImageUploader from '@/components/shared/ImageUploader';
 
 export default function AdminCollections() {
   const { t } = useTranslation('admin');
@@ -68,18 +69,11 @@ export default function AdminCollections() {
           <BilingualField label={t('fields.description')} name="description" form={form} setForm={setForm} type="textarea" />
           <div>
             <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">Collection Image</label>
-            {form.heroImage && (
-              <div className="relative w-full max-w-sm mb-2">
-                <img src={form.heroImage} alt="Collection" className="w-full aspect-[4/3] object-cover border border-white/10" />
-                <button onClick={() => setForm({ ...form, heroImage: '' })} className="absolute top-2 right-2 w-7 h-7 bg-black/60 text-white flex items-center justify-center hover:bg-black/80"><X size={14} /></button>
-              </div>
-            )}
-            <input
-              type="url"
-              value={form.heroImage || ''}
-              onChange={(e) => setForm({ ...form, heroImage: e.target.value })}
-              placeholder="https://ik.imagekit.io/..."
-              className="w-full max-w-sm bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]"
+            <ImageUploader
+              value={form.heroImage}
+              onChange={(url) => setForm({ ...form, heroImage: url })}
+              previewClassName="w-full max-w-sm aspect-[4/3] object-cover border border-white/10"
+              dropzoneClassName="w-full max-w-sm bg-[#0A0A0B] border-white/10 hover:border-[#C5A367]/50"
             />
           </div>
           <button onClick={handleSave} className="flex items-center gap-2 bg-[#C5A367] text-[#0A0A0B] text-[11px] tracking-[0.12em] uppercase font-medium px-6 py-3"><Save size={14} /> {t('save')}</button>
