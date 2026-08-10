@@ -15,6 +15,7 @@ import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import StarRating from '@/components/dealer/StarRating';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
+import SafeHtml from '@/components/shared/SafeHtml';
 
 function productIdFromPath() {
   if (typeof window === 'undefined') return null;
@@ -316,7 +317,11 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
           {localize(product, 'productDescription') &&
           <div>
               <h2 className="font-display text-2xl text-foreground font-light mb-6">{t('pages.productDetail.aboutTitle')}</h2>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{localize(product, 'productDescription')}</p>
+              <SafeHtml
+                as="div"
+                html={localize(product, 'productDescription')}
+                className="prose prose-sm max-w-none text-sm text-muted-foreground leading-relaxed [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:p-2 [&_th]:border [&_th]:border-border [&_th]:p-2 [&_img]:max-w-full [&_img]:h-auto [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic"
+              />
             </div>
           }
           <div>
