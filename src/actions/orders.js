@@ -119,6 +119,13 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey }
     products: [lineItem],
     total_amount: price,
     currency: product.currency || 'EUR',
+    // orders.payment_method is NOT NULL on the live table. Originally this
+    // was meant to stay unset until the buyer picks a method once the
+    // dealer accepts — but with crypto deferred, bank_transfer is the only
+    // option anyway, so default to it here rather than blocking on a
+    // schema change. Revisit (make it nullable, or let this be a real
+    // choice again) if/when crypto payments come back.
+    payment_method: 'bank_transfer',
     escrow_status: 'pending_review',
     shipping_status: 'not_shipped',
     shipping_address: shippingDetails,
