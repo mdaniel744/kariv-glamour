@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { listDealerApplications, approveDealerApplication, rejectDealerApplication } from '@/actions/dealerApplications';
-import { useToast } from '@/components/ui/use-toast';
-import { Check, X, Store } from 'lucide-react';
+import { listDealerApplications } from '@/actions/dealerApplications';
+import { Store } from 'lucide-react';
 
 export default function AdminDealerApplications() {
-  const { toast } = useToast();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('pending');
@@ -21,31 +19,12 @@ export default function AdminDealerApplications() {
     finally { setLoading(false); }
   };
 
-  const handleApprove = async (app) => {
-    const res = await approveDealerApplication(app.id);
-    if (res.ok) {
-      toast({ title: `Approved ${app.company_name} — user is now a dealer` });
-      load();
-    } else {
-      toast({ title: 'Error', description: res.error, variant: 'destructive' });
-    }
-  };
-
-  const handleReject = async (app) => {
-    const res = await rejectDealerApplication(app.id);
-    if (res.ok) {
-      toast({ title: `Rejected ${app.company_name}` });
-      load();
-    } else {
-      toast({ title: 'Error', description: res.error, variant: 'destructive' });
-    }
-  };
-
   const filtered = applications.filter(a => filter === 'all' || a.status === filter);
 
   return (
     <div>
       <h1 className="text-xl font-display text-[#E5E5E5] font-light mb-6">Dealer Applications</h1>
+      <p className="text-[10px] text-[#8E8E93] mb-4">Read-only — approvals are handled in the Ecom King dashboard.</p>
 
       <div className="flex gap-2 mb-6">
         {['pending', 'approved', 'rejected', 'all'].map(f => (
@@ -81,12 +60,6 @@ export default function AdminDealerApplications() {
                 {app.country && <div>Country: <span className="text-[#E5E5E5]">{app.country}</span></div>}
               </div>
               {app.message && <p className="text-[10px] text-[#8E8E93] italic mb-3">"{app.message}"</p>}
-              {app.status === 'pending' && (
-                <div className="flex gap-2">
-                  <button onClick={() => handleApprove(app)} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase bg-green-900/30 text-green-400 px-3 py-1.5 hover:bg-green-900/50"><Check size={12} /> Approve</button>
-                  <button onClick={() => handleReject(app)} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase bg-red-900/30 text-red-400 px-3 py-1.5 hover:bg-red-900/50"><X size={12} /> Reject</button>
-                </div>
-              )}
             </div>
           ))}
         </div>
