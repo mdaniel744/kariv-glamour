@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getMySales } from '@/actions/orders';
 import { useAuth } from '@/lib/AuthContext';
 import { ShoppingCart, ShieldCheck, Truck } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
@@ -14,8 +13,7 @@ export default function PortalSales() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dataClient.entities.Orders.filter({ dealerId: user.id }, '-created_date', 50)
-      .then(data => setSales(asArray(data))).catch(console.error).finally(() => setLoading(false));
+    getMySales({ limit: 50 }).then(setSales).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   const needsShipping = sales.filter(s => s.escrowStatus === 'funds_secured');

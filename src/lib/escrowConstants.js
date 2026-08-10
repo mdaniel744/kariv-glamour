@@ -81,7 +81,10 @@ export const ESCROW_TRANSITIONS = {
   dealer_accepted: ['funds_secured', 'cancelled'],
   funds_secured: ['shipped', 'cancelled'],
   shipped: ['verified'],
-  verified: ['funds_released'],
+  // A dispute resolved in the buyer's favor after delivery needs a legal
+  // path out of `verified` besides funds_released — added for the refund
+  // branch of resolveDispute().
+  verified: ['funds_released', 'cancelled'],
   funds_released: [],
   cancelled: []
 };

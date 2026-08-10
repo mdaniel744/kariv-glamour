@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
+import { getMyProfile, saveMyProfile } from '@/actions/customers';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Save } from 'lucide-react';
@@ -18,31 +18,31 @@ export default function PortalProfile() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (!user) return;
+    getMyProfile().then(p => {
       setProfile({
         full_name: user.full_name || '',
-        phoneNumber: user.phoneNumber || '',
-        streetAddress: user.streetAddress || '',
-        city: user.city || '',
-        postalCode: user.postalCode || '',
-        country: user.country || ''
+        phoneNumber: p.phoneNumber || '',
+        streetAddress: p.streetAddress || '',
+        city: p.city || '',
+        postalCode: p.postalCode || '',
+        country: p.country || ''
       });
-    }
+    }).catch(console.error);
   }, [user]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      await dataClient.auth.updateMe({
+      const res = await saveMyProfile({
         phoneNumber: profile.phoneNumber,
         streetAddress: profile.streetAddress,
         city: profile.city,
         postalCode: profile.postalCode,
         country: profile.country
       });
-      toast({ title: 'Profile updated successfully' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      if (res.ok) toast({ title: 'Profile updated successfully' });
+      else toast({ title: 'Error', description: res.error, variant: 'destructive' });
     } finally {
       setSaving(false);
     }

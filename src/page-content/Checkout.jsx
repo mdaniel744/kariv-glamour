@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
+import { createOrder } from '@/actions/orders';
+import { getMyProfile, saveMyProfile } from '@/actions/customers';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
@@ -43,17 +45,22 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   }, [id, initialProduct]);
 
   useEffect(() => {
-    if (user) {
+    if (!user) return;
+    getMyProfile().then(profile => {
       setBilling({
         fullName: user.full_name || '',
-        street: user.streetAddress || '',
-        city: user.city || '',
-        postalCode: user.postalCode || '',
-        country: user.country || '',
-        phone: user.phoneNumber || ''
+        street: profile.streetAddress || '',
+        city: profile.city || '',
+        postalCode: profile.postalCode || '',
+        country: profile.country || '',
+        phone: profile.phoneNumber || ''
       });
-    }
+    }).catch(console.error);
   }, [user]);
+
+  // Created once per mount, not per click — a regenerated key on every
+  // submit attempt would defeat the whole point of idempotency.
+  const [idempotencyKey] = useState(() => (typeof crypto !== 'undefined' ? crypto.randomUUID() : `checkout-${id}-${Date.now()}`));
 
   const effectiveShipping = useBillingAsShipping ? billing : shipping;
 
@@ -69,30 +76,25 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      // Save billing address to user profile if changed
-      if (user) {
-        await dataClient.auth.updateMe({
-          streetAddress: billing.street,
-          city: billing.city,
-          postalCode: billing.postalCode,
-          country: billing.country,
-          phoneNumber: billing.phone
-        });
-      }
-      // Generate idempotency key for this checkout attempt
-      // Repeated submissions with the same key return the existing order
-      const idempotencyKey = `checkout-${id}-${user.id}-${Date.now()}`;
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'create',
-        productId: id,
-        shippingDetails: effectiveShipping,
-        idempotencyKey
+      // Save billing address as the buyer's default profile for next time.
+      await saveMyProfile({
+        streetAddress: billing.street,
+        city: billing.city,
+        postalCode: billing.postalCode,
+        country: billing.country,
+        phoneNumber: billing.phone
       });
-      setOrder(res.data.order);
-      setDone(true);
+
+      const res = await createOrder({ productId: id, shippingDetails: effectiveShipping, idempotencyKey });
+      if (res.ok) {
+        setOrder(res.order);
+        setDone(true);
+      } else {
+        alert(res.error);
+      }
     } catch (e) {
       console.error(e);
-      alert(e.response?.data?.error || 'Failed to create order');
+      alert('Failed to create order');
     } finally {
       setSubmitting(false);
     }

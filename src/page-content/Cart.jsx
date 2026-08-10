@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useCart } from '@/lib/cartContext';
+import { useAuth } from '@/lib/AuthContext';
+import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { useSEO } from '@/hooks/useSEO';
 import { Trash2, ShoppingBag, ArrowLeft, ShieldCheck, Truck, Lock, ChevronRight } from 'lucide-react';
 import { productSlug } from '@/lib/slug';
+import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 
 export default function Cart() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { cartItems, removeFromCart, cartTotal, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { localePath } = useLanguage();
   const { localize } = useLocalizedField();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   useSEO({ title: t('common:seo.cart.title'), description: t('common:seo.cart.description'), noindex: true });
+
+  // createOrder is single-product per order (matches the existing backend
+  // contract) — checkout uses the first cart item; the rest stay in the cart.
+  const checkoutPath = cartItems[0] ? `/checkout/${cartItems[0].id}` : null;
+  const handleCheckout = () => {
+    if (!checkoutPath) return;
+    if (!isAuthenticated) { setShowAuthModal(true); return; }
+    router.push(localePath(checkoutPath));
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -96,11 +113,16 @@ export default function Cart() {
             </div>
 
             <button
-              disabled
-              title="Online checkout is being rebuilt on our new platform — please contact us to purchase."
-              className="w-full bg-muted text-muted-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 cursor-not-allowed">
+              onClick={handleCheckout}
+              className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
               {t('pages.cart.checkout')}
             </button>
+            {cartItems.length > 1 && (
+              <p className="text-[10px] text-muted-foreground text-center -mt-3">
+                {t('pages.cart.checkoutFirstItemNote', { defaultValue: 'Checkout is one watch at a time — your first item will be ordered.' })}
+              </p>
+            )}
+            <BuyNowAuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} continueTo={checkoutPath} />
 
             <LocalizedLink to="/shop" className="flex items-center justify-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground transition-colors pt-2">
               <ArrowLeft size={12} /> {t('pages.cart.continueShopping')}

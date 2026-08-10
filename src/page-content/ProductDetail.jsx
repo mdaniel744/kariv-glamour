@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useCart } from '@/lib/cartContext';
+import { useAuth } from '@/lib/AuthContext';
+import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
 import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
@@ -11,6 +14,7 @@ import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import StarRating from '@/components/dealer/StarRating';
+import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 
 function productIdFromPath() {
   if (typeof window === 'undefined') return null;
@@ -21,13 +25,17 @@ function productIdFromPath() {
 export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = [] }) {
   const { t } = useTranslation();
   const id = idProp || productIdFromPath();
+  const router = useRouter();
   const { toggleWishlist, isInWishlist } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { localePath } = useLanguage();
   const { localize } = useLocalizedField();
   const [product, setProduct] = useState(initialProduct);
   const [loading, setLoading] = useState(!initialProduct);
   const [selectedImage, setSelectedImage] = useState(0);
   const [related, setRelated] = useState(initialRelated);
   const [dealerProfile, setDealerProfile] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -103,6 +111,12 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const images = product.productImages?.length > 0 ? product.productImages :
   product.featuredImage ? [product.featuredImage] : [];
   const wishlisted = isInWishlist(product.id);
+
+  const checkoutPath = `/checkout/${product.id}`;
+  const handleBuyNow = () => {
+    if (!isAuthenticated) { setShowAuthModal(true); return; }
+    router.push(localePath(checkoutPath));
+  };
   const brandSlug = product.brand?.toLowerCase().replace(/\s+/g, '-');
 
   const specs = [
@@ -229,12 +243,12 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             {/* Actions */}
             <div className="space-y-3">
               <button
-                disabled
-                title="Online checkout is being rebuilt on our new platform — please contact us to purchase this piece."
-                className="w-full flex items-center justify-center gap-2 text-[11px] tracking-[0.15em] uppercase font-medium py-4 bg-muted text-muted-foreground cursor-not-allowed">
+                onClick={handleBuyNow}
+                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
                 <Lock size={16} />
                 {t('pages.productDetail.buyNow')}
               </button>
+              <BuyNowAuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} continueTo={checkoutPath} />
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   onClick={() => toggleWishlist(product)}

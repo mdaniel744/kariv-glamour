@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
+import { getAdminCustomers } from '@/actions/customers';
+import { getAdminMessagesOverview, adminReplyToOrder, markAdminOrderThreadRead } from '@/actions/orders';
 import { useToast } from '@/components/ui/use-toast';
 import { Users, Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
 
@@ -14,8 +15,8 @@ export default function AdminCustomers() {
 
   useEffect(() => {
     Promise.all([
-      dataClient.entities.Customers.list('-created_date', 50).then(asArray).catch(() => []),
-      dataClient.entities.OrderMessage.list('-created_date', 200).then(asArray).catch(() => [])
+      getAdminCustomers({ limit: 50 }).catch(() => []),
+      getAdminMessagesOverview({ limit: 200 }).catch(() => [])
     ]).then(([custs, msgs]) => {
       setCustomers(custs);
       setMessages(msgs);
@@ -81,27 +82,23 @@ export default function AdminCustomers() {
     if (!replyText.trim()) return;
     setSending(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'admin_reply',
-        orderId,
-        message: replyText.trim()
-      });
-      setMessages(prev => [...prev, res.data.message]);
-      setReplyText('');
-      toast({ title: 'Reply sent to buyer' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await adminReplyToOrder(orderId, 'Re: Your Order', replyText.trim());
+      if (res.ok) {
+        setMessages(prev => [...prev, res.message]);
+        setReplyText('');
+        toast({ title: 'Reply sent to buyer' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setSending(false);
     }
   };
 
   const markThreadAsRead = (thread) => {
-    const unreadIds = thread.messages.filter(m => m.sender === 'buyer' && !m.isRead).map(m => m.id);
-    unreadIds.forEach(async id => {
-      try { await dataClient.entities.OrderMessage.update(id, { isRead: true }); } catch (e) {}
-    });
-    setMessages(prev => prev.map(m => unreadIds.includes(m.id) ? { ...m, isRead: true } : m));
+    if (!thread.messages.some(m => m.sender === 'buyer' && !m.isRead)) return;
+    markAdminOrderThreadRead(thread.orderId).catch(() => {});
+    setMessages(prev => prev.map(m => m.orderId === thread.orderId && m.sender === 'buyer' ? { ...m, isRead: true } : m));
   };
 
   if (loading) return <div className="space-y-2">{[...Array(3)].map((_, i) => <div key={i} className="h-14 bg-[#111] animate-pulse" />)}</div>;
@@ -221,7 +218,7 @@ export default function AdminCustomers() {
                     <textarea
                       value={replyText}
                       onChange={e => setReplyText(e.target.value)}
-                      placeholder="Reply to buyer... (will be emailed)"
+                      placeholder="Reply to buyer..."
                       rows={3}
                       className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 outline-none focus:border-[#C5A367] resize-none mb-2"
                     />

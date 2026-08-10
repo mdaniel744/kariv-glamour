@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
+import { getAdminDashboardStats } from '@/actions/orders';
 import { Package, ShoppingCart, Users, Tag } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 
@@ -10,14 +10,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [products, orders, customers, brands] = await Promise.all([
-          dataClient.entities.Products.list('-created_date', 1),
-          dataClient.entities.Orders.list('-created_date', 5),
-          dataClient.entities.Customers.list('-created_date', 1),
-          dataClient.entities.Brands.list('-created_date', 1)
-        ]);
-        setStats({ products: products.length, orders: orders.length, customers: customers.length, brands: brands.length });
-        setRecentOrders(orders);
+        const data = await getAdminDashboardStats();
+        setStats({ products: data.products, orders: data.orders, customers: data.customers, brands: data.brands });
+        setRecentOrders(data.recentOrders);
       } catch (e) {
         console.error(e);
       }

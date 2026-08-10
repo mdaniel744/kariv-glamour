@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getMyOrders } from '@/actions/orders';
 import { getMyDealerListings } from '@/actions/products';
 import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +20,7 @@ export default function PortalDashboard() {
   const dealer = isDealer(user);
 
   useEffect(() => {
-    dataClient.entities.Orders.filter({ buyerId: user.id }, '-created_date', 5)
-      .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
+    getMyOrders({ limit: 5 }).then(setOrders).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   useEffect(() => {

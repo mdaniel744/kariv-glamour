@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getMyOrderMessages, sendOrderMessage, markMyOrderThreadRead } from '@/actions/orders';
 import { useAuth } from '@/lib/AuthContext';
 import LocalizedLink from '@/components/LocalizedLink';
 import { Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
@@ -15,8 +14,8 @@ export default function PortalMails() {
 
   useEffect(() => {
     if (!user) return;
-    dataClient.entities.OrderMessage.filter({ buyerId: user.id }, '-created_date', 200)
-      .then(data => setMessages(asArray(data)))
+    getMyOrderMessages({ limit: 200 })
+      .then(setMessages)
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [user]);
@@ -44,34 +43,25 @@ export default function PortalMails() {
     try {
       const lastSubject = selectedThread.messages[selectedThread.messages.length - 1]?.subject || 'Re: Your Order';
       const replySubject = lastSubject.startsWith('Re:') ? lastSubject : 'Re: ' + lastSubject;
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'send_message',
-        orderId: selectedThread.orderId,
-        subject: replySubject,
-        message: replyText.trim()
-      });
-      setMessages(prev => [...prev, res.data.message]);
-      setReplyText('');
-    } catch (e) {
-      alert(e.response?.data?.error || 'Failed to send message');
+      const res = await sendOrderMessage(selectedThread.orderId, replySubject, replyText.trim());
+      if (res.ok) {
+        setMessages(prev => [...prev, res.message]);
+        setReplyText('');
+      } else {
+        alert(res.error);
+      }
     } finally {
       setSending(false);
     }
   };
 
-  const markAsRead = async (msgIds) => {
-    for (const id of msgIds) {
-      try {
-        await dataClient.entities.OrderMessage.update(id, { isRead: true });
-      } catch (e) { /* best effort */ }
-    }
-    setMessages(prev => prev.map(m => msgIds.includes(m.id) ? { ...m, isRead: true } : m));
-  };
-
   const openThread = (thread) => {
     setSelectedOrderId(thread.orderId);
-    const unreadAdminMsgs = thread.messages.filter(m => m.sender === 'admin' && !m.isRead).map(m => m.id);
-    if (unreadAdminMsgs.length) markAsRead(unreadAdminMsgs);
+    const hasUnread = thread.messages.some(m => m.sender === 'admin' && !m.isRead);
+    if (hasUnread) {
+      markMyOrderThreadRead(thread.orderId).catch(() => {});
+      setMessages(prev => prev.map(m => m.orderId === thread.orderId && m.sender === 'admin' ? { ...m, isRead: true } : m));
+    }
   };
 
   if (loading) return <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-16 bg-card animate-pulse" />)}</div>;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getMyOrder, getMyOrderDispute, selectPaymentMethod, flagOrder, confirmPaymentSent } from '@/actions/orders';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { formatPrice } from '@/lib/constants';
@@ -32,27 +31,21 @@ export default function PortalOrderDetail({ id: providedId }) {
 
   useEffect(() => {
     Promise.all([
-      dataClient.entities.Orders.get(id),
-      dataClient.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
-    ]).then(([o, disputes]) => {
+      getMyOrder(id),
+      getMyOrderDispute(id).catch(() => null)
+    ]).then(([o, d]) => {
       setOrder(o);
-      setPaymentMethod(o.paymentMethod);
-      const openDispute = disputes.find(d => ['open', 'under_review'].includes(d.status));
-      setDispute(openDispute || disputes[0] || null);
+      setPaymentMethod(o?.paymentMethod || null);
+      setDispute(d);
     }).catch(console.error).finally(() => setLoading(false));
   }, [id]);
 
   const handleSelectPayment = async () => {
     setSavingPayment(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'select_payment',
-        orderId: id,
-        paymentMethod
-      });
-      setOrder(res.data.order);
-    } catch (e) {
-      alert(e.response?.data?.error || 'Failed to save payment method');
+      const res = await selectPaymentMethod(id, paymentMethod);
+      if (res.ok) setOrder(res.order);
+      else alert(res.error);
     } finally {
       setSavingPayment(false);
     }
@@ -69,18 +62,15 @@ export default function PortalOrderDetail({ id: providedId }) {
     }
     setFlagging(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'flag_order',
-        orderId: id,
-        reason: flagReason,
-        description: flagDescription.trim()
-      });
-      setDispute(res.data.dispute);
-      setShowFlagForm(false);
-      setFlagReason('');
-      setFlagDescription('');
-    } catch (e) {
-      alert(e.response?.data?.error || 'Failed to flag order');
+      const res = await flagOrder(id, flagReason, flagDescription.trim());
+      if (res.ok) {
+        setDispute(res.dispute);
+        setShowFlagForm(false);
+        setFlagReason('');
+        setFlagDescription('');
+      } else {
+        alert(res.error);
+      }
     } finally {
       setFlagging(false);
     }
@@ -89,14 +79,9 @@ export default function PortalOrderDetail({ id: providedId }) {
   const handleConfirmPaymentSent = async () => {
     setConfirmingPayment(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'confirm_payment_sent',
-        orderId: id,
-        paymentProofUrl
-      });
-      setOrder(res.data.order);
-    } catch (e) {
-      alert(e.response?.data?.error || 'Failed to confirm payment');
+      const res = await confirmPaymentSent(id, paymentProofUrl);
+      if (res.ok) setOrder(res.order);
+      else alert(res.error);
     } finally {
       setConfirmingPayment(false);
     }

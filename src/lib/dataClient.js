@@ -18,14 +18,22 @@ const MIGRATED_ENTITIES = {
   WebsiteString: supabaseData.WebsiteString,
 };
 
-// Orders, order messages, disputes, dealer profiles/reviews, dealer
-// applications (read), customers, and the admin-only translation/glossary
-// tooling are deferred — no Supabase tables/read-policies exist for these
-// yet (or, for dealer_applications, no anon SELECT policy at all).
+// Orders/order_messages/disputes/customers are live now — every real
+// consumer reads/writes them through src/actions/orders.js and
+// src/actions/customers.js directly (service-role, ownership-scoped),
+// never through this generic shim (its filter/list "load everything then
+// filter in JS" shape is wrong for per-user order data). 'Orders' stays
+// deferred here only because DealerProfile.jsx's review-eligibility check
+// still references it — that whole feature depends on the out-of-scope
+// dealer_reviews table and is intentionally left stubbed.
+//
+// Dealer profiles/reviews, dealer applications (read), and the admin-only
+// translation/glossary tooling remain deferred — no Supabase tables/
+// read-policies exist for these yet.
 const DEFERRED_ENTITY_NAMES = [
-  'Orders', 'OrderMessage', 'Dispute',
+  'Orders',
   'DealerProfile', 'DealerReview', 'DealerApplications',
-  'User', 'Customers',
+  'User',
   'GlossaryTerm', 'TranslationSettings', 'TranslationJob',
 ];
 

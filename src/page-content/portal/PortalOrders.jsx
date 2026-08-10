@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getMyOrders } from '@/actions/orders';
 import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -15,8 +14,7 @@ export default function PortalOrders() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dataClient.entities.Orders.filter({ buyerId: user.id }, '-created_date', 50)
-      .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
+    getMyOrders({ limit: 50 }).then(setOrders).catch(console.error).finally(() => setLoading(false));
   }, [user]);
 
   return (

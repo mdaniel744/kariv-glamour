@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import {
+  getAdminOrder, getAdminOrderMessages, getAdminOrderDispute,
+  updateEscrowStatus, updateTrackingNumber, adminReplyToOrder,
+  markAdminOrderThreadRead, confirmCourierDelivery as confirmCourierDeliveryAction,
+  resolveDispute as resolveDisputeAction,
+} from '@/actions/orders';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
@@ -28,36 +32,32 @@ export default function AdminOrderDetail({ id: providedId }) {
 
   useEffect(() => {
     Promise.all([
-      dataClient.entities.Orders.get(id),
-      dataClient.entities.OrderMessage.filter({ orderId: id }, '-created_date', 100).then(asArray).catch(() => []),
-      dataClient.entities.Dispute.filter({ orderId: id }, '-created_date', 10).then(asArray).catch(() => [])
-    ]).then(([o, msgs, disputes]) => {
+      getAdminOrder(id),
+      getAdminOrderMessages(id).catch(() => []),
+      getAdminOrderDispute(id).catch(() => null),
+    ]).then(([o, msgs, d]) => {
       setOrder(o);
       setMessages(msgs);
-      setTrackingInput(o.trackingNumber || '');
-      const openDispute = disputes.find(d => ['open', 'under_review'].includes(d.status));
-      setDispute(openDispute || disputes[0] || null);
+      setTrackingInput(o?.trackingNumber || '');
+      setDispute(d);
     }).catch(console.error).finally(() => setLoading(false));
   }, [id]);
 
   const refreshOrder = async () => {
-    const o = await dataClient.entities.Orders.get(id);
+    const o = await getAdminOrder(id);
     setOrder(o);
   };
 
   const updateEscrow = async (newEscrowStatus) => {
     setUpdatingStatus(true);
     try {
-      const orderStatus = newEscrowStatus === 'funds_released' ? 'Delivered' : newEscrowStatus === 'shipped' ? 'Shipped' : newEscrowStatus === 'cancelled' ? 'Cancelled' : 'Processing';
-      const paymentStatus = ['funds_secured', 'shipped', 'verified', 'funds_released'].includes(newEscrowStatus) ? 'Paid' : 'Pending';
-      const shippingStatus = newEscrowStatus === 'shipped' ? 'Shipped' : newEscrowStatus === 'verified' || newEscrowStatus === 'funds_released' ? 'Delivered' : 'Pending';
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'update_escrow', orderId: id, escrowStatus: newEscrowStatus, orderStatus, paymentStatus, shippingStatus
-      });
-      setOrder(res.data.order);
-      toast({ title: `Escrow status updated to ${ESCROW_STATUS_LABELS[newEscrowStatus]}` });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await updateEscrowStatus(id, newEscrowStatus);
+      if (res.ok) {
+        setOrder(res.order);
+        toast({ title: `Escrow status updated to ${ESCROW_STATUS_LABELS[newEscrowStatus]}` });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setUpdatingStatus(false);
     }
@@ -65,12 +65,12 @@ export default function AdminOrderDetail({ id: providedId }) {
 
   const saveTracking = async () => {
     if (!trackingInput.trim()) return;
-    try {
-      await dataClient.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber: trackingInput.trim() });
-      setOrder(prev => ({ ...prev, trackingNumber: trackingInput.trim() }));
+    const res = await updateTrackingNumber(id, trackingInput.trim());
+    if (res.ok) {
+      setOrder(res.order);
       toast({ title: 'Tracking number updated' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Error', description: res.error, variant: 'destructive' });
     }
   };
 
@@ -81,63 +81,53 @@ export default function AdminOrderDetail({ id: providedId }) {
     }
     setSendingMsg(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'admin_reply',
-        orderId: id,
-        subject: msgSubject.trim(),
-        message: msgBody.trim()
-      });
-      setMessages(prev => [res.data.message, ...prev]);
-      setMsgSubject(''); setMsgBody('');
-      toast({ title: 'Message sent to buyer' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await adminReplyToOrder(id, msgSubject.trim(), msgBody.trim());
+      if (res.ok) {
+        setMessages(prev => [res.message, ...prev]);
+        setMsgSubject(''); setMsgBody('');
+        toast({ title: 'Message sent to buyer' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setSendingMsg(false);
     }
   };
 
   const markMessagesRead = () => {
-    const unreadIds = messages.filter(m => m.sender === 'buyer' && !m.isRead).map(m => m.id);
-    unreadIds.forEach(async mid => {
-      try { await dataClient.entities.OrderMessage.update(mid, { isRead: true }); } catch (e) {}
-    });
-    setMessages(prev => prev.map(m => unreadIds.includes(m.id) ? { ...m, isRead: true } : m));
+    if (!messages.some(m => m.sender === 'buyer' && !m.isRead)) return;
+    markAdminOrderThreadRead(id).catch(() => {});
+    setMessages(prev => prev.map(m => m.sender === 'buyer' ? { ...m, isRead: true } : m));
   };
 
   const confirmCourierDelivery = async () => {
     setUpdatingStatus(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'confirm_courier_delivery',
-        orderId: id
-      });
-      setOrder(res.data.order);
-      toast({ title: 'Courier delivery confirmed — 14-day inspection period started' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await confirmCourierDeliveryAction(id);
+      if (res.ok) {
+        setOrder(res.order);
+        toast({ title: 'Courier delivery confirmed — 14-day inspection period started' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setUpdatingStatus(false);
     }
   };
 
-  const resolveDispute = async (outcome, orderAction) => {
+  const resolveDispute = async (outcome) => {
     setResolving(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'resolve_dispute',
-        disputeId: dispute.id,
-        outcome,
-        resolution: resolutionNotes.trim(),
-        mediatorNotes: resolutionNotes.trim(),
-        orderAction
-      });
-      setDispute(res.data.dispute);
-      await refreshOrder();
-      setResolutionNotes('');
-      toast({ title: 'Dispute resolved' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await resolveDisputeAction({ disputeId: dispute.id, outcome, mediatorNotes: resolutionNotes.trim() });
+      if (res.ok) {
+        const [d, o] = await Promise.all([getAdminOrderDispute(id), getAdminOrder(id)]);
+        setDispute(d);
+        setOrder(o);
+        setResolutionNotes('');
+        toast({ title: 'Dispute resolved' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setResolving(false);
     }
@@ -323,7 +313,7 @@ export default function AdminOrderDetail({ id: providedId }) {
         <textarea
           value={msgBody}
           onChange={e => setMsgBody(e.target.value)}
-          placeholder="Type a message to the buyer... (will be emailed and appear in their Mails tab)"
+          placeholder="Type a message to the buyer... (appears in their Mails tab)"
           rows={3}
           className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367] resize-none"
         />
@@ -361,14 +351,14 @@ export default function AdminOrderDetail({ id: providedId }) {
           />
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => resolveDispute('resolved_buyer', 'refund')}
+              onClick={() => resolveDispute('refund')}
               disabled={resolving}
               className="bg-red-600/20 border border-red-600/40 text-red-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-red-600/30 disabled:opacity-50"
             >
               {resolving ? 'Resolving...' : 'Resolve for Buyer (Refund)'}
             </button>
             <button
-              onClick={() => resolveDispute('resolved_dealer', 'release_funds')}
+              onClick={() => resolveDispute('release_funds')}
               disabled={resolving}
               className="bg-emerald-600/20 border border-emerald-600/40 text-emerald-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-emerald-600/30 disabled:opacity-50"
             >

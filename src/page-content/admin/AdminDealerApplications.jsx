@@ -22,22 +22,22 @@ export default function AdminDealerApplications() {
   };
 
   const handleApprove = async (app) => {
-    try {
-      await approveDealerApplication(app.id);
+    const res = await approveDealerApplication(app.id);
+    if (res.ok) {
       toast({ title: `Approved ${app.company_name} — user is now a dealer` });
       load();
-    } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Error', description: res.error, variant: 'destructive' });
     }
   };
 
   const handleReject = async (app) => {
-    try {
-      await rejectDealerApplication(app.id);
+    const res = await rejectDealerApplication(app.id);
+    if (res.ok) {
       toast({ title: `Rejected ${app.company_name}` });
       load();
-    } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Error', description: res.error, variant: 'destructive' });
     }
   };
 

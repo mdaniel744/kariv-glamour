@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { getAdminOrders, updateEscrowStatus, updateTrackingNumber, requestJustification, adminReplyToOrder } from '@/actions/orders';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
-import { ESCROW_STATUS_LABELS } from '@/lib/escrowConstants';
+import { ESCROW_STATUS_LABELS, ESCROW_TRANSITIONS } from '@/lib/escrowConstants';
 import { ChevronDown, Truck, FileCheck2, ExternalLink, Send } from 'lucide-react';
 
 export default function AdminOrders() {
@@ -21,38 +20,34 @@ export default function AdminOrders() {
   const [sendingMsg, setSendingMsg] = useState(false);
 
   useEffect(() => {
-    dataClient.entities.Orders.list('-created_date', 50).then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
+    getAdminOrders({ limit: 50 }).then(setOrders).catch(console.error).finally(() => setLoading(false));
   }, []);
 
   const updateEscrow = async (id, escrowStatus) => {
-    try {
-      const orderStatus = escrowStatus === 'funds_released' ? 'Delivered' : escrowStatus === 'shipped' ? 'Shipped' : escrowStatus === 'cancelled' ? 'Cancelled' : 'Processing';
-      const paymentStatus = ['funds_secured', 'shipped', 'verified', 'funds_released'].includes(escrowStatus) ? 'Paid' : 'Pending';
-      const shippingStatus = escrowStatus === 'shipped' ? 'Shipped' : escrowStatus === 'verified' || escrowStatus === 'funds_released' ? 'Delivered' : 'Pending';
-
-      await dataClient.functions.invoke('processOrder', {
-        action: 'update_escrow', orderId: id, escrowStatus, orderStatus, paymentStatus, shippingStatus
-      });
-      setOrders(prev => prev.map(o => o.id === id ? { ...o, escrowStatus, orderStatus, paymentStatus, shippingStatus } : o));
+    const res = await updateEscrowStatus(id, escrowStatus);
+    if (res.ok) {
+      setOrders(prev => prev.map(o => o.id === id ? res.order : o));
       toast({ title: `Escrow status updated to ${ESCROW_STATUS_LABELS[escrowStatus]}` });
-    } catch (e) { toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' }); }
+    } else {
+      toast({ title: 'Error', description: res.error, variant: 'destructive' });
+    }
   };
 
-  const requestJustification = async (id) => {
+  const sendJustification = async (id) => {
     if (!justSubject.trim() || !justMessage.trim()) {
       toast({ title: 'Error', description: 'Subject and message are required', variant: 'destructive' });
       return;
     }
     setSendingJust(true);
     try {
-      const res = await dataClient.functions.invoke('processOrder', {
-        action: 'request_justification', orderId: id, subject: justSubject, message: justMessage
-      });
-      setOrders(prev => prev.map(o => o.id === id ? { ...o, paymentStatus: 'Justification Requested', justificationMessage: justMessage } : o));
-      setJustSubject(''); setJustMessage('');
-      toast({ title: 'Justification request emailed to buyer' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await requestJustification(id, justSubject.trim(), justMessage.trim());
+      if (res.ok) {
+        setOrders(prev => prev.map(o => o.id === id ? res.order : o));
+        setJustSubject(''); setJustMessage('');
+        toast({ title: 'Justification request sent to buyer' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setSendingJust(false);
     }
@@ -65,27 +60,26 @@ export default function AdminOrders() {
     }
     setSendingMsg(true);
     try {
-      await dataClient.functions.invoke('processOrder', {
-        action: 'admin_reply',
-        orderId: id,
-        subject: msgSubject.trim(),
-        message: msgBody.trim()
-      });
-      setMsgSubject(''); setMsgBody('');
-      toast({ title: 'Message sent to buyer' });
-    } catch (e) {
-      toast({ title: 'Error', description: e.response?.data?.error || e.message, variant: 'destructive' });
+      const res = await adminReplyToOrder(id, msgSubject.trim(), msgBody.trim());
+      if (res.ok) {
+        setMsgSubject(''); setMsgBody('');
+        toast({ title: 'Message sent to buyer' });
+      } else {
+        toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      }
     } finally {
       setSendingMsg(false);
     }
   };
 
   const updateTracking = async (id, trackingNumber) => {
-    try {
-      await dataClient.functions.invoke('processOrder', { action: 'update_escrow', orderId: id, trackingNumber });
-      setOrders(prev => prev.map(o => o.id === id ? { ...o, trackingNumber } : o));
+    const res = await updateTrackingNumber(id, trackingNumber);
+    if (res.ok) {
+      setOrders(prev => prev.map(o => o.id === id ? res.order : o));
       toast({ title: 'Tracking number updated' });
-    } catch (e) { toast({ title: 'Error', description: e.message, variant: 'destructive' }); }
+    } else {
+      toast({ title: 'Error', description: res.error, variant: 'destructive' });
+    }
   };
 
   return (
@@ -128,7 +122,7 @@ export default function AdminOrders() {
                   <div>
                     <p className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-1.5">Escrow Status</p>
                     <select value={o.escrowStatus} onChange={e => updateEscrow(o.id, e.target.value)} className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 outline-none focus:border-[#C5A367]">
-                      {Object.entries(ESCROW_STATUS_LABELS).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
+                      {[o.escrowStatus, ...(ESCROW_TRANSITIONS[o.escrowStatus] || [])].map(key => <option key={key} value={key}>{ESCROW_STATUS_LABELS[key]}</option>)}
                     </select>
                   </div>
 
@@ -187,7 +181,7 @@ export default function AdminOrders() {
                     <textarea
                       value={msgBody}
                       onChange={e => setMsgBody(e.target.value)}
-                      placeholder="Type a message to the buyer... (will be emailed and appear in their Mails tab)"
+                      placeholder="Type a message to the buyer... (appears in their Mails tab)"
                       rows={3}
                       className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367] resize-none"
                     />
@@ -203,7 +197,7 @@ export default function AdminOrders() {
                   {/* Justification already requested */}
                   {o.paymentStatus === 'Justification Requested' && (
                     <div className="text-[10px] text-amber-400 font-medium">
-                      ⚠ Justification requested — buyer notified by email
+                      ⚠ Justification requested — buyer notified in their Mails tab
                     </div>
                   )}
 
@@ -225,11 +219,11 @@ export default function AdminOrders() {
                         className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 mb-2 outline-none focus:border-[#C5A367] resize-none"
                       />
                       <button
-                        onClick={() => requestJustification(o.id)}
+                        onClick={() => sendJustification(o.id)}
                         disabled={sendingJust}
                         className="w-full bg-amber-600/20 border border-amber-600/40 text-amber-400 text-[10px] tracking-[0.1em] uppercase py-2 hover:bg-amber-600/30 disabled:opacity-50"
                       >
-                        {sendingJust ? 'Sending...' : 'Send Email to Buyer'}
+                        {sendingJust ? 'Sending...' : 'Send to Buyer'}
                       </button>
                     </div>
                   )}
