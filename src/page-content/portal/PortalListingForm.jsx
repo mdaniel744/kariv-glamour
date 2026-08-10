@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { dataClient } from '@/lib/dataClient';
+import { getMyDealerListing, createDealerListing, updateDealerListing } from '@/actions/products';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useToast } from '@/components/ui/use-toast';
-import { ArrowLeft, Save, Upload, X } from 'lucide-react';
+import { ArrowLeft, Save, X } from 'lucide-react';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 
-export default function DealerListingForm({ id: providedId }) {
+export default function PortalListingForm({ id: providedId }) {
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const router = useRouter();
   const { user } = useAuth();
@@ -16,7 +16,7 @@ export default function DealerListingForm({ id: providedId }) {
   const isEdit = id && id !== 'new';
 
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const [imageUrlInput, setImageUrlInput] = useState('');
   const [product, setProduct] = useState({
     productTitle: '', brand: '', model: '', referenceNumber: '', condition: 'Excellent',
     yearOfProduction: '', gender: 'Men', caseDiameter: '', caseMaterial: 'Stainless Steel',
@@ -32,26 +32,19 @@ export default function DealerListingForm({ id: providedId }) {
 
   useEffect(() => {
     if (isEdit) {
-      dataClient.entities.Products.get(id).then(p => setProduct(p)).catch(console.error);
+      getMyDealerListing(id).then((p) => { if (p) setProduct(p); }).catch(console.error);
     }
   }, [id]);
 
-  const handleUpload = async (files) => {
-    if (!files.length) return;
-    setUploading(true);
-    try {
-      const urls = [];
-      for (const file of files) {
-        const { file_url } = await dataClient.integrations.Core.UploadFile({ file });
-        urls.push(file_url);
-      }
-      setProduct(prev => ({
-        ...prev,
-        productImages: [...prev.productImages, ...urls],
-        featuredImage: prev.featuredImage || urls[0]
-      }));
-    } catch (e) { toast({ title: 'Upload failed', variant: 'destructive' }); }
-    finally { setUploading(false); }
+  const addImageUrl = () => {
+    const url = imageUrlInput.trim();
+    if (!url) return;
+    setProduct(prev => ({
+      ...prev,
+      productImages: [...prev.productImages, url],
+      featuredImage: prev.featuredImage || url,
+    }));
+    setImageUrlInput('');
   };
 
   const removeImage = (idx) => {
@@ -69,14 +62,14 @@ export default function DealerListingForm({ id: providedId }) {
     setSaving(true);
     try {
       const { authenticationStatus, ...rest } = product;
-      const payload = { ...rest, dealerId: user.id, dealerEmail: user.email, dealerName: user.full_name || user.email, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
+      const payload = { ...rest, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
       if (isEdit) {
-        await dataClient.entities.Products.update(id, payload);
+        await updateDealerListing(id, payload);
       } else {
-        await dataClient.entities.Products.create(payload);
+        await createDealerListing(payload);
       }
       toast({ title: isEdit ? 'Listing updated!' : 'Listing created!' });
-      router.push(localePath('/dealer/listings'));
+      router.push(localePath('/portal/listings'));
     } catch (e) {
       toast({ title: 'Error', description: e.message, variant: 'destructive' });
     } finally { setSaving(false); }
@@ -87,7 +80,7 @@ export default function DealerListingForm({ id: providedId }) {
 
   return (
     <div className="max-w-2xl">
-      <button onClick={() => router.push(localePath('/dealer/listings'))} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
+      <button onClick={() => router.push(localePath('/portal/listings'))} className="inline-flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft size={10} /> Back to Listings
       </button>
       <h1 className="text-xl font-display text-foreground font-light mb-6">{isEdit ? 'Edit Listing' : 'List a New Watch'}</h1>
@@ -95,17 +88,23 @@ export default function DealerListingForm({ id: providedId }) {
       {/* Images */}
       <div className="mb-6">
         <label className={labelClass}>Photos</label>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 mb-3">
           {product.productImages.map((img, i) => (
             <div key={i} className="relative w-24 h-24 group">
               <img src={img} alt="" className="w-full h-full object-cover" />
               <button onClick={() => removeImage(i)} className="absolute top-1 right-1 w-5 h-5 bg-background/80 rounded-full flex items-center justify-center"><X size={12} /></button>
             </div>
           ))}
-          <label className="w-24 h-24 border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:border-primary">
-            {uploading ? <div className="w-5 h-5 border-2 border-border border-t-primary rounded-full animate-spin" /> : <Upload size={16} className="text-muted-foreground" />}
-            <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleUpload(Array.from(e.target.files))} />
-          </label>
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="url"
+            value={imageUrlInput}
+            onChange={(e) => setImageUrlInput(e.target.value)}
+            placeholder="https://ik.imagekit.io/..."
+            className={inputClass}
+          />
+          <button onClick={addImageUrl} className="flex-shrink-0 border border-border px-4 py-2.5 text-xs uppercase tracking-[0.1em] text-foreground hover:border-primary">Add</button>
         </div>
       </div>
 

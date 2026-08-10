@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/
 import { NextResponse } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['/:locale/admin(.*)']);
-const isDealerRoute = createRouteMatcher(['/:locale/dealer(.*)']);
+const isDealerRoute = createRouteMatcher(['/:locale/portal/listings(.*)', '/:locale/portal/sales(.*)']);
 const isSignedInRoute = createRouteMatcher([
   '/:locale/portal(.*)',
   '/:locale/cart(.*)',

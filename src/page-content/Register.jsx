@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSignUp } from "@clerk/nextjs";
+import { useSignUp } from "@clerk/nextjs/legacy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -254,6 +254,9 @@ export default function Register() {
           )}
         </Button>
       </form>
+
+      {/* Required by Clerk for custom sign-up flows — bot protection is enabled by default */}
+      <div id="clerk-captcha" />
     </AuthLayout>
   );
 }

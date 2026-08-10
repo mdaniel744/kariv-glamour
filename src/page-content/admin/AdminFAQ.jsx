@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createFaq, updateFaq, deleteFaq } from '@/actions/catalog';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -33,15 +34,15 @@ export default function AdminFAQ() {
         question: form.question_de || form.question_en || form.question || '',
         answer: form.answer_de || form.answer_en || form.answer || ''
       };
-      if (editing === 'new') { await dataClient.entities.FAQ.create(payload); toast({ title: t('faqCreated') }); }
-      else { await dataClient.entities.FAQ.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await createFaq(payload); toast({ title: t('faqCreated') }); }
+      else { await updateFaq(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await dataClient.entities.FAQ.delete(id); load(); } catch (e) { console.error(e); }
+    try { await deleteFaq(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

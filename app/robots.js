@@ -14,8 +14,6 @@ export default function robots() {
           '/en/admin',
           '/de/portal',
           '/en/portal',
-          '/de/dealer',
-          '/en/dealer',
           '/de/checkout',
           '/en/checkout',
           '/login',

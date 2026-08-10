@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createBrand, updateBrand, deleteBrand } from '@/actions/catalog';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -40,15 +41,15 @@ export default function AdminBrands() {
         seoDescription: form.seoDescription_de || form.seoDescription_en || form.seoDescription || '',
         slug: form.slug || (form.brandName_de || form.brandName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await dataClient.entities.Brands.create(payload); toast({ title: t('brandCreated') }); }
-      else { await dataClient.entities.Brands.update(editing, payload); toast({ title: t('brandUpdated') }); }
+      if (editing === 'new') { await createBrand(payload); toast({ title: t('brandCreated') }); }
+      else { await updateBrand(editing, payload); toast({ title: t('brandUpdated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirmBrand'))) return;
-    try { await dataClient.entities.Brands.delete(id); toast({ title: t('brandDeleted') }); load(); }
+    try { await deleteBrand(id); toast({ title: t('brandDeleted') }); load(); }
     catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 

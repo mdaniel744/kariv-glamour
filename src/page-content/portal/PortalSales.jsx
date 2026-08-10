@@ -2,19 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { useLanguage } from '@/lib/languageContext';
 import { ShoppingCart, ShieldCheck, Truck } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import { ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
 
-export default function DealerSales() {
+export default function PortalSales() {
   const { user } = useAuth();
-  const { localePath } = useLanguage();
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     dataClient.entities.Orders.filter({ dealerId: user.id }, '-created_date', 50)

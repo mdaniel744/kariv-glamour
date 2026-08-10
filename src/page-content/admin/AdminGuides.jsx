@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createGuide, updateGuide, deleteGuide } from '@/actions/catalog';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -35,15 +36,15 @@ export default function AdminGuides() {
         content: form.content_de || form.content_en || form.content || '',
         slug: form.slug || (form.title_de || form.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await dataClient.entities.WatchGuides.create(payload); toast({ title: t('guideCreated') }); }
-      else { await dataClient.entities.WatchGuides.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await createGuide(payload); toast({ title: t('guideCreated') }); }
+      else { await updateGuide(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await dataClient.entities.WatchGuides.delete(id); load(); } catch (e) { console.error(e); }
+    try { await deleteGuide(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

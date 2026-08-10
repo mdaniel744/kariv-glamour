@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { getMyDealerListings } from '@/actions/products';
 import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { Package, ShieldCheck, Store, ChevronRight } from 'lucide-react';
+import { Package, ShieldCheck, Store, ChevronRight, Plus } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import { isDealer } from '@/lib/escrowConstants';
@@ -16,11 +17,19 @@ export default function PortalDashboard() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [listings, setListings] = useState([]);
+  const dealer = isDealer(user);
 
   useEffect(() => {
     dataClient.entities.Orders.filter({ buyerId: user.id }, '-created_date', 5)
       .then(data => setOrders(asArray(data))).catch(console.error).finally(() => setLoading(false));
   }, [user]);
+
+  useEffect(() => {
+    if (dealer) {
+      getMyDealerListings().then(data => setListings(data.slice(0, 4))).catch(console.error);
+    }
+  }, [dealer]);
 
   const stats = [
     { icon: Package, label: t('pages.portal.activeOrders'), value: orders.filter(o => !['funds_released', 'cancelled'].includes(o.escrowStatus)).length, color: 'text-blue-500' },
@@ -49,7 +58,7 @@ export default function PortalDashboard() {
       </div>
 
       {/* Become dealer CTA */}
-      {!isDealer(user) && (
+      {!dealer && (
         <div className="bg-primary/5 border border-primary/20 p-5 mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Store size={24} className="text-primary" />
@@ -61,6 +70,38 @@ export default function PortalDashboard() {
           <LocalizedLink to="/portal/become-dealer" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline whitespace-nowrap flex items-center gap-1">
             {t('pages.portal.apply')} <ChevronRight size={12} />
           </LocalizedLink>
+        </div>
+      )}
+
+      {/* Dealer: recent listings */}
+      {dealer && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-medium text-foreground">{t('pages.dealer.listings')}</h2>
+            <div className="flex items-center gap-4">
+              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline flex items-center gap-1"><Plus size={11} /> List Watch</LocalizedLink>
+              <LocalizedLink to="/portal/listings" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.viewAll')}</LocalizedLink>
+            </div>
+          </div>
+          {listings.length === 0 ? (
+            <div className="border border-border p-6 text-center">
+              <p className="text-xs text-muted-foreground mb-3">No listings yet.</p>
+              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</LocalizedLink>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {listings.map(p => (
+                <LocalizedLink key={p.id} to={`/portal/listings/${p.id}`} className="bg-card border border-border hover:border-primary transition-colors">
+                  {p.featuredImage ? <img src={p.featuredImage} alt="" className="w-full aspect-square object-cover" /> : <div className="w-full aspect-square bg-muted" />}
+                  <div className="p-2">
+                    <p className="text-[9px] tracking-[0.1em] uppercase text-primary truncate">{p.brand}</p>
+                    <p className="text-[10px] text-foreground truncate">{p.productTitle}</p>
+                    <p className="text-xs text-foreground mt-0.5">{formatPrice(p.price)}</p>
+                  </div>
+                </LocalizedLink>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

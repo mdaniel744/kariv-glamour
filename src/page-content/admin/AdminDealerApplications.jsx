@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { listDealerApplications, approveDealerApplication, rejectDealerApplication } from '@/actions/dealerApplications';
 import { useToast } from '@/components/ui/use-toast';
 import { Check, X, Store } from 'lucide-react';
 
@@ -17,18 +16,15 @@ export default function AdminDealerApplications() {
   const load = async () => {
     setLoading(true);
     try {
-      const apps = asArray(await dataClient.entities.DealerApplications.list('-created_date', 50));
-      setApplications(apps);
+      setApplications(await listDealerApplications());
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
 
   const handleApprove = async (app) => {
     try {
-      await dataClient.entities.DealerApplications.update(app.id, { status: 'approved' });
-      // Update user role to dealer — admin can update other users
-      await dataClient.entities.User.update(app.userId, { role: 'dealer', isDealerApproved: true, dealerApplicationStatus: 'approved', dealerCompanyName: app.companyName, dealerPhone: app.phone });
-      toast({ title: `Approved ${app.companyName} — user is now a dealer` });
+      await approveDealerApplication(app.id);
+      toast({ title: `Approved ${app.company_name} — user is now a dealer` });
       load();
     } catch (e) {
       toast({ title: 'Error', description: e.message, variant: 'destructive' });
@@ -37,8 +33,8 @@ export default function AdminDealerApplications() {
 
   const handleReject = async (app) => {
     try {
-      await dataClient.entities.DealerApplications.update(app.id, { status: 'rejected' });
-      toast({ title: `Rejected ${app.companyName}` });
+      await rejectDealerApplication(app.id);
+      toast({ title: `Rejected ${app.company_name}` });
       load();
     } catch (e) {
       toast({ title: 'Error', description: e.message, variant: 'destructive' });
@@ -71,17 +67,17 @@ export default function AdminDealerApplications() {
                 <div className="flex items-center gap-3">
                   <Store size={18} className="text-[#C5A367]" />
                   <div>
-                    <p className="text-xs text-[#E5E5E5] font-medium">{app.companyName}</p>
-                    <p className="text-[10px] text-[#8E8E93]">{app.userFullName} • {app.userEmail}</p>
+                    <p className="text-xs text-[#E5E5E5] font-medium">{app.company_name}</p>
+                    <p className="text-[10px] text-[#8E8E93]">{app.contact_email}</p>
                   </div>
                 </div>
                 <span className={`text-[9px] tracking-wide uppercase px-2 py-0.5 ${app.status === 'pending' ? 'bg-amber-900/30 text-amber-400' : app.status === 'approved' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>{app.status}</span>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px] text-[#8E8E93] mb-3">
                 {app.phone && <div>Phone: <span className="text-[#E5E5E5]">{app.phone}</span></div>}
-                {app.taxId && <div>Tax ID: <span className="text-[#E5E5E5]">{app.taxId}</span></div>}
+                {app.tax_id && <div>Tax ID: <span className="text-[#E5E5E5]">{app.tax_id}</span></div>}
                 {app.website && <div>Website: <span className="text-[#E5E5E5]">{app.website}</span></div>}
-                {app.address && <div>Address: <span className="text-[#E5E5E5]">{app.address}, {app.city} {app.postalCode}</span></div>}
+                {app.address && <div>Address: <span className="text-[#E5E5E5]">{app.address}</span></div>}
                 {app.country && <div>Country: <span className="text-[#E5E5E5]">{app.country}</span></div>}
               </div>
               {app.message && <p className="text-[10px] text-[#8E8E93] italic mb-3">"{app.message}"</p>}

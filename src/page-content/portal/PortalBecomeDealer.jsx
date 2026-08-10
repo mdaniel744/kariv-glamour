@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { submitDealerApplication } from '@/lib/supabaseData';
+import { getMyDealerApplication } from '@/actions/dealerApplications';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useTranslation } from 'react-i18next';
-import { Store, Check } from 'lucide-react';
+import { Store, Check, Clock, X } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 
 export default function PortalBecomeDealer() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
-  const [submitted, setSubmitted] = useState(false);
+  const [application, setApplication] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     companyName: '', phone: '', taxId: '', website: '',
     address: '', city: '', postalCode: '', country: '', message: ''
   });
 
-  // Note: dealer_applications has no anon SELECT policy (insert-only), so we
-  // can't check for an existing application or its status here — that needs
-  // a future service-role-backed route filtered by dealer_user_id, same
-  // ownership-check pattern as every other Clerk-authenticated read/write.
+  useEffect(() => {
+    getMyDealerApplication()
+      .then(setApplication)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
@@ -37,7 +42,8 @@ export default function PortalBecomeDealer() {
         message: form.message,
       });
       toast({ title: t('pages.portal.applicationSubmitted') });
-      setSubmitted(true);
+      const app = await getMyDealerApplication();
+      setApplication(app);
     } catch (e) {
       toast({ title: t('common:error'), description: e.message, variant: 'destructive' });
     } finally {
@@ -57,14 +63,29 @@ export default function PortalBecomeDealer() {
     );
   }
 
-  if (submitted) {
+  if (loading) return <div className="space-y-3">{[...Array(4)].map((_, i) => <div key={i} className="h-16 bg-card animate-pulse" />)}</div>;
+
+  if (application && application.status === 'pending') {
     return (
       <div className="max-w-lg text-center py-12">
         <div className="w-16 h-16 bg-amber-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Check size={28} className="text-amber-600 dark:text-amber-400" />
+          <Clock size={28} className="text-amber-600 dark:text-amber-400" />
         </div>
         <h1 className="font-display text-xl text-foreground mb-2">{t('pages.portal.becomeDealerPending')}</h1>
-        <p className="text-sm text-muted-foreground">{t('pages.portal.becomeDealerPendingDesc', { company: form.companyName, email: user.email })}</p>
+        <p className="text-sm text-muted-foreground">{t('pages.portal.becomeDealerPendingDesc', { company: application.company_name, email: user.email })}</p>
+      </div>
+    );
+  }
+
+  if (application && application.status === 'rejected') {
+    return (
+      <div className="max-w-lg text-center py-12">
+        <div className="w-16 h-16 bg-red-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
+          <X size={28} className="text-red-600 dark:text-red-400" />
+        </div>
+        <h1 className="font-display text-xl text-foreground mb-2">{t('pages.portal.becomeDealerRejected')}</h1>
+        <p className="text-sm text-muted-foreground mb-6">{t('pages.portal.becomeDealerRejectedDesc')}</p>
+        <button onClick={() => setApplication(null)} className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.submitNewApplication')}</button>
       </div>
     );
   }

@@ -109,9 +109,9 @@ function mapProduct(row, brandsById, collectionsById, translationsById) {
     featuredImage: images[0] || '',
     imageAlts: row.image_alts || [],
     isFeatured: !!row.is_featured,
-    isNewArrival: false,
-    isCertifiedPreOwned: false,
-    isVintage: false,
+    isNewArrival: attrs['isNewArrival'] === true,
+    isCertifiedPreOwned: attrs['isCertifiedPreOwned'] === true,
+    isVintage: attrs['isVintage'] === true,
     badge: row.badge || '',
     shortDescription: row.short_description || '',
     productDescription: row.description || '',
@@ -184,6 +184,15 @@ async function loadCollectionsById() {
   const byId = {};
   for (const row of data || []) byId[row.id] = row;
   return byId;
+}
+
+// Shapes product rows already fetched by a caller (e.g. a service-role
+// query that needs to see draft/dealer rows RLS would otherwise hide).
+// Brand/collection/translation lookups are public data either way.
+export async function shapeProductRows(rows) {
+  const [brandsById, collectionsById] = await Promise.all([loadBrandsById(), loadCollectionsById()]);
+  const translationsById = await fetchTranslationsById('product', rows.map((r) => r.id));
+  return rows.map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
 export async function loadAllProductsShaped() {

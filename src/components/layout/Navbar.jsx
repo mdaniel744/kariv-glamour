@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
 import { useAuth } from '@/lib/AuthContext';
-import { isDealer } from '@/lib/escrowConstants';
 import { BRAND_DATA } from '@/lib/constants';
 import BrandFavicon from '@/components/shared/BrandFavicon';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -50,7 +49,7 @@ function KarivLogo({ theme }) {
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
   const { theme, toggleTheme } = useTheme();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { t } = useTranslation('navigation');
   const { localePath } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -198,7 +197,7 @@ export default function Navbar() {
                 }
               </LocalizedLink>
               {isAuthenticated ? (
-                <LocalizedLink to={isDealer(user) ? '/dealer' : '/portal'} className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Account">
+                <LocalizedLink to="/portal" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Account">
                   <User size={18} />
                 </LocalizedLink>
               ) : (

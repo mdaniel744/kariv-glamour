@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createProduct, updateProduct, deleteProduct } from '@/actions/products';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save, Search } from 'lucide-react';
@@ -52,10 +53,10 @@ export default function AdminProducts() {
         slug: (form.productTitle_de || form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
       if (editing === 'new') {
-        await dataClient.entities.Products.create(payload);
+        await createProduct(payload);
         toast({ title: t('productCreated') });
       } else {
-        await dataClient.entities.Products.update(editing, payload);
+        await updateProduct(editing, payload);
         toast({ title: t('productUpdated') });
       }
       setEditing(null);
@@ -68,7 +69,7 @@ export default function AdminProducts() {
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirmProduct'))) return;
     try {
-      await dataClient.entities.Products.delete(id);
+      await deleteProduct(id);
       toast({ title: t('productDeleted') });
       loadProducts();
     } catch (e) {

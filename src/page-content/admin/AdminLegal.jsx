@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createLegalPage, updateLegalPage, deleteLegalPage } from '@/actions/catalog';
 import { useTranslation } from 'react-i18next';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -34,15 +35,15 @@ export default function AdminLegal() {
         seoDescription: form.seoDescription_de || form.seoDescription_en || form.seoDescription || '',
         slug: form.slug || (form.title_de || form.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await dataClient.entities.LegalPages.create(payload); toast({ title: t('pageCreated') }); }
-      else { await dataClient.entities.LegalPages.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await createLegalPage(payload); toast({ title: t('pageCreated') }); }
+      else { await updateLegalPage(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await dataClient.entities.LegalPages.delete(id); load(); } catch (e) { console.error(e); }
+    try { await deleteLegalPage(id); load(); } catch (e) { console.error(e); }
   };
 
   if (editing !== null) {

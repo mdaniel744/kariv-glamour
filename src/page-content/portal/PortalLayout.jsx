@@ -5,28 +5,38 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail } from 'lucide-react';
+import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail, ShoppingCart } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 import LocalizedLink from '@/components/LocalizedLink';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 export default function PortalLayout({ children }) {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const { localePath } = useLanguage();
+  const dealer = isDealer(user);
 
   const navItems = [
     { to: '/portal', icon: LayoutDashboard, label: t('pages.portal.dashboard'), exact: true },
     { to: '/portal/orders', icon: Package, label: t('pages.portal.orders') },
     { to: '/portal/mails', icon: Mail, label: 'Mails' },
     { to: '/portal/wishlist', icon: Heart, label: t('pages.portal.wishlist') },
+    ...(dealer ? [
+      { to: '/portal/listings', icon: Store, label: t('pages.dealer.listings') },
+      { to: '/portal/sales', icon: ShoppingCart, label: t('pages.dealer.sales') },
+    ] : []),
     { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];
 
   const handleLogout = () => logout();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-background flex flex-col">
+      <Navbar />
+
+      <div className="flex flex-col md:flex-row flex-1 pt-28 md:pt-40">
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border flex-shrink-0">
         <div className="p-5 border-b border-border">
@@ -51,13 +61,8 @@ export default function PortalLayout({ children }) {
             );
           })}
 
-          {/* Dealer link — show if dealer, or "Become Dealer" if not */}
-          {isDealer(user) ? (
-            <LocalizedLink to="/dealer" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-primary hover:bg-primary/10">
-              <Store size={15} />
-              Dealer Portal
-            </LocalizedLink>
-          ) : (
+          {/* Become a Dealer — only shown until a client is approved */}
+          {!dealer && (
             <LocalizedLink to="/portal/become-dealer" className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors ${pathname.includes('become-dealer') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}>
               <Store size={15} />
               {t('pages.portal.becomeDealer')}
@@ -86,6 +91,9 @@ export default function PortalLayout({ children }) {
           {children}
         </div>
       </main>
+      </div>
+
+      <Footer />
     </div>
   );
 }

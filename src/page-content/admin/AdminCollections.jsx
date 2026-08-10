@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
+import { createCollection, updateCollection, deleteCollection } from '@/actions/catalog';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DATA } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save } from 'lucide-react';
@@ -33,15 +34,15 @@ export default function AdminCollections() {
         description: form.description_de || form.description_en || form.description || '',
         slug: form.slug || (form.collectionName_de || form.collectionName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') { await dataClient.entities.Collections.create(payload); toast({ title: t('collectionCreated') }); }
-      else { await dataClient.entities.Collections.update(editing, payload); toast({ title: t('updated') }); }
+      if (editing === 'new') { await createCollection(payload); toast({ title: t('collectionCreated') }); }
+      else { await updateCollection(editing, payload); toast({ title: t('updated') }); }
       setEditing(null); load();
     } catch (e) { toast({ title: t('error'), description: e.message, variant: "destructive" }); }
   };
 
   const handleDelete = async (id) => {
     if (!confirm(t('deleteConfirm'))) return;
-    try { await dataClient.entities.Collections.delete(id); load(); } catch (e) { toast({ title: t('error'), variant: "destructive" }); }
+    try { await deleteCollection(id); load(); } catch (e) { toast({ title: t('error'), variant: "destructive" }); }
   };
 
   if (editing !== null) {
