@@ -14,6 +14,16 @@
 
 import { createClient } from '@supabase/supabase-js';
 
+// supabase-js initializes a Realtime client (unused here — we only do
+// plain select/update calls) that requires a native WebSocket global.
+// Node 22+ has one built in; the VPS runs Node 20, where it doesn't exist
+// outside the Next.js app's own runtime — polyfill it for this standalone
+// script specifically.
+if (typeof globalThis.WebSocket === 'undefined') {
+  const { default: WebSocket } = await import('ws');
+  globalThis.WebSocket = WebSocket;
+}
+
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID;
