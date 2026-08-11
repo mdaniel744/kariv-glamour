@@ -35,3 +35,6 @@ base44/.app.jsonc
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# local-only Claude Code instructions — never push, see CLAUDE.md itself
+/CLAUDE.md

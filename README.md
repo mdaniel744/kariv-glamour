@@ -38,5 +38,5 @@ pnpm build
 
 ## Notes
 
-- No file upload infrastructure exists — image fields (products, brands, collections) are plain URL text fields. Upload externally (ImageKit) and paste the resulting URL.
-- Orders, escrow, and the dealer marketplace (profiles/reviews) are deferred — their UI is present but safely disabled/stubbed pending a Supabase schema and payment integration for that area. See `AGENTS.md` for details.
+- Image fields (products, brands, collections, payment proof) use a real upload pipeline to a public-read Supabase Storage bucket via drag-and-drop/click-to-browse uploaders — no more paste-a-URL.
+- Orders, escrow (bank transfer only for v1), disputes, and customer profiles are live, backed by real Supabase tables. Dealer marketplace profile/review pages remain deferred (no schema yet). See `AGENTS.md` for details.
