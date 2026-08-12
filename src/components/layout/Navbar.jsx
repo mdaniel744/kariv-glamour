@@ -8,6 +8,7 @@ import { useTheme } from '@/lib/themeContext';
 import { useAuth } from '@/lib/AuthContext';
 import { BRAND_DATA } from '@/lib/constants';
 import BrandFavicon from '@/components/shared/BrandFavicon';
+import NotificationBell from '@/components/shared/NotificationBell';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -196,6 +197,7 @@ export default function Navbar() {
                   </span>
                 }
               </LocalizedLink>
+              <NotificationBell />
               {isAuthenticated ? (
                 <LocalizedLink to="/portal" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Account">
                   <User size={18} />

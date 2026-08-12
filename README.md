@@ -20,6 +20,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:5511
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_or_live_...
 CLERK_SECRET_KEY=sk_test_or_live_...
+
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=...
 ```
 
 `NEXT_PUBLIC_STORE_ID` scopes every Supabase query to this store's rows — the Supabase project is shared with other stores on the same platform.
@@ -40,3 +42,4 @@ pnpm build
 
 - Image fields (products, brands, collections, payment proof) use a real upload pipeline to a public-read Supabase Storage bucket via drag-and-drop/click-to-browse uploaders — no more paste-a-URL.
 - Orders, escrow (bank transfer only for v1), disputes, and customer profiles are live, backed by real Supabase tables. Dealer marketplace profile/review pages remain deferred (no schema yet). See `AGENTS.md` for details.
+- Browser push notifications (order/escrow status changes) are live — see `AGENTS.md` for the subscription flow.

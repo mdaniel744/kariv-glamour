@@ -25,6 +25,18 @@ Conventions established in `src/actions/orders.js` — follow these for any new 
 
 Any write that needs to check "does this belong to the current user" (orders, dealer listings, admin CRUD, anything Clerk-authenticated) must happen server-side using the Supabase **service-role key** with an explicit ownership filter in the query — never rely on Postgres RLS keyed off `auth.uid()`, since Clerk sessions don't populate it.
 
+## Push notifications — live
+
+Dashboard Agent's platform writes rows to a shared `notifications` table (`id, store_id, user_id, type, title, body, link_path, read_at, created_at`) whenever escrow status changes or staff messages a buyer, and attempts a real Web Push send. This side owns subscription capture and the in-app bell UI:
+
+- `src/actions/notifications.js`: `getMyNotifications`/`markNotificationRead`/`markAllNotificationsRead` (store_id + user_id ownership filters, same pattern as everywhere else), `subscribeToPush` (upserts into `push_subscriptions` — `id, store_id, user_id, endpoint, p256dh, auth, created_at`, keyed by `endpoint` since `UNIQUE(endpoint)` is enforced on the shared side).
+- `src/lib/pushNotifications.js`: client-only helper — requests `Notification.requestPermission()`, registers `public/sw.js`, subscribes via `PushManager`, and calls `subscribeToPush`. Needs a user gesture (button click), not called on page load.
+- `public/sw.js`: the service worker — `push` handler shows the OS notification (payload is `{title, body, link_path}`, matching the `notifications` row shape directly), `notificationclick` navigates to `link_path` and focuses/opens the tab.
+- `src/components/shared/NotificationBell.jsx`: the header bell (wired into `Navbar.jsx`, authenticated users only) — polls `getMyNotifications` every 45s, shows unread count, and doubles as the permission-request UX (shows an "Enable notifications" CTA inline when `Notification.permission !== 'granted'`, instead of a separate banner elsewhere). Clicking an item marks it read and navigates; opening the panel does *not* bulk-mark-read (a "Mark all read" button does that explicitly) — deliberate choice so unread items don't disappear before they're actually seen.
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY`: public VAPID key, safe client-side, required in `.env.local` (and the VPS) for subscriptions to work at all.
+
+`link_path` values from Dashboard Agent currently look like `/portal/orders/{orderId}` — confirmed this matches our actual route (`app/[locale]/portal/orders/[id]/page.jsx`); the bell prepends the locale via `localePath()` before navigating.
+
 ## Dealer applications — read-only on this side
 
 `/admin`'s dealer application view (`AdminDealerApplications.jsx`) is display-only. Approval authority (granting the Clerk `dealer` role, writing `status`/`reviewed_by`/`reviewed_at`) lives exclusively in the platform's own "Ecom King" dashboard now — `src/actions/dealerApplications.js` only exports `listDealerApplications`/`getMyDealerApplication` (reads). Do not reintroduce approve/reject writes here without confirming with whoever owns that dashboard first.
