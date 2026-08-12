@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getMyProfile, saveMyProfile } from '@/actions/customers';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Save } from 'lucide-react';
+import { Save, Upload, Loader2 } from 'lucide-react';
 
 export default function PortalProfile() {
-  const { user } = useAuth();
+  const { user, updateProfileImage } = useAuth();
   const { toast } = useToast();
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef(null);
   const [profile, setProfile] = useState({
     full_name: '',
     phoneNumber: '',
@@ -48,11 +50,39 @@ export default function PortalProfile() {
     }
   };
 
+  const handleAvatarChange = async (file) => {
+    if (!file) return;
+    setUploadingAvatar(true);
+    try {
+      const res = await updateProfileImage(file);
+      if (!res.ok) toast({ title: 'Error', description: res.error, variant: 'destructive' });
+    } finally {
+      setUploadingAvatar(false);
+      if (avatarInputRef.current) avatarInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="max-w-lg">
       <h1 className="text-xl font-display text-foreground font-light mb-6">My Profile</h1>
 
       <div className="space-y-4">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-full border border-border overflow-hidden bg-card flex-shrink-0 flex items-center justify-center">
+            {user?.avatarUrl ? (
+              <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-xl font-display text-primary">{(user?.full_name || user?.email || '?').charAt(0).toUpperCase()}</span>
+            )}
+          </div>
+          <div>
+            <label className="cursor-pointer inline-flex items-center gap-1.5 border border-border px-3 py-2 text-xs text-foreground hover:border-primary transition-colors">
+              {uploadingAvatar ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+              {uploadingAvatar ? 'Uploading...' : 'Change Photo'}
+              <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" disabled={uploadingAvatar} onChange={e => handleAvatarChange(e.target.files?.[0])} />
+            </label>
+          </div>
+        </div>
         <div>
           <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Email</label>
           <input value={user?.email || ''} disabled className="w-full bg-muted border border-border px-4 py-3 text-sm text-muted-foreground" />

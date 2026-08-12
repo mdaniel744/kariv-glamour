@@ -18,6 +18,7 @@ function shapeUser(clerkUser) {
     full_name: clerkUser.fullName || clerkUser.username || '',
     email: clerkUser.primaryEmailAddress?.emailAddress || '',
     role: clerkUser.publicMetadata?.role || 'buyer',
+    avatarUrl: clerkUser.imageUrl || '',
   };
 }
 
@@ -38,6 +39,18 @@ export const AuthProvider = ({ children }) => {
     clerk.redirectToSignIn({ redirectUrl: window.location.href });
   };
 
+  // Uploads straight to Clerk's own image storage — every Clerk user already
+  // has an avatar slot, so this needs no Supabase table/column of its own.
+  const updateProfileImage = async (file) => {
+    if (!clerkUser) return { ok: false, error: 'Not signed in.' };
+    try {
+      await clerkUser.setProfileImage({ file });
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e.message || 'Failed to update profile image.' };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -49,6 +62,7 @@ export const AuthProvider = ({ children }) => {
         authChecked,
         logout,
         navigateToLogin,
+        updateProfileImage,
       }}
     >
       {children}
