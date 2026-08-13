@@ -4,8 +4,9 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { requireAdmin, requireDealer } from '@/lib/serverAuth';
 import { STORE_ID, shapeProductRows } from '@/lib/supabaseData';
 import { slugify } from '@/lib/slug';
+import { translateMissingProductContent } from '@/lib/productTranslation';
 
-async function upsertTranslations(entityType, entityId, fieldValues) {
+async function upsertTranslations(entityType, entityId, fieldValues, automaticKeys = new Set()) {
   const rows = [];
   for (const [fieldName, locales] of Object.entries(fieldValues)) {
     for (const [locale, value] of Object.entries(locales)) {
@@ -17,7 +18,7 @@ async function upsertTranslations(entityType, entityId, fieldValues) {
           field_name: fieldName,
           locale,
           value,
-          translator: 'human',
+          translator: automaticKeys.has(`${fieldName}_${locale}`) ? 'openai' : 'human',
         });
       }
     }
@@ -27,6 +28,18 @@ async function upsertTranslations(entityType, entityId, fieldValues) {
     .from('translations')
     .upsert(rows, { onConflict: 'store_id,entity_type,entity_id,field_name,locale' });
   if (error) throw error;
+}
+
+async function prepareProductPayload(payload) {
+  return translateMissingProductContent(payload);
+}
+
+async function saveProductTranslations(entityId, payload, automaticKeys) {
+  await upsertTranslations('product', entityId, {
+    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
+    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
+    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
+  }, automaticKeys);
 }
 
 async function resolveBrandId(brandName) {
@@ -103,33 +116,27 @@ async function buildProductRow(payload, existingRow = null) {
 
 export async function createProduct(payload) {
   await requireAdmin();
-  const row = await buildProductRow(payload);
+  const prepared = await prepareProductPayload(payload);
+  const row = await buildProductRow(prepared.payload);
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
-  await upsertTranslations('product', data.id, {
-    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
-  });
+  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
 
-  return { id: data.id };
+  return { id: data.id, translationWarning: prepared.warning || undefined };
 }
 
 export async function updateProduct(id, payload) {
   await requireAdmin();
   const { data: existingRow } = await supabaseAdmin.from('products').select('*').eq('id', id).single();
-  const row = await buildProductRow(payload, existingRow);
+  const prepared = await prepareProductPayload(payload);
+  const row = await buildProductRow(prepared.payload, existingRow);
   const { error } = await supabaseAdmin.from('products').update(row).eq('id', id);
   if (error) throw new Error(error.message);
 
-  await upsertTranslations('product', id, {
-    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
-  });
+  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
 
-  return { id };
+  return { id, translationWarning: prepared.warning || undefined };
 }
 
 export async function deleteProduct(id) {
@@ -142,19 +149,16 @@ export async function deleteProduct(id) {
 
 export async function createDealerListing(payload) {
   const dealer = await requireDealer();
-  const row = await buildProductRow(payload);
+  const prepared = await prepareProductPayload(payload);
+  const row = await buildProductRow(prepared.payload);
   row.dealer_id = dealer.id;
   row.status = 'draft'; // dealer-created listings start as draft pending review
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
-  await upsertTranslations('product', data.id, {
-    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
-  });
+  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
 
-  return { id: data.id };
+  return { id: data.id, translationWarning: prepared.warning || undefined };
 }
 
 export async function updateDealerListing(id, payload) {
@@ -167,17 +171,14 @@ export async function updateDealerListing(id, payload) {
     .single();
   if (fetchError || !existingRow) throw new Error('Listing not found or not owned by you');
 
-  const row = await buildProductRow(payload, existingRow);
+  const prepared = await prepareProductPayload(payload);
+  const row = await buildProductRow(prepared.payload, existingRow);
   const { error } = await supabaseAdmin.from('products').update(row).eq('id', id).eq('dealer_id', dealer.id);
   if (error) throw new Error(error.message);
 
-  await upsertTranslations('product', id, {
-    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
-  });
+  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
 
-  return { id };
+  return { id, translationWarning: prepared.warning || undefined };
 }
 
 export async function deleteDealerListing(id) {

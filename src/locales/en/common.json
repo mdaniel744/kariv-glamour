@@ -396,6 +396,11 @@
       "moreFrom": "More from",
       "viewAll": "View All",
       "noImage": "No image available",
+      "galleryLabel": "Product image gallery",
+      "previousImage": "Previous product image",
+      "nextImage": "Next product image",
+      "viewImage": "View product image {{number}}",
+      "imageCount": "{{current}} of {{total}}",
       "specs": {
         "brand": "Brand",
         "collection": "Collection",

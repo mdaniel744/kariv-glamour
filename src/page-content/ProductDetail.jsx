@@ -8,14 +8,14 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
-import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
+import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronLeft, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import StarRating from '@/components/dealer/StarRating';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 import SafeHtml from '@/components/shared/SafeHtml';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
 function productIdFromPath() {
   if (typeof window === 'undefined') return null;
@@ -34,6 +34,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const [product, setProduct] = useState(initialProduct);
   const [loading, setLoading] = useState(!initialProduct);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [galleryApi, setGalleryApi] = useState(null);
   const [related, setRelated] = useState(initialRelated);
   const [dealerProfile, setDealerProfile] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -84,6 +85,24 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
       mounted = false;
     };
   }, [id, initialProduct, initialRelated]);
+
+  useEffect(() => {
+    if (!galleryApi) return undefined;
+    const syncSelectedImage = () => setSelectedImage(galleryApi.selectedScrollSnap());
+    syncSelectedImage();
+    galleryApi.on('select', syncSelectedImage);
+    galleryApi.on('reInit', syncSelectedImage);
+    return () => {
+      galleryApi.off('select', syncSelectedImage);
+      galleryApi.off('reInit', syncSelectedImage);
+    };
+  }, [galleryApi]);
+
+  useEffect(() => {
+    if (!galleryApi) return;
+    galleryApi.scrollTo(0, true);
+    setSelectedImage(0);
+  }, [galleryApi, product?.id]);
 
   if (loading) {
     return (
@@ -164,25 +183,63 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
         <div className="grid gap-7 md:grid-cols-2 md:gap-16">
           {/* Image gallery */}
           <div className="min-w-0">
-            <motion.div
-              key={selectedImage}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="aspect-[4/5] overflow-hidden bg-card mb-3 sm:aspect-square md:mb-4">
-              
-              {images.length > 0 ?
-              <img src={images[selectedImage]} alt={localize(product, 'productTitle')} className="w-full h-full object-cover" /> :
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground/40 text-sm">{t('pages.productDetail.noImage')}</div>
+            {images.length > 0 ?
+            <Carousel
+              setApi={setGalleryApi}
+              opts={{ align: 'start', loop: images.length > 1 }}
+              className="group mb-3 md:mb-4"
+              aria-label={t('pages.productDetail.galleryLabel')}>
+                <CarouselContent className="ml-0">
+                  {images.map((image, index) =>
+                <CarouselItem key={`${image}-${index}`} className="pl-0">
+                      <div className="aspect-[4/5] overflow-hidden bg-card sm:aspect-square">
+                        <img
+                      src={image}
+                      alt={`${localize(product, 'productTitle')} — ${t('pages.productDetail.imageCount', { current: index + 1, total: images.length })}`}
+                      draggable="false"
+                      className="h-full w-full select-none object-cover" />
+                      </div>
+                    </CarouselItem>
+                )}
+                </CarouselContent>
+                {images.length > 1 &&
+              <>
+                    <button
+                  type="button"
+                  onClick={() => galleryApi?.scrollPrev()}
+                  className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground opacity-100 shadow-sm backdrop-blur transition hover:border-primary hover:text-primary md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+                  aria-label={t('pages.productDetail.previousImage')}>
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                  type="button"
+                  onClick={() => galleryApi?.scrollNext()}
+                  className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground opacity-100 shadow-sm backdrop-blur transition hover:border-primary hover:text-primary md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+                  aria-label={t('pages.productDetail.nextImage')}>
+                      <ChevronRight size={20} />
+                    </button>
+                    <span
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/80 px-3 py-1 text-[10px] tracking-[0.12em] text-foreground backdrop-blur"
+                  aria-live="polite">
+                      {t('pages.productDetail.imageCount', { current: selectedImage + 1, total: images.length })}
+                    </span>
+                  </>
               }
-            </motion.div>
+              </Carousel> :
+            <div className="mb-3 flex aspect-[4/5] items-center justify-center overflow-hidden bg-card text-sm text-muted-foreground/40 sm:aspect-square md:mb-4">
+                {t('pages.productDetail.noImage')}
+              </div>
+            }
             {images.length > 1 &&
             <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
                 {images.map((img, i) =>
               <button
                 key={i}
-                onClick={() => setSelectedImage(i)}
+                type="button"
+                onClick={() => galleryApi?.scrollTo(i)}
                 className={`h-16 w-16 flex-shrink-0 overflow-hidden border ${i === selectedImage ? 'border-primary' : 'border-border'}`}
-                aria-label={`View product image ${i + 1}`}>
+                aria-current={i === selectedImage ? 'true' : undefined}
+                aria-label={t('pages.productDetail.viewImage', { number: i + 1 })}>
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
               )}

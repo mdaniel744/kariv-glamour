@@ -53,13 +53,13 @@ export default function AdminProducts() {
         productDescription: form.productDescription_de || form.productDescription_en || form.productDescription || '',
         slug: (form.productTitle_de || form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
-      if (editing === 'new') {
-        await createProduct(payload);
-        toast({ title: t('productCreated') });
-      } else {
-        await updateProduct(editing, payload);
-        toast({ title: t('productUpdated') });
-      }
+      const result = editing === 'new'
+        ? await createProduct(payload)
+        : await updateProduct(editing, payload);
+      toast({
+        title: editing === 'new' ? t('productCreated') : t('productUpdated'),
+        description: result.translationWarning,
+      });
       setEditing(null);
       loadProducts();
     } catch (e) {

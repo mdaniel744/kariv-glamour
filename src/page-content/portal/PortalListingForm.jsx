@@ -10,7 +10,7 @@ import ImageUploader from '@/components/shared/ImageUploader';
 export default function PortalListingForm({ id: providedId }) {
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const router = useRouter();
-  const { localePath } = useLanguage();
+  const { locale, localePath } = useLanguage();
   const { toast } = useToast();
   const isEdit = id && id !== 'new';
 
@@ -58,13 +58,23 @@ export default function PortalListingForm({ id: providedId }) {
     setSaving(true);
     try {
       const { authenticationStatus, ...rest } = product;
-      const payload = { ...rest, price: Number(product.price), salePrice: product.salePrice ? Number(product.salePrice) : undefined, yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined };
-      if (isEdit) {
-        await updateDealerListing(id, payload);
-      } else {
-        await createDealerListing(payload);
-      }
-      toast({ title: isEdit ? 'Listing updated!' : 'Listing created!' });
+      const payload = {
+        ...rest,
+        sourceLocale: locale,
+        [`productTitle_${locale}`]: product.productTitle,
+        [`shortDescription_${locale}`]: product.shortDescription,
+        [`productDescription_${locale}`]: product.productDescription,
+        price: Number(product.price),
+        salePrice: product.salePrice ? Number(product.salePrice) : undefined,
+        yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined,
+      };
+      const result = isEdit
+        ? await updateDealerListing(id, payload)
+        : await createDealerListing(payload);
+      toast({
+        title: isEdit ? 'Listing updated!' : 'Listing created!',
+        description: result.translationWarning,
+      });
       router.push(localePath('/portal/listings'));
     } catch (e) {
       toast({ title: 'Error', description: e.message, variant: 'destructive' });

@@ -396,6 +396,11 @@
       "moreFrom": "Mehr von",
       "viewAll": "Alle ansehen",
       "noImage": "Kein Bild verfügbar",
+      "galleryLabel": "Produktbildergalerie",
+      "previousImage": "Vorheriges Produktbild",
+      "nextImage": "Nächstes Produktbild",
+      "viewImage": "Produktbild {{number}} ansehen",
+      "imageCount": "{{current}} von {{total}}",
       "specs": {
         "brand": "Marke",
         "collection": "Kollektion",
