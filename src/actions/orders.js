@@ -185,7 +185,7 @@ export async function confirmPaymentSent(orderId, paymentProofUrl) {
   // Clears any open justification request. Silently ignored if the
   // order_messages.kind/subject migration hasn't landed yet.
   await supabaseAdmin.from('order_messages').insert({
-    order_id: orderId, sender: 'buyer', sender_user_id: user.id,
+    order_id: orderId, sender: 'buyer', sender_user_id: user.id, recipient_role: 'buyer',
     subject: 'Payment sent', message: 'Buyer submitted proof of payment.', kind: 'payment_sent', is_read: false,
   });
 
@@ -230,11 +230,12 @@ export async function getMyOrderMessages({ limit = 200 } = {}) {
   if (!orders.length) return [];
   const orderMap = new Map(orders.map(o => [o.id, o]));
 
-  // Scoped to buyer/admin senders only — dealer messages on the same order
-  // (a separate dealer<->staff thread sharing this table) are never shown
-  // to the buyer directly.
+  // Scoped to the buyer conversation only — recipient_role distinguishes
+  // which two-party thread a row belongs to (buyer<->staff vs
+  // dealer<->staff); sender alone can't tell them apart since both threads
+  // use sender:'admin' for the staff side.
   const { data, error } = await supabaseAdmin
-    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).in('sender', ['buyer', 'admin']).order('created_at', { ascending: false }).limit(limit);
+    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).eq('recipient_role', 'buyer').in('sender', ['buyer', 'admin']).order('created_at', { ascending: false }).limit(limit);
   if (error) throw new Error(error.message);
   const rows = data || [];
   const identities = await loadIdentities(rows.map(m => m.sender_user_id).concat(orders.map(o => o.buyer_user_id)));
@@ -249,7 +250,7 @@ export async function sendOrderMessage(orderId, subject, message) {
 
   const { data, error } = await supabaseAdmin
     .from('order_messages')
-    .insert({ order_id: orderId, sender: 'buyer', sender_user_id: user.id, subject, message, kind: 'message', is_read: false })
+    .insert({ order_id: orderId, sender: 'buyer', sender_user_id: user.id, recipient_role: 'buyer', subject, message, kind: 'message', is_read: false })
     .select().single();
   if (error) return { ok: false, error: error.message };
 
@@ -262,7 +263,7 @@ export async function markMyOrderThreadRead(orderId) {
   const { data: orderRow } = await supabaseAdmin
     .from('orders').select('id').eq('id', orderId).eq('store_id', STORE_ID).eq('buyer_user_id', user.id).maybeSingle();
   if (!orderRow) return { ok: false, error: 'Order not found.' };
-  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('sender', 'admin');
+  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('recipient_role', 'buyer').eq('sender', 'admin');
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
@@ -292,11 +293,13 @@ export async function getMyDealerOrderMessages({ limit = 200 } = {}) {
   if (!orders.length) return [];
   const orderMap = new Map(orders.map(o => [o.id, o]));
 
-  // Scoped to dealer/admin senders only — mirrors getMyOrderMessages' buyer
-  // scoping. Buyer and dealer each get their own two-party thread with
-  // staff; only admin sees the full three-way conversation.
+  // Scoped to the dealer conversation only — mirrors getMyOrderMessages'
+  // buyer scoping. recipient_role is what actually separates the two
+  // two-party threads sharing this table; sender alone can't, since both
+  // use sender:'admin' for the staff side. Only admin sees the full
+  // three-way conversation.
   const { data, error } = await supabaseAdmin
-    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).in('sender', ['dealer', 'admin']).order('created_at', { ascending: false }).limit(limit);
+    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).eq('recipient_role', 'dealer').in('sender', ['dealer', 'admin']).order('created_at', { ascending: false }).limit(limit);
   if (error) throw new Error(error.message);
   const rows = data || [];
   const identities = await loadIdentities(rows.map(m => m.sender_user_id));
@@ -311,7 +314,7 @@ export async function sendDealerOrderMessage(orderId, subject, message) {
 
   const { data, error } = await supabaseAdmin
     .from('order_messages')
-    .insert({ order_id: orderId, sender: 'dealer', sender_user_id: user.id, subject, message, kind: 'message', is_read: false })
+    .insert({ order_id: orderId, sender: 'dealer', sender_user_id: user.id, recipient_role: 'dealer', subject, message, kind: 'message', is_read: false })
     .select().single();
   if (error) return { ok: false, error: error.message };
 
@@ -324,7 +327,7 @@ export async function markMyDealerOrderThreadRead(orderId) {
   const { data: orderRow } = await supabaseAdmin
     .from('orders').select('id').eq('id', orderId).eq('store_id', STORE_ID).eq('dealer_user_id', user.id).maybeSingle();
   if (!orderRow) return { ok: false, error: 'Order not found.' };
-  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('sender', 'admin');
+  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('recipient_role', 'dealer').eq('sender', 'admin');
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
@@ -444,12 +447,16 @@ export async function confirmCourierDelivery(orderId) {
   return { ok: true, order: await shapeOrderDetail(result.order) };
 }
 
+// Scoped to recipient_role='buyer' throughout — our own /admin's message
+// UI was built buyer-only (hardcoded buyer-name labeling, no dealer
+// distinction) and predates dealer messaging entirely. Dealer<->staff
+// conversations now live on Dashboard Agent's own tool, not here.
 export async function getAdminOrderMessages(orderId) {
   await requireAdmin();
   const { data: orderRow } = await supabaseAdmin.from('orders').select('id, buyer_user_id').eq('id', orderId).eq('store_id', STORE_ID).maybeSingle();
   if (!orderRow) return [];
   const { data, error } = await supabaseAdmin
-    .from('order_messages').select('*').eq('order_id', orderId).order('created_at', { ascending: false }).limit(100);
+    .from('order_messages').select('*').eq('order_id', orderId).eq('recipient_role', 'buyer').order('created_at', { ascending: false }).limit(100);
   if (error) throw new Error(error.message);
   const rows = data || [];
   const identities = await loadIdentities(rows.map(m => m.sender_user_id).concat([orderRow.buyer_user_id]));
@@ -464,7 +471,7 @@ export async function getAdminMessagesOverview({ limit = 200 } = {}) {
   const orderMap = new Map(rows2.map(o => [o.id, o]));
 
   const { data, error } = await supabaseAdmin
-    .from('order_messages').select('*').in('order_id', rows2.map(o => o.id)).order('created_at', { ascending: false }).limit(limit);
+    .from('order_messages').select('*').in('order_id', rows2.map(o => o.id)).eq('recipient_role', 'buyer').order('created_at', { ascending: false }).limit(limit);
   if (error) throw new Error(error.message);
   const rows = data || [];
   const identities = await loadIdentities(rows.map(m => m.sender_user_id).concat(rows2.map(o => o.buyer_user_id)));
@@ -478,7 +485,7 @@ export async function adminReplyToOrder(orderId, subject, message) {
 
   const { data, error } = await supabaseAdmin
     .from('order_messages')
-    .insert({ order_id: orderId, sender: 'admin', sender_user_id: admin.id, subject, message, kind: 'message', is_read: false })
+    .insert({ order_id: orderId, sender: 'admin', sender_user_id: admin.id, recipient_role: 'buyer', subject, message, kind: 'message', is_read: false })
     .select().single();
   if (error) return { ok: false, error: error.message };
 
@@ -493,7 +500,7 @@ export async function requestJustification(orderId, subject, message) {
 
   const { error } = await supabaseAdmin
     .from('order_messages')
-    .insert({ order_id: orderId, sender: 'admin', sender_user_id: admin.id, subject, message, kind: 'justification_request', is_read: false });
+    .insert({ order_id: orderId, sender: 'admin', sender_user_id: admin.id, recipient_role: 'buyer', subject, message, kind: 'justification_request', is_read: false });
   if (error) return { ok: false, error: error.message };
 
   return { ok: true, order: await shapeOrderDetail(orderRow) };
@@ -501,7 +508,7 @@ export async function requestJustification(orderId, subject, message) {
 
 export async function markAdminOrderThreadRead(orderId) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).in('sender', ['buyer', 'dealer']);
+  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('recipient_role', 'buyer').eq('sender', 'buyer');
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }

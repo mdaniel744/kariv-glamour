@@ -96,6 +96,7 @@ async function main() {
       order_id: order.id,
       sender: 'admin',
       sender_user_id: 'system',
+      recipient_role: 'buyer',
       subject: 'Funds Released',
       message: 'The 14-day inspection period has ended with no dispute filed. Funds have been released to the dealer.',
       kind: 'message',
