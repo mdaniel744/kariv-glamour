@@ -12,6 +12,7 @@ import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import { ESCROW_STATUS_LABELS, ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
 import { ArrowLeft, Truck, FileCheck2, ExternalLink, Send, ShieldCheck, Package, CreditCard, Bitcoin, Building2, Flag, Gavel } from 'lucide-react';
 import LocalizedLink from '@/components/LocalizedLink';
+import SafeHtml from '@/components/shared/SafeHtml';
 
 const PAYMENT_ICONS = { bank_transfer: Building2, crypto: Bitcoin };
 
@@ -401,7 +402,7 @@ export default function AdminOrderDetail({ id: providedId }) {
                     <p className="text-[9px] text-[#8E8E93]">{new Date(msg.created_date).toLocaleString()}</p>
                   </div>
                   {msg.subject && <p className="text-[10px] text-[#8E8E93] mb-1">Re: {msg.subject}</p>}
-                  <p className="text-xs text-[#E5E5E5] whitespace-pre-wrap">{msg.body}</p>
+                  <SafeHtml as="div" html={msg.body} className="text-xs text-[#E5E5E5] whitespace-pre-wrap [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-white/10 [&_td]:p-1.5 [&_th]:border [&_th]:border-white/10 [&_th]:p-1.5 [&_img]:max-w-full [&_img]:h-auto" />
                 </div>
               </div>
             ))}

@@ -12,13 +12,22 @@ const ALLOWED_TAGS = [
   'a', 'p', 'br', 'strong', 'em', 'b', 'i', 'u', 'mark', 'ul', 'ol', 'li',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'sup', 'sub',
   'blockquote', 'img',
-  'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+  'table', 'colgroup', 'col', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
 ];
 
-// `style` is allowed only on these tags, and only to carry alignment —
-// see the sanitize-time hook below, which strips it down to nothing else.
-const ALIGNABLE_TAGS = new Set(['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'td', 'th']);
-const SAFE_TEXT_ALIGN = /^text-align:\s*(left|right|center|justify)\s*;?\s*$/i;
+// `style` is allowed only on these tags — text-align on block/cell tags,
+// min-width on col/colgroup (table column-resize) — see the sanitize-time
+// hook below, which strips it down to nothing else.
+const ALIGNABLE_TAGS = new Set(['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'td', 'th', 'col', 'colgroup']);
+const SAFE_STYLE_DECLARATIONS = [
+  /^text-align:\s*(left|right|center|justify)$/i,
+  /^min-width:\s*\d+(?:\.\d+)?(?:px|%|em|rem)$/i,
+];
+function isSafeStyleValue(value) {
+  const declarations = value.trim().replace(/;$/, '').split(';').map((d) => d.trim()).filter(Boolean);
+  if (declarations.length === 0) return false;
+  return declarations.every((decl) => SAFE_STYLE_DECLARATIONS.some((re) => re.test(decl)));
+}
 
 const ALLOWED_ATTR = ['href', 'title', 'src', 'alt', 'width', 'height', 'colspan', 'rowspan', 'style'];
 
@@ -57,7 +66,7 @@ function registerDomPurifyHooks(purifier) {
   purifier.addHook('uponSanitizeAttribute', (node, data) => {
     if (data.attrName === 'style') {
       const tag = node.tagName?.toLowerCase();
-      if (!ALIGNABLE_TAGS.has(tag) || !SAFE_TEXT_ALIGN.test(data.attrValue.trim())) {
+      if (!ALIGNABLE_TAGS.has(tag) || !isSafeStyleValue(data.attrValue)) {
         data.keepAttr = false;
       }
     }
@@ -112,7 +121,7 @@ function sanitizeServerSide(dirty) {
 
       if (ALIGNABLE_TAGS.has(tag)) {
         const style = attrs.match(/\bstyle\s*=\s*(['"])(.*?)\1/i)?.[2] || '';
-        if (SAFE_TEXT_ALIGN.test(style.trim())) safeAttrs.push(`style="${escapeAttribute(style.trim())}"`);
+        if (isSafeStyleValue(style)) safeAttrs.push(`style="${escapeAttribute(style.trim())}"`);
       }
 
       return `<${tag}${safeAttrs.length ? ` ${safeAttrs.join(' ')}` : ''}>`;
@@ -136,6 +145,13 @@ export function sanitizeHtml(dirty) {
 
   registerDomPurifyHooks(purifier);
   return purifier.sanitize(dirty, SANITIZE_CONFIG);
+}
+
+// For one-line previews (inbox list snippets) — plain text, not sanitized
+// markup, since a stray <table>/<img> would break a single-line layout.
+export function stripHtmlToText(dirty) {
+  if (!dirty || typeof dirty !== 'string') return '';
+  return dirty.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 export default sanitizeHtml;

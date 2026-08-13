@@ -3,6 +3,8 @@ import { getMyOrderMessages, sendOrderMessage, markMyOrderThreadRead } from '@/a
 import { useAuth } from '@/lib/AuthContext';
 import LocalizedLink from '@/components/LocalizedLink';
 import { Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
+import SafeHtml from '@/components/shared/SafeHtml';
+import { stripHtmlToText } from '@/lib/sanitize';
 
 export default function PortalMails() {
   const { user } = useAuth();
@@ -102,7 +104,7 @@ export default function PortalMails() {
                     </div>
                     <p className="text-xs text-foreground font-medium truncate">{lastMsg.subject}</p>
                     <p className="text-[11px] text-muted-foreground truncate mt-0.5">
-                      {lastMsg.sender === 'admin' ? 'Kariv Glamour' : 'You'}: {lastMsg.body}
+                      {lastMsg.sender === 'admin' ? 'Kariv Glamour' : 'You'}: {stripHtmlToText(lastMsg.body)}
                     </p>
                   </div>
                   <p className="text-[9px] text-muted-foreground flex-shrink-0">
@@ -140,7 +142,7 @@ export default function PortalMails() {
                     <p className="text-[9px] text-muted-foreground">{new Date(msg.created_date).toLocaleString()}</p>
                   </div>
                   <p className="text-[11px] text-muted-foreground mb-1">{msg.subject}</p>
-                  <p className="text-xs text-foreground whitespace-pre-wrap">{msg.body}</p>
+                  <SafeHtml as="div" html={msg.body} className="text-xs text-foreground whitespace-pre-wrap [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:p-1.5 [&_th]:border [&_th]:border-border [&_th]:p-1.5 [&_img]:max-w-full [&_img]:h-auto" />
                 </div>
               </div>
             ))}
