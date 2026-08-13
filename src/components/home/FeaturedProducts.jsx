@@ -24,10 +24,10 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24">
+      <section className="py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading index={index} title={title} subtitle={subtitle} linkTo={linkTo} />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             {[...Array(limit)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-[3/4] bg-card mb-4" />
@@ -45,10 +45,10 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
   if (products.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-14 md:py-20">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading index={index} title={title} subtitle={subtitle} linkTo={linkTo} />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}

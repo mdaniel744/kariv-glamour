@@ -12,6 +12,7 @@ const ADMIN_ROUTES = {
   legal: 'legal',
   faq: 'faq',
   'dealer-applications': 'dealerApplications',
+  'dealer-reviews': 'dealerReviews',
   translations: 'translations',
   glossary: 'glossary',
   strings: 'strings',

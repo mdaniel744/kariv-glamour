@@ -12,7 +12,7 @@ Treat this as user-owned application code, keep changes focused on the user's re
 
 ## Orders/escrow/payments — live
 
-Orders, order messages, disputes, and customers are real Supabase-backed tables now (`orders`, `order_messages`, `disputes`, `customers`), read/written via `src/actions/orders.js` and `src/actions/customers.js`. Checkout, Cart's checkout button, Portal Orders/Mails/Sales, and Admin Orders/Customers are all live. Still deferred: `dealer_profiles`/`dealer_reviews` (public dealer profile pages, review flow) — no tables exist for these yet.
+Orders, order messages, disputes, customers, and moderated dealer reviews are real Supabase-backed tables now (`orders`, `order_messages`, `disputes`, `customers`, `dealer_reviews`). Dealer reviews are read/written through `src/actions/dealerReviews.js`: only buyers with a verified/completed order can submit, submissions default to `pending`, and only `approved` rows are rendered publicly. The schema lives in `supabase/migrations/20260813093000_create_dealer_reviews.sql`. Still deferred: `dealer_profiles`; public dealer pages derive the dealer name from Clerk and ratings from approved reviews.
 
 **Crypto payments are deferred for v1** — only `bank_transfer` ships. `PaymentMethodSelector.jsx` filters `PAYMENT_METHODS` down to bank-only at render time (the constant itself still lists both, so re-enabling crypto later is a one-line change); `CryptoCheckoutButton.jsx` and the crypto branch of `PaymentMethodSelector.jsx` are left in place but unused.
 

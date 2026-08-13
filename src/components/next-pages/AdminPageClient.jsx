@@ -15,6 +15,7 @@ const ADMIN_PAGES = {
   legal: dynamic(() => import('@/page-content/admin/AdminLegal')),
   faq: dynamic(() => import('@/page-content/admin/AdminFAQ')),
   dealerApplications: dynamic(() => import('@/page-content/admin/AdminDealerApplications')),
+  dealerReviews: dynamic(() => import('@/page-content/admin/AdminDealerReviews')),
   translations: dynamic(() => import('@/page-content/admin/AdminTranslationDashboard')),
   glossary: dynamic(() => import('@/page-content/admin/AdminGlossary')),
   strings: dynamic(() => import('@/page-content/admin/AdminStrings')),

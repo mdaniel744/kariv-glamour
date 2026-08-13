@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText } from 'lucide-react';
+import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText, Star } from 'lucide-react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
 
@@ -31,6 +31,7 @@ export default function AdminLayout({ children }) {
     { to: '/admin/collections', icon: Layers, label: t('collections') },
     { to: '/admin/orders', icon: ShoppingCart, label: t('orders') },
     { to: '/admin/dealer-applications', icon: Store, label: 'Dealer Applications' },
+    { to: '/admin/dealer-reviews', icon: Star, label: t('dealerReviews') },
     { to: '/admin/customers', icon: Users, label: t('customers') },
     { to: '/admin/guides', icon: BookOpen, label: t('guides') },
     { to: '/admin/legal', icon: FileText, label: t('legal') },

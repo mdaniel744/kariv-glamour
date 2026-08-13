@@ -3,7 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import BrandLogo from '@/components/shared/BrandLogo';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function BrandMarquee() {
@@ -44,10 +44,16 @@ export default function BrandMarquee() {
   if (brands.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 border-y border-border">
-      <div className="max-w-7xl mx-auto px-6 mb-10 flex items-center justify-between">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-primary font-medium">{t('components.brandMarquee.title')}</span>
-        <div className="flex gap-2">
+    <section className="border-y border-border bg-background py-10 md:py-12">
+      <div className="mx-auto mb-7 flex max-w-7xl items-center justify-between px-6">
+        <div>
+          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary">{t('components.brandMarquee.title')}</span>
+          <p className="mt-1.5 text-xs text-muted-foreground">{t('components.brandMarquee.subtitle')}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LocalizedLink to="/brands" className="mr-2 hidden items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary sm:flex">
+            {t('components.brandMarquee.viewAll')} <ArrowRight size={12} />
+          </LocalizedLink>
           <button onClick={() => scrollByDir(-1)} disabled={!canPrev} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-0 disabled:pointer-events-none" aria-label={t('components.brandMarquee.scrollLeft')}>
             <ChevronLeft size={16} />
           </button>
@@ -56,21 +62,21 @@ export default function BrandMarquee() {
           </button>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-6">
-        <div ref={scrollRef} onScroll={updateArrows} className="flex gap-10 md:gap-14 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
+      <div className="mx-auto max-w-7xl px-6">
+        <div ref={scrollRef} onScroll={updateArrows} className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 scroll-px-6 md:gap-4">
           {brands.map((brand, i) => (
             <LocalizedLink
               key={`${brand.slug}-${i}`}
               to={`/brands/${brand.slug}`}
               data-brand-card
-              className="flex-shrink-0 snap-start h-20 md:h-28 flex items-center justify-center group"
+              className="group flex h-20 min-w-[150px] flex-shrink-0 snap-start items-center justify-center border border-border px-6 transition-colors hover:border-primary/40 md:h-24 md:min-w-[190px]"
             >
               <BrandLogo
                 slug={brand.slug}
                 light={brand.brandLogoLight}
                 dark={brand.brandLogoDark}
                 alt={t('components.brandMarquee.brandWatches', { brand: brand.brandName })}
-                className="h-full w-auto object-contain opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                className="h-full w-auto object-contain opacity-70 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
               />
             </LocalizedLink>
           ))}

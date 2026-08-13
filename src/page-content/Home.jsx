@@ -5,10 +5,10 @@ import HeroSection from '@/components/home/HeroSection';
 import BrandMarquee from '@/components/home/BrandMarquee';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import CategoryGrid from '@/components/home/CategoryGrid';
+import PopularModels from '@/components/home/PopularModels';
 import EditorialSection from '@/components/home/EditorialSection';
 import EditorialHero from '@/components/home/EditorialHero';
 import TrustBar from '@/components/shared/TrustBar';
-import PopularCollections from '@/components/home/PopularCollections';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -36,6 +36,8 @@ export default function Home() {
       />
       <HeroSection />
       <BrandMarquee />
+      <CategoryGrid />
+      <PopularModels />
       <FeaturedProducts
         index="01"
         title={t('components.featuredProducts.section01.title')}
@@ -44,6 +46,7 @@ export default function Home() {
         linkTo="/shop"
         limit={4}
       />
+      <TrustBar />
       <FeaturedProducts
         index="02"
         title={t('components.featuredProducts.section02.title')}
@@ -52,6 +55,7 @@ export default function Home() {
         linkTo="/shop?isNewArrival=true"
         limit={4}
       />
+      <EditorialHero />
       <FeaturedProducts
         index="03"
         title={t('components.featuredProducts.section03.title')}
@@ -60,10 +64,6 @@ export default function Home() {
         linkTo="/shop?isCertifiedPreOwned=true"
         limit={4}
       />
-      <EditorialHero />
-      <CategoryGrid />
-      <PopularCollections />
-      <TrustBar />
       <EditorialSection />
     </div>
   );

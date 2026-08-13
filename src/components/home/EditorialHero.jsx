@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const EDITORIAL_IMAGE = "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/4957f596d_generated_310565b9.png";
+const EDITORIAL_IMAGE = '/media/kariv-principle.png';
 
 export default function EditorialHero() {
   const { t } = useTranslation();

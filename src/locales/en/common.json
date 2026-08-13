@@ -171,10 +171,18 @@
       },
       "prevSlide": "Previous slide",
       "nextSlide": "Next slide",
-      "slideN": "Slide {{n}}"
+      "slideN": "Slide {{n}}",
+      "searchLabel": "Search watches",
+      "searchPlaceholder": "Search by brand, model, or reference...",
+      "searchCta": "Search watches",
+      "popularSearches": "Popular",
+      "certified": "Certified pre-owned",
+      "underTen": "Under €10,000"
     },
     "brandMarquee": {
       "title": "Featured Manufacturers",
+      "subtitle": "Start with the name on the dial",
+      "viewAll": "All brands",
       "scrollLeft": "Scroll left",
       "scrollRight": "Scroll right",
       "brandWatches": "{{brand}} watches at Kariv Glamour"
@@ -185,7 +193,11 @@
       "mens": { "title": "Men's Watches", "subtitle": "Explore collection" },
       "womens": { "title": "Women's Watches", "subtitle": "Elegance redefined" },
       "vintage": { "title": "Vintage & Collectibles", "subtitle": "Timeless treasures" },
-      "newArrivals": { "title": "New Arrivals", "subtitle": "Freshly arrived" }
+      "newArrivals": { "title": "New Arrivals", "subtitle": "Freshly arrived" },
+      "certified": { "title": "Certified Pre-Owned", "subtitle": "Inspected and authenticated" },
+      "automatic": { "title": "Automatic Watches", "subtitle": "Mechanical craftsmanship" },
+      "gold": { "title": "Gold Watches", "subtitle": "Enduring distinction" },
+      "underTen": { "title": "Under €10,000", "subtitle": "Luxury within reach" }
     },
     "editorialHero": {
       "eyebrow": "The Kariv Principle",
@@ -206,6 +218,11 @@
       "title": "Popular Collections",
       "subtitle": "Discover the most sought-after watch collections",
       "discover": "Discover"
+    },
+    "popularModels": {
+      "title": "The Models Everyone Knows",
+      "subtitle": "Explore icons that have defined generations of watchmaking",
+      "discover": "Shop this model"
     },
     "featuredProducts": {
       "section01": { "title": "Featured Timepieces", "subtitle": "Hand-picked selection from our curated inventory" },
@@ -231,6 +248,28 @@
       "insuredShippingDesc": "Worldwide, fully insured",
       "conditionReport": "Condition Report",
       "conditionReportDesc": "Detailed condition reports"
+    },
+    "dealerReviews": {
+      "sectionTitle": "Dealer Reviews",
+      "reviewsCount": "{{count}} reviews",
+      "noReviews": "No approved reviews yet.",
+      "rateDealer": "Rate your experience with {{dealer}}",
+      "yourRating": "Your rating",
+      "titleLabel": "Title (optional)",
+      "titlePlaceholder": "Summarize your experience",
+      "reviewLabel": "Review",
+      "reviewPlaceholder": "Share details about your purchase, delivery, and product quality...",
+      "submit": "Submit review",
+      "submitting": "Submitting...",
+      "submitted": "Review submitted",
+      "pendingDescription": "Your review will appear after an administrator approves it.",
+      "pendingNotice": "Your verified-purchase review is awaiting approval from the Kariv Glamour administration team. It will appear here after moderation.",
+      "moderationNotice": "Reviews are published only after verification and administrator approval.",
+      "validation": "Choose a rating and write at least 10 characters.",
+      "error": "Review could not be submitted",
+      "verifiedBuyer": "Verified Buyer",
+      "verifiedPurchase": "Verified Purchase",
+      "dealerResponse": "Dealer Response"
     }
   },
   "pages": {

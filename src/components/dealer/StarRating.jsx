@@ -16,6 +16,8 @@ export default function StarRating({ rating = 0, size = 14, interactive = false,
           onMouseLeave={() => interactive && setHover(0)}
           onClick={() => interactive && onChange?.(star)}
           className={interactive ? 'cursor-pointer' : 'cursor-default'}
+          aria-label={interactive ? `${star} ${star === 1 ? 'star' : 'stars'}` : undefined}
+          aria-hidden={interactive ? undefined : true}
         >
           <Star
             size={size}

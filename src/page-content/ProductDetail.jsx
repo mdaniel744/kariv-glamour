@@ -16,6 +16,7 @@ import StarRating from '@/components/dealer/StarRating';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 import SafeHtml from '@/components/shared/SafeHtml';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { getDealerRatingSummary } from '@/actions/dealerReviews';
 
 function productIdFromPath() {
   if (typeof window === 'undefined') return null;
@@ -42,11 +43,29 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   useEffect(() => {
     let mounted = true;
 
+    const loadDealer = (data) => {
+      const dealerUserId = data?.dealerId || data?.created_by_id;
+      if (!dealerUserId) return;
+      getDealerRatingSummary(dealerUserId)
+        .then((summary) => {
+          if (mounted && summary) {
+            setDealerProfile((current) => ({
+              ...summary,
+              ...(current || {}),
+              averageRating: summary.averageRating,
+              totalReviews: summary.totalReviews,
+            }));
+          }
+        })
+        .catch(() => {});
+    };
+
     if (initialProduct?.id === id) {
       setProduct(initialProduct);
       setRelated(initialRelated);
       setDealerProfile(initialDealerProfile);
       setLoading(false);
+      loadDealer(initialProduct);
       window.scrollTo(0, 0);
       return () => {
         mounted = false;
@@ -59,6 +78,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
         const data = await dataClient.entities.Products.get(id);
         if (!mounted) return;
         setProduct(data);
+        loadDealer(data);
         const rel = asArray(await dataClient.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
         if (mounted) setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {

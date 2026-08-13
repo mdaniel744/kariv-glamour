@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
-import { useAuth } from '@/lib/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { submitDealerReview } from '@/actions/dealerReviews';
 import StarRating from './StarRating';
 import { useToast } from '@/components/ui/use-toast';
 
 export default function DealerReviewForm({ dealerId, dealerName, orderId, orderReference, onSubmitted }) {
-  const { user } = useAuth();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState('');
@@ -14,42 +13,25 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async () => {
-    if (!rating || !reviewText.trim()) {
-      toast({ title: 'Please provide a rating and review text', variant: 'destructive' });
+    if (!rating || reviewText.trim().length < 10) {
+      toast({ title: t('components.dealerReviews.validation'), variant: 'destructive' });
       return;
     }
+
     setSaving(true);
     try {
-      const review = await dataClient.entities.DealerReview.create({
-        dealerId,
-        dealerName,
-        buyerId: user.id,
-        buyerName: user.full_name || user.email,
-        orderId,
-        orderReference,
-        rating,
-        title: title.trim(),
-        reviewText: reviewText.trim(),
-        isVerifiedPurchase: true
-      });
-
-      // Recalculate dealer average
-      const allReviews = asArray(await dataClient.entities.DealerReview.filter({ dealerId }, '-created_date', 500));
-      const avg = allReviews.length > 0
-        ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length
-        : 0;
-      const profiles = asArray(await dataClient.entities.DealerProfile.filter({ userId: dealerId }, '-created_date', 1));
-      if (profiles.length > 0) {
-        await dataClient.entities.DealerProfile.update(profiles[0].id, {
-          averageRating: Math.round(avg * 10) / 10,
-          totalReviews: allReviews.length
-        });
+      const result = await submitDealerReview({ dealerId, orderId, rating, title, reviewText });
+      if (!result.ok) {
+        toast({ title: t('components.dealerReviews.error'), description: result.error, variant: 'destructive' });
+        return;
       }
-
-      toast({ title: 'Review submitted!' });
-      onSubmitted?.(review);
-    } catch (e) {
-      toast({ title: 'Error', description: e.message, variant: 'destructive' });
+      toast({
+        title: t('components.dealerReviews.submitted'),
+        description: t('components.dealerReviews.pendingDescription'),
+      });
+      onSubmitted?.(result.review);
+    } catch (error) {
+      toast({ title: t('components.dealerReviews.error'), description: error.message, variant: 'destructive' });
     } finally {
       setSaving(false);
     }
@@ -57,38 +39,55 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
 
   return (
     <div className="border border-border bg-card p-5">
-      <h3 className="text-sm font-medium text-foreground mb-4">Rate Your Experience with {dealerName}</h3>
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+        <h3 className="text-sm font-medium text-foreground">
+          {t('components.dealerReviews.rateDealer', { dealer: dealerName })}
+        </h3>
+        <span className="font-mono text-[10px] text-muted-foreground">{orderReference}</span>
+      </div>
       <div className="space-y-4">
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2 block">Your Rating</label>
+          <label className="mb-2 block text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+            {t('components.dealerReviews.yourRating')}
+          </label>
           <StarRating rating={rating} size={24} interactive onChange={setRating} />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1 block">Title (optional)</label>
+          <label className="mb-1 block text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+            {t('components.dealerReviews.titleLabel')}
+          </label>
           <input
             value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Summarize your experience"
-            className="w-full bg-background border border-border px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary"
+            onChange={(event) => setTitle(event.target.value)}
+            maxLength={120}
+            placeholder={t('components.dealerReviews.titlePlaceholder')}
+            className="w-full border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary"
           />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1 block">Review *</label>
+          <label className="mb-1 block text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+            {t('components.dealerReviews.reviewLabel')}
+          </label>
           <textarea
             value={reviewText}
-            onChange={e => setReviewText(e.target.value)}
-            placeholder="Share details about your purchase experience, delivery, and product quality..."
+            onChange={(event) => setReviewText(event.target.value)}
+            maxLength={2000}
+            placeholder={t('components.dealerReviews.reviewPlaceholder')}
             rows={4}
-            className="w-full bg-background border border-border px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary resize-none"
+            className="w-full resize-none border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary"
           />
+          <p className="mt-1 text-right text-[9px] text-muted-foreground">{reviewText.length}/2000</p>
         </div>
         <button
           onClick={handleSubmit}
-          disabled={saving || !rating || !reviewText.trim()}
-          className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 disabled:opacity-50"
+          disabled={saving || !rating || reviewText.trim().length < 10}
+          className="w-full bg-primary py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground disabled:opacity-50"
         >
-          {saving ? 'Submitting...' : 'Submit Review'}
+          {saving ? t('components.dealerReviews.submitting') : t('components.dealerReviews.submit')}
         </button>
+        <p className="text-[10px] leading-relaxed text-muted-foreground">
+          {t('components.dealerReviews.moderationNotice')}
+        </p>
       </div>
     </div>
   );

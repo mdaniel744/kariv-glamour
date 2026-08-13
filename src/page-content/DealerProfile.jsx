@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
+import { getDealerReviewEligibility } from '@/actions/dealerReviews';
 import StarRating from '@/components/dealer/StarRating';
 import DealerReviewCard from '@/components/dealer/DealerReviewCard';
 import DealerReviewForm from '@/components/dealer/DealerReviewForm';
@@ -14,12 +16,14 @@ export default function DealerProfile({
   initialListings = [],
   initialReviews = [],
 }) {
+  const { t } = useTranslation();
   const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const { user } = useAuth();
   const [profile, setProfile] = useState(initialProfile);
   const [listings, setListings] = useState(initialListings);
   const [reviews, setReviews] = useState(initialReviews);
   const [eligibleOrder, setEligibleOrder] = useState(null);
+  const [submittedReview, setSubmittedReview] = useState(null);
   const [loading, setLoading] = useState(!initialProfile && initialListings.length === 0 && initialReviews.length === 0);
 
   useEffect(() => {
@@ -29,24 +33,15 @@ export default function DealerProfile({
         const [profiles, dealerListings, dealerReviews] = hasInitialData
           ? [[initialProfile].filter(Boolean), initialListings, initialReviews]
           : await Promise.all([
-              dataClient.entities.DealerProfile.filter({ userId: id }, '-created_date', 1).then(asArray).catch(() => []),
+              Promise.resolve([]),
               dataClient.entities.Products.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => []),
-              dataClient.entities.DealerReview.filter({ dealerId: id }, '-created_date', 50).then(asArray).catch(() => [])
+              Promise.resolve([]),
             ]);
 
         setProfile(profiles[0] || null);
         setListings(dealerListings);
         setReviews(dealerReviews);
 
-        // Check if current user has a completed order with this dealer (eligible to review)
-        if (user) {
-          const myOrders = asArray(await dataClient.entities.Orders.filter({ buyerId: user.id, dealerId: id }, '-created_date', 50).then(asArray).catch(() => []));
-          const completed = myOrders.find(o =>
-            ['funds_released', 'verified'].includes(o.escrowStatus) &&
-            !dealerReviews.find(r => r.orderId === o.id)
-          );
-          if (completed) setEligibleOrder(completed);
-        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -56,6 +51,25 @@ export default function DealerProfile({
     load();
     window.scrollTo(0, 0);
   }, [id, user, initialProfile, initialListings, initialReviews]);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!user || !id) {
+      setEligibleOrder(null);
+      setSubmittedReview(null);
+      return () => { mounted = false; };
+    }
+
+    getDealerReviewEligibility(id)
+      .then((result) => {
+        if (!mounted || !result.ok) return;
+        setEligibleOrder(result.eligibleOrder);
+        setSubmittedReview(result.submittedReview);
+      })
+      .catch(() => {});
+
+    return () => { mounted = false; };
+  }, [id, user]);
 
   if (loading) {
     return (
@@ -115,7 +129,7 @@ export default function DealerProfile({
               <div className="flex items-center gap-1.5">
                 <StarRating rating={Math.round(avgRating)} size={14} />
                 <span className="text-sm text-foreground font-medium">{avgRating.toFixed(1)}</span>
-                <span className="text-xs text-muted-foreground">({totalReviews} reviews)</span>
+                <span className="text-xs text-muted-foreground">({t('components.dealerReviews.reviewsCount', { count: totalReviews })})</span>
               </div>
               {profile?.location && (
                 <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -181,7 +195,7 @@ export default function DealerProfile({
         <div className="mb-12">
           <div className="flex items-end justify-between mb-6">
             <h2 className="font-display text-xl text-foreground font-light flex items-center gap-2">
-              <Star size={18} className="text-amber-400" /> Dealer Reviews
+              <Star size={18} className="text-amber-400" /> {t('components.dealerReviews.sectionTitle')}
             </h2>
           </div>
 
@@ -191,7 +205,7 @@ export default function DealerProfile({
               <div className="border border-border bg-card p-5 text-center flex flex-col items-center justify-center">
                 <p className="text-4xl font-display text-foreground">{avgRating.toFixed(1)}</p>
                 <StarRating rating={Math.round(avgRating)} size={16} />
-                <p className="text-xs text-muted-foreground mt-1">{totalReviews} reviews</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('components.dealerReviews.reviewsCount', { count: totalReviews })}</p>
               </div>
               <div className="md:col-span-2 border border-border bg-card p-5">
                 {distribution.map(d => (
@@ -217,16 +231,22 @@ export default function DealerProfile({
                 orderReference={eligibleOrder.escrowReference}
                 onSubmitted={() => {
                   setEligibleOrder(null);
-                  window.location.reload();
+                  setSubmittedReview({ status: 'pending' });
                 }}
               />
+            </div>
+          )}
+
+          {submittedReview?.status === 'pending' && (
+            <div className="mb-6 border border-amber-500/25 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-700 dark:text-amber-300">
+              {t('components.dealerReviews.pendingNotice')}
             </div>
           )}
 
           {/* Review list */}
           {reviews.length === 0 ? (
             <div className="border border-border p-8 text-center">
-              <p className="text-sm text-muted-foreground">No reviews yet. Be the first to review this dealer!</p>
+              <p className="text-sm text-muted-foreground">{t('components.dealerReviews.noReviews')}</p>
             </div>
           ) : (
             <div className="space-y-4">

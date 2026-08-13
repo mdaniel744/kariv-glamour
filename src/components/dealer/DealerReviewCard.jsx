@@ -1,17 +1,19 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import StarRating from './StarRating';
 import { BadgeCheck, ShieldCheck } from 'lucide-react';
 
 export default function DealerReviewCard({ review }) {
+  const { t } = useTranslation();
   return (
     <div className="border border-border bg-card p-5">
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-foreground">{review.buyerName || 'Verified Buyer'}</p>
+            <p className="text-sm font-medium text-foreground">{review.buyerName || t('components.dealerReviews.verifiedBuyer')}</p>
             {review.isVerifiedPurchase && (
               <span className="flex items-center gap-1 text-[9px] tracking-[0.1em] uppercase text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck size={10} /> Verified Purchase
+                <ShieldCheck size={10} /> {t('components.dealerReviews.verifiedPurchase')}
               </span>
             )}
           </div>
@@ -29,7 +31,7 @@ export default function DealerReviewCard({ review }) {
         <div className="mt-4 pl-4 border-l-2 border-primary/30">
           <div className="flex items-center gap-1.5 mb-1">
             <BadgeCheck size={12} className="text-primary" />
-            <p className="text-[10px] tracking-[0.1em] uppercase text-primary font-medium">Dealer Response</p>
+            <p className="text-[10px] tracking-[0.1em] uppercase text-primary font-medium">{t('components.dealerReviews.dealerResponse')}</p>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">{review.dealerResponse}</p>
         </div>

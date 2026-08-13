@@ -3,6 +3,7 @@ import { productSlug } from '@/lib/slug';
 import { Products, Brands, Collections, LegalPages, STORE_ID } from '@/lib/supabaseData';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { loadIdentities } from '@/lib/orderIdentities';
+import { loadApprovedDealerReviews, summarizeDealerReviews } from '@/lib/dealerReviewsData';
 
 export async function getProductById(id) {
   if (!id) return null;
@@ -110,10 +111,8 @@ export async function getLegalPageBySlug(slug) {
   }
 }
 
-// Dealer reviews are deferred (no dealer_reviews table yet). dealer_profiles
-// may not exist yet either — that read is wrapped so this degrades
-// gracefully today and upgrades automatically once the table lands, no
-// further code changes needed here.
+// dealer_profiles may not exist yet — this read is wrapped so the page
+// degrades gracefully until that table is available.
 async function getRealDealerProfile(userId) {
   try {
     const { data, error } = await supabaseAdmin
@@ -176,14 +175,36 @@ export async function getDealerPageData(userId) {
     return { profile: null, listings: [], reviews: [] };
   }
 
-  let listings = [];
-  try {
-    listings = await Products.filter({ dealerId: userId }, '-created_date', 100, 0);
-  } catch (error) {
-    console.error('Unable to load dealer listings from Supabase:', error?.message || error);
+  const [listingsResult, reviewsResult, identitiesResult, profileResult] = await Promise.allSettled([
+    Products.filter({ dealerId: userId }, '-created_date', 100, 0),
+    loadApprovedDealerReviews(userId, 100),
+    loadIdentities([userId]),
+    getDealerProfileSummary(userId),
+  ]);
+  const listings = listingsResult.status === 'fulfilled' ? listingsResult.value : [];
+  const reviews = reviewsResult.status === 'fulfilled' ? reviewsResult.value : [];
+  const identities = identitiesResult.status === 'fulfilled' ? identitiesResult.value : new Map();
+  const identity = identities.get(userId);
+  const summary = summarizeDealerReviews(reviews);
+  const savedProfile = profileResult.status === 'fulfilled' ? profileResult.value : null;
+  const displayName = savedProfile?.displayName || identity?.fullName || listings[0]?.dealerName || 'Dealer';
+
+  if (listingsResult.status === 'rejected') {
+    console.error('Unable to load dealer listings from Supabase:', listingsResult.reason?.message || listingsResult.reason);
+  }
+  if (reviewsResult.status === 'rejected') {
+    console.error('Unable to load dealer reviews from Supabase:', reviewsResult.reason?.message || reviewsResult.reason);
   }
 
-  const profile = await getDealerProfileSummary(userId);
-
-  return { profile, listings, reviews: [] };
+  return {
+    profile: {
+      userId,
+      verifiedStatus: 'verified',
+      ...(savedProfile || {}),
+      displayName,
+      ...summary,
+    },
+    listings,
+    reviews,
+  };
 }
