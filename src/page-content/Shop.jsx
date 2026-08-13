@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { SlidersHorizontal, X, Grid3X3, LayoutGrid, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
+import { productMatchesSearchPayload } from '@/lib/productFilters';
 
 const PAGE_SIZE = 24;
 const LOCAL_SEARCH_LIMIT = 500;
@@ -140,27 +141,6 @@ function filterCacheKey(filters) {
   return JSON.stringify(filters);
 }
 
-function normalizeText(text) {
-  return typeof text === 'string' ? text.toLowerCase().trim() : '';
-}
-
-function matchesTextSearch(product, query) {
-  if (!query) return true;
-  const fields = [
-    product.productTitle,
-    product.productTitle_en,
-    product.productTitle_de,
-    product.brand,
-    product.collection,
-    product.referenceNumber,
-    product.model,
-    product.productDescription,
-    product.productDescription_en,
-    product.productDescription_de
-  ];
-  return fields.some(value => normalizeText(value).includes(query));
-}
-
 function sortProducts(products, sortKey) {
   const sortField = SEARCH_SORTS[sortKey] || SEARCH_SORTS.newest;
   const sortMultiplier = sortField.startsWith('-') ? -1 : 1;
@@ -179,30 +159,7 @@ function sortProducts(products, sortKey) {
 
 async function searchProductsLocally(payload) {
   const allProducts = asArray(await dataClient.entities.Products.list(SEARCH_SORTS[payload.sort] || SEARCH_SORTS.newest, LOCAL_SEARCH_LIMIT));
-  const searchQuery = normalizeText(payload.search);
-  const minPrice = payload.minPrice ?? null;
-  const maxPrice = payload.maxPrice ?? null;
-  const yearFrom = payload.yearFrom ?? null;
-  const yearTo = payload.yearTo ?? null;
-
-  const filtered = allProducts.filter(product => {
-    if (payload.brands?.length && !payload.brands.includes(product.brand)) return false;
-    if (payload.collections?.length && !payload.collections.includes(product.collection)) return false;
-    if (payload.conditions?.length && !payload.conditions.includes(product.condition)) return false;
-    if (payload.availability?.length && !payload.availability.includes(product.availability)) return false;
-    if (payload.genders?.length && !payload.genders.includes(product.gender)) return false;
-    if (payload.materials?.length && !payload.materials.includes(product.caseMaterial)) return false;
-    if (payload.dialColors?.length && !payload.dialColors.includes(product.dialColor)) return false;
-    if (payload.movementTypes?.length && !payload.movementTypes.includes(product.movementType)) return false;
-    if (payload.isNewArrival === true && product.isNewArrival !== true) return false;
-    if (payload.isCertifiedPreOwned === true && product.isCertifiedPreOwned !== true) return false;
-    if (payload.isVintage === true && product.isVintage !== true) return false;
-    if (minPrice !== null && Number(product.price || 0) < minPrice) return false;
-    if (maxPrice !== null && Number(product.price || 0) > maxPrice) return false;
-    if (yearFrom !== null && Number(product.yearOfProduction || 0) < yearFrom) return false;
-    if (yearTo !== null && Number(product.yearOfProduction || 0) > yearTo) return false;
-    return matchesTextSearch(product, searchQuery);
-  });
+  const filtered = allProducts.filter(product => productMatchesSearchPayload(product, payload));
 
   const sorted = sortProducts(filtered, payload.sort);
   const page = Math.max(1, Number(payload.page) || 1);

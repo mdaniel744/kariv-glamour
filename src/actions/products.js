@@ -73,6 +73,7 @@ function buildAttributes(payload, existing = {}) {
   set('Dial Color', payload.dialColor);
   set('Watch Shape', payload.watchShape);
   set('Movement Type', payload.movementType);
+  set('Model', payload.model);
   set('Gender', payload.gender);
   set('Year of Production', payload.yearOfProduction);
   set('Authentication', payload.authenticationStatus);
