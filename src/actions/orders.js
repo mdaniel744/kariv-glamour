@@ -322,6 +322,27 @@ export async function sendDealerOrderMessage(orderId, subject, message) {
   return { ok: true, message: mapOrderMessageRow(data, { order: orderRow, identities }) };
 }
 
+// Dealer can only delete their own sent messages — never staff's or (there
+// isn't one, but hypothetically) a buyer's. Deletes the row outright, which
+// also removes it from Dashboard Agent's staff-side thread view since this
+// is a shared table — that's a deliberate product choice made with the
+// operator, not an oversight.
+export async function deleteDealerOrderMessage(messageId) {
+  const user = await requireDealer();
+  const { data: msg } = await supabaseAdmin
+    .from('order_messages').select('id, order_id, sender, sender_user_id').eq('id', messageId).maybeSingle();
+  if (!msg || msg.sender !== 'dealer' || msg.sender_user_id !== user.id) {
+    return { ok: false, error: 'Message not found.' };
+  }
+  const { data: orderRow } = await supabaseAdmin
+    .from('orders').select('id').eq('id', msg.order_id).eq('store_id', STORE_ID).eq('dealer_user_id', user.id).maybeSingle();
+  if (!orderRow) return { ok: false, error: 'Message not found.' };
+
+  const { error } = await supabaseAdmin.from('order_messages').delete().eq('id', messageId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 export async function markMyDealerOrderThreadRead(orderId) {
   const user = await requireDealer();
   const { data: orderRow } = await supabaseAdmin

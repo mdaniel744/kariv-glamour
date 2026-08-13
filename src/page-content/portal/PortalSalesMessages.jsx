@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getMyDealerOrderMessages, sendDealerOrderMessage, markMyDealerOrderThreadRead } from '@/actions/orders';
+import { getMyDealerOrderMessages, sendDealerOrderMessage, markMyDealerOrderThreadRead, deleteDealerOrderMessage } from '@/actions/orders';
 import { useAuth } from '@/lib/AuthContext';
-import { Mail, ArrowLeft, Send, ShieldCheck, Package } from 'lucide-react';
+import { Mail, ArrowLeft, Send, ShieldCheck, Package, Trash2 } from 'lucide-react';
 import SafeHtml from '@/components/shared/SafeHtml';
 import { stripHtmlToText } from '@/lib/sanitize';
 
@@ -29,6 +29,9 @@ export default function PortalSalesMessages() {
     }
     threads[m.orderId].messages.push(m);
   });
+  // API returns newest-first; conversation view and "last message" preview
+  // both need oldest-first (chat convention: newest at the bottom).
+  Object.values(threads).forEach(t => t.messages.sort((a, b) => new Date(a.created_date) - new Date(b.created_date)));
   const threadList = Object.values(threads).sort((a, b) => {
     const aDate = new Date(a.messages[a.messages.length - 1].created_date).getTime();
     const bDate = new Date(b.messages[b.messages.length - 1].created_date).getTime();
@@ -53,6 +56,16 @@ export default function PortalSalesMessages() {
       }
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleDelete = async (messageId) => {
+    if (!confirm('Delete this message? This cannot be undone.')) return;
+    const res = await deleteDealerOrderMessage(messageId);
+    if (res.ok) {
+      setMessages(prev => prev.filter(m => m.id !== messageId));
+    } else {
+      alert(res.error);
     }
   };
 
@@ -136,6 +149,11 @@ export default function PortalSalesMessages() {
                     </p>
                     {msg.sender === 'admin' && <ShieldCheck size={10} className="text-primary" />}
                     <p className="text-[9px] text-muted-foreground">{new Date(msg.created_date).toLocaleString()}</p>
+                    {msg.sender === 'dealer' && (
+                      <button onClick={() => handleDelete(msg.id)} aria-label="Delete message" className="ml-auto text-muted-foreground hover:text-destructive transition-colors p-0.5">
+                        <Trash2 size={11} />
+                      </button>
+                    )}
                   </div>
                   <p className="text-[11px] text-muted-foreground mb-1">{msg.subject}</p>
                   <SafeHtml as="div" html={msg.body} className="text-xs text-foreground whitespace-pre-wrap [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:p-1.5 [&_th]:border [&_th]:border-border [&_th]:p-1.5 [&_img]:max-w-full [&_img]:h-auto" />

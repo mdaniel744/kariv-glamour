@@ -30,6 +30,9 @@ export default function PortalMails() {
     }
     threads[m.orderId].messages.push(m);
   });
+  // API returns newest-first; conversation view and "last message" preview
+  // both need oldest-first (chat convention: newest at the bottom).
+  Object.values(threads).forEach(t => t.messages.sort((a, b) => new Date(a.created_date) - new Date(b.created_date)));
   const threadList = Object.values(threads).sort((a, b) => {
     const aDate = new Date(a.messages[a.messages.length - 1].created_date).getTime();
     const bDate = new Date(b.messages[b.messages.length - 1].created_date).getTime();
