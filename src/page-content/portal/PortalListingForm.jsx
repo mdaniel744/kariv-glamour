@@ -57,7 +57,7 @@ export default function PortalListingForm({ id: providedId }) {
     }
     setSaving(true);
     try {
-      const { authenticationStatus, ...rest } = product;
+      const { authenticationStatus: _authenticationStatus, ...rest } = product;
       const payload = {
         ...rest,
         sourceLocale: locale,
