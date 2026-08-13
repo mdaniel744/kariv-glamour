@@ -17,6 +17,7 @@ export async function loadIdentities(userIds) {
       fullName: u.fullName || u.username || '',
       email: u.primaryEmailAddress?.emailAddress || '',
       phone: u.primaryPhoneNumber?.phoneNumber || '',
+      imageUrl: u.imageUrl || '',
     });
   }
   return map;

@@ -23,7 +23,7 @@ function productIdFromPath() {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = [] }) {
+export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = [], initialDealerProfile = null }) {
   const { t } = useTranslation();
   const id = idProp || productIdFromPath();
   const router = useRouter();
@@ -36,27 +36,17 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const [selectedImage, setSelectedImage] = useState(0);
   const [galleryApi, setGalleryApi] = useState(null);
   const [related, setRelated] = useState(initialRelated);
-  const [dealerProfile, setDealerProfile] = useState(null);
+  const [dealerProfile, setDealerProfile] = useState(initialDealerProfile);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    const loadDealer = (data) => {
-      const dealerUserId = data?.dealerId || data?.created_by_id;
-      if (!dealerUserId) return;
-      dataClient.entities.DealerProfile.filter({ userId: dealerUserId }, '-created_date', 1)
-        .then((profiles) => {
-          if (mounted) setDealerProfile(profiles[0] || null);
-        })
-        .catch(() => {});
-    };
-
     if (initialProduct?.id === id) {
       setProduct(initialProduct);
       setRelated(initialRelated);
+      setDealerProfile(initialDealerProfile);
       setLoading(false);
-      loadDealer(initialProduct);
       window.scrollTo(0, 0);
       return () => {
         mounted = false;
@@ -69,7 +59,6 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
         const data = await dataClient.entities.Products.get(id);
         if (!mounted) return;
         setProduct(data);
-        loadDealer(data);
         const rel = asArray(await dataClient.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
         if (mounted) setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
@@ -84,7 +73,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
     return () => {
       mounted = false;
     };
-  }, [id, initialProduct, initialRelated]);
+  }, [id, initialProduct, initialRelated, initialDealerProfile]);
 
   useEffect(() => {
     if (!galleryApi) return undefined;

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageClient';
-import { getProductBySlug, getRelatedProducts } from '@/lib/base44Server';
+import { getProductBySlug, getRelatedProducts, getDealerProfileSummary } from '@/lib/base44Server';
 import { productSlug } from '@/lib/slug';
 import {
   getSiteUrl,
@@ -71,6 +71,7 @@ export default async function ProductPage({ params }) {
   if (!product) notFound();
 
   const relatedProducts = await getRelatedProducts(product);
+  const dealerProfile = await getDealerProfileSummary(product.dealerId || product.created_by_id);
   const name = localizedField(product, 'productTitle', locale);
   const description = productDescription(product, locale);
   const siteUrl = getSiteUrl();
@@ -115,7 +116,7 @@ export default async function ProductPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <ProductDetailPageClient product={product} relatedProducts={relatedProducts} />
+      <ProductDetailPageClient product={product} relatedProducts={relatedProducts} dealerProfile={dealerProfile} />
     </>
   );
 }
