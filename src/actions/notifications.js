@@ -53,6 +53,29 @@ export async function markAllNotificationsRead() {
   return { ok: true };
 }
 
+export async function deleteNotification(id) {
+  const user = await requireUser();
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .delete()
+    .eq('id', id)
+    .eq('store_id', STORE_ID)
+    .eq('user_id', user.id);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
+export async function clearAllNotifications() {
+  const user = await requireUser();
+  const { error } = await supabaseAdmin
+    .from('notifications')
+    .delete()
+    .eq('store_id', STORE_ID)
+    .eq('user_id', user.id);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 // endpoint is the natural dedup key (one row per browser/device subscription,
 // UNIQUE(endpoint) on the shared side) — re-subscribing the same browser just
 // re-points it at whichever user is currently signed in.

@@ -2,11 +2,11 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bell } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
-import { getMyNotifications, markNotificationRead, markAllNotificationsRead } from '@/actions/notifications';
+import { getMyNotifications, markNotificationRead, markAllNotificationsRead, deleteNotification, clearAllNotifications } from '@/actions/notifications';
 import { enablePushNotifications, getNotificationPermission } from '@/lib/pushNotifications';
 
 const POLL_INTERVAL_MS = 45000;
@@ -68,6 +68,17 @@ export default function NotificationBell() {
     await markAllNotificationsRead().catch(() => {});
   };
 
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    await deleteNotification(id).catch(() => {});
+  };
+
+  const handleClearAll = async () => {
+    setNotifications([]);
+    await clearAllNotifications().catch(() => {});
+  };
+
   return (
     <div ref={ref} className="relative">
       <button
@@ -95,11 +106,18 @@ export default function NotificationBell() {
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <p className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Notifications</p>
-              {unreadCount > 0 && (
-                <button onClick={handleMarkAllRead} className="text-[10px] tracking-[0.1em] uppercase text-primary hover:text-primary/70">
-                  Mark all read
-                </button>
-              )}
+              <div className="flex items-center gap-3">
+                {unreadCount > 0 && (
+                  <button onClick={handleMarkAllRead} className="text-[10px] tracking-[0.1em] uppercase text-primary hover:text-primary/70">
+                    Mark all read
+                  </button>
+                )}
+                {notifications.length > 0 && (
+                  <button onClick={handleClearAll} className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-destructive">
+                    Clear all
+                  </button>
+                )}
+              </div>
             </div>
 
             {permission !== 'granted' && (
@@ -122,19 +140,27 @@ export default function NotificationBell() {
             ) : (
               <div>
                 {notifications.map((n) => (
-                  <button
-                    key={n.id}
-                    onClick={() => handleItemClick(n)}
-                    className={`w-full text-left px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted transition-colors ${!n.isRead ? 'bg-primary/5' : ''}`}
-                  >
-                    <div className="flex items-start gap-2">
-                      {!n.isRead && <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />}
-                      <div className="min-w-0">
-                        <p className="text-xs text-foreground font-medium">{n.title}</p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5">{n.body}</p>
+                  <div key={n.id} className={`relative border-b border-border last:border-b-0 ${!n.isRead ? 'bg-primary/5' : ''}`}>
+                    <button
+                      onClick={() => handleItemClick(n)}
+                      className="w-full text-left pl-4 pr-9 py-3 hover:bg-muted transition-colors"
+                    >
+                      <div className="flex items-start gap-2">
+                        {!n.isRead && <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />}
+                        <div className="min-w-0">
+                          <p className="text-xs text-foreground font-medium">{n.title}</p>
+                          <p className="text-[11px] text-muted-foreground mt-0.5">{n.body}</p>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                    <button
+                      onClick={(e) => handleDelete(e, n.id)}
+                      aria-label="Delete notification"
+                      className="absolute top-2.5 right-2 p-1 text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
