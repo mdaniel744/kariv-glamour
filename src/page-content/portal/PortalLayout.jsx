@@ -26,6 +26,7 @@ export default function PortalLayout({ children }) {
     ...(dealer ? [
       { to: '/portal/listings', icon: Store, label: t('pages.dealer.listings') },
       { to: '/portal/sales', icon: ShoppingCart, label: t('pages.dealer.sales') },
+      { to: '/portal/sales-messages', icon: Mail, label: 'Sales Messages' },
     ] : []),
     { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];

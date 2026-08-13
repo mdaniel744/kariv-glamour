@@ -14,6 +14,7 @@ const PORTAL_PAGES = {
   listings: dynamic(() => import('@/page-content/portal/PortalListings')),
   listingForm: dynamic(() => import('@/page-content/portal/PortalListingForm')),
   sales: dynamic(() => import('@/page-content/portal/PortalSales')),
+  salesMessages: dynamic(() => import('@/page-content/portal/PortalSalesMessages')),
 };
 
 export default function PortalPageClient({ pageKey, id }) {

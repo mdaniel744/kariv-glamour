@@ -230,8 +230,11 @@ export async function getMyOrderMessages({ limit = 200 } = {}) {
   if (!orders.length) return [];
   const orderMap = new Map(orders.map(o => [o.id, o]));
 
+  // Scoped to buyer/admin senders only — dealer messages on the same order
+  // (a separate dealer<->staff thread sharing this table) are never shown
+  // to the buyer directly.
   const { data, error } = await supabaseAdmin
-    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).order('created_at', { ascending: false }).limit(limit);
+    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).in('sender', ['buyer', 'admin']).order('created_at', { ascending: false }).limit(limit);
   if (error) throw new Error(error.message);
   const rows = data || [];
   const identities = await loadIdentities(rows.map(m => m.sender_user_id).concat(orders.map(o => o.buyer_user_id)));
@@ -279,6 +282,51 @@ export async function getMySales({ limit = 50 } = {}) {
     .limit(limit);
   if (error) throw new Error(error.message);
   return shapeRows(data || []);
+}
+
+export async function getMyDealerOrderMessages({ limit = 200 } = {}) {
+  const user = await requireDealer();
+  const { data: myOrders } = await supabaseAdmin
+    .from('orders').select('id, dealer_user_id').eq('store_id', STORE_ID).eq('dealer_user_id', user.id);
+  const orders = myOrders || [];
+  if (!orders.length) return [];
+  const orderMap = new Map(orders.map(o => [o.id, o]));
+
+  // Scoped to dealer/admin senders only — mirrors getMyOrderMessages' buyer
+  // scoping. Buyer and dealer each get their own two-party thread with
+  // staff; only admin sees the full three-way conversation.
+  const { data, error } = await supabaseAdmin
+    .from('order_messages').select('*').in('order_id', orders.map(o => o.id)).in('sender', ['dealer', 'admin']).order('created_at', { ascending: false }).limit(limit);
+  if (error) throw new Error(error.message);
+  const rows = data || [];
+  const identities = await loadIdentities(rows.map(m => m.sender_user_id));
+  return rows.map(m => mapOrderMessageRow(m, { order: orderMap.get(m.order_id), identities }));
+}
+
+export async function sendDealerOrderMessage(orderId, subject, message) {
+  const user = await requireDealer();
+  const { data: orderRow } = await supabaseAdmin
+    .from('orders').select('id, dealer_user_id').eq('id', orderId).eq('store_id', STORE_ID).eq('dealer_user_id', user.id).maybeSingle();
+  if (!orderRow) return { ok: false, error: 'Order not found.' };
+
+  const { data, error } = await supabaseAdmin
+    .from('order_messages')
+    .insert({ order_id: orderId, sender: 'dealer', sender_user_id: user.id, subject, message, kind: 'message', is_read: false })
+    .select().single();
+  if (error) return { ok: false, error: error.message };
+
+  const identities = await loadIdentities([user.id]);
+  return { ok: true, message: mapOrderMessageRow(data, { order: orderRow, identities }) };
+}
+
+export async function markMyDealerOrderThreadRead(orderId) {
+  const user = await requireDealer();
+  const { data: orderRow } = await supabaseAdmin
+    .from('orders').select('id').eq('id', orderId).eq('store_id', STORE_ID).eq('dealer_user_id', user.id).maybeSingle();
+  if (!orderRow) return { ok: false, error: 'Order not found.' };
+  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('sender', 'admin');
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
 }
 
 // ============================================================================
@@ -453,7 +501,7 @@ export async function requestJustification(orderId, subject, message) {
 
 export async function markAdminOrderThreadRead(orderId) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('sender', 'buyer');
+  const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).in('sender', ['buyer', 'dealer']);
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
