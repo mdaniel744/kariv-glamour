@@ -25,6 +25,7 @@ const SEARCH_SORTS = {
 const DEFAULT_FILTERS = {
   search: '',
   brand: [],
+  model: [],
   collection: [],
   condition: [],
   gender: [],
@@ -46,6 +47,7 @@ function parseFiltersFromURL(searchParams) {
   const filters = { ...DEFAULT_FILTERS };
   filters.search = searchParams.get('search') || '';
   filters.brand = searchParams.getAll('brand');
+  filters.model = searchParams.getAll('model');
   filters.collection = searchParams.getAll('collection');
   filters.condition = searchParams.getAll('condition');
   filters.gender = searchParams.getAll('gender');
@@ -68,6 +70,7 @@ function serializeFiltersToURL(filters, page, sortBy) {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
   if (filters.brand.length) filters.brand.forEach(b => params.append('brand', b));
+  if (filters.model.length) filters.model.forEach(m => params.append('model', m));
   if (filters.collection.length) filters.collection.forEach(c => params.append('collection', c));
   if (filters.condition.length) filters.condition.forEach(c => params.append('condition', c));
   if (filters.gender.length) filters.gender.forEach(g => params.append('gender', g));
@@ -92,6 +95,7 @@ function buildSearchPayload(filters, page, sortBy) {
   const payload = {
     search: filters.search || '',
     brands: filters.brand,
+    models: filters.model,
     collections: filters.collection,
     categories: [],
     conditions: filters.condition,
@@ -120,6 +124,7 @@ function buildSearchPayload(filters, page, sortBy) {
 function hasActiveFilters(filters) {
   return !!(filters.search ||
     filters.brand.length ||
+    filters.model.length ||
     filters.collection.length ||
     filters.condition.length ||
     filters.gender.length ||
@@ -177,6 +182,11 @@ async function searchProductsLocally(payload) {
 }
 
 async function searchProducts(payload) {
+  // Model families need cross-field aliases and explicit sibling exclusions.
+  // Use the shared catalog matcher so production cannot silently return a
+  // similarly named but unrelated collection.
+  if (payload.models?.length) return searchProductsLocally(payload);
+
   try {
     const response = await dataClient.functions.invoke('searchProducts', payload);
     const data = response?.data || response || {};
@@ -332,6 +342,7 @@ export default function Shop() {
     if (filters.isNewArrival) return t('common:shop.newArrivals');
     if (filters.isCertifiedPreOwned) return t('common:shop.certifiedPreOwned');
     if (filters.isVintage) return t('common:shop.vintage');
+    if (filters.model.length === 1) return `${filters.brand[0] ? `${filters.brand[0]} ` : ''}${filters.model[0]}`;
     if (filters.collection.length === 1) return `${filters.brand[0] ? `${filters.brand[0]} ` : ''}${filters.collection[0]}`;
     if (filters.brand.length === 1) return `${filters.brand[0]} ${t('common:shop.title')}`;
     if (filters.gender.includes('Men') && filters.gender.length === 1) return t('common:shop.mensWatches');

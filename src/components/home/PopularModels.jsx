@@ -3,17 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SectionHeading from '@/components/shared/SectionHeading';
-
-const POPULAR_MODELS = [
-  { brand: 'Rolex', model: 'Datejust', collection: 'Datejust', image: '/brand-assets/rolex/collections/rolex-datejust.png' },
-  { brand: 'Rolex', model: 'Submariner', collection: 'Submariner', image: '/brand-assets/rolex/collections/rolex-submariner.png' },
-  { brand: 'Rolex', model: 'Cosmograph Daytona', collection: 'Cosmograph Daytona', image: '/brand-assets/rolex/collections/rolex-cosmograph-daytona.png' },
-  { brand: 'Omega', model: 'Speedmaster', collection: 'Speedmaster', image: '/brand-assets/omega/collections/omega-speedmaster-collection.png' },
-  { brand: 'Audemars Piguet', model: 'Royal Oak', collection: 'Royal Oak', image: '/brand-assets/audemars-piguet/collections/audemars-piguet-royal-oak-collection.png' },
-  { brand: 'Patek Philippe', model: 'Nautilus', collection: 'Nautilus', image: '/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png' },
-  { brand: 'Cartier', model: 'Santos de Cartier', collection: 'Santos de Cartier', image: '/brand-assets/cartier/collections/cartier-santos-de-cartier.png' },
-  { brand: 'Tudor', model: 'Black Bay', collection: 'Black Bay', image: '/brand-assets/tudor/collections/tudor-black-bay-collection.png' },
-];
+import { buildHomeShopHref, HOME_MODEL_LINKS } from '@/lib/homeShopLinks';
 
 export default function PopularModels() {
   const { t } = useTranslation();
@@ -27,10 +17,10 @@ export default function PopularModels() {
           linkTo="/shop"
         />
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {POPULAR_MODELS.map((item) => (
+          {HOME_MODEL_LINKS.map((item) => (
             <LocalizedLink
               key={`${item.brand}-${item.model}`}
-              to={`/shop?brand=${encodeURIComponent(item.brand)}&collection=${encodeURIComponent(item.collection)}`}
+              to={buildHomeShopHref({ brand: item.brand, model: item.model })}
               className="group relative overflow-hidden border border-border bg-background transition-colors hover:border-primary/50"
             >
               <div className="relative aspect-square overflow-hidden bg-[radial-gradient(circle_at_center,hsl(var(--muted))_0%,hsl(var(--background))_68%)]">

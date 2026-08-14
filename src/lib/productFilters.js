@@ -44,6 +44,49 @@ function matchesGender(productGender, selectedGenders) {
   return selected.includes(canonicalizeGender(productGender));
 }
 
+const MODEL_FILTER_RULES = {
+  datejust: {
+    aliases: ['datejust'],
+    excludes: ['lady datejust', 'datejust lady'],
+  },
+  'cosmograph daytona': {
+    aliases: ['cosmograph daytona', 'daytona'],
+  },
+  'royal oak': {
+    aliases: ['royal oak'],
+    excludes: ['royal oak offshore', 'royal oak concept'],
+  },
+  'santos de cartier': {
+    aliases: ['santos de cartier', 'santos'],
+    excludes: ['santos dumont'],
+  },
+};
+
+function matchesModelFamilies(product, selectedModels) {
+  const selected = toArray(selectedModels).map(normalizeFilterValue).filter(Boolean);
+  if (!selected.length) return true;
+
+  const candidates = [
+    product.collection,
+    product.model,
+    product.productTitle,
+    product.productTitle_en,
+    product.productTitle_de,
+  ].map(normalizeFilterValue).filter(Boolean);
+
+  return selected.some((requested) => {
+    const rule = MODEL_FILTER_RULES[requested] || { aliases: [requested] };
+    const matchesAlias = rule.aliases.some((alias) => (
+      candidates.some((candidate) => candidate.includes(alias))
+    ));
+    const matchesExcludedFamily = (rule.excludes || []).some((excluded) => (
+      candidates.some((candidate) => candidate.includes(excluded))
+    ));
+
+    return matchesAlias && !matchesExcludedFamily;
+  });
+}
+
 export function isTrueProductFlag(value) {
   if (value === true || value === 1) return true;
   return ['true', '1', 'yes', 'on'].includes(normalizeFilterValue(value));
@@ -76,6 +119,7 @@ function matchesSearch(product, query) {
 
 export function productMatchesSearchPayload(product, payload) {
   if (!matchesSelectedValues(product.brand, payload.brands)) return false;
+  if (!matchesModelFamilies(product, payload.models)) return false;
 
   // Older and dealer-created listings may have the watch family in the
   // model/title while their collection relation is empty. Treat the landing
@@ -96,7 +140,10 @@ export function productMatchesSearchPayload(product, payload) {
   if (!matchesSelectedValues(product.movementType, payload.movementTypes, { contains: true })) return false;
   if (payload.isNewArrival === true && !isTrueProductFlag(product.isNewArrival)) return false;
   if (payload.isCertifiedPreOwned === true && !isTrueProductFlag(product.isCertifiedPreOwned)) return false;
-  if (payload.isVintage === true && !isTrueProductFlag(product.isVintage)) return false;
+  if (payload.isVintage === true && !(
+    isTrueProductFlag(product.isVintage) ||
+    normalizeFilterValue(product.condition) === 'vintage'
+  )) return false;
 
   const price = effectivePrice(product);
   if (payload.minPrice !== null && payload.minPrice !== undefined && price < payload.minPrice) return false;

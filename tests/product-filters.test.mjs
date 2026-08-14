@@ -5,6 +5,7 @@ import { productMatchesSearchPayload } from '../src/lib/productFilters.js';
 const basePayload = {
   search: '',
   brands: [],
+  models: [],
   collections: [],
   conditions: [],
   availability: [],

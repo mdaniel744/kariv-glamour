@@ -19,11 +19,39 @@ export function useUrlSearchParams() {
 
   useEffect(() => {
     const syncSearch = () => setSearch(getCurrentSearch());
+    const originalPushState = window.history.pushState;
+    const originalReplaceState = window.history.replaceState;
+    const notifyUrlChange = () => window.dispatchEvent(new Event('kariv:urlchange'));
+
+    // Next.js client-side links update the History API without emitting a
+    // popstate event. Mirror those updates so landing-page query parameters
+    // are available when the Shop route mounts during a client transition.
+    const pushStateWithNotification = function pushStateWithNotification(...args) {
+      const result = originalPushState.apply(this, args);
+      notifyUrlChange();
+      return result;
+    };
+    const replaceStateWithNotification = function replaceStateWithNotification(...args) {
+      const result = originalReplaceState.apply(this, args);
+      notifyUrlChange();
+      return result;
+    };
+
+    window.history.pushState = pushStateWithNotification;
+    window.history.replaceState = replaceStateWithNotification;
     window.addEventListener('popstate', syncSearch);
     window.addEventListener('kariv:urlchange', syncSearch);
+    syncSearch();
+
     return () => {
       window.removeEventListener('popstate', syncSearch);
       window.removeEventListener('kariv:urlchange', syncSearch);
+      if (window.history.pushState === pushStateWithNotification) {
+        window.history.pushState = originalPushState;
+      }
+      if (window.history.replaceState === replaceStateWithNotification) {
+        window.history.replaceState = originalReplaceState;
+      }
     };
   }, []);
 
