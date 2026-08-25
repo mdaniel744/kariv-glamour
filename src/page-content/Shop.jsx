@@ -6,7 +6,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
-import { SlidersHorizontal, X, Grid3X3, LayoutGrid, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
+import { SlidersHorizontal, X, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
 import { productMatchesSearchPayload } from '@/lib/productFilters';
 
 const PAGE_SIZE = 24;
@@ -206,17 +206,21 @@ export default function Shop() {
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(false);
 
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [gridCols, setGridCols] = useState(3);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
-    if (!mobileFiltersOpen) return undefined;
+    if (!filtersOpen) return undefined;
     const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setFiltersOpen(false);
+    };
     document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
     return () => {
       document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
     };
-  }, [mobileFiltersOpen]);
+  }, [filtersOpen]);
 
   // Refs for stale request cancellation
   const requestIdRef = useRef(0);
@@ -299,7 +303,7 @@ export default function Shop() {
   const handleClearFilters = () => {
     setFilters({ ...DEFAULT_FILTERS });
     setPage(1);
-    syncURL({ ...DEFAULT_FILTERS }, 1, 'newest');
+    syncURL({ ...DEFAULT_FILTERS }, 1, sortBy);
   };
 
   const handleRetry = () => {
@@ -344,6 +348,30 @@ export default function Shop() {
     if (Array.isArray(value)) return count + value.length;
     return count + (value ? 1 : 0);
   }, 0);
+  const quickFilters = [
+    { key: 'isNewArrival', value: true, label: t('common:shop.newArrivals') },
+    { key: 'isCertifiedPreOwned', value: true, label: t('common:shop.certifiedPreOwned') },
+    { key: 'isVintage', value: true, label: t('common:shop.vintage') },
+    { key: 'gender', value: 'Men', label: t('common:shop.mensWatches') },
+    { key: 'gender', value: 'Women', label: t('common:shop.womensWatches') },
+    { key: 'dialColor', value: 'Black', label: t('common:shop.blackDial') },
+    { key: 'dialColor', value: 'Blue', label: t('common:shop.blueDial') },
+    { key: 'caseMaterial', value: 'Stainless Steel', label: t('common:shop.steelCase') },
+    { key: 'caseMaterial', value: 'Rose Gold', label: t('common:shop.roseGoldCase') },
+    { key: 'movementType', value: 'Automatic', label: t('common:shop.automaticMovement') },
+  ];
+
+  const isQuickFilterActive = ({ key, value }) => (
+    Array.isArray(filters[key]) ? filters[key].includes(value) : filters[key] === value
+  );
+
+  const toggleQuickFilter = ({ key, value }) => {
+    const currentValue = filters[key];
+    const nextValue = Array.isArray(currentValue)
+      ? (currentValue.includes(value) ? currentValue.filter(item => item !== value) : [...currentValue, value])
+      : (currentValue === value ? null : value);
+    handleFiltersChange({ ...filters, [key]: nextValue });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
@@ -383,49 +411,66 @@ export default function Shop() {
         </div>
       </div>
 
-      {/* Toolbar */}
-      <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
-        <button
-          onClick={() => setMobileFiltersOpen(true)}
-          className="flex min-h-11 items-center gap-2 border border-border px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground lg:hidden"
-        >
-          <SlidersHorizontal size={14} /> {t('common:shop.filters')}
-          {activeFilterCount > 0 && <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] text-primary-foreground">{activeFilterCount}</span>}
-        </button>
-        <div className="flex items-center gap-4 ml-auto">
+      {/* Floating quick filters and full filter trigger */}
+      <div className="sticky top-[102px] z-30 -mx-2 mb-8 rounded-xl border border-border/80 bg-background/95 p-2 shadow-sm backdrop-blur-xl md:top-[154px] md:-mx-4 md:p-3">
+        <div className="no-scrollbar flex items-center gap-2 overflow-x-auto overscroll-x-contain scroll-smooth">
+          <button
+            type="button"
+            onClick={() => setFiltersOpen(true)}
+            className="flex min-h-10 flex-none items-center gap-2 rounded-full border border-primary bg-primary px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground shadow-sm"
+          >
+            <SlidersHorizontal size={14} /> {t('common:shop.filters')}
+            {activeFilterCount > 0 && <span className="rounded-full bg-primary-foreground/20 px-2 py-0.5 text-[10px]">{activeFilterCount}</span>}
+          </button>
+          {quickFilters.map((quickFilter) => {
+            const active = isQuickFilterActive(quickFilter);
+            return (
+              <button
+                key={`${quickFilter.key}-${quickFilter.value}`}
+                type="button"
+                onClick={() => toggleQuickFilter(quickFilter)}
+                aria-pressed={active}
+                className={`min-h-10 flex-none whitespace-nowrap rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors ${active
+                  ? 'border-primary bg-primary text-primary-foreground'
+                  : 'border-border bg-background/80 text-foreground hover:border-primary hover:text-primary'
+                }`}
+              >
+                {quickFilter.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-2 flex items-center justify-between gap-3 border-t border-border/70 pt-2">
+          <div className="min-w-0 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+            {activeFilterCount > 0 ? (
+              <button type="button" onClick={handleClearFilters} className="inline-flex items-center gap-1.5 text-primary hover:text-foreground">
+                <X size={12} /> {t('common:shop.clearAllFilters')} ({activeFilterCount})
+              </button>
+            ) : (
+              <span>{t('common:shop.quickFilters')}</span>
+            )}
+          </div>
           <select
             value={sortBy}
             onChange={e => handleSortChange(e.target.value)}
-            className="bg-transparent border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary"
+            aria-label={t('common:shop.sortLabel')}
+            className="max-w-[52vw] rounded-full border border-border bg-transparent px-3 py-2 text-xs text-foreground outline-none focus:border-primary"
           >
             {sortOptions.map(opt => (
               <option key={opt.value} value={opt.value} className="bg-popover text-foreground">{opt.label}</option>
             ))}
           </select>
-          <div className="hidden md:flex items-center gap-2">
-            <button onClick={() => setGridCols(3)} className={`p-1.5 ${gridCols === 3 ? 'text-primary' : 'text-muted-foreground/50'}`}>
-              <Grid3X3 size={16} />
-            </button>
-            <button onClick={() => setGridCols(4)} className={`p-1.5 ${gridCols === 4 ? 'text-primary' : 'text-muted-foreground/50'}`}>
-              <LayoutGrid size={16} />
-            </button>
-          </div>
         </div>
       </div>
 
-      <div className="flex gap-8 xl:gap-12">
-        {/* Desktop Filters */}
-        <aside className="hidden w-72 flex-shrink-0 rounded-xl border border-border bg-background px-5 pb-5 xl:w-80 lg:block">
-          <ShopFilters filters={filters} setFilters={handleFiltersChange} />
-        </aside>
-
-        {/* Products grid */}
-        <div className="flex-1">
+      {/* Products grid */}
+      <div>
           {loading ? (
-            <div className={`grid grid-cols-2 ${gridCols === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
-              {[...Array(6)].map((_, i) => (
+            <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+              {[...Array(8)].map((_, i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="aspect-[3/4] bg-card mb-4" />
+                  <div className="mb-4 aspect-[3/4] rounded-xl bg-card" />
                   <div className="h-3 bg-card w-20 mb-2" />
                   <div className="h-3 bg-card w-full" />
                 </div>
@@ -450,9 +495,9 @@ export default function Shop() {
             </div>
           ) : (
             <>
-              <div className={`grid grid-cols-2 ${gridCols === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
+              <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
                 {products.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} enableGallery />
                 ))}
               </div>
 
@@ -482,19 +527,26 @@ export default function Shop() {
               )}
             </>
           )}
-        </div>
       </div>
 
-      {/* Mobile filter drawer */}
-      {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-[60] bg-black/35 backdrop-blur-[2px] lg:hidden" role="dialog" aria-modal="true" aria-label={t('common:shop.filters')}>
-          <div className="ml-auto flex h-full w-full max-w-md flex-col bg-background shadow-2xl">
+      {/* Full off-canvas filter drawer */}
+      {filtersOpen && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-[2px]"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('common:shop.filters')}
+          onPointerDown={(event) => {
+            if (event.target === event.currentTarget) setFiltersOpen(false);
+          }}
+        >
+          <div className="mr-auto flex h-full w-full max-w-md flex-col border-r border-border bg-background shadow-2xl">
             <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-7">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('common:shop.title')}</span>
                 <h2 className="mt-1 font-display text-2xl font-semibold text-foreground">{t('common:shop.filters')}</h2>
               </div>
-              <button onClick={() => setMobileFiltersOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground" aria-label="Close filters">
+              <button onClick={() => setFiltersOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground" aria-label="Close filters">
                 <X size={22} />
               </button>
             </div>
@@ -503,8 +555,8 @@ export default function Shop() {
             </div>
             <div className="border-t border-border bg-background px-5 py-4 sm:px-7">
               <button
-                onClick={() => setMobileFiltersOpen(false)}
-                className="min-h-12 w-full bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground"
+                onClick={() => setFiltersOpen(false)}
+                className="min-h-12 w-full rounded-full bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground"
               >
                 {t('common:shop.showResults', { count: totalCount })}
               </button>

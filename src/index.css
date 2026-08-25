@@ -190,7 +190,18 @@ html {
   }
 
   .brand-filter-shell {
-    @apply hidden w-72 flex-shrink-0 rounded-xl border border-border bg-background px-5 pb-5 lg:block xl:w-80;
+    @apply hidden;
+  }
+
+  .brand-products-section .brand-filter-shell + .flex-1 {
+    min-width: 0;
+    width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .brand-products-section .brand-filter-shell + .flex-1 > .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   .brand-filter-panel > button {

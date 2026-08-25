@@ -5,7 +5,8 @@ import { useLocalizedField } from '@/lib/localize';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { motion } from 'framer-motion';
-import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
+import { Heart, ShieldCheck, Eye, SlidersHorizontal } from 'lucide-react';
+import BrandFilterDrawer from '@/components/shared/BrandFilterDrawer';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES } from '@/lib/constants';
 import { ROLEX_COLLECTIONS, ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
@@ -159,7 +160,7 @@ export default function RolexProductGrid() {
         <BrandQuickFilters chips={ROLEX_QUICK_FILTERS} collections={ROLEX_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="mb-8 flex items-center justify-between gap-4 border-b border-border pb-4">
-          <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">
+          <button onClick={() => setMobileFiltersOpen(true)} className="flex min-h-10 items-center gap-2 rounded-full bg-primary px-4 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground shadow-sm">
             <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
           <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.count', { count: products.length, brand: BRAND })}</p>
@@ -189,20 +190,15 @@ export default function RolexProductGrid() {
         </div>
       </div>
 
-      {mobileFiltersOpen &&
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-background">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl text-foreground">{t('productGrid.filter')}</h2>
-              <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground"><X size={20} /></button>
-            </div>
-            <FilterContent />
-            <button onClick={() => setMobileFiltersOpen(false)} className="w-full mt-8 py-4 text-[11px] tracking-[0.15em] uppercase font-medium bg-primary text-primary-foreground">
-              {t('productGrid.showResults', { count: products.length })}
-            </button>
-          </div>
-        </div>
-      }
+      <BrandFilterDrawer
+        open={mobileFiltersOpen}
+        onClose={() => setMobileFiltersOpen(false)}
+        brand={BRAND}
+        title={t('productGrid.filter')}
+        resultsLabel={t('productGrid.showResults', { count: products.length })}
+      >
+        <FilterContent />
+      </BrandFilterDrawer>
     </section>
   );
 }
