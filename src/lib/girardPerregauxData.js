@@ -49,12 +49,12 @@ export const GP_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const GP_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const GP_QUICK_FILTERS = [
-  { label_en: 'Laureato', label_de: 'Laureato', link: '/girard-perregaux/laureato' },
-  { label_en: '1966', label_de: '1966', link: '/girard-perregaux/1966' },
-  { label_en: 'Vintage 1945', label_de: 'Vintage 1945', link: '/girard-perregaux/vintage-1945' },
-  { label_en: 'Bridges', label_de: 'Bridges', link: '/girard-perregaux/bridges' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/girard-perregaux-gebraucht' },
-  { label_en: 'Vintage Models', label_de: 'Alte Modelle', link: '/girard-perregaux-alte-modelle' },
+  { label_en: 'Laureato', label_de: 'Laureato', link: '/girard-perregaux/laureato', filter: { collection: 'Laureato' } },
+  { label_en: '1966', label_de: '1966', link: '/girard-perregaux/1966', filter: { collection: '1966' } },
+  { label_en: 'Vintage 1945', label_de: 'Vintage 1945', link: '/girard-perregaux/vintage-1945', filter: { collection: 'Vintage 1945' } },
+  { label_en: 'Bridges', label_de: 'Bridges', link: '/girard-perregaux/bridges', filter: { collection: 'Bridges' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/girard-perregaux-gebraucht', filter: { preOwned: true } },
+  { label_en: 'Vintage Models', label_de: 'Alte Modelle', link: '/girard-perregaux-alte-modelle', filter: { vintage: true } },
 ];
 
 export const GP_SEO_CARDS = [

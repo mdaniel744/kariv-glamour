@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
-import { BRAND_DATA, BRAND_DISCLAIMER } from '@/lib/constants';
+import { BRAND_DATA } from '@/lib/constants';
 import { useLocalizedField } from '@/lib/localize';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import { motion } from 'framer-motion';
-import { ChevronRight, ShieldCheck } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const COPY = {
   de: {
@@ -128,14 +128,6 @@ export default function BrandDetail({
           <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{copy.manufacture}</span>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {localize(brand, 'longDescription') || localize(brand, 'shortDescription') || copy.fallback(brandName)}
-          </p>
-        </div>
-
-        {/* Brand disclaimer */}
-        <div className="mt-8 border border-border p-4 flex items-start gap-3">
-          <ShieldCheck size={14} className="text-primary flex-shrink-0 mt-0.5" />
-          <p className="text-[10px] text-muted-foreground leading-relaxed">
-            {localize(brand, 'brandDisclaimer') || BRAND_DISCLAIMER}
           </p>
         </div>
       </section>

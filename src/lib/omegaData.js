@@ -105,17 +105,17 @@ export const OMEGA_COLLECTIONS = [
 
 // Quick filter chips for product grid
 export const OMEGA_QUICK_FILTERS = [
-  { label_en: 'Omega Speedmaster', label_de: 'Omega Speedmaster', link: '/omega-speedmaster-kaufen' },
-  { label_en: 'Omega Moonwatch', label_de: 'Omega Moonwatch', link: '/omega-moonwatch-kaufen' },
-  { label_en: 'Omega Seamaster', label_de: 'Omega Seamaster', link: '/omega-seamaster-kaufen' },
-  { label_en: 'Omega Seamaster Diver 300M', label_de: 'Omega Seamaster Diver 300M', link: '/omega-seamaster-diver-300m-kaufen' },
-  { label_en: 'Omega Planet Ocean', label_de: 'Omega Planet Ocean', link: '/omega-seamaster-planet-ocean-kaufen' },
-  { label_en: 'Omega Aqua Terra', label_de: 'Omega Aqua Terra', link: '/omega-seamaster-aqua-terra-kaufen' },
-  { label_en: 'Omega Constellation', label_de: 'Omega Constellation', link: '/omega-constellation-kaufen' },
-  { label_en: 'Omega De Ville', label_de: 'Omega De Ville', link: '/omega-de-ville-kaufen' },
-  { label_en: 'Pre-Owned Omega', label_de: 'Omega gebraucht', link: '/omega-gebraucht-kaufen' },
-  { label_en: 'Omega with Box and Papers', label_de: 'Omega mit Box und Papieren', link: '/watch-guides/box-and-papers' },
-  { label_en: 'Omega Master Chronometer', label_de: 'Omega Master Chronometer', link: '/omega/master-chronometer-guide' },
+  { label_en: 'Omega Speedmaster', label_de: 'Omega Speedmaster', link: '/omega-speedmaster-kaufen', filter: { collection: 'Speedmaster' } },
+  { label_en: 'Omega Moonwatch', label_de: 'Omega Moonwatch', link: '/omega-moonwatch-kaufen', filter: { search: 'Moonwatch' } },
+  { label_en: 'Omega Seamaster', label_de: 'Omega Seamaster', link: '/omega-seamaster-kaufen', filter: { collection: 'Seamaster' } },
+  { label_en: 'Omega Seamaster Diver 300M', label_de: 'Omega Seamaster Diver 300M', link: '/omega-seamaster-diver-300m-kaufen', filter: { collection: 'Seamaster Diver 300M' } },
+  { label_en: 'Omega Planet Ocean', label_de: 'Omega Planet Ocean', link: '/omega-seamaster-planet-ocean-kaufen', filter: { collection: 'Seamaster Planet Ocean' } },
+  { label_en: 'Omega Aqua Terra', label_de: 'Omega Aqua Terra', link: '/omega-seamaster-aqua-terra-kaufen', filter: { collection: 'Seamaster Aqua Terra' } },
+  { label_en: 'Omega Constellation', label_de: 'Omega Constellation', link: '/omega-constellation-kaufen', filter: { collection: 'Constellation' } },
+  { label_en: 'Omega De Ville', label_de: 'Omega De Ville', link: '/omega-de-ville-kaufen', filter: { collection: 'De Ville' } },
+  { label_en: 'Pre-Owned Omega', label_de: 'Omega gebraucht', link: '/omega-gebraucht-kaufen', filter: { preOwned: true } },
+  { label_en: 'Omega with Box and Papers', label_de: 'Omega mit Box und Papieren', link: '/watch-guides/box-and-papers', filter: { fullSet: true } },
+  { label_en: 'Omega Master Chronometer', label_de: 'Omega Master Chronometer', link: '/omega/master-chronometer-guide', filter: { search: 'Master Chronometer' } },
 ];
 
 // SEO Cards

@@ -54,13 +54,13 @@ export const BVLGARI_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'
 export const BVLGARI_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const BVLGARI_QUICK_FILTERS = [
-  { label_en: 'Serpenti', label_de: 'Serpenti', link: '/bvlgari/serpenti' },
-  { label_en: 'Octo Finissimo', label_de: 'Octo Finissimo', link: '/bvlgari/octo-finissimo' },
-  { label_en: 'Octo Roma', label_de: 'Octo Roma', link: '/bvlgari/octo-roma' },
-  { label_en: "Women's", label_de: 'Damen', link: '/bvlgari-uhr-damen' },
-  { label_en: "Men's", label_de: 'Herren', link: '/bvlgari-uhr-herren' },
-  { label_en: 'Aluminium', label_de: 'Aluminium', link: '/bvlgari/aluminium' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/bvlgari-gebraucht' },
+  { label_en: 'Serpenti', label_de: 'Serpenti', link: '/bvlgari/serpenti', filter: { collection: 'Serpenti' } },
+  { label_en: 'Octo Finissimo', label_de: 'Octo Finissimo', link: '/bvlgari/octo-finissimo', filter: { collection: 'Octo Finissimo' } },
+  { label_en: 'Octo Roma', label_de: 'Octo Roma', link: '/bvlgari/octo-roma', filter: { collection: 'Octo Roma' } },
+  { label_en: "Women's", label_de: 'Damen', link: '/bvlgari-uhr-damen', filter: { gender: 'Women' } },
+  { label_en: "Men's", label_de: 'Herren', link: '/bvlgari-uhr-herren', filter: { gender: 'Men' } },
+  { label_en: 'Aluminium', label_de: 'Aluminium', link: '/bvlgari/aluminium', filter: { collection: 'Aluminium' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/bvlgari-gebraucht', filter: { preOwned: true } },
 ];
 
 export const BVLGARI_SEO_CARDS = [

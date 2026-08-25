@@ -69,14 +69,14 @@ export const TH_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const TH_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const TH_QUICK_FILTERS = [
-  { label_en: 'Carrera', label_de: 'Carrera', link: '/tag-heuer/carrera' },
-  { label_en: 'Aquaracer', label_de: 'Aquaracer', link: '/tag-heuer/aquaracer' },
-  { label_en: 'Formula 1', label_de: 'Formula 1', link: '/tag-heuer/formula-1' },
-  { label_en: 'Monaco', label_de: 'Monaco', link: '/tag-heuer/monaco' },
-  { label_en: 'Connected', label_de: 'Connected', link: '/tag-heuer/connected' },
-  { label_en: 'Chronograph', label_de: 'Chronograph', link: '/tag-heuer-chronograph' },
-  { label_en: "Men's", label_de: 'Herren', link: '/tag-heuer-uhr-herren' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/tag-heuer-gebraucht' },
+  { label_en: 'Carrera', label_de: 'Carrera', link: '/tag-heuer/carrera', filter: { collection: 'Carrera' } },
+  { label_en: 'Aquaracer', label_de: 'Aquaracer', link: '/tag-heuer/aquaracer', filter: { collection: 'Aquaracer' } },
+  { label_en: 'Formula 1', label_de: 'Formula 1', link: '/tag-heuer/formula-1', filter: { collection: 'Formula 1' } },
+  { label_en: 'Monaco', label_de: 'Monaco', link: '/tag-heuer/monaco', filter: { collection: 'Monaco' } },
+  { label_en: 'Connected', label_de: 'Connected', link: '/tag-heuer/connected', filter: { collection: 'Connected' } },
+  { label_en: 'Chronograph', label_de: 'Chronograph', link: '/tag-heuer-chronograph', filter: { search: 'Chronograph' } },
+  { label_en: "Men's", label_de: 'Herren', link: '/tag-heuer-uhr-herren', filter: { gender: 'Men' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/tag-heuer-gebraucht', filter: { preOwned: true } },
 ];
 
 export const TH_SEO_CARDS = [

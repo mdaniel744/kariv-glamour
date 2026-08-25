@@ -518,7 +518,335 @@
     },
     "buyerProtection": {
       "breadcrumb": "Buyer Protection",
-      "title": "Buyer Protection"
+      "title": "Buyer Protection",
+      "hero": {
+        "eyebrow": "Buyer Protection",
+        "title": "Kariv Buyer Protection",
+        "description": "Buy your next luxury watch with confidence. Kariv Buyer Protection helps secure your payment, protect your order, verify seller standards, and support you throughout the entire purchase journey.",
+        "primaryCta": "Shop Luxury Watches",
+        "secondaryCta": "How Buyer Protection Works",
+        "imageAlt": "Protected luxury watch purchase agreement",
+        "protectedPurchase": "Protected Purchase",
+        "badges": [
+          "Secure Escrow Payment",
+          "Authenticity Commitment",
+          "14-Day Money-Back Guarantee",
+          "Insured Shipping",
+          "Verified Dealers",
+          "Buyer Support"
+        ]
+      },
+      "included": {
+        "title": "What’s Included in Kariv Buyer Protection?",
+        "items": [
+          {
+            "title": "Payment via Escrow Service",
+            "text": "Your payment is securely held until your watch is delivered and you have time to inspect it."
+          },
+          {
+            "title": "Commitment to Authenticity",
+            "text": "Every listed watch must be authentic. Dealers are required to list only original timepieces."
+          },
+          {
+            "title": "14-Day Global Money-Back Guarantee",
+            "text": "If the watch is defective, not as described, or does not meet the agreed listing details, you can start a return within 14 days after delivery."
+          },
+          {
+            "title": "Strict Dealer Guidelines",
+            "text": "Dealers must follow Kariv Glamour’s marketplace rules and verification requirements before selling."
+          },
+          {
+            "title": "Insured Shipments",
+            "text": "Orders must be shipped with insurance and tracking to help protect both domestic and international purchases."
+          },
+          {
+            "title": "Kariv Quality & Security Team",
+            "text": "Our support and security team reviews issues, monitors suspicious activity, and assists buyers throughout the purchase process."
+          }
+        ]
+      },
+      "howItWorks": {
+        "title": "How Kariv Buyer Protection Works",
+        "steps": [
+          {
+            "title": "Choose Your Watch",
+            "text": "Browse luxury watches from trusted sellers and review important details such as brand, model, reference number, condition, year, box and papers, service history, price, and shipping information."
+          },
+          {
+            "title": "Pay Securely Through Kariv",
+            "text": "When your order is eligible for Kariv Escrow, your payment is held securely instead of being released immediately to the seller."
+          },
+          {
+            "title": "Seller Ships the Watch",
+            "text": "The seller ships the watch using an insured shipping method with tracking. Shipment details are added to your order so you can follow the delivery."
+          },
+          {
+            "title": "Inspect Your Watch",
+            "text": "After delivery, you have time to inspect the watch, compare it with the product listing, and confirm that the condition, documents, and accessories match the description."
+          },
+          {
+            "title": "Seller Receives Payment",
+            "text": "Only after the buyer protection period has passed, or after the order is confirmed, is the payment released to the seller."
+          },
+          {
+            "title": "Support Is Available",
+            "text": "If something is wrong, Kariv Glamour support helps guide the next steps, including return, refund, or dispute review where applicable."
+          }
+        ]
+      },
+      "escrow": {
+        "title": "Payment via the Kariv Escrow Service",
+        "intro": "Thanks to the Kariv Escrow Service, eligible payments are held securely while your order is being completed. Instead of paying the seller directly, your payment is kept in a protected escrow account during the delivery and inspection period. This gives you time to receive your watch, check its condition, and confirm that the order matches the listing.",
+        "highlight": "Your money is not released to the seller immediately. It remains protected during the buyer inspection period.",
+        "points": [
+          "Payment is held securely during the transaction.",
+          "Buyer has 14 days after delivery to inspect the watch.",
+          "Seller payout is released only after the buyer protection conditions are satisfied.",
+          "Escrow applies only to eligible orders processed through Kariv Glamour’s checkout.",
+          "Direct payments outside Kariv Glamour are not covered."
+        ],
+        "importantLabel": "Important",
+        "importantText": "Kariv Buyer Protection only applies to eligible purchases completed through Kariv Glamour’s approved checkout and payment process. Payments made outside the platform may not be covered."
+      },
+      "authenticity": {
+        "title": "Commitment to Authenticity",
+        "intro": "Kariv Glamour is committed to offering authentic luxury watches only. Every dealer and seller must list original timepieces and provide accurate product information. Product listings should clearly state the brand, model, reference number, condition, year, box and papers status, service history, and any known replacement or non-original parts.",
+        "points": [
+          "Authentic watches only",
+          "No counterfeit or replica watches",
+          "Clear reference numbers",
+          "Transparent product condition",
+          "Box and papers visibility",
+          "Service history where available",
+          "Original and replacement parts should be disclosed",
+          "Suspicious listings may be reviewed, hidden, or removed"
+        ],
+        "notice": "Kariv Glamour does not allow counterfeit, replica, or intentionally misleading watch listings.",
+        "counterfeitTitle": "How We Help Protect Against Counterfeits",
+        "counterfeitIntro": "Luxury watches require trust. Kariv Glamour uses seller standards, product information checks, customer reporting, and support review to reduce the risk of counterfeit or misleading listings.",
+        "counterfeitCards": [
+          "Seller verification",
+          "Product information review",
+          "Reference number visibility",
+          "Buyer reporting tools",
+          "Suspicious listing monitoring",
+          "Support team review"
+        ]
+      },
+      "moneyBack": {
+        "title": "14-Day Global Money-Back Guarantee",
+        "intro": "If your watch is defective, malfunctioning, not as described, missing agreed accessories, or materially different from the product listing, you can contact Kariv Glamour support within 14 days after delivery to start a return request.",
+        "coveredTitle": "What may be covered",
+        "covered": [
+          "Watch is not as described",
+          "Wrong model or reference",
+          "Undisclosed damage",
+          "Missing box or papers when included in the listing",
+          "Defective or malfunctioning watch",
+          "Suspected authenticity issue",
+          "Incorrect shipment"
+        ],
+        "notCoveredTitle": "What may not be covered",
+        "notCovered": [
+          "Buyer changed their mind after the return window",
+          "Watch was worn, damaged, altered, resized, or modified after delivery",
+          "Missing packaging caused by buyer mishandling",
+          "Direct payments made outside Kariv Glamour",
+          "Custom agreements not recorded on the platform",
+          "Normal signs of wear clearly disclosed in the listing",
+          "Vintage characteristics already stated in the product description"
+        ],
+        "eligibilityNote": "Return eligibility depends on the condition of the watch, the listing details, and whether the return request is made within the required time frame.",
+        "returnsTitle": "Returns Made Easy",
+        "returnSteps": [
+          {
+            "title": "Contact Kariv Support",
+            "text": "Email or message our support team within 14 days after receiving your watch. Include your order number, photos, and a clear explanation of the issue."
+          },
+          {
+            "title": "Return the Watch Safely",
+            "text": "Once the return is approved, ship the watch back fully insured, with tracking, and in its original packaging, including all accessories, documents, tags, links, box, papers, and certificates received."
+          },
+          {
+            "title": "Receive Your Refund",
+            "text": "After the return is received and checked, Kariv Glamour processes the refund according to the buyer protection and return policy terms."
+          }
+        ],
+        "noteLabel": "Note",
+        "note": "In most cases, the buyer may be responsible for return shipping costs unless the return is caused by seller error, misdescription, or another covered issue."
+      },
+      "dealers": {
+        "title": "Strict Dealer Guidelines",
+        "intro": "To maintain trust across the Kariv Glamour marketplace, professional dealers must follow strict platform rules. Before selling, dealers may be required to provide identity information, commercial registration details, business address, tax information, and other verification documents.",
+        "requirements": [
+          "Valid identity verification",
+          "Business registration where applicable",
+          "Business address",
+          "Tax information where applicable",
+          "Verified contact details",
+          "Transparent product listings",
+          "Accurate condition grading",
+          "Disclosure of replacement parts",
+          "No counterfeit or replica watches",
+          "Timely communication",
+          "Insured shipping",
+          "Respect for Kariv Glamour return and buyer protection rules"
+        ],
+        "reviewsTitle": "Dealer Reviews and Marketplace Transparency",
+        "reviewsText": "Customer reviews, order history, response behaviour, and seller performance help buyers better understand who they are buying from. Kariv Glamour should display seller ratings, verified reviews, seller location, years active, response time, and completed transactions where available."
+      },
+      "shipping": {
+        "title": "Insured Shipments",
+        "intro": "Luxury watches must be shipped securely. Sellers are required to use insured shipping methods with tracking for eligible orders. This helps protect buyers in rare cases of loss, theft, or unsuccessful delivery.",
+        "points": [
+          "Fully insured shipment",
+          "Tracking number required",
+          "Secure packaging",
+          "Signature on delivery where available",
+          "Domestic and international shipment support",
+          "Buyer support in case of shipment issues",
+          "Delivery confirmation required"
+        ],
+        "notice": "Buyers should inspect the package upon delivery and report visible damage immediately."
+      },
+      "securityTeam": {
+        "title": "Kariv Quality & Security Team",
+        "intro": "Kariv Glamour’s dedicated quality and security team supports buyers throughout the purchase process. The team monitors suspicious activity, reviews reported listings, assists with payment and delivery concerns, and helps resolve issues when a watch is not as described.",
+        "responsibilities": [
+          "Review suspicious listings",
+          "Support buyers before purchase",
+          "Assist with order issues",
+          "Help manage return requests",
+          "Review authenticity concerns",
+          "Communicate with sellers",
+          "Monitor dealer behaviour",
+          "Protect marketplace trust"
+        ]
+      },
+      "conditions": {
+        "appliesTitle": "When Buyer Protection Applies",
+        "applies": [
+          "The purchase is completed through Kariv Glamour checkout",
+          "The order is eligible for escrow",
+          "The buyer follows Kariv Glamour payment instructions",
+          "The return or issue is reported within the required time frame",
+          "The watch is returned in the same condition received",
+          "The buyer keeps all packaging, accessories, documents, and proof of delivery",
+          "The buyer cooperates with support during review"
+        ],
+        "notApplyTitle": "When Buyer Protection May Not Apply",
+        "reviewLabel": "Please review carefully",
+        "notApply": [
+          "Payment is made outside Kariv Glamour",
+          "Buyer and seller make a private off-platform agreement",
+          "The buyer misses the return deadline",
+          "The watch is worn, damaged, altered, repaired, resized, or modified after delivery",
+          "The buyer loses box, papers, accessories, links, warranty card, certificate, or packaging",
+          "The issue was clearly disclosed in the product listing",
+          "The buyer refuses to provide requested evidence",
+          "The return is shipped without insurance or tracking",
+          "The shipment is sent to the wrong address"
+        ]
+      },
+      "checklists": {
+        "beforeTitle": "Buyer Checklist Before Purchase",
+        "before": [
+          "Check the brand, model, and reference number",
+          "Read the condition description carefully",
+          "Review all photos",
+          "Confirm box and papers status",
+          "Check service history if available",
+          "Review warranty details",
+          "Check seller rating and dealer profile",
+          "Confirm shipping cost and delivery country",
+          "Read return conditions",
+          "Pay only through Kariv Glamour’s approved checkout"
+        ],
+        "afterTitle": "What to Do After Delivery",
+        "after": [
+          "Inspect the package before opening",
+          "Take photos or video while unboxing expensive watches",
+          "Compare the watch with the listing",
+          "Check the reference number and documents",
+          "Confirm box, papers, links, tags, and accessories",
+          "Test basic functionality carefully",
+          "Do not wear, resize, alter, repair, or polish the watch before deciding to keep it",
+          "Contact Kariv support immediately if something is wrong"
+        ]
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "q": "What is Kariv Buyer Protection?",
+            "a": "Kariv Buyer Protection is designed to help customers buy luxury watches safely through Kariv Glamour. It includes secure payment handling, authenticity standards, dealer rules, insured shipping, support assistance, and a 14-day return request window for eligible orders."
+          },
+          {
+            "q": "How does the Kariv Escrow Service work?",
+            "a": "For eligible orders, the buyer’s payment is held securely while the watch is shipped and inspected. The seller is paid only after the buyer protection conditions are satisfied."
+          },
+          {
+            "q": "How long do I have to inspect my watch?",
+            "a": "You have 14 days after delivery to inspect the watch and contact Kariv Glamour support if the order is defective, not as described, or has another covered issue."
+          },
+          {
+            "q": "Are all watches on Kariv Glamour authentic?",
+            "a": "Kariv Glamour requires sellers to list only authentic watches. Counterfeit and replica watches are not allowed. If an authenticity concern arises, buyers should contact support within the protection period."
+          },
+          {
+            "q": "What happens if the watch is not as described?",
+            "a": "Contact Kariv Glamour support within 14 days after delivery. Provide your order number, photos, and a clear explanation of the issue. Our team will review the case and guide the return or resolution process."
+          },
+          {
+            "q": "Are shipments insured?",
+            "a": "Eligible sellers are required to ship watches with tracking and insurance. This helps protect buyers in rare cases of loss, theft, or unsuccessful delivery."
+          },
+          {
+            "q": "Who pays for return shipping?",
+            "a": "In most cases, the buyer may be responsible for return shipping unless the return is due to seller error, misdescription, or another covered issue. Return instructions will be provided by support."
+          },
+          {
+            "q": "What should I keep after receiving the watch?",
+            "a": "Keep the original packaging, shipping materials, box, papers, warranty card, certificate, links, tags, service documents, and all accessories until you are certain you are keeping the watch."
+          },
+          {
+            "q": "Does Buyer Protection apply if I pay the seller directly?",
+            "a": "No. Buyer Protection applies only to eligible transactions completed through Kariv Glamour’s approved checkout and payment process. Direct payments outside the platform may not be covered."
+          },
+          {
+            "q": "Can I return a watch because I changed my mind?",
+            "a": "Return eligibility depends on the product, seller terms, jurisdiction, and Kariv Glamour policy. The 14-day money-back guarantee is designed mainly to protect buyers when an item is defective, not as described, or affected by a covered issue."
+          },
+          {
+            "q": "What happens if the package arrives damaged?",
+            "a": "Document the damage immediately with photos and contact Kariv Glamour support. Keep all packaging and do not discard any shipping materials until the case is reviewed."
+          },
+          {
+            "q": "What if I suspect the watch is counterfeit?",
+            "a": "Contact Kariv Glamour support immediately within the protection period. Provide photos, documents, and details about your concern. Kariv Glamour does not allow counterfeit or replica listings."
+          }
+        ]
+      },
+      "support": {
+        "title": "Need help with a purchase?",
+        "intro": "Our support team is here to guide you before, during, and after your luxury watch purchase.",
+        "contactCta": "Contact Support",
+        "faqCta": "Browse FAQ",
+        "returnsCta": "View Returns Policy",
+        "shippingCta": "View Shipping Policy",
+        "resourcesTitle": "Useful Buyer Resources",
+        "resources": [
+          "Authentication Process",
+          "Condition Grading",
+          "Returns and Refunds",
+          "Shipping Policy",
+          "Terms and Conditions of Purchase",
+          "Watch Box and Papers Guide",
+          "Service History Guide",
+          "How to Buy a Pre-Owned Luxury Watch Safely",
+          "Contact Customer Service"
+        ]
+      }
     },
     "portal": {
       "dashboard": "Dashboard",

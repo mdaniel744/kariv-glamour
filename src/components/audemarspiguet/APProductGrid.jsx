@@ -8,6 +8,7 @@ import { SlidersHorizontal, X } from 'lucide-react';
 import APFilterSidebar from './APFilterSidebar';
 import APProductCard from './APProductCard';
 import { AP_QUICK_FILTERS } from '@/lib/audemarsPiguetData';
+import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Audemars Piguet';
 
@@ -20,6 +21,7 @@ export default function APProductGrid() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [quickFilter, setQuickFilter] = useState([]);
   const [filters, setFilters] = useState({ collection: [], caseMaterial: [], watchShape: [], movementType: [], complication: [], features: [], dialColor: [], braceletMaterial: [], condition: [], gender: [], caseSize: [], boxPapers: [], availability: [], type: [], priceMin: '', priceMax: '' });
 
   useEffect(() => {
@@ -61,6 +63,7 @@ export default function APProductGrid() {
     if (f.availability.length) result = result.filter(p => f.availability.includes(p.availability));
     if (f.priceMin) result = result.filter(p => p.price >= Number(f.priceMin));
     if (f.priceMax) result = result.filter(p => p.price <= Number(f.priceMax));
+    if (quickFilter.length) result = result.filter((p) => matchesBrandQuickFilter(p, quickFilter));
     return [...result].sort((a, b) => {
       switch (sortBy) {
         case 'price': return a.price - b.price;
@@ -70,24 +73,20 @@ export default function APProductGrid() {
         default: return new Date(b.created_date) - new Date(a.created_date);
       }
     });
-  }, [products, filters, sortBy]);
+  }, [products, filters, sortBy, quickFilter]);
 
   return (
-    <section id="shop" className="py-16 md:py-24 bg-secondary">
+    <section id="shop" className="brand-products-section bg-secondary py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('productGrid.eyebrow')}</span>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
-          {AP_QUICK_FILTERS.map((chip, i) => (
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{localize(chip, 'label')}</LocalizedLink>
-          ))}
-        </div>
+        <BrandQuickFilters chips={AP_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
-          <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
+          <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">
             <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
           <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.timepieces', { count: filtered.length })}</p>
@@ -99,7 +98,7 @@ export default function APProductGrid() {
         </div>
 
         <div className="flex gap-10">
-          <aside className="hidden md:block w-64 flex-shrink-0">
+          <aside className="brand-filter-shell">
             <APFilterSidebar filters={filters} setFilters={setFilters} />
           </aside>
           <div className="flex-1">

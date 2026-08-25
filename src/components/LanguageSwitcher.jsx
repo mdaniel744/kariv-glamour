@@ -5,7 +5,7 @@ export default function LanguageSwitcher({ className = '' }) {
   const { locale, setLocale, supportedLocales } = useLanguage();
 
   return (
-    <div className={`flex items-center gap-0.5 text-[10px] tracking-[0.12em] uppercase font-medium ${className}`}>
+    <div className={`flex items-center gap-0.5 font-body text-[11px] font-semibold uppercase tracking-[0.06em] ${className}`}>
       {supportedLocales.map((lng, i) => (
         <React.Fragment key={lng}>
           {i > 0 && <span className="text-muted-foreground/40 mx-0.5">|</span>}

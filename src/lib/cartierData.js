@@ -73,16 +73,16 @@ export const CARTIER_COLLECTIONS = [
 ];
 
 export const CARTIER_QUICK_FILTERS = [
-  { label_en: 'Cartier Tank', label_de: 'Cartier Tank', link: '/cartier-tank-kaufen' },
-  { label_en: 'Cartier Santos', label_de: 'Cartier Santos', link: '/cartier-santos-kaufen' },
-  { label_en: 'Cartier Panthère', label_de: 'Cartier Panthère', link: '/cartier-panthere-kaufen' },
-  { label_en: 'Cartier Ballon Bleu', label_de: 'Cartier Ballon Bleu', link: '/cartier-ballon-bleu-kaufen' },
-  { label_en: 'Cartier Baignoire', label_de: 'Cartier Baignoire', link: '/cartier-baignoire-kaufen' },
-  { label_en: 'Cartier Pasha', label_de: 'Cartier Pasha', link: '/cartier-pasha-kaufen' },
-  { label_en: 'Pre-Owned Cartier', label_de: 'Cartier gebraucht', link: '/cartier-gebraucht-kaufen' },
-  { label_en: 'Cartier for Women', label_de: 'Cartier für Damen', link: '/cartier-damen' },
-  { label_en: 'Cartier for Men', label_de: 'Cartier für Herren', link: '/cartier-herren' },
-  { label_en: 'Cartier with Box and Papers', label_de: 'Cartier mit Box und Papieren', link: '/guides' },
+  { label_en: 'Cartier Tank', label_de: 'Cartier Tank', link: '/cartier-tank-kaufen', filter: { collection: 'Tank' } },
+  { label_en: 'Cartier Santos', label_de: 'Cartier Santos', link: '/cartier-santos-kaufen', filter: { collection: 'Santos' } },
+  { label_en: 'Cartier Panthère', label_de: 'Cartier Panthère', link: '/cartier-panthere-kaufen', filter: { collection: 'Panthère' } },
+  { label_en: 'Cartier Ballon Bleu', label_de: 'Cartier Ballon Bleu', link: '/cartier-ballon-bleu-kaufen', filter: { collection: 'Ballon Bleu' } },
+  { label_en: 'Cartier Baignoire', label_de: 'Cartier Baignoire', link: '/cartier-baignoire-kaufen', filter: { collection: 'Baignoire' } },
+  { label_en: 'Cartier Pasha', label_de: 'Cartier Pasha', link: '/cartier-pasha-kaufen', filter: { collection: 'Pasha' } },
+  { label_en: 'Pre-Owned Cartier', label_de: 'Cartier gebraucht', link: '/cartier-gebraucht-kaufen', filter: { preOwned: true } },
+  { label_en: 'Cartier for Women', label_de: 'Cartier für Damen', link: '/cartier-damen', filter: { gender: 'Women' } },
+  { label_en: 'Cartier for Men', label_de: 'Cartier für Herren', link: '/cartier-herren', filter: { gender: 'Men' } },
+  { label_en: 'Cartier with Box and Papers', label_de: 'Cartier mit Box und Papieren', link: '/guides', filter: { fullSet: true } },
 ];
 
 export const CARTIER_SEO_CARDS = [

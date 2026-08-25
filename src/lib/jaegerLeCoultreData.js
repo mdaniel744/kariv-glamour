@@ -51,13 +51,13 @@ export const JLC_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const JLC_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const JLC_QUICK_FILTERS = [
-  { label_en: 'Reverso', label_de: 'Reverso', link: '/jaeger-lecoultre/reverso' },
-  { label_en: 'Master Ultra Thin', label_de: 'Master Ultra Thin', link: '/jaeger-lecoultre/master-ultra-thin' },
-  { label_en: 'Master Control', label_de: 'Master Control', link: '/jaeger-lecoultre/master-control' },
-  { label_en: 'Polaris', label_de: 'Polaris', link: '/jaeger-lecoultre/polaris' },
-  { label_en: 'Rendez-Vous', label_de: 'Rendez-Vous', link: '/jaeger-lecoultre/rendez-vous' },
-  { label_en: 'Duometre', label_de: 'Duometre', link: '/jaeger-lecoultre/duometre' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/gebrauchte-jaeger-lecoultre' },
+  { label_en: 'Reverso', label_de: 'Reverso', link: '/jaeger-lecoultre/reverso', filter: { collection: 'Reverso' } },
+  { label_en: 'Master Ultra Thin', label_de: 'Master Ultra Thin', link: '/jaeger-lecoultre/master-ultra-thin', filter: { collection: 'Master Ultra Thin' } },
+  { label_en: 'Master Control', label_de: 'Master Control', link: '/jaeger-lecoultre/master-control', filter: { collection: 'Master Control' } },
+  { label_en: 'Polaris', label_de: 'Polaris', link: '/jaeger-lecoultre/polaris', filter: { collection: 'Polaris' } },
+  { label_en: 'Rendez-Vous', label_de: 'Rendez-Vous', link: '/jaeger-lecoultre/rendez-vous', filter: { collection: 'Rendez-Vous' } },
+  { label_en: 'Duometre', label_de: 'Duometre', link: '/jaeger-lecoultre/duometre', filter: { collection: 'Duometre' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/gebrauchte-jaeger-lecoultre', filter: { preOwned: true } },
 ];
 
 export const JLC_SEO_CARDS = [

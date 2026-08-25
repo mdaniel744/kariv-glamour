@@ -40,7 +40,7 @@ export default function GrandSeikoFilterSidebar({ filters, setFilters }) {
   const reset = () => setFilters({ collection: [], caseMaterial: [], movementType: [], dialColor: [], dialTheme: [], features: [], braceletMaterial: [], condition: [], gender: [], caseSize: [], boxPapers: [], availability: [], type: [], priceMin: '', priceMax: '' });
 
   return (
-    <div>
+    <div className="brand-filter-panel">
       {activeCount > 0 && (
         <button onClick={reset} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-primary mb-4 hover:text-foreground transition-colors">
           <X size={12} /> {t('productGrid.clearFilters')}

@@ -43,13 +43,13 @@ export const IWC_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const IWC_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const IWC_QUICK_FILTERS = [
-  { label_en: "Pilot's Watches", label_de: "Fliegeruhren", link: '/iwc-schaffhausen/pilots-watches' },
-  { label_en: 'Portugieser', label_de: 'Portugieser', link: '/iwc-schaffhausen/portugieser' },
-  { label_en: 'Portofino', label_de: 'Portofino', link: '/iwc-schaffhausen/portofino' },
-  { label_en: 'Ingenieur', label_de: 'Ingenieur', link: '/iwc-schaffhausen/ingenieur' },
-  { label_en: 'Aquatimer', label_de: 'Aquatimer', link: '/iwc-schaffhausen/aquatimer' },
-  { label_en: 'Automatic', label_de: 'Automatik', link: '/iwc-schaffhausen-automatic' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/iwc-schaffhausen-gebraucht' },
+  { label_en: "Pilot's Watches", label_de: "Fliegeruhren", link: '/iwc-schaffhausen/pilots-watches', filter: { collection: "Pilot's Watches" } },
+  { label_en: 'Portugieser', label_de: 'Portugieser', link: '/iwc-schaffhausen/portugieser', filter: { collection: 'Portugieser' } },
+  { label_en: 'Portofino', label_de: 'Portofino', link: '/iwc-schaffhausen/portofino', filter: { collection: 'Portofino' } },
+  { label_en: 'Ingenieur', label_de: 'Ingenieur', link: '/iwc-schaffhausen/ingenieur', filter: { collection: 'Ingenieur' } },
+  { label_en: 'Aquatimer', label_de: 'Aquatimer', link: '/iwc-schaffhausen/aquatimer', filter: { collection: 'Aquatimer' } },
+  { label_en: 'Automatic', label_de: 'Automatik', link: '/iwc-schaffhausen-automatic', filter: { movementType: 'Automatic' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/iwc-schaffhausen-gebraucht', filter: { preOwned: true } },
 ];
 
 export const IWC_SEO_CARDS = [

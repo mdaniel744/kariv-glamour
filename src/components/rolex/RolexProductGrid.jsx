@@ -11,6 +11,7 @@ import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET
 import { ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
 import { productSlug } from '@/lib/slug';
 import ProductCardImage from '@/components/shared/ProductCardImage';
+import BrandQuickFilters, { BrandAttributeFilterGroup, matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Rolex';
 
@@ -21,6 +22,7 @@ export default function RolexProductGrid() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [quickFilter, setQuickFilter] = useState([]);
   const [filters, setFilters] = useState({ condition: [], caseMaterial: [], dialColor: [], gender: [], braceletMaterial: [], movementType: [], boxPapers: '', availability: '' });
 
   useEffect(() => {
@@ -38,11 +40,12 @@ export default function RolexProductGrid() {
         if (filters.boxPapers === 'box') data = data.filter((p) => p.boxIncluded);
         if (filters.boxPapers === 'papers') data = data.filter((p) => p.papersIncluded);
         if (filters.availability) data = data.filter((p) => p.availability === filters.availability);
+        if (quickFilter.length) data = data.filter((p) => matchesBrandQuickFilter(p, quickFilter));
         setProducts(data);
       } catch (e) { console.error(e); } finally { setLoading(false); }
     };
     load();
-  }, [sortBy, filters]);
+  }, [sortBy, filters, quickFilter]);
 
   const toggleFilter = (key, value) => setFilters((prev) => { const arr = prev[key]; return { ...prev, [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value] }; });
 
@@ -117,28 +120,14 @@ export default function RolexProductGrid() {
     );
   };
 
-  const FilterGroup = ({ label, options, selected, onToggle }) => (
-    <div className="border-b border-border pb-4 mb-4">
-      <h4 className="text-[10px] tracking-[0.15em] uppercase font-medium mb-3 text-foreground">{label}</h4>
-      <div className="space-y-2">
-        {options.map((opt) =>
-          <label key={opt} className="flex items-center gap-2 cursor-pointer text-xs text-muted-foreground hover:text-foreground transition-colors">
-            <input type="checkbox" checked={selected.includes(opt)} onChange={() => onToggle(opt)} className="accent-primary" />
-            {opt}
-          </label>
-        )}
-      </div>
-    </div>
-  );
-
   const FilterContent = () => (
-    <>
-      <FilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} />
-      <FilterGroup label={t('productGrid.caseMaterial')} options={CASE_MATERIALS} selected={filters.caseMaterial} onToggle={(v) => toggleFilter('caseMaterial', v)} />
-      <FilterGroup label={t('productGrid.dialColor')} options={DIAL_COLORS} selected={filters.dialColor} onToggle={(v) => toggleFilter('dialColor', v)} />
-      <FilterGroup label={t('productGrid.gender')} options={GENDERS} selected={filters.gender} onToggle={(v) => toggleFilter('gender', v)} />
-      <FilterGroup label={t('productGrid.bracelet')} options={BRACELET_MATERIALS} selected={filters.braceletMaterial} onToggle={(v) => toggleFilter('braceletMaterial', v)} />
-      <FilterGroup label={t('productGrid.movement')} options={MOVEMENT_TYPES} selected={filters.movementType} onToggle={(v) => toggleFilter('movementType', v)} />
+    <div className="brand-filter-panel">
+      <BrandAttributeFilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} defaultOpen />
+      <BrandAttributeFilterGroup label={t('productGrid.caseMaterial')} options={CASE_MATERIALS} selected={filters.caseMaterial} onToggle={(v) => toggleFilter('caseMaterial', v)} />
+      <BrandAttributeFilterGroup label={t('productGrid.dialColor')} options={DIAL_COLORS} selected={filters.dialColor} onToggle={(v) => toggleFilter('dialColor', v)} />
+      <BrandAttributeFilterGroup label={t('productGrid.gender')} options={GENDERS} selected={filters.gender} onToggle={(v) => toggleFilter('gender', v)} />
+      <BrandAttributeFilterGroup label={t('productGrid.bracelet')} options={BRACELET_MATERIALS} selected={filters.braceletMaterial} onToggle={(v) => toggleFilter('braceletMaterial', v)} />
+      <BrandAttributeFilterGroup label={t('productGrid.movement')} options={MOVEMENT_TYPES} selected={filters.movementType} onToggle={(v) => toggleFilter('movementType', v)} />
       <div className="border-b border-border pb-4 mb-4">
         <h4 className="text-[10px] tracking-[0.15em] uppercase font-medium mb-3 text-foreground">{t('productGrid.boxPapers')}</h4>
         <select value={filters.boxPapers} onChange={(e) => setFilters((p) => ({ ...p, boxPapers: e.target.value }))} className="w-full text-xs p-2 border border-border bg-card text-foreground outline-none focus:border-primary">
@@ -153,25 +142,21 @@ export default function RolexProductGrid() {
           {AVAILABILITY_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
       </div>
-    </>
+    </div>
   );
 
   return (
-    <section id="rolex-products" className="py-16 md:py-24 bg-secondary">
+    <section id="rolex-products" className="brand-products-section bg-secondary py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('productGrid.eyebrow')}</span>
           <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <div className="flex flex-wrap gap-2 justify-center mb-10">
-          {ROLEX_QUICK_FILTERS.map((chip, i) =>
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{localize(chip, 'label')}</LocalizedLink>
-          )}
-        </div>
+        <BrandQuickFilters chips={ROLEX_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="mb-8 flex items-center justify-between gap-4 border-b border-border pb-4">
-          <button onClick={() => setMobileFiltersOpen(true)} className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground">
+          <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">
             <SlidersHorizontal size={14} /> {t('productGrid.filter')}
           </button>
           <p className="hidden md:block text-xs text-muted-foreground">{t('productGrid.count', { count: products.length, brand: BRAND })}</p>
@@ -181,7 +166,7 @@ export default function RolexProductGrid() {
         </div>
 
         <div className="flex gap-10">
-          <aside className="hidden md:block w-56 flex-shrink-0"><FilterContent /></aside>
+          <aside className="brand-filter-shell"><FilterContent /></aside>
           <div className="flex-1">
             {loading ?
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">

@@ -415,7 +415,7 @@ export default function Shop() {
 
       <div className="flex gap-8 xl:gap-12">
         {/* Desktop Filters */}
-        <aside className="hidden w-72 flex-shrink-0 rounded-sm border border-border bg-background px-5 pb-5 xl:w-80 lg:block">
+        <aside className="hidden w-72 flex-shrink-0 rounded-xl border border-border bg-background px-5 pb-5 xl:w-80 lg:block">
           <ShopFilters filters={filters} setFilters={handleFiltersChange} />
         </aside>
 

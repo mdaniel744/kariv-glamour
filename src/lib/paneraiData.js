@@ -56,13 +56,13 @@ export const PANERAI_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'
 export const PANERAI_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const PANERAI_QUICK_FILTERS = [
-  { label_en: 'Luminor', label_de: 'Luminor', link: '/panerai/luminor' },
-  { label_en: 'Luminor Marina', label_de: 'Luminor Marina', link: '/panerai/luminor-marina' },
-  { label_en: 'Radiomir', label_de: 'Radiomir', link: '/panerai/radiomir' },
-  { label_en: 'Submersible', label_de: 'Submersible', link: '/panerai/submersible' },
-  { label_en: 'Luminor Due', label_de: 'Luminor Due', link: '/panerai/luminor-due' },
-  { label_en: "Men's", label_de: 'Herren', link: '/panerai-uhr-herren' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/panerai-gebraucht' },
+  { label_en: 'Luminor', label_de: 'Luminor', link: '/panerai/luminor', filter: { collection: 'Luminor' } },
+  { label_en: 'Luminor Marina', label_de: 'Luminor Marina', link: '/panerai/luminor-marina', filter: { collection: 'Luminor Marina' } },
+  { label_en: 'Radiomir', label_de: 'Radiomir', link: '/panerai/radiomir', filter: { collection: 'Radiomir' } },
+  { label_en: 'Submersible', label_de: 'Submersible', link: '/panerai/submersible', filter: { collection: 'Submersible' } },
+  { label_en: 'Luminor Due', label_de: 'Luminor Due', link: '/panerai/luminor-due', filter: { collection: 'Luminor Due' } },
+  { label_en: "Men's", label_de: 'Herren', link: '/panerai-uhr-herren', filter: { gender: 'Men' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/panerai-gebraucht', filter: { preOwned: true } },
 ];
 
 export const PANERAI_SEO_CARDS = [

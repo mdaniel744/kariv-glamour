@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
-import { BRAND_DATA } from '@/lib/constants';
+import { BRAND_DATA, BRAND_TILE_IMAGES } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 
@@ -39,7 +39,7 @@ export default function Brands({ initialBrands = [] }) {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {allBrands.map((brand, i) => (
           <motion.div
             key={brand.slug}
@@ -48,19 +48,25 @@ export default function Brands({ initialBrands = [] }) {
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
           >
-            <LocalizedLink to={`/brands/${brand.slug}`} className="group block border border-border hover:border-primary/30 transition-all">
-              <div className="aspect-[16/9] bg-card overflow-hidden relative">
-                {brand.heroImage ? (
-                  <img src={brand.heroImage} alt={brand.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
+            <LocalizedLink to={`/brands/${brand.slug}`} className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-foreground/5">
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-secondary/80 via-card to-secondary">
+                {(BRAND_TILE_IMAGES[brand.slug] || brand.heroImage) ? (
+                  <img
+                    src={BRAND_TILE_IMAGES[brand.slug] || brand.heroImage}
+                    alt={`${brand.name} watch`}
+                    loading={i < 3 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className="h-full w-full object-contain p-5 drop-shadow-[0_22px_24px_rgba(0,0,0,0.18)] transition-transform duration-700 ease-out group-hover:scale-110 sm:p-7"
+                  />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="font-display text-3xl text-muted-foreground/30 font-light tracking-[0.1em]">{brand.name}</span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+                <div className="pointer-events-none absolute inset-x-10 bottom-4 h-8 rounded-full bg-foreground/10 blur-xl transition-transform duration-700 group-hover:scale-110" />
               </div>
               <div className="p-6">
-                <h2 className="font-display text-xl text-foreground font-light group-hover:text-primary transition-colors">{brand.name}</h2>
+                <h2 className="font-display text-xl font-semibold text-foreground transition-colors group-hover:text-primary">{brand.name}</h2>
                 {brand.shortDescription && (
                   <p className="text-xs text-muted-foreground mt-2 line-clamp-2 leading-relaxed">{localize(brand, 'shortDescription')}</p>
                 )}

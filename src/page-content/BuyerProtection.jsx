@@ -17,22 +17,24 @@ import BpSupport from '@/components/buyer-protection/BpSupport';
 
 export default function BuyerProtection() {
   const { t } = useTranslation();
+  const copy = t('pages.buyerProtection', { returnObjects: true });
+
   return (
     <div className="bg-background">
       <SEO title={t('common:seo.buyerProtection.title')} description={t('common:seo.buyerProtection.description')} />
-      <BpHero />
-      <BpIncluded />
-      <BpHowItWorks />
-      <BpEscrow />
-      <BpAuthenticity />
-      <BpMoneyBack />
-      <BpDealers />
-      <BpShipping />
-      <BpSecurityTeam />
-      <BpConditions />
-      <BpChecklists />
-      <BpFAQ />
-      <BpSupport />
+      <BpHero copy={copy.hero} />
+      <BpIncluded copy={copy.included} />
+      <BpHowItWorks copy={copy.howItWorks} />
+      <BpEscrow copy={copy.escrow} />
+      <BpAuthenticity copy={copy.authenticity} />
+      <BpMoneyBack copy={copy.moneyBack} />
+      <BpDealers copy={copy.dealers} />
+      <BpShipping copy={copy.shipping} />
+      <BpSecurityTeam copy={copy.securityTeam} />
+      <BpConditions copy={copy.conditions} />
+      <BpChecklists copy={copy.checklists} />
+      <BpFAQ copy={copy.faq} />
+      <BpSupport copy={copy.support} />
     </div>
   );
 }

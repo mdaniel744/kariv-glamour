@@ -52,15 +52,15 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
   if (!page) {
     return (
       <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <h1 className="font-display text-2xl text-foreground">{copy.notFound}</h1>
-        <p className="text-sm text-muted-foreground mt-2">{copy.missing}</p>
-        <LocalizedLink to="/" className="text-primary text-sm mt-4 inline-block">{copy.back}</LocalizedLink>
+        <h1 className="font-display text-3xl font-semibold text-foreground">{copy.notFound}</h1>
+        <p className="text-base text-muted-foreground mt-2">{copy.missing}</p>
+        <LocalizedLink to="/" className="text-primary text-base mt-4 inline-block">{copy.back}</LocalizedLink>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+    <div className="max-w-4xl mx-auto px-6 py-12 md:py-20 font-body">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-8">
         <LocalizedLink to="/" className="hover:text-foreground">{copy.home}</LocalizedLink>
@@ -68,8 +68,8 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
         <span className="text-foreground">{localize(page, 'title')}</span>
       </div>
 
-      <h1 className="font-display text-3xl md:text-4xl font-light text-foreground mb-8">{localize(page, 'title')}</h1>
-      <div className="prose prose-sm prose-headings:font-display prose-headings:font-light prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary max-w-none">
+      <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-10">{localize(page, 'title')}</h1>
+      <div className="legal-content">
         <ReactMarkdown>{localize(page, 'content')}</ReactMarkdown>
       </div>
     </div>

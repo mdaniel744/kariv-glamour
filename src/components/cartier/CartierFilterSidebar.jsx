@@ -40,7 +40,7 @@ export default function CartierFilterSidebar({ filters, setFilters }) {
   const reset = () => setFilters({ collection: [], caseMaterial: [], watchShape: [], movementType: [], dialColor: [], braceletMaterial: [], condition: [], gender: [], caseSize: [], boxPapers: [], availability: [], priceMin: '', priceMax: '' });
 
   return (
-    <div>
+    <div className="brand-filter-panel">
       {activeCount > 0 && (
         <button onClick={reset} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase mb-4 text-primary hover:text-foreground transition-colors">
           <X size={12} /> {t('productGrid.clearFilters')}

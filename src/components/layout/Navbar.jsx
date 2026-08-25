@@ -126,16 +126,16 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+      <nav className="site-navigation fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 font-body backdrop-blur-md">
         {/* Top bar */}
         <div className="hidden md:block border-b border-border">
           <div className="w-full mx-auto px-6 py-2 flex justify-between items-center">
-            <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-body">
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
               {t('topBar')}
             </p>
             <div className="flex gap-6 items-center">
-              <LocalizedLink to="/about" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('about')}</LocalizedLink>
-              <LocalizedLink to="/customer-service" className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-primary transition-colors">{t('customerService')}</LocalizedLink>
+              <LocalizedLink to="/about" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary">{t('about')}</LocalizedLink>
+              <LocalizedLink to="/customer-service" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary">{t('customerService')}</LocalizedLink>
               <LanguageSwitcher />
               <button onClick={toggleTheme} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
                 {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
@@ -216,10 +216,10 @@ export default function Navbar() {
                   <User size={18} />
                 </LocalizedLink>
                 <div className="hidden items-center gap-3 md:flex">
-                  <LocalizedLink to="/login" className="text-[10px] tracking-[0.12em] uppercase text-foreground hover:text-primary transition-colors">
+                  <LocalizedLink to="/login" className="text-xs font-medium uppercase tracking-[0.06em] text-foreground transition-colors hover:text-primary">
                     Sign In
                   </LocalizedLink>
-                  <LocalizedLink to="/register" className="text-[10px] tracking-[0.12em] uppercase text-primary-foreground bg-primary px-3 py-2 hover:bg-primary/90 transition-colors">
+                  <LocalizedLink to="/register" className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.06em] text-primary-foreground transition-colors hover:bg-primary/90">
                     Sign Up
                   </LocalizedLink>
                 </div>
@@ -243,7 +243,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-7 border-t border-border py-3">
             {/* Buy a watch — mega dropdown */}
             <div ref={buyRef} className="relative">
-              <button onClick={toggleBuy} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium flex items-center gap-1">
+              <button onClick={toggleBuy} className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">
                 {t('buyWatch')} <ChevronDown size={12} className={`transition-transform ${buyOpen ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
@@ -255,13 +255,13 @@ export default function Navbar() {
                   transition={{ duration: 0.2 }}
                   className="absolute top-full left-0 pt-3">
                   
-                    <div className="bg-popover border border-border rounded p-10 shadow-lg flex items-center gap-12 w-[70vw] h-[70vh]">
+                    <div className="flex h-[70vh] w-[70vw] items-center gap-12 rounded-2xl border border-border bg-popover p-10 shadow-lg">
                       {/* Watch brands */}
                       <div className="flex-1">
-                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchBrands')}</p>
+                        <p className="mb-6 text-sm font-semibold uppercase tracking-[0.08em] text-primary">{t('watchBrands')}</p>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {BRAND_DATA.map((b) =>
-                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="block whitespace-nowrap text-[22px] tracking-[0.05em] text-muted-foreground transition-colors hover:text-primary">
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="block whitespace-nowrap text-[17px] font-medium tracking-normal text-muted-foreground transition-colors hover:text-primary">
                               {b.name}
                             </LocalizedLink>
                         )}
@@ -269,10 +269,10 @@ export default function Navbar() {
                       </div>
                       {/* Watch categories */}
                       <div className="w-72 border-l border-border pl-10">
-                        <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchCategories')}</p>
+                        <p className="mb-6 text-sm font-semibold uppercase tracking-[0.08em] text-primary">{t('watchCategories')}</p>
                         <div className="space-y-5">
                           {WATCH_CATEGORIES.map((c) =>
-                        <LocalizedLink key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors">
+                        <LocalizedLink key={c.to} to={c.to} onClick={() => setBuyOpen(false)} className="block text-[17px] font-medium tracking-normal text-muted-foreground transition-colors hover:text-primary">
                               {c.label}
                             </LocalizedLink>
                         )}
@@ -284,12 +284,12 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <LocalizedLink to="/shop" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('topDeals')}</LocalizedLink>
-            <LocalizedLink to="/brands" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchCollections')}</LocalizedLink>
+            <LocalizedLink to="/shop" className="text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">{t('topDeals')}</LocalizedLink>
+            <LocalizedLink to="/brands" className="text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">{t('watchCollections')}</LocalizedLink>
 
             {/* Kariv Security — dropdown */}
             <div ref={securityRef} className="relative">
-              <button onClick={toggleSecurity} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium flex items-center gap-1">
+              <button onClick={toggleSecurity} className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">
                 {t('karivSecurity')} <ChevronDown size={12} className={`transition-transform ${securityOpen ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
@@ -304,7 +304,7 @@ export default function Navbar() {
                     <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
                       <div className="space-y-3">
                         {SECURITY_LINKS.map((s) =>
-                      <LocalizedLink key={s.to} to={s.to} onClick={() => setSecurityOpen(false)} className="block text-[11px] tracking-[0.1em] text-muted-foreground hover:text-primary transition-colors">
+                      <LocalizedLink key={s.to} to={s.to} onClick={() => setSecurityOpen(false)} className="block text-sm font-medium tracking-normal text-muted-foreground transition-colors hover:text-primary">
                             {s.label}
                           </LocalizedLink>
                       )}
@@ -315,7 +315,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <LocalizedLink to="/guides" className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-primary/70 transition-colors font-medium">{t('watchGuides')}</LocalizedLink>
+            <LocalizedLink to="/guides" className="text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">{t('watchGuides')}</LocalizedLink>
           </div>
         </div>
       </nav>
@@ -328,7 +328,7 @@ export default function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -300 }}
           transition={{ type: 'tween', duration: 0.3 }}
-          className="fixed left-0 right-0 top-[102px] bottom-0 z-40 overflow-y-auto overscroll-contain border-t border-border bg-background"
+          className="site-navigation fixed bottom-0 left-0 right-0 top-[102px] z-40 overflow-y-auto overscroll-contain border-t border-border bg-background font-body"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation">
@@ -338,7 +338,7 @@ export default function Navbar() {
               <div>
                 <button
                 onClick={() => setMobileExpanded(mobileExpanded === 'buy' ? null : 'buy')}
-                className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">
+                className="flex w-full items-center justify-between py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">
                 
                   {t('buyWatch')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'buy' ? 'rotate-180' : ''}`} />
@@ -357,7 +357,7 @@ export default function Navbar() {
                           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('watchBrands')}</p>
                           <div className="space-y-2">
                             {BRAND_DATA.map((b) =>
-                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="block py-1 text-base text-muted-foreground transition-colors hover:text-primary">
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="block py-1 text-[15px] font-medium text-muted-foreground transition-colors hover:text-primary">
                                 {b.name}
                               </LocalizedLink>
                         )}
@@ -367,7 +367,7 @@ export default function Navbar() {
                           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('watchCategories')}</p>
                           <div className="space-y-2">
                             {WATCH_CATEGORIES.map((c) =>
-                        <LocalizedLink key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <LocalizedLink key={c.to} to={c.to} onClick={closeMobile} className="block text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                                 {c.label}
                               </LocalizedLink>
                         )}
@@ -379,14 +379,14 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <LocalizedLink to="/shop" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('topDeals')}</LocalizedLink>
-              <LocalizedLink to="/brands" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchCollections')}</LocalizedLink>
+              <LocalizedLink to="/shop" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('topDeals')}</LocalizedLink>
+              <LocalizedLink to="/brands" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('watchCollections')}</LocalizedLink>
 
               {/* Kariv Security — expandable */}
               <div>
                 <button
                 onClick={() => setMobileExpanded(mobileExpanded === 'security' ? null : 'security')}
-                className="w-full flex items-center justify-between text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">
+                className="flex w-full items-center justify-between py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">
                 
                   {t('karivSecurity')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'security' ? 'rotate-180' : ''}`} />
@@ -402,7 +402,7 @@ export default function Navbar() {
                   
                       <div className="pl-4 pt-2 pb-4 space-y-2">
                         {SECURITY_LINKS.map((s) =>
-                    <LocalizedLink key={s.to} to={s.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <LocalizedLink key={s.to} to={s.to} onClick={closeMobile} className="block text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                             {s.label}
                           </LocalizedLink>
                     )}
@@ -412,14 +412,14 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              <LocalizedLink to="/guides" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('watchGuides')}</LocalizedLink>
-              <LocalizedLink to="/sell-trade" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('sellTrade')}</LocalizedLink>
-              <LocalizedLink to="/about" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('about')}</LocalizedLink>
-              <LocalizedLink to="/customer-service" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">{t('customerService')}</LocalizedLink>
+              <LocalizedLink to="/guides" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('watchGuides')}</LocalizedLink>
+              <LocalizedLink to="/sell-trade" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('sellTrade')}</LocalizedLink>
+              <LocalizedLink to="/about" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('about')}</LocalizedLink>
+              <LocalizedLink to="/customer-service" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('customerService')}</LocalizedLink>
               {!isAuthenticated && (
                 <div className="pt-4 mt-2 border-t border-border space-y-1">
-                  <LocalizedLink to="/login" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Sign In</LocalizedLink>
-                  <LocalizedLink to="/register" onClick={closeMobile} className="block text-lg font-display tracking-wide text-foreground hover:text-primary transition-colors py-2">Create Account</LocalizedLink>
+                  <LocalizedLink to="/login" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Sign In</LocalizedLink>
+                  <LocalizedLink to="/register" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Create Account</LocalizedLink>
                 </div>
               )}
               <div className="pt-2"><LanguageSwitcher /></div>

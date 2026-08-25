@@ -4,7 +4,6 @@ import { ShieldCheck, Eye, Award, Users, Globe, Heart, ChevronRight } from 'luci
 import LocalizedLink from '@/components/LocalizedLink';
 import SEO from '@/components/SEO';
 import TrustBar from '@/components/shared/TrustBar';
-import { BRAND_DISCLAIMER } from '@/lib/constants';
 import { motion } from 'framer-motion';
 
 const TEXTURE_BG = "https://media.base44.com/images/public/6a3f1710b5d8247379a67f8a/4957f596d_generated_310565b9.png";
@@ -22,7 +21,7 @@ export default function About() {
   ];
 
   return (
-    <div>
+    <div className="font-body">
       <SEO title={t('common:seo.about.title')} description={t('common:seo.about.description')} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 pt-8">
@@ -50,7 +49,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight mb-8"
+            className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight mb-8"
           >
             {t('pages.about.heroTitle1')}<br />
             <span className="text-primary italic">{t('pages.about.heroTitle2')}</span>
@@ -59,7 +58,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto"
+            className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
           >
             {t('pages.about.heroDesc')}
           </motion.p>
@@ -71,8 +70,8 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div>
             <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{t('pages.about.storyEyebrow')}</span>
-            <h2 className="font-display text-3xl text-foreground font-light mb-6">{t('pages.about.storyTitle1')}<br />{t('pages.about.storyTitle2')}</h2>
-            <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+            <h2 className="font-display text-3xl md:text-4xl text-foreground font-semibold mb-6">{t('pages.about.storyTitle1')}<br />{t('pages.about.storyTitle2')}</h2>
+            <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
               <p>{t('pages.about.storyP1')}</p>
               <p>{t('pages.about.storyP2')}</p>
               <p>{t('pages.about.storyP3')}</p>
@@ -93,7 +92,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
             <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{t('pages.about.valuesEyebrow')}</span>
-            <h2 className="font-display text-3xl text-foreground font-light">{t('pages.about.valuesTitle')}</h2>
+            <h2 className="font-display text-3xl md:text-4xl text-foreground font-semibold">{t('pages.about.valuesTitle')}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {values.map((val, i) => (
@@ -106,20 +105,11 @@ export default function About() {
                 className="border border-border p-8"
               >
                 <val.icon size={24} className="text-primary mb-5" strokeWidth={1.5} />
-                <h3 className="text-sm text-foreground font-medium mb-3">{val.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{val.desc}</p>
+                <h3 className="text-lg text-foreground font-semibold mb-3">{val.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{val.desc}</p>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Disclaimer */}
-      <section className="py-16 border-t border-border">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <ShieldCheck size={24} className="text-primary mx-auto mb-4" />
-          <h3 className="text-[11px] tracking-[0.15em] uppercase text-foreground font-medium mb-4">{t('pages.about.disclaimerTitle')}</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">{BRAND_DISCLAIMER}</p>
         </div>
       </section>
 

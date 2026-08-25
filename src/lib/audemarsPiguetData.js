@@ -42,12 +42,11 @@ export const AP_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const AP_TYPES = ['New', 'Pre-Owned', 'Vintage'];
 
 export const AP_QUICK_FILTERS = [
-  { label_en: 'Royal Oak', label_de: 'Royal Oak', link: '/audemars-piguet/royal-oak' },
-  { label_en: 'Royal Oak Offshore', label_de: 'Royal Oak Offshore', link: '/audemars-piguet/royal-oak-offshore' },
-  { label_en: 'Royal Oak Concept', label_de: 'Royal Oak Concept', link: '/audemars-piguet/royal-oak-concept' },
-  { label_en: 'Code 11.59', label_de: 'Code 11.59', link: '/audemars-piguet/code-1159' },
-  { label_en: 'Pre-Owned AP', label_de: 'Gebrauchte AP', link: '/audemars-piguet-gebraucht' },
-  { label_en: 'AP Price Guide', label_de: 'AP Preis-Guide', link: '/audemars-piguet-uhr-preis' },
+  { label_en: 'Royal Oak', label_de: 'Royal Oak', link: '/audemars-piguet/royal-oak', filter: { collection: 'Royal Oak' } },
+  { label_en: 'Royal Oak Offshore', label_de: 'Royal Oak Offshore', link: '/audemars-piguet/royal-oak-offshore', filter: { collection: 'Royal Oak Offshore' } },
+  { label_en: 'Royal Oak Concept', label_de: 'Royal Oak Concept', link: '/audemars-piguet/royal-oak-concept', filter: { collection: 'Royal Oak Concept' } },
+  { label_en: 'Code 11.59', label_de: 'Code 11.59', link: '/audemars-piguet/code-1159', filter: { collection: 'Code 11.59' } },
+  { label_en: 'Pre-Owned AP', label_de: 'Gebrauchte AP', link: '/audemars-piguet-gebraucht', filter: { preOwned: true } },
 ];
 
 export const AP_SEO_CARDS = [

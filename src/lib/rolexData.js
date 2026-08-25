@@ -86,14 +86,14 @@ export const ROLEX_COLLECTIONS = [
 
 // Quick filter chips for product grid
 export const ROLEX_QUICK_FILTERS = [
-  { label_en: 'Rolex Submariner', label_de: 'Rolex Submariner', link: '/rolex-submariner-kaufen' },
-  { label_en: 'Rolex Daytona', label_de: 'Rolex Daytona', link: '/rolex-daytona-kaufen' },
-  { label_en: 'Rolex Datejust', label_de: 'Rolex Datejust', link: '/rolex-datejust-kaufen' },
-  { label_en: 'Rolex GMT-Master II', label_de: 'Rolex GMT-Master II', link: '/rolex-gmt-master-ii-kaufen' },
-  { label_en: 'Rolex Day-Date', label_de: 'Rolex Day-Date', link: '/rolex-day-date-kaufen' },
-  { label_en: 'Rolex Oyster Perpetual', label_de: 'Rolex Oyster Perpetual', link: '/rolex-oyster-perpetual-kaufen' },
-  { label_en: 'Pre-Owned Rolex', label_de: 'Gebrauchte Rolex', link: '/rolex-gebraucht-kaufen' },
-  { label_en: 'Rolex with Box and Papers', label_de: 'Rolex mit Box und Papieren', link: '/rolex-box-papers-guide' },
+  { label_en: 'Rolex Submariner', label_de: 'Rolex Submariner', link: '/rolex-submariner-kaufen', filter: { collection: 'Submariner' } },
+  { label_en: 'Rolex Daytona', label_de: 'Rolex Daytona', link: '/rolex-daytona-kaufen', filter: { collection: 'Daytona' } },
+  { label_en: 'Rolex Datejust', label_de: 'Rolex Datejust', link: '/rolex-datejust-kaufen', filter: { collection: 'Datejust' } },
+  { label_en: 'Rolex GMT-Master II', label_de: 'Rolex GMT-Master II', link: '/rolex-gmt-master-ii-kaufen', filter: { collection: 'GMT-Master II' } },
+  { label_en: 'Rolex Day-Date', label_de: 'Rolex Day-Date', link: '/rolex-day-date-kaufen', filter: { collection: 'Day-Date' } },
+  { label_en: 'Rolex Oyster Perpetual', label_de: 'Rolex Oyster Perpetual', link: '/rolex-oyster-perpetual-kaufen', filter: { collection: 'Oyster Perpetual' } },
+  { label_en: 'Pre-Owned Rolex', label_de: 'Gebrauchte Rolex', link: '/rolex-gebraucht-kaufen', filter: { preOwned: true } },
+  { label_en: 'Rolex with Box and Papers', label_de: 'Rolex mit Box und Papieren', link: '/rolex-box-papers-guide', filter: { fullSet: true } },
 ];
 
 // SEO Cards

@@ -16,6 +16,27 @@ export const BRAND_DATA = [
   { name: "Girard-Perregaux", slug: "girard-perregaux" }
 ];
 
+// Local watch cutouts used by the Watch Collections brand tiles. Keeping this
+// mapping independent from CMS brand records ensures that every tile always has
+// a representative watch image, including local development without CMS data.
+export const BRAND_TILE_IMAGES = {
+  "rolex": "/brand-assets/rolex/collections/rolex-submariner.png",
+  "patek-philippe": "/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png",
+  "omega": "/brand-assets/omega/collections/omega-speedmaster-collection.png",
+  "cartier": "/brand-assets/cartier/collections/cartier-santos-de-cartier.png",
+  "audemars-piguet": "/brand-assets/audemars-piguet/collections/audemars-piguet-royal-oak-collection.png",
+  "breitling": "/brand-assets/breitling/page/breitling-hero.webp",
+  "hublot": "/brand-assets/hublot/page/hublot-hero.webp",
+  "grand-seiko": "/brand-assets/grand-seiko/page/grand-seiko-hero.webp",
+  "iwc-schaffhausen": "/brand-assets/iwc-schaffhausen/page/iwc-schaffhausen-hero.png",
+  "jaeger-lecoultre": "/brand-assets/jaeger-lecoultre/collections/jaeger-lecoultre-reverso-collection.png",
+  "tag-heuer": "/brand-assets/tag-heuer/collections/tag-heuer-carrera-collection.png",
+  "tudor": "/brand-assets/tudor/collections/tudor-black-bay-collection.png",
+  "panerai": "/brand-assets/panerai/collections/panerai-luminor-collection.png",
+  "bvlgari": "/brand-assets/bvlgari/collections/bvlgari-octo-finissimo-collection.png",
+  "girard-perregaux": "/brand-assets/girard-perregaux/collections/girard-perregaux-laureato-collection.png"
+};
+
 // ============================================================================
 // BRAND_LOGOS — Theme-aware brand logo assets
 // ----------------------------------------------------------------------------

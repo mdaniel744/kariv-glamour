@@ -69,14 +69,14 @@ export const TUDOR_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const TUDOR_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const TUDOR_QUICK_FILTERS = [
-  { label_en: 'Black Bay', label_de: 'Black Bay', link: '/tudor/black-bay' },
-  { label_en: 'Pelagos', label_de: 'Pelagos', link: '/tudor/pelagos' },
-  { label_en: 'Tudor Royal', label_de: 'Tudor Royal', link: '/tudor/tudor-royal' },
-  { label_en: '1926', label_de: '1926', link: '/tudor/1926' },
-  { label_en: 'Ranger', label_de: 'Ranger', link: '/tudor/ranger' },
-  { label_en: "Men's", label_de: 'Herren', link: '/tudor-uhr-herren' },
-  { label_en: "Women's", label_de: 'Damen', link: '/tudor-uhr-damen' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/tudor-gebraucht' },
+  { label_en: 'Black Bay', label_de: 'Black Bay', link: '/tudor/black-bay', filter: { collection: 'Black Bay' } },
+  { label_en: 'Pelagos', label_de: 'Pelagos', link: '/tudor/pelagos', filter: { collection: 'Pelagos' } },
+  { label_en: 'Tudor Royal', label_de: 'Tudor Royal', link: '/tudor/tudor-royal', filter: { collection: 'Tudor Royal' } },
+  { label_en: '1926', label_de: '1926', link: '/tudor/1926', filter: { collection: '1926' } },
+  { label_en: 'Ranger', label_de: 'Ranger', link: '/tudor/ranger', filter: { collection: 'Ranger' } },
+  { label_en: "Men's", label_de: 'Herren', link: '/tudor-uhr-herren', filter: { gender: 'Men' } },
+  { label_en: "Women's", label_de: 'Damen', link: '/tudor-uhr-damen', filter: { gender: 'Women' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/tudor-gebraucht', filter: { preOwned: true } },
 ];
 
 export const TUDOR_SEO_CARDS = [

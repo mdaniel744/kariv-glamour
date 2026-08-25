@@ -43,14 +43,14 @@ export const GS_BOX_PAPERS = ['Box included', 'Papers included', 'Full set'];
 export const GS_AVAILABILITY = ['In Stock', 'Reserved', 'Coming Soon', 'Sold'];
 
 export const GS_QUICK_FILTERS = [
-  { label_en: 'Heritage', label_de: 'Heritage', link: '/grand-seiko/heritage' },
-  { label_en: 'Elegance', label_de: 'Elegance', link: '/grand-seiko/elegance' },
-  { label_en: 'Sport', label_de: 'Sport', link: '/grand-seiko/sport' },
-  { label_en: 'Evolution 9', label_de: 'Evolution 9', link: '/grand-seiko/evolution-9' },
-  { label_en: 'Masterpiece', label_de: 'Masterpiece', link: '/grand-seiko/masterpiece' },
-  { label_en: 'Snowflake', label_de: 'Snowflake', link: '/grand-seiko-snowflake' },
-  { label_en: 'Spring Drive', label_de: 'Spring Drive', link: '/grand-seiko-spring-drive' },
-  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/grand-seiko-gebraucht' },
+  { label_en: 'Heritage', label_de: 'Heritage', link: '/grand-seiko/heritage', filter: { collection: 'Heritage' } },
+  { label_en: 'Elegance', label_de: 'Elegance', link: '/grand-seiko/elegance', filter: { collection: 'Elegance' } },
+  { label_en: 'Sport', label_de: 'Sport', link: '/grand-seiko/sport', filter: { collection: 'Sport' } },
+  { label_en: 'Evolution 9', label_de: 'Evolution 9', link: '/grand-seiko/evolution-9', filter: { collection: 'Evolution 9' } },
+  { label_en: 'Masterpiece', label_de: 'Masterpiece', link: '/grand-seiko/masterpiece', filter: { collection: 'Masterpiece' } },
+  { label_en: 'Snowflake', label_de: 'Snowflake', link: '/grand-seiko-snowflake', filter: { search: 'Snowflake' } },
+  { label_en: 'Spring Drive', label_de: 'Spring Drive', link: '/grand-seiko-spring-drive', filter: { movementType: 'Spring Drive' } },
+  { label_en: 'Pre-Owned', label_de: 'Gebraucht', link: '/grand-seiko-gebraucht', filter: { preOwned: true } },
 ];
 
 export const GS_SEO_CARDS = [

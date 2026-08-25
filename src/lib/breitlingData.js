@@ -40,14 +40,14 @@ export const BREITLING_BOX_PAPERS = ['Box included', 'Papers included', 'Full se
 export const BREITLING_TYPES = ['New', 'Pre-Owned', 'Vintage'];
 
 export const BREITLING_QUICK_FILTERS = [
-  { label_en: 'Breitling Navitimer', label_de: 'Breitling Navitimer', link: '/breitling/navitimer' },
-  { label_en: 'Breitling Chronomat', label_de: 'Breitling Chronomat', link: '/breitling/chronomat' },
-  { label_en: 'Breitling Superocean', label_de: 'Breitling Superocean', link: '/breitling/superocean' },
-  { label_en: 'Breitling Avenger', label_de: 'Breitling Avenger', link: '/breitling/avenger' },
-  { label_en: 'Breitling Premier', label_de: 'Breitling Premier', link: '/breitling/premier' },
-  { label_en: 'Breitling Professional', label_de: 'Breitling Professional', link: '/breitling/professional' },
-  { label_en: 'Pre-Owned Breitling', label_de: 'Breitling gebraucht', link: '/breitling-uhr-gebraucht' },
-  { label_en: 'Breitling with Box and Papers', label_de: 'Breitling mit Box und Papieren', link: '/guides' },
+  { label_en: 'Breitling Navitimer', label_de: 'Breitling Navitimer', link: '/breitling/navitimer', filter: { collection: 'Navitimer' } },
+  { label_en: 'Breitling Chronomat', label_de: 'Breitling Chronomat', link: '/breitling/chronomat', filter: { collection: 'Chronomat' } },
+  { label_en: 'Breitling Superocean', label_de: 'Breitling Superocean', link: '/breitling/superocean', filter: { collection: 'Superocean' } },
+  { label_en: 'Breitling Avenger', label_de: 'Breitling Avenger', link: '/breitling/avenger', filter: { collection: 'Avenger' } },
+  { label_en: 'Breitling Premier', label_de: 'Breitling Premier', link: '/breitling/premier', filter: { collection: 'Premier' } },
+  { label_en: 'Breitling Professional', label_de: 'Breitling Professional', link: '/breitling/professional', filter: { collection: 'Professional' } },
+  { label_en: 'Pre-Owned Breitling', label_de: 'Breitling gebraucht', link: '/breitling-uhr-gebraucht', filter: { preOwned: true } },
+  { label_en: 'Breitling with Box and Papers', label_de: 'Breitling mit Box und Papieren', link: '/guides', filter: { fullSet: true } },
 ];
 
 export const BREITLING_SEO_CARDS = [

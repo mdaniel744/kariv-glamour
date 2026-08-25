@@ -518,7 +518,335 @@
     },
     "buyerProtection": {
       "breadcrumb": "Käuferschutz",
-      "title": "Käuferschutz"
+      "title": "Käuferschutz",
+      "hero": {
+        "eyebrow": "Käuferschutz",
+        "title": "Kariv Käuferschutz",
+        "description": "Kaufen Sie Ihre nächste Luxusuhr mit Vertrauen. Der Kariv Käuferschutz sichert Ihre Zahlung und Bestellung ab, prüft die Standards der Verkäufer und begleitet Sie während des gesamten Kaufprozesses.",
+        "primaryCta": "Luxusuhren entdecken",
+        "secondaryCta": "So funktioniert der Käuferschutz",
+        "imageAlt": "Abgesicherter Kaufvertrag für eine Luxusuhr",
+        "protectedPurchase": "Abgesicherter Kauf",
+        "badges": [
+          "Sichere Treuhandzahlung",
+          "Verpflichtung zur Authentizität",
+          "14-tägige Geld-zurück-Garantie",
+          "Versicherter Versand",
+          "Verifizierte Händler",
+          "Käufersupport"
+        ]
+      },
+      "included": {
+        "title": "Was beinhaltet der Kariv Käuferschutz?",
+        "items": [
+          {
+            "title": "Zahlung über den Treuhandservice",
+            "text": "Ihre Zahlung wird sicher verwahrt, bis Ihre Uhr geliefert wurde und Sie Zeit hatten, sie zu prüfen."
+          },
+          {
+            "title": "Verpflichtung zur Authentizität",
+            "text": "Jede angebotene Uhr muss authentisch sein. Händler dürfen ausschließlich Originaluhren anbieten."
+          },
+          {
+            "title": "14-tägige weltweite Geld-zurück-Garantie",
+            "text": "Wenn die Uhr mangelhaft ist, nicht der Beschreibung entspricht oder von den vereinbarten Angebotsdetails abweicht, können Sie innerhalb von 14 Tagen nach der Lieferung eine Rückgabe einleiten."
+          },
+          {
+            "title": "Strenge Händlerrichtlinien",
+            "text": "Händler müssen vor dem Verkauf die Marktplatzregeln und Verifizierungsanforderungen von Kariv Glamour erfüllen."
+          },
+          {
+            "title": "Versicherter Versand",
+            "text": "Bestellungen müssen versichert und mit Sendungsverfolgung verschickt werden, um nationale und internationale Käufe abzusichern."
+          },
+          {
+            "title": "Kariv Qualitäts- und Sicherheitsteam",
+            "text": "Unser Support- und Sicherheitsteam prüft Probleme, überwacht verdächtige Aktivitäten und unterstützt Käufer während des gesamten Kaufprozesses."
+          }
+        ]
+      },
+      "howItWorks": {
+        "title": "So funktioniert der Kariv Käuferschutz",
+        "steps": [
+          {
+            "title": "Wählen Sie Ihre Uhr",
+            "text": "Entdecken Sie Luxusuhren vertrauenswürdiger Verkäufer und prüfen Sie wichtige Angaben wie Marke, Modell, Referenznummer, Zustand, Jahr, Box und Papiere, Servicehistorie, Preis und Versandinformationen."
+          },
+          {
+            "title": "Sicher über Kariv bezahlen",
+            "text": "Wenn Ihre Bestellung für den Kariv Treuhandservice berechtigt ist, wird Ihre Zahlung sicher verwahrt und nicht sofort an den Verkäufer ausgezahlt."
+          },
+          {
+            "title": "Der Verkäufer versendet die Uhr",
+            "text": "Der Verkäufer verschickt die Uhr versichert und mit Sendungsverfolgung. Die Versanddaten werden Ihrer Bestellung hinzugefügt, damit Sie die Lieferung verfolgen können."
+          },
+          {
+            "title": "Prüfen Sie Ihre Uhr",
+            "text": "Nach der Lieferung haben Sie Zeit, die Uhr zu prüfen, sie mit dem Produktangebot zu vergleichen und sicherzustellen, dass Zustand, Dokumente und Zubehör der Beschreibung entsprechen."
+          },
+          {
+            "title": "Der Verkäufer erhält die Zahlung",
+            "text": "Die Zahlung wird erst nach Ablauf des Käuferschutzzeitraums oder nach Bestätigung der Bestellung an den Verkäufer freigegeben."
+          },
+          {
+            "title": "Support steht zur Verfügung",
+            "text": "Wenn etwas nicht stimmt, begleitet Sie der Kariv Glamour Support bei den nächsten Schritten, einschließlich Rückgabe, Erstattung oder Streitfallprüfung, sofern zutreffend."
+          }
+        ]
+      },
+      "escrow": {
+        "title": "Zahlung über den Kariv Treuhandservice",
+        "intro": "Dank des Kariv Treuhandservices werden berechtigte Zahlungen während der Abwicklung Ihrer Bestellung sicher verwahrt. Statt direkt an den Verkäufer zu zahlen, bleibt Ihre Zahlung während der Liefer- und Prüfphase auf einem geschützten Treuhandkonto. So haben Sie Zeit, Ihre Uhr zu erhalten, ihren Zustand zu prüfen und sicherzustellen, dass die Bestellung dem Angebot entspricht.",
+        "highlight": "Ihr Geld wird nicht sofort an den Verkäufer ausgezahlt. Es bleibt während des Prüfzeitraums des Käufers geschützt.",
+        "points": [
+          "Die Zahlung wird während der Transaktion sicher verwahrt.",
+          "Der Käufer hat nach der Lieferung 14 Tage Zeit, die Uhr zu prüfen.",
+          "Die Auszahlung an den Verkäufer erfolgt erst, wenn die Bedingungen des Käuferschutzes erfüllt sind.",
+          "Der Treuhandservice gilt nur für berechtigte Bestellungen, die über den Checkout von Kariv Glamour abgewickelt werden.",
+          "Direktzahlungen außerhalb von Kariv Glamour sind nicht geschützt."
+        ],
+        "importantLabel": "Wichtig",
+        "importantText": "Der Kariv Käuferschutz gilt nur für berechtigte Käufe, die über den genehmigten Checkout- und Zahlungsprozess von Kariv Glamour abgeschlossen werden. Zahlungen außerhalb der Plattform sind möglicherweise nicht geschützt."
+      },
+      "authenticity": {
+        "title": "Verpflichtung zur Authentizität",
+        "intro": "Kariv Glamour verpflichtet sich, ausschließlich authentische Luxusuhren anzubieten. Jeder Händler und Verkäufer muss Originaluhren anbieten und korrekte Produktinformationen bereitstellen. Angebote sollten Marke, Modell, Referenznummer, Zustand, Jahr, den Status von Box und Papieren, die Servicehistorie sowie bekannte Ersatz- oder Nichtoriginalteile klar angeben.",
+        "points": [
+          "Ausschließlich authentische Uhren",
+          "Keine Fälschungen oder Replikate",
+          "Klare Referenznummern",
+          "Transparente Zustandsangaben",
+          "Sichtbare Angaben zu Box und Papieren",
+          "Servicehistorie, sofern verfügbar",
+          "Original- und Ersatzteile müssen offengelegt werden",
+          "Verdächtige Angebote können geprüft, ausgeblendet oder entfernt werden"
+        ],
+        "notice": "Kariv Glamour erlaubt keine gefälschten, nachgebildeten oder absichtlich irreführenden Uhrenangebote.",
+        "counterfeitTitle": "So helfen wir beim Schutz vor Fälschungen",
+        "counterfeitIntro": "Luxusuhren erfordern Vertrauen. Kariv Glamour nutzt Verkäuferstandards, Prüfungen der Produktangaben, Kundenmeldungen und Supportkontrollen, um das Risiko gefälschter oder irreführender Angebote zu reduzieren.",
+        "counterfeitCards": [
+          "Verkäuferverifizierung",
+          "Prüfung der Produktinformationen",
+          "Sichtbarkeit der Referenznummer",
+          "Meldewerkzeuge für Käufer",
+          "Überwachung verdächtiger Angebote",
+          "Prüfung durch das Supportteam"
+        ]
+      },
+      "moneyBack": {
+        "title": "14-tägige weltweite Geld-zurück-Garantie",
+        "intro": "Wenn Ihre Uhr mangelhaft oder funktionsgestört ist, nicht der Beschreibung entspricht, vereinbartes Zubehör fehlt oder sie wesentlich vom Produktangebot abweicht, können Sie innerhalb von 14 Tagen nach der Lieferung den Kariv Glamour Support kontaktieren und eine Rückgabe einleiten.",
+        "coveredTitle": "Was abgedeckt sein kann",
+        "covered": [
+          "Die Uhr entspricht nicht der Beschreibung",
+          "Falsches Modell oder falsche Referenz",
+          "Nicht offengelegte Schäden",
+          "Fehlende Box oder Papiere, obwohl sie im Angebot enthalten waren",
+          "Defekte oder nicht funktionierende Uhr",
+          "Verdacht auf ein Authentizitätsproblem",
+          "Falsche Lieferung"
+        ],
+        "notCoveredTitle": "Was möglicherweise nicht abgedeckt ist",
+        "notCovered": [
+          "Der Käufer ändert seine Meinung nach Ablauf der Rückgabefrist",
+          "Die Uhr wurde nach der Lieferung getragen, beschädigt, verändert, angepasst oder modifiziert",
+          "Fehlende Verpackung durch unsachgemäße Behandlung seitens des Käufers",
+          "Direktzahlungen außerhalb von Kariv Glamour",
+          "Individuelle Vereinbarungen, die nicht auf der Plattform dokumentiert wurden",
+          "Normale Gebrauchsspuren, die im Angebot klar angegeben wurden",
+          "Besonderheiten einer Vintage-Uhr, die bereits in der Produktbeschreibung genannt wurden"
+        ],
+        "eligibilityNote": "Ob eine Rückgabe möglich ist, hängt vom Zustand der Uhr, den Angebotsdetails und davon ab, ob der Rückgabeantrag innerhalb der vorgeschriebenen Frist gestellt wurde.",
+        "returnsTitle": "Einfache Rückgabe",
+        "returnSteps": [
+          {
+            "title": "Kariv Support kontaktieren",
+            "text": "Senden Sie unserem Supportteam innerhalb von 14 Tagen nach Erhalt Ihrer Uhr eine E-Mail oder Nachricht. Geben Sie Ihre Bestellnummer, Fotos und eine klare Beschreibung des Problems an."
+          },
+          {
+            "title": "Die Uhr sicher zurücksenden",
+            "text": "Nach Genehmigung der Rückgabe senden Sie die Uhr vollständig versichert, mit Sendungsverfolgung und in der Originalverpackung zurück. Legen Sie sämtliches erhaltenes Zubehör, Dokumente, Anhänger, Glieder, Box, Papiere und Zertifikate bei."
+          },
+          {
+            "title": "Erstattung erhalten",
+            "text": "Nachdem die Rückgabe eingegangen und geprüft wurde, bearbeitet Kariv Glamour die Erstattung gemäß den Bedingungen des Käuferschutzes und der Rückgaberichtlinie."
+          }
+        ],
+        "noteLabel": "Hinweis",
+        "note": "In den meisten Fällen trägt der Käufer möglicherweise die Rücksendekosten, sofern die Rückgabe nicht durch einen Fehler des Verkäufers, eine falsche Beschreibung oder ein anderes abgedecktes Problem verursacht wurde."
+      },
+      "dealers": {
+        "title": "Strenge Händlerrichtlinien",
+        "intro": "Um das Vertrauen auf dem Kariv Glamour Marktplatz zu wahren, müssen professionelle Händler strenge Plattformregeln einhalten. Vor dem Verkauf können Händler zur Vorlage von Identitätsnachweisen, Handelsregisterangaben, Geschäftsadresse, Steuerinformationen und weiteren Verifizierungsunterlagen verpflichtet werden.",
+        "requirements": [
+          "Gültiger Identitätsnachweis",
+          "Gewerbeanmeldung, sofern erforderlich",
+          "Geschäftsadresse",
+          "Steuerinformationen, sofern erforderlich",
+          "Verifizierte Kontaktdaten",
+          "Transparente Produktangebote",
+          "Korrekte Zustandsbewertung",
+          "Offenlegung von Ersatzteilen",
+          "Keine Fälschungen oder Replikate",
+          "Zeitnahe Kommunikation",
+          "Versicherter Versand",
+          "Einhaltung der Rückgabe- und Käuferschutzregeln von Kariv Glamour"
+        ],
+        "reviewsTitle": "Händlerbewertungen und Marktplatztransparenz",
+        "reviewsText": "Kundenbewertungen, Bestellhistorie, Antwortverhalten und Verkäuferleistung helfen Käufern, ihren Handelspartner besser einzuschätzen. Kariv Glamour sollte, sofern verfügbar, Verkäuferbewertungen, verifizierte Rezensionen, Standort, aktive Jahre, Antwortzeit und abgeschlossene Transaktionen anzeigen."
+      },
+      "shipping": {
+        "title": "Versicherter Versand",
+        "intro": "Luxusuhren müssen sicher versendet werden. Verkäufer sind verpflichtet, für berechtigte Bestellungen versicherte Versandmethoden mit Sendungsverfolgung zu nutzen. Dies schützt Käufer in seltenen Fällen von Verlust, Diebstahl oder fehlgeschlagener Zustellung.",
+        "points": [
+          "Vollständig versicherter Versand",
+          "Sendungsnummer erforderlich",
+          "Sichere Verpackung",
+          "Unterschrift bei Zustellung, sofern verfügbar",
+          "Unterstützung für nationalen und internationalen Versand",
+          "Käufersupport bei Versandproblemen",
+          "Zustellbestätigung erforderlich"
+        ],
+        "notice": "Käufer sollten das Paket bei der Zustellung prüfen und sichtbare Schäden sofort melden."
+      },
+      "securityTeam": {
+        "title": "Kariv Qualitäts- und Sicherheitsteam",
+        "intro": "Das Qualitäts- und Sicherheitsteam von Kariv Glamour unterstützt Käufer während des gesamten Kaufprozesses. Das Team überwacht verdächtige Aktivitäten, prüft gemeldete Angebote, hilft bei Zahlungs- und Lieferproblemen und unterstützt bei der Lösung von Fällen, in denen eine Uhr nicht der Beschreibung entspricht.",
+        "responsibilities": [
+          "Verdächtige Angebote prüfen",
+          "Käufer vor dem Kauf unterstützen",
+          "Bei Bestellproblemen helfen",
+          "Rückgabeanträge begleiten",
+          "Authentizitätsbedenken prüfen",
+          "Mit Verkäufern kommunizieren",
+          "Händlerverhalten überwachen",
+          "Das Vertrauen in den Marktplatz schützen"
+        ]
+      },
+      "conditions": {
+        "appliesTitle": "Wann der Käuferschutz gilt",
+        "applies": [
+          "Der Kauf wird über den Checkout von Kariv Glamour abgeschlossen",
+          "Die Bestellung ist für den Treuhandservice berechtigt",
+          "Der Käufer befolgt die Zahlungsanweisungen von Kariv Glamour",
+          "Die Rückgabe oder das Problem wird innerhalb der vorgeschriebenen Frist gemeldet",
+          "Die Uhr wird im erhaltenen Zustand zurückgegeben",
+          "Der Käufer bewahrt Verpackung, Zubehör, Dokumente und Zustellnachweis auf",
+          "Der Käufer arbeitet während der Prüfung mit dem Support zusammen"
+        ],
+        "notApplyTitle": "Wann der Käuferschutz möglicherweise nicht gilt",
+        "reviewLabel": "Bitte sorgfältig prüfen",
+        "notApply": [
+          "Die Zahlung erfolgt außerhalb von Kariv Glamour",
+          "Käufer und Verkäufer treffen eine private Vereinbarung außerhalb der Plattform",
+          "Der Käufer versäumt die Rückgabefrist",
+          "Die Uhr wurde nach der Lieferung getragen, beschädigt, verändert, repariert, angepasst oder modifiziert",
+          "Der Käufer verliert Box, Papiere, Zubehör, Glieder, Garantiekarte, Zertifikat oder Verpackung",
+          "Das Problem wurde im Produktangebot klar angegeben",
+          "Der Käufer verweigert angeforderte Nachweise",
+          "Die Rückgabe wird ohne Versicherung oder Sendungsverfolgung verschickt",
+          "Die Sendung wird an die falsche Adresse geschickt"
+        ]
+      },
+      "checklists": {
+        "beforeTitle": "Checkliste für Käufer vor dem Kauf",
+        "before": [
+          "Marke, Modell und Referenznummer prüfen",
+          "Zustandsbeschreibung sorgfältig lesen",
+          "Alle Fotos prüfen",
+          "Status von Box und Papieren bestätigen",
+          "Servicehistorie prüfen, sofern verfügbar",
+          "Garantiedetails prüfen",
+          "Verkäuferbewertung und Händlerprofil prüfen",
+          "Versandkosten und Lieferland bestätigen",
+          "Rückgabebedingungen lesen",
+          "Nur über den genehmigten Checkout von Kariv Glamour bezahlen"
+        ],
+        "afterTitle": "Was nach der Lieferung zu tun ist",
+        "after": [
+          "Paket vor dem Öffnen prüfen",
+          "Beim Auspacken wertvoller Uhren Fotos oder ein Video aufnehmen",
+          "Die Uhr mit dem Angebot vergleichen",
+          "Referenznummer und Dokumente prüfen",
+          "Box, Papiere, Glieder, Anhänger und Zubehör kontrollieren",
+          "Grundfunktionen sorgfältig testen",
+          "Die Uhr nicht tragen, anpassen, verändern, reparieren oder polieren, bevor Sie sich entschieden haben, sie zu behalten",
+          "Den Kariv Support sofort kontaktieren, wenn etwas nicht stimmt"
+        ]
+      },
+      "faq": {
+        "title": "Häufig gestellte Fragen",
+        "items": [
+          {
+            "q": "Was ist der Kariv Käuferschutz?",
+            "a": "Der Kariv Käuferschutz hilft Kunden, Luxusuhren sicher über Kariv Glamour zu kaufen. Er umfasst sichere Zahlungsabwicklung, Authentizitätsstandards, Händlerrichtlinien, versicherten Versand, Support und ein 14-tägiges Zeitfenster für Rückgabeanträge bei berechtigten Bestellungen."
+          },
+          {
+            "q": "Wie funktioniert der Kariv Treuhandservice?",
+            "a": "Bei berechtigten Bestellungen wird die Zahlung des Käufers sicher verwahrt, während die Uhr versendet und geprüft wird. Der Verkäufer wird erst bezahlt, wenn die Bedingungen des Käuferschutzes erfüllt sind."
+          },
+          {
+            "q": "Wie lange kann ich meine Uhr prüfen?",
+            "a": "Sie haben nach der Lieferung 14 Tage Zeit, die Uhr zu prüfen und den Kariv Glamour Support zu kontaktieren, wenn die Bestellung mangelhaft ist, nicht der Beschreibung entspricht oder ein anderes abgedecktes Problem vorliegt."
+          },
+          {
+            "q": "Sind alle Uhren auf Kariv Glamour authentisch?",
+            "a": "Kariv Glamour verlangt von Verkäufern, ausschließlich authentische Uhren anzubieten. Fälschungen und Replikate sind nicht erlaubt. Bei Bedenken zur Authentizität sollten Käufer innerhalb des Schutzzeitraums den Support kontaktieren."
+          },
+          {
+            "q": "Was geschieht, wenn die Uhr nicht der Beschreibung entspricht?",
+            "a": "Kontaktieren Sie den Kariv Glamour Support innerhalb von 14 Tagen nach der Lieferung. Geben Sie Ihre Bestellnummer, Fotos und eine klare Beschreibung des Problems an. Unser Team prüft den Fall und begleitet die Rückgabe oder eine andere Lösung."
+          },
+          {
+            "q": "Sind Sendungen versichert?",
+            "a": "Berechtigte Verkäufer müssen Uhren mit Sendungsverfolgung und Versicherung verschicken. Dies schützt Käufer in seltenen Fällen von Verlust, Diebstahl oder fehlgeschlagener Zustellung."
+          },
+          {
+            "q": "Wer trägt die Rücksendekosten?",
+            "a": "In den meisten Fällen trägt möglicherweise der Käufer die Rücksendekosten, sofern die Rückgabe nicht auf einem Fehler des Verkäufers, einer falschen Beschreibung oder einem anderen abgedeckten Problem beruht. Der Support stellt die Rücksendeanweisungen bereit."
+          },
+          {
+            "q": "Was sollte ich nach Erhalt der Uhr aufbewahren?",
+            "a": "Bewahren Sie Originalverpackung, Versandmaterial, Box, Papiere, Garantiekarte, Zertifikat, Glieder, Anhänger, Servicedokumente und sämtliches Zubehör auf, bis Sie sicher sind, dass Sie die Uhr behalten."
+          },
+          {
+            "q": "Gilt der Käuferschutz, wenn ich direkt an den Verkäufer zahle?",
+            "a": "Nein. Der Käuferschutz gilt nur für berechtigte Transaktionen, die über den genehmigten Checkout- und Zahlungsprozess von Kariv Glamour abgeschlossen werden. Direktzahlungen außerhalb der Plattform sind möglicherweise nicht geschützt."
+          },
+          {
+            "q": "Kann ich eine Uhr zurückgeben, weil ich meine Meinung geändert habe?",
+            "a": "Ob eine Rückgabe möglich ist, hängt vom Produkt, den Verkäuferbedingungen, der Rechtsordnung und den Richtlinien von Kariv Glamour ab. Die 14-tägige Geld-zurück-Garantie schützt Käufer vor allem dann, wenn ein Artikel mangelhaft ist, nicht der Beschreibung entspricht oder ein anderes abgedecktes Problem vorliegt."
+          },
+          {
+            "q": "Was geschieht, wenn das Paket beschädigt ankommt?",
+            "a": "Dokumentieren Sie den Schaden sofort mit Fotos und kontaktieren Sie den Kariv Glamour Support. Bewahren Sie die gesamte Verpackung auf und entsorgen Sie kein Versandmaterial, bis der Fall geprüft wurde."
+          },
+          {
+            "q": "Was kann ich tun, wenn ich eine Fälschung vermute?",
+            "a": "Kontaktieren Sie den Kariv Glamour Support sofort innerhalb des Schutzzeitraums. Stellen Sie Fotos, Dokumente und Angaben zu Ihren Bedenken bereit. Kariv Glamour erlaubt keine gefälschten Uhren oder Replikate."
+          }
+        ]
+      },
+      "support": {
+        "title": "Benötigen Sie Hilfe bei einem Kauf?",
+        "intro": "Unser Supportteam begleitet Sie vor, während und nach dem Kauf Ihrer Luxusuhr.",
+        "contactCta": "Support kontaktieren",
+        "faqCta": "FAQ ansehen",
+        "returnsCta": "Rückgaberichtlinie ansehen",
+        "shippingCta": "Versandrichtlinie ansehen",
+        "resourcesTitle": "Nützliche Ressourcen für Käufer",
+        "resources": [
+          "Authentifizierungsprozess",
+          "Zustandsbewertung",
+          "Rückgaben und Erstattungen",
+          "Versandrichtlinie",
+          "Kaufbedingungen",
+          "Leitfaden zu Uhrenbox und Papieren",
+          "Leitfaden zur Servicehistorie",
+          "So kaufen Sie eine gebrauchte Luxusuhr sicher",
+          "Kundenservice kontaktieren"
+        ]
+      }
     },
     "portal": {
       "dashboard": "Dashboard",

@@ -18,7 +18,7 @@ export default function Authentication() {
   ];
 
   return (
-    <div>
+    <div className="font-body">
       <SEO title={t('common:seo.authentication.title')} description={t('common:seo.authentication.description')} />
       <div className="max-w-7xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
@@ -33,10 +33,10 @@ export default function Authentication() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <ShieldCheck size={40} className="text-primary mx-auto mb-6" strokeWidth={1.5} />
             <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{t('pages.authentication.eyebrow')}</span>
-            <h1 className="font-display text-4xl md:text-6xl font-light text-foreground tracking-tight mb-6">
+            <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight mb-6">
               {t('pages.authentication.heroTitle1')}<br />{t('pages.authentication.heroTitle2')}
             </h1>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
               {t('pages.authentication.heroDesc')}
             </p>
           </motion.div>
@@ -59,8 +59,8 @@ export default function Authentication() {
               </div>
               <div className="flex-1 border-l border-border pl-8">
                 <step.icon size={24} className="text-primary mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-display text-foreground font-light mb-3">{step.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+                <h3 className="text-xl font-display text-foreground font-semibold mb-3">{step.title}</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">{step.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -70,8 +70,8 @@ export default function Authentication() {
       {/* No counterfeits */}
       <section className="py-16 bg-secondary">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-display text-2xl text-foreground font-light mb-4">{t('pages.authentication.noFakesTitle')}</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <h2 className="font-display text-3xl text-foreground font-semibold mb-4">{t('pages.authentication.noFakesTitle')}</h2>
+          <p className="text-base text-muted-foreground leading-relaxed">
             {t('pages.authentication.noFakesDesc')}
           </p>
         </div>

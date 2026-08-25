@@ -40,15 +40,15 @@ export const HUBLOT_BOX_PAPERS = ['Box included', 'Papers included', 'Full set']
 export const HUBLOT_TYPES = ['New', 'Pre-Owned', 'Vintage'];
 
 export const HUBLOT_QUICK_FILTERS = [
-  { label_en: 'Hublot Big Bang', label_de: 'Hublot Big Bang', link: '/hublot/big-bang' },
-  { label_en: 'Hublot Big Bang Unico', label_de: 'Hublot Big Bang Unico', link: '/hublot/big-bang-unico' },
-  { label_en: 'Hublot Classic Fusion', label_de: 'Hublot Classic Fusion', link: '/hublot/classic-fusion' },
-  { label_en: 'Hublot Spirit of Big Bang', label_de: 'Hublot Spirit of Big Bang', link: '/hublot/spirit-of-big-bang' },
-  { label_en: 'Hublot Square Bang', label_de: 'Hublot Square Bang', link: '/hublot/square-bang' },
-  { label_en: 'Hublot Ceramic Watches', label_de: 'Hublot Keramik-Uhren', link: '/hublot-uhren' },
-  { label_en: 'Hublot Skeleton Watches', label_de: 'Hublot Skeleton-Uhren', link: '/hublot-uhren' },
-  { label_en: 'Pre-Owned Hublot', label_de: 'Hublot gebraucht', link: '/hublot-gebraucht' },
-  { label_en: 'Hublot with Box and Papers', label_de: 'Hublot mit Box und Papieren', link: '/guides' },
+  { label_en: 'Hublot Big Bang', label_de: 'Hublot Big Bang', link: '/hublot/big-bang', filter: { collection: 'Big Bang' } },
+  { label_en: 'Hublot Big Bang Unico', label_de: 'Hublot Big Bang Unico', link: '/hublot/big-bang-unico', filter: { collection: 'Big Bang Unico' } },
+  { label_en: 'Hublot Classic Fusion', label_de: 'Hublot Classic Fusion', link: '/hublot/classic-fusion', filter: { collection: 'Classic Fusion' } },
+  { label_en: 'Hublot Spirit of Big Bang', label_de: 'Hublot Spirit of Big Bang', link: '/hublot/spirit-of-big-bang', filter: { collection: 'Spirit of Big Bang' } },
+  { label_en: 'Hublot Square Bang', label_de: 'Hublot Square Bang', link: '/hublot/square-bang', filter: { collection: 'Square Bang' } },
+  { label_en: 'Hublot Ceramic Watches', label_de: 'Hublot Keramik-Uhren', link: '/hublot-uhren', filter: { caseMaterial: 'Ceramic' } },
+  { label_en: 'Hublot Skeleton Watches', label_de: 'Hublot Skeleton-Uhren', link: '/hublot-uhren', filter: { dialColor: 'Skeleton' } },
+  { label_en: 'Pre-Owned Hublot', label_de: 'Hublot gebraucht', link: '/hublot-gebraucht', filter: { preOwned: true } },
+  { label_en: 'Hublot with Box and Papers', label_de: 'Hublot mit Box und Papieren', link: '/guides', filter: { fullSet: true } },
 ];
 
 export const HUBLOT_SEO_CARDS = [

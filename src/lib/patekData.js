@@ -70,16 +70,15 @@ export const PATEK_COLLECTIONS = [
 
 // Quick filter chips for product grid
 export const PATEK_QUICK_FILTERS = [
-  { label: 'Patek Philippe Nautilus', link: '/patek-philippe-nautilus-kaufen' },
-  { label: 'Patek Philippe Aquanaut', link: '/patek-philippe-aquanaut-kaufen' },
-  { label: 'Patek Philippe Calatrava', link: '/patek-philippe-calatrava-kaufen' },
-  { label: 'Patek Philippe Cubitus', link: '/patek-philippe-cubitus-kaufen' },
-  { label: 'Patek Philippe Grand Complications', link: '/patek-philippe-grand-complications-kaufen' },
-  { label: 'Patek Philippe Complications', link: '/patek-philippe-complications-kaufen' },
-  { label: 'Patek Philippe Twenty~4', link: '/patek-philippe-twenty-4-kaufen' },
-  { label: 'Pre-Owned Patek Philippe', link: '/patek-philippe-gebraucht-kaufen' },
-  { label: 'Patek Philippe with Box and Papers', link: '/watch-guides/box-and-papers' },
-  { label: 'Patek Philippe with Archives Extract', link: '/patek-philippe-archives-extract-guide' },
+  { label: 'Patek Philippe Nautilus', link: '/patek-philippe-nautilus-kaufen', filter: { collection: 'Nautilus' } },
+  { label: 'Patek Philippe Aquanaut', link: '/patek-philippe-aquanaut-kaufen', filter: { collection: 'Aquanaut' } },
+  { label: 'Patek Philippe Calatrava', link: '/patek-philippe-calatrava-kaufen', filter: { collection: 'Calatrava' } },
+  { label: 'Patek Philippe Cubitus', link: '/patek-philippe-cubitus-kaufen', filter: { collection: 'Cubitus' } },
+  { label: 'Patek Philippe Grand Complications', link: '/patek-philippe-grand-complications-kaufen', filter: { collection: 'Grand Complications' } },
+  { label: 'Patek Philippe Complications', link: '/patek-philippe-complications-kaufen', filter: { collection: 'Complications' } },
+  { label: 'Patek Philippe Twenty~4', link: '/patek-philippe-twenty-4-kaufen', filter: { collection: 'Twenty~4' } },
+  { label: 'Pre-Owned Patek Philippe', link: '/patek-philippe-gebraucht-kaufen', filter: { preOwned: true } },
+  { label: 'Patek Philippe with Box and Papers', link: '/watch-guides/box-and-papers', filter: { fullSet: true } },
 ];
 
 // Complication filter options
