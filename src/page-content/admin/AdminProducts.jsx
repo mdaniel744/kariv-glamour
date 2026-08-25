@@ -143,6 +143,7 @@ export default function AdminProducts() {
         <div className="mb-6">
           <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-2">{t('fields.productImage')}</label>
           <ImageUploader
+            purpose="product"
             value={form.featuredImage}
             onChange={handleImageUrlChange}
             previewClassName="w-20 h-20 object-cover border border-white/10"

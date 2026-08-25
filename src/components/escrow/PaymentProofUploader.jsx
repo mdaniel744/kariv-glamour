@@ -28,6 +28,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('purpose', 'payment-proof');
       const res = await uploadImage(formData);
       if (res.ok) {
         setPreviewUrl(res.url);

@@ -42,9 +42,9 @@ export default function JaegerLeCoultrePage() {
   return (
     <div className="bg-background">
       <JLCHero />
-      <JLCIntro />
       <JLCCollectionGrid />
       <JLCProductGrid />
+      <JLCIntro />
       <JLCSeoCards />
       <JLCStoryTeaser />
       <JLCReadMoreCarousel />

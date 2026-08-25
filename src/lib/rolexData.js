@@ -59,7 +59,7 @@ const IMG = {
   service: `${ROLEX_ASSET_BASE}/rolex-premium-service-maintenance.jpg`,
   submarinerGuide: `${ROLEX_ASSET_BASE}/rolex-submariner-guide.jpg`,
   story: `${ROLEX_ASSET_BASE}/the-rolex-story.jpg`,
-  buyingGuide: `${ROLEX_ASSET_BASE}/which-rolex-watch-to-buy.jpg`,
+  buyingGuide: `${ROLEX_ASSET_BASE}/which-rolex-watch-to-buy.webp`,
 };
 
 // Rolex Collections

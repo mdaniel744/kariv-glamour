@@ -47,9 +47,9 @@ export default function RolexPage() {
   return (
     <div className="bg-background">
       <RolexHero />
-      <RolexIntro />
       <RolexCollectionCarousel />
       <RolexProductGrid />
+      <RolexIntro />
       <RolexSeoCardGrid />
       <RolexEditorialSection section={ROLEX_EDITORIAL_SECTIONS[0]} />
       <RolexEditorialSection section={ROLEX_EDITORIAL_SECTIONS[1]} reverse />

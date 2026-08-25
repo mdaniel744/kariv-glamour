@@ -27,7 +27,7 @@ const PAGE_IMAGES = {
   moonwatch: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-moonwatch.webp`,
   planetOcean: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-planet-ocean.webp`,
   seamaster: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-seamaster.jpg`,
-  seamasterDiver300m: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-seamaster-diver-300m.png`,
+  seamasterDiver300m: `${OMEGA_PAGE_ASSET_BASE}/buy-omega-seamaster-diver-300m.webp`,
   preOwnedSpeedmaster: `${OMEGA_PAGE_ASSET_BASE}/buy-preowned-omega-speedmaster.jpeg`,
   preOwned: `${OMEGA_PAGE_ASSET_BASE}/buy-preowned-omega-watch.webp`,
   boxAndPapers: `${OMEGA_PAGE_ASSET_BASE}/omega-box-and-papers.jpg`,

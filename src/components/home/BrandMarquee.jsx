@@ -47,11 +47,11 @@ export default function BrandMarquee() {
     <section className="border-y border-border bg-background py-10 md:py-12">
       <div className="mx-auto mb-7 flex max-w-7xl items-center justify-between px-6">
         <div>
-          <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary">{t('components.brandMarquee.title')}</span>
-          <p className="mt-1.5 text-xs text-muted-foreground">{t('components.brandMarquee.subtitle')}</p>
+          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{t('components.brandMarquee.title')}</span>
+          <p className="mt-1.5 text-sm text-muted-foreground">{t('components.brandMarquee.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
-          <LocalizedLink to="/brands" className="mr-2 hidden items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary sm:flex">
+          <LocalizedLink to="/brands" className="mr-2 hidden items-center gap-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-primary sm:flex">
             {t('components.brandMarquee.viewAll')} <ArrowRight size={12} />
           </LocalizedLink>
           <button onClick={() => scrollByDir(-1)} disabled={!canPrev} className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary transition-colors disabled:opacity-0 disabled:pointer-events-none" aria-label={t('components.brandMarquee.scrollLeft')}>

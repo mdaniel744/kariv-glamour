@@ -42,9 +42,9 @@ export default function TudorPage() {
   return (
     <div className="bg-background">
       <TudorHero />
-      <TudorIntro />
       <TudorCollectionGrid />
       <TudorProductGrid />
+      <TudorIntro />
       <TudorSeoCards />
       <TudorStoryTeaser />
       <TudorReadMoreCarousel />

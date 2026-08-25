@@ -12,7 +12,7 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Kariv Glamour';
   const options = {
     body: data.body || '',
-    icon: '/logos/kariv-glamour-mobile-green.png',
+    icon: '/logos/kariv-glamour-mobile-green.webp',
     data: { linkPath: data.link_path || '/' },
   };
 

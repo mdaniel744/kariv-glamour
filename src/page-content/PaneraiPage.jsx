@@ -42,9 +42,9 @@ export default function PaneraiPage() {
   return (
     <div className="bg-background">
       <PaneraiHero />
-      <PaneraiIntro />
       <PaneraiCollectionGrid />
       <PaneraiProductGrid />
+      <PaneraiIntro />
       <PaneraiSeoCards />
       <PaneraiStoryTeaser />
       <PaneraiReadMoreCarousel />

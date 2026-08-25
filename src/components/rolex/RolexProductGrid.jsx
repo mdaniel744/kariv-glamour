@@ -10,6 +10,7 @@ import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES } from '@/lib/constants';
 import { ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
 import { productSlug } from '@/lib/slug';
+import ProductCardImage from '@/components/shared/ProductCardImage';
 
 const BRAND = 'Rolex';
 
@@ -73,7 +74,7 @@ export default function RolexProductGrid() {
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group min-w-0">
         <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-card md:mb-4">
           {product.featuredImage ?
-            <img src={product.featuredImage} alt={product.productTitle} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+            <ProductCardImage src={product.featuredImage} alt={product.productTitle} /> :
             <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
           }
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">

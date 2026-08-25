@@ -7,19 +7,19 @@ import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
 import { useAuth } from '@/lib/AuthContext';
 import { BRAND_DATA } from '@/lib/constants';
-import BrandFavicon from '@/components/shared/BrandFavicon';
 import NotificationBell from '@/components/shared/NotificationBell';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
+import MediaImage from '@/components/shared/MediaImage';
 
 const LOGOS = {
   desktop: {
-    light: '/logos/kariv-glamour-desktop-green.png',
-    dark: '/logos/kariv-glamour-desktop-white.png',
+    light: '/logos/kariv-glamour-desktop-green.webp',
+    dark: '/logos/kariv-glamour-desktop-white.webp',
   },
   mobile: {
-    light: '/logos/kariv-glamour-mobile-green.png',
-    dark: '/logos/kariv-glamour-mobile-white.png',
+    light: '/logos/kariv-glamour-mobile-green.webp',
+    dark: '/logos/kariv-glamour-mobile-white.webp',
   },
 };
 
@@ -28,16 +28,24 @@ function KarivLogo({ theme }) {
 
   return (
     <>
-      <img
+      <MediaImage
         src={LOGOS.desktop[mode]}
         alt="Kariv Glamour"
+        width={320}
+        height={56}
+        sizes="(min-width: 1024px) 320px, 280px"
+        quality={88}
         className="hidden md:block h-14 w-[280px] lg:w-[320px] object-cover object-center"
         draggable={false}
       />
       <span className="block md:hidden h-10 w-16 overflow-hidden">
-        <img
+        <MediaImage
           src={LOGOS.mobile[mode]}
           alt="Kariv Glamour"
+          width={128}
+          height={80}
+          sizes="64px"
+          quality={88}
           className="h-full w-full scale-[1.85] object-cover object-center"
           draggable={false}
         />
@@ -253,8 +261,7 @@ export default function Navbar() {
                         <p className="text-xl tracking-[0.2em] uppercase text-primary font-medium mb-6">{t('watchBrands')}</p>
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
                           {BRAND_DATA.map((b) =>
-                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="flex items-center gap-3 text-[22px] tracking-[0.05em] text-muted-foreground hover:text-primary transition-colors whitespace-nowrap">
-                              <BrandFavicon slug={b.slug} className="h-7 w-auto" alt="" />
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={() => setBuyOpen(false)} className="block whitespace-nowrap text-[22px] tracking-[0.05em] text-muted-foreground transition-colors hover:text-primary">
                               {b.name}
                             </LocalizedLink>
                         )}
@@ -347,18 +354,17 @@ export default function Navbar() {
                   
                       <div className="pl-4 pt-2 pb-4 space-y-5">
                         <div>
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchBrands')}</p>
+                          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('watchBrands')}</p>
                           <div className="space-y-2">
                             {BRAND_DATA.map((b) =>
-                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-                                <BrandFavicon slug={b.slug} className="h-4 w-auto" alt="" />
+                        <LocalizedLink key={b.slug} to={`/brands/${b.slug}`} onClick={closeMobile} className="block py-1 text-base text-muted-foreground transition-colors hover:text-primary">
                                 {b.name}
                               </LocalizedLink>
                         )}
                           </div>
                         </div>
                         <div>
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium mb-3">{t('watchCategories')}</p>
+                          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('watchCategories')}</p>
                           <div className="space-y-2">
                             {WATCH_CATEGORIES.map((c) =>
                         <LocalizedLink key={c.to} to={c.to} onClick={closeMobile} className="block text-sm text-muted-foreground hover:text-primary transition-colors">

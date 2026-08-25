@@ -6,6 +6,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { ArrowLeft, Save, X } from 'lucide-react';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 import ImageUploader from '@/components/shared/ImageUploader';
+import MediaImage from '@/components/shared/MediaImage';
+import { getMediaVariant } from '@/lib/media';
 
 export default function PortalListingForm({ id: providedId }) {
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
@@ -97,11 +99,12 @@ export default function PortalListingForm({ id: providedId }) {
         <div className="flex flex-wrap gap-3">
           {product.productImages.map((img, i) => (
             <div key={i} className="relative w-24 h-24 group">
-              <img src={img} alt="" className="w-full h-full object-cover" />
+              <MediaImage src={getMediaVariant(img, 'thumb')} alt={`Product photo ${i + 1}`} fill sizes="96px" quality={76} className="object-cover" />
               <button onClick={() => removeImage(i)} className="absolute top-1 right-1 w-5 h-5 bg-background/80 rounded-full flex items-center justify-center"><X size={12} /></button>
             </div>
           ))}
           <ImageUploader
+            purpose="product"
             value=""
             onChange={handleImageUploaded}
             label="Add photo"

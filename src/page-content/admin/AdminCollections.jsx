@@ -70,6 +70,7 @@ export default function AdminCollections() {
           <div>
             <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">Collection Image</label>
             <ImageUploader
+              purpose="collection"
               value={form.heroImage}
               onChange={(url) => setForm({ ...form, heroImage: url })}
               previewClassName="w-full max-w-sm aspect-[4/3] object-cover border border-white/10"

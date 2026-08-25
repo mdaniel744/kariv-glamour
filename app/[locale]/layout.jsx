@@ -3,6 +3,14 @@ import { notFound } from 'next/navigation';
 import { ClerkProvider } from '@clerk/nextjs';
 import SiteChrome from '@/components/layout/SiteChrome';
 import Providers from '../providers';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
 
 const SUPPORTED_LOCALES = ['de', 'en'];
 const SITE_NAME = 'Kariv Glamour';
@@ -37,7 +45,7 @@ export default async function LocaleLayout({ children, params }) {
   }
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={poppins.variable} suppressHydrationWarning>
       <body data-next-native="true">
         <ClerkProvider>
           <Providers initialLocale={locale}>

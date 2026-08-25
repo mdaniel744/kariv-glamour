@@ -43,8 +43,8 @@ export default function PopularCollections() {
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
             
-            <h2 className="text-3xl md:text-4xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('components.popularCollections.title')}</h2>
-            <p className="text-sm text-muted-foreground mt-2 max-w-lg">{t('components.popularCollections.subtitle')}</p>
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.035em] text-primary md:text-4xl">{t('components.popularCollections.title')}</h2>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">{t('components.popularCollections.subtitle')}</p>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -59,9 +59,9 @@ export default function PopularCollections() {
               <LocalizedLink               to={`/shop?brand=${encodeURIComponent(col.brand)}`}
               className="group block border border-border p-6 hover:border-primary/30 transition-colors">
               
-                <p className="text-[10px] tracking-[0.15em] uppercase text-primary mb-2">{col.brand}</p>
-                <h3 className="font-display text-lg text-foreground font-normal group-hover:text-primary transition-colors">{col.collectionName}</h3>
-                <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.12em] uppercase text-muted-foreground mt-3 group-hover:text-primary transition-colors">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary">{col.brand}</p>
+                <h3 className="font-display text-lg font-semibold text-foreground transition-colors group-hover:text-primary">{col.collectionName}</h3>
+                <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">
                   {t('components.popularCollections.discover')} <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </LocalizedLink>

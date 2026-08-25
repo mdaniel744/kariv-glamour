@@ -42,9 +42,9 @@ export default function GrandSeikoPage() {
   return (
     <div className="bg-background">
       <GrandSeikoHero />
-      <GrandSeikoIntro />
       <GrandSeikoCollectionGrid />
       <GrandSeikoProductGrid />
+      <GrandSeikoIntro />
       <GrandSeikoSeoCards />
       <GrandSeikoStoryTeaser />
       <GrandSeikoReadMoreCarousel />

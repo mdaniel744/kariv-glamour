@@ -51,9 +51,9 @@ export default function PatekPhilippePage() {
   return (
     <div className="bg-background">
       <PatekPhilippeHero />
-      <PatekPhilippeIntro />
       <PatekPhilippeCollectionCarousel />
       <PatekPhilippeProductGrid />
+      <PatekPhilippeIntro />
       <PatekPhilippeSeoCardGrid />
       <PatekPhilippeEditorialSection section={PATEK_EDITORIAL_SECTIONS[0]} />
       <PatekPhilippeEditorialSection section={PATEK_EDITORIAL_SECTIONS[1]} reverse />

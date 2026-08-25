@@ -42,9 +42,9 @@ export default function HublotPage() {
   return (
     <div className="bg-background">
       <HublotHero />
-      <HublotIntro />
       <HublotCollectionGrid />
       <HublotProductGrid />
+      <HublotIntro />
       <HublotSeoCards />
       <HublotStoryTeaser />
       <HublotReadMoreCarousel />

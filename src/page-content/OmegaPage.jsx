@@ -47,9 +47,9 @@ export default function OmegaPage() {
   return (
     <div className="bg-background">
       <OmegaHero />
-      <OmegaIntro />
       <OmegaCollectionCarousel />
       <OmegaProductGrid />
+      <OmegaIntro />
       <OmegaSeoCardGrid />
       <OmegaEditorialSection section={OMEGA_EDITORIAL_SECTIONS[0]} />
       <OmegaEditorialSection section={OMEGA_EDITORIAL_SECTIONS[1]} reverse />

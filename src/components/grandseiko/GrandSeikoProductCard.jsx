@@ -7,6 +7,7 @@ import { useCart } from '@/lib/cartContext';
 import { formatPrice } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { productSlug } from '@/lib/slug';
+import ProductCardImage from '@/components/shared/ProductCardImage';
 
 const BRAND = 'Grand Seiko';
 
@@ -20,7 +21,7 @@ export default function GrandSeikoProductCard({ product }) {
       <LocalizedLink to={`/product/${productSlug(product)}`} className="block">
         <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
           {product.featuredImage ? (
-            <img src={product.featuredImage} alt={localize(product, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <ProductCardImage src={product.featuredImage} alt={localize(product, 'productTitle')} />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-muted-foreground/40">
               <span className="text-xs tracking-[0.3em] uppercase">{BRAND}</span>

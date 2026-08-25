@@ -42,9 +42,9 @@ export default function IWCPage() {
   return (
     <div className="bg-background">
       <IWCHero />
-      <IWCIntro />
       <IWCCollectionGrid />
       <IWCProductGrid />
+      <IWCIntro />
       <IWCSeoCards />
       <IWCStoryTeaser />
       <IWCReadMoreCarousel />

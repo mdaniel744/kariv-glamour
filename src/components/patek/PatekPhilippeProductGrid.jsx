@@ -10,6 +10,7 @@ import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { PATEK_QUICK_FILTERS, PATEK_COMPLICATIONS } from '@/lib/patekData';
 import { productSlug } from '@/lib/slug';
+import ProductCardImage from '@/components/shared/ProductCardImage';
 
 const BRAND = 'Patek Philippe';
 
@@ -22,7 +23,7 @@ function PatekProductCard({ product }) {
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group">
       <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
         {product.featuredImage ?
-          <img src={product.featuredImage} alt={localize(product, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> :
+          <ProductCardImage src={product.featuredImage} alt={localize(product, 'productTitle')} /> :
           <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
         }
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">

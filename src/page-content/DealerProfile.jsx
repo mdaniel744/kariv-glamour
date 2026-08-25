@@ -9,6 +9,8 @@ import DealerReviewCard from '@/components/dealer/DealerReviewCard';
 import DealerReviewForm from '@/components/dealer/DealerReviewForm';
 import ProductCard from '@/components/shared/ProductCard';
 import { BadgeCheck, MapPin, Clock, Globe, ShieldCheck, Star, Package } from 'lucide-react';
+import MediaImage from '@/components/shared/MediaImage';
+import { getMediaVariant } from '@/lib/media';
 
 export default function DealerProfile({
   id: idProp,
@@ -98,7 +100,7 @@ export default function DealerProfile({
       {/* Banner */}
       <div className="relative h-48 md:h-64 bg-card overflow-hidden">
         {profile?.bannerImage ? (
-          <img src={profile.bannerImage} alt="" className="w-full h-full object-cover" />
+          <MediaImage src={getMediaVariant(profile.bannerImage, 'display')} alt={`${displayName} dealer banner`} fill priority quality={84} sizes="100vw" className="object-cover" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/10 via-card to-muted" />
         )}
@@ -107,9 +109,9 @@ export default function DealerProfile({
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end gap-4 -mt-12 md:-mt-16 mb-8 relative">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background overflow-hidden bg-card flex-shrink-0">
+          <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background overflow-hidden bg-card flex-shrink-0">
             {profile?.logoImage ? (
-              <img src={profile.logoImage} alt={displayName} className="w-full h-full object-cover" />
+              <MediaImage src={getMediaVariant(profile.logoImage, 'thumb')} alt={displayName} fill sizes="128px" quality={80} className="object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-3xl font-display text-primary">
                 {displayName.charAt(0).toUpperCase()}

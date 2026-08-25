@@ -5,13 +5,13 @@
 const GS_PAGE_ASSET_BASE = '/brand-assets/grand-seiko/page';
 
 export const GS_PAGE_IMAGES = {
-  hero: `${GS_PAGE_ASSET_BASE}/grand-seiko-hero.png`,
+  hero: `${GS_PAGE_ASSET_BASE}/grand-seiko-hero.webp`,
   story: `${GS_PAGE_ASSET_BASE}/grand-seiko-story.webp`,
   shunbunGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-shunbun-guide.webp`,
-  shunbunVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-shunbun-vs-snowflake.webp`,
+  shunbunVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-shunbun-vs-snowflake.optimized.webp`,
   snowflakeGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-snowflake-guide.jpg`,
   springDriveGuide: `${GS_PAGE_ASSET_BASE}/grand-seiko-spring-drive-guide.webp`,
-  springDriveVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-spring-drive-vs-snowflake.jpg`,
+  springDriveVsSnowflake: `${GS_PAGE_ASSET_BASE}/grand-seiko-spring-drive-vs-snowflake.webp`,
   preOwned: `${GS_PAGE_ASSET_BASE}/grand-seiko-pre-owned.jpg`,
 };
 

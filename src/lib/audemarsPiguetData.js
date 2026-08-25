@@ -13,7 +13,7 @@ const COLLECTION_IMAGES = {
 export const AP_PAGE_IMAGES = {
   hero: `${AP_PAGE_ASSET_BASE}/ap-hero.png`,
   story: `${AP_PAGE_ASSET_BASE}/ap-story.webp`,
-  royalOakGuide: `${AP_PAGE_ASSET_BASE}/ap-royal-oak-guide.jpg`,
+  royalOakGuide: `${AP_PAGE_ASSET_BASE}/ap-royal-oak-guide.webp`,
   royalOakOffshoreGuide: `${AP_PAGE_ASSET_BASE}/ap-royal-oak-offshore-guide.avif`,
   preOwnedGuide: `${AP_PAGE_ASSET_BASE}/ap-pre-owned-guide.webp`,
   priceGuide: `${AP_PAGE_ASSET_BASE}/ap-price-guide.jpg`,

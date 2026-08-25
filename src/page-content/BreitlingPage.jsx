@@ -42,9 +42,9 @@ export default function BreitlingPage() {
   return (
     <div className="bg-background">
       <BreitlingHero />
-      <BreitlingIntro />
       <BreitlingCollectionGrid />
       <BreitlingProductGrid />
+      <BreitlingIntro />
       <BreitlingSeoCards />
       <BreitlingStoryTeaser />
       <BreitlingReadMoreCarousel />

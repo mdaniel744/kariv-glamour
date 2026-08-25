@@ -49,7 +49,7 @@ const IMG = {
   story: `${PATEK_ASSET_BASE}/patek-philippe-story.jpg`,
   watchesToBuy: `${PATEK_ASSET_BASE}/patek-philippe-watches-to-buy.jpg`,
   preOwned: `${PATEK_ASSET_BASE}/pre-owned-patek-philippe.jpg`,
-  maintenance: `${PATEK_ASSET_BASE}/patek-philippe-maintenance.avif`,
+  maintenance: `${PATEK_ASSET_BASE}/patek-philippe-maintenance.webp`,
 };
 
 // Patek Philippe Collections

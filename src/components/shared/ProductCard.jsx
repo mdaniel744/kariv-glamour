@@ -7,6 +7,8 @@ import { formatPrice } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { productSlug } from '@/lib/slug';
+import MediaImage from '@/components/shared/MediaImage';
+import { getMediaVariant } from '@/lib/media';
 
 export default function ProductCard({ product }) {
   const { t } = useTranslation();
@@ -25,10 +27,13 @@ export default function ProductCard({ product }) {
       <LocalizedLink to={`/product/${productSlug(product)}`} className="block min-w-0">
         <div className="product-image-grid relative mb-3 md:mb-4">
           {product.featuredImage ? (
-            <img
-              src={product.featuredImage}
+            <MediaImage
+              src={getMediaVariant(product.featuredImage, 'card')}
               alt={localize(product, 'productTitle')}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              fill
+              sizes="(max-width: 639px) calc(50vw - 1.5rem), (max-width: 1023px) calc(33vw - 2rem), (max-width: 1439px) calc(25vw - 2.25rem), 280px"
+              quality={82}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center px-2 text-center text-muted-foreground/40">

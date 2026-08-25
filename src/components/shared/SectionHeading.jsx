@@ -13,13 +13,13 @@ export default function SectionHeading({ index, title, subtitle, linkTo, linkLab
         
 
         
-        <h2 className="text-3xl md:text-4xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-bold text-[hsl(var(--primary))]">{title}</h2>
+        <h2 className="font-display text-3xl font-semibold tracking-[-0.035em] text-primary md:text-4xl">{title}</h2>
         {subtitle &&
-        <p className="text-sm text-muted-foreground mt-2 max-w-lg">{subtitle}</p>
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">{subtitle}</p>
         }
       </div>
       {linkTo &&
-      <LocalizedLink to={linkTo} className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors group">
+      <LocalizedLink to={linkTo} className="group hidden items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary transition-colors hover:text-foreground md:flex">
           {label}
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </LocalizedLink>

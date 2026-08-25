@@ -7,7 +7,7 @@ export const BREITLING_PAGE_IMAGES = {
   story: `${BREITLING_PAGE_ASSET_BASE}/breitling-story.avif`,
   buyingGuide: `${BREITLING_PAGE_ASSET_BASE}/breitling-buying-guide.jpg`,
   chronographGuide: `${BREITLING_PAGE_ASSET_BASE}/breitling-chronograph-guide.webp`,
-  navitimerGuide: `${BREITLING_PAGE_ASSET_BASE}/breitling-navitimer-collector-guide.webp`,
+  navitimerGuide: `${BREITLING_PAGE_ASSET_BASE}/breitling-navitimer-collector-guide.optimized.webp`,
   preOwnedGuide: `${BREITLING_PAGE_ASSET_BASE}/breitling-pre-owned-guide.jpg`,
 };
 

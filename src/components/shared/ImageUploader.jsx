@@ -3,6 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import { uploadImage } from '@/actions/storage';
+import MediaImage from '@/components/shared/MediaImage';
+import { getMediaVariant } from '@/lib/media';
 
 // Drop-in replacement for the old `<input type="url">` + "paste a link"
 // pattern — uploads straight to the platform's store-images bucket instead.
@@ -15,6 +17,8 @@ export default function ImageUploader({
   label = 'Click or drag an image here',
   previewClassName = 'w-20 h-20 object-cover border border-border',
   dropzoneClassName = '',
+  purpose = 'catalog',
+  helpText = null,
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,11 +27,20 @@ export default function ImageUploader({
 
   const handleFile = async (file) => {
     if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a JPG, PNG, WebP, GIF, or AVIF image.');
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setError('Images must be under 20MB. Large phone photos are resized automatically.');
+      return;
+    }
     setError(null);
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('purpose', purpose);
       const res = await uploadImage(formData);
       if (res.ok) onChange(res.url);
       else setError(res.error);
@@ -42,7 +55,7 @@ export default function ImageUploader({
   if (value) {
     return (
       <div className="relative inline-block">
-        <img src={value} alt="" className={previewClassName} />
+        <MediaImage src={getMediaVariant(value, 'thumb')} alt="Uploaded preview" width={320} height={320} sizes="160px" quality={76} className={previewClassName} />
         <button
           type="button"
           onClick={() => onChange('')}
@@ -73,6 +86,11 @@ export default function ImageUploader({
         <span className="text-[11px] text-muted-foreground">{uploading ? 'Uploading...' : label}</span>
       </button>
       <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
+      <p className="mt-1.5 max-w-sm text-[10px] leading-relaxed text-muted-foreground/75">
+        {helpText || (purpose === 'product'
+          ? 'Use a sharp, well-lit photo at least 1200px wide. JPG, PNG, WebP or AVIF; up to 20MB. Large phone photos are optimized automatically.'
+          : 'JPG, PNG, WebP or AVIF; up to 20MB. Images are resized and optimized automatically.')}
+      </p>
       {error && <p className="text-[10px] text-destructive mt-1">{error}</p>}
     </div>
   );

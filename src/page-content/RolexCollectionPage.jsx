@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProductCardImage from '@/components/shared/ProductCardImage';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
@@ -100,7 +101,7 @@ export default function RolexCollectionPage({ slug: slugProp }) {
                   <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
                     <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-card md:mb-4">
                       {p.featuredImage ? (
-                        <img src={p.featuredImage} alt={localize(p, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <ProductCardImage src={p.featuredImage} alt={localize(p, 'productTitle')} />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
                       )}

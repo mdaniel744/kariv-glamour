@@ -19,8 +19,8 @@ export default function TrustBar() {
           {trustItems.map((item, i) =>
           <div key={i} className="text-center">
               <item.icon size={26} className="text-primary mx-auto mb-4" strokeWidth={1.5} />
-              <h3 className="text-[10px] tracking-[0.25em] uppercase font-medium text-background mb-1.5">{item.title}</h3>
-              <p className="text-[11px] text-background/60 leading-relaxed max-w-[180px] mx-auto">{item.desc}</p>
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-background">{item.title}</h3>
+              <p className="mx-auto max-w-[210px] text-sm leading-relaxed text-background/75">{item.desc}</p>
             </div>
           )}
         </div>

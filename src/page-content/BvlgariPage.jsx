@@ -42,9 +42,9 @@ export default function BvlgariPage() {
   return (
     <div className="bg-background">
       <BvlgariHero />
-      <BvlgariIntro />
       <BvlgariCollectionGrid />
       <BvlgariProductGrid />
+      <BvlgariIntro />
       <BvlgariSeoCards />
       <BvlgariStoryTeaser />
       <BvlgariReadMoreCarousel />

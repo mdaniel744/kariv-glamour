@@ -42,9 +42,9 @@ export default function TAGHeuerPage() {
   return (
     <div className="bg-background">
       <TAGHeuerHero />
-      <TAGHeuerIntro />
       <TAGHeuerCollectionGrid />
       <TAGHeuerProductGrid />
+      <TAGHeuerIntro />
       <TAGHeuerSeoCards />
       <TAGHeuerStoryTeaser />
       <TAGHeuerReadMoreCarousel />

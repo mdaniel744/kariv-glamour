@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProductCardImage from '@/components/shared/ProductCardImage';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
@@ -94,7 +95,7 @@ export default function BreitlingCollectionPage({ slug: slugProp }) {
                   <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
                     <LocalizedLink to={`/product/${productSlug(p)}`}>
                       <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
-                        {p.featuredImage ? <img src={p.featuredImage} alt={localize(p, 'productTitle')} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center text-muted-foreground/40"><span className="text-xs tracking-[0.3em] uppercase">{BRAND}</span></div>}
+                        {p.featuredImage ? <ProductCardImage src={p.featuredImage} alt={localize(p, 'productTitle')} /> : <div className="w-full h-full flex items-center justify-center text-muted-foreground/40"><span className="text-xs tracking-[0.3em] uppercase">{BRAND}</span></div>}
                         <button onClick={(e) => { e.preventDefault(); toggleWishlist(p); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/40 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><Heart size={14} className={w ? 'fill-primary text-primary' : 'text-white'} /></button>
                       </div>
                       <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{p.brand}</p>

@@ -1,0 +1,172 @@
+[
+  {
+    "input": "/logos/kariv-glamour-desktop-white.png",
+    "output": "/logos/kariv-glamour-desktop-white.webp",
+    "beforeBytes": 2149552,
+    "afterBytes": 31622,
+    "savedBytes": 2117930,
+    "savedPercent": 98.5,
+    "beforeDimensions": "1536×1024",
+    "afterDimensions": "768×512"
+  },
+  {
+    "input": "/logos/kariv-glamour-mobile-green.png",
+    "output": "/logos/kariv-glamour-mobile-green.webp",
+    "beforeBytes": 2099272,
+    "afterBytes": 20694,
+    "savedBytes": 2078578,
+    "savedPercent": 99,
+    "beforeDimensions": "1536×1024",
+    "afterDimensions": "768×512"
+  },
+  {
+    "input": "/logos/kariv-glamour-desktop-green.png",
+    "output": "/logos/kariv-glamour-desktop-green.webp",
+    "beforeBytes": 2094235,
+    "afterBytes": 34940,
+    "savedBytes": 2059295,
+    "savedPercent": 98.3,
+    "beforeDimensions": "1536×1024",
+    "afterDimensions": "768×512"
+  },
+  {
+    "input": "/logos/kariv-glamour-mobile-white.png",
+    "output": "/logos/kariv-glamour-mobile-white.webp",
+    "beforeBytes": 759609,
+    "afterBytes": 18360,
+    "savedBytes": 741249,
+    "savedPercent": 97.6,
+    "beforeDimensions": "1536×1024",
+    "afterDimensions": "768×512"
+  },
+  {
+    "input": "/media/kariv-principle.png",
+    "output": "/media/kariv-principle.webp",
+    "beforeBytes": 829847,
+    "afterBytes": 85752,
+    "savedBytes": 744095,
+    "savedPercent": 89.7,
+    "beforeDimensions": "1080×720",
+    "afterDimensions": "1080×720"
+  },
+  {
+    "input": "/brand-assets/hublot/page/hublot-hero.png",
+    "output": "/brand-assets/hublot/page/hublot-hero.webp",
+    "beforeBytes": 7498882,
+    "afterBytes": 474528,
+    "savedBytes": 7024354,
+    "savedPercent": 93.7,
+    "beforeDimensions": "2606×2606",
+    "afterDimensions": "1800×1800"
+  },
+  {
+    "input": "/brand-assets/hublot/page/hublot-brand-story.jpg",
+    "output": "/brand-assets/hublot/page/hublot-brand-story.webp",
+    "beforeBytes": 4018640,
+    "afterBytes": 442642,
+    "savedBytes": 3575998,
+    "savedPercent": 89,
+    "beforeDimensions": "5184×3423",
+    "afterDimensions": "1920×1268"
+  },
+  {
+    "input": "/brand-assets/hublot/page/hublot-pre-owned-guide.webp",
+    "output": "/brand-assets/hublot/page/hublot-pre-owned-guide.optimized.webp",
+    "beforeBytes": 897822,
+    "afterBytes": 402520,
+    "savedBytes": 495302,
+    "savedPercent": 55.2,
+    "beforeDimensions": "3024×3024",
+    "afterDimensions": "1800×1800"
+  },
+  {
+    "input": "/brand-assets/omega/page/buy-omega-seamaster-diver-300m.png",
+    "output": "/brand-assets/omega/page/buy-omega-seamaster-diver-300m.webp",
+    "beforeBytes": 1904789,
+    "afterBytes": 307746,
+    "savedBytes": 1597043,
+    "savedPercent": 83.8,
+    "beforeDimensions": "1024×1024",
+    "afterDimensions": "1024×1024"
+  },
+  {
+    "input": "/brand-assets/jaeger-lecoultre/page/jaeger-lecoultre-hero.png",
+    "output": "/brand-assets/jaeger-lecoultre/page/jaeger-lecoultre-hero.webp",
+    "beforeBytes": 1750757,
+    "afterBytes": 220060,
+    "savedBytes": 1530697,
+    "savedPercent": 87.4,
+    "beforeDimensions": "1248×2000",
+    "afterDimensions": "998×1600"
+  },
+  {
+    "input": "/brand-assets/grand-seiko/page/grand-seiko-hero.png",
+    "output": "/brand-assets/grand-seiko/page/grand-seiko-hero.webp",
+    "beforeBytes": 1185611,
+    "afterBytes": 117610,
+    "savedBytes": 1068001,
+    "savedPercent": 90.1,
+    "beforeDimensions": "1102×1102",
+    "afterDimensions": "1102×1102"
+  },
+  {
+    "input": "/brand-assets/grand-seiko/page/grand-seiko-spring-drive-vs-snowflake.jpg",
+    "output": "/brand-assets/grand-seiko/page/grand-seiko-spring-drive-vs-snowflake.webp",
+    "beforeBytes": 1269126,
+    "afterBytes": 238482,
+    "savedBytes": 1030644,
+    "savedPercent": 81.2,
+    "beforeDimensions": "3024×4032",
+    "afterDimensions": "1350×1800"
+  },
+  {
+    "input": "/brand-assets/grand-seiko/page/grand-seiko-shunbun-vs-snowflake.webp",
+    "output": "/brand-assets/grand-seiko/page/grand-seiko-shunbun-vs-snowflake.optimized.webp",
+    "beforeBytes": 1149776,
+    "afterBytes": 360090,
+    "savedBytes": 789686,
+    "savedPercent": 68.7,
+    "beforeDimensions": "3072×4096",
+    "afterDimensions": "1350×1800"
+  },
+  {
+    "input": "/brand-assets/breitling/page/breitling-navitimer-collector-guide.webp",
+    "output": "/brand-assets/breitling/page/breitling-navitimer-collector-guide.optimized.webp",
+    "beforeBytes": 1014114,
+    "afterBytes": 470784,
+    "savedBytes": 543330,
+    "savedPercent": 53.6,
+    "beforeDimensions": "2500×1666",
+    "afterDimensions": "1800×1200"
+  },
+  {
+    "input": "/brand-assets/rolex/which-rolex-watch-to-buy.jpg",
+    "output": "/brand-assets/rolex/which-rolex-watch-to-buy.webp",
+    "beforeBytes": 1009502,
+    "afterBytes": 448084,
+    "savedBytes": 561418,
+    "savedPercent": 55.6,
+    "beforeDimensions": "1700×1700",
+    "afterDimensions": "1600×1600"
+  },
+  {
+    "input": "/brand-assets/audemars-piguet/page/ap-royal-oak-guide.jpg",
+    "output": "/brand-assets/audemars-piguet/page/ap-royal-oak-guide.webp",
+    "beforeBytes": 817761,
+    "afterBytes": 214356,
+    "savedBytes": 603405,
+    "savedPercent": 73.8,
+    "beforeDimensions": "2400×1600",
+    "afterDimensions": "1800×1200"
+  },
+  {
+    "input": "/brand-assets/patek-philippe/patek-philippe-maintenance.avif",
+    "output": "/brand-assets/patek-philippe/patek-philippe-maintenance.webp",
+    "beforeBytes": 812426,
+    "afterBytes": 253908,
+    "savedBytes": 558518,
+    "savedPercent": 68.7,
+    "beforeDimensions": "3350×2233",
+    "afterDimensions": "1800×1200"
+  }
+]

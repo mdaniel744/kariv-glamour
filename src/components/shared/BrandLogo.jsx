@@ -1,6 +1,7 @@
 import React from 'react';
 import { BRAND_LOGOS } from '@/lib/constants';
 import { useTheme } from '@/lib/themeContext';
+import MediaImage from '@/components/shared/MediaImage';
 
 /**
  * Theme-aware brand logo.
@@ -14,7 +15,7 @@ import { useTheme } from '@/lib/themeContext';
  *
  * Falls back to the light variant if a dark variant is not yet uploaded.
  */
-export default function BrandLogo({ slug, light, dark, alt = '', className = '', style }) {
+export default function BrandLogo({ slug, light, dark, alt = '', className = '', style, priority = false }) {
   const { theme } = useTheme();
 
   const entry = slug ? BRAND_LOGOS[slug] || {} : {};
@@ -25,5 +26,5 @@ export default function BrandLogo({ slug, light, dark, alt = '', className = '',
 
   if (!src) return null;
 
-  return <img src={src} alt={alt} className={className} style={style} />;
+  return <MediaImage src={src} alt={alt} width={240} height={96} sizes="190px" quality={82} priority={priority} className={className} style={style} />;
 }

@@ -2,13 +2,13 @@
 const HUBLOT_PAGE_ASSET_BASE = '/brand-assets/hublot/page';
 
 export const HUBLOT_PAGE_IMAGES = {
-  hero: `${HUBLOT_PAGE_ASSET_BASE}/hublot-hero.png`,
+  hero: `${HUBLOT_PAGE_ASSET_BASE}/hublot-hero.webp`,
   story: `${HUBLOT_PAGE_ASSET_BASE}/hublot-story.jpg`,
-  brandStory: `${HUBLOT_PAGE_ASSET_BASE}/hublot-brand-story.jpg`,
+  brandStory: `${HUBLOT_PAGE_ASSET_BASE}/hublot-brand-story.webp`,
   bigBangGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-big-bang-guide.jpg`,
   classicFusionGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-classic-fusion-guide.jpg`,
   materialsGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-materials-guide.webp`,
-  preOwnedGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-pre-owned-guide.webp`,
+  preOwnedGuide: `${HUBLOT_PAGE_ASSET_BASE}/hublot-pre-owned-guide.optimized.webp`,
 };
 
 export const HUBLOT_HERO_IMAGE = HUBLOT_PAGE_IMAGES.hero;

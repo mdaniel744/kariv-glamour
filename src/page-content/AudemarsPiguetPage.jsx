@@ -42,9 +42,9 @@ export default function AudemarsPiguetPage() {
   return (
     <div className="bg-background">
       <APHero />
-      <APIntro />
       <APCollectionGrid />
       <APProductGrid />
+      <APIntro />
       <APSeoCards />
       <APStoryTeaser />
       <APReadMoreCarousel />

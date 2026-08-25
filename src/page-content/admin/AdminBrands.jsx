@@ -77,6 +77,7 @@ export default function AdminBrands() {
               <div key={field}>
                 <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{field === 'brandLogoLight' ? t('fields.logo') + ' (Light)' : field === 'brandLogoDark' ? t('fields.logo') + ' (Dark)' : t('fields.heroImage')}</label>
                 <ImageUploader
+                  purpose={field === 'heroImage' ? 'brand-hero' : 'brand-logo'}
                   value={form[field]}
                   onChange={(url) => setForm(prev => ({ ...prev, [field]: url }))}
                   previewClassName="w-16 h-16 object-cover border border-white/10"

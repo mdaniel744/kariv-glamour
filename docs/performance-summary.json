@@ -1,0 +1,83 @@
+{
+  "home": {
+    "before": {
+      "score": 36,
+      "lcpMs": 41275,
+      "cls": 0.017,
+      "tbtMs": 1808,
+      "totalKiB": 16504,
+      "imageKiB": 11834,
+      "scriptKiB": 4514,
+      "requests": 55
+    },
+    "after": {
+      "score": 39,
+      "lcpMs": 27425,
+      "cls": 0,
+      "tbtMs": 2992,
+      "totalKiB": 5059,
+      "imageKiB": 177,
+      "scriptKiB": 4721,
+      "requests": 54
+    },
+    "change": {
+      "lcpPercent": 33.6,
+      "totalBytesPercent": 69.3,
+      "imageBytesPercent": 98.5
+    }
+  },
+  "shop": {
+    "before": {
+      "score": 35,
+      "lcpMs": 37805,
+      "cls": 0.129,
+      "tbtMs": 1578,
+      "totalKiB": 8765,
+      "imageKiB": 4096,
+      "scriptKiB": 4518,
+      "requests": 39
+    },
+    "after": {
+      "score": 33,
+      "lcpMs": 28834,
+      "cls": 0.129,
+      "tbtMs": 3034,
+      "totalKiB": 4879,
+      "imageKiB": 2,
+      "scriptKiB": 4724,
+      "requests": 37
+    },
+    "change": {
+      "lcpPercent": 23.7,
+      "totalBytesPercent": 44.3,
+      "imageBytesPercent": 100
+    }
+  },
+  "omega": {
+    "before": {
+      "score": 38,
+      "lcpMs": 39940,
+      "cls": 0.001,
+      "tbtMs": 1505,
+      "totalKiB": 9764,
+      "imageKiB": 4970,
+      "scriptKiB": 4633,
+      "requests": 45
+    },
+    "after": {
+      "score": 46,
+      "lcpMs": 30062,
+      "cls": 0,
+      "tbtMs": 1911,
+      "totalKiB": 5906,
+      "imageKiB": 899,
+      "scriptKiB": 4842,
+      "requests": 44
+    },
+    "change": {
+      "lcpPercent": 24.7,
+      "totalBytesPercent": 39.5,
+      "imageBytesPercent": 81.9
+    }
+  }
+}

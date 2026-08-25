@@ -120,27 +120,6 @@ function buildSearchPayload(filters, page, sortBy) {
   return payload;
 }
 
-// Check if filters have any active values
-function hasActiveFilters(filters) {
-  return !!(filters.search ||
-    filters.brand.length ||
-    filters.model.length ||
-    filters.collection.length ||
-    filters.condition.length ||
-    filters.gender.length ||
-    filters.caseMaterial.length ||
-    filters.dialColor.length ||
-    filters.movementType.length ||
-    filters.availability.length ||
-    filters.priceMin ||
-    filters.priceMax ||
-    filters.yearFrom ||
-    filters.yearTo ||
-    filters.isNewArrival ||
-    filters.isCertifiedPreOwned ||
-    filters.isVintage);
-}
-
 // Generate a cache key for filter state comparison
 function filterCacheKey(filters) {
   return JSON.stringify(filters);
@@ -229,6 +208,15 @@ export default function Shop() {
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [gridCols, setGridCols] = useState(3);
+
+  useEffect(() => {
+    if (!mobileFiltersOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileFiltersOpen]);
 
   // Refs for stale request cancellation
   const requestIdRef = useRef(0);
@@ -352,7 +340,10 @@ export default function Shop() {
   };
 
   const pageTitle = getPageTitle();
-  const activeFilterCount = hasActiveFilters(filters);
+  const activeFilterCount = Object.values(filters).reduce((count, value) => {
+    if (Array.isArray(value)) return count + value.length;
+    return count + (value ? 1 : 0);
+  }, 0);
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
@@ -396,10 +387,10 @@ export default function Shop() {
       <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
         <button
           onClick={() => setMobileFiltersOpen(true)}
-          className="md:hidden flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground"
+          className="flex min-h-11 items-center gap-2 border border-border px-4 text-xs font-semibold uppercase tracking-[0.1em] text-foreground lg:hidden"
         >
           <SlidersHorizontal size={14} /> {t('common:shop.filters')}
-          {activeFilterCount > 0 && <span className="text-[9px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">{activeFilterCount}</span>}
+          {activeFilterCount > 0 && <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] text-primary-foreground">{activeFilterCount}</span>}
         </button>
         <div className="flex items-center gap-4 ml-auto">
           <select
@@ -422,14 +413,9 @@ export default function Shop() {
         </div>
       </div>
 
-      <div className="flex gap-10">
+      <div className="flex gap-8 xl:gap-12">
         {/* Desktop Filters */}
-        <aside className="hidden md:block w-64 flex-shrink-0">
-          {activeFilterCount > 0 && (
-            <button onClick={handleClearFilters} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-primary mb-4 hover:text-foreground transition-colors">
-              <X size={12} /> {t('common:shop.clearAllFilters')}
-            </button>
-          )}
+        <aside className="hidden w-72 flex-shrink-0 rounded-sm border border-border bg-background px-5 pb-5 xl:w-80 lg:block">
           <ShopFilters filters={filters} setFilters={handleFiltersChange} />
         </aside>
 
@@ -501,21 +487,28 @@ export default function Shop() {
 
       {/* Mobile filter drawer */}
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl text-foreground">{t('common:shop.filters')}</h2>
-              <button onClick={() => setMobileFiltersOpen(false)} className="text-muted-foreground">
-                <X size={20} />
+        <div className="fixed inset-0 z-[60] bg-black/35 backdrop-blur-[2px] lg:hidden" role="dialog" aria-modal="true" aria-label={t('common:shop.filters')}>
+          <div className="ml-auto flex h-full w-full max-w-md flex-col bg-background shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4 sm:px-7">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('common:shop.title')}</span>
+                <h2 className="mt-1 font-display text-2xl font-semibold text-foreground">{t('common:shop.filters')}</h2>
+              </div>
+              <button onClick={() => setMobileFiltersOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground" aria-label="Close filters">
+                <X size={22} />
               </button>
             </div>
-            <ShopFilters filters={filters} setFilters={handleFiltersChange} />
-            <button
-              onClick={() => setMobileFiltersOpen(false)}
-              className="w-full mt-8 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4"
-            >
-              {t('common:shop.showResults', { count: totalCount })}
-            </button>
+            <div className="flex-1 overflow-y-auto px-5 sm:px-7">
+              <ShopFilters filters={filters} setFilters={handleFiltersChange} />
+            </div>
+            <div className="border-t border-border bg-background px-5 py-4 sm:px-7">
+              <button
+                onClick={() => setMobileFiltersOpen(false)}
+                className="min-h-12 w-full bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground"
+              >
+                {t('common:shop.showResults', { count: totalCount })}
+              </button>
+            </div>
           </div>
         </div>
       )}

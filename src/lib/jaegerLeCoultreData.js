@@ -16,7 +16,7 @@ const COLLECTION_IMAGES = {
 };
 
 export const JLC_PAGE_IMAGES = {
-  hero: `${JLC_PAGE_ASSET_BASE}/jaeger-lecoultre-hero.png`,
+  hero: `${JLC_PAGE_ASSET_BASE}/jaeger-lecoultre-hero.webp`,
   story: `${JLC_PAGE_ASSET_BASE}/jaeger-lecoultre-brand-story.webp`,
   preOwned: `${JLC_PAGE_ASSET_BASE}/jaeger-lecoultre-pre-owned.webp`,
   masterControlGuide: `${JLC_PAGE_ASSET_BASE}/jaeger-lecoultre-master-control-guide.webp`,

@@ -42,9 +42,9 @@ export default function GirardPerregauxPage() {
   return (
     <div className="bg-background">
       <GirardPerregauxHero />
-      <GirardPerregauxIntro />
       <GirardPerregauxCollectionGrid />
       <GirardPerregauxProductGrid />
+      <GirardPerregauxIntro />
       <GirardPerregauxSeoCards />
       <GirardPerregauxStoryTeaser />
       <GirardPerregauxReadMoreCarousel />

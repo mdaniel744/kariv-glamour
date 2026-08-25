@@ -63,10 +63,10 @@ const config = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
-  		fontFamily: {
-  			heading: ['Cormorant Garamond', 'serif'],
-  			body: ['Inter', 'sans-serif'],
-  			display: ['Cormorant Garamond', 'serif'],
+		fontFamily: {
+			heading: ['var(--font-poppins)', 'Segoe UI', 'sans-serif'],
+			body: ['var(--font-poppins)', 'Segoe UI', 'sans-serif'],
+			display: ['var(--font-poppins)', 'Segoe UI', 'sans-serif'],
   			mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
   		},
   		keyframes: {
