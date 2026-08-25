@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
-import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, Sun, Moon, User } from 'lucide-react';
+import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
 import { useTheme } from '@/lib/themeContext';
@@ -57,7 +57,7 @@ function KarivLogo({ theme }) {
 
 export default function Navbar() {
   const { cartCount, wishlistCount } = useCart();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation('navigation');
   const { localePath } = useLanguage();
@@ -137,9 +137,6 @@ export default function Navbar() {
               <LocalizedLink to="/about" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary">{t('about')}</LocalizedLink>
               <LocalizedLink to="/customer-service" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary">{t('customerService')}</LocalizedLink>
               <LanguageSwitcher />
-              <button onClick={toggleTheme} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Theme toggle">
-                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
-              </button>
             </div>
           </div>
         </div>
@@ -181,14 +178,6 @@ export default function Navbar() {
 
             {/* Actions */}
             <div className="flex shrink-0 items-center gap-1 md:gap-4">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden"
-                aria-label="Toggle theme"
-              >
-                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-              </button>
               <LocalizedLink to="/wishlist" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Wishlist">
                 <Heart size={18} />
                 {wishlistCount > 0 &&

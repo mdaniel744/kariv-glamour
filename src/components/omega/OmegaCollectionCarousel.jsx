@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
-import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { OMEGA_COLLECTIONS } from '@/lib/omegaData';
@@ -11,7 +10,6 @@ const BRAND = 'Omega';
 
 export default function OmegaCollectionCarousel() {
   const { t } = useTranslation('brandComponents');
-  const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const scroll = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 320, behavior: 'smooth' }); };
   const { collections } = useBrandCollections(BRAND, OMEGA_COLLECTIONS);
@@ -33,15 +31,13 @@ export default function OmegaCollectionCarousel() {
 
         <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
           {MAIN_COLLECTIONS.map((col, i) =>
-            <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[280px] snap-start group">
-              <LocalizedLink to={`/omega/${col.slug}`} className="block">
-                <div className="relative aspect-[4/5] overflow-hidden mb-4 bg-card">
+            <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[220px] snap-start group sm:w-[280px]">
+              <LocalizedLink to={`/omega/${col.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
+                <div className="relative aspect-[4/5] overflow-hidden bg-card">
                   <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="text-lg mb-2 text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{col.name}</h3>
-                <p className="text-xs leading-relaxed mb-3 line-clamp-2 text-muted-foreground">{localize(col, 'description')}</p>
-                <span className="text-[10px] tracking-[0.12em] uppercase transition-colors group-hover:opacity-70 text-primary">{t('collectionCarousel.exploreCollection')} →</span>
+                <h3 className="px-4 py-3 font-body text-base font-semibold leading-snug text-foreground">{col.name}</h3>
               </LocalizedLink>
             </motion.div>
           )}

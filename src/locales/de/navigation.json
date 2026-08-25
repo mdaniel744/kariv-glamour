@@ -50,6 +50,10 @@
     "cookiePolicy": "Cookie-Richtlinie",
     "impressum": "Impressum",
     "authenticityDisclaimer": "Echtheitserklärung",
-    "brandDisclaimer": "Marken-Haftungsausschluss"
+    "brandDisclaimer": "Marken-Haftungsausschluss",
+    "appearance": "Darstellung",
+    "themeDevice": "Gerät",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel"
   }
 }

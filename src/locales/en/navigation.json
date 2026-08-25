@@ -50,6 +50,10 @@
     "cookiePolicy": "Cookie Policy",
     "impressum": "Impressum",
     "authenticityDisclaimer": "Authenticity Disclaimer",
-    "brandDisclaimer": "Brand Disclaimer"
+    "brandDisclaimer": "Brand Disclaimer",
+    "appearance": "Appearance",
+    "themeDevice": "Device",
+    "themeLight": "Light",
+    "themeDark": "Dark"
   }
 }

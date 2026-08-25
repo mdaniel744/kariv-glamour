@@ -1,7 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
-import { useLocalizedField } from '@/lib/localize';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { JLC_COLLECTIONS } from '@/lib/jaegerLeCoultreData';
@@ -11,7 +10,6 @@ const BRAND = 'Jaeger-LeCoultre';
 
 export default function JLCCollectionGrid() {
   const { t } = useTranslation('brandComponents');
-  const { localize } = useLocalizedField();
   const scrollRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -54,8 +52,8 @@ export default function JLCCollectionGrid() {
 
           <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
             {collections.map((c, i) => (
-              <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: (i % 3) * 0.05 }} className="flex-shrink-0 snap-start w-[78%] sm:w-[60%] lg:w-[31%]">
-                <LocalizedLink to={`/jaeger-lecoultre/${c.slug}`} className="group block border border-border bg-card hover:border-primary/40 transition-colors h-full">
+              <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: (i % 3) * 0.05 }} className="flex-shrink-0 snap-start w-[220px] sm:w-[60%] lg:w-[31%]">
+                <LocalizedLink to={`/jaeger-lecoultre/${c.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card hover:border-primary/40 transition-colors h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center relative">
                     {c.image ? (
                       <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" />
@@ -65,10 +63,8 @@ export default function JLCCollectionGrid() {
                     {c.isHorological && <span className="absolute top-3 left-3 text-[9px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">{t('collectionCarousel.eyebrow')}</span>}
                     {c.isDiscontinued && <span className="absolute top-3 left-3 text-[9px] tracking-[0.15em] uppercase bg-foreground/80 text-background px-2 py-1">{t('product.vintage')}</span>}
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-display text-xl font-medium mb-2 text-foreground">{c.name}</h3>
-                    <p className="text-xs leading-relaxed mb-4 text-muted-foreground">{localize(c, 'shortDescription')}</p>
-                    <span className="text-[10px] tracking-[0.15em] uppercase text-primary">{t('collectionCarousel.exploreCollection')} &rarr;</span>
+                  <div className="px-4 py-3">
+                    <h3 className="font-body text-base font-semibold leading-snug text-foreground">{c.name}</h3>
                   </div>
                 </LocalizedLink>
               </motion.div>

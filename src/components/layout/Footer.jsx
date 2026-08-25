@@ -3,9 +3,18 @@ import LocalizedLink from '@/components/LocalizedLink';
 import MediaImage from '@/components/shared/MediaImage';
 import { useTranslation } from 'react-i18next';
 import { BRAND_DATA } from '@/lib/constants';
+import { Monitor, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/lib/themeContext';
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
+  const { themePreference, setThemePreference } = useTheme();
+
+  const themeOptions = [
+    { value: 'system', label: t('footer.themeDevice'), icon: Monitor },
+    { value: 'light', label: t('footer.themeLight'), icon: Sun },
+    { value: 'dark', label: t('footer.themeDark'), icon: Moon },
+  ];
 
   const footerLinks = {
     company: [
@@ -68,6 +77,29 @@ export default function Footer() {
                   {social.slice(0, 2)}
                 </a>
               )}
+            </div>
+            <div className="mt-8">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
+                {t('footer.appearance')}
+              </p>
+              <div className="inline-flex max-w-full rounded-full border border-[#cddbd2] bg-white p-1 shadow-sm dark:border-white/15 dark:bg-white/5" role="group" aria-label={t('footer.appearance')}>
+                {themeOptions.map(({ value, label, icon: Icon }) => {
+                  const selected = themePreference === value;
+
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setThemePreference(value)}
+                      aria-pressed={selected}
+                      className={`flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${selected ? 'bg-[#173d31] text-white shadow-sm dark:bg-[#C5A367] dark:text-[#06110d]' : 'text-[#496057] hover:bg-[#edf3ef] hover:text-primary dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'}`}
+                    >
+                      <Icon size={15} aria-hidden="true" />
+                      <span>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

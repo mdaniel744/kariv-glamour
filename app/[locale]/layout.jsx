@@ -15,6 +15,19 @@ const poppins = Poppins({
 const SUPPORTED_LOCALES = ['de', 'en'];
 const SITE_NAME = 'Kariv Glamour';
 const SITE_DESCRIPTION = 'Authenticated luxury watches from Kariv Glamour.';
+const themeInitializationScript = `
+  (() => {
+    try {
+      const savedPreference = localStorage.getItem('kariv-theme-preference');
+      const preference = ['system', 'light', 'dark'].includes(savedPreference) ? savedPreference : 'system';
+      const theme = preference === 'system'
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : preference;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.style.colorScheme = theme;
+    } catch (_) {}
+  })();
+`;
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002'),
@@ -46,6 +59,9 @@ export default async function LocaleLayout({ children, params }) {
 
   return (
     <html lang={locale} className={poppins.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
+      </head>
       <body data-next-native="true">
         <ClerkProvider>
           <Providers initialLocale={locale}>
