@@ -7,7 +7,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import GirardPerregauxFilterSidebar from './GirardPerregauxFilterSidebar';
 import GirardPerregauxProductCard from './GirardPerregauxProductCard';
-import { GP_QUICK_FILTERS } from '@/lib/girardPerregauxData';
+import { GP_COLLECTIONS, GP_QUICK_FILTERS } from '@/lib/girardPerregauxData';
 import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Girard-Perregaux';
@@ -126,7 +126,7 @@ export default function GirardPerregauxProductGrid() {
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-[hsl(var(--primary))]">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={GP_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={GP_QUICK_FILTERS} collections={GP_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

@@ -42,3 +42,13 @@ export function getBrandCollection(routeKey, slug) {
   const collection = group.collections.find((item) => item.slug === slug);
   return collection ? { ...group, collection } : null;
 }
+
+export function getBrandCollectionsByName(brandName) {
+  const group = Object.values(BRAND_COLLECTION_GROUPS).find((item) => item.brandName === brandName);
+  if (!group) return [];
+
+  return group.collections.filter((collection, index, collections) => (
+    collection?.name
+    && collections.findIndex((item) => item.name === collection.name) === index
+  ));
+}

@@ -8,6 +8,7 @@ import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_
 import ImageUploader from '@/components/shared/ImageUploader';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
+import { getBrandCollectionsByName } from '@/lib/brandCollectionRegistry';
 
 export default function PortalListingForm({ id: providedId }) {
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
@@ -18,7 +19,7 @@ export default function PortalListingForm({ id: providedId }) {
 
   const [saving, setSaving] = useState(false);
   const [product, setProduct] = useState({
-    productTitle: '', brand: '', model: '', referenceNumber: '', condition: 'Excellent',
+    productTitle: '', brand: '', collection: '', model: '', referenceNumber: '', condition: 'Excellent',
     yearOfProduction: '', gender: 'Men', caseDiameter: '', caseMaterial: 'Stainless Steel',
     braceletMaterial: '', dialColor: 'Black', watchShape: 'Round', movementType: 'Automatic',
     functions: '', waterResistance: '', crystalType: '', powerReserve: '',
@@ -29,6 +30,7 @@ export default function PortalListingForm({ id: providedId }) {
     shippingInfo: 'Insured worldwide shipping included', returnEligibility: true,
     authenticationStatus: 'Pending'
   });
+  const collectionOptions = getBrandCollectionsByName(product.brand);
 
   useEffect(() => {
     if (isEdit) {
@@ -53,8 +55,8 @@ export default function PortalListingForm({ id: providedId }) {
   };
 
   const handleSave = async () => {
-    if (!product.productTitle || !product.brand || !product.price) {
-      toast({ title: 'Please fill in title, brand, and price', variant: 'destructive' });
+    if (!product.productTitle || !product.brand || !product.collection || !product.price) {
+      toast({ title: 'Please fill in title, brand, collection, and price', variant: 'destructive' });
       return;
     }
     setSaving(true);
@@ -85,6 +87,16 @@ export default function PortalListingForm({ id: providedId }) {
 
   const inputClass = "w-full bg-card border border-border px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary";
   const labelClass = "text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1 block";
+  const handleBrandChange = (brand) => {
+    const validCollections = getBrandCollectionsByName(brand);
+    setProduct((current) => ({
+      ...current,
+      brand,
+      collection: validCollections.some((collection) => collection.name === current.collection)
+        ? current.collection
+        : '',
+    }));
+  };
 
   return (
     <div className="max-w-2xl">
@@ -118,12 +130,18 @@ export default function PortalListingForm({ id: providedId }) {
         <div><label className={labelClass}>Watch Title *</label><input value={product.productTitle} onChange={e => setProduct({...product, productTitle: e.target.value})} className={inputClass} /></div>
         <div className="grid grid-cols-2 gap-3">
           <div><label className={labelClass}>Brand *</label>
-            <select value={product.brand} onChange={e => setProduct({...product, brand: e.target.value})} className={inputClass}>
+            <select value={product.brand} onChange={(e) => handleBrandChange(e.target.value)} className={inputClass}>
               <option value="">Select brand</option>
               {BRAND_DATA.map(b => <option key={b.slug} value={b.name}>{b.name}</option>)}
             </select>
           </div>
           <div><label className={labelClass}>Model</label><input value={product.model} onChange={e => setProduct({...product, model: e.target.value})} className={inputClass} /></div>
+        </div>
+        <div><label className={labelClass}>Collection *</label>
+          <select value={product.collection || ''} onChange={(e) => setProduct({...product, collection: e.target.value})} disabled={!product.brand} className={`${inputClass} disabled:cursor-not-allowed disabled:opacity-50`}>
+            <option value="">{product.brand ? 'Select collection' : 'Select a brand first'}</option>
+            {collectionOptions.map((collection) => <option key={collection.slug || collection.name} value={collection.name}>{collection.name}</option>)}
+          </select>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div><label className={labelClass}>Reference Number</label><input value={product.referenceNumber} onChange={e => setProduct({...product, referenceNumber: e.target.value})} className={inputClass} /></div>

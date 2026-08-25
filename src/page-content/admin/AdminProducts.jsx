@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 import BilingualField from '@/components/admin/BilingualField';
 import ProductCategorySidebar from '@/components/admin/ProductCategorySidebar';
 import ImageUploader from '@/components/shared/ImageUploader';
+import { getBrandCollectionsByName } from '@/lib/brandCollectionRegistry';
 
 export default function AdminProducts() {
   const { t } = useTranslation('admin');
@@ -20,6 +21,7 @@ export default function AdminProducts() {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const collectionOptions = getBrandCollectionsByName(form.brand).map((collection) => collection.name);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -82,20 +84,29 @@ export default function AdminProducts() {
     setForm(prev => ({ ...prev, featuredImage: url, productImages: url ? [url, ...(prev.productImages || []).filter((u) => u !== prev.featuredImage)] : (prev.productImages || []) }));
   };
 
-  const Field = ({ label, name, type = 'text', options, ...props }) => (
+  const handleBrandChange = (brand) => {
+    const validCollections = getBrandCollectionsByName(brand).map((collection) => collection.name);
+    setForm((current) => ({
+      ...current,
+      brand,
+      collection: validCollections.includes(current.collection) ? current.collection : '',
+    }));
+  };
+
+  const Field = ({ label, name, type = 'text', options, onChange, ...props }) => (
     <div>
       <label className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] block mb-1">{label}</label>
       {type === 'select' ? (
-        <select value={form[name] || ''} onChange={e => setForm({...form, [name]: e.target.value})} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]">
+        <select value={form[name] || ''} onChange={onChange || (e => setForm({...form, [name]: e.target.value}))} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367] disabled:cursor-not-allowed disabled:opacity-50" {...props}>
           <option value="">—</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : type === 'checkbox' ? (
-        <input type="checkbox" checked={!!form[name]} onChange={e => setForm({...form, [name]: e.target.checked})} className="accent-[#C5A367]" />
+        <input type="checkbox" checked={!!form[name]} onChange={onChange || (e => setForm({...form, [name]: e.target.checked}))} className="accent-[#C5A367]" {...props} />
       ) : type === 'textarea' ? (
-        <textarea value={form[name] || ''} onChange={e => setForm({...form, [name]: e.target.value})} rows={3} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367] resize-none" {...props} />
+        <textarea value={form[name] || ''} onChange={onChange || (e => setForm({...form, [name]: e.target.value}))} rows={3} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367] resize-none" {...props} />
       ) : (
-        <input type={type} value={form[name] || ''} onChange={e => setForm({...form, [name]: e.target.value})} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]" {...props} />
+        <input type={type} value={form[name] || ''} onChange={onChange || (e => setForm({...form, [name]: e.target.value}))} className="w-full bg-[#0A0A0B] border border-white/10 text-xs text-[#E5E5E5] px-3 py-2 outline-none focus:border-[#C5A367]" {...props} />
       )}
     </div>
   );
@@ -108,8 +119,8 @@ export default function AdminProducts() {
           <button onClick={() => setEditing(null)} className="text-[#8E8E93] hover:text-[#E5E5E5]"><X size={18} /></button>
         </div>
         <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <Field label={t('fields.brand')} name="brand" type="select" options={BRAND_DATA.map(b => b.name)} />
-          <Field label={t('fields.collection')} name="collection" />
+          <Field label={t('fields.brand')} name="brand" type="select" options={BRAND_DATA.map(b => b.name)} onChange={(e) => handleBrandChange(e.target.value)} />
+          <Field label={t('fields.collection')} name="collection" type="select" options={collectionOptions} disabled={!form.brand} />
           <Field label={t('fields.model')} name="model" />
           <Field label={t('fields.referenceNumber')} name="referenceNumber" />
           <Field label={t('fields.price')} name="price" type="number" />

@@ -104,6 +104,7 @@
   "productGrid": {
     "eyebrow": "Shop",
     "heading": "{{brand}} Uhren kaufen",
+    "collection": "Kollektion",
     "filter": "Filter",
     "count": "{{count}} {{brand}} Uhren",
     "noMatches": "Keine {{brand}} Uhren entsprechen aktuell Ihren Filtern. Bitte anpassen oder alle Kollektionen entdecken.",

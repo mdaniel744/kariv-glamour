@@ -7,7 +7,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import GrandSeikoFilterSidebar from './GrandSeikoFilterSidebar';
 import GrandSeikoProductCard from './GrandSeikoProductCard';
-import { GS_QUICK_FILTERS } from '@/lib/grandSeikoData';
+import { GS_COLLECTIONS, GS_QUICK_FILTERS } from '@/lib/grandSeikoData';
 import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Grand Seiko';
@@ -97,7 +97,7 @@ export default function GrandSeikoProductGrid() {
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-[hsl(var(--primary))]">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={GS_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={GS_QUICK_FILTERS} collections={GS_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

@@ -8,12 +8,13 @@ import { motion } from 'framer-motion';
 import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
-import { PATEK_QUICK_FILTERS, PATEK_COMPLICATIONS } from '@/lib/patekData';
+import { PATEK_COLLECTIONS, PATEK_QUICK_FILTERS, PATEK_COMPLICATIONS } from '@/lib/patekData';
 import { productSlug } from '@/lib/slug';
 import ProductCardImage from '@/components/shared/ProductCardImage';
 import BrandQuickFilters, { BrandAttributeFilterGroup, matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Patek Philippe';
+const COLLECTION_NAMES = PATEK_COLLECTIONS.map((collection) => collection.name);
 
 function PatekProductCard({ product }) {
   const { t } = useTranslation('brandComponents');
@@ -64,12 +65,13 @@ function PatekProductCard({ product }) {
 
 export default function PatekPhilippeProductGrid() {
   const { t } = useTranslation('brandComponents');
+  const { localize } = useLocalizedField();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [quickFilter, setQuickFilter] = useState([]);
-  const [filters, setFilters] = useState({ condition: [], caseMaterial: [], dialColor: [], gender: [], braceletMaterial: [], movementType: [], watchShape: [], complication: [], boxPapers: '', availability: '' });
+  const [filters, setFilters] = useState({ collection: [], condition: [], caseMaterial: [], dialColor: [], gender: [], braceletMaterial: [], movementType: [], watchShape: [], complication: [], boxPapers: '', availability: '' });
 
   const SORT_OPTIONS = [
     { value: '-created_date', label: t('productGrid.sortNewest') },
@@ -84,6 +86,7 @@ export default function PatekPhilippeProductGrid() {
       setLoading(true);
       try {
         let data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, sortBy, 50));
+        if (filters.collection.length) data = data.filter((p) => filters.collection.includes(p.collection));
         if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
         if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));
         if (filters.dialColor.length) data = data.filter((p) => filters.dialColor.includes(p.dialColor));
@@ -107,7 +110,8 @@ export default function PatekPhilippeProductGrid() {
 
   const FilterContent = () => (
     <div className="brand-filter-panel">
-      <BrandAttributeFilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} defaultOpen />
+      <BrandAttributeFilterGroup label={t('productGrid.collection')} options={COLLECTION_NAMES} selected={filters.collection} onToggle={(v) => toggleFilter('collection', v)} defaultOpen />
+      <BrandAttributeFilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.caseMaterial')} options={CASE_MATERIALS} selected={filters.caseMaterial} onToggle={(v) => toggleFilter('caseMaterial', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.dialColor')} options={DIAL_COLORS} selected={filters.dialColor} onToggle={(v) => toggleFilter('dialColor', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.gender')} options={GENDERS} selected={filters.gender} onToggle={(v) => toggleFilter('gender', v)} />
@@ -145,7 +149,7 @@ export default function PatekPhilippeProductGrid() {
           <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={PATEK_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => chip.label} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={PATEK_QUICK_FILTERS} collections={PATEK_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

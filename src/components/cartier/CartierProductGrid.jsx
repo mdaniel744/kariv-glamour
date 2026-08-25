@@ -7,7 +7,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import CartierFilterSidebar from './CartierFilterSidebar';
 import CartierProductCard from './CartierProductCard';
-import { CARTIER_QUICK_FILTERS } from '@/lib/cartierData';
+import { CARTIER_COLLECTIONS, CARTIER_QUICK_FILTERS } from '@/lib/cartierData';
 import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Cartier';
@@ -90,7 +90,7 @@ export default function CartierProductGrid() {
           <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={CARTIER_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={CARTIER_QUICK_FILTERS} collections={CARTIER_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

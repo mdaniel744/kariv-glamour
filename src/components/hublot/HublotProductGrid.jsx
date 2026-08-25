@@ -7,7 +7,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import HublotFilterSidebar from './HublotFilterSidebar';
 import HublotProductCard from './HublotProductCard';
-import { HUBLOT_QUICK_FILTERS } from '@/lib/hublotData';
+import { HUBLOT_COLLECTIONS, HUBLOT_QUICK_FILTERS } from '@/lib/hublotData';
 import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Hublot';
@@ -83,7 +83,7 @@ export default function HublotProductGrid() {
           <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={HUBLOT_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={HUBLOT_QUICK_FILTERS} collections={HUBLOT_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

@@ -8,12 +8,13 @@ import { motion } from 'framer-motion';
 import { Heart, ShieldCheck, Eye, SlidersHorizontal, X } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES } from '@/lib/constants';
-import { ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
+import { ROLEX_COLLECTIONS, ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
 import { productSlug } from '@/lib/slug';
 import ProductCardImage from '@/components/shared/ProductCardImage';
 import BrandQuickFilters, { BrandAttributeFilterGroup, matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Rolex';
+const COLLECTION_NAMES = ROLEX_COLLECTIONS.map((collection) => collection.name);
 
 export default function RolexProductGrid() {
   const { t } = useTranslation('brandComponents');
@@ -23,13 +24,14 @@ export default function RolexProductGrid() {
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [quickFilter, setQuickFilter] = useState([]);
-  const [filters, setFilters] = useState({ condition: [], caseMaterial: [], dialColor: [], gender: [], braceletMaterial: [], movementType: [], boxPapers: '', availability: '' });
+  const [filters, setFilters] = useState({ collection: [], condition: [], caseMaterial: [], dialColor: [], gender: [], braceletMaterial: [], movementType: [], boxPapers: '', availability: '' });
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       try {
         let data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, sortBy, 50));
+        if (filters.collection.length) data = data.filter((p) => filters.collection.includes(p.collection));
         if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
         if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));
         if (filters.dialColor.length) data = data.filter((p) => filters.dialColor.includes(p.dialColor));
@@ -122,7 +124,8 @@ export default function RolexProductGrid() {
 
   const FilterContent = () => (
     <div className="brand-filter-panel">
-      <BrandAttributeFilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} defaultOpen />
+      <BrandAttributeFilterGroup label={t('productGrid.collection')} options={COLLECTION_NAMES} selected={filters.collection} onToggle={(v) => toggleFilter('collection', v)} defaultOpen />
+      <BrandAttributeFilterGroup label={t('productGrid.condition')} options={CONDITIONS} selected={filters.condition} onToggle={(v) => toggleFilter('condition', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.caseMaterial')} options={CASE_MATERIALS} selected={filters.caseMaterial} onToggle={(v) => toggleFilter('caseMaterial', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.dialColor')} options={DIAL_COLORS} selected={filters.dialColor} onToggle={(v) => toggleFilter('dialColor', v)} />
       <BrandAttributeFilterGroup label={t('productGrid.gender')} options={GENDERS} selected={filters.gender} onToggle={(v) => toggleFilter('gender', v)} />
@@ -153,7 +156,7 @@ export default function RolexProductGrid() {
           <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={ROLEX_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={ROLEX_QUICK_FILTERS} collections={ROLEX_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="mb-8 flex items-center justify-between gap-4 border-b border-border pb-4">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

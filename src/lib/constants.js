@@ -141,6 +141,9 @@ export const DIAL_COLORS = ["Black", "Blue", "Green", "Gray", "Silver", "White",
 
 export const CASE_MATERIALS = ["Stainless Steel", "Yellow Gold", "Rose Gold", "White Gold", "Platinum", "Titanium", "Ceramic", "Carbon", "Bronze", "Two-Tone", "Steel and Gold", "Steel and Rose Gold"];
 
+// Popular sizes repeated across the existing brand-specific case-size lists.
+export const POPULAR_CASE_DIAMETERS = ["36 mm", "40 mm", "41 mm", "42 mm"];
+
 export const BRACELET_MATERIALS = ["Steel", "Titanium", "Yellow Gold", "Rose Gold", "White Gold", "Platinum", "Rubber", "Leather", "Alligator Leather", "Textile", "Nylon", "Ceramic"];
 
 export const MOVEMENT_TYPES = ["Automatic", "Self-winding", "Manual-winding", "Quartz", "Spring Drive", "Hi-Beat", "Mechanical", "Tourbillon", "Chronograph"];

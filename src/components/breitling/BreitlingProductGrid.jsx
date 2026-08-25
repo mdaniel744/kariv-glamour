@@ -7,7 +7,7 @@ import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal, X } from 'lucide-react';
 import BreitlingFilterSidebar from './BreitlingFilterSidebar';
 import BreitlingProductCard from './BreitlingProductCard';
-import { BREITLING_QUICK_FILTERS } from '@/lib/breitlingData';
+import { BREITLING_COLLECTIONS, BREITLING_QUICK_FILTERS } from '@/lib/breitlingData';
 import BrandQuickFilters, { matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Breitling';
@@ -84,7 +84,7 @@ export default function BreitlingProductGrid() {
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
 
-        <BrandQuickFilters chips={BREITLING_QUICK_FILTERS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
+        <BrandQuickFilters chips={BREITLING_QUICK_FILTERS} collections={BREITLING_COLLECTIONS} activeFilter={quickFilter} getLabel={(chip) => localize(chip, 'label')} onSelect={setQuickFilter} />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <button onClick={() => setMobileFiltersOpen(true)} className="flex items-center gap-2 text-[11px] tracking-[0.12em] uppercase text-foreground lg:hidden">

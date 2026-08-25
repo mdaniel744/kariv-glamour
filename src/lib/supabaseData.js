@@ -74,7 +74,7 @@ function mapProduct(row, brandsById, collectionsById, translationsById) {
     ...(translationsById[row.id] || {}),
     brand: brandsById[row.brand_id]?.name || '',
     brandId: row.brand_id,
-    collection: collectionsById[row.collection_id]?.name || '',
+    collection: collectionsById[row.collection_id]?.name || attrs['Collection'] || '',
     collectionId: row.collection_id,
     model: attrs['Model'] || '',
     referenceNumber: row.reference_number || '',
