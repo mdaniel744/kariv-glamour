@@ -1,68 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
-import { motion } from 'framer-motion';
-import { Heart, ShieldCheck, Eye, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import BrandFilterDrawer from '@/components/shared/BrandFilterDrawer';
-import { useCart } from '@/lib/cartContext';
-import { formatPrice, CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
+import { CONDITIONS, CASE_MATERIALS, DIAL_COLORS, GENDERS, BRACELET_MATERIALS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { PATEK_COLLECTIONS, PATEK_QUICK_FILTERS, PATEK_COMPLICATIONS } from '@/lib/patekData';
-import { productSlug } from '@/lib/slug';
-import ProductCardImage from '@/components/shared/ProductCardImage';
+import ProductCard from '@/components/shared/ProductCard';
 import BrandQuickFilters, { BrandAttributeFilterGroup, matchesBrandQuickFilter } from '@/components/shared/BrandQuickFilters';
 
 const BRAND = 'Patek Philippe';
 const COLLECTION_NAMES = PATEK_COLLECTIONS.map((collection) => collection.name);
-
-function PatekProductCard({ product }) {
-  const { t } = useTranslation('brandComponents');
-  const { localize } = useLocalizedField();
-  const { toggleWishlist, isInWishlist } = useCart();
-  const wishlisted = isInWishlist(product.id);
-  return (
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group">
-      <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
-        {product.featuredImage ?
-          <ProductCardImage src={product.featuredImage} alt={localize(product, 'productTitle')} /> :
-          <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
-        }
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          {product.isNewArrival && <span className="text-[9px] tracking-[0.15em] uppercase px-2 py-1 font-medium bg-primary text-primary-foreground">{t('productGrid.new')}</span>}
-          {product.authenticationStatus === 'Authenticated' &&
-            <span className="text-[9px] tracking-[0.15em] uppercase px-2 py-1 flex items-center gap-1 bg-foreground/10 text-foreground"><ShieldCheck size={10} /> {t('productGrid.verified')}</span>
-          }
-        </div>
-        <button onClick={(e) => { e.preventDefault(); toggleWishlist(product); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
-          <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
-        </button>
-        <LocalizedLink to={`/product/${productSlug(product)}`} className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-          <Eye size={14} className="text-white" />
-          <span className="text-[10px] tracking-[0.15em] uppercase text-white">{t('productGrid.quickView')}</span>
-        </LocalizedLink>
-      </div>
-      <LocalizedLink to={`/product/${productSlug(product)}`}>
-        <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
-        <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(product, 'productTitle')}</h3>
-        <div className="flex items-center gap-3 text-[10px] mb-2 text-muted-foreground">
-          {product.referenceNumber && <span>{t('product.ref')} {product.referenceNumber}</span>}
-          {product.yearOfProduction && <span>· {product.yearOfProduction}</span>}
-        </div>
-        <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
-          {product.condition && <span>{product.condition}</span>}
-          <span>·</span>
-          <span>{product.boxIncluded ? t('productGrid.box') : t('productGrid.noBox')}</span>
-          <span>·</span>
-          <span>{product.papersIncluded ? t('productGrid.papers') : t('productGrid.noPapers')}</span>
-        </div>
-        <p className="text-sm font-medium text-foreground">{formatPrice(product.price, product.currency)}</p>
-        <span className="text-[10px] tracking-[0.12em] uppercase mt-2 inline-block group-hover:opacity-70 text-primary">{t('productGrid.viewDetails')} →</span>
-      </LocalizedLink>
-    </motion.div>
-  );
-}
 
 export default function PatekPhilippeProductGrid() {
   const { t } = useTranslation('brandComponents');
@@ -177,7 +126,7 @@ export default function PatekPhilippeProductGrid() {
               </div> :
               products.length === 0 ?
                 <div className="text-center py-20"><p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p></div> :
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">{products.map((p) => <PatekProductCard key={p.id} product={p} />)}</div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">{products.map((p) => <ProductCard key={p.id} product={p} />)}</div>
             }
           </div>
         </div>

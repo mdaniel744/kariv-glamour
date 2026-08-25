@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ProductCardImage from '@/components/shared/ProductCardImage';
+import ProductCard from '@/components/shared/ProductCard';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
@@ -7,43 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
-import { ChevronRight, Heart } from 'lucide-react';
-import { useCart } from '@/lib/cartContext';
-import { formatPrice } from '@/lib/constants';
+import { ChevronRight } from 'lucide-react';
 import { ROLEX_SEO_PAGES, ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
 import TrustBar from '@/components/shared/TrustBar';
-import { productSlug } from '@/lib/slug';
 
 const BRAND = 'Rolex';
 
 function SeoProductCard({ product }) {
-  const { t } = useTranslation('brandComponents');
-  const { localize } = useLocalizedField();
-  const { toggleWishlist, isInWishlist } = useCart();
-  const wishlisted = isInWishlist(product.id);
-  return (
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
-      <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-card">
-        {product.featuredImage ? (
-          <ProductCardImage src={product.featuredImage} alt={localize(product, 'productTitle')} />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
-        )}
-        <button onClick={(e) => { e.preventDefault(); toggleWishlist(product); }} className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm">
-          <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
-        </button>
-      </div>
-      <LocalizedLink to={`/product/${productSlug(product)}`}>
-        <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{product.brand}</p>
-        <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(product, 'productTitle')}</h3>
-        <div className="flex items-center gap-2 text-[10px] mb-2 text-muted-foreground">
-          {product.referenceNumber && <span>{t('product.ref')} {product.referenceNumber}</span>}
-          {product.yearOfProduction && <span>· {product.yearOfProduction}</span>}
-        </div>
-        <p className="text-sm font-medium text-foreground">{formatPrice(product.price, product.currency)}</p>
-      </LocalizedLink>
-    </motion.div>
-  );
+  return <ProductCard product={product} />;
 }
 
 export default function RolexSeoLanding({ slug }) {

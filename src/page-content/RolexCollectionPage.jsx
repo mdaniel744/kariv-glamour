@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ProductCardImage from '@/components/shared/ProductCardImage';
+import ProductCard from '@/components/shared/ProductCard';
 import LocalizedLink from '@/components/LocalizedLink';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
@@ -7,12 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
-import { ChevronRight, Heart } from 'lucide-react';
-import { useCart } from '@/lib/cartContext';
-import { formatPrice } from '@/lib/constants';
+import { ChevronRight } from 'lucide-react';
 import { ROLEX_COLLECTIONS, ROLEX_QUICK_FILTERS } from '@/lib/rolexData';
 import TrustBar from '@/components/shared/TrustBar';
-import { productSlug } from '@/lib/slug';
 
 const BRAND = 'Rolex';
 
@@ -23,7 +20,6 @@ export default function RolexCollectionPage({ slug: slugProp }) {
   const collection = ROLEX_COLLECTIONS.find(c => c.slug === slug);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { toggleWishlist, isInWishlist } = useCart();
 
   useSEO({
     title: collection ? localize(collection, 'description').slice(0, 60) : '',
@@ -95,36 +91,7 @@ export default function RolexCollectionPage({ slug: slugProp }) {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">{[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] animate-pulse bg-card" />)}</div>
           ) : products.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {products.map(p => {
-                const wishlisted = isInWishlist(p.id);
-                return (
-                  <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group">
-                    <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-card md:mb-4">
-                      {p.featuredImage ? (
-                        <ProductCardImage src={p.featuredImage} alt={localize(p, 'productTitle')} />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
-                      )}
-                      <button
-                        type="button"
-                        onClick={(e) => { e.preventDefault(); toggleWishlist(p); }}
-                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full opacity-100 transition-opacity bg-black/40 backdrop-blur-sm md:opacity-0 md:group-hover:opacity-100"
-                        aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}>
-                        <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : 'text-white'} />
-                      </button>
-                    </div>
-                    <LocalizedLink to={`/product/${productSlug(p)}`}>
-                      <p className="text-[10px] tracking-[0.15em] uppercase font-medium mb-1 text-primary">{p.brand}</p>
-                      <h3 className="text-sm font-body leading-tight line-clamp-2 mb-1.5 text-foreground">{localize(p, 'productTitle')}</h3>
-                      <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-muted-foreground">
-                        {p.referenceNumber && <span>{t('product.ref')} {p.referenceNumber}</span>}
-                        {p.yearOfProduction && <span>· {p.yearOfProduction}</span>}
-                      </div>
-                      <p className="text-sm font-medium text-foreground">{formatPrice(p.price, p.currency)}</p>
-                    </LocalizedLink>
-                  </motion.div>
-                );
-              })}
+              {products.map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
           ) : (
             <div className="text-center py-16">

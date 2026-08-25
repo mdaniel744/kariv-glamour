@@ -10,7 +10,7 @@ import { productSlug } from '@/lib/slug';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
 
-export default function ProductCard({ product, enableGallery = false }) {
+export default function ProductCard({ product, enableGallery = true }) {
   const { t } = useTranslation();
   const { toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
@@ -21,8 +21,11 @@ export default function ProductCard({ product, enableGallery = false }) {
   const [activeImage, setActiveImage] = useState(0);
   const title = localize(product, 'productTitle');
   const productPath = `/product/${productSlug(product)}`;
-  const sourceImages = enableGallery && Array.isArray(product.productImages)
-    ? product.productImages
+  const sourceImages = enableGallery
+    ? [
+        ...(Array.isArray(product.productImages) ? product.productImages : []),
+        ...(Array.isArray(product.images) ? product.images : []),
+      ]
     : [];
   const images = [...new Set([product.featuredImage, ...sourceImages].filter(Boolean))]
     .map((image) => (
