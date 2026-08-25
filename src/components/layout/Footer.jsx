@@ -2,19 +2,10 @@ import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import MediaImage from '@/components/shared/MediaImage';
 import { useTranslation } from 'react-i18next';
-import { BRAND_DATA } from '@/lib/constants';
-import { Monitor, Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/lib/themeContext';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
-  const { themePreference, setThemePreference } = useTheme();
-
-  const themeOptions = [
-    { value: 'system', label: t('footer.themeDevice'), icon: Monitor },
-    { value: 'light', label: t('footer.themeLight'), icon: Sun },
-    { value: 'dark', label: t('footer.themeDark'), icon: Moon },
-  ];
 
   const footerLinks = {
     company: [
@@ -31,20 +22,17 @@ export default function Footer() {
       { label: t('footer.warranty'), to: '/legal/warranty-policy' }
     ],
     legal: [
-      { label: t('footer.termsConditions'), to: '/legal/terms-and-conditions' },
-      { label: t('footer.privacyPolicy'), to: '/legal/privacy-policy' },
       { label: t('footer.cookiePolicy'), to: '/legal/cookie-policy' },
       { label: t('footer.impressum'), to: '/legal/impressum' },
       { label: t('footer.authenticityDisclaimer'), to: '/legal/authenticity-disclaimer' },
       { label: t('footer.brandDisclaimer'), to: '/legal/brand-disclaimer' }
-    ],
-    brands: BRAND_DATA.slice(0, 6).map((b) => ({ label: b.name, to: `/brands/${b.slug}` })).concat([{ label: t('footer.allBrands'), to: '/brands' }])
+    ]
   };
 
   return (
     <footer className="border-t border-[#dce5df] bg-[#fbfcfa] dark:border-[#263747] dark:bg-[#060B14]">
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
             <LocalizedLink to="/" aria-label="Kariv Glamour home" className="mb-5 inline-flex max-w-full items-center">
               <MediaImage
@@ -82,32 +70,14 @@ export default function Footer() {
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
                 {t('footer.appearance')}
               </p>
-              <div className="inline-flex max-w-full rounded-full border border-[#cddbd2] bg-white p-1 shadow-sm dark:border-white/15 dark:bg-white/5" role="group" aria-label={t('footer.appearance')}>
-                {themeOptions.map(({ value, label, icon: Icon }) => {
-                  const selected = themePreference === value;
-
-                  return (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setThemePreference(value)}
-                      aria-pressed={selected}
-                      className={`flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${selected ? 'bg-[#173d31] text-white shadow-sm dark:bg-[#C5A367] dark:text-[#06110d]' : 'text-[#496057] hover:bg-[#edf3ef] hover:text-primary dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'}`}
-                    >
-                      <Icon size={15} aria-hidden="true" />
-                      <span>{label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <ThemeSwitcher />
             </div>
           </div>
 
           {[
             { title: t('footer.company'), links: footerLinks.company },
             { title: t('footer.service'), links: footerLinks.service },
-            { title: t('footer.legal'), links: footerLinks.legal },
-            { title: t('footer.brands'), links: footerLinks.brands }
+            { title: t('footer.legal'), links: footerLinks.legal }
           ].map((col) =>
           <div key={col.title}>
               <h3 className="text-[11px] tracking-[0.2em] uppercase text-primary dark:text-white font-semibold mb-5">{col.title}</h3>

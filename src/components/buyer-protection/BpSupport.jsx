@@ -6,8 +6,8 @@ import BpSection from './BpSection';
 const RESOURCES = [
   { icon: ShieldCheck, to: '/authentication' },
   { icon: Award, to: '/guides' },
-  { icon: RotateCcw, to: '/legal/returns-and-refunds' },
-  { icon: Truck, to: '/legal/shipping-and-delivery' },
+  { icon: RotateCcw, to: '/legal/returns-refund-policy' },
+  { icon: Truck, to: '/legal/shipping-policy' },
   { icon: FileText, to: '/legal/terms-and-conditions' },
   { icon: BookOpen, to: '/guides' },
   { icon: Wrench, to: '/guides' },
@@ -28,8 +28,8 @@ export default function BpSupport({ copy }) {
           <div className="flex flex-wrap justify-center gap-3">
             <LocalizedLink to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 bg-primary-foreground text-primary text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{copy.contactCta}</LocalizedLink>
             <LocalizedLink to="/customer-service" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">{copy.faqCta}</LocalizedLink>
-            <LocalizedLink to="/legal/returns-and-refunds" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">{copy.returnsCta}</LocalizedLink>
-            <LocalizedLink to="/legal/shipping-and-delivery" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">{copy.shippingCta}</LocalizedLink>
+            <LocalizedLink to="/legal/returns-refund-policy" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">{copy.returnsCta}</LocalizedLink>
+            <LocalizedLink to="/legal/shipping-policy" className="inline-flex items-center justify-center px-6 py-3 border border-primary-foreground/40 text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-primary-foreground/10 transition-colors">{copy.shippingCta}</LocalizedLink>
           </div>
         </div>
       </section>

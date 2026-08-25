@@ -92,9 +92,9 @@ export default function PatekPhilippeProductGrid() {
   );
 
   return (
-    <section id="patek-products" className="brand-products-section bg-secondary py-16 md:py-24">
+    <section id="patek-products" className="brand-products-section bg-secondary py-5 sm:py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-10">
+        <div className="hidden">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('productGrid.eyebrow')}</span>
           <h2 className="text-3xl md:text-4xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>

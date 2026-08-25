@@ -11,9 +11,9 @@ export default function HublotCollectionGrid() {
   const { t } = useTranslation('brandComponents');
   const { collections } = useBrandCollections(BRAND, HUBLOT_COLLECTIONS);
   return (
-    <section id="collections" className="py-16 md:py-24 bg-background">
+    <section id="collections" data-brand-collections className="bg-background py-3 sm:py-4 md:py-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-12">
+        <div data-brand-collections-header className="hidden">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('collectionCarousel.eyebrow')}</span>
           <h2 className="text-3xl md:text-4xl mb-4 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('collectionCarousel.heading', { brand: BRAND })}</h2>
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>

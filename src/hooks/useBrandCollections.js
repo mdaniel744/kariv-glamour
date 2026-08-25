@@ -2,19 +2,10 @@ import { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { isCatalogDatabaseConfigured } from '@/lib/supabaseData';
+import { normalizeCollectionKey, sortCollectionsByProductCount } from '@/lib/collectionOrdering';
 
 function firstNonEmpty(...values) {
   return values.find(value => typeof value === 'string' && value.trim().length > 0)?.trim() || '';
-}
-
-function normalizeCollectionKey(value) {
-  return firstNonEmpty(value)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/&/g, 'and')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }
 
 function buildFallbackLookup(fallbackData = []) {
@@ -96,26 +87,29 @@ function mapCollectionRecords(records, fallbackData = []) {
 
 export function useBrandCollections(brandName, fallbackData = []) {
   const shouldUseFallback = !isCatalogDatabaseConfigured;
-  const [collections, setCollections] = useState(() => shouldUseFallback ? fallbackData : []);
+  const [collections, setCollections] = useState(() => shouldUseFallback ? sortCollectionsByProductCount(fallbackData) : []);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    setCollections(shouldUseFallback ? fallbackData : []);
+    setCollections(shouldUseFallback ? sortCollectionsByProductCount(fallbackData) : []);
 
-    dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName', 100)
-      .then(response => {
+    Promise.allSettled([
+      dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName', 100),
+      dataClient.entities.Products.filter({ brand: brandName }, '-created_date'),
+    ])
+      .then(([collectionResult, productResult]) => {
         if (!mounted) return;
-        const records = asArray(response);
-        if (records.length > 0) {
-          setCollections(mapCollectionRecords(records, fallbackData));
-          return;
-        }
-        setCollections(fallbackData);
+        const records = collectionResult.status === 'fulfilled' ? asArray(collectionResult.value) : [];
+        const products = productResult.status === 'fulfilled' ? asArray(productResult.value) : [];
+        const availableCollections = records.length > 0
+          ? mapCollectionRecords(records, fallbackData)
+          : fallbackData;
+        setCollections(sortCollectionsByProductCount(availableCollections, products));
       })
       .catch(() => {
-        if (mounted) setCollections(fallbackData);
+        if (mounted) setCollections(sortCollectionsByProductCount(fallbackData));
       })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };

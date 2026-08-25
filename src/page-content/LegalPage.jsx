@@ -5,6 +5,28 @@ import { asArray } from '@/lib/base44Data';
 import { useLocalizedField } from '@/lib/localize';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight } from 'lucide-react';
+import CompanyDetails from '@/components/legal/CompanyDetails';
+
+function MarkdownLink({ node: _node, href = '', children, ...props }) {
+  return (
+    <LocalizedLink to={href} {...props}>
+      {children}
+    </LocalizedLink>
+  );
+}
+
+function MarkdownTable({ node: _node, children, ...props }) {
+  return (
+    <div className="max-w-full overflow-x-auto rounded-xl border border-border">
+      <table {...props}>{children}</table>
+    </div>
+  );
+}
+
+const markdownComponents = {
+  a: MarkdownLink,
+  table: MarkdownTable,
+};
 
 export default function LegalPage({ slug: slugProp, initialPage = null }) {
   const slug = slugProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
@@ -69,8 +91,9 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
       </div>
 
       <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-10">{localize(page, 'title')}</h1>
+      <CompanyDetails locale={locale} compact={slug !== 'impressum'} />
       <div className="legal-content">
-        <ReactMarkdown>{localize(page, 'content')}</ReactMarkdown>
+        <ReactMarkdown components={markdownComponents}>{localize(page, 'content')}</ReactMarkdown>
       </div>
     </div>
   );

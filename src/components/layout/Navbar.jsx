@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { BRAND_DATA } from '@/lib/constants';
 import NotificationBell from '@/components/shared/NotificationBell';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 import MediaImage from '@/components/shared/MediaImage';
 
@@ -81,8 +82,8 @@ export default function Navbar() {
   const SECURITY_LINKS = [
     { label: t('security.buyerProtection'), to: '/buyer-protection' },
     { label: t('security.faqs'), to: '/customer-service' },
-    { label: t('security.returnsRefunds'), to: '/legal/returns-and-refunds' },
-    { label: t('security.shippingDelivery'), to: '/legal/shipping-and-delivery' }
+    { label: t('security.returnsRefunds'), to: '/legal/returns-refund-policy' },
+    { label: t('security.shippingDelivery'), to: '/legal/shipping-policy' }
   ];
 
   const handleSearch = (e) => {
@@ -405,13 +406,16 @@ export default function Navbar() {
               <LocalizedLink to="/sell-trade" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('sellTrade')}</LocalizedLink>
               <LocalizedLink to="/about" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('about')}</LocalizedLink>
               <LocalizedLink to="/customer-service" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('customerService')}</LocalizedLink>
+              <div className="mt-3 flex flex-wrap items-center gap-3 border-y border-border py-4">
+                <LanguageSwitcher />
+                <ThemeSwitcher />
+              </div>
               {!isAuthenticated && (
                 <div className="pt-4 mt-2 border-t border-border space-y-1">
                   <LocalizedLink to="/login" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Sign In</LocalizedLink>
                   <LocalizedLink to="/register" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Create Account</LocalizedLink>
                 </div>
               )}
-              <div className="pt-2"><LanguageSwitcher /></div>
             </div>
           </motion.div>
         }

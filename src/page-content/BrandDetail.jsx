@@ -7,7 +7,6 @@ import { useLocalizedField } from '@/lib/localize';
 import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
 import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
 
 const COPY = {
   de: {
@@ -97,25 +96,13 @@ export default function BrandDetail({
   return (
     <div>
       {/* Hero */}
-      <section className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-        {brand?.heroImage ?
-        <img src={brand.heroImage} alt={brandName} className="w-full h-full object-cover" /> :
-
-        <div className="w-full h-full bg-gradient-to-br from-card to-background" />
-        }
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-16 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-4">
-            <LocalizedLink to="/" className="hover:text-foreground">{copy.home}</LocalizedLink>
-            <ChevronRight size={10} />
-            <LocalizedLink to="/brands" className="hover:text-foreground">{copy.brands}</LocalizedLink>
-            <ChevronRight size={10} />
-            <span className="text-foreground">{brandName}</span>
-          </div>
+      <section data-site-hero="brand" className="relative overflow-hidden border-b border-[#d9e2dc] bg-[#fbfcfa] text-[#10231d] dark:border-[#263747] dark:bg-[#0d1824] dark:text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_83%_40%,rgba(203,221,212,0.52),transparent_31%),linear-gradient(135deg,#ffffff_0%,#f7faf7_55%,#eef4f0_100%)] dark:bg-[radial-gradient(circle_at_83%_40%,rgba(98,114,128,0.22),transparent_32%),linear-gradient(135deg,#121e2b_0%,#0d1824_56%,#09121c_100%)]" />
+        <div className="relative mx-auto max-w-7xl px-5 py-6 sm:px-7 sm:py-7 md:px-10 md:py-8 lg:px-12">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl tracking-tight [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">
+            className="font-display text-[2.25rem] font-semibold leading-[1.08] tracking-[-0.045em] text-primary dark:text-white sm:text-[2.65rem] md:text-5xl md:leading-[1.06]">
             
             {brandName}
           </motion.h1>
@@ -123,7 +110,7 @@ export default function BrandDetail({
       </section>
 
       {/* Brand story */}
-      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+      <section className="hidden">
         <div className="max-w-3xl">
           <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-4 block">{copy.manufacture}</span>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -134,9 +121,9 @@ export default function BrandDetail({
 
       {/* Collections */}
       {collections.length > 0 &&
-      <section className="border-t border-border py-16 md:py-20">
+      <section data-brand-collections className="border-b border-border py-3 sm:py-4 md:border-t md:py-8">
           <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-2xl mb-10 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{copy.collections}</h2>
+            <h2 data-brand-collections-header className="hidden">{copy.collections}</h2>
             <div className="flex gap-3 flex-wrap">
               {collections.map((col) =>
             <LocalizedLink               key={col.id}
@@ -152,10 +139,10 @@ export default function BrandDetail({
       }
 
       {/* Products */}
-      <section className="border-t border-border py-16 md:py-20">
+      <section className="border-t border-border py-5 sm:py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
-            <div>
+          <div className="mb-6 flex justify-end">
+            <div className="hidden">
               <h2 className="text-2xl [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{copy.available}</h2>
               <p className="text-xs text-muted-foreground mt-1">{copy.watchesAvailable(products.length)}</p>
             </div>

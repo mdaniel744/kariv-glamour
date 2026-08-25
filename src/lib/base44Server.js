@@ -1,6 +1,7 @@
 import 'server-only';
 import { productSlug } from '@/lib/slug';
 import { Products, Brands, Collections, LegalPages, STORE_ID } from '@/lib/supabaseData';
+import { getLegalPageFallback, mergeLegalPageFallbacks } from '@/lib/legalPageFallbacks';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { loadIdentities } from '@/lib/orderIdentities';
 import { loadApprovedDealerReviews, summarizeDealerReviews } from '@/lib/dealerReviewsData';
@@ -93,10 +94,11 @@ export async function getPublishedProducts(limit = 500) {
 
 export async function getLegalPages(limit = 100) {
   try {
-    return await LegalPages.list('title', limit, 0);
+    const pages = await LegalPages.list('title', limit, 0);
+    return mergeLegalPageFallbacks(pages);
   } catch (error) {
     console.error('Unable to load legal pages from Supabase:', error?.message || error);
-    return [];
+    return mergeLegalPageFallbacks();
   }
 }
 
@@ -104,10 +106,10 @@ export async function getLegalPageBySlug(slug) {
   if (!slug) return null;
   try {
     const records = await LegalPages.filter({ slug }, '-created_date', 1, 0);
-    return records[0] || null;
+    return records[0] || getLegalPageFallback(slug);
   } catch (error) {
     console.error('Unable to load legal page from Supabase:', error?.message || error);
-    return null;
+    return getLegalPageFallback(slug);
   }
 }
 

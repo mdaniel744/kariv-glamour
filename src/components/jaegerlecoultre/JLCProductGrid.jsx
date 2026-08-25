@@ -102,9 +102,9 @@ export default function JLCProductGrid() {
   }, [products, filters, sortBy, quickFilter]);
 
   return (
-    <section id="shop" className="brand-products-section bg-secondary py-16 md:py-24">
+    <section id="shop" className="brand-products-section bg-secondary py-5 sm:py-6 md:py-8">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="text-center mb-10">
+        <div className="hidden">
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('productGrid.eyebrow')}</span>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">{t('productGrid.heading', { brand: BRAND })}</h2>
         </div>
