@@ -34,7 +34,9 @@ export default function RolexCollectionCarousel() {
             <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.03 }} className="flex-shrink-0 w-[164px] snap-start group sm:w-[280px]">
               <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(col.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, col.name)} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
                 <div className="relative h-[164px] overflow-hidden bg-secondary sm:h-[230px]">
-                  <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="absolute inset-x-0 top-0 h-[calc(100%-48px)] w-full object-contain p-1.5 transition-transform duration-700 group-hover:scale-105 sm:p-5 md:p-6" />
+                  <div className="absolute inset-x-0 top-0 h-[calc(100%-48px)] overflow-hidden">
+                    <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="h-full w-full scale-[1.18] object-contain transition-transform duration-700 group-hover:scale-[1.24] sm:scale-[1.12] sm:group-hover:scale-[1.18]" />
+                  </div>
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-center px-3 sm:px-4">
                     <h3 className="line-clamp-2 font-body text-xs font-semibold leading-tight text-primary sm:text-sm">{col.name}</h3>
                   </div>

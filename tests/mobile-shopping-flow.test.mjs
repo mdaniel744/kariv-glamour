@@ -84,7 +84,8 @@ test('brand collection tiles are compact on mobile and apply real collection fil
     assert.match(source, /sm:h-\[230px\]/, `${path} needs a fixed desktop tile height`);
     assert.match(source, /h-\[calc\(100%-48px\)\]/, `${path} needs a dedicated image area above the title`);
     assert.match(source, /flex h-12 items-center/, `${path} needs a dedicated title row that cannot overlap the image`);
-    assert.match(source, /p-1\.5/, `${path} needs near-edge mobile watch imagery`);
+    assert.match(source, /scale-\[1\.18\]/, `${path} needs enlarged mobile watch imagery`);
+    assert.match(source, /h-\[calc\(100%-48px\)\] overflow-hidden/, `${path} must clip enlarged imagery above the title row`);
     assert.match(source, /line-clamp-2[^\n]*leading-tight text-primary/, `${path} needs a contained theme-aware title`);
     assert.doesNotMatch(source, /from-black\/75|via-black\/35/, `${path} must not use a dark title gradient`);
     assert.doesNotMatch(source, /sm:aspect-\[/, `${path} must not return to a tall desktop aspect ratio`);

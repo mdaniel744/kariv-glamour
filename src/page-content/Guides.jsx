@@ -5,21 +5,40 @@ import { useLocalizedField } from '@/lib/localize';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import SEO from '@/components/SEO';
-import { BookOpen, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { EDITORIAL_GUIDES } from '@/lib/editorialGuides';
+
+const BUILT_IN_GUIDES = EDITORIAL_GUIDES.map((guide) => ({
+  id: `editorial-${guide.slug}`,
+  slug: guide.slug,
+  featuredImage: guide.image,
+  published: true,
+  created_date: guide.datePublished,
+  title_en: guide.translations.en.title,
+  title_de: guide.translations.de.title,
+  excerpt_en: guide.translations.en.excerpt,
+  excerpt_de: guide.translations.de.excerpt,
+  category_en: guide.translations.en.category,
+  category_de: guide.translations.de.category,
+}));
 
 export default function Guides() {
   const { t } = useTranslation();
   const { localize } = useLocalizedField();
   const [guides, setGuides] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     dataClient.entities.WatchGuides.filter({ published: true }, '-created_date', 50)
       .then(data => setGuides(asArray(data)))
-      .catch(console.error)
-      .finally(() => setLoading(false));
+      .catch(console.error);
   }, []);
+
+  const builtInSlugs = new Set(BUILT_IN_GUIDES.map((guide) => guide.slug));
+  const visibleGuides = [
+    ...BUILT_IN_GUIDES,
+    ...guides.filter((guide) => !builtInSlugs.has(guide.slug)),
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
@@ -38,25 +57,8 @@ export default function Guides() {
         </p>
       </div>
 
-      {loading ? (
-        <div className="grid md:grid-cols-3 gap-8">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="aspect-[16/10] bg-card mb-4" />
-              <div className="h-3 bg-card w-20 mb-2" />
-              <div className="h-4 bg-card w-full" />
-            </div>
-          ))}
-        </div>
-      ) : guides.length === 0 ? (
-        <div className="text-center py-20 border border-border">
-          <BookOpen size={40} className="text-muted-foreground/30 mx-auto mb-4" />
-          <p className="text-muted-foreground text-sm mb-2">{t('pages.guides.emptyTitle')}</p>
-          <p className="text-xs text-muted-foreground/50">{t('pages.guides.emptyDesc')}</p>
-        </div>
-      ) : (
-        <div className="grid md:grid-cols-3 gap-8">
-          {guides.map((guide, i) => (
+      <div className="grid gap-8 md:grid-cols-3">
+          {visibleGuides.map((guide, i) => (
             <motion.div
               key={guide.id}
               initial={{ opacity: 0, y: 20 }}
@@ -64,20 +66,19 @@ export default function Guides() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <LocalizedLink to={`/guides/${guide.id}`} className="group block">
-                <div className="aspect-[16/10] bg-card overflow-hidden mb-4">
+              <LocalizedLink to={`/guides/${guide.slug || guide.id}`} className="group block">
+                <div className="mb-4 aspect-[16/10] overflow-hidden rounded-xl bg-card">
                   {guide.featuredImage && (
                     <img src={guide.featuredImage} alt={localize(guide, 'title')} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   )}
                 </div>
-                <span className="text-[9px] tracking-[0.2em] uppercase text-primary mb-2 block">{guide.category}</span>
-                <h2 className="text-sm text-foreground group-hover:text-primary transition-colors leading-tight mb-2">{localize(guide, 'title')}</h2>
-                {guide.excerpt && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{localize(guide, 'excerpt')}</p>}
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-primary">{localize(guide, 'category')}</span>
+                <h2 className="mb-2 text-lg font-bold leading-tight text-foreground transition-colors group-hover:text-primary">{localize(guide, 'title')}</h2>
+                {localize(guide, 'excerpt') && <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">{localize(guide, 'excerpt')}</p>}
               </LocalizedLink>
             </motion.div>
           ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -11,9 +11,9 @@ export default function EditorialSection() {
   const { t } = useTranslation();
 
   const guides = [
-    { titleKey: 'components.editorialSection.guide1.title', excerptKey: 'components.editorialSection.guide1.excerpt', tagKey: 'components.editorialSection.guide1.tag' },
-    { titleKey: 'components.editorialSection.guide2.title', excerptKey: 'components.editorialSection.guide2.excerpt', tagKey: 'components.editorialSection.guide2.tag' },
-    { titleKey: 'components.editorialSection.guide3.title', excerptKey: 'components.editorialSection.guide3.excerpt', tagKey: 'components.editorialSection.guide3.tag' }
+    { slug: 'how-to-safely-buy-a-pre-owned-luxury-watch', titleKey: 'components.editorialSection.guide1.title', excerptKey: 'components.editorialSection.guide1.excerpt', tagKey: 'components.editorialSection.guide1.tag' },
+    { slug: 'what-box-and-papers-mean-for-luxury-watches', titleKey: 'components.editorialSection.guide2.title', excerptKey: 'components.editorialSection.guide2.excerpt', tagKey: 'components.editorialSection.guide2.tag' },
+    { slug: 'are-pre-owned-luxury-watches-a-good-investment', titleKey: 'components.editorialSection.guide3.title', excerptKey: 'components.editorialSection.guide3.excerpt', tagKey: 'components.editorialSection.guide3.tag' }
   ];
 
   return (
@@ -24,8 +24,8 @@ export default function EditorialSection() {
       <div className="relative max-w-7xl mx-auto px-6">
         <SectionHeading index="06" title={t('components.editorialSection.title')} subtitle={t('components.editorialSection.subtitle')} linkTo="/guides" />
         <div className="grid md:grid-cols-3 gap-8">
-          {guides.map((guide, i) => (
-            <LocalizedLink key={i} to="/guides" className="group block">
+          {guides.map((guide) => (
+            <LocalizedLink key={guide.slug} to={`/guides/${guide.slug}`} className="group block">
               <div className="border border-border p-8 hover:border-primary/30 transition-colors h-full flex flex-col">
                 <span className="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t(guide.tagKey)}</span>
                 <h3 className="mb-3 font-display text-xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">

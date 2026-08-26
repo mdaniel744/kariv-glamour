@@ -1,6 +1,7 @@
 import { BRAND_DATA } from '@/lib/constants';
 import { SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import { BRAND_COLLECTION_ROUTES } from '@/lib/brandCollectionRegistry';
+import { EDITORIAL_GUIDES } from '@/lib/editorialGuides';
 import { getLegalPages, getPublishedProducts } from '@/lib/base44Server';
 import { getSiteUrl, SUPPORTED_LOCALES } from '@/lib/seo';
 import { productSlug } from '@/lib/slug';
@@ -120,6 +121,21 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de${path}`,
             en: `${siteUrl}/en${path}`,
+          },
+        },
+      });
+    }
+
+    for (const guide of EDITORIAL_GUIDES) {
+      entries.push({
+        url: localized(`/guides/${guide.slug}`),
+        lastModified: guide.dateModified,
+        changeFrequency: 'monthly',
+        priority: 0.65,
+        alternates: {
+          languages: {
+            de: `${siteUrl}/de/guides/${guide.slug}`,
+            en: `${siteUrl}/en/guides/${guide.slug}`,
           },
         },
       });
