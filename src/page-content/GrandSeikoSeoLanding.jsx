@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { GS_SEO_PAGES, GS_QUICK_FILTERS } from '@/lib/grandSeikoData';
 import TrustBar from '@/components/shared/TrustBar';
+import SeoPillRail from '@/components/shared/SeoPillRail';
 
 const BRAND = 'Grand Seiko';
 
@@ -70,9 +71,7 @@ export default function GrandSeikoSeoLanding({ slug }) {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {GS_QUICK_FILTERS.map((chip, i) => <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{localize(chip, 'label')}</LocalizedLink>)}
-        </div>
+        <SeoPillRail items={GS_QUICK_FILTERS} getLabel={(chip) => localize(chip, 'label')} />
       </div>
 
       {!pageData.isGuide && (

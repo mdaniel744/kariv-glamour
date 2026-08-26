@@ -26,6 +26,24 @@ const PRODUCT_COMPONENTS = COLLECTION_COMPONENTS.map((path) =>
   path.replace(/Collection(?:Grid|Carousel)\.jsx$/, 'ProductGrid.jsx'),
 );
 
+const SEO_LANDING_COMPONENTS = [
+  'AudemarsPiguetSeoLanding.jsx',
+  'BreitlingSeoLanding.jsx',
+  'BvlgariSeoLanding.jsx',
+  'CartierSeoLanding.jsx',
+  'GirardPerregauxSeoLanding.jsx',
+  'GrandSeikoSeoLanding.jsx',
+  'HublotSeoLanding.jsx',
+  'IWCSeoLanding.jsx',
+  'JaegerLeCoultreSeoLanding.jsx',
+  'OmegaSeoLanding.jsx',
+  'PaneraiSeoLanding.jsx',
+  'PatekPhilippeSeoLanding.jsx',
+  'RolexSeoLanding.jsx',
+  'TAGHeuerSeoLanding.jsx',
+  'TudorSeoLanding.jsx',
+].map((file) => `src/page-content/${file}`);
+
 test('the home hero keeps its primary shopping controls compact on mobile', () => {
   const source = read('src/components/home/HeroSection.jsx');
 
@@ -56,6 +74,43 @@ test('every custom brand hides collection and shop titles while preserving the s
     assert.match(source, /py-5 sm:py-6 md:py-8/, `${path} needs compact shop spacing at every breakpoint`);
     assert.match(source, /<div className="hidden">\s*<span[^>]*>\{t\('productGrid\.eyebrow'\)/, `${path} needs an always-hidden shop title`);
   });
+});
+
+test('brand collection tiles are compact on mobile and apply real collection filters', () => {
+  COLLECTION_COMPONENTS.forEach((path) => {
+    const source = read(path);
+    assert.match(source, /data-collection-card/, `${path} needs a collection-card marker`);
+    assert.match(source, /h-\[164px\]/, `${path} needs a compact, consistent mobile tile`);
+    assert.match(source, /sm:h-\[230px\]/, `${path} needs a fixed desktop tile height`);
+    assert.match(source, /h-\[calc\(100%-48px\)\]/, `${path} needs a dedicated image area above the title`);
+    assert.match(source, /flex h-12 items-center/, `${path} needs a dedicated title row that cannot overlap the image`);
+    assert.match(source, /p-1\.5/, `${path} needs near-edge mobile watch imagery`);
+    assert.match(source, /line-clamp-2[^\n]*leading-tight text-primary/, `${path} needs a contained theme-aware title`);
+    assert.doesNotMatch(source, /from-black\/75|via-black\/35/, `${path} must not use a dark title gradient`);
+    assert.doesNotMatch(source, /sm:aspect-\[/, `${path} must not return to a tall desktop aspect ratio`);
+    assert.match(source, /\/shop\?brand=\$\{encodeURIComponent\(BRAND\)\}&collection=\$\{encodeURIComponent\((?:c|col)\.name\)\}/, `${path} needs a valid catalogue filter fallback`);
+    assert.match(source, /handleBrandCollectionFilterClick\(event, (?:c|col)\.name\)/, `${path} needs same-page collection filtering`);
+  });
+
+  const quickFilters = read('src/components/shared/BrandQuickFilters.jsx');
+  assert.match(quickFilters, /BRAND_COLLECTION_FILTER_EVENT/);
+  assert.doesNotMatch(quickFilters, /rounded-xl border border-border\/80 bg-background\/95/);
+});
+
+test('SEO model and collection pages share one responsive horizontal pill rail', () => {
+  SEO_LANDING_COMPONENTS.forEach((path) => {
+    const source = read(path);
+    assert.match(source, /import SeoPillRail/, `${path} needs the shared pill rail`);
+    assert.match(source, /<SeoPillRail items=\{\w+_QUICK_FILTERS\}/, `${path} needs its related models in the rail`);
+    assert.doesNotMatch(source, /flex flex-wrap gap-2 justify-center/, `${path} must keep related models on one line`);
+  });
+
+  const rail = read('src/components/shared/SeoPillRail.jsx');
+  assert.match(rail, /overflow-x-auto/);
+  assert.match(rail, /touch-pan-x/);
+  assert.match(rail, /rounded-full/);
+  assert.match(rail, /onMouseEnter=\{\(\) => startHoverScroll\(-1\)\}/);
+  assert.match(rail, /onMouseEnter=\{\(\) => startHoverScroll\(1\)\}/);
 });
 
 test('fallback brand pages use the same compact title, collections, and shop order', () => {

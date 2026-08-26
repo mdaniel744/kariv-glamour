@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { OMEGA_COLLECTIONS } from '@/lib/omegaData';
 import { useBrandCollections } from '@/hooks/useBrandCollections';
+import { handleBrandCollectionFilterClick } from '@/lib/brandCollectionFilters';
 
 const BRAND = 'Omega';
 
@@ -29,15 +30,16 @@ export default function OmegaCollectionCarousel() {
           <button onClick={() => scroll(1)} className="w-10 h-10 border border-border flex items-center justify-center transition-colors hover:border-primary hover:text-primary text-foreground"><ChevronRight size={18} /></button>
         </div>
 
-        <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
+        <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-4 sm:gap-5 md:pb-2 scroll-smooth snap-x no-scrollbar">
           {MAIN_COLLECTIONS.map((col, i) =>
-            <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[220px] snap-start group sm:w-[280px]">
-              <LocalizedLink to={`/omega/${col.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
-                <div className="relative aspect-[4/5] overflow-hidden bg-card">
-                  <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[164px] snap-start group sm:w-[280px]">
+              <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(col.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, col.name)} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
+                <div className="relative h-[164px] overflow-hidden bg-card sm:h-[230px]">
+                  <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="absolute inset-x-0 top-0 h-[calc(100%-48px)] w-full object-contain p-1.5 transition-transform duration-700 group-hover:scale-105 sm:p-5 md:p-6" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-center px-3 sm:px-4">
+                    <h3 className="line-clamp-2 font-body text-xs font-semibold leading-tight text-primary sm:text-sm">{col.name}</h3>
+                  </div>
                 </div>
-                <h3 className="px-4 py-3 font-body text-base font-semibold leading-snug text-foreground">{col.name}</h3>
               </LocalizedLink>
             </motion.div>
           )}

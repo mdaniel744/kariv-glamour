@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { HUBLOT_COLLECTIONS } from '@/lib/hublotData';
 import { useBrandCollections } from '@/hooks/useBrandCollections';
+import { handleBrandCollectionFilterClick } from '@/lib/brandCollectionFilters';
 
 const BRAND = 'Hublot';
 
@@ -18,16 +19,16 @@ export default function HublotCollectionGrid() {
           <h2 className="text-3xl md:text-4xl mb-4 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('collectionCarousel.heading', { brand: BRAND })}</h2>
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
           {collections.map((c, i) =>
-          <motion.div key={c.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }}>
-              <LocalizedLink to={`/hublot/${c.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card hover:border-primary/40 transition-colors">
-                <div className="aspect-[4/3] overflow-hidden flex items-center justify-center bg-secondary">
-                  {c.image ? <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>}
-                </div>
-                <div className="px-4 py-3">
-                    <h3 className="font-body text-base font-semibold leading-snug text-foreground">{c.name}</h3>
+          <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }}>
+              <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(c.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, c.name)} className="group block overflow-hidden rounded-xl border border-border bg-card hover:border-primary/40 transition-colors">
+                <div className="relative h-[164px] overflow-hidden bg-secondary sm:h-[230px]">
+                  {c.image ? <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="absolute inset-x-0 top-0 h-[calc(100%-48px)] w-full object-contain p-1.5 sm:object-cover sm:p-0 group-hover:scale-105 transition-transform duration-700" /> : <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-center px-3 sm:px-4">
+                    <h3 className="line-clamp-2 font-body text-xs font-semibold leading-tight text-primary sm:text-sm">{c.name}</h3>
                   </div>
+                </div>
               </LocalizedLink>
             </motion.div>
           )}

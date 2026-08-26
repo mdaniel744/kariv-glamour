@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PATEK_COLLECTIONS } from '@/lib/patekData';
 import { useBrandCollections } from '@/hooks/useBrandCollections';
+import { handleBrandCollectionFilterClick } from '@/lib/brandCollectionFilters';
 
 const BRAND = 'Patek Philippe';
 
@@ -27,18 +28,19 @@ export default function PatekPhilippeCollectionCarousel() {
           <button onClick={() => scroll(-1)} className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full shadow-md transition-all hover:opacity-90 bg-primary text-primary-foreground"><ChevronLeft size={18} /></button>
           <button onClick={() => scroll(1)} className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center rounded-full shadow-md transition-all hover:opacity-90 bg-primary text-primary-foreground"><ChevronRight size={18} /></button>
 
-          <div ref={scrollRef} className="flex gap-5 overflow-x-auto pb-4 md:pb-2 scroll-smooth snap-x no-scrollbar">
+          <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-4 sm:gap-5 md:pb-2 scroll-smooth snap-x no-scrollbar">
             {collections.map((col, i) =>
-              <motion.div key={col.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[220px] sm:w-[280px] md:w-[300px] snap-start group">
-                <LocalizedLink to={`/patek-philippe/${col.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
-                  <div className="relative aspect-[3/4] overflow-hidden bg-card">
+              <motion.div key={col.id} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="flex-shrink-0 w-[164px] sm:w-[280px] md:w-[300px] snap-start group">
+                <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(col.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, col.name)} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
+                  <div className="relative h-[164px] overflow-hidden bg-card sm:h-[230px]">
                     {col.image ?
-                      <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="w-full h-full object-contain p-6 md:p-8 group-hover:scale-105 transition-transform duration-700" /> :
-                      <div className="w-full h-full flex items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
+                      <img src={col.image} alt={`${BRAND} ${col.name}`} loading="lazy" className="absolute inset-x-0 top-0 h-[calc(100%-48px)] w-full object-contain p-1.5 transition-transform duration-700 group-hover:scale-105 sm:p-6 md:p-8" /> :
+                      <div className="absolute inset-x-0 top-0 flex h-[calc(100%-48px)] items-center justify-center text-primary"><span className="text-xs tracking-[0.2em] uppercase">{BRAND}</span></div>
                     }
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-center px-3 sm:px-4">
+                      <h3 className="line-clamp-2 font-body text-xs font-semibold leading-tight text-primary sm:text-sm">{col.name}</h3>
+                    </div>
                   </div>
-                  <h3 className="px-4 py-3 font-body text-base font-semibold leading-snug text-foreground">{col.name}</h3>
                 </LocalizedLink>
               </motion.div>
             )}

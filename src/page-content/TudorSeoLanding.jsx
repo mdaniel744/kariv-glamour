@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { TUDOR_SEO_PAGES, TUDOR_QUICK_FILTERS } from '@/lib/tudorData';
 import TrustBar from '@/components/shared/TrustBar';
+import SeoPillRail from '@/components/shared/SeoPillRail';
 
 const BRAND = 'Tudor';
 
@@ -73,9 +74,7 @@ export default function TudorSeoLanding({ slug }) {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {TUDOR_QUICK_FILTERS.map((chip, i) => <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground hover:border-primary hover:text-primary transition-colors">{localize(chip, 'label')}</LocalizedLink>)}
-        </div>
+        <SeoPillRail items={TUDOR_QUICK_FILTERS} getLabel={(chip) => localize(chip, 'label')} />
       </div>
 
       {!pageData.isGuide && (

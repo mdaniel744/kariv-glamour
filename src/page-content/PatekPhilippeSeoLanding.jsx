@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { PATEK_SEO_PAGES, PATEK_QUICK_FILTERS } from '@/lib/patekData';
 import TrustBar from '@/components/shared/TrustBar';
+import SeoPillRail from '@/components/shared/SeoPillRail';
 
 const BRAND = 'Patek Philippe';
 
@@ -65,11 +66,7 @@ export default function PatekPhilippeSeoLanding({ slug }) {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {PATEK_QUICK_FILTERS.map((chip, i) => (
-            <LocalizedLink key={i} to={chip.link} className="text-[10px] tracking-[0.12em] uppercase px-4 py-2 border border-border text-foreground transition-colors hover:border-primary hover:text-primary">{chip.label}</LocalizedLink>
-          ))}
-        </div>
+        <SeoPillRail items={PATEK_QUICK_FILTERS} getLabel={(chip) => localize(chip, 'label')} />
       </div>
 
       {!pageData.isGuide && (

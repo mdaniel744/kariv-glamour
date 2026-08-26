@@ -7,6 +7,7 @@ import {
   MOVEMENT_TYPES,
   POPULAR_CASE_DIAMETERS,
 } from '@/lib/constants';
+import { BRAND_COLLECTION_FILTER_EVENT } from '@/lib/brandCollectionFilters';
 
 const normalize = (value) => String(value || '')
   .toLowerCase()
@@ -229,8 +230,26 @@ export default function BrandQuickFilters({ chips, collections = [], activeFilte
 
   React.useEffect(() => stopHoverScroll, [stopHoverScroll]);
 
+  React.useEffect(() => {
+    const selectCollection = (event) => {
+      const collection = event.detail?.collection;
+      if (!collection) return;
+
+      const filter = { collection };
+      const key = filterKey(filter);
+      onSelect((current) => (
+        current.some((active) => filterKey(active) === key)
+          ? current
+          : [...current, filter]
+      ));
+    };
+
+    window.addEventListener(BRAND_COLLECTION_FILTER_EVENT, selectCollection);
+    return () => window.removeEventListener(BRAND_COLLECTION_FILTER_EVENT, selectCollection);
+  }, [onSelect]);
+
   return (
-    <div className="group/collection-rail sticky top-[102px] z-30 -mx-2 mb-8 w-[calc(100%+1rem)] max-w-none rounded-xl border border-border/80 bg-background/95 px-2 py-2.5 shadow-sm backdrop-blur-xl md:top-[154px] md:-mx-4 md:mb-10 md:w-[calc(100%+2rem)] md:px-4">
+    <div className="group/collection-rail sticky top-[102px] z-30 -mx-2 mb-8 w-[calc(100%+1rem)] max-w-none px-2 py-2.5 md:top-[154px] md:-mx-4 md:mb-10 md:w-[calc(100%+2rem)] md:px-4">
       <div
         ref={railRef}
         className="no-scrollbar flex w-full max-w-full snap-x snap-proximity gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth scroll-px-1 touch-pan-x"

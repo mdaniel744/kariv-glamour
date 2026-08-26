@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TUDOR_COLLECTIONS } from '@/lib/tudorData';
 import { useBrandCollections } from '@/hooks/useBrandCollections';
+import { handleBrandCollectionFilterClick } from '@/lib/brandCollectionFilters';
 
 const BRAND = 'Tudor';
 
@@ -50,18 +51,18 @@ export default function TudorCollectionGrid() {
             <ChevronRight size={18} />
           </button>
 
-          <div ref={scrollRef} onScroll={updateArrows} className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2">
+          <div ref={scrollRef} onScroll={updateArrows} className="flex gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-px-6 pb-2 sm:gap-6">
             {collections.map((c, i) =>
-              <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[220px] sm:w-[60%] lg:w-[31%]">
-                <LocalizedLink to={`/tudor/${c.slug}`} className="group block overflow-hidden rounded-xl border border-border bg-card hover:border-primary/40 transition-colors h-full">
-                  <div className="aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
+              <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 3 * 0.05 }} className="flex-shrink-0 snap-start w-[164px] sm:w-[60%] lg:w-[31%]">
+                <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(c.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, c.name)} className="group block overflow-hidden rounded-xl border border-border bg-card hover:border-primary/40 transition-colors h-full">
+                  <div className="relative h-[164px] overflow-hidden bg-secondary sm:h-[230px]">
                     {c.image ?
-                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="w-full h-full object-contain p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" /> :
+                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="absolute inset-x-0 top-0 h-[calc(100%-48px)] w-full object-contain p-1.5 sm:p-5 md:p-6 group-hover:scale-105 transition-transform duration-700" /> :
                       <span className="font-display text-xl tracking-wide text-foreground/70 group-hover:text-foreground transition-colors">{c.name}</span>
                     }
-                  </div>
-                  <div className="px-4 py-3">
-                    <h3 className="font-body text-base font-semibold leading-snug text-foreground">{c.name}</h3>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-12 items-center px-3 sm:px-4">
+                      <h3 className="line-clamp-2 font-body text-xs font-semibold leading-tight text-primary sm:text-sm">{c.name}</h3>
+                    </div>
                   </div>
                 </LocalizedLink>
               </motion.div>
