@@ -40,6 +40,22 @@ export const supabase = hasSupabaseConfig ? createClient(SUPABASE_URL, SUPABASE_
 // record. Supabase stores them as rows in `translations`. This merges those
 // rows back onto each record as `field_locale` keys so localize()/
 // localizedField() keep working unchanged.
+//
+// The platform's own dashboard also writes into this same shared table
+// (its own AI + human translation pipeline), but keys rows by the raw DB
+// column name (`name`, `description`, `short_description`, `disclaimer`)
+// rather than the UI field name our own actions.js uses (`productTitle`,
+// `productDescription`, `brandName`, ...). Confirmed via live data: 1000+
+// translation rows exist for admin-created products/brands/collections
+// under those raw names, but were never surfacing anywhere on the site
+// because nothing read that key shape. This alias table normalizes them
+// on read only — write-side conventions are untouched.
+const TRANSLATION_FIELD_ALIASES = {
+  product: { name: 'productTitle', description: 'productDescription', short_description: 'shortDescription' },
+  brand: { name: 'brandName', disclaimer: 'brandDisclaimer', short_description: 'shortDescription' },
+  collection: { name: 'collectionName' },
+};
+
 async function fetchTranslationsById(entityType, ids) {
   if (!ids.length) return {};
   const client = getSupabase();
@@ -54,10 +70,12 @@ async function fetchTranslationsById(entityType, ids) {
     console.error(`Unable to load translations for ${entityType}:`, error.message);
     return {};
   }
+  const aliases = TRANSLATION_FIELD_ALIASES[entityType] || {};
   const byId = {};
   for (const row of data || []) {
+    const fieldName = aliases[row.field_name] || row.field_name;
     byId[row.entity_id] ??= {};
-    byId[row.entity_id][`${row.field_name}_${row.locale}`] = row.value;
+    byId[row.entity_id][`${fieldName}_${row.locale}`] = row.value;
   }
   return byId;
 }
