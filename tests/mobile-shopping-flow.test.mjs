@@ -48,7 +48,11 @@ test('the home hero keeps its primary shopping controls compact on mobile', () =
   const source = read('src/components/home/HeroSection.jsx');
 
   assert.match(source, /data-site-hero="home"/);
-  assert.match(source, /min-h-\[220px\]/);
+  assert.match(source, /grid min-w-0/);
+  assert.match(source, /text-\[clamp\(2rem,10\.5vw,2\.3rem\)\]/);
+  assert.match(source, /min-w-0 w-full max-w-full items-stretch overflow-hidden/);
+  assert.match(source, /min-h-\[200px\]/);
+  assert.match(source, /h-\[190px\].*max-w-\[190px\]/);
   assert.match(source, /hidden max-w-xl[\s\S]*md:block/);
   assert.match(source, /mt-5 hidden flex-wrap[\s\S]*md:flex/);
 });
