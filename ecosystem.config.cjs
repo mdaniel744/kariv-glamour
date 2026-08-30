@@ -23,5 +23,14 @@ module.exports = {
       cron_restart: '7 * * * *',
       autorestart: false,
     },
+    {
+      // GitHub webhook receiver (scripts/webhook-server.cjs) — nginx proxies
+      // https://karivglamour.com/deploy-hook to this on WEBHOOK_PORT (9003 by
+      // default), which verifies the HMAC signature then runs deploy.sh.
+      name: 'kariv-webhook',
+      script: 'node',
+      args: '--env-file=.env.local scripts/webhook-server.cjs',
+      cwd: '/var/www/kariv',
+    },
   ],
 };
