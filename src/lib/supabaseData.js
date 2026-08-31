@@ -279,18 +279,52 @@ async function notYetWritable() {
   );
 }
 
+// This whole shim's "load every row, then filter/sort/paginate in JS" shape
+// was a reasonable fit when the catalog was ~35 rows total (Base44-era
+// scale). It no longer is — a single-product slug lookup now means loading
+// and re-shaping all 300+ products (plus a translations-table join for every
+// one of them) on every request, measured at ~1.4s in production for what
+// should be a single indexed query. Rather than rewrite every call site's
+// query shape, cache loadAll()'s result briefly: reads are public catalog
+// data that doesn't change second-to-second, and this benefits every entity
+// built on makeEntity (Products, Brands, Collections, FAQ, Guides, ...)
+// uniformly. Concurrent calls during a cache miss share the same in-flight
+// promise instead of firing duplicate queries.
+function withCache(loadFn, ttlMs = 30000) {
+  let cached = null;
+  let cachedAt = 0;
+  let inFlight = null;
+  return async () => {
+    if (cached !== null && Date.now() - cachedAt < ttlMs) return cached;
+    if (inFlight) return inFlight;
+    inFlight = loadFn()
+      .then((result) => {
+        cached = result;
+        cachedAt = Date.now();
+        inFlight = null;
+        return result;
+      })
+      .catch((err) => {
+        inFlight = null;
+        throw err;
+      });
+    return inFlight;
+  };
+}
+
 function makeEntity(loadAll) {
+  const loadAllCached = withCache(loadAll);
   return {
     async filter(query, sort, limit, offset = 0) {
-      const rows = applySort((await loadAll()).filter((r) => matchesQuery(r, query)), sort);
+      const rows = applySort((await loadAllCached()).filter((r) => matchesQuery(r, query)), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async list(sort, limit, offset = 0) {
-      const rows = applySort(await loadAll(), sort);
+      const rows = applySort(await loadAllCached(), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async get(id) {
-      const rows = await loadAll();
+      const rows = await loadAllCached();
       return rows.find((r) => r.id === id) || null;
     },
     create: notYetWritable,
