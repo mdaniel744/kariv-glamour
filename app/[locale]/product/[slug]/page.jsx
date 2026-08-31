@@ -67,15 +67,19 @@ export default async function ProductPage({ params }) {
   const { locale, slug } = await params;
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
+  const __t0 = Date.now();
   const product = await getProductBySlug(slug);
+  console.log('[TIMING] getProductBySlug:', Date.now() - __t0, 'ms');
   if (!product) notFound();
 
+  const __t1 = Date.now();
   // Neither depends on the other's result — running them in parallel avoids
   // paying two full network round-trips back to back (Supabase + Clerk).
   const [relatedProducts, dealerProfile] = await Promise.all([
-    getRelatedProducts(product),
-    getDealerProfileSummary(product.dealerId || product.created_by_id),
+    (async () => { const t = Date.now(); const r = await getRelatedProducts(product); console.log('[TIMING] getRelatedProducts:', Date.now() - t, 'ms'); return r; })(),
+    (async () => { const t = Date.now(); const r = await getDealerProfileSummary(product.dealerId || product.created_by_id); console.log('[TIMING] getDealerProfileSummary:', Date.now() - t, 'ms'); return r; })(),
   ]);
+  console.log('[TIMING] parallel block total:', Date.now() - __t1, 'ms');
   const name = localizedField(product, 'productTitle', locale);
   const description = productDescription(product, locale);
   const siteUrl = getSiteUrl();
