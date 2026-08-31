@@ -70,8 +70,12 @@ export default async function ProductPage({ params }) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const relatedProducts = await getRelatedProducts(product);
-  const dealerProfile = await getDealerProfileSummary(product.dealerId || product.created_by_id);
+  // Neither depends on the other's result — running them in parallel avoids
+  // paying two full network round-trips back to back (Supabase + Clerk).
+  const [relatedProducts, dealerProfile] = await Promise.all([
+    getRelatedProducts(product),
+    getDealerProfileSummary(product.dealerId || product.created_by_id),
+  ]);
   const name = localizedField(product, 'productTitle', locale);
   const description = productDescription(product, locale);
   const siteUrl = getSiteUrl();
