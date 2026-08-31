@@ -65,3 +65,10 @@ Dashboard Agent's platform writes rows to a shared `notifications` table (`id, s
 - Before adding a new Supabase table or altering a shared one (`products`, `categories`, `attributes`, etc.), confirm with whoever owns the platform's Supabase project — it's shared with two other stores.
 - On the VPS, env changes require `pm2 restart kariv --update-env` (a plain restart does not reload env vars); process definitions live in `ecosystem.config.cjs`.
 - **Kariv migrated to its own dedicated VPS** (previously shared with two unrelated sites, "Die Containers"/"STF Container B.V.", on a different box). Auto-deploy is webhook-driven: a push to `main` hits `https://karivglamour.com/deploy-hook` (nginx → `scripts/webhook-server.cjs`, verified via HMAC signature against `WEBHOOK_SECRET`), which runs `scripts/deploy.sh` (`git pull --ff-only` → `pnpm install --frozen-lockfile` → `pnpm build` → `pm2 restart kariv --update-env`). `kariv-webhook` is now a tracked PM2 app in `ecosystem.config.cjs`, not a hand-configured process.
+- **nginx needs enlarged proxy buffers for Clerk's post-auth handshake**, or sign-up/sign-in intermittently 502s. Right after auth, Clerk redirects back with a `__clerk_handshake` param that makes the server set several substantial session cookies at once (`__client_uat`, `__session`, `__refresh_...`); the combined response header size exceeds nginx's small defaults, so nginx rejects the whole response ("upstream sent too big header") instead of passing it through. Fixed on the VPS's `location /` block (not in this repo — it's server config, not app code):
+  ```
+  proxy_buffer_size 128k;
+  proxy_buffers 4 256k;
+  proxy_busy_buffers_size 256k;
+  ```
+  If this box is ever rebuilt from scratch, this has to be re-added by hand.
