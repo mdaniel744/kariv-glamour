@@ -294,7 +294,7 @@ function withCache(loadFn, ttlMs = 30000) {
   let cached = null;
   let cachedAt = 0;
   let inFlight = null;
-  return async () => {
+  const get = async () => {
     if (cached !== null && Date.now() - cachedAt < ttlMs) return cached;
     if (inFlight) return inFlight;
     inFlight = loadFn()
@@ -310,23 +310,32 @@ function withCache(loadFn, ttlMs = 30000) {
       });
     return inFlight;
   };
+  // Called by the corresponding write action right after a successful
+  // create/update/delete, so the *next* read pays one fresh-load cost
+  // instead of possibly serving up to `ttlMs` of stale data.
+  const invalidate = () => {
+    cached = null;
+    cachedAt = 0;
+  };
+  return { get, invalidate };
 }
 
 function makeEntity(loadAll) {
-  const loadAllCached = withCache(loadAll);
+  const cache = withCache(loadAll);
   return {
     async filter(query, sort, limit, offset = 0) {
-      const rows = applySort((await loadAllCached()).filter((r) => matchesQuery(r, query)), sort);
+      const rows = applySort((await cache.get()).filter((r) => matchesQuery(r, query)), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async list(sort, limit, offset = 0) {
-      const rows = applySort(await loadAllCached(), sort);
+      const rows = applySort(await cache.get(), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async get(id) {
-      const rows = await loadAllCached();
+      const rows = await cache.get();
       return rows.find((r) => r.id === id) || null;
     },
+    invalidate: cache.invalidate,
     create: notYetWritable,
     update: notYetWritable,
     delete: notYetWritable,

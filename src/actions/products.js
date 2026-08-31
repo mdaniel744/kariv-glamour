@@ -1,10 +1,23 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { requireAdmin, requireDealer } from '@/lib/serverAuth';
-import { STORE_ID, shapeProductRows } from '@/lib/supabaseData';
+import { STORE_ID, shapeProductRows, Products } from '@/lib/supabaseData';
 import { slugify } from '@/lib/slug';
 import { translateMissingProductContent } from '@/lib/productTranslation';
+
+// Called after every product create/update/delete: clears the in-process
+// catalog cache (src/lib/supabaseData.js) and Next's own page cache, so a
+// saved change is visible immediately instead of up to 30s (data cache) or
+// 5min (page ISR) later. Blunt (whole-site) rather than enumerating every
+// page a product could appear on (home, shop, brand pages, SEO landings,
+// dealer profile) — this is an infrequent admin/dealer action, not a
+// hot path, so the cost of over-invalidating is negligible.
+function invalidateCatalog() {
+  Products.invalidate();
+  revalidatePath('/', 'layout');
+}
 
 async function upsertTranslations(entityType, entityId, fieldValues, automaticKeys = new Set()) {
   const rows = [];
@@ -124,6 +137,7 @@ export async function createProduct(payload) {
   if (error) throw new Error(error.message);
 
   await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
+  invalidateCatalog();
 
   return { id: data.id, translationWarning: prepared.warning || undefined };
 }
@@ -137,6 +151,7 @@ export async function updateProduct(id, payload) {
   if (error) throw new Error(error.message);
 
   await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
+  invalidateCatalog();
 
   return { id, translationWarning: prepared.warning || undefined };
 }
@@ -145,6 +160,7 @@ export async function deleteProduct(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('products').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidateCatalog();
 }
 
 // ---- Dealer's own listings (ownership-scoped, not admin) ----
@@ -159,6 +175,7 @@ export async function createDealerListing(payload) {
   if (error) throw new Error(error.message);
 
   await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
+  invalidateCatalog();
 
   return { id: data.id, translationWarning: prepared.warning || undefined };
 }
@@ -179,6 +196,7 @@ export async function updateDealerListing(id, payload) {
   if (error) throw new Error(error.message);
 
   await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
+  invalidateCatalog();
 
   return { id, translationWarning: prepared.warning || undefined };
 }
@@ -187,6 +205,7 @@ export async function deleteDealerListing(id) {
   const dealer = await requireDealer();
   const { error } = await supabaseAdmin.from('products').delete().eq('id', id).eq('dealer_id', dealer.id);
   if (error) throw new Error(error.message);
+  invalidateCatalog();
 }
 
 export async function getMyDealerListings() {

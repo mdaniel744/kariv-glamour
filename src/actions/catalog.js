@@ -1,8 +1,20 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { requireAdmin } from '@/lib/serverAuth';
-import { STORE_ID } from '@/lib/supabaseData';
+import { STORE_ID, Brands, Collections, FAQ, WatchGuides, LegalPages } from '@/lib/supabaseData';
+
+// Called after every create/update/delete below: clears that entity's
+// in-process catalog cache (src/lib/supabaseData.js) and Next's own page
+// cache, so a saved change is visible immediately instead of up to 30s
+// (data cache) or 5min (page ISR) later. Blunt (whole-site) rather than
+// enumerating every page each entity could appear on — this is an
+// infrequent admin action, not a hot path.
+function invalidate(entity) {
+  entity.invalidate();
+  revalidatePath('/', 'layout');
+}
 
 async function upsertTranslations(entityType, entityId, fieldValues) {
   const rows = [];
@@ -61,6 +73,7 @@ export async function createBrand(payload) {
     seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en },
     seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en },
   });
+  invalidate(Brands);
   return { id: data.id };
 }
 
@@ -88,6 +101,7 @@ export async function updateBrand(id, payload) {
     seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en },
     seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en },
   });
+  invalidate(Brands);
   return { id };
 }
 
@@ -95,6 +109,7 @@ export async function deleteBrand(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('brands').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidate(Brands);
 }
 
 // ---- Collections ----
@@ -116,6 +131,7 @@ export async function createCollection(payload) {
     collectionName: { de: payload.collectionName_de, en: payload.collectionName_en },
     description: { de: payload.description_de, en: payload.description_en },
   });
+  invalidate(Collections);
   return { id: data.id };
 }
 
@@ -135,6 +151,7 @@ export async function updateCollection(id, payload) {
     collectionName: { de: payload.collectionName_de, en: payload.collectionName_en },
     description: { de: payload.description_de, en: payload.description_en },
   });
+  invalidate(Collections);
   return { id };
 }
 
@@ -142,6 +159,7 @@ export async function deleteCollection(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('collections').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidate(Collections);
 }
 
 // ---- FAQ ----
@@ -155,6 +173,7 @@ export async function createFaq(payload) {
     question: { de: payload.question_de, en: payload.question_en },
     answer: { de: payload.answer_de, en: payload.answer_en },
   });
+  invalidate(FAQ);
   return { id: data.id };
 }
 
@@ -167,6 +186,7 @@ export async function updateFaq(id, payload) {
     question: { de: payload.question_de, en: payload.question_en },
     answer: { de: payload.answer_de, en: payload.answer_en },
   });
+  invalidate(FAQ);
   return { id };
 }
 
@@ -174,6 +194,7 @@ export async function deleteFaq(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('faqs').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidate(FAQ);
 }
 
 // ---- Guides ----
@@ -196,6 +217,7 @@ export async function createGuide(payload) {
     excerpt: { de: payload.excerpt_de, en: payload.excerpt_en },
     content: { de: payload.content_de, en: payload.content_en },
   });
+  invalidate(WatchGuides);
   return { id: data.id };
 }
 
@@ -216,6 +238,7 @@ export async function updateGuide(id, payload) {
     excerpt: { de: payload.excerpt_de, en: payload.excerpt_en },
     content: { de: payload.content_de, en: payload.content_en },
   });
+  invalidate(WatchGuides);
   return { id };
 }
 
@@ -223,6 +246,7 @@ export async function deleteGuide(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('guides').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidate(WatchGuides);
 }
 
 // ---- Legal Pages ----
@@ -243,6 +267,7 @@ export async function createLegalPage(payload) {
     title: { de: payload.title_de, en: payload.title_en },
     content: { de: payload.content_de, en: payload.content_en },
   });
+  invalidate(LegalPages);
   return { id: data.id };
 }
 
@@ -261,6 +286,7 @@ export async function updateLegalPage(id, payload) {
     title: { de: payload.title_de, en: payload.title_en },
     content: { de: payload.content_de, en: payload.content_en },
   });
+  invalidate(LegalPages);
   return { id };
 }
 
@@ -268,4 +294,5 @@ export async function deleteLegalPage(id) {
   await requireAdmin();
   const { error } = await supabaseAdmin.from('legal_pages').delete().eq('id', id);
   if (error) throw new Error(error.message);
+  invalidate(LegalPages);
 }
