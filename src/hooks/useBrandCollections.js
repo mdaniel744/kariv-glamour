@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useBrandCatalog } from '@/components/shared/BrandCatalogProvider';
+import { useBrandProducts } from '@/hooks/useBrandProducts';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { isCatalogDatabaseConfigured } from '@/lib/supabaseData';
@@ -85,35 +87,40 @@ function mapCollectionRecords(records, fallbackData = []) {
   return records.map(record => mapCollectionRecord(record, findFallbackCollection(record, fallbackLookup)));
 }
 
-export function useBrandCollections(brandName, fallbackData = []) {
-  const shouldUseFallback = !isCatalogDatabaseConfigured;
-  const [collections, setCollections] = useState(() => shouldUseFallback ? sortCollectionsByProductCount(fallbackData) : []);
-  const [loading, setLoading] = useState(true);
+const EMPTY_COLLECTIONS = [];
+
+export function useBrandCollections(brandName, fallbackData = EMPTY_COLLECTIONS) {
+  const catalog = useBrandCatalog(brandName);
+  const initialCollections = Array.isArray(catalog?.collections) ? catalog.collections : null;
+  const { products, loading: productsLoading, error: productsError } = useBrandProducts(brandName);
+  const [state, setState] = useState({ brandName, records: EMPTY_COLLECTIONS, loading: true, error: null });
 
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    setCollections(shouldUseFallback ? sortCollectionsByProductCount(fallbackData) : []);
-
-    Promise.allSettled([
-      dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName', 100),
-      dataClient.entities.Products.filter({ brand: brandName }, '-created_date'),
-    ])
-      .then(([collectionResult, productResult]) => {
-        if (!mounted) return;
-        const records = collectionResult.status === 'fulfilled' ? asArray(collectionResult.value) : [];
-        const products = productResult.status === 'fulfilled' ? asArray(productResult.value) : [];
-        const availableCollections = records.length > 0
-          ? mapCollectionRecords(records, fallbackData)
-          : fallbackData;
-        setCollections(sortCollectionsByProductCount(availableCollections, products));
+    if (initialCollections !== null) return;
+    let active = true;
+    setState({ brandName, records: EMPTY_COLLECTIONS, loading: true, error: null });
+    dataClient.entities.Collections.filter({ brand: brandName }, 'collectionName')
+      .then((data) => {
+        if (active) setState({ brandName, records: asArray(data), loading: false, error: null });
       })
-      .catch(() => {
-        if (mounted) setCollections(sortCollectionsByProductCount(fallbackData));
-      })
-      .finally(() => { if (mounted) setLoading(false); });
-    return () => { mounted = false; };
-  }, [brandName, fallbackData, shouldUseFallback]);
+      .catch((error) => {
+        if (active) setState({ brandName, records: EMPTY_COLLECTIONS, loading: false, error });
+      });
+    return () => { active = false; };
+  }, [brandName, initialCollections]);
 
-  return { collections, loading };
+  const currentState = state.brandName === brandName ? state : null;
+  const records = initialCollections ?? currentState?.records ?? EMPTY_COLLECTIONS;
+  const collectionsLoading = initialCollections === null && (!currentState || currentState.loading);
+  const collections = useMemo(() => {
+    if (collectionsLoading && isCatalogDatabaseConfigured) return EMPTY_COLLECTIONS;
+    const available = records.length > 0 ? mapCollectionRecords(records, fallbackData) : fallbackData;
+    return sortCollectionsByProductCount(available, products);
+  }, [collectionsLoading, records, fallbackData, products]);
+
+  return {
+    collections,
+    loading: collectionsLoading || productsLoading,
+    error: (initialCollections === null ? currentState?.error : null) || productsError,
+  };
 }

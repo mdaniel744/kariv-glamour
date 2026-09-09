@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import { useBrandProducts } from '@/hooks/useBrandProducts';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal } from 'lucide-react';
@@ -54,23 +53,11 @@ const matchesFeature = (p, feat) => {
 export default function PaneraiProductGrid() {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading } = useBrandProducts(BRAND);
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [quickFilter, setQuickFilter] = useState([]);
   const [filters, setFilters] = useState({ collection: [], watchType: [], caseMaterial: [], movementType: [], dialColor: [], features: [], braceletMaterial: [], condition: [], gender: [], caseSize: [], boxPapers: [], availability: [], type: [], priceMin: '', priceMax: '' });
-
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, '-created_date', 100));
-        setProducts(data);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
-    };
-    load();
-  }, []);
 
   const SORT_OPTIONS = [
     { value: '-created_date', label: t('productGrid.sortFeatured') },

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, User } from 'lucide-react';
@@ -57,6 +58,7 @@ function KarivLogo({ theme }) {
 
 
 export default function Navbar() {
+  const router = useRouter();
   const { cartCount, wishlistCount } = useCart();
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
@@ -89,7 +91,7 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `${localePath('/shop')}?search=${encodeURIComponent(searchQuery.trim())}`;
+      router.push(`${localePath('/shop')}?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
     }
   };

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import MediaImage from '@/components/shared/MediaImage';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CARTIER_COLLECTIONS } from '@/lib/cartierData';
 import { useBrandCollections } from '@/hooks/useBrandCollections';
@@ -36,12 +36,12 @@ export default function CartierCollectionGrid() {
 
         <div ref={scrollRef} className="no-scrollbar flex snap-x gap-3 overflow-x-auto scroll-smooth pb-4 sm:gap-5 md:pb-2">
           {collections.map((c, i) =>
-            <motion.div key={c.slug} data-collection-card initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i % 4 * 0.05 }} className="group w-[164px] flex-shrink-0 snap-start sm:w-[280px]">
+            <div key={c.slug} data-collection-card className="group w-[164px] flex-shrink-0 snap-start sm:w-[280px]">
               <LocalizedLink to={`/shop?brand=${encodeURIComponent(BRAND)}&collection=${encodeURIComponent(c.name)}`} onClick={(event) => handleBrandCollectionFilterClick(event, c.name)} className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50">
                 <div className="relative h-[164px] overflow-hidden bg-secondary sm:h-[230px]">
                   {c.image ?
                     <div className="absolute inset-x-0 top-0 h-[calc(100%-48px)] overflow-hidden">
-                      <img src={c.image} alt={`${BRAND} ${c.name}`} loading="lazy" className="h-full w-full scale-[1.18] object-contain transition-transform duration-700 group-hover:scale-[1.24] sm:scale-[1.12] sm:group-hover:scale-[1.18]" />
+                      <MediaImage src={c.image} alt={`${BRAND} ${c.name}`} fill sizes="(max-width: 639px) 164px, 280px" quality={82} priority={i === 0} className="h-full w-full scale-[1.18] object-contain transition-transform duration-700 group-hover:scale-[1.24] sm:scale-[1.12] sm:group-hover:scale-[1.18]" />
                     </div> :
                     <div className="absolute inset-x-0 top-0 flex h-[calc(100%-48px)] items-center justify-center">
                       <span className="font-display text-2xl text-primary">{c.name}</span>
@@ -52,7 +52,7 @@ export default function CartierCollectionGrid() {
                   </div>
                 </div>
               </LocalizedLink>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

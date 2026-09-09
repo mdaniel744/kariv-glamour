@@ -1,4 +1,6 @@
 import 'server-only';
+import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import { productSlug } from '@/lib/slug';
 import { Products, Brands, Collections, LegalPages, STORE_ID } from '@/lib/supabaseData';
 import { getLegalPageFallback, mergeLegalPageFallbacks } from '@/lib/legalPageFallbacks';
@@ -6,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { loadIdentities } from '@/lib/orderIdentities';
 import { loadApprovedDealerReviews, summarizeDealerReviews } from '@/lib/dealerReviewsData';
 
-export async function getProductById(id) {
+export const getProductById = cache(async (id) => {
   if (!id) return null;
   try {
     return await Products.get(id);
@@ -14,9 +16,9 @@ export async function getProductById(id) {
     console.error('Unable to load product from Supabase:', error?.message || error);
     return null;
   }
-}
+});
 
-export async function getProductBySlug(slug) {
+export const getProductBySlug = cache(async (slug) => {
   if (!slug) return null;
   try {
     const exactMatches = await Products.filter({ slug }, '-created_date', 1, 0);
@@ -30,7 +32,7 @@ export async function getProductBySlug(slug) {
     console.error('Unable to load product by slug from Supabase:', error?.message || error);
     return null;
   }
-}
+});
 
 export async function getRelatedProducts(product, limit = 4) {
   if (!product?.brand) return [];
@@ -52,16 +54,33 @@ export async function getBrands(limit = 100) {
   }
 }
 
-export async function getBrandBySlug(slug) {
+// Cache anonymous catalogue reads only; inventory is refreshed every minute.
+const loadBrandBySlug = unstable_cache(
+  async (slug) => (await Brands.filter({ slug }, '-created_date', 1, 0))[0] || null,
+  ['public-brand-v1', STORE_ID],
+  { revalidate: 300 },
+);
+const loadBrandProducts = unstable_cache(
+  (brandName) => Products.filter({ brand: brandName, isPublished: true }, '-created_date'),
+  ['public-brand-products-v1', STORE_ID],
+  { revalidate: 60 },
+);
+const loadBrandCollections = unstable_cache(
+  (brandName) => Collections.filter({ brand: brandName }, 'collectionName'),
+  ['public-brand-collections-v1', STORE_ID],
+  { revalidate: 300 },
+);
+
+// Metadata and page rendering share the same lookup within a request.
+export const getBrandBySlug = cache(async (slug) => {
   if (!slug) return null;
   try {
-    const records = await Brands.filter({ slug }, '-created_date', 1, 0);
-    return records[0] || null;
+    return await loadBrandBySlug(slug);
   } catch (error) {
     console.error('Unable to load brand from Supabase:', error?.message || error);
     return null;
   }
-}
+});
 
 export async function getBrandPageData(slug, brandName) {
   const brand = await getBrandBySlug(slug);
@@ -72,14 +91,22 @@ export async function getBrandPageData(slug, brandName) {
   }
 
   const [productsResult, collectionsResult] = await Promise.allSettled([
-    Products.filter({ brand: resolvedName }, '-created_date', 100, 0),
-    Collections.filter({ brand: resolvedName }, 'collectionName', 100, 0),
+    loadBrandProducts(resolvedName),
+    loadBrandCollections(resolvedName),
   ]);
+
+  for (const result of [productsResult, collectionsResult]) {
+    if (result.status === 'rejected') {
+      console.error('Unable to load brand catalogue:', result.reason?.message || result.reason);
+    }
+  }
 
   return {
     brand,
-    products: productsResult.status === 'fulfilled' ? productsResult.value : [],
-    collections: collectionsResult.status === 'fulfilled' ? collectionsResult.value : [],
+    // A failed read is different from a successfully loaded empty catalogue:
+    // the client may retry a transient failure, but must not refetch empty data.
+    products: productsResult.status === 'fulfilled' ? productsResult.value : null,
+    collections: collectionsResult.status === 'fulfilled' ? collectionsResult.value : null,
   };
 }
 

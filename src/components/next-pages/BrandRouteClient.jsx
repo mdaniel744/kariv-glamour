@@ -3,6 +3,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import BrandDetail from '@/page-content/BrandDetail';
+import BrandCatalogProvider from '@/components/shared/BrandCatalogProvider';
 
 const BRAND_PAGES = {
   rolex: dynamic(() => import('@/page-content/RolexPage')),
@@ -24,14 +25,19 @@ const BRAND_PAGES = {
 
 export default function BrandRouteClient({ slug, brand, products, collections }) {
   const BrandPage = BRAND_PAGES[slug];
-  if (BrandPage) return <BrandPage />;
+  if (BrandPage) return (
+    <BrandCatalogProvider key={slug} slug={slug} brand={brand} products={products} collections={collections}>
+      <BrandPage />
+    </BrandCatalogProvider>
+  );
 
   return (
     <BrandDetail
+      key={slug}
       slug={slug}
       initialBrand={brand}
-      initialProducts={products}
-      initialCollections={collections}
+      initialProducts={products ?? []}
+      initialCollections={collections ?? []}
     />
   );
 }

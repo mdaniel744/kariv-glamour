@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
+import React, { useState, useMemo } from 'react';
+import { useBrandProducts } from '@/hooks/useBrandProducts';
+import { sortBrandProducts } from '@/lib/brandProductSort';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal } from 'lucide-react';
@@ -16,8 +16,7 @@ const COLLECTION_NAMES = PATEK_COLLECTIONS.map((collection) => collection.name);
 export default function PatekPhilippeProductGrid() {
   const { t } = useTranslation('brandComponents');
   const { localize } = useLocalizedField();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products: allProducts, loading } = useBrandProducts(BRAND);
   const [sortBy, setSortBy] = useState('-created_date');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [quickFilter, setQuickFilter] = useState([]);
@@ -31,30 +30,24 @@ export default function PatekPhilippeProductGrid() {
     { value: 'featured', label: t('productGrid.sortFeatured') },
   ];
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        let data = asArray(await dataClient.entities.Products.filter({ brand: BRAND }, sortBy, 50));
-        if (filters.collection.length) data = data.filter((p) => filters.collection.includes(p.collection));
-        if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
-        if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));
-        if (filters.dialColor.length) data = data.filter((p) => filters.dialColor.includes(p.dialColor));
-        if (filters.gender.length) data = data.filter((p) => filters.gender.includes(p.gender));
-        if (filters.braceletMaterial.length) data = data.filter((p) => filters.braceletMaterial.includes(p.braceletMaterial));
-        if (filters.movementType.length) data = data.filter((p) => filters.movementType.includes(p.movementType));
-        if (filters.watchShape.length) data = data.filter((p) => filters.watchShape.includes(p.watchShape));
-        if (filters.complication.length) data = data.filter((p) => filters.complication.some((c) => (p.functions || '').includes(c)));
-        if (filters.boxPapers === 'box+papers') data = data.filter((p) => p.boxIncluded && p.papersIncluded);
-        if (filters.boxPapers === 'box') data = data.filter((p) => p.boxIncluded);
-        if (filters.boxPapers === 'papers') data = data.filter((p) => p.papersIncluded);
-        if (filters.availability) data = data.filter((p) => p.availability === filters.availability);
-        if (quickFilter.length) data = data.filter((p) => matchesBrandQuickFilter(p, quickFilter));
-        setProducts(data);
-      } catch (e) { console.error(e); } finally { setLoading(false); }
-    };
-    load();
-  }, [sortBy, filters, quickFilter]);
+  const products = useMemo(() => {
+    let data = allProducts;
+    if (filters.collection.length) data = data.filter((p) => filters.collection.includes(p.collection));
+    if (filters.condition.length) data = data.filter((p) => filters.condition.includes(p.condition));
+    if (filters.caseMaterial.length) data = data.filter((p) => filters.caseMaterial.includes(p.caseMaterial));
+    if (filters.dialColor.length) data = data.filter((p) => filters.dialColor.includes(p.dialColor));
+    if (filters.gender.length) data = data.filter((p) => filters.gender.includes(p.gender));
+    if (filters.braceletMaterial.length) data = data.filter((p) => filters.braceletMaterial.includes(p.braceletMaterial));
+    if (filters.movementType.length) data = data.filter((p) => filters.movementType.includes(p.movementType));
+    if (filters.watchShape.length) data = data.filter((p) => filters.watchShape.includes(p.watchShape));
+    if (filters.complication.length) data = data.filter((p) => filters.complication.some((c) => (p.functions || '').includes(c)));
+    if (filters.boxPapers === 'box+papers') data = data.filter((p) => p.boxIncluded && p.papersIncluded);
+    if (filters.boxPapers === 'box') data = data.filter((p) => p.boxIncluded);
+    if (filters.boxPapers === 'papers') data = data.filter((p) => p.papersIncluded);
+    if (filters.availability) data = data.filter((p) => p.availability === filters.availability);
+    if (quickFilter.length) data = data.filter((p) => matchesBrandQuickFilter(p, quickFilter));
+    return sortBrandProducts(data, sortBy);
+  }, [allProducts, sortBy, filters, quickFilter]);
 
   const toggleFilter = (key, value) => setFilters((prev) => { const arr = prev[key]; return { ...prev, [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value] }; });
 

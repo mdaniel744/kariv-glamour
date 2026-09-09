@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Heart, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { productSlug } from '@/lib/slug';
 import MediaImage from '@/components/shared/MediaImage';
@@ -80,11 +79,7 @@ export default function ProductCard({ product, enableGallery = true }) {
   };
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+    <article
       className="group relative h-full min-w-0 cursor-pointer"
     >
       {/* This stretched link makes every non-control part of the tile navigable. */}
@@ -222,6 +217,6 @@ export default function ProductCard({ product, enableGallery = true }) {
           <p className="text-[10px] tracking-wide text-muted-foreground">{product.condition} · {product.yearOfProduction || t('components.productCard.notAvailable')}</p>
         )}
       </div>
-    </motion.article>
+    </article>
   );
 }

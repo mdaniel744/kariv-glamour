@@ -3,6 +3,7 @@
 // the exact field names the existing UI already reads (productTitle, brand,
 // caseDiameter, etc.) so consuming components don't need to change.
 import { createClient } from '@supabase/supabase-js';
+import { createPublicReferenceLoader, loadFilteredCatalogRows } from './catalogQueries.js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -181,63 +182,76 @@ function mapCollection(row, brandsById, translationsById) {
   };
 }
 
-// ---- in-memory per-request loaders (catalog is tiny — ~35 products) ----
+// ---- shared anonymous catalog reference lookups ----
 
-async function loadBrandsById() {
+const loadBrandsById = createPublicReferenceLoader(async () => {
   const client = getSupabase();
   if (!client) return {};
 
-  const { data, error } = await client.from('brands').select('*').eq('store_id', STORE_ID);
+  const { data, error } = await client.from('brands').select('id, name').eq('store_id', STORE_ID);
   if (error) throw error;
   const byId = {};
   for (const row of data || []) byId[row.id] = row;
   return byId;
-}
+});
 
-async function loadCollectionsById() {
+const loadCollectionsById = createPublicReferenceLoader(async () => {
   const client = getSupabase();
   if (!client) return {};
 
-  const { data, error } = await client.from('collections').select('*').eq('store_id', STORE_ID);
+  const { data, error } = await client.from('collections').select('id, name').eq('store_id', STORE_ID);
   if (error) throw error;
   const byId = {};
   for (const row of data || []) byId[row.id] = row;
   return byId;
+});
+
+const catalogReferences = { brands: loadBrandsById, collections: loadCollectionsById };
+const publicCatalogCaches = new Set([loadBrandsById, loadCollectionsById]);
+
+function invalidatePublicCatalogCaches() {
+  // Product/collection shapes embed reference names, so a brand or collection
+  // edit must also evict cached lists that contain those names.
+  for (const cachedLoad of publicCatalogCaches) cachedLoad.invalidate();
 }
 
 // Shapes product rows already fetched by a caller (e.g. a service-role
 // query that needs to see draft/dealer rows RLS would otherwise hide).
 // Brand/collection/translation lookups are public data either way.
 export async function shapeProductRows(rows) {
-  const [brandsById, collectionsById] = await Promise.all([loadBrandsById(), loadCollectionsById()]);
-  const translationsById = await fetchTranslationsById('product', rows.map((r) => r.id));
+  if (!rows.length) return [];
+  const [brandsById, collectionsById, translationsById] = await Promise.all([
+    loadBrandsById(),
+    loadCollectionsById(),
+    fetchTranslationsById('product', rows.map((r) => r.id)),
+  ]);
   return rows.map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
-export async function loadAllProductsShaped() {
+export async function loadAllProductsShaped(query = {}) {
   const client = getSupabase();
   if (!client) return [];
 
-  const [{ data: products, error }, brandsById, collectionsById] = await Promise.all([
-    client.from('products').select('*').eq('store_id', STORE_ID),
+  const [products, brandsById, collectionsById] = await Promise.all([
+    loadFilteredCatalogRows(client, STORE_ID, 'products', query, catalogReferences),
     loadBrandsById(),
     loadCollectionsById(),
   ]);
-  if (error) throw error;
   const translationsById = await fetchTranslationsById('product', (products || []).map((p) => p.id));
   return (products || []).map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
-export async function loadAllBrandsShaped() {
-  const brandsById = await loadBrandsById();
-  const rows = Object.values(brandsById);
+export async function loadAllBrandsShaped(query = {}) {
+  const rows = await loadFilteredCatalogRows(getSupabase(), STORE_ID, 'brands', query);
   const translationsById = await fetchTranslationsById('brand', rows.map((r) => r.id));
   return rows.map((row) => mapBrand(row, translationsById));
 }
 
-export async function loadAllCollectionsShaped() {
-  const [collectionsById, brandsById] = await Promise.all([loadCollectionsById(), loadBrandsById()]);
-  const rows = Object.values(collectionsById);
+export async function loadAllCollectionsShaped(query = {}) {
+  const [rows, brandsById] = await Promise.all([
+    loadFilteredCatalogRows(getSupabase(), STORE_ID, 'collections', query, catalogReferences),
+    loadBrandsById(),
+  ]);
   const translationsById = await fetchTranslationsById('collection', rows.map((r) => r.id));
   return rows.map((row) => mapCollection(row, brandsById, translationsById));
 }
@@ -279,72 +293,36 @@ async function notYetWritable() {
   );
 }
 
-// This whole shim's "load every row, then filter/sort/paginate in JS" shape
-// was a reasonable fit when the catalog was ~35 rows total (Base44-era
-// scale). It no longer is — a single-product slug lookup now means loading
-// and re-shaping all 300+ products (plus a translations-table join for every
-// one of them) on every request, measured at ~1.4s in production for what
-// should be a single indexed query. Rather than rewrite every call site's
-// query shape, cache loadAll()'s result briefly: reads are public catalog
-// data that doesn't change second-to-second, and this benefits every entity
-// built on makeEntity (Products, Brands, Collections, FAQ, Guides, ...)
-// uniformly. Concurrent calls during a cache miss share the same in-flight
-// promise instead of firing duplicate queries.
-function withCache(loadFn, ttlMs = 30000) {
-  let cached = null;
-  let cachedAt = 0;
-  let inFlight = null;
-  const get = async () => {
-    if (cached !== null && Date.now() - cachedAt < ttlMs) return cached;
-    if (inFlight) return inFlight;
-    inFlight = loadFn()
-      .then((result) => {
-        cached = result;
-        cachedAt = Date.now();
-        inFlight = null;
-        return result;
-      })
-      .catch((err) => {
-        inFlight = null;
-        throw err;
-      });
-    return inFlight;
-  };
-  // Called by the corresponding write action right after a successful
-  // create/update/delete, so the *next* read pays one fresh-load cost
-  // instead of possibly serving up to `ttlMs` of stale data.
-  const invalidate = () => {
-    cached = null;
-    cachedAt = 0;
-  };
-  return { get, invalidate };
-}
-
-function makeEntity(loadAll) {
-  const cache = withCache(loadAll);
+// Full-list reads retain the brief public cache used by the shop/navigation.
+// Scoped catalog reads bypass it, allowing the database to narrow rows before
+// shaping and translation loading. Other entities keep their existing cache.
+function makeEntity(loadAll, scoped = false) {
+  const loadList = createPublicReferenceLoader(loadAll, 30_000);
+  publicCatalogCaches.add(loadList);
+  const loadMatching = (query) => scoped ? loadAll(query) : loadList();
   return {
     async filter(query, sort, limit, offset = 0) {
-      const rows = applySort((await cache.get()).filter((r) => matchesQuery(r, query)), sort);
+      const rows = applySort((await loadMatching(query)).filter((r) => matchesQuery(r, query)), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async list(sort, limit, offset = 0) {
-      const rows = applySort(await cache.get(), sort);
+      const rows = applySort(await loadList(), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async get(id) {
-      const rows = await cache.get();
+      const rows = await loadMatching({ id });
       return rows.find((r) => r.id === id) || null;
     },
-    invalidate: cache.invalidate,
+    invalidate: invalidatePublicCatalogCaches,
     create: notYetWritable,
     update: notYetWritable,
     delete: notYetWritable,
   };
 }
 
-export const Products = makeEntity(loadAllProductsShaped);
-export const Brands = makeEntity(loadAllBrandsShaped);
-export const Collections = makeEntity(loadAllCollectionsShaped);
+export const Products = makeEntity(loadAllProductsShaped, true);
+export const Brands = makeEntity(loadAllBrandsShaped, true);
+export const Collections = makeEntity(loadAllCollectionsShaped, true);
 
 // ---- FAQ / WatchGuides ----
 
