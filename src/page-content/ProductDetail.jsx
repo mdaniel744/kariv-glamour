@@ -8,17 +8,16 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { formatPrice } from '@/lib/constants';
-import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock, Store } from 'lucide-react';
+import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import ProductCard from '@/components/shared/ProductCard';
 import TrustBar from '@/components/shared/TrustBar';
-import StarRating from '@/components/dealer/StarRating';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 import SafeHtml from '@/components/shared/SafeHtml';
-import { getDealerRatingSummary } from '@/actions/dealerReviews';
 import ProductGallery from '@/components/product/ProductGallery';
-import MediaImage from '@/components/shared/MediaImage';
-import { getMediaVariant } from '@/lib/media';
+import ProductDealerCard from '@/components/product/ProductDealerCard';
+import RelatedProducts from '@/components/product/RelatedProducts';
+
+const EMPTY_RELATED = [];
 
 function productIdFromPath() {
   if (typeof window === 'undefined') return null;
@@ -26,7 +25,7 @@ function productIdFromPath() {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = [], initialDealerProfile = null }) {
+export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = EMPTY_RELATED, initialDealerProfile = null, dealerSlot, relatedSlot }) {
   const { t } = useTranslation();
   const id = idProp || productIdFromPath();
   const router = useRouter();
@@ -37,35 +36,15 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const [product, setProduct] = useState(initialProduct);
   const [loading, setLoading] = useState(!initialProduct);
   const [related, setRelated] = useState(initialRelated);
-  const [dealerProfile, setDealerProfile] = useState(initialDealerProfile);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    const loadDealer = (data) => {
-      const dealerUserId = data?.dealerId || data?.created_by_id;
-      if (!dealerUserId) return;
-      getDealerRatingSummary(dealerUserId)
-        .then((summary) => {
-          if (mounted && summary) {
-            setDealerProfile((current) => ({
-              ...summary,
-              ...(current || {}),
-              averageRating: summary.averageRating,
-              totalReviews: summary.totalReviews,
-            }));
-          }
-        })
-        .catch(() => {});
-    };
-
     if (initialProduct?.id === id) {
       setProduct(initialProduct);
       setRelated(initialRelated);
-      setDealerProfile(initialDealerProfile);
       setLoading(false);
-      loadDealer(initialProduct);
       window.scrollTo(0, 0);
       return () => {
         mounted = false;
@@ -74,12 +53,15 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
     const load = async () => {
       setLoading(true);
+      setRelated(EMPTY_RELATED);
       try {
         const data = await dataClient.entities.Products.get(id);
         if (!mounted) return;
         setProduct(data);
-        loadDealer(data);
-        const rel = asArray(await dataClient.entities.Products.filter({ brand: data.brand }, '-created_date', 4));
+        // Show the selected watch before waiting for optional recommendations.
+        setLoading(false);
+        if (!data) return;
+        const rel = asArray(await dataClient.entities.Products.filter({ brand: data.brand }, '-created_date', 5));
         if (mounted) setRelated(rel.filter((p) => p.id !== data.id).slice(0, 4));
       } catch (e) {
         console.error(e);
@@ -93,7 +75,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
     return () => {
       mounted = false;
     };
-  }, [id, initialProduct, initialRelated, initialDealerProfile]);
+  }, [id, initialProduct, initialRelated]);
 
   if (loading) {
     return (
@@ -284,33 +266,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </div>
 
             {/* Dealer info */}
-            {(product.dealerId || product.created_by_id) && (() => {
-              const dealerUserId = product.dealerId || product.created_by_id;
-              return (
-              <LocalizedLink to={`/dealer-profile/${dealerUserId}`} className="block border border-border p-4 hover:border-primary transition-colors group">
-                <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    {dealerProfile?.logoImage ? (
-                      <MediaImage src={getMediaVariant(dealerProfile.logoImage, 'thumb')} alt="" fill sizes="40px" quality={76} className="object-cover" />
-                    ) : (
-                      <Store size={16} className="text-primary" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">Sold By</p>
-                    <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">{dealerProfile?.displayName || product.dealerName || 'View Dealer Profile'}</p>
-                    {dealerProfile?.averageRating > 0 && (
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <StarRating rating={Math.round(dealerProfile.averageRating)} size={10} />
-                        <span className="text-[10px] text-muted-foreground">{dealerProfile.averageRating.toFixed(1)} ({dealerProfile.totalReviews} reviews)</span>
-                      </div>
-                    )}
-                  </div>
-                  <ChevronRight size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                </div>
-              </LocalizedLink>
-              );
-            })()}
+            {dealerSlot !== undefined ? dealerSlot : <ProductDealerCard key={product.dealerId || product.created_by_id} product={product} initialProfile={initialDealerProfile} />}
           </div>
         </div>
 
@@ -341,21 +297,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
       </div>
 
       {/* Related */}
-      {related.length > 0 &&
-      <div className="border-t border-border py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
-              <h2 className="font-display text-2xl text-foreground font-light">{t('pages.productDetail.moreFrom')} {product.brand}</h2>
-              <LocalizedLink to={`/brands/${brandSlug}`} className="text-[11px] tracking-[0.15em] uppercase text-primary hover:text-foreground transition-colors">
-                {t('pages.productDetail.viewAll')} {product.brand} →
-              </LocalizedLink>
-            </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-              {related.map((p) => <ProductCard key={p.id} product={p} />)}
-            </div>
-          </div>
-        </div>
-      }
+      {relatedSlot !== undefined ? relatedSlot : <RelatedProducts product={product} products={related} />}
 
       <TrustBar />
     </div>

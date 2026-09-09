@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageClient';
-import { getProductBySlug, getRelatedProducts, getDealerProfileSummary } from '@/lib/base44Server';
+import { getProductBySlug } from '@/lib/base44Server';
+import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
 import {
   getSiteUrl,
@@ -70,12 +72,6 @@ export default async function ProductPage({ params }) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  // Neither depends on the other's result — running them in parallel avoids
-  // paying two full network round-trips back to back (Supabase + Clerk).
-  const [relatedProducts, dealerProfile] = await Promise.all([
-    getRelatedProducts(product),
-    getDealerProfileSummary(product.dealerId || product.created_by_id),
-  ]);
   const name = localizedField(product, 'productTitle', locale);
   const description = productDescription(product, locale);
   const siteUrl = getSiteUrl();
@@ -120,7 +116,20 @@ export default async function ProductPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <ProductDetailPageClient product={product} relatedProducts={relatedProducts} dealerProfile={dealerProfile} />
+      <ProductDetailPageClient
+        key={product.id}
+        product={product}
+        dealerSlot={(product.dealerId || product.created_by_id) ? (
+          <Suspense fallback={<div aria-busy="true" className="h-20 rounded-xl border border-border bg-card motion-safe:animate-pulse" />}>
+            <ProductDealerSection product={product} />
+          </Suspense>
+        ) : null}
+        relatedSlot={(
+          <Suspense fallback={null}>
+            <RelatedProductsSection product={product} />
+          </Suspense>
+        )}
+      />
     </>
   );
 }

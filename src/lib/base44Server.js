@@ -18,16 +18,29 @@ export const getProductById = cache(async (id) => {
   }
 });
 
-export const getProductBySlug = cache(async (slug) => {
-  if (!slug) return null;
-  try {
+// Public product pages can share a short-lived lookup across visits. Checkout
+// deliberately keeps the uncached Products.get read in getProductById above.
+// Existing catalog writes invalidate this through revalidatePath('/', 'layout').
+const loadProductBySlug = unstable_cache(
+  async (slug) => {
     const exactMatches = await Products.filter({ slug }, '-created_date', 1, 0);
     if (exactMatches[0]) return exactMatches[0];
 
     // Fallback to a title-derived slug match for any product still missing
     // a real `slug` value (should be rare now that Supabase is the source).
-    const products = await getPublishedProducts();
+    // Let failures escape the cache callback so a transient outage cannot
+    // turn a valid legacy product URL into a cached "not found" result.
+    const products = await Products.filter({ isPublished: true }, '-updated_date', 500, 0);
     return products.find((p) => productSlug(p) === slug) || null;
+  },
+  ['public-product-by-slug-v1', STORE_ID],
+  { revalidate: 60 },
+);
+
+export const getProductBySlug = cache(async (slug) => {
+  if (!slug) return null;
+  try {
+    return await loadProductBySlug(slug);
   } catch (error) {
     console.error('Unable to load product by slug from Supabase:', error?.message || error);
     return null;
@@ -37,7 +50,8 @@ export const getProductBySlug = cache(async (slug) => {
 export async function getRelatedProducts(product, limit = 4) {
   if (!product?.brand) return [];
   try {
-    const records = await Products.filter({ brand: product.brand }, '-created_date', limit + 1, 0);
+    // Reuse the catalog already loaded while browsing this brand.
+    const records = await loadBrandProducts(product.brand);
     return records.filter((record) => record.id !== product.id).slice(0, limit);
   } catch (error) {
     console.error('Unable to load related products from Supabase:', error?.message || error);
