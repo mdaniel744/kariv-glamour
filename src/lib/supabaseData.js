@@ -304,7 +304,14 @@ function makeEntity(loadAll, scoped = false) {
   };
 }
 
-export const Products = makeEntity(loadAllProductsShaped, true);
+const loadPublishedProductList = createPublicReferenceLoader(() => loadAllProductsShaped({ isPublished: true }), 30_000);
+publicCatalogCaches.add(loadPublishedProductList);
+export const Products = {
+  ...makeEntity(loadAllProductsShaped, true),
+  // Storefront searches must not load draft/dealer-pending rows. Keep the
+  // full list API for existing callers and share a public-only cache for shop.
+  listPublished: loadPublishedProductList,
+};
 export const Brands = makeEntity(loadAllBrandsShaped, true);
 export const Collections = makeEntity(loadAllCollectionsShaped, true);
 

@@ -59,13 +59,6 @@ export default function Footer() {
             <p className="text-sm text-[#496057] dark:text-white/70 leading-relaxed mb-6 font-body">
               {t('footer.description')}
             </p>
-            <div className="flex gap-4">
-              {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map((social) =>
-              <a key={social} href="#" className="text-[11px] tracking-[0.1em] uppercase text-primary/75 hover:text-[#9b7333] dark:text-white/70 dark:hover:text-[#C5A367] transition-colors font-medium">
-                  {social.slice(0, 2)}
-                </a>
-              )}
-            </div>
             <div className="mt-8">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
                 {t('footer.appearance')}

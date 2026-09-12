@@ -11,6 +11,7 @@ import { productSlug } from '@/lib/slug';
 import { ShieldCheck, Lock, Check, ArrowLeft, Truck, RotateCcw } from 'lucide-react';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import LocalizedLink from '@/components/LocalizedLink';
+import { getProductAvailability, getProductPricing } from '@/lib/productMerchant';
 
 export default function Checkout({ id: idProp, initialProduct = null }) {
   const { t } = useTranslation();
@@ -63,8 +64,11 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const [idempotencyKey] = useState(() => (typeof crypto !== 'undefined' ? crypto.randomUUID() : `checkout-${id}-${Date.now()}`));
 
   const effectiveShipping = useBillingAsShipping ? billing : shipping;
+  const pricing = getProductPricing(product || {});
+  const availableToPurchase = getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null;
 
   const canSubmit = () => {
+    if (!availableToPurchase) return false;
     if (!agreed) return false;
     if (!billing.fullName || !billing.street || !billing.city || !billing.postalCode) return false;
     if (!useBillingAsShipping) {
@@ -74,6 +78,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   };
 
   const handleSubmit = async () => {
+    if (!canSubmit() || submitting) return;
     setSubmitting(true);
     try {
       // Save billing address as the buyer's default profile for next time.
@@ -103,7 +108,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   if (loading || isLoadingAuth) return <div className="min-h-screen flex items-center justify-center"><div className="w-6 h-6 border-2 border-border border-t-primary rounded-full animate-spin" /></div>;
   if (!product) return <div className="max-w-2xl mx-auto py-20 text-center"><p className="text-sm text-muted-foreground">{t('pages.checkout.productNotFound')}</p></div>;
 
-  const price = product.salePrice || product.price;
+  const priceLabel = pricing.price != null && pricing.currency ? formatPrice(pricing.price, pricing.currency) : t('common:priceUnavailable');
 
   // Confirmation screen
   if (done && order) {
@@ -230,7 +235,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
               className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 disabled:opacity-50 hover:bg-primary/90 transition-colors"
             >
               <Lock size={16} />
-              {submitting ? t('pages.checkout.processing') : t('pages.checkout.placeOrder')}
+              {!availableToPurchase ? t('common:currentlyUnavailable') : submitting ? t('pages.checkout.processing') : t('pages.checkout.placeOrder')}
             </button>
           </div>
 
@@ -249,9 +254,9 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                 {product.referenceNumber && <p className="text-xs text-muted-foreground mt-1">{t('pages.productDetail.ref')} {product.referenceNumber}</p>}
                 {product.condition && <p className="text-xs text-muted-foreground mt-0.5">{product.condition}</p>}
                 <div className="mt-4 pt-4 border-t border-border space-y-1.5">
-                  <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.subtotal')}</span><span className="text-foreground">{formatPrice(price)}</span></div>
+                  <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.subtotal')}</span><span className="text-foreground">{priceLabel}</span></div>
                   <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.shipping')}</span><span className="text-foreground">{t('pages.checkout.free')}</span></div>
-                  <div className="flex justify-between text-sm font-medium pt-2 border-t border-border"><span className="text-foreground">{t('pages.checkout.total')}</span><span className="text-primary">{formatPrice(price)}</span></div>
+                  <div className="flex justify-between text-sm font-medium pt-2 border-t border-border"><span className="text-foreground">{t('pages.checkout.total')}</span><span className="text-primary">{priceLabel}</span></div>
                 </div>
               </div>
               <EscrowTrustBadge />

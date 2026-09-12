@@ -4,11 +4,14 @@ import { canonicalSeoSlug, getResearchArticle } from '@/lib/watchResearch/articl
 import { BRAND_RESEARCH } from '@/lib/watchResearch/brands';
 import ResearchSources, { SourceLinks } from './ResearchSources';
 import { COMPARISONS } from '@/lib/watchResearch/comparisons';
+import { getGuideMedia } from '@/lib/watchResearch/media';
+import GuideFigure from './GuideFigure';
 
 export default function BrandResearchArticle({ route, locale, compact = false }) {
   const article = getResearchArticle(route, locale);
   if (!article) return null;
   const de = locale === 'de';
+  const media = !compact && getGuideMedia(route, locale);
   const related = SEO_LANDING_ROUTES.filter((item) => item.pageKey === route.pageKey && item.pageData.isGuide && item.slug !== route.slug && canonicalSeoSlug(item, SEO_LANDING_ROUTES) === item.slug);
   const editorialLinks = [
     ['how-to-safely-buy-a-pre-owned-luxury-watch', de ? 'Gebrauchte Luxusuhren sicher kaufen' : 'How to buy a pre-owned luxury watch safely'],
@@ -23,17 +26,23 @@ export default function BrandResearchArticle({ route, locale, compact = false })
   ] : article.sections;
   return <article className="bg-background font-body text-foreground">
     <div className="mx-auto max-w-6xl px-5 py-9 sm:px-7 md:py-12">
-      {!compact && <header className="max-w-3xl">
+      {!compact && <header>
         <nav aria-label={de ? 'Brotkrumennavigation' : 'Breadcrumb'} className="mb-5 flex flex-wrap gap-2 text-sm text-muted-foreground">
           <Link href={`/${locale}`}>{de ? 'Startseite' : 'Home'}</Link><span aria-hidden="true">/</span>
           <Link href={`/${locale}/guides`}>{de ? 'Uhren-Guides' : 'Watch guides'}</Link><span aria-hidden="true">/</span>
           <Link href={`/${locale}/brands/${route.brandSlug}`}>{route.brandName}</Link>
         </nav>
-        <h1 className="break-words text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">{article.title}</h1>
-        <p className="mt-5 text-sm leading-6 text-muted-foreground">Kariv Glamour · {de ? 'Aktualisiert' : 'Updated'} <time dateTime={article.dateModified}>{new Intl.DateTimeFormat(de ? 'de-DE' : 'en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(article.dateModified + 'T12:00:00Z'))}</time> · {article.readMinutes} {de ? 'Min. Lesezeit' : 'min read'}</p>
+        <div className="grid items-center gap-7 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-10">
+          <div className="min-w-0">
+            <p className="mb-4 text-sm font-medium tracking-wide text-primary">{route.brandName} / {de ? 'Uhrenwissen' : 'Watch journal'}</p>
+            <h1 className="break-words text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">{article.title}</h1>
+            <p className="mt-5 text-base leading-8 text-muted-foreground sm:text-lg">{article.excerpt}</p>
+          </div>
+          <GuideFigure media={media?.hero} locale={locale} priority />
+        </div>
       </header>}
       {compact && <h2 className="text-2xl font-semibold">{de ? 'Kaufwissen:' : 'Buying notes:'} {article.title}</h2>}
-      <div className={compact ? 'mt-6 max-w-3xl' : 'mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14'}>
+      <div className={compact ? 'mt-6 max-w-3xl' : 'mt-10 grid items-start gap-8 border-t border-border pt-9 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14'}>
         <div className="min-w-0">
           {comparison && <section className="mb-8">
             <h2 className="text-xl font-semibold">{de ? 'Die wichtigsten Unterschiede' : 'Key differences at a glance'}</h2>
@@ -48,12 +57,13 @@ export default function BrandResearchArticle({ route, locale, compact = false })
             <SourceLinks ids={comparison.sources} locale={locale} />
           </section>}
           <div className="space-y-8">
-            {sections.map((section) => <section id={section.id} key={section.id} className="scroll-mt-36">
+            {sections.map((section, index) => <section id={section.id} key={section.id} className="scroll-mt-36">
               <h2 className="text-xl font-semibold leading-snug sm:text-2xl">{section.title}</h2>
               <div className="mt-4 space-y-4 text-base leading-8 sm:text-lg">
                 {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>
               <SourceLinks ids={section.sources} locale={locale} />
+              {index === 1 && media?.supporting && <GuideFigure media={media.supporting} locale={locale} className="mt-8" />}
             </section>)}
           </div>
           <nav aria-label={de ? 'Weiterführende Kaufleitfäden' : 'Further buying guides'} className="mt-9 border-t border-border pt-6">

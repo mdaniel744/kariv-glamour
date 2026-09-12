@@ -12,6 +12,7 @@ import {
   deriveOrderStatus,
 } from '@/lib/orderShaping';
 import { isValidEscrowTransition } from '@/lib/escrowConstants';
+import { getProductPricing } from '@/lib/productMerchant';
 
 async function shapeRows(rows) {
   const ids = rows.flatMap(r => [r.buyer_user_id, r.dealer_user_id]);
@@ -100,14 +101,17 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey }
   if ((product.stock_quantity ?? 0) < 1) return { ok: false, error: 'This watch has already sold.' };
 
   const attrs = product.attributes || {};
-  const price = product.sale_price ?? product.price;
+  // Recompute from the fresh, tenant-scoped database row, never a client total.
+  const pricing = getProductPricing({ price: product.price, salePrice: product.sale_price, currency: product.currency });
+  if (pricing.price == null || !pricing.currency) return { ok: false, error: 'This watch does not currently have a valid purchase price. Please contact us.' };
+  const price = pricing.price;
   const lineItem = {
     product_id: product.id,
     title: product.name,
     brand: product.brands?.name || '',
     condition: attrs['Condition'] || '',
     price,
-    currency: product.currency || 'EUR',
+    currency: pricing.currency,
     image: Array.isArray(product.images) ? product.images[0] : null,
     quantity: 1,
   };
@@ -118,7 +122,7 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey }
     dealer_user_id: product.dealer_id || null,
     products: [lineItem],
     total_amount: price,
-    currency: product.currency || 'EUR',
+    currency: pricing.currency,
     // orders.payment_method is NOT NULL on the live table. Originally this
     // was meant to stay unset until the buyer picks a method once the
     // dealer accepts — but with crypto deferred, bank_transfer is the only

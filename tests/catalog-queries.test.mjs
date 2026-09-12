@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPublicReferenceLoader, loadFilteredCatalogRows } from '../src/lib/catalogQueries.js';
+import { searchShopProducts } from '../src/lib/shopSearch.js';
 
 // Run the actual data adapter against an in-memory HTTP endpoint. No live
 // database credentials or requests are used by these tests.
@@ -82,7 +83,7 @@ function matches(row, field, expression) {
   throw new Error(`Unexpected test filter: ${expression}`);
 }
 
-function useFixtureEndpoint(t, { rowLimit = 1000 } = {}) {
+function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProductOffset = null, emptyProductOffset = null } = {}) {
   Products.invalidate();
   const requests = [];
   t.mock.method(globalThis, 'fetch', async (input) => {
@@ -113,10 +114,14 @@ function useFixtureEndpoint(t, { rowLimit = 1000 } = {}) {
     });
     const total = rows.length;
     const offset = Number(url.searchParams.get('offset') || 0);
+    if (table === 'products' && offset === failProductOffset) {
+      return new Response(JSON.stringify({ message: 'Catalogue page failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
     const limit = Math.min(Number(url.searchParams.get('limit') || rowLimit), rowLimit);
     rows = rows.slice(offset, offset + limit);
+    if (table === 'products' && offset === emptyProductOffset) rows = [];
     return new Response(JSON.stringify(rows), { headers: {
-      'Content-Type': 'application/json', 'Content-Range': `${offset}-${offset + rows.length - 1}/${total}`,
+      'Content-Type': 'application/json', 'Content-Range': `${offset}-${offset + rows.length - 1}/${omitCount ? '*' : total}`,
     } });
   });
   return requests;
@@ -339,4 +344,70 @@ test('translation reads never merge values from another store', async (t) => {
   const requests = useFixtureEndpoint(t);
   assert.equal((await Products.get('p1')).productTitle_de, 'Daytona Deutsch');
   assert.equal(requests.find((request) => request.table === 'translations').params.get('store_id'), 'eq.kariv');
+});
+
+test('shop totals and searches include every catalogue page beyond 1000 rows while retaining tenant and publication scope', async (t) => {
+  const previous = fixtures.products;
+  t.after(() => { fixtures.products = previous; Products.invalidate(); });
+  fixtures.products = Array.from({ length: 1200 }, (_, index) => ({
+    id: `watch-${String(index).padStart(4, '0')}`, store_id: 'kariv',
+    name: `Watch ${index}`, brand_id: 'omega', status: 'active', reference_number: `REF-${index}`,
+  }));
+  fixtures.products.push(
+    { id: 'watch-draft', store_id: 'kariv', name: 'Draft', status: 'draft' },
+    { id: 'other-tenant', store_id: 'other', name: 'Another store watch', status: 'active' },
+  );
+  const requests = useFixtureEndpoint(t, { rowLimit: 200 });
+  const results = await searchShopProducts(Products, {});
+  assert.equal(results.totalCount, 1200);
+  assert.equal(results.totalPages, 50);
+  assert.equal((await searchShopProducts(Products, { search: 'Omega REF-1199' })).items[0].id, 'watch-1199');
+  const reads = requests.filter(({ table }) => table === 'products');
+  assert.deepEqual(reads.map(({ params }) => Number(params.get('offset'))), [0, 200, 400, 600, 800, 1000]);
+  for (const { params } of reads) {
+    assert.equal(params.get('store_id'), 'eq.kariv');
+    assert.equal(params.get('status'), 'eq.active');
+    assert.equal(params.get('order'), 'id.asc');
+  }
+  assert.equal((await Products.list()).length, 1201, 'compatibility API retains non-public rows if an existing caller is allowed to read them');
+});
+
+test('catalogue pagination stops correctly at an exact response-page boundary', async (t) => {
+  const previous = fixtures.products;
+  t.after(() => { fixtures.products = previous; Products.invalidate(); });
+  fixtures.products = Array.from({ length: 1000 }, (_, index) => ({
+    id: `watch-${String(index).padStart(4, '0')}`, store_id: 'kariv', name: `Watch ${index}`, status: 'active',
+  }));
+  const requests = useFixtureEndpoint(t);
+  assert.equal((await Products.list()).length, 1000);
+  assert.deepEqual(requests.filter(({ table }) => table === 'products').map(({ params }) => Number(params.get('offset'))), [0, 500]);
+});
+
+test('published shop reads share the public cache and refresh after catalogue invalidation', async (t) => {
+  const requests = useFixtureEndpoint(t);
+  const originalPrice = fixtures.products[0].price;
+  t.after(() => { fixtures.products[0].price = originalPrice; Products.invalidate(); });
+  const [first, second] = await Promise.all([Products.listPublished(), Products.listPublished()]);
+  assert.equal(first, second);
+  assert.ok(first.every((row) => row.isPublished));
+  fixtures.products[0].price = 567;
+  assert.equal((await Products.listPublished()).find(({ id }) => id === 'p1').price, originalPrice);
+  assert.equal(requests.filter(({ table }) => table === 'products').length, 1);
+  Products.invalidate();
+  assert.equal((await Products.listPublished()).find(({ id }) => id === 'p1').price, 567);
+  assert.equal(requests.filter(({ table }) => table === 'products').length, 2);
+});
+
+test('catalogue pagination handles a lower server cap even when a count is unavailable', async (t) => {
+  const requests = useFixtureEndpoint(t, { rowLimit: 2, omitCount: true });
+  assert.equal((await Products.list()).length, 5);
+  assert.deepEqual(requests.filter(({ table }) => table === 'products').map(({ params }) => Number(params.get('offset'))), [0, 2, 4, 5]);
+});
+
+test('failed or incomplete catalogue pages reject the count rather than returning partial results', async (t) => {
+  useFixtureEndpoint(t, { rowLimit: 2, failProductOffset: 2 });
+  await assert.rejects(searchShopProducts(Products, {}), { message: 'Catalogue page failed' });
+  t.mock.restoreAll();
+  useFixtureEndpoint(t, { rowLimit: 2, emptyProductOffset: 2 });
+  await assert.rejects(searchShopProducts(Products, {}), /catalogue response was incomplete/);
 });

@@ -16,6 +16,7 @@ import SafeHtml from '@/components/shared/SafeHtml';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductDealerCard from '@/components/product/ProductDealerCard';
 import RelatedProducts from '@/components/product/RelatedProducts';
+import { getProductAvailability, getProductPricing } from '@/lib/productMerchant';
 
 const EMPTY_RELATED = [];
 
@@ -104,9 +105,13 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const images = product.productImages?.length > 0 ? product.productImages :
   product.featuredImage ? [product.featuredImage] : [];
   const wishlisted = isInWishlist(product.id);
+  const pricing = getProductPricing(product);
+  const availability = getProductAvailability(product);
+  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null;
 
   const checkoutPath = `/checkout/${product.id}`;
   const handleBuyNow = () => {
+    if (!canPurchase) return;
     if (!isAuthenticated) { setShowAuthModal(true); return; }
     router.push(localePath(checkoutPath));
   };
@@ -192,17 +197,17 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             {/* Price */}
             <div className="border-y border-border py-5">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                {product.salePrice && product.salePrice < product.price ?
+                {pricing.salePrice != null && pricing.currency ?
                 <>
-                    <span className="font-display text-2xl text-primary sm:text-3xl">{formatPrice(product.salePrice)}</span>
-                    <span className="text-sm text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                    <span className="font-display text-2xl text-primary sm:text-3xl">{formatPrice(pricing.salePrice, pricing.currency)}</span>
+                    <span className="text-sm text-muted-foreground line-through">{formatPrice(pricing.regularPrice, pricing.currency)}</span>
                   </> :
-                <span className="font-display text-2xl text-foreground sm:text-3xl">{formatPrice(product.price)}</span>
+                <span className="font-display text-2xl text-foreground sm:text-3xl">{pricing.price != null && pricing.currency ? formatPrice(pricing.price, pricing.currency) : t('common:priceUnavailable')}</span>
                 }
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-2 sm:gap-4">
-                <span className={`text-[10px] tracking-[0.1em] uppercase px-2 py-1 ${product.availability === 'In Stock' ? 'bg-emerald-600/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-600/15 text-red-600 dark:text-red-400'}`}>
-                  {product.availability === 'In Stock' ? t('pages.productDetail.inStock') : product.availability || t('pages.productDetail.inStock')}
+                <span className={`text-[10px] tracking-[0.1em] uppercase px-2 py-1 ${availability.inStock ? 'bg-emerald-600/15 text-emerald-600 dark:text-emerald-400' : 'bg-red-600/15 text-red-600 dark:text-red-400'}`}>
+                  {t(`common:${availability.labelKey}`)}
                 </span>
                 {product.condition &&
                 <span className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground">{product.condition}</span>
@@ -229,11 +234,12 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             <div className="space-y-3">
               <button
                 onClick={handleBuyNow}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
+                disabled={!canPurchase}
+                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors disabled:cursor-not-allowed disabled:opacity-50">
                 <Lock size={16} />
-                {t('pages.productDetail.buyNow')}
+                {canPurchase ? t('pages.productDetail.buyNow') : t('common:currentlyUnavailable')}
               </button>
-              <BuyNowAuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} continueTo={checkoutPath} />
+              <BuyNowAuthModal open={showAuthModal && canPurchase} onClose={() => setShowAuthModal(false)} continueTo={checkoutPath} />
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   onClick={() => toggleWishlist(product)}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarDays, Check, ChevronRight, Clock3 } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import MediaImage from '@/components/shared/MediaImage';
 import { EDITORIAL_GUIDES, localizeEditorialGuide } from '@/lib/editorialGuides';
 import ResearchSources, { SourceLinks } from './ResearchSources';
@@ -8,7 +8,6 @@ const UI = {
   en: {
     home: 'Home',
     guides: 'Watch Guides',
-    published: 'Published',
     contents: 'In this guide',
     keyPoints: 'Key points',
     faq: 'Frequently asked questions',
@@ -21,7 +20,6 @@ const UI = {
   de: {
     home: 'Startseite',
     guides: 'Uhren-Guides',
-    published: 'Veröffentlicht',
     contents: 'In diesem Guide',
     keyPoints: 'Das Wichtigste',
     faq: 'Häufig gestellte Fragen',
@@ -32,15 +30,6 @@ const UI = {
     readArticle: 'Artikel lesen',
   },
 };
-
-function formatDate(value, locale) {
-  return new Intl.DateTimeFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(`${value}T00:00:00Z`));
-}
 
 export default function GuideArticle({ guide, locale }) {
   const article = localizeEditorialGuide(guide, locale);
@@ -69,12 +58,6 @@ export default function GuideArticle({ guide, locale }) {
             <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground md:text-xl md:leading-9">
               {article.excerpt}
             </p>
-            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
-              <span>Kariv Glamour</span>
-              <span className="inline-flex items-center gap-2"><CalendarDays size={16} aria-hidden="true" />{copy.published} {formatDate(guide.datePublished, locale)}</span>
-              <span>{locale === 'de' ? 'Aktualisiert' : 'Updated'} <time dateTime={guide.dateModified}>{formatDate(guide.dateModified, locale)}</time></span>
-              <span className="inline-flex items-center gap-2"><Clock3 size={16} aria-hidden="true" />{article.readTime}</span>
-            </div>
           </div>
         </div>
       </header>
@@ -166,10 +149,13 @@ export default function GuideArticle({ guide, locale }) {
             {related.map((item) => {
               const relatedArticle = localizeEditorialGuide(item, locale);
               return (
-                <Link key={item.slug} href={`/${locale}/guides/${item.slug}`} className="group rounded-2xl border border-border bg-background p-6 transition-colors hover:border-primary/45">
+                <Link key={item.slug} href={`/${locale}/guides/${item.slug}`} className="group overflow-hidden rounded-2xl border border-border bg-background transition-colors hover:border-primary/45">
+                  <div className="relative aspect-[16/8] bg-secondary"><MediaImage src={item.image} alt="" fill sizes="(max-width: 767px) 100vw, 50vw" className="object-cover" /></div>
+                  <div className="p-6">
                   <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">{relatedArticle.category}</span>
                   <h3 className="mt-3 text-xl font-bold leading-snug text-foreground transition-colors group-hover:text-primary">{relatedArticle.title}</h3>
                   <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">{copy.readArticle}<ArrowRight size={14} className="transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
+                  </div>
                 </Link>
               );
             })}

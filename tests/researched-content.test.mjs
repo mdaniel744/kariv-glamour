@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { compileFunction } from 'node:vm';
 import React from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
@@ -12,6 +12,7 @@ import { SOURCES, REVIEW_DATE } from '../src/lib/watchResearch/sources.js';
 import { COMPARISONS } from '../src/lib/watchResearch/comparisons.js';
 import { BRAND_RESEARCH } from '../src/lib/watchResearch/brands.js';
 import { EDITORIAL_GUIDES } from '../src/lib/editorialGuides.js';
+import { getGuideMedia } from '../src/lib/watchResearch/media.js';
 import { getSiteUrl, localizedMetadata, localeAlternates } from '../src/lib/seo.js';
 
 const read = (path) => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
@@ -129,7 +130,10 @@ test('every brand guide server-renders one heading, meaningful content and click
     '@/lib/watchResearch/sources': { SOURCES, REVIEW_DATE },
     '@/lib/watchResearch/comparisons': { COMPARISONS },
     '@/lib/watchResearch/brands': { BRAND_RESEARCH },
+    '@/lib/watchResearch/media': { getGuideMedia },
+    '@/components/shared/MediaImage': ({ src, alt, className, sizes, priority }) => React.createElement('img', { src, alt, className, sizes, loading: priority ? 'eager' : 'lazy' }),
   };
+  imports['./GuideFigure'] = loadSource('src/components/guides/GuideFigure.jsx', imports);
   imports['./ResearchSources'] = loadSource('src/components/guides/ResearchSources.jsx', imports);
   const Article = loadSource('src/components/guides/BrandResearchArticle.jsx', imports).default;
   const knownPaths = new Set([
@@ -140,12 +144,27 @@ test('every brand guide server-renders one heading, meaningful content and click
   for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de']) {
     const html = renderToStaticMarkup(React.createElement(Article, { route, locale }));
     assert.equal((html.match(/<h1\b/g) || []).length, 1, route.slug);
-    assert.ok(html.includes('dateTime="' + REVIEW_DATE + '"'));
-    assert.ok(html.includes(locale === 'de' ? 'Quellen und redaktioneller Ansatz' : 'Sources and editorial approach'));
+    assert.doesNotMatch(html, /<time\b|min read|Min\. Lesezeit|Sources checked on/);
+    assert.ok(html.includes(locale === 'de' ? 'Quellen zum Weiterlesen' : 'References and further reading'));
+    assert.match(html, /<figure/);
+    assert.match(html, /loading="eager"/);
     for (const [, href] of html.matchAll(/href="([^"]+)"/g)) {
       if (href.startsWith('/')) assert.ok(knownPaths.has(href), href);
       if (href.startsWith('#')) assert.ok(html.includes('id="' + href.slice(1) + '"'), href);
       if (href.startsWith('https:')) assert.ok(Object.values(SOURCES).some((source) => source.url === href), href);
     }
   }
+});
+
+test('all guide images are existing local assets with translated alt text and no unresolved paths', () => {
+  for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de']) {
+    const media = getGuideMedia(route, locale);
+    assert.ok(media?.hero, route.slug);
+    for (const image of [media.hero, media.supporting].filter(Boolean)) {
+      assert.ok(existsSync(new URL('../public' + image.src, import.meta.url)), image.src);
+      assert.ok(image.alt.length > 5);
+    }
+  }
+  assert.doesNotMatch(read('src/components/guides/GuideArticle.jsx'), /CalendarDays|Clock3|formatDate|article\.readTime/);
+  assert.match(read('app/[locale]/[slug]/page.jsx'), /image:.*getGuideMedia/);
 });

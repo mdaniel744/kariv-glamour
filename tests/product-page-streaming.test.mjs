@@ -8,6 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import ts from 'typescript';
 import { mergeCatalogTranslations } from '../src/lib/catalogTranslations.js';
 import { localizedField } from '../src/lib/seo.js';
+import * as productMerchant from '../src/lib/productMerchant.js';
 
 function loadSource(path, imports) {
   const { outputText } = ts.transpileModule(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'), {
@@ -24,7 +25,7 @@ function loadSource(path, imports) {
 
 const watch = {
   id: 'watch-1', slug: 'rolex-daytona', productTitle: 'Rolex Daytona Steel', brand: 'Rolex',
-  price: 12000, availability: 'In Stock', isPublished: true, dealerId: 'dealer-1',
+  price: 12000, stockQuantity: 1, availability: 'In Stock', isPublished: true, dealerId: 'dealer-1',
   productImages: ['/watch.webp'], productDescription: 'Watch description',
 };
 
@@ -45,6 +46,7 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     '@/lib/AuthContext': { useAuth: () => ({ isAuthenticated: false }) },
     '@/lib/languageContext': { useLanguage: () => ({ locale, localePath: (path) => `/${locale}${path}` }) },
     '@/lib/constants': { formatPrice: (price) => `EUR ${price}` },
+    '@/lib/productMerchant': productMerchant,
     '@/components/shared/TrustBar': () => null,
     '@/components/checkout/BuyNowAuthModal': () => null,
     '@/components/shared/SafeHtml': ({ html }) => React.createElement('div', null, html),

@@ -3,6 +3,7 @@ import SeoLandingRouteClient from '@/components/next-pages/SeoLandingRouteClient
 import { getSeoLandingRoute, SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import BrandResearchArticle from '@/components/guides/BrandResearchArticle';
 import { canonicalSeoSlug, getResearchArticle } from '@/lib/watchResearch/articles';
+import { getGuideMedia } from '@/lib/watchResearch/media';
 import {
   getSiteUrl,
   localizedField,
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }) {
     path: canonicalSeoSlug(route, SEO_LANDING_ROUTES),
     title: article?.title || localizedField(route.pageData, 'title', locale),
     description: route.pageData.isGuide ? article?.excerpt : localizedField(route.pageData, 'description', locale),
-    image: route.pageData.image,
+    image: route.pageData.isGuide ? getGuideMedia(route, locale)?.hero.src : route.pageData.image,
     type: route.pageData.isGuide ? 'article' : 'website',
   });
 }
@@ -78,6 +79,7 @@ export default async function SeoLandingPage({ params }) {
       inLanguage: locale,
       ...(route.pageData.isGuide ? {
         mainEntityOfPage: url,
+        image: `${siteUrl}${getGuideMedia(route, locale).hero.src}`,
         dateModified: article.dateModified,
         author: { '@type': 'Organization', name: 'Kariv Glamour', url: siteUrl },
         publisher: { '@type': 'Organization', name: 'Kariv Glamour', url: siteUrl },
@@ -97,7 +99,7 @@ export default async function SeoLandingPage({ params }) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-        { '@type': 'ListItem', position: 2, name: locale === 'de' ? 'Marken' : 'Brands', item: `${siteUrl}/${locale}/brands` },
+        { '@type': 'ListItem', position: 2, name: route.pageData.isGuide ? (locale === 'de' ? 'Uhren-Guides' : 'Watch guides') : (locale === 'de' ? 'Marken' : 'Brands'), item: `${siteUrl}/${locale}/${route.pageData.isGuide ? 'guides' : 'brands'}` },
         { '@type': 'ListItem', position: 3, name: route.brandName, item: `${siteUrl}/${locale}/brands/${route.brandSlug}` },
         { '@type': 'ListItem', position: 4, name: title, item: url },
       ],

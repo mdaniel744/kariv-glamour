@@ -1,25 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
 import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { SlidersHorizontal, X, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
-import { productMatchesSearchPayload } from '@/lib/productFilters';
-
-const PAGE_SIZE = 24;
-const LOCAL_SEARCH_LIMIT = 500;
-
-const SEARCH_SORTS = {
-  newest: '-created_date',
-  oldest: 'created_date',
-  price_low: 'price',
-  price_high: '-price',
-  name_asc: 'productTitle',
-  name_desc: '-productTitle'
-};
+import { positivePage, searchShopProducts, SHOP_PAGE_SIZE } from '@/lib/shopSearch';
 
 // Default filter state
 const DEFAULT_FILTERS = {
@@ -90,8 +77,8 @@ function serializeFiltersToURL(filters, page, sortBy) {
   return params;
 }
 
-// Build the backend search payload from filter state
-function buildSearchPayload(filters, page, sortBy) {
+// Build the shared catalogue search payload from filter state.
+function buildSearchPayload(filters, page, sortBy, locale) {
   const payload = {
     search: filters.search || '',
     brands: filters.brand,
@@ -113,10 +100,9 @@ function buildSearchPayload(filters, page, sortBy) {
     isVintage: filters.isVintage,
     sort: sortBy || 'newest',
     page: page,
-    pageSize: PAGE_SIZE
+    pageSize: SHOP_PAGE_SIZE,
+    locale,
   };
-  // Also pass dialColor and movementType through materials if needed
-  // (backend supports materials as caseMaterial for now)
   return payload;
 }
 
@@ -125,67 +111,12 @@ function filterCacheKey(filters) {
   return JSON.stringify(filters);
 }
 
-function sortProducts(products, sortKey) {
-  const sortField = SEARCH_SORTS[sortKey] || SEARCH_SORTS.newest;
-  const sortMultiplier = sortField.startsWith('-') ? -1 : 1;
-  const actualField = sortField.replace(/^-/, '');
-
-  return [...products].sort((a, b) => {
-    const av = a[actualField];
-    const bv = b[actualField];
-    if (av === bv) return String(a.id || '').localeCompare(String(b.id || ''));
-    if (av === null || av === undefined) return 1;
-    if (bv === null || bv === undefined) return -1;
-    if (typeof av === 'string') return sortMultiplier * av.localeCompare(String(bv));
-    return sortMultiplier * (Number(av) - Number(bv));
-  });
-}
-
-async function searchProductsLocally(payload) {
-  const allProducts = asArray(await dataClient.entities.Products.list(SEARCH_SORTS[payload.sort] || SEARCH_SORTS.newest, LOCAL_SEARCH_LIMIT));
-  const filtered = allProducts.filter(product => productMatchesSearchPayload(product, payload));
-
-  const sorted = sortProducts(filtered, payload.sort);
-  const page = Math.max(1, Number(payload.page) || 1);
-  const pageSize = Math.max(1, Math.min(Number(payload.pageSize) || PAGE_SIZE, 48));
-  const totalCount = sorted.length;
-  const totalPages = Math.ceil(totalCount / pageSize);
-  const startIndex = (page - 1) * pageSize;
-
-  return {
-    items: sorted.slice(startIndex, startIndex + pageSize),
-    totalCount,
-    totalPages,
-    hasMore: page < totalPages
-  };
-}
-
-async function searchProducts(payload) {
-  // Model families need cross-field aliases and explicit sibling exclusions.
-  // Use the shared catalog matcher so production cannot silently return a
-  // similarly named but unrelated collection.
-  if (payload.models?.length) return searchProductsLocally(payload);
-
-  try {
-    const response = await dataClient.functions.invoke('searchProducts', payload);
-    const data = response?.data || response || {};
-    const items = asArray(data.items ?? data);
-    return {
-      items,
-      totalCount: data.totalCount ?? items.length,
-      totalPages: data.totalPages ?? Math.ceil(items.length / PAGE_SIZE),
-      hasMore: data.hasMore ?? false
-    };
-  } catch (error) {
-    const status = error?.response?.status || error?.status;
-    if (status && status !== 404 && status !== 405) throw error;
-    return searchProductsLocally(payload);
-  }
-}
+const searchProducts = (payload) => searchShopProducts(dataClient.entities.Products, payload);
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useUrlSearchParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage?.startsWith('de') ? 'de' : 'en';
   const sortOptions = [
     { value: 'newest', label: t('common:shop.sortNewest') },
     { value: 'price_low', label: t('common:shop.sortPriceLow') },
@@ -197,7 +128,7 @@ export default function Shop() {
   // Initialize state from URL
   const [filters, setFilters] = useState(() => parseFiltersFromURL(searchParams));
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
-  const [page, setPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [page, setPage] = useState(() => positivePage(searchParams.get('page')));
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -228,7 +159,7 @@ export default function Shop() {
 
   // ── Sync filter changes to URL ──
   // This runs when filters/sort/page change from user interaction.
-  // We use replace to avoid polluting history on every filter toggle.
+  // Keep deliberate filter changes available through back/forward navigation.
   const syncURL = useCallback((newFilters, newPage, newSort) => {
     const params = serializeFiltersToURL(newFilters, newPage, newSort);
     setSearchParams(params, { replace: false });
@@ -244,7 +175,7 @@ export default function Shop() {
     }
 
     const urlFilters = parseFiltersFromURL(searchParams);
-    const urlPage = parseInt(searchParams.get('page') || '1');
+    const urlPage = positivePage(searchParams.get('page'));
     const urlSort = searchParams.get('sort') || 'newest';
 
     setFilters(urlFilters);
@@ -259,7 +190,7 @@ export default function Shop() {
       setLoading(true);
       setError(null);
       try {
-        const payload = buildSearchPayload(filters, page, sortBy);
+        const payload = buildSearchPayload(filters, page, sortBy, locale);
         const results = await searchProducts(payload);
 
         // Ignore stale responses — only process if this is the latest request
@@ -269,6 +200,10 @@ export default function Shop() {
         setTotalCount(results.totalCount || 0);
         setTotalPages(results.totalPages || 0);
         setHasMore(results.hasMore || false);
+        if (results.page !== page) {
+          setPage(results.page);
+          syncURL(filters, results.page, sortBy);
+        }
       } catch (e) {
         if (currentRequestId !== requestIdRef.current) return;
         console.error(e);
@@ -280,7 +215,7 @@ export default function Shop() {
       }
     };
     load();
-  }, [filterCacheKey(filters), sortBy, page, t]);
+  }, [filterCacheKey(filters), sortBy, page, locale, t, syncURL]);
 
   // ── Filter change handlers ──
   const handleFiltersChange = (newFilters) => {
@@ -291,7 +226,8 @@ export default function Shop() {
 
   const handleSortChange = (newSort) => {
     setSortBy(newSort);
-    syncURL(filters, page, newSort);
+    setPage(1);
+    syncURL(filters, 1, newSort);
   };
 
   const handlePageChange = (newPage) => {
@@ -312,7 +248,7 @@ export default function Shop() {
     const currentRequestId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
-    const payload = buildSearchPayload(filters, page, sortBy);
+    const payload = buildSearchPayload(filters, page, sortBy, locale);
     searchProducts(payload)
       .then(results => {
         if (currentRequestId !== requestIdRef.current) return;
@@ -320,6 +256,10 @@ export default function Shop() {
         setTotalCount(results.totalCount || 0);
         setTotalPages(results.totalPages || 0);
         setHasMore(results.hasMore || false);
+        if (results.page !== page) {
+          setPage(results.page);
+          syncURL(filters, results.page, sortBy);
+        }
       })
       .catch(e => {
         if (currentRequestId !== requestIdRef.current) return;
@@ -392,8 +332,8 @@ export default function Shop() {
       <div className="mb-10">
         <span className="text-[10px] tracking-[0.3em] uppercase text-primary mb-2 block">{t('common:collection')}</span>
         <h1 className="font-display text-3xl md:text-5xl font-light text-foreground tracking-tight">{pageTitle}</h1>
-        <p className="text-sm text-muted-foreground mt-2">
-          {loading ? '…' : `${totalCount} ${t('common:shop.title')}`}
+        <p className="text-sm text-muted-foreground mt-2" aria-live="polite">
+          {loading ? '…' : error ? t('common:error') : `${new Intl.NumberFormat(locale).format(totalCount)} ${t('common:shop.title')}`}
         </p>
       </div>
 
@@ -403,6 +343,7 @@ export default function Shop() {
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
+            aria-label={t('common:shop.searchPlaceholder')}
             value={filters.search}
             onChange={e => handleFiltersChange({ ...filters, search: e.target.value })}
             placeholder={t('common:shop.searchPlaceholder') || 'Search watches...'}
@@ -558,7 +499,7 @@ export default function Shop() {
                 onClick={() => setFiltersOpen(false)}
                 className="min-h-12 w-full rounded-full bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground"
               >
-                {t('common:shop.showResults', { count: totalCount })}
+                {loading ? t('common:shop.loadingWatches') : error ? t('common:close') : t('common:shop.showResults', { count: totalCount })}
               </button>
             </div>
           </div>

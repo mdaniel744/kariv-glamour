@@ -1,3 +1,5 @@
+import { getProductPricing } from './productMerchant.js';
+
 function toArray(value) {
   if (Array.isArray(value)) return value;
   return value === null || value === undefined || value === '' ? [] : [value];
@@ -93,17 +95,14 @@ export function isTrueProductFlag(value) {
 }
 
 function effectivePrice(product) {
-  const regularPrice = Number(product.price);
-  const salePrice = Number(product.salePrice);
-  if (Number.isFinite(salePrice) && salePrice > 0) return salePrice;
-  return Number.isFinite(regularPrice) ? regularPrice : 0;
+  return getProductPricing(product).price ?? 0;
 }
 
 function matchesSearch(product, query) {
   const requested = normalizeFilterValue(query);
   if (!requested) return true;
 
-  return [
+  const searchable = [
     product.productTitle,
     product.productTitle_en,
     product.productTitle_de,
@@ -114,7 +113,11 @@ function matchesSearch(product, query) {
     product.productDescription,
     product.productDescription_en,
     product.productDescription_de,
-  ].some((value) => normalizeFilterValue(value).includes(requested));
+  ].map((value) => normalizeFilterValue(String(value ?? '').replace(/<[^>]*>/g, ' '))).join(' ');
+  // A shopper may enter a brand and a reference saved in separate fields,
+  // or words in a different order from the listing title. Every search term
+  // must match, but they need not be one contiguous phrase in a single field.
+  return requested.split(' ').every((term) => searchable.includes(term));
 }
 
 export function productMatchesSearchPayload(product, payload) {

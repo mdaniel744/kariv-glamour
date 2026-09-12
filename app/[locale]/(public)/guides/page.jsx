@@ -4,6 +4,7 @@ import MediaImage from '@/components/shared/MediaImage';
 import { EDITORIAL_GUIDES, localizeEditorialGuide } from '@/lib/editorialGuides';
 import { SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import { canonicalSeoSlug, getResearchArticle } from '@/lib/watchResearch/articles';
+import { getGuideMedia } from '@/lib/watchResearch/media';
 import { getPublishedGuides } from '@/lib/publishedGuides';
 import { localizedMetadata, localizedField, SUPPORTED_LOCALES, getSiteUrl, safeJsonLd } from '@/lib/seo';
 
@@ -55,10 +56,14 @@ export default async function GuidesPage({ params }) {
       })}</nav>
       <div className="mt-5 grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">{groups.map((name) => {
         const group = routes.filter((route) => route.brandName === name);
-        return <section key={name} id={`guides-${group[0].brandSlug}`} className="scroll-mt-32 rounded-2xl border border-border p-5">
+        const media = getGuideMedia(group.find((route) => route.slug.startsWith('welche-')) || group[0], locale).hero;
+        return <section key={name} id={`guides-${group[0].brandSlug}`} className="scroll-mt-32 overflow-hidden rounded-2xl border border-border">
+          <div className="relative aspect-[16/9] bg-secondary"><MediaImage src={media.src} alt={media.alt} fill sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" className={media.contain ? 'object-contain p-4' : 'object-cover'} /></div>
+          <div className="p-5">
           <h3 className="text-xl font-semibold">{name}</h3>
           <ul className="mt-4 space-y-3">{group.map((route) => <li key={route.slug}><Link href={`/${locale}/${route.slug}`} className="text-base leading-7 text-primary underline-offset-4 hover:underline">{getResearchArticle(route, locale).title}</Link></li>)}</ul>
           <Link href={`/${locale}/brands/${group[0].brandSlug}`} className="mt-5 inline-block text-sm font-medium underline underline-offset-4">{de ? 'Verfügbare Uhren' : 'Available watches'} →</Link>
+          </div>
         </section>;
       })}</div>
     </section>

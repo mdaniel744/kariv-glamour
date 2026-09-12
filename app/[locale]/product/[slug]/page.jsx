@@ -4,6 +4,7 @@ import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageCl
 import { getProductBySlug } from '@/lib/base44Server';
 import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
+import { buildProductMerchantSchema, productMetaDescription } from '@/lib/productMerchant';
 import {
   getSiteUrl,
   localizedField,
@@ -13,27 +14,6 @@ import {
 } from '@/lib/seo';
 
 export const revalidate = 300;
-
-function productDescription(product, locale) {
-  const description =
-    localizedField(product, 'metaDescription', locale) ||
-    localizedField(product, 'shortDescription', locale) ||
-    localizedField(product, 'productDescription', locale);
-  return description ? description.slice(0, 320) : '';
-}
-
-function productAvailability(value) {
-  if (value === 'In Stock') return 'https://schema.org/InStock';
-  if (value === 'Reserved') return 'https://schema.org/PreOrder';
-  if (value === 'Coming Soon') return 'https://schema.org/PreOrder';
-  return 'https://schema.org/OutOfStock';
-}
-
-function productCondition(value) {
-  return value === 'New' || value === 'Unworn'
-    ? 'https://schema.org/NewCondition'
-    : 'https://schema.org/UsedCondition';
-}
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
@@ -58,7 +38,7 @@ export async function generateMetadata({ params }) {
     locale,
     path: `product/${productSlug(product)}`,
     title,
-    description: productDescription(product, locale),
+    description: productMetaDescription(product, locale),
     image: product.featuredImage || product.productImages?.[0],
     type: 'website',
     index: product.isPublished === true,
@@ -73,32 +53,11 @@ export default async function ProductPage({ params }) {
   if (!product) notFound();
 
   const name = localizedField(product, 'productTitle', locale);
-  const description = productDescription(product, locale);
   const siteUrl = getSiteUrl();
   const productUrl = `${siteUrl}/${locale}/product/${productSlug(product)}`;
-  const image = product.featuredImage || product.productImages?.[0];
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      '@id': `${productUrl}#product`,
-      name,
-      description,
-      image: product.productImages?.length ? product.productImages : image ? [image] : undefined,
-      sku: product.sku || undefined,
-      mpn: product.referenceNumber || undefined,
-      brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
-      category: 'Luxury Watches',
-      offers: {
-        '@type': 'Offer',
-        url: productUrl,
-        price: product.salePrice || product.price,
-        priceCurrency: product.currency || 'EUR',
-        availability: productAvailability(product.availability),
-        itemCondition: productCondition(product.condition),
-      },
-    },
+    buildProductMerchantSchema(product, { locale, url: productUrl }),
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

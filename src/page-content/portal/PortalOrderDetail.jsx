@@ -202,14 +202,14 @@ export default function PortalOrderDetail({ id: providedId }) {
                 <p className="text-[10px] tracking-[0.1em] uppercase text-primary">{p.brand}</p>
                 <p className="text-xs text-foreground">{p.productTitle}</p>
                 <p className="text-[10px] text-muted-foreground">{p.condition}</p>
-                <p className="text-sm text-foreground mt-1">{formatPrice(p.price)}</p>
+                <p className="text-sm text-foreground mt-1">{formatPrice(p.price, p.currency || order.currency || 'EUR')}</p>
               </div>
             </div>
           ))}
           <div className="border-t border-border mt-4 pt-3 space-y-1">
-            <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.portal.subtotal')}</span><span className="text-foreground">{formatPrice(order.totalAmount)}</span></div>
+            <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.portal.subtotal')}</span><span className="text-foreground">{formatPrice(order.totalAmount, order.currency || 'EUR')}</span></div>
             <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.portal.insuredShipping')}</span><span className="text-foreground">{t('pages.cart.free')}</span></div>
-            <div className="flex justify-between text-sm font-medium pt-2 border-t border-border"><span className="text-foreground">{t('pages.portal.total')}</span><span className="text-primary">{formatPrice(order.totalAmount)}</span></div>
+            <div className="flex justify-between text-sm font-medium pt-2 border-t border-border"><span className="text-foreground">{t('pages.portal.total')}</span><span className="text-primary">{formatPrice(order.totalAmount, order.currency || 'EUR')}</span></div>
           </div>
         </div>
 

@@ -27,7 +27,7 @@ export async function loadFilteredCatalogRows(client, storeId, table, filters = 
   filters ||= {};
   if (Object.values(filters).some((value) => Array.isArray(value) && !value.length)) return [];
 
-  let query = client.from(table).select('*').eq('store_id', storeId);
+  let query = client.from(table).select('*', { count: 'exact' }).eq('store_id', storeId);
   for (const [field, column] of Object.entries(COLUMNS[table] || {})) {
     if (!(field in filters)) continue;
     const values = nonEmptyStrings(filters[field]);
@@ -65,9 +65,28 @@ export async function loadFilteredCatalogRows(client, storeId, table, filters = 
     }
   }
 
-  const { data, error } = await query;
-  if (error) throw error;
-  return data || [];
+  // Supabase limits each response even when no explicit UI limit is supplied.
+  // Read all matching rows in stable ID order; use the actual number returned
+  // because a deployment may enforce a smaller cap than our requested page.
+  query = query.order('id');
+  const rows = [];
+  const pageSize = 500;
+  let offset = 0;
+  while (true) {
+    const { data, error, count } = await query.range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    const page = data || [];
+    if (!page.length) {
+      if (count != null && offset < count) throw new Error('The catalogue response was incomplete. Please retry.');
+      break;
+    }
+    rows.push(...page);
+    offset += page.length;
+    if (count != null && offset >= count) break;
+    // With no count, continue until an empty page, not a short page: a short
+    // response can be the server's row cap rather than the end of the catalogue.
+  }
+  return rows;
 }
 
 // Public catalog data only. Failed requests are never retained; simultaneous

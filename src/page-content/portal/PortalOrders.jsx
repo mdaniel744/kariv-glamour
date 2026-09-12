@@ -47,7 +47,7 @@ export default function PortalOrders() {
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-sm text-foreground mb-1">{formatPrice(order.totalAmount)}</p>
+                  <p className="text-sm text-foreground mb-1">{formatPrice(order.totalAmount, order.currency || 'EUR')}</p>
                   <EscrowStatusBadge status={order.escrowStatus} />
                 </div>
                 <ChevronRight size={16} className="text-muted-foreground flex-shrink-0" />

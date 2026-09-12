@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { productSlug } from '@/lib/slug';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
+import { getProductPricing } from '@/lib/productMerchant';
 
 export default function ProductCard({ product, enableGallery = true }) {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ export default function ProductCard({ product, enableGallery = true }) {
   const suppressClickRef = useRef(false);
   const [activeImage, setActiveImage] = useState(0);
   const title = localize(product, 'productTitle');
+  const pricing = getProductPricing(product);
   const productPath = `/product/${productSlug(product)}`;
   const sourceImages = enableGallery
     ? [
@@ -204,13 +206,13 @@ export default function ProductCard({ product, enableGallery = true }) {
         <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary">{product.brand}</p>
         <h3 className="line-clamp-2 text-sm font-body leading-tight text-foreground">{title}</h3>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          {product.salePrice && product.salePrice < product.price ? (
+          {pricing.salePrice != null && pricing.currency ? (
             <>
-              <span className="text-sm font-medium text-primary">{formatPrice(product.salePrice)}</span>
-              <span className="text-xs text-muted-foreground line-through">{formatPrice(product.price)}</span>
+              <span className="text-sm font-medium text-primary">{formatPrice(pricing.salePrice, pricing.currency)}</span>
+              <span className="text-xs text-muted-foreground line-through">{formatPrice(pricing.regularPrice, pricing.currency)}</span>
             </>
           ) : (
-            <span className="text-sm font-medium text-foreground">{formatPrice(product.price)}</span>
+            <span className="text-sm font-medium text-foreground">{pricing.price != null && pricing.currency ? formatPrice(pricing.price, pricing.currency) : t('common:priceUnavailable')}</span>
           )}
         </div>
         {product.condition && (
