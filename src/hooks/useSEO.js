@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/languageContext';
+import { getSiteUrl } from '@/lib/seo';
 
 const SITE_NAME = 'Kariv Glamour';
 const LOCALE_FULL = { de: 'de_DE', en: 'en_US' };
@@ -75,7 +76,7 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     // Keep this hook only for routes still served by the legacy SPA fallback.
     if (document.body.dataset.nextNative === 'true') return;
 
-    const origin = window.location.origin;
+    const origin = getSiteUrl();
     const currentUrl = origin + pathname;
 
     // Build hreflang alternate URLs by swapping the locale segment

@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import SiteChrome from '@/components/layout/SiteChrome';
 import Providers from '../providers';
 import { Poppins } from 'next/font/google';
+import { getSiteUrl } from '@/lib/seo';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -30,7 +31,7 @@ const themeInitializationScript = `
 `;
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002'),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,

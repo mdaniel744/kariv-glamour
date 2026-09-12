@@ -125,7 +125,7 @@ export async function getBrandPageData(slug, brandName) {
   };
 }
 
-export async function getPublishedProducts(limit = 500) {
+export async function getPublishedProducts(limit) {
   try {
     return await Products.filter({ isPublished: true }, '-updated_date', limit, 0);
   } catch (error) {

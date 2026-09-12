@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, CalendarDays, Check, ChevronRight, Clock3 } from 'lucide-react';
 import MediaImage from '@/components/shared/MediaImage';
 import { EDITORIAL_GUIDES, localizeEditorialGuide } from '@/lib/editorialGuides';
+import ResearchSources, { SourceLinks } from './ResearchSources';
 
 const UI = {
   en: {
@@ -69,7 +70,9 @@ export default function GuideArticle({ guide, locale }) {
               {article.excerpt}
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+              <span>Kariv Glamour</span>
               <span className="inline-flex items-center gap-2"><CalendarDays size={16} aria-hidden="true" />{copy.published} {formatDate(guide.datePublished, locale)}</span>
+              <span>{locale === 'de' ? 'Aktualisiert' : 'Updated'} <time dateTime={guide.dateModified}>{formatDate(guide.dateModified, locale)}</time></span>
               <span className="inline-flex items-center gap-2"><Clock3 size={16} aria-hidden="true" />{article.readTime}</span>
             </div>
           </div>
@@ -128,6 +131,7 @@ export default function GuideArticle({ guide, locale }) {
                   <div className="mt-5 space-y-5 text-lg leading-8 text-muted-foreground">
                     {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                   </div>
+                  <SourceLinks ids={section.sources} locale={locale} />
                 </section>
               ))}
             </div>
@@ -138,6 +142,8 @@ export default function GuideArticle({ guide, locale }) {
               </p>
             )}
 
+            {guide.sources && <ResearchSources ids={guide.sources} locale={locale} />}
+            <p className="mt-6 text-base leading-7"><Link className="text-primary underline underline-offset-4" href={`/${locale}/guides#brand-guides`}>{locale === 'de' ? 'Referenzen, Technik und Geschichte nach Uhrenmarke vertiefen' : 'Explore reference, technology and history guides by watch brand'}</Link></p>
             <section aria-labelledby="guide-faq" className="mt-14 border-t border-border pt-10">
               <h2 id="guide-faq" className="text-2xl font-bold tracking-[-0.025em] text-foreground md:text-3xl">{copy.faq}</h2>
               <div className="mt-6 divide-y divide-border border-y border-border">

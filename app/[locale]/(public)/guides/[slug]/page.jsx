@@ -1,11 +1,14 @@
 import { notFound } from 'next/navigation';
 import GuideArticle from '@/components/guides/GuideArticle';
+import PublishedGuideArticle from '@/components/guides/PublishedGuideArticle';
+import { getPublishedGuide } from '@/lib/publishedGuides';
 import { EDITORIAL_GUIDES, getEditorialGuide, localizeEditorialGuide } from '@/lib/editorialGuides';
 import {
   getSiteUrl,
   localizedMetadata,
   safeJsonLd,
   SUPPORTED_LOCALES,
+  localizedField,
 } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -15,6 +18,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
   const guide = getEditorialGuide(slug);
+
+  if (!guide && SUPPORTED_LOCALES.includes(locale)) {
+    const published = await getPublishedGuide(slug);
+    if (published && localizedField(published, 'content', locale)) return localizedMetadata({
+      locale, path: `guides/${published.slug || published.id}`,
+      title: localizedField(published, 'title', locale),
+      description: localizedField(published, 'excerpt', locale), type: 'article',
+    });
+  }
 
   if (!SUPPORTED_LOCALES.includes(locale) || !guide) {
     return localizedMetadata({
@@ -42,7 +54,11 @@ export default async function EditorialGuidePage({ params }) {
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
   const guide = getEditorialGuide(slug);
-  if (!guide) notFound();
+  if (!guide) {
+    const published = await getPublishedGuide(slug);
+    if (!published || !localizedField(published, 'content', locale)) notFound();
+    return <PublishedGuideArticle guide={published} locale={locale} />;
+  }
 
   const article = localizeEditorialGuide(guide, locale);
   const siteUrl = getSiteUrl();

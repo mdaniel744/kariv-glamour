@@ -5,14 +5,18 @@ import { EDITORIAL_GUIDES } from '@/lib/editorialGuides';
 import { getLegalPages, getPublishedProducts } from '@/lib/base44Server';
 import { getSiteUrl, SUPPORTED_LOCALES } from '@/lib/seo';
 import { productSlug } from '@/lib/slug';
+import { canonicalSeoSlug } from '@/lib/watchResearch/articles';
+import { REVIEW_DATE } from '@/lib/watchResearch/sources';
+import { getPublishedGuides } from '@/lib/publishedGuides';
 
 export const revalidate = 3600;
 
 export default async function sitemap() {
   const siteUrl = getSiteUrl();
-  const [products, legalPages] = await Promise.all([
+  const [products, legalPages, publishedGuides] = await Promise.all([
     getPublishedProducts(),
     getLegalPages(),
+    getPublishedGuides(),
   ]);
   const entries = [];
   const publicPaths = [
@@ -30,7 +34,6 @@ export default async function sitemap() {
     entries.push(
       {
         url: localized(),
-        lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 1,
         alternates: {
@@ -42,7 +45,6 @@ export default async function sitemap() {
       },
       {
         url: localized('/shop'),
-        lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.9,
         alternates: {
@@ -54,7 +56,6 @@ export default async function sitemap() {
       },
       {
         url: localized('/brands'),
-        lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.8,
         alternates: {
@@ -69,7 +70,6 @@ export default async function sitemap() {
     for (const brand of BRAND_DATA) {
       entries.push({
         url: localized(`/brands/${brand.slug}`),
-        lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.8,
         alternates: {
@@ -82,9 +82,10 @@ export default async function sitemap() {
     }
 
     for (const route of SEO_LANDING_ROUTES) {
+      if (canonicalSeoSlug(route, SEO_LANDING_ROUTES) !== route.slug) continue;
       entries.push({
         url: localized(`/${route.slug}`),
-        lastModified: new Date(),
+        lastModified: REVIEW_DATE,
         changeFrequency: 'weekly',
         priority: route.pageData.isGuide ? 0.6 : 0.7,
         alternates: {
@@ -99,7 +100,6 @@ export default async function sitemap() {
     for (const route of BRAND_COLLECTION_ROUTES) {
       entries.push({
         url: localized(`/${route.pathPrefix}/${route.collection.slug}`),
-        lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.75,
         alternates: {
@@ -114,7 +114,6 @@ export default async function sitemap() {
     for (const path of publicPaths) {
       entries.push({
         url: localized(path),
-        lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
         alternates: {
@@ -144,7 +143,7 @@ export default async function sitemap() {
     for (const legalPage of legalPages) {
       entries.push({
         url: localized(`/legal/${legalPage.slug}`),
-        lastModified: legalPage.updated_date || legalPage.created_date || new Date(),
+        lastModified: legalPage.updated_date || legalPage.created_date || undefined,
         changeFrequency: 'monthly',
         priority: 0.4,
         alternates: {
@@ -160,7 +159,7 @@ export default async function sitemap() {
       const slug = productSlug(product);
       entries.push({
         url: localized(`/product/${slug}`),
-        lastModified: product.updated_date || product.created_date || new Date(),
+        lastModified: product.updated_date || product.created_date || undefined,
         changeFrequency: 'daily',
         priority: 0.8,
         alternates: {
@@ -173,5 +172,17 @@ export default async function sitemap() {
     }
   }
 
-  return entries;
+  const builtIn = new Set(EDITORIAL_GUIDES.map((guide) => guide.slug));
+  for (const guide of publishedGuides) {
+    if (!guide.slug || builtIn.has(guide.slug) || !guide.content) continue;
+    for (const locale of SUPPORTED_LOCALES) entries.push({
+      url: `${siteUrl}/${locale}/guides/${guide.slug}`,
+      lastModified: guide.updated_date || guide.created_date || undefined,
+      alternates: { languages: {
+        de: `${siteUrl}/de/guides/${guide.slug}`,
+        en: `${siteUrl}/en/guides/${guide.slug}`,
+      } },
+    });
+  }
+  return [...new Map(entries.map((entry) => [entry.url, entry])).values()];
 }

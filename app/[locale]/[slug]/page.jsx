@@ -1,6 +1,8 @@
 import { notFound, redirect } from 'next/navigation';
 import SeoLandingRouteClient from '@/components/next-pages/SeoLandingRouteClient';
-import { getSeoLandingRoute } from '@/lib/brandSeoRegistry';
+import { getSeoLandingRoute, SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
+import BrandResearchArticle from '@/components/guides/BrandResearchArticle';
+import { canonicalSeoSlug, getResearchArticle } from '@/lib/watchResearch/articles';
 import {
   getSiteUrl,
   localizedField,
@@ -37,12 +39,14 @@ export async function generateMetadata({ params }) {
     });
   }
 
+  const article = getResearchArticle(route, locale);
   return localizedMetadata({
     locale,
-    path: slug,
-    title: localizedField(route.pageData, 'title', locale),
-    description: localizedField(route.pageData, 'description', locale),
+    path: canonicalSeoSlug(route, SEO_LANDING_ROUTES),
+    title: article?.title || localizedField(route.pageData, 'title', locale),
+    description: route.pageData.isGuide ? article?.excerpt : localizedField(route.pageData, 'description', locale),
     image: route.pageData.image,
+    type: route.pageData.isGuide ? 'article' : 'website',
   });
 }
 
@@ -58,9 +62,10 @@ export default async function SeoLandingPage({ params }) {
   }
 
   const siteUrl = getSiteUrl();
-  const url = `${siteUrl}/${locale}/${slug}`;
-  const title = localizedField(route.pageData, 'title', locale);
-  const description = localizedField(route.pageData, 'description', locale);
+  const url = `${siteUrl}/${locale}/${canonicalSeoSlug(route, SEO_LANDING_ROUTES)}`;
+  const article = getResearchArticle(route, locale);
+  const title = article?.title || localizedField(route.pageData, 'title', locale);
+  const description = route.pageData.isGuide ? article?.excerpt : localizedField(route.pageData, 'description', locale);
 
   const jsonLd = [
     {
@@ -71,6 +76,12 @@ export default async function SeoLandingPage({ params }) {
       description,
       url,
       inLanguage: locale,
+      ...(route.pageData.isGuide ? {
+        mainEntityOfPage: url,
+        dateModified: article.dateModified,
+        author: { '@type': 'Organization', name: 'Kariv Glamour', url: siteUrl },
+        publisher: { '@type': 'Organization', name: 'Kariv Glamour', url: siteUrl },
+      } : {}),
       about: {
         '@type': 'Brand',
         name: route.brandName,
@@ -99,7 +110,8 @@ export default async function SeoLandingPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <SeoLandingRouteClient pageKey={route.pageKey} slug={slug} />
+      {!route.pageData.isGuide && <SeoLandingRouteClient pageKey={route.pageKey} slug={slug} />}
+      <BrandResearchArticle route={route} locale={locale} compact={!route.pageData.isGuide} />
     </>
   );
 }

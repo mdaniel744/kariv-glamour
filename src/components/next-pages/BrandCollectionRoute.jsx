@@ -1,8 +1,8 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import BrandCollectionPageClient from '@/components/next-pages/BrandCollectionPageClient';
-import SeoLandingRouteClient from '@/components/next-pages/SeoLandingRouteClient';
 import { getBrandCollection } from '@/lib/brandCollectionRegistry';
-import { getSeoLandingRouteForBrandPath } from '@/lib/brandSeoRegistry';
+import { getSeoLandingRouteForBrandPath, SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
+import { canonicalSeoSlug } from '@/lib/watchResearch/articles';
 import {
   getSiteUrl,
   localizedField,
@@ -20,7 +20,7 @@ export async function buildBrandCollectionMetadata({ params }, routeKey) {
 
     return localizedMetadata({
       locale,
-      path: `${seoRoute.brandSlug}/${slug}`,
+      path: canonicalSeoSlug(seoRoute, SEO_LANDING_ROUTES),
       title: localizedField(seoRoute.pageData, 'title', locale),
       description: localizedField(seoRoute.pageData, 'description', locale),
       image: seoRoute.pageData.image,
@@ -51,39 +51,8 @@ export default async function BrandCollectionRoute({ params, routeKey }) {
     const seoRoute = getSeoLandingRouteForBrandPath(routeKey, slug);
     if (!seoRoute) notFound();
 
-    const siteUrl = getSiteUrl();
-    const url = `${siteUrl}/${locale}/${seoRoute.brandSlug}/${slug}`;
-    const title = localizedField(seoRoute.pageData, 'title', locale);
-    const description = localizedField(seoRoute.pageData, 'description', locale);
-    const jsonLd = [
-      {
-        '@context': 'https://schema.org',
-        '@type': seoRoute.pageData.isGuide ? 'Article' : 'CollectionPage',
-        headline: title,
-        name: title,
-        description,
-        url,
-        inLanguage: locale,
-        about: { '@type': 'Brand', name: seoRoute.brandName },
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-          { '@type': 'ListItem', position: 2, name: locale === 'de' ? 'Marken' : 'Brands', item: `${siteUrl}/${locale}/brands` },
-          { '@type': 'ListItem', position: 3, name: seoRoute.brandName, item: `${siteUrl}/${locale}/brands/${seoRoute.brandSlug}` },
-          { '@type': 'ListItem', position: 4, name: title, item: url },
-        ],
-      },
-    ];
-
-    return (
-      <>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
-        <SeoLandingRouteClient pageKey={seoRoute.pageKey} slug={seoRoute.slug} />
-      </>
-    );
+    // One researched article per intent, also when an old nested URL is used.
+    permanentRedirect(`/${locale}/${canonicalSeoSlug(seoRoute, SEO_LANDING_ROUTES)}`);
   }
 
   const siteUrl = getSiteUrl();

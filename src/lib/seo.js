@@ -1,9 +1,12 @@
 export const SITE_NAME = 'Kariv Glamour';
 export const SUPPORTED_LOCALES = ['de', 'en'];
 export const DEFAULT_LOCALE = 'de';
+// Public identity is deliberately independent of preview hosts and obsolete
+// deployment environment values. The owner selected 24kariv.com.
+export const CANONICAL_SITE_URL = 'https://24kariv.com';
 
 export function getSiteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002').replace(/\/+$/, '');
+  return CANONICAL_SITE_URL;
 }
 
 export function localizedField(record, fieldName, locale = DEFAULT_LOCALE) {

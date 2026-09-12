@@ -1,3 +1,5 @@
+import { enrichEditorialGuide } from './editorialResearch.js';
+
 export const EDITORIAL_GUIDES = [
   {
     slug: 'how-to-safely-buy-a-pre-owned-luxury-watch',
@@ -457,7 +459,7 @@ export const EDITORIAL_GUIDES = [
       },
     },
   },
-];
+].map(enrichEditorialGuide);
 
 export function getEditorialGuide(slug) {
   return EDITORIAL_GUIDES.find((guide) => guide.slug === slug) || null;
@@ -467,4 +469,3 @@ export function localizeEditorialGuide(guide, locale = 'en') {
   if (!guide) return null;
   return guide.translations[locale] || guide.translations.en;
 }
-

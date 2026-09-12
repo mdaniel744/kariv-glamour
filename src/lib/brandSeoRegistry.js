@@ -1,18 +1,18 @@
-import { ROLEX_SEO_PAGES } from '@/lib/rolexData';
-import { PATEK_SEO_PAGES } from '@/lib/patekData';
-import { OMEGA_SEO_PAGES } from '@/lib/omegaData';
-import { CARTIER_SEO_PAGES } from '@/lib/cartierData';
-import { HUBLOT_SEO_PAGES } from '@/lib/hublotData';
-import { BREITLING_SEO_PAGES } from '@/lib/breitlingData';
-import { AP_SEO_PAGES } from '@/lib/audemarsPiguetData';
-import { GS_SEO_PAGES } from '@/lib/grandSeikoData';
-import { IWC_SEO_PAGES } from '@/lib/iwcData';
-import { JLC_SEO_PAGES } from '@/lib/jaegerLeCoultreData';
-import { TH_SEO_PAGES } from '@/lib/tagHeuerData';
-import { TUDOR_SEO_PAGES } from '@/lib/tudorData';
-import { PANERAI_SEO_PAGES } from '@/lib/paneraiData';
-import { BVLGARI_SEO_PAGES } from '@/lib/bvlgariData';
-import { GP_SEO_PAGES } from '@/lib/girardPerregauxData';
+import { ROLEX_SEO_PAGES } from './rolexData.js';
+import { PATEK_SEO_PAGES } from './patekData.js';
+import { OMEGA_SEO_PAGES } from './omegaData.js';
+import { CARTIER_SEO_PAGES } from './cartierData.js';
+import { HUBLOT_SEO_PAGES } from './hublotData.js';
+import { BREITLING_SEO_PAGES } from './breitlingData.js';
+import { AP_SEO_PAGES } from './audemarsPiguetData.js';
+import { GS_SEO_PAGES } from './grandSeikoData.js';
+import { IWC_SEO_PAGES } from './iwcData.js';
+import { JLC_SEO_PAGES } from './jaegerLeCoultreData.js';
+import { TH_SEO_PAGES } from './tagHeuerData.js';
+import { TUDOR_SEO_PAGES } from './tudorData.js';
+import { PANERAI_SEO_PAGES } from './paneraiData.js';
+import { BVLGARI_SEO_PAGES } from './bvlgariData.js';
+import { GP_SEO_PAGES } from './girardPerregauxData.js';
 
 const GROUPS = [
   { key: 'rolex', brandName: 'Rolex', brandSlug: 'rolex', pages: ROLEX_SEO_PAGES },
