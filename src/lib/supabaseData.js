@@ -4,6 +4,7 @@
 // caseDiameter, etc.) so consuming components don't need to change.
 import { createClient } from '@supabase/supabase-js';
 import { createPublicReferenceLoader, loadFilteredCatalogRows } from './catalogQueries.js';
+import { loadCatalogTranslations } from './catalogTranslations.js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -51,34 +52,17 @@ export const supabase = hasSupabaseConfig ? createClient(SUPABASE_URL, SUPABASE_
 // under those raw names, but were never surfacing anywhere on the site
 // because nothing read that key shape. This alias table normalizes them
 // on read only — write-side conventions are untouched.
-const TRANSLATION_FIELD_ALIASES = {
-  product: { name: 'productTitle', description: 'productDescription', short_description: 'shortDescription' },
-  brand: { name: 'brandName', disclaimer: 'brandDisclaimer', short_description: 'shortDescription' },
-  collection: { name: 'collectionName' },
-};
-
 async function fetchTranslationsById(entityType, ids) {
   if (!ids.length) return {};
   const client = getSupabase();
   if (!client) return {};
 
-  const { data, error } = await client
-    .from('translations')
-    .select('entity_id, field_name, locale, value')
-    .eq('entity_type', entityType)
-    .in('entity_id', ids);
-  if (error) {
+  try {
+    return await loadCatalogTranslations(client, STORE_ID, entityType, ids);
+  } catch (error) {
     console.error(`Unable to load translations for ${entityType}:`, error.message);
     return {};
   }
-  const aliases = TRANSLATION_FIELD_ALIASES[entityType] || {};
-  const byId = {};
-  for (const row of data || []) {
-    const fieldName = aliases[row.field_name] || row.field_name;
-    byId[row.entity_id] ??= {};
-    byId[row.entity_id][`${fieldName}_${row.locale}`] = row.value;
-  }
-  return byId;
 }
 
 // ---- shape adapters ----

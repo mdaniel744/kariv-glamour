@@ -22,7 +22,7 @@ process.env.NEXT_PUBLIC_STORE_ID = 'benchmark-store';
 
 const rows = { brands: [], collections: [], products: [], translations: [] };
 function translate(type, id, field, value) {
-  for (const locale of ['en', 'de']) rows.translations.push({ entity_type: type, entity_id: id, field_name: field, locale, value: `${value} ${locale}` });
+  for (const locale of ['en', 'de']) rows.translations.push({ store_id: 'benchmark-store', entity_type: type, entity_id: id, field_name: field, locale, value: `${value} ${locale}` });
 }
 for (let brandIndex = 0; brandIndex < 15; brandIndex++) {
   const brand = { id: `brand-${brandIndex}`, slug: `brand-${brandIndex}`, name: `Brand ${brandIndex}`, store_id: 'benchmark-store', long_description: 'Brand editorial. '.repeat(100) };
@@ -60,7 +60,10 @@ async function measure(moduleUrl) {
     const url = new URL(input);
     assert.equal(url.origin, 'https://benchmark.test', 'live network requests are forbidden');
     const table = url.pathname.split('/').at(-1);
-    let result = rows[table].filter((row) => [...url.searchParams].every(([field, expression]) => field === 'select' || matches(row, field, expression)));
+    let result = rows[table].filter((row) => [...url.searchParams].every(([field, expression]) => ['select', 'order', 'offset', 'limit'].includes(field) || matches(row, field, expression)));
+    const offset = Number(url.searchParams.get('offset') || 0);
+    const limit = Number(url.searchParams.get('limit') || result.length);
+    result = result.slice(offset, offset + limit);
     const projection = url.searchParams.get('select');
     if (projection !== '*') result = result.map((row) => Object.fromEntries(projection.split(',').map((field) => [field.trim(), row[field.trim()]])));
     const body = JSON.stringify(result);

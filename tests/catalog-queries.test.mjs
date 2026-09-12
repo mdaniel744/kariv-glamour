@@ -45,6 +45,7 @@ const fixtures = {
     { entity_type: 'collection', entity_id: 'daytona', field_name: 'name', locale: 'de', value: 'Daytona Kollektion' },
   ],
 };
+fixtures.translations = fixtures.translations.map((row) => ({ store_id: 'kariv', ...row }));
 
 function splitExpressions(value) {
   const parts = [];
@@ -81,7 +82,7 @@ function matches(row, field, expression) {
   throw new Error(`Unexpected test filter: ${expression}`);
 }
 
-function useFixtureEndpoint(t) {
+function useFixtureEndpoint(t, { rowLimit = 1000 } = {}) {
   Products.invalidate();
   const requests = [];
   t.mock.method(globalThis, 'fetch', async (input) => {
@@ -91,7 +92,7 @@ function useFixtureEndpoint(t) {
     requests.push({ table, params: url.searchParams });
     let rows = [...fixtures[table]];
     for (const [field, expression] of url.searchParams) {
-      if (field === 'select') continue;
+      if (['select', 'order', 'offset', 'limit'].includes(field)) continue;
       if (field === 'or') {
         rows = rows.filter((row) => splitExpressions(expression.slice(1, -1)).some((part) => {
           const dot = part.indexOf('.');
@@ -101,7 +102,22 @@ function useFixtureEndpoint(t) {
         rows = rows.filter((row) => matches(row, field, expression));
       }
     }
-    return new Response(JSON.stringify(rows), { headers: { 'Content-Type': 'application/json' } });
+    const order = url.searchParams.get('order');
+    if (order) rows.sort((a, b) => {
+      for (const entry of order.split(',')) {
+        const [field, direction] = entry.split('.');
+        const comparison = String(a[field] || '').localeCompare(String(b[field] || ''));
+        if (comparison) return direction === 'desc' ? -comparison : comparison;
+      }
+      return 0;
+    });
+    const total = rows.length;
+    const offset = Number(url.searchParams.get('offset') || 0);
+    const limit = Math.min(Number(url.searchParams.get('limit') || rowLimit), rowLimit);
+    rows = rows.slice(offset, offset + limit);
+    return new Response(JSON.stringify(rows), { headers: {
+      'Content-Type': 'application/json', 'Content-Range': `${offset}-${offset + rows.length - 1}/${total}`,
+    } });
   });
   return requests;
 }
@@ -115,7 +131,7 @@ test('brand queries narrow products before translations and retain sorting/offse
   assert.equal(products.params.get('status'), 'eq.active');
   const translations = requests.find((request) => request.table === 'translations');
   assert.equal(translations.params.get('entity_id'), 'in.(p1,p3,p6)');
-  for (const request of requests.filter((request) => request.table !== 'translations')) {
+  for (const request of requests) {
     assert.equal(request.params.get('store_id'), 'eq.kariv');
   }
 });
@@ -266,4 +282,61 @@ test('invalidating an in-flight read cannot repopulate or clear the newer cache'
   assert.equal(await freshRead, 'fresh');
   assert.equal(await sharedFreshRead, 'fresh');
   assert.equal(await load(), 'fresh', 'old result must not return to the cache');
+});
+
+test('the latest dashboard title and rich description win over older aliases in either return order', async (t) => {
+  const previous = fixtures.translations;
+  t.after(() => { fixtures.translations = previous; Products.invalidate(); });
+  fixtures.translations = ['en', 'de'].flatMap((locale) => [
+    { store_id: 'kariv', entity_type: 'product', entity_id: 'p1', field_name: 'name', locale, value: `Current ${locale} title`, updated_at: '2026-09-10T10:00:00Z' },
+    { store_id: 'kariv', entity_type: 'product', entity_id: 'p1', field_name: 'productTitle', locale, value: 'Old untranslated title', updated_at: '2026-09-09T10:00:00Z' },
+    { store_id: 'kariv', entity_type: 'product', entity_id: 'p1', field_name: 'description', locale, value: `<p>Current ${locale} description</p>`, updated_at: '2026-09-10T10:00:00Z' },
+    { store_id: 'kariv', entity_type: 'product', entity_id: 'p1', field_name: 'productDescription', locale, value: 'Old untranslated description', updated_at: '2026-09-09T10:00:00Z' },
+  ]);
+  useFixtureEndpoint(t);
+  const product = await Products.get('p1');
+  for (const locale of ['en', 'de']) {
+    assert.equal(product[`productTitle_${locale}`], `Current ${locale} title`);
+    assert.equal(product[`productDescription_${locale}`], `<p>Current ${locale} description</p>`);
+  }
+  fixtures.translations.reverse();
+  assert.deepEqual(await Products.get('p1'), product);
+});
+
+test('bulk catalog reads include all translations beyond a single response row limit', async (t) => {
+  const oldProducts = fixtures.products;
+  const oldTranslations = fixtures.translations;
+  t.after(() => { fixtures.products = oldProducts; fixtures.translations = oldTranslations; Products.invalidate(); });
+  fixtures.products = Array.from({ length: 220 }, (_, index) => ({
+    id: `bulk-${index}`, store_id: 'kariv', name: `Base ${index}`, status: 'active', brand_id: 'rolex',
+  }));
+  fixtures.translations = fixtures.products.flatMap(({ id }) => ['en', 'de'].flatMap((locale) =>
+    ['name', 'description', 'short_description'].map((field_name) => ({
+      store_id: 'kariv', entity_type: 'product', entity_id: id, field_name, locale, value: `${id} ${field_name} ${locale}`,
+    }))
+  ));
+  // 1,320 translation rows overall; also test a server cap smaller than
+  // one requested page so pagination uses the response's actual row count.
+  const requests = useFixtureEndpoint(t, { rowLimit: 250 });
+  const products = await Products.list();
+  assert.equal(products.length, 220);
+  for (const product of products) for (const locale of ['de', 'en']) {
+    assert.equal(product[`productTitle_${locale}`], `${product.id} name ${locale}`);
+    assert.equal(product[`productDescription_${locale}`], `${product.id} description ${locale}`);
+    assert.equal(product[`shortDescription_${locale}`], `${product.id} short_description ${locale}`);
+  }
+  const reads = requests.filter((request) => request.table === 'translations');
+  assert.ok(reads.some((read) => read.params.get('offset') === '250'));
+  assert.ok(reads.every((read) => read.params.get('entity_id').split(',').length <= 50));
+});
+
+test('translation reads never merge values from another store', async (t) => {
+  const previous = fixtures.translations;
+  t.after(() => { fixtures.translations = previous; Products.invalidate(); });
+  fixtures.translations = [...previous, {
+    store_id: 'other', entity_type: 'product', entity_id: 'p1', field_name: 'name', locale: 'de', value: 'Wrong store', updated_at: '2099-01-01',
+  }];
+  const requests = useFixtureEndpoint(t);
+  assert.equal((await Products.get('p1')).productTitle_de, 'Daytona Deutsch');
+  assert.equal(requests.find((request) => request.table === 'translations').params.get('store_id'), 'eq.kariv');
 });

@@ -33,7 +33,7 @@ const loadProductBySlug = unstable_cache(
     const products = await Products.filter({ isPublished: true }, '-updated_date', 500, 0);
     return products.find((p) => productSlug(p) === slug) || null;
   },
-  ['public-product-by-slug-v1', STORE_ID],
+  ['public-product-by-slug-v2', STORE_ID],
   { revalidate: 60 },
 );
 
@@ -69,19 +69,20 @@ export async function getBrands(limit = 100) {
 }
 
 // Cache anonymous catalogue reads only; inventory is refreshed every minute.
+// v2 excludes old cache entries with incomplete/unnormalized translations.
 const loadBrandBySlug = unstable_cache(
   async (slug) => (await Brands.filter({ slug }, '-created_date', 1, 0))[0] || null,
-  ['public-brand-v1', STORE_ID],
+  ['public-brand-v2', STORE_ID],
   { revalidate: 300 },
 );
 const loadBrandProducts = unstable_cache(
   (brandName) => Products.filter({ brand: brandName, isPublished: true }, '-created_date'),
-  ['public-brand-products-v1', STORE_ID],
+  ['public-brand-products-v2', STORE_ID],
   { revalidate: 60 },
 );
 const loadBrandCollections = unstable_cache(
   (brandName) => Collections.filter({ brand: brandName }, 'collectionName'),
-  ['public-brand-collections-v1', STORE_ID],
+  ['public-brand-collections-v2', STORE_ID],
   { revalidate: 300 },
 );
 

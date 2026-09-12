@@ -6,6 +6,8 @@ import React from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ts from 'typescript';
+import { mergeCatalogTranslations } from '../src/lib/catalogTranslations.js';
+import { localizedField } from '../src/lib/seo.js';
 
 function loadSource(path, imports) {
   const { outputText } = ts.transpileModule(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'), {
@@ -29,25 +31,24 @@ const watch = {
 function fixture({ related = async () => [], dealer = async () => null } = {}) {
   const effects = [];
   const icon = () => null;
+  let locale = 'en';
   const imports = {
     react: { ...React, useEffect: (effect) => effects.push(effect) },
     'react/jsx-runtime': jsxRuntime,
     'next/navigation': { useRouter: () => ({ push() {} }), notFound: () => { throw new Error('Not found'); } },
     'react-i18next': { useTranslation: () => ({ t: (key) => key }) },
-    'lucide-react': Object.fromEntries(['Heart', 'ShieldCheck', 'Truck', 'RotateCcw', 'Award', 'ChevronRight', 'MessageCircle', 'Lock', 'Store'].map((key) => [key, icon])),
+    'lucide-react': Object.fromEntries(['Heart', 'ShieldCheck', 'Truck', 'RotateCcw', 'Award', 'ChevronLeft', 'ChevronRight', 'MessageCircle', 'Lock', 'Store'].map((key) => [key, icon])),
     '@/components/LocalizedLink': ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children),
     '@/lib/dataClient': { dataClient: { entities: { Products: { get: async () => watch, filter: related } } } },
     '@/lib/base44Data': { asArray: (rows) => rows || [] },
     '@/lib/cartContext': { useCart: () => ({ toggleWishlist() {}, isInWishlist: () => false }) },
     '@/lib/AuthContext': { useAuth: () => ({ isAuthenticated: false }) },
-    '@/lib/languageContext': { useLanguage: () => ({ localePath: (path) => `/en${path}` }) },
-    '@/lib/localize': { useLocalizedField: () => ({ localize: (record, key) => record?.[key] || '' }) },
+    '@/lib/languageContext': { useLanguage: () => ({ locale, localePath: (path) => `/${locale}${path}` }) },
     '@/lib/constants': { formatPrice: (price) => `EUR ${price}` },
     '@/components/shared/TrustBar': () => null,
     '@/components/checkout/BuyNowAuthModal': () => null,
     '@/components/shared/SafeHtml': ({ html }) => React.createElement('div', null, html),
     '@/components/product/ProductGallery': ({ title }) => React.createElement('div', { 'data-gallery': true }, title),
-    '@/components/shared/ProductCard': ({ product }) => React.createElement('article', null, product.productTitle),
     '@/components/dealer/StarRating': () => null,
     '@/components/shared/MediaImage': ({ src }) => React.createElement('img', { src }),
     '@/lib/media': { getMediaVariant: (src) => src },
@@ -60,6 +61,8 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     },
   };
   for (const [specifier, path] of [
+    ['@/lib/localize', 'src/lib/localize.jsx'],
+    ['@/components/shared/ProductCard', 'src/components/shared/ProductCard.jsx'],
     ['@/components/product/ProductDealerCard', 'src/components/product/ProductDealerCard.jsx'],
     ['@/components/product/RelatedProducts', 'src/components/product/RelatedProducts.jsx'],
     ['@/components/product/ProductPageSections', 'src/components/product/ProductPageSections.jsx'],
@@ -67,7 +70,11 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     ['@/components/next-pages/ProductDetailPageClient', 'src/components/next-pages/ProductDetailPageClient.jsx'],
   ]) imports[specifier] = loadSource(path, imports);
   const route = loadSource('app/[locale]/product/[slug]/page.jsx', imports);
-  return { route, effects, Detail: imports['@/page-content/ProductDetail'].default };
+  return {
+    route, effects, Detail: imports['@/page-content/ProductDetail'].default,
+    Card: imports['@/components/shared/ProductCard'].default,
+    setLocale: (value) => { locale = value; },
+  };
 }
 
 function clientElement(tree) {
@@ -153,4 +160,29 @@ test('legacy detail props still render recommendations without server slots', ()
   assert.match(html, /Rolex Daytona Steel/);
   assert.match(html, /Legacy related watch/);
   assert.match(html, /Legacy dealer/);
+});
+
+test('storefront cards, detail headings, descriptions and metadata follow the selected product language', () => {
+  const rows = ['en', 'de'].flatMap((locale) => [
+    { entity_id: watch.id, locale, field_name: 'name', value: locale === 'en' ? 'Steel watch English' : 'Stahluhr Deutsch' },
+    { entity_id: watch.id, locale, field_name: 'description', value: locale === 'en' ? '<p>English watch description.</p>' : '<p>Deutsche Uhrenbeschreibung.</p>' },
+  ]);
+  const product = { ...watch, ...mergeCatalogTranslations('product', rows)[watch.id] };
+  const { Card, Detail, setLocale } = fixture();
+  // Reuse exactly the same record while changing only the selected language.
+  for (const locale of ['de', 'en', 'de']) {
+    setLocale(locale);
+    const title = locale === 'en' ? 'Steel watch English' : 'Stahluhr Deutsch';
+    const description = locale === 'en' ? 'English watch description.' : 'Deutsche Uhrenbeschreibung.';
+    const otherTitle = locale === 'de' ? 'Steel watch English' : 'Stahluhr Deutsch';
+    const cardHtml = renderToStaticMarkup(React.createElement(Card, { product }));
+    const detailHtml = renderToStaticMarkup(React.createElement(Detail, { id: product.id, initialProduct: product }));
+    assert.ok(cardHtml.includes(title));
+    assert.ok(detailHtml.includes(title));
+    assert.ok(detailHtml.includes(description));
+    assert.ok(!cardHtml.includes(otherTitle));
+    assert.ok(!detailHtml.includes(otherTitle));
+    assert.equal(localizedField(product, 'productTitle', locale), title);
+    assert.equal(localizedField(product, 'productDescription', locale), `<p>${description}</p>`);
+  }
 });
