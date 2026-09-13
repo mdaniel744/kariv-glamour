@@ -86,7 +86,7 @@ export default function LanguageSwitcher({ className = '' }) {
         <div
           role="menu"
           aria-label={switcherLabel}
-          className="absolute right-0 z-[70] mt-2 min-w-[160px] overflow-hidden rounded-xl border border-border bg-background p-1.5 shadow-xl"
+          className="absolute left-0 z-[70] mt-2 min-w-[160px] overflow-hidden rounded-xl border border-border bg-background p-1.5 shadow-xl md:left-auto md:right-0"
         >
           {supportedLocales.map((language) => {
             const option = LANGUAGE_OPTIONS[language] || { label: language.toUpperCase() };
