@@ -56,7 +56,7 @@ export default function PortalSales() {
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-sm text-foreground mb-1">{formatPrice(sale.totalAmount)}</p>
+                  <p className="text-sm text-foreground mb-1">{formatPrice(sale.totalAmount, sale.currency || 'EUR')}</p>
                   <EscrowStatusBadge status={sale.escrowStatus} />
                 </div>
               </div>

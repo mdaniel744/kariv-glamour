@@ -1,5 +1,6 @@
 import React from 'react';
-import { ESCROW_STATUS_LABELS } from '@/lib/escrowConstants';
+import { getEscrowCopy } from '@/lib/escrowCopy';
+import { useLanguage } from '@/lib/languageContext';
 
 const STATUS_STYLES = {
   pending_review: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
@@ -12,7 +13,8 @@ const STATUS_STYLES = {
 };
 
 export default function EscrowStatusBadge({ status, size = 'sm' }) {
-  const label = ESCROW_STATUS_LABELS[status] || status;
+  const { locale } = useLanguage();
+  const label = getEscrowCopy(locale).labels[status] || status;
   const style = STATUS_STYLES[status] || 'bg-muted text-muted-foreground';
   const sizeClass = size === 'sm' ? 'text-[9px] px-2 py-0.5' : 'text-[10px] px-3 py-1';
 

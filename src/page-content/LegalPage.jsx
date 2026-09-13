@@ -6,6 +6,7 @@ import { useLocalizedField } from '@/lib/localize';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight } from 'lucide-react';
 import CompanyDetails from '@/components/legal/CompanyDetails';
+import { withCzechLegalFallback } from '@/lib/legalPageFallbacks';
 
 function MarkdownLink({ node: _node, href = '', children, ...props }) {
   return (
@@ -33,13 +34,15 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
   const [page, setPage] = useState(initialPage);
   const [loading, setLoading] = useState(!initialPage);
   const { localize, locale } = useLocalizedField();
-  const copy = locale === 'de'
+  const copy = locale === 'cs'
+    ? { home: 'Úvod', notFound: 'Stránka nenalezena', missing: 'Tato stránka zatím nebyla vytvořena.', back: 'Zpět na úvodní stránku' }
+    : locale === 'de'
     ? { home: 'Start', notFound: 'Seite nicht gefunden', missing: 'Diese Seite wurde noch nicht erstellt.', back: 'Zurück zur Startseite' }
     : { home: 'Home', notFound: 'Page not found', missing: 'This page has not been created yet.', back: 'Back to the homepage' };
 
   useEffect(() => {
     if (initialPage?.slug === slug) {
-      setPage(initialPage);
+      setPage(withCzechLegalFallback(initialPage));
       setLoading(false);
       window.scrollTo(0, 0);
       return;
@@ -49,7 +52,7 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
       setLoading(true);
       try {
         const pages = asArray(await dataClient.entities.LegalPages.filter({ slug }));
-        if (pages.length > 0) setPage(pages[0]);
+        if (pages.length > 0) setPage(withCzechLegalFallback(pages[0]));
       } catch (e) {
         console.error(e);
       } finally {

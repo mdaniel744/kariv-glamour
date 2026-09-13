@@ -9,6 +9,18 @@ export const COMPANY_DETAILS = Object.freeze({
 });
 
 const COMPANY_DETAILS_COPY = Object.freeze({
+  cs: {
+    eyebrow: 'Právnická osoba',
+    heading: 'Údaje o společnosti',
+    location: 'Praha, Česká republika',
+    legalName: 'Obchodní firma',
+    registeredAddress: 'Sídlo společnosti',
+    companyId: 'IČO',
+    euid: 'EUID',
+    vatId: 'DIČ',
+    manager: 'Jednatel',
+    email: 'E-mail',
+  },
   en: {
     eyebrow: 'Legal entity',
     heading: 'Company details',

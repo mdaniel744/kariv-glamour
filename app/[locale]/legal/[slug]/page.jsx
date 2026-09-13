@@ -2,18 +2,19 @@ import { notFound, redirect } from 'next/navigation';
 import LegalPageClient from '@/components/next-pages/LegalPageClient';
 import { getLegalPageBySlug } from '@/lib/base44Server';
 import { localizedField, localizedMetadata, SUPPORTED_LOCALES } from '@/lib/seo';
+import { withCzechLegalFallback } from '@/lib/legalPageFallbacks';
 
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
-  const page = await getLegalPageBySlug(slug);
+  const page = withCzechLegalFallback(await getLegalPageBySlug(slug));
 
   if (!page) {
     return localizedMetadata({
       locale,
       path: `legal/${slug}`,
-      title: locale === 'de' ? 'Rechtliche Hinweise' : 'Legal information',
+      title: locale === 'cs' ? 'Právní informace' : locale === 'de' ? 'Rechtliche Hinweise' : 'Legal information',
       description: '',
       index: false,
     });
@@ -32,7 +33,7 @@ export default async function LegalRoute({ params }) {
   const { locale, slug } = await params;
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
-  const page = await getLegalPageBySlug(slug);
+  const page = withCzechLegalFallback(await getLegalPageBySlug(slug));
   if (!page) redirect(`/${locale}/customer-service`);
 
   return <LegalPageClient slug={slug} page={page} />;

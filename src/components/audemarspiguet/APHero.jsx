@@ -1,10 +1,12 @@
 import React from 'react';
+import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import BrandHero from '@/components/shared/BrandHero';
 
 const BRAND = 'Audemars Piguet';
 
 export default function APHero() {
+  const { locale } = useLanguage();
   const { t } = useTranslation('brandComponents');
   const links = [
     { label: 'Royal Oak', to: '/audemars-piguet/royal-oak' },
@@ -14,5 +16,5 @@ export default function APHero() {
     { label: t('hero.anchorPreOwned', { brand: 'AP' }), to: '/audemars-piguet-gebraucht' },
   ];
 
-  return <BrandHero brand={BRAND} displayBrand="AP" image="/brand-assets/audemars-piguet/collections/audemars-piguet-royal-oak-collection.png" imageAlt="Audemars Piguet Royal Oak watch" shopTo="/audemars-piguet-uhr" links={links} />;
+  return <BrandHero brand={BRAND} displayBrand="AP" image="/brand-assets/audemars-piguet/collections/audemars-piguet-royal-oak-collection.png" imageAlt={locale === 'cs' ? "Hodinky Audemars Piguet Royal Oak" : "Audemars Piguet Royal Oak watch"} shopTo="/audemars-piguet-uhr" links={links} />;
 }

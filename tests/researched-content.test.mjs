@@ -11,6 +11,7 @@ import { getResearchArticle, canonicalSeoSlug } from '../src/lib/watchResearch/a
 import { SOURCES, REVIEW_DATE } from '../src/lib/watchResearch/sources.js';
 import { COMPARISONS } from '../src/lib/watchResearch/comparisons.js';
 import { BRAND_RESEARCH } from '../src/lib/watchResearch/brands.js';
+import { CZECH_BRAND_PROFILES } from '../src/lib/watchResearch/czech.js';
 import { EDITORIAL_GUIDES } from '../src/lib/editorialGuides.js';
 import { getGuideMedia } from '../src/lib/watchResearch/media.js';
 import { getSiteUrl, localizedMetadata, localeAlternates } from '../src/lib/seo.js';
@@ -130,6 +131,7 @@ test('every brand guide server-renders one heading, meaningful content and click
     '@/lib/watchResearch/sources': { SOURCES, REVIEW_DATE },
     '@/lib/watchResearch/comparisons': { COMPARISONS },
     '@/lib/watchResearch/brands': { BRAND_RESEARCH },
+    '@/lib/watchResearch/czech': { CZECH_BRAND_PROFILES },
     '@/lib/watchResearch/media': { getGuideMedia },
     '@/components/shared/MediaImage': ({ src, alt, className, sizes, priority }) => React.createElement('img', { src, alt, className, sizes, loading: priority ? 'eager' : 'lazy' }),
   };
@@ -137,15 +139,15 @@ test('every brand guide server-renders one heading, meaningful content and click
   imports['./ResearchSources'] = loadSource('src/components/guides/ResearchSources.jsx', imports);
   const Article = loadSource('src/components/guides/BrandResearchArticle.jsx', imports).default;
   const knownPaths = new Set([
-    '/en', '/de', '/en/guides', '/de/guides',
-    ...routes.flatMap((route) => ['en', 'de'].flatMap((locale) => ['/' + locale + '/' + route.slug, '/' + locale + '/brands/' + route.brandSlug])),
-    ...EDITORIAL_GUIDES.flatMap((guide) => ['en', 'de'].map((locale) => '/' + locale + '/guides/' + guide.slug)),
+    '/en', '/de', '/cs', '/en/guides', '/de/guides', '/cs/guides',
+    ...routes.flatMap((route) => ['en', 'de', 'cs'].flatMap((locale) => ['/' + locale + '/' + route.slug, '/' + locale + '/brands/' + route.brandSlug])),
+    ...EDITORIAL_GUIDES.flatMap((guide) => ['en', 'de', 'cs'].map((locale) => '/' + locale + '/guides/' + guide.slug)),
   ]);
-  for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de']) {
+  for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de', 'cs']) {
     const html = renderToStaticMarkup(React.createElement(Article, { route, locale }));
     assert.equal((html.match(/<h1\b/g) || []).length, 1, route.slug);
     assert.doesNotMatch(html, /<time\b|min read|Min\. Lesezeit|Sources checked on/);
-    assert.ok(html.includes(locale === 'de' ? 'Quellen zum Weiterlesen' : 'References and further reading'));
+    assert.ok(html.includes(locale === 'cs' ? 'Zdroje a další čtení' : locale === 'de' ? 'Quellen zum Weiterlesen' : 'References and further reading'));
     assert.match(html, /<figure/);
     assert.match(html, /loading="eager"/);
     for (const [, href] of html.matchAll(/href="([^"]+)"/g)) {
@@ -157,7 +159,7 @@ test('every brand guide server-renders one heading, meaningful content and click
 });
 
 test('all guide images are existing local assets with translated alt text and no unresolved paths', () => {
-  for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de']) {
+  for (const route of routes.filter((item) => item.pageData.isGuide)) for (const locale of ['en', 'de', 'cs']) {
     const media = getGuideMedia(route, locale);
     assert.ok(media?.hero, route.slug);
     for (const image of [media.hero, media.supporting].filter(Boolean)) {

@@ -8,6 +8,7 @@ import {
   POPULAR_CASE_DIAMETERS,
 } from '@/lib/constants';
 import { BRAND_COLLECTION_FILTER_EVENT } from '@/lib/brandCollectionFilters';
+import { useAttributeLabel } from '@/hooks/useAttributeLabel';
 
 const normalize = (value) => String(value || '')
   .toLowerCase()
@@ -99,6 +100,7 @@ export function matchesBrandQuickFilter(product, filters) {
 }
 
 export function BrandAttributeFilterGroup({ label, options, selected, onToggle, defaultOpen = false }) {
+  const attributeLabel = useAttributeLabel();
   const [open, setOpen] = React.useState(defaultOpen);
 
   return (
@@ -129,7 +131,7 @@ export function BrandAttributeFilterGroup({ label, options, selected, onToggle, 
                   onChange={() => onToggle(value)}
                   className="h-[18px] w-[18px] flex-shrink-0 rounded border-border bg-transparent accent-primary"
                 />
-                <span className="text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{value}</span>
+                <span className="text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{attributeLabel(value)}</span>
               </label>
             );
           })}
@@ -140,6 +142,7 @@ export function BrandAttributeFilterGroup({ label, options, selected, onToggle, 
 }
 
 export default function BrandQuickFilters({ chips, collections = [], activeFilter, getLabel, onSelect }) {
+  const attributeLabel = useAttributeLabel();
   const railRef = React.useRef(null);
   const hoverScrollFrameRef = React.useRef(null);
   const hoverScrollDelayRef = React.useRef(null);
@@ -175,12 +178,12 @@ export default function BrandQuickFilters({ chips, collections = [], activeFilte
     return {
       filter,
       key: filterKey(filter),
-      label: matchingChip ? getLabel(matchingChip) : Object.values(filter).join(', '),
+      label: matchingChip ? attributeLabel(getLabel(matchingChip)) : Object.values(filter).map(attributeLabel).join(', '),
     };
   });
-  const selectedFiltersLabel = getLabel({ label: 'Selected filters', label_en: 'Selected filters', label_de: 'Ausgewählte Filter' });
-  const clearAllLabel = getLabel({ label: 'Clear all', label_en: 'Clear all', label_de: 'Alle löschen' });
-  const removeFilterLabel = getLabel({ label: 'Remove', label_en: 'Remove', label_de: 'Entfernen' });
+  const selectedFiltersLabel = getLabel({ label: 'Selected filters', label_en: 'Selected filters', label_de: 'Ausgewählte Filter', label_cs: 'Vybrané filtry' });
+  const clearAllLabel = getLabel({ label: 'Clear all', label_en: 'Clear all', label_de: 'Alle löschen', label_cs: 'Zrušit vše' });
+  const removeFilterLabel = getLabel({ label: 'Remove', label_en: 'Remove', label_de: 'Entfernen', label_cs: 'Odebrat' });
 
   const stopHoverScroll = React.useCallback(() => {
     if (hoverScrollDelayRef.current !== null) {
@@ -253,10 +256,10 @@ export default function BrandQuickFilters({ chips, collections = [], activeFilte
       <div
         ref={railRef}
         className="no-scrollbar flex w-full max-w-full snap-x snap-proximity gap-2.5 overflow-x-auto overscroll-x-contain scroll-smooth scroll-px-1 touch-pan-x"
-        aria-label="Collection and product filters"
+        aria-label={getLabel({ label_en: 'Collection and product filters', label_de: 'Kollektionen und Produktfilter', label_cs: 'Kolekce a filtry produktů' })}
       >
         {visibleChips.filter((chip) => chip.filter).map((chip) => {
-          const label = getLabel(chip);
+          const label = attributeLabel(getLabel(chip));
           const key = filterKey(chip.filter);
           const selected = selectedKeys.has(key);
           const inactiveClasses = chip.kind === 'attribute'
@@ -286,7 +289,7 @@ export default function BrandQuickFilters({ chips, collections = [], activeFilte
 
       <button
         type="button"
-        aria-label="Scroll collections left"
+        aria-label={getLabel({ label_en: 'Scroll collections left', label_de: 'Kollektionen nach links scrollen', label_cs: 'Posunout kolekce doleva' })}
         onClick={() => nudgeRail(-1)}
         onMouseEnter={() => startHoverScroll(-1)}
         onMouseLeave={stopHoverScroll}
@@ -297,7 +300,7 @@ export default function BrandQuickFilters({ chips, collections = [], activeFilte
 
       <button
         type="button"
-        aria-label="Scroll collections right"
+        aria-label={getLabel({ label_en: 'Scroll collections right', label_de: 'Kollektionen nach rechts scrollen', label_cs: 'Posunout kolekce doprava' })}
         onClick={() => nudgeRail(1)}
         onMouseEnter={() => startHoverScroll(1)}
         onMouseLeave={stopHoverScroll}

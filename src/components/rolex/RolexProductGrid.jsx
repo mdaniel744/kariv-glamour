@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { useBrandProducts } from '@/hooks/useBrandProducts';
@@ -15,6 +16,7 @@ const COLLECTION_NAMES = ROLEX_COLLECTIONS.map((collection) => collection.name);
 
 export default function RolexProductGrid() {
   const { t } = useTranslation('brandComponents');
+  const { getPricing } = useStorefrontPricing();
   const { localize } = useLocalizedField();
   const { products: allProducts, loading } = useBrandProducts(BRAND);
   const [sortBy, setSortBy] = useState('-created_date');
@@ -36,8 +38,8 @@ export default function RolexProductGrid() {
     if (filters.boxPapers === 'papers') data = data.filter((p) => p.papersIncluded);
     if (filters.availability) data = data.filter((p) => p.availability === filters.availability);
     if (quickFilter.length) data = data.filter((p) => matchesBrandQuickFilter(p, quickFilter));
-    return sortBrandProducts(data, sortBy);
-  }, [allProducts, sortBy, filters, quickFilter]);
+    return sortBrandProducts(data, sortBy, getPricing);
+  }, [allProducts, sortBy, filters, quickFilter, getPricing]);
 
   const toggleFilter = (key, value) => setFilters((prev) => { const arr = prev[key]; return { ...prev, [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value] }; });
 

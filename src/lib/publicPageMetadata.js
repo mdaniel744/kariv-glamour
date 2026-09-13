@@ -1,8 +1,9 @@
 import enCommon from '@/locales/en/common.json';
 import deCommon from '@/locales/de/common.json';
+import csCommon from '@/locales/cs/common.json';
 import { localizedMetadata } from '@/lib/seo';
 
-const DICTIONARIES = { de: deCommon, en: enCommon };
+const DICTIONARIES = { de: deCommon, en: enCommon, cs: csCommon };
 
 export function publicPageMetadata(locale, seoKey, path, index = true) {
   const dictionary = DICTIONARIES[locale] || DICTIONARIES.de;

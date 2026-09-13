@@ -21,12 +21,12 @@ export default function PortalLayout({ children }) {
   const navItems = [
     { to: '/portal', icon: LayoutDashboard, label: t('pages.portal.dashboard'), exact: true },
     { to: '/portal/orders', icon: Package, label: t('pages.portal.orders') },
-    { to: '/portal/mails', icon: Mail, label: 'Mails' },
+    { to: '/portal/mails', icon: Mail, label: t('pages.portal.mails') },
     { to: '/portal/wishlist', icon: Heart, label: t('pages.portal.wishlist') },
     ...(dealer ? [
       { to: '/portal/listings', icon: Store, label: t('pages.dealer.listings') },
       { to: '/portal/sales', icon: ShoppingCart, label: t('pages.dealer.sales') },
-      { to: '/portal/sales-messages', icon: Mail, label: 'Sales Messages' },
+      { to: '/portal/sales-messages', icon: Mail, label: t('pages.portal.salesMessages') },
     ] : []),
     { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];
@@ -73,7 +73,7 @@ export default function PortalLayout({ children }) {
           {['admin', 'super_admin'].includes(user?.role) && (
             <LocalizedLink to="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded text-xs whitespace-nowrap transition-colors text-muted-foreground hover:text-foreground hover:bg-muted">
               <LayoutDashboard size={15} />
-              Admin Console
+              {t('pages.portal.adminConsole')}
             </LocalizedLink>
           )}
         </nav>

@@ -37,7 +37,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
         setError(res.error);
       }
     } catch {
-      setError('Upload failed.');
+      setError(t('admin:uploadFailed'));
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -86,7 +86,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
       ) : (
         <div className="flex items-center gap-3 border border-border p-3 bg-card">
           {previewUrl.match(/\.(jpg|jpeg|png|webp|gif|avif)$/i) ? (
-            <img src={previewUrl} alt="Payment proof" className="w-12 h-12 object-cover rounded" />
+            <img src={previewUrl} alt={t('pages.portal.proofAlt')} className="w-12 h-12 object-cover rounded" />
           ) : (
             <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded">
               <FileCheck2 size={20} className="text-primary" />
@@ -103,6 +103,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
           <button
             type="button"
             onClick={handleRemove}
+            aria-label={t('pages.portal.removeProof')}
             className="text-muted-foreground hover:text-destructive transition-colors p-1"
           >
             <X size={16} />

@@ -9,6 +9,10 @@ import ts from 'typescript';
 import { mergeCatalogTranslations } from '../src/lib/catalogTranslations.js';
 import { localizedField } from '../src/lib/seo.js';
 import * as productMerchant from '../src/lib/productMerchant.js';
+import * as locales from '../src/lib/locales.js';
+import { attributeLabel } from '../src/lib/attributeLabels.js';
+
+const exchangeRates = { source: 'CNB', date: new Date().toISOString().slice(0, 10), rates: { EUR: 24.26, CZK: 1 } };
 
 function loadSource(path, imports) {
   const { outputText } = ts.transpileModule(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'), {
@@ -46,6 +50,13 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     '@/lib/AuthContext': { useAuth: () => ({ isAuthenticated: false }) },
     '@/lib/languageContext': { useLanguage: () => ({ locale, localePath: (path) => `/${locale}${path}` }) },
     '@/lib/constants': { formatPrice: (price) => `EUR ${price}` },
+    '@/lib/locales': locales,
+    '@/hooks/useAttributeLabel': { useAttributeLabel: () => (value) => attributeLabel(value, locale) },
+    '@/lib/exchangeRatesServer': { getCzkExchangeRates: async () => exchangeRates },
+    '@/lib/currencyContext': {
+      CurrencyProvider: ({ children }) => children,
+      useStorefrontPricing: () => ({ locale, getPricing: (product) => productMerchant.getProductPricing(product, { locale, exchangeRates }), formatMoney: (price, currency = 'EUR') => `${currency} ${price}` }),
+    },
     '@/lib/productMerchant': productMerchant,
     '@/components/shared/TrustBar': () => null,
     '@/components/checkout/BuyNowAuthModal': () => null,
@@ -59,7 +70,7 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     '@/lib/slug': { productSlug: (product) => product.slug },
     '@/lib/seo': {
       getSiteUrl: () => 'https://example.test', localizedField: (record, key) => record?.[key] || '',
-      localizedMetadata: (data) => data, safeJsonLd: JSON.stringify, SUPPORTED_LOCALES: ['en', 'de'],
+      localizedMetadata: (data) => data, safeJsonLd: JSON.stringify, SUPPORTED_LOCALES: ['en', 'de', 'cs'],
     },
   };
   for (const [specifier, path] of [
@@ -80,7 +91,8 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
 }
 
 function clientElement(tree) {
-  return React.Children.toArray(tree.props.children).find((element) => typeof element.type === 'function');
+  const provider = React.Children.toArray(tree.props.children).find((element) => typeof element.type === 'function');
+  return provider.props.children;
 }
 
 test('product route returns the selected watch before unresolved dealer and related reads', async () => {
@@ -165,23 +177,27 @@ test('legacy detail props still render recommendations without server slots', ()
 });
 
 test('storefront cards, detail headings, descriptions and metadata follow the selected product language', () => {
-  const rows = ['en', 'de'].flatMap((locale) => [
-    { entity_id: watch.id, locale, field_name: 'name', value: locale === 'en' ? 'Steel watch English' : 'Stahluhr Deutsch' },
-    { entity_id: watch.id, locale, field_name: 'description', value: locale === 'en' ? '<p>English watch description.</p>' : '<p>Deutsche Uhrenbeschreibung.</p>' },
+  const titles = { en: 'Steel watch English', de: 'Stahluhr Deutsch', cs: 'Ocelové hodinky česky' };
+  const descriptions = { en: 'English watch description.', de: 'Deutsche Uhrenbeschreibung.', cs: 'Český popis hodinek.' };
+  const rows = ['en', 'de', 'cs'].flatMap((locale) => [
+    { entity_id: watch.id, locale, field_name: 'name', value: titles[locale] },
+    { entity_id: watch.id, locale, field_name: 'description', value: `<p>${descriptions[locale]}</p>` },
   ]);
   const product = { ...watch, ...mergeCatalogTranslations('product', rows)[watch.id] };
   const { Card, Detail, setLocale } = fixture();
   // Reuse exactly the same record while changing only the selected language.
-  for (const locale of ['de', 'en', 'de']) {
+  for (const locale of ['de', 'cs', 'en', 'de']) {
     setLocale(locale);
-    const title = locale === 'en' ? 'Steel watch English' : 'Stahluhr Deutsch';
-    const description = locale === 'en' ? 'English watch description.' : 'Deutsche Uhrenbeschreibung.';
+    const title = titles[locale];
+    const description = descriptions[locale];
     const otherTitle = locale === 'de' ? 'Steel watch English' : 'Stahluhr Deutsch';
     const cardHtml = renderToStaticMarkup(React.createElement(Card, { product }));
     const detailHtml = renderToStaticMarkup(React.createElement(Detail, { id: product.id, initialProduct: product }));
     assert.ok(cardHtml.includes(title));
     assert.ok(detailHtml.includes(title));
     assert.ok(detailHtml.includes(description));
+    assert.ok(cardHtml.includes(locale === 'cs' ? 'CZK 291120' : 'EUR 12000'));
+    assert.ok(detailHtml.includes(locale === 'cs' ? 'CZK 291120' : 'EUR 12000'));
     assert.ok(!cardHtml.includes(otherTitle));
     assert.ok(!detailHtml.includes(otherTitle));
     assert.equal(localizedField(product, 'productTitle', locale), title);

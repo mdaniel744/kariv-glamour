@@ -1,8 +1,10 @@
 import 'server-only';
 
 const TRANSLATABLE_FIELDS = ['productTitle', 'shortDescription', 'productDescription'];
-const LANGUAGE_NAMES = { de: 'German', en: 'English' };
-const DEFAULT_SOURCE_LOCALE = 'de';
+const LANGUAGE_NAMES = { de: 'German', en: 'English', cs: 'Czech' };
+// This deployment belongs to Kariv. Product source copy is English regardless
+// of the editor's UI language; do not reuse a visitor/dealer locale here.
+const DEFAULT_SOURCE_LOCALE = 'en';
 const MAX_TRANSLATION_CHARACTERS = 24000;
 
 function hasText(value) {
@@ -11,15 +13,10 @@ function hasText(value) {
 
 function seedLocalizedSourceFields(payload) {
   const seeded = { ...payload };
-  const sourceLocale = ['de', 'en'].includes(payload.sourceLocale)
-    ? payload.sourceLocale
-    : DEFAULT_SOURCE_LOCALE;
-
   for (const fieldName of TRANSLATABLE_FIELDS) {
-    const deKey = `${fieldName}_de`;
-    const enKey = `${fieldName}_en`;
-    if (!hasText(seeded[deKey]) && !hasText(seeded[enKey]) && hasText(seeded[fieldName])) {
-      seeded[`${fieldName}_${sourceLocale}`] = seeded[fieldName];
+    const hasSavedVersion = Object.keys(LANGUAGE_NAMES).some((language) => hasText(seeded[`${fieldName}_${language}`]));
+    if (!hasSavedVersion && hasText(seeded[fieldName])) {
+      seeded[`${fieldName}_${DEFAULT_SOURCE_LOCALE}`] = seeded[fieldName];
     }
   }
 
@@ -106,25 +103,14 @@ async function requestTranslation(fields, sourceLocale, targetLocale) {
 }
 
 /**
- * Fills only missing German/English product-copy fields. Existing localized
+ * Fills only missing English/German/Czech product-copy fields. Existing localized
  * values are preserved so human edits are never replaced automatically.
  */
 export async function translateMissingProductContent(payload) {
   const translatedPayload = seedLocalizedSourceFields(payload);
-  const plans = [
-    { sourceLocale: 'de', targetLocale: 'en', fields: missingFields(translatedPayload, 'de', 'en') },
-    { sourceLocale: 'en', targetLocale: 'de', fields: missingFields(translatedPayload, 'en', 'de') },
-  ].filter((plan) => Object.keys(plan.fields).length > 0);
-
   const automaticKeys = new Set();
   const warnings = [];
-
-  const results = await Promise.allSettled(
-    plans.map((plan) => requestTranslation(plan.fields, plan.sourceLocale, plan.targetLocale))
-  );
-
-  results.forEach((result, index) => {
-    const plan = plans[index];
+  const applyResult = (result, plan) => {
     if (result.status === 'rejected') {
       warnings.push(result.reason?.message || 'Automatic translation failed.');
       return;
@@ -137,7 +123,28 @@ export async function translateMissingProductContent(payload) {
       translatedPayload[key] = value;
       automaticKeys.add(key);
     }
-  });
+  };
+
+  // A manually corrected legacy product can have German primary text. Use its
+  // saved English version when present, otherwise recover English from a known
+  // localized field; never blindly label legacy German primary copy English.
+  for (const sourceLocale of ['de', 'cs']) {
+    const fields = missingFields(translatedPayload, sourceLocale, 'en');
+    if (!Object.keys(fields).length) continue;
+    const plan = { sourceLocale, targetLocale: 'en', fields };
+    const [result] = await Promise.allSettled([requestTranslation(fields, sourceLocale, 'en')]);
+    applyResult(result, plan);
+  }
+
+  const plans = ['de', 'cs'].map((targetLocale) => ({
+    sourceLocale: DEFAULT_SOURCE_LOCALE,
+    targetLocale,
+    fields: missingFields(translatedPayload, DEFAULT_SOURCE_LOCALE, targetLocale),
+  })).filter((plan) => Object.keys(plan.fields).length > 0);
+  const results = await Promise.allSettled(
+    plans.map((plan) => requestTranslation(plan.fields, plan.sourceLocale, plan.targetLocale))
+  );
+  results.forEach((result, index) => applyResult(result, plans[index]));
 
   return {
     payload: translatedPayload,

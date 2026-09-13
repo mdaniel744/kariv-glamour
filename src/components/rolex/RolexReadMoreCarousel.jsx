@@ -21,8 +21,8 @@ export default function RolexReadMoreCarousel() {
             <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('heading.readMoreAbout', { brand: 'Rolex' })}</h2>
           </div>
           <div className="hidden md:flex gap-2">
-            <button onClick={() => scroll(-1)} className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors text-foreground"><ChevronLeft size={18} /></button>
-            <button onClick={() => scroll(1)} className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors text-foreground"><ChevronRight size={18} /></button>
+            <button aria-label={t('common:previous')} onClick={() => scroll(-1)} className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors text-foreground"><ChevronLeft size={18} /></button>
+            <button aria-label={t('common:next')} onClick={() => scroll(1)} className="w-10 h-10 border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors text-foreground"><ChevronRight size={18} /></button>
           </div>
         </div>
 

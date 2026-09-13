@@ -41,3 +41,38 @@ export const COMPARISONS = {
     note: b('Model names describe design families. They do not establish the dimensions or movement of a listing.', 'Modellnamen beschreiben Designfamilien, nicht die genauen Maße oder das Werk eines Angebots.'),
   },
 };
+
+const CZECH_ROWS = {
+  snowflakeShunbun: [
+    ['Průměr pouzdra', '41 mm', '40 mm'], ['Délka mezi nožkami', '49 mm', '47 mm'],
+    ['Výška', '12,5 mm', '12,8 mm'], ['Pouzdro a náramek', 'Titan', 'Titan'],
+    ['Strojek', '9R65 Spring Drive', '9R65 Spring Drive'], ['Číselník', 'Bílá struktura', 'Růžově tónovaná struktura'],
+  ],
+  speedSeamaster: [
+    ['První rozlišení', 'Který chronograf a strojek?', 'Diver 300M, Planet Ocean, nebo Aqua Terra?'],
+    ['Co porovnat', 'Nátah, tlačítka, sklíčko', 'Luneta, výška pouzdra, zamýšlené použití ve vodě'],
+    ['Nepředpokládejte', 'Každá Speedmaster je ručně natahovaná Moonwatch', 'Každá Seamaster je stejný typ potápěčských hodinek'],
+  ],
+  blackBayPelagos: [
+    ['Výchozí zaměření', 'Historicky inspirovaný design s různými funkcemi', 'Technické potápěčské zaměření'],
+    ['Zúžení výběru', 'Jednoduchý čas, GMT, nebo chronograf?', 'Standardní, 39, LHD, FXD, nebo Ultra?'],
+    ['Kontrola usazení', 'Výška a nastavení náramku', 'Materiál, uchycení řemínku a hmotnost'],
+  ],
+  luminorRadiomir: [
+    ['Vzhled', 'Ochranný můstek korunky', 'Odlišný obrys korunky a pouzdra'],
+    ['Zkuste na zápěstí', 'Prostor kolem můstku a zakřivení řemínku', 'Konstrukce nožek a celková délka'],
+    ['Ověřte samostatně', 'Reference PAM, nátah a vodotěsnost', 'Reference PAM, nátah a vodotěsnost'],
+  ],
+};
+const CZECH_NOTES = {
+  snowflakeShunbun: 'Rozměry výrobce platí pro uvedené reference, nikoli pro každou variantu Snowflake či Shunbun. Menší průměr zde neznamená nižší pouzdro.',
+  speedSeamaster: 'Použijte porovnání k výběru dvou přesných referencí. Jde o rozhodovací pomůcku, nikoli úplnou specifikaci rodin.',
+  blackBayPelagos: 'Vodotěsnost, certifikace a rozměry se liší podle reference. Tabulka neuvádí jednotnou specifikaci celé rodiny.',
+  luminorRadiomir: 'Názvy modelů popisují rodiny designů. Neurčují rozměry ani strojek konkrétní nabídky.',
+};
+for (const [key, comparison] of Object.entries(COMPARISONS)) {
+  comparison.note.cs = CZECH_NOTES[key];
+  comparison.rows.forEach((item, index) => {
+    [item.label.cs, item.left.cs, item.right.cs] = CZECH_ROWS[key][index];
+  });
+}

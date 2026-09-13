@@ -4,6 +4,7 @@ import { REVIEW_DATE, bilingual as b } from './sources.js';
 import { TOPIC_DEPTH } from './guideDepth.js';
 import { BRAND_ESSAYS } from './brandEssays.js';
 import { GUIDE_SUMMARIES, BRAND_GUIDE_SUMMARIES } from './summaries.js';
+import { getCzechResearchArticle } from './czech.js';
 
 const field = (data, name, locale) => data[`${name}_${locale}`] || data[name] || '';
 export function cleanHeading(value) {
@@ -11,6 +12,7 @@ export function cleanHeading(value) {
 }
 
 export function getResearchArticle(route, locale = 'en') {
+  if (locale === 'cs') return getCzechResearchArticle(route);
   const brand = BRAND_RESEARCH[route.pageKey];
   if (!brand) return null;
   const key = route.pageData.isGuide ? guideTopic(route.slug) : 'choice';

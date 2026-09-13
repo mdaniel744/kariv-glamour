@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Girard-Perregaux collections, filters, and SEO data
 // Positioned as understated haute horlogerie, integrated-bracelet sport-chic design,
 // dress watches, Art Deco cases, visible mechanics, and collector value.
@@ -413,3 +416,7 @@ export const GP_SEO_PAGES = {
     ],
   },
 };
+
+applyCzechSeoPages(GP_SEO_PAGES, 'Girard-Perregaux', 'girardPerregaux');
+applyCzechBrandFaqs(GP_FAQS, 'girardPerregaux');
+applyCzechBrandContent('girardPerregaux', GP_COLLECTIONS, GP_QUICK_FILTERS, GP_SEO_CARDS, GP_READ_MORE, GP_INTERNAL_LINKS);

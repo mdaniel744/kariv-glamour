@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useAttributeLabel } from '@/hooks/useAttributeLabel';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import { BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES } from '@/lib/constants';
 import { ChevronDown, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
+  const attributeLabel = useAttributeLabel();
   return (
     <div className="border-b border-border">
       <button onClick={onToggle} className="flex min-h-14 w-full items-center justify-between py-4 text-sm font-semibold uppercase tracking-[0.1em] text-foreground">
@@ -26,7 +29,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
                   }}
                   className="h-[18px] w-[18px] flex-shrink-0 rounded-sm border-border bg-transparent accent-primary"
                 />
-                <span className="text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{val}</span>
+                <span className="text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{attributeLabel(val)}</span>
               </label>
             );
           })}
@@ -38,6 +41,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
 
 export default function ShopFilters({ filters, setFilters }) {
   const { t } = useTranslation();
+  const { currency } = useStorefrontPricing();
   const [openGroups, setOpenGroups] = useState({ brand: true, condition: true });
 
   const toggleGroup = (key) => {
@@ -74,7 +78,7 @@ export default function ShopFilters({ filters, setFilters }) {
 
       {/* Price range */}
       <div className="border-b border-border py-5">
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.1em] text-foreground">{t('common:shop.priceRange')}</p>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.1em] text-foreground">{t('common:shop.priceRange')} ({currency})</p>
         <div className="grid grid-cols-2 gap-3">
           <input
             type="number"

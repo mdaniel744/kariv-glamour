@@ -50,10 +50,10 @@ export default function AdminProducts() {
         ...form,
         price: Number(form.price) || 0,
         yearOfProduction: Number(form.yearOfProduction) || undefined,
-        productTitle: form.productTitle_de || form.productTitle_en || form.productTitle || '',
-        shortDescription: form.shortDescription_de || form.shortDescription_en || form.shortDescription || '',
-        productDescription: form.productDescription_de || form.productDescription_en || form.productDescription || '',
-        slug: (form.productTitle_de || form.productTitle || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        productTitle: form.productTitle_en || form.productTitle || form.productTitle_de || '',
+        shortDescription: form.shortDescription_en || form.shortDescription || form.shortDescription_de || '',
+        productDescription: form.productDescription_en || form.productDescription || form.productDescription_de || '',
+        slug: form.slug || (form.productTitle_en || form.productTitle || form.productTitle_de || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
       };
       const result = editing === 'new'
         ? await createProduct(payload)

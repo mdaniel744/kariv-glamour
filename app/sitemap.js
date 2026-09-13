@@ -8,6 +8,7 @@ import { productSlug } from '@/lib/slug';
 import { canonicalSeoSlug } from '@/lib/watchResearch/articles';
 import { REVIEW_DATE } from '@/lib/watchResearch/sources';
 import { getPublishedGuides } from '@/lib/publishedGuides';
+import { hasCzechProductCopy } from '@/lib/productMerchant';
 
 export const revalidate = 3600;
 
@@ -40,6 +41,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de`,
             en: `${siteUrl}/en`,
+            cs: `${siteUrl}/cs`,
           },
         },
       },
@@ -51,6 +53,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/shop`,
             en: `${siteUrl}/en/shop`,
+            cs: `${siteUrl}/cs/shop`,
           },
         },
       },
@@ -62,6 +65,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/brands`,
             en: `${siteUrl}/en/brands`,
+            cs: `${siteUrl}/cs/brands`,
           },
         },
       }
@@ -76,6 +80,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/brands/${brand.slug}`,
             en: `${siteUrl}/en/brands/${brand.slug}`,
+            cs: `${siteUrl}/cs/brands/${brand.slug}`,
           },
         },
       });
@@ -92,6 +97,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/${route.slug}`,
             en: `${siteUrl}/en/${route.slug}`,
+            cs: `${siteUrl}/cs/${route.slug}`,
           },
         },
       });
@@ -106,6 +112,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/${route.pathPrefix}/${route.collection.slug}`,
             en: `${siteUrl}/en/${route.pathPrefix}/${route.collection.slug}`,
+            cs: `${siteUrl}/cs/${route.pathPrefix}/${route.collection.slug}`,
           },
         },
       });
@@ -120,6 +127,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de${path}`,
             en: `${siteUrl}/en${path}`,
+            cs: `${siteUrl}/cs${path}`,
           },
         },
       });
@@ -135,6 +143,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/guides/${guide.slug}`,
             en: `${siteUrl}/en/guides/${guide.slug}`,
+            cs: `${siteUrl}/cs/guides/${guide.slug}`,
           },
         },
       });
@@ -150,12 +159,14 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/legal/${legalPage.slug}`,
             en: `${siteUrl}/en/legal/${legalPage.slug}`,
+            cs: `${siteUrl}/cs/legal/${legalPage.slug}`,
           },
         },
       });
     }
 
     for (const product of products) {
+      if (locale === 'cs' && !hasCzechProductCopy(product)) continue;
       const slug = productSlug(product);
       entries.push({
         url: localized(`/product/${slug}`),
@@ -166,6 +177,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/product/${slug}`,
             en: `${siteUrl}/en/product/${slug}`,
+            ...(hasCzechProductCopy(product) ? { cs: `${siteUrl}/cs/product/${slug}` } : {}),
           },
         },
       });
@@ -175,12 +187,13 @@ export default async function sitemap() {
   const builtIn = new Set(EDITORIAL_GUIDES.map((guide) => guide.slug));
   for (const guide of publishedGuides) {
     if (!guide.slug || builtIn.has(guide.slug) || !guide.content) continue;
-    for (const locale of SUPPORTED_LOCALES) entries.push({
+    for (const locale of SUPPORTED_LOCALES.filter((value) => value !== 'cs' || (guide.title_cs && guide.content_cs))) entries.push({
       url: `${siteUrl}/${locale}/guides/${guide.slug}`,
       lastModified: guide.updated_date || guide.created_date || undefined,
       alternates: { languages: {
         de: `${siteUrl}/de/guides/${guide.slug}`,
         en: `${siteUrl}/en/guides/${guide.slug}`,
+        ...(guide.title_cs && guide.content_cs ? { cs: `${siteUrl}/cs/guides/${guide.slug}` } : {}),
       } },
     });
   }

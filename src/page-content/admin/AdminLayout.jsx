@@ -22,7 +22,12 @@ function AdminDarkMode() {
 export default function AdminLayout({ children }) {
   const { t } = useTranslation('admin');
   const pathname = usePathname();
-  const { localePath } = useLanguage();
+  const { localePath, locale } = useLanguage();
+  const copy = ({
+    cs: { applications: 'Žádosti prodejců', translations: 'Překlady', glossary: 'Slovníček', strings: 'Texty rozhraní', settings: 'Nastavení překladů', logs: 'Protokol překladů' },
+    de: { applications: 'Händleranträge', translations: 'Übersetzungen', glossary: 'Glossar', strings: 'Oberflächentexte', settings: 'Übersetzungseinstellungen', logs: 'Übersetzungsprotokolle' },
+    en: { applications: 'Dealer Applications', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' },
+  })[locale] || { applications: 'Dealer Applications', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' };
 
   const navItems = [
     { to: '/admin', icon: LayoutDashboard, label: t('dashboard'), exact: true },
@@ -30,17 +35,17 @@ export default function AdminLayout({ children }) {
     { to: '/admin/brands', icon: Tag, label: t('brands') },
     { to: '/admin/collections', icon: Layers, label: t('collections') },
     { to: '/admin/orders', icon: ShoppingCart, label: t('orders') },
-    { to: '/admin/dealer-applications', icon: Store, label: 'Dealer Applications' },
+    { to: '/admin/dealer-applications', icon: Store, label: copy.applications },
     { to: '/admin/dealer-reviews', icon: Star, label: t('dealerReviews') },
     { to: '/admin/customers', icon: Users, label: t('customers') },
     { to: '/admin/guides', icon: BookOpen, label: t('guides') },
     { to: '/admin/legal', icon: FileText, label: t('legal') },
     { to: '/admin/faq', icon: HelpCircle, label: t('faq') },
-    { to: '/admin/translations', icon: Languages, label: 'Translations' },
-    { to: '/admin/glossary', icon: BookMarked, label: 'Glossary' },
-    { to: '/admin/strings', icon: Type, label: 'Strings' },
-    { to: '/admin/translation-settings', icon: Settings, label: 'Translation Settings' },
-    { to: '/admin/translation-logs', icon: ScrollText, label: 'Translation Logs' }
+    { to: '/admin/translations', icon: Languages, label: copy.translations },
+    { to: '/admin/glossary', icon: BookMarked, label: copy.glossary },
+    { to: '/admin/strings', icon: Type, label: copy.strings },
+    { to: '/admin/translation-settings', icon: Settings, label: copy.settings },
+    { to: '/admin/translation-logs', icon: ScrollText, label: copy.logs }
   ];
 
   return (
@@ -54,7 +59,7 @@ export default function AdminLayout({ children }) {
               <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
             </span>
           </LocalizedLink>
-          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">Admin Console</p>
+          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{t('common:pages.portal.adminConsole')}</p>
         </div>
         <nav className="p-3 space-y-0.5">
            {navItems.map(item => {

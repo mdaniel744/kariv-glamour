@@ -18,6 +18,7 @@ function staticBrandForSlug(slug) {
 }
 
 function fallbackDescription(name, locale) {
+  if (locale === 'cs') return `Prohlédněte si luxusní hodinky ${name}. Porovnejte kolekce, reference, stav a podrobnosti jednotlivých nabídek na Kariv Glamour.`;
   return locale === 'de'
     ? `Entdecken Sie authentische ${name} Luxusuhren bei Kariv Glamour – mit transparenten Produktdetails, sicherer Abwicklung und internationaler Lieferung.`
     : `Discover authentic ${name} luxury watches at Kariv Glamour, with transparent product details, secure checkout, and international delivery.`;
@@ -33,9 +34,11 @@ export async function generateMetadata({ params }) {
   ]);
   const name = localizedField(brand, 'brandName', locale) || staticBrand?.name || slug;
   const title =
+    (locale === 'cs' && (brand?.seoTitle_cs || `Hodinky ${name}`)) ||
     localizedField(brand, 'seoTitle', locale) ||
     (locale === 'de' ? `${name} Uhren kaufen` : `Buy ${name} Watches`);
   const description =
+    (locale === 'cs' && (brand?.seoDescription_cs || brand?.shortDescription_cs || fallbackDescription(name, locale))) ||
     localizedField(brand, 'seoDescription', locale) ||
     localizedField(brand, 'shortDescription', locale) ||
     fallbackDescription(name, locale);
@@ -59,12 +62,13 @@ export default async function BrandPage({ params }) {
 
   const name = localizedField(data.brand, 'brandName', locale) || staticBrand?.name || slug;
   const description =
+    (locale === 'cs' && (data.brand?.seoDescription_cs || data.brand?.shortDescription_cs || fallbackDescription(name, locale))) ||
     localizedField(data.brand, 'seoDescription', locale) ||
     localizedField(data.brand, 'shortDescription', locale) ||
     fallbackDescription(name, locale);
   const siteUrl = getSiteUrl();
   const brandUrl = `${siteUrl}/${locale}/brands/${slug}`;
-  const faqs = localizedArray(data.brand, 'faqs', locale);
+  const faqs = locale === 'cs' && !data.brand?.faqs_cs ? [] : localizedArray(data.brand, 'faqs', locale);
 
   const jsonLd = [
     {
@@ -80,8 +84,8 @@ export default async function BrandPage({ params }) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-        { '@type': 'ListItem', position: 2, name: locale === 'de' ? 'Marken' : 'Brands', item: `${siteUrl}/${locale}/brands` },
+        { '@type': 'ListItem', position: 1, name: locale === 'cs' ? 'Úvod' : locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
+        { '@type': 'ListItem', position: 2, name: locale === 'cs' ? 'Značky' : locale === 'de' ? 'Marken' : 'Brands', item: `${siteUrl}/${locale}/brands` },
         { '@type': 'ListItem', position: 3, name, item: brandUrl },
       ],
     },

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
 import { getMyOrder, getMyOrderDispute, selectPaymentMethod, flagOrder, confirmPaymentSent } from '@/actions/orders';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -8,14 +9,40 @@ import EscrowTimeline from '@/components/escrow/EscrowTimeline';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import PaymentMethodSelector from '@/components/escrow/PaymentMethodSelector';
-import { ESCROW_STATUS_DESCRIPTIONS } from '@/lib/escrowConstants';
+import { getEscrowCopy } from '@/lib/escrowCopy';
+import { useLanguage } from '@/lib/languageContext';
 import CryptoCheckoutButton from '@/components/escrow/CryptoCheckoutButton';
 import PaymentProofUploader from '@/components/escrow/PaymentProofUploader';
 
 const ICON_MAP = { Building2, CreditCard, Bitcoin };
 
+const ORDER_COPY = {
+  cs: {
+    reason: 'Důvod', selectReason: 'Vyberte důvod…', describe: 'Popište problém', detailHint: 'Uveďte prosím podrobnosti problému…', submitDispute: 'Odeslat žádost o řešení sporu',
+    reasons: { authenticity_issue: 'Pochybnosti o pravosti', condition_mismatch: 'Stav neodpovídá nabídce', item_not_received: 'Zboží nebylo doručeno', damaged_in_transit: 'Poškození při přepravě', not_as_described: 'Neodpovídá popisu', other: 'Jiný důvod' },
+    statuses: { open: 'Otevřený', under_review: 'Posuzuje se', resolved_buyer: 'Vyřešeno ve prospěch kupujícího', resolved_seller: 'Vyřešeno ve prospěch prodejce', closed: 'Uzavřený' },
+    rate: 'Ohodnoťte prodejce', review: 'Napsat recenzi', reviewHint: 'Jak jste byli s nákupem spokojeni? Vaše zkušenost pomůže ostatním kupujícím při rozhodování.',
+  },
+  de: {
+    reason: 'Grund', selectReason: 'Grund auswählen…', describe: 'Problem beschreiben', detailHint: 'Bitte beschreiben Sie das Problem genauer…', submitDispute: 'Streitfall einreichen',
+    reasons: { authenticity_issue: 'Echtheitsbedenken', condition_mismatch: 'Abweichender Zustand', item_not_received: 'Artikel nicht erhalten', damaged_in_transit: 'Transportschaden', not_as_described: 'Nicht wie beschrieben', other: 'Sonstiges' },
+    statuses: { open: 'Offen', under_review: 'Wird geprüft', resolved_buyer: 'Zugunsten des Käufers geklärt', resolved_seller: 'Zugunsten des Verkäufers geklärt', closed: 'Geschlossen' },
+    rate: 'Händler bewerten', review: 'Bewertung schreiben', reviewHint: 'Wie war Ihre Einkaufserfahrung? Ihre Rückmeldung hilft anderen Käufern bei der Entscheidung.',
+  },
+  en: {
+    reason: 'Reason', selectReason: 'Select a reason...', describe: 'Describe the Issue', detailHint: 'Please provide details about the issue...', submitDispute: 'Submit Dispute Case',
+    reasons: { authenticity_issue: 'Authenticity Issue', condition_mismatch: 'Condition Mismatch', item_not_received: 'Item Not Received', damaged_in_transit: 'Damaged in Transit', not_as_described: 'Not As Described', other: 'Other' },
+    statuses: { open: 'Open', under_review: 'Under review', resolved_buyer: 'Resolved for buyer', resolved_seller: 'Resolved for seller', closed: 'Closed' },
+    rate: 'Rate Your Dealer', review: 'Leave a Review', reviewHint: 'How was your purchase experience? Your feedback helps other buyers make informed decisions.',
+  },
+};
+
 export default function PortalOrderDetail({ id: providedId }) {
+  const { localize } = useLocalizedField();
   const { t } = useTranslation();
+  const { locale } = useLanguage();
+  const escrowCopy = getEscrowCopy(locale);
+  const copy = ORDER_COPY[locale] || ORDER_COPY.en;
   const id = providedId || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).at(-1) : null);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,11 +80,11 @@ export default function PortalOrderDetail({ id: providedId }) {
 
   const handleFlagOrder = async () => {
     if (!flagReason) {
-      alert('Please select a reason');
+      alert(copy.selectReason);
       return;
     }
     if (!flagDescription.trim()) {
-      alert('Please describe the issue');
+      alert(copy.describe);
       return;
     }
     setFlagging(true);
@@ -114,7 +141,7 @@ export default function PortalOrderDetail({ id: providedId }) {
       {/* Status description */}
       <div className="bg-primary/5 border border-primary/20 p-4 mb-6 flex items-start gap-3">
         <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
-        <p className="text-xs text-foreground">{ESCROW_STATUS_DESCRIPTIONS[order.escrowStatus]}</p>
+        <p className="text-xs text-foreground">{escrowCopy.descriptions[order.escrowStatus]}</p>
       </div>
 
       {/* Payment selection — only when dealer accepted and no method chosen */}
@@ -142,7 +169,8 @@ export default function PortalOrderDetail({ id: providedId }) {
               <p className="text-muted-foreground">
                 {t('pages.portal.bankTransferInfo', { defaultValue: 'Bank transfer details will be provided after the dealer confirms availability. Use your Escrow Reference as the payment reference.' })}
               </p>
-              <div className="flex justify-between pt-1"><span className="text-muted-foreground">Reference:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+              <div className="flex justify-between pt-1"><span className="text-muted-foreground">{t('pages.portal.paymentReference')}:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+              <div className="flex justify-between pt-1"><span className="text-muted-foreground">{t('pages.portal.total')}</span><span className="text-primary font-bold">{formatPrice(order.totalAmount, order.currency || 'EUR')} ({order.currency || 'EUR'})</span></div>
             </div>
           )}
 
@@ -160,7 +188,7 @@ export default function PortalOrderDetail({ id: providedId }) {
               {order.paymentStatus === 'Justification Requested' && order.justificationMessage && (
                 <div className="mb-4 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs">
                   <p className="font-medium mb-1 flex items-center gap-1.5">
-                    <ShieldCheck size={14} /> Action Required: Additional Information Needed
+                    <ShieldCheck size={14} /> {t('pages.portal.additionalInformation')}
                   </p>
                   <p className="whitespace-pre-wrap">{order.justificationMessage}</p>
                 </div>
@@ -200,8 +228,8 @@ export default function PortalOrderDetail({ id: providedId }) {
               {p.featuredImage && <img src={p.featuredImage} alt="" className="w-16 h-16 object-cover" />}
               <div className="flex-1">
                 <p className="text-[10px] tracking-[0.1em] uppercase text-primary">{p.brand}</p>
-                <p className="text-xs text-foreground">{p.productTitle}</p>
-                <p className="text-[10px] text-muted-foreground">{p.condition}</p>
+                <p className="text-xs text-foreground">{localize(p, 'productTitle')}</p>
+                <p className="text-[10px] text-muted-foreground">{p.condition ? t(`products:conditions.${p.condition}`, { defaultValue: p.condition }) : ''}</p>
                 <p className="text-sm text-foreground mt-1">{formatPrice(p.price, p.currency || order.currency || 'EUR')}</p>
               </div>
             </div>
@@ -258,7 +286,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                   <div>
                     <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })}</p>
                     <p className="text-[11px] text-muted-foreground">
-                      {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString()}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends, unless you file a dispute.' })}
+                      {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString(locale)}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends, unless you file a dispute.' })}
                     </p>
                   </div>
                 </div>
@@ -275,8 +303,8 @@ export default function PortalOrderDetail({ id: providedId }) {
                         {t('pages.portal.disputeOpenDesc', { defaultValue: 'You flagged this order. Our mediation team is reviewing your case. Escrow funds are frozen until the dispute is resolved.' })}
                       </p>
                       <div className="text-[11px] text-muted-foreground space-y-0.5">
-                        <p><span className="text-foreground">Reason:</span> {dispute.reason.replace(/_/g, ' ')}</p>
-                        <p><span className="text-foreground">Status:</span> <span className="capitalize">{dispute.status.replace(/_/g, ' ')}</span></p>
+                        <p><span className="text-foreground">{copy.reason}:</span> {copy.reasons[dispute.reason] || dispute.reason.replace(/_/g, ' ')}</p>
+                        <p><span className="text-foreground">{t('pages.checkout.status')}:</span> <span className="capitalize">{copy.statuses[dispute.status] || dispute.status.replace(/_/g, ' ')}</span></p>
                       </div>
                     </div>
                   </div>
@@ -309,33 +337,28 @@ export default function PortalOrderDetail({ id: providedId }) {
                     <p className="text-xs font-medium text-destructive flex items-center gap-2">
                       <Flag size={14} /> {t('pages.portal.openDispute', { defaultValue: 'Open a Dispute' })}
                     </p>
-                    <button onClick={() => setShowFlagForm(false)} className="text-muted-foreground hover:text-foreground">
+                    <button aria-label={t('close')} onClick={() => setShowFlagForm(false)} className="text-muted-foreground hover:text-foreground">
                       <X size={14} />
                     </button>
                   </div>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">Reason</label>
+                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">{copy.reason}</label>
                       <select
                         value={flagReason}
                         onChange={e => setFlagReason(e.target.value)}
                         className="w-full bg-background border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary"
                       >
-                        <option value="">Select a reason...</option>
-                        <option value="authenticity_issue">Authenticity Issue</option>
-                        <option value="condition_mismatch">Condition Mismatch</option>
-                        <option value="item_not_received">Item Not Received</option>
-                        <option value="damaged_in_transit">Damaged in Transit</option>
-                        <option value="not_as_described">Not As Described</option>
-                        <option value="other">Other</option>
+                        <option value="">{copy.selectReason}</option>
+                        {Object.entries(copy.reasons).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">Describe the Issue</label>
+                      <label className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">{copy.describe}</label>
                       <textarea
                         value={flagDescription}
                         onChange={e => setFlagDescription(e.target.value)}
-                        placeholder="Please provide details about the issue..."
+                        placeholder={copy.detailHint}
                         rows={4}
                         className="w-full bg-background border border-border text-xs text-foreground px-3 py-2 outline-none focus:border-primary resize-none"
                       />
@@ -345,7 +368,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                       disabled={flagging || !flagReason || !flagDescription.trim()}
                       className="w-full bg-destructive text-destructive-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 hover:bg-destructive/90 disabled:opacity-50"
                     >
-                      {flagging ? 'Submitting...' : 'Submit Dispute Case'}
+                      {flagging ? t('pages.portal.submitting') : copy.submitDispute}
                     </button>
                   </div>
                 </div>
@@ -359,7 +382,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                     <div>
                       <p className="text-xs font-medium text-foreground mb-1">{t('pages.portal.disputeResolved', { defaultValue: 'Dispute Resolved' })}</p>
                       <p className="text-[11px] text-muted-foreground">
-                        <span className="capitalize">{dispute.status.replace(/_/g, ' ')}</span>
+                        <span className="capitalize">{copy.statuses[dispute.status] || dispute.status.replace(/_/g, ' ')}</span>
                       </p>
                       {dispute.resolution && <p className="text-[11px] text-muted-foreground mt-1">{dispute.resolution}</p>}
                     </div>
@@ -372,7 +395,7 @@ export default function PortalOrderDetail({ id: providedId }) {
           {order.paymentMethod && (
             <div className="border border-border p-5">
               <h2 className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-3">{t('pages.portal.paymentMethod')}</h2>
-              <p className="text-xs text-foreground capitalize">{order.paymentMethod.replace('_', ' ')}</p>
+              <p className="text-xs text-foreground capitalize">{order.paymentMethod === 'bank_transfer' ? escrowCopy.bank : order.paymentMethod.replace('_', ' ')}</p>
             </div>
           )}
         </div>
@@ -383,10 +406,10 @@ export default function PortalOrderDetail({ id: providedId }) {
           <div className="flex items-start gap-3">
             <Star size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs font-medium text-primary mb-1">Rate Your Dealer</p>
-              <p className="text-[11px] text-muted-foreground mb-3">How was your experience with {order.dealerName || 'this dealer'}? Your feedback helps other buyers make informed decisions.</p>
+              <p className="text-xs font-medium text-primary mb-1">{copy.rate}</p>
+              <p className="text-[11px] text-muted-foreground mb-3">{copy.reviewHint}</p>
               <LocalizedLink to={`/dealer-profile/${order.dealerId}`} className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
-                Leave a Review →
+                {copy.review} →
               </LocalizedLink>
             </div>
           </div>

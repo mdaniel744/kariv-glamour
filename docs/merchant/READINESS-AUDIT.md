@@ -76,7 +76,7 @@ Audit baseline: `app/[locale]/product/[slug]/page.jsx`.
 
 Regression tests execute the real order action against in-memory database/auth fixtures only; no live order, profile write, payment or customer message was made. They cover valid/invalid sales, currencies, inactive and out-of-stock products, tenant scoping, sign-in requirements and unchanged idempotent historical orders. Live end-to-end checkout remains unverified.
 
-**Separate legacy cart defect remains:** `cartContext.jsx` stores only `{productId, quantity}` and does not expose `cartTotal`, while `Cart.jsx` expects hydrated product objects and a total. A populated legacy cart can therefore render missing prices or form an invalid checkout link. The direct product Buy Now flow does not use this cart, but the legacy cart must be repaired or deliberately retired before a Merchant review; this revision does not redesign that flow.
+**Legacy cart follow-up:** the Czech/CZK update now hydrates the saved product IDs, reads current prices, disables unavailable checkout, and totals the first watch consistently with the existing single-watch order contract. The direct Buy Now flow is unchanged. Live cart-to-order verification still requires the configured application environment. See [Czech/CZK rollout checks](../czech-czk-rollout.md) for currency and dashboard prerequisites.
 
 Merchant listing markup needs a real, positive-priced purchasable Offer, appropriate currency and product imagery. Shipping/return enhancements are useful but optional; absent enhancement markup alone is not proof of an account-policy violation. [Merchant listing structured data](https://developers.google.com/search/docs/appearance/structured-data/merchant-listing).
 

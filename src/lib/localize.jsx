@@ -1,4 +1,5 @@
 import { useLanguage } from '@/lib/languageContext';
+import { localizedValue } from '@/lib/locales';
 
 /**
  * Hook that provides a helper function to get the localized value
@@ -17,16 +18,12 @@ export function useLocalizedField() {
 
   const localize = (record, fieldName) => {
     if (!record) return '';
-    const localizedKey = `${fieldName}_${locale}`;
-    const otherKey = `${fieldName}_${locale === 'de' ? 'en' : 'de'}`;
-    return record[localizedKey] || record[fieldName] || record[otherKey] || '';
+    return localizedValue(record, fieldName, locale);
   };
 
   const localizeArray = (record, fieldName) => {
     if (!record) return [];
-    const localizedKey = `${fieldName}_${locale}`;
-    const otherKey = `${fieldName}_${locale === 'de' ? 'en' : 'de'}`;
-    return record[localizedKey] || record[fieldName] || record[otherKey] || [];
+    return localizedValue(record, fieldName, locale, []);
   };
 
   return { locale, localize, localizeArray };

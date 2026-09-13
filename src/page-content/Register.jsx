@@ -1,3 +1,4 @@
+import { getAuthText } from '@/lib/authCopy';
 import React, { useState, useEffect } from "react";
 import { useSignUp } from "@clerk/nextjs/legacy";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,8 @@ export default function Register() {
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [searchParams] = useUrlSearchParams();
-  const { localePath } = useLanguage();
+  const { locale, localePath } = useLanguage();
+  const text = (value) => getAuthText(locale, value);
   const { isAuthenticated } = useAuth();
   const { signUp, setActive, isLoaded } = useSignUp();
 
@@ -31,7 +33,7 @@ export default function Register() {
   useEffect(() => {
     if (isAuthenticated) {
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+      const destination = /^\/(de|en|cs|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
       window.location.replace(destination);
     }
   }, [isAuthenticated, localePath, searchParams]);
@@ -41,7 +43,7 @@ export default function Register() {
     if (!isLoaded) return;
     setError("");
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(text("Passwords do not match"));
       return;
     }
     setLoading(true);
@@ -50,7 +52,7 @@ export default function Register() {
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setShowOtp(true);
     } catch (err) {
-      setError(err.errors?.[0]?.message || "Registration failed");
+      setError(err.errors?.[0]?.message || text("Registration failed"));
     } finally {
       setLoading(false);
     }
@@ -63,14 +65,14 @@ export default function Register() {
     try {
       const result = await signUp.attemptEmailAddressVerification({ code: otpCode });
       if (result.status !== "complete") {
-        setError("Verification incomplete — please try again.");
+        setError(text("Verification incomplete — please try again."));
         return;
       }
       await setActive({ session: result.createdSessionId });
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      window.location.href = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+      window.location.href = /^\/(de|en|cs|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     } catch (err) {
-      setError(err.errors?.[0]?.message || "Invalid verification code");
+      setError(err.errors?.[0]?.message || text("Invalid verification code"));
     } finally {
       setLoading(false);
     }
@@ -82,18 +84,18 @@ export default function Register() {
     try {
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       toast({
-        title: "Code sent",
-        description: "Check your email for the new code.",
+        title: text("Code sent"),
+        description: text("Check your email for the new code."),
       });
     } catch (err) {
-      setError(err.errors?.[0]?.message || "Failed to resend code");
+      setError(err.errors?.[0]?.message || text("Failed to resend code"));
     }
   };
 
   const handleGoogle = () => {
     if (!isLoaded) return;
     const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-    const destination = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+    const destination = /^\/(de|en|cs|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     signUp.authenticateWithRedirect({
       strategy: "oauth_google",
       redirectUrl: localePath("/sso-callback"),
@@ -105,8 +107,8 @@ export default function Register() {
     return (
       <AuthLayout
         icon={Mail}
-        title="Verify your email"
-        subtitle={`We sent a code to ${email}`}
+        title={text("Verify your email")}
+        subtitle={locale === 'cs' ? `Kód jsme odeslali na ${email}` : `We sent a code to ${email}`}
       >
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -139,16 +141,16 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Verifying...
+              {text("Verifying...")}
             </>
           ) : (
-            "Verify"
+            text("Verify")
           )}
         </Button>
         <p className="text-center text-sm text-muted-foreground mt-4">
-          Didn't receive the code?{" "}
+          {text("Didn't receive the code?")}{" "}
           <button onClick={handleResend} className="text-primary font-medium hover:underline">
-            Resend
+            {text("Resend")}
           </button>
         </p>
       </AuthLayout>
@@ -158,13 +160,13 @@ export default function Register() {
   return (
     <AuthLayout
       icon={UserPlus}
-      title="Create your account"
-      subtitle="Sign up to get started"
+      title={text("Create your account")}
+      subtitle={text("Sign up to get started")}
       footer={
         <>
-          Already have an account?{" "}
+          {text("Already have an account?")}{" "}
           <LocalizedLink to={`/login${searchParams.toString() ? '?' + searchParams.toString() : ''}`} className="text-primary font-medium hover:underline">
-            Log in
+            {text("Log in")}
           </LocalizedLink>
         </>
       }
@@ -175,7 +177,7 @@ export default function Register() {
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
+        {text("Continue with Google")}
       </Button>
 
       <div className="relative mb-6">
@@ -183,7 +185,7 @@ export default function Register() {
           <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
+          <span className="bg-card px-3 text-muted-foreground">{text("or")}</span>
         </div>
       </div>
 
@@ -195,7 +197,7 @@ export default function Register() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{text("Email")}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -212,7 +214,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{text("Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -228,7 +230,7 @@ export default function Register() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirm">Confirm Password</Label>
+          <Label htmlFor="confirm">{text("Confirm Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -247,10 +249,10 @@ export default function Register() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Creating account...
+              {text("Creating account...")}
             </>
           ) : (
-            "Create account"
+            text("Create account")
           )}
         </Button>
       </form>

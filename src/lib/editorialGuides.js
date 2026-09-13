@@ -1,4 +1,5 @@
 import { enrichEditorialGuide } from './editorialResearch.js';
+import { CZECH_EDITORIAL_GUIDES } from './editorialGuides.cs.js';
 
 export const EDITORIAL_GUIDES = [
   {
@@ -459,7 +460,10 @@ export const EDITORIAL_GUIDES = [
       },
     },
   },
-].map(enrichEditorialGuide);
+].map((guide) => enrichEditorialGuide({
+  ...guide,
+  translations: { ...guide.translations, cs: CZECH_EDITORIAL_GUIDES[guide.slug] },
+}));
 
 export function getEditorialGuide(slug) {
   return EDITORIAL_GUIDES.find((guide) => guide.slug === slug) || null;

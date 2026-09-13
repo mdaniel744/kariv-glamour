@@ -1,0 +1,62 @@
+{
+  "referenceNumber": "Referenční číslo",
+  "caseDiameter": "Průměr pouzdra",
+  "caseMaterial": "Materiál pouzdra",
+  "braceletMaterial": "Materiál náramku",
+  "dialColor": "Barva ciferníku",
+  "movementType": "Strojek",
+  "waterResistance": "Vodotěsnost",
+  "crystalType": "Sklíčko",
+  "powerReserve": "Rezerva chodu",
+  "condition": "Stav",
+  "yearOfProduction": "Rok výroby",
+  "gender": "Určení",
+  "watchShape": "Tvar pouzdra",
+  "functions": "Funkce",
+  "boxIncluded": "Originální krabička",
+  "papersIncluded": "Doklady",
+  "serviceHistory": "Servisní historie",
+  "polishedStatus": "Stav leštění",
+  "originalPartsStatus": "Originální díly",
+  "warrantyType": "Typ záruky",
+  "warrantyDuration": "Délka záruky",
+  "authenticationStatus": "Ověření pravosti",
+  "availability": "Dostupnost",
+  "stockQuantity": "Počet kusů skladem",
+  "sku": "SKU",
+  "shippingInfo": "Informace o dopravě",
+  "returnEligibility": "Podmínky vrácení",
+  "scopeOfDelivery": "Obsah balení",
+  "productDescription": "Popis",
+  "shortDescription": "Shrnutí",
+  "featuredImage": "Hlavní obrázek",
+  "productImages": "Galerie",
+  "conditions": {
+    "New": "Nové",
+    "Unworn": "Nenošené",
+    "Excellent": "Výborný",
+    "Very Good": "Velmi dobrý",
+    "Good": "Dobrý",
+    "Vintage": "Vintage"
+  },
+  "genders": {
+    "Men": "Pánské",
+    "Women": "Dámské",
+    "Unisex": "Unisex"
+  },
+  "availabilityStatus": {
+    "In Stock": "Skladem",
+    "Sold": "Prodáno",
+    "Reserved": "Rezervováno",
+    "Coming Soon": "Již brzy"
+  },
+  "authStatus": {
+    "Authenticated": "Pravost ověřena",
+    "Pending": "Čeká na ověření",
+    "Not Verified": "Neověřeno"
+  },
+  "boolean": {
+    "yes": "Ano",
+    "no": "Ne"
+  }
+}

@@ -13,6 +13,9 @@ import {
 } from '@/lib/orderShaping';
 import { isValidEscrowTransition } from '@/lib/escrowConstants';
 import { getProductPricing } from '@/lib/productMerchant';
+import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
+import { matchesCheckoutPrice } from '@/lib/currencyConversion';
+import { loadCatalogTranslations } from '@/lib/catalogTranslations';
 
 async function shapeRows(rows) {
   const ids = rows.flatMap(r => [r.buyer_user_id, r.dealer_user_id]);
@@ -79,14 +82,17 @@ export async function getMyOrder(orderId) {
   return shapeOrderDetail(data);
 }
 
-export async function createOrder({ productId, shippingDetails, idempotencyKey }) {
+export async function createOrder({ productId, shippingDetails, idempotencyKey, locale = 'en', expectedPrice, expectedCurrency }) {
   const user = await requireUser();
+  if (!['en', 'de', 'cs'].includes(locale)) return { ok: false, error: 'Unsupported checkout language.' };
+  if (typeof idempotencyKey !== 'string' || !idempotencyKey || idempotencyKey.length > 150) return { ok: false, error: 'Invalid checkout reference.' };
 
   const { data: existing } = await supabaseAdmin
     .from('orders')
     .select('*')
     .eq('store_id', STORE_ID)
     .eq('idempotency_key', idempotencyKey)
+    .eq('buyer_user_id', user.id)
     .maybeSingle();
   if (existing) return { ok: true, order: await shapeOrderDetail(existing) };
 
@@ -102,18 +108,29 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey }
 
   const attrs = product.attributes || {};
   // Recompute from the fresh, tenant-scoped database row, never a client total.
-  const pricing = getProductPricing({ price: product.price, salePrice: product.sale_price, currency: product.currency });
-  if (pricing.price == null || !pricing.currency) return { ok: false, error: 'This watch does not currently have a valid purchase price. Please contact us.' };
+  const exchangeRates = locale === 'cs' ? await getCzkExchangeRates() : null;
+  const pricing = getProductPricing({ price: product.price, salePrice: product.sale_price, currency: product.currency }, { locale, exchangeRates });
+  if (pricing.price == null || !pricing.currency) return { ok: false, error: locale === 'cs' ? 'Cenu v Kč nyní nelze ověřit. Zkuste to prosím později. Objednávka nebyla vytvořena.' : 'This watch does not currently have a valid purchase price. Please contact us.' };
+  // Client amounts are only a confirmation check, never an input to pricing.
+  // A changed listing/rate requires the buyer to see and accept the new total.
+  if (!matchesCheckoutPrice(pricing, expectedPrice, expectedCurrency)) return {
+    ok: false, code: 'PRICE_CHANGED', pricing,
+    error: locale === 'cs' ? 'Cena byla aktualizována. Zkontrolujte novou částku a znovu potvrďte objednávku.' : locale === 'de' ? 'Der Preis wurde aktualisiert. Bitte prüfen und bestätigen Sie den neuen Gesamtbetrag.' : 'The price has been updated. Please review and confirm the new total.',
+  };
   const price = pricing.price;
+  const translations = await loadCatalogTranslations(supabaseAdmin, STORE_ID, 'product', [product.id]).catch(() => ({}));
+  const translatedProduct = translations[product.id] || {};
   const lineItem = {
     product_id: product.id,
     title: product.name,
+    ...Object.fromEntries(['en', 'de', 'cs'].flatMap((language) => translatedProduct[`productTitle_${language}`] ? [[`title_${language}`, translatedProduct[`productTitle_${language}`]]] : [])),
     brand: product.brands?.name || '',
     condition: attrs['Condition'] || '',
     price,
     currency: pricing.currency,
     image: Array.isArray(product.images) ? product.images[0] : null,
     quantity: 1,
+    ...(pricing.conversion ? { conversion: pricing.conversion } : {}),
   };
 
   const row = {
@@ -140,7 +157,7 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey }
   if (error) {
     if (error.code === '23505') {
       const { data: raced } = await supabaseAdmin
-        .from('orders').select('*').eq('store_id', STORE_ID).eq('idempotency_key', idempotencyKey).maybeSingle();
+        .from('orders').select('*').eq('store_id', STORE_ID).eq('idempotency_key', idempotencyKey).eq('buyer_user_id', user.id).maybeSingle();
       if (raced) return { ok: true, order: await shapeOrderDetail(raced) };
     }
     return { ok: false, error: error.message };

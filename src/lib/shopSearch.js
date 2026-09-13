@@ -17,9 +17,9 @@ export function positivePage(value) {
   return Number.isFinite(number) && number >= 1 ? Math.floor(number) : 1;
 }
 
-function sortValue(product, field, locale) {
+function sortValue(product, field, locale, exchangeRates) {
   if (field === 'price') {
-    return getProductPricing(product).price;
+    return getProductPricing(product, { locale, exchangeRates }).price;
   }
   if (field === 'productTitle') return product[`productTitle_${locale}`] || product.productTitle;
   return product[field];
@@ -28,13 +28,13 @@ function sortValue(product, field, locale) {
 // Filter the full public catalogue before sorting or taking a display page.
 // A display limit must never become the source of the catalogue total.
 export function selectShopResults(products, payload = {}) {
-  const locale = payload.locale === 'de' ? 'de' : 'en';
+  const locale = ['de', 'en', 'cs'].includes(payload.locale) ? payload.locale : 'en';
   const [field, direction] = SORT_FIELDS[payload.sort] || SORT_FIELDS.newest;
   const sorted = products.filter((product) => (
     product.isPublished === true && productMatchesSearchPayload(product, payload)
   )).sort((a, b) => {
-    const av = sortValue(a, field, locale);
-    const bv = sortValue(b, field, locale);
+    const av = sortValue(a, field, locale, payload.exchangeRates);
+    const bv = sortValue(b, field, locale, payload.exchangeRates);
     if (av === bv) return String(a.id || '').localeCompare(String(b.id || ''));
     const aMissing = av == null || (typeof av === 'number' && !Number.isFinite(av));
     const bMissing = bv == null || (typeof bv === 'number' && !Number.isFinite(bv));

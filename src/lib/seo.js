@@ -1,6 +1,6 @@
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, OPEN_GRAPH_LOCALES, localizedValue } from './locales.js';
+export { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './locales.js';
 export const SITE_NAME = 'Kariv Glamour';
-export const SUPPORTED_LOCALES = ['de', 'en'];
-export const DEFAULT_LOCALE = 'de';
 // Public identity is deliberately independent of preview hosts and obsolete
 // deployment environment values. The owner selected 24kariv.com.
 export const CANONICAL_SITE_URL = 'https://24kariv.com';
@@ -11,8 +11,7 @@ export function getSiteUrl() {
 
 export function localizedField(record, fieldName, locale = DEFAULT_LOCALE) {
   if (!record) return '';
-  const otherLocale = locale === 'de' ? 'en' : 'de';
-  return record[`${fieldName}_${locale}`] || record[fieldName] || record[`${fieldName}_${otherLocale}`] || '';
+  return localizedValue(record, fieldName, locale);
 }
 
 export function localizedArray(record, fieldName, locale = DEFAULT_LOCALE) {
@@ -23,9 +22,8 @@ export function localizedArray(record, fieldName, locale = DEFAULT_LOCALE) {
 export function localeAlternates(pathWithoutLocale = '') {
   const cleanPath = pathWithoutLocale ? `/${String(pathWithoutLocale).replace(/^\/+/, '')}` : '';
   return {
-    de: `/de${cleanPath}`,
-    en: `/en${cleanPath}`,
-    'x-default': `/de${cleanPath}`,
+    ...Object.fromEntries(SUPPORTED_LOCALES.map((locale) => [locale, `/${locale}${cleanPath}`])),
+    'x-default': `/${DEFAULT_LOCALE}${cleanPath}`,
   };
 }
 
@@ -67,8 +65,8 @@ export function localizedMetadata({
       description,
       type,
       siteName: SITE_NAME,
-      locale: locale === 'de' ? 'de_DE' : 'en_US',
-      alternateLocale: locale === 'de' ? ['en_US'] : ['de_DE'],
+      locale: OPEN_GRAPH_LOCALES[locale],
+      alternateLocale: SUPPORTED_LOCALES.filter((other) => other !== locale).map((other) => OPEN_GRAPH_LOCALES[other]),
       url: canonical,
       images,
     },

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useAttributeLabel } from '@/hooks/useAttributeLabel';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, X } from 'lucide-react';
 import { CONDITIONS, GENDERS } from '@/lib/constants';
 import { BREITLING_COLLECTIONS, BREITLING_CASE_MATERIALS, BREITLING_SHAPES, BREITLING_MOVEMENTS, BREITLING_COMPLICATIONS, BREITLING_FEATURES, BREITLING_DIAL_COLORS, BREITLING_BRACELETS, BREITLING_CASE_SIZES, BREITLING_AVAILABILITY, BREITLING_BOX_PAPERS, BREITLING_TYPES } from '@/lib/breitlingData';
 
 function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
+  const attributeLabel = useAttributeLabel();
   return (
     <div className="border-b border-border">
       <button onClick={onToggle} className="w-full flex items-center justify-between py-4 text-[11px] tracking-[0.12em] uppercase text-foreground font-medium">
@@ -20,7 +23,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
             return (
               <label key={val} className="flex items-center gap-2 cursor-pointer group">
                 <input type="checkbox" checked={isSelected} onChange={() => onChange(isSelected ? selected.filter(s => s !== val) : [...selected, val])} className="w-3.5 h-3.5 rounded-sm border-border bg-transparent accent-primary" />
-                <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">{val}</span>
+                <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">{attributeLabel(val)}</span>
               </label>
             );
           })}
@@ -32,6 +35,7 @@ function FilterGroup({ label, options, selected, onChange, open, onToggle }) {
 
 export default function BreitlingFilterSidebar({ filters, setFilters }) {
   const { t } = useTranslation('brandComponents');
+  const { currency } = useStorefrontPricing();
   const [openGroups, setOpenGroups] = useState({ collection: true, caseMaterial: true });
   const toggleGroup = (k) => setOpenGroups(p => ({ ...p, [k]: !p[k] }));
   const update = (k, v) => setFilters(p => ({ ...p, [k]: v }));
@@ -61,7 +65,7 @@ export default function BreitlingFilterSidebar({ filters, setFilters }) {
       <FilterGroup label={t('productGrid.boxPapers')} options={BREITLING_BOX_PAPERS} selected={filters.boxPapers} onChange={v => update('boxPapers', v)} open={openGroups.boxPapers} onToggle={() => toggleGroup('boxPapers')} />
       <FilterGroup label={t('productGrid.availability')} options={BREITLING_AVAILABILITY} selected={filters.availability} onChange={v => update('availability', v)} open={openGroups.availability} onToggle={() => toggleGroup('availability')} />
       <div className="border-b border-border py-4">
-        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">{t('productGrid.priceRange')}</p>
+        <p className="text-[11px] tracking-[0.12em] uppercase text-foreground font-medium mb-3">{t('productGrid.priceRange')} ({currency})</p>
         <div className="flex gap-2">
           <input type="number" placeholder="Min" value={filters.priceMin} onChange={e => update('priceMin', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />
           <input type="number" placeholder="Max" value={filters.priceMax} onChange={e => update('priceMax', e.target.value)} className="w-full bg-card border border-border text-xs text-foreground px-3 py-2 placeholder:text-muted-foreground/50 outline-none focus:border-primary" />

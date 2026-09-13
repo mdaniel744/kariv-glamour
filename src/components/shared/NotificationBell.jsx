@@ -10,11 +10,17 @@ import { getMyNotifications, markNotificationRead, markAllNotificationsRead, del
 import { enablePushNotifications, getNotificationPermission } from '@/lib/pushNotifications';
 
 const POLL_INTERVAL_MS = 45000;
+const NOTIFICATION_COPY = {
+  cs: { title: 'Oznámení', markRead: 'Označit vše jako přečtené', clear: 'Smazat vše', hint: 'Nechte si oznámit změny stavu objednávky.', enabling: 'Zapínání…', enable: 'Zapnout oznámení', empty: 'Zatím žádná oznámení.', remove: 'Smazat oznámení' },
+  de: { title: 'Benachrichtigungen', markRead: 'Alle als gelesen markieren', clear: 'Alle löschen', hint: 'Erhalten Sie Benachrichtigungen, wenn sich Ihr Bestellstatus ändert.', enabling: 'Wird aktiviert…', enable: 'Benachrichtigungen aktivieren', empty: 'Noch keine Benachrichtigungen.', remove: 'Benachrichtigung löschen' },
+  en: { title: 'Notifications', markRead: 'Mark all read', clear: 'Clear all', hint: 'Get notified when your order status changes.', enabling: 'Enabling...', enable: 'Enable notifications', empty: 'No notifications yet.', remove: 'Delete notification' },
+};
 
 export default function NotificationBell() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const { localePath } = useLanguage();
+  const { localePath, locale } = useLanguage();
+  const copy = NOTIFICATION_COPY[locale] || NOTIFICATION_COPY.en;
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [permission, setPermission] = useState('default');
@@ -85,7 +91,7 @@ export default function NotificationBell() {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary"
-        aria-label="Notifications"
+        aria-label={copy.title}
       >
         <Bell size={18} />
         {unreadCount > 0 && (
@@ -105,16 +111,16 @@ export default function NotificationBell() {
             className="absolute top-full right-0 mt-3 w-80 max-h-[70vh] overflow-y-auto bg-popover border border-border rounded shadow-lg z-50"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <p className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Notifications</p>
+              <p className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{copy.title}</p>
               <div className="flex items-center gap-3">
                 {unreadCount > 0 && (
                   <button onClick={handleMarkAllRead} className="text-[10px] tracking-[0.1em] uppercase text-primary hover:text-primary/70">
-                    Mark all read
+                    {copy.markRead}
                   </button>
                 )}
                 {notifications.length > 0 && (
                   <button onClick={handleClearAll} className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-destructive">
-                    Clear all
+                    {copy.clear}
                   </button>
                 )}
               </div>
@@ -122,20 +128,20 @@ export default function NotificationBell() {
 
             {permission !== 'granted' && (
               <div className="px-4 py-3 border-b border-border bg-muted/40">
-                <p className="text-xs text-foreground mb-2">Get notified when your order status changes.</p>
+                <p className="text-xs text-foreground mb-2">{copy.hint}</p>
                 <button
                   onClick={handleEnable}
                   disabled={enabling}
                   className="text-[10px] tracking-[0.1em] uppercase bg-primary text-primary-foreground px-3 py-1.5 disabled:opacity-50"
                 >
-                  {enabling ? 'Enabling...' : 'Enable notifications'}
+                  {enabling ? copy.enabling : copy.enable}
                 </button>
               </div>
             )}
 
             {notifications.length === 0 ? (
               <div className="px-4 py-8 text-center">
-                <p className="text-xs text-muted-foreground">No notifications yet.</p>
+                <p className="text-xs text-muted-foreground">{copy.empty}</p>
               </div>
             ) : (
               <div>
@@ -155,7 +161,7 @@ export default function NotificationBell() {
                     </button>
                     <button
                       onClick={(e) => handleDelete(e, n.id)}
-                      aria-label="Delete notification"
+                      aria-label={copy.remove}
                       className="absolute top-2.5 right-2 p-1 text-muted-foreground hover:text-destructive transition-colors"
                     >
                       <X size={12} />

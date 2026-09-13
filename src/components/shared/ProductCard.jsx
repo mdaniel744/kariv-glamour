@@ -3,15 +3,15 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { ChevronLeft, ChevronRight, Heart, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/lib/cartContext';
 import { useLocalizedField } from '@/lib/localize';
-import { formatPrice } from '@/lib/constants';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import { useTranslation } from 'react-i18next';
 import { productSlug } from '@/lib/slug';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
-import { getProductPricing } from '@/lib/productMerchant';
 
 export default function ProductCard({ product, enableGallery = true }) {
   const { t } = useTranslation();
+  const { getPricing, formatMoney: formatPrice } = useStorefrontPricing();
   const { toggleWishlist, isInWishlist } = useCart();
   const { localize } = useLocalizedField();
   const wishlisted = isInWishlist(product.id);
@@ -20,7 +20,7 @@ export default function ProductCard({ product, enableGallery = true }) {
   const suppressClickRef = useRef(false);
   const [activeImage, setActiveImage] = useState(0);
   const title = localize(product, 'productTitle');
-  const pricing = getProductPricing(product);
+  const pricing = getPricing(product);
   const productPath = `/product/${productSlug(product)}`;
   const sourceImages = enableGallery
     ? [

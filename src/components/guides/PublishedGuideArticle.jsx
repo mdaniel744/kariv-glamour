@@ -17,7 +17,7 @@ export default function PublishedGuideArticle({ guide, locale }) {
       ...(guide.updated_date ? { dateModified: guide.updated_date } : {}),
       publisher: { '@type': 'Organization', name: 'Kariv Glamour', url: getSiteUrl() },
     }) }} />
-    <Link className="text-primary underline" href={`/${locale}/guides`}>{locale === 'de' ? 'Alle Uhren-Guides' : 'All watch guides'}</Link>
+    <Link className="text-primary underline" href={`/${locale}/guides`}>{locale === 'cs' ? 'Všechny průvodce hodinkami' : locale === 'de' ? 'Alle Uhren-Guides' : 'All watch guides'}</Link>
     <h1 className="mt-6 break-words text-3xl font-semibold leading-tight md:text-4xl">{title}</h1>
     <div className="mt-7 break-words text-lg leading-8 [&_p]:mb-5 [&_h2]:mb-4 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_a]:text-primary [&_a]:underline [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6">
       {/<[a-z][\s\S]*>/i.test(content) ? <SafeHtml html={content} /> : <ReactMarkdown>{content}</ReactMarkdown>}

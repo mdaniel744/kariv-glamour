@@ -6,15 +6,16 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { useTranslation } from 'react-i18next';
-import { formatPrice } from '@/lib/constants';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import { productSlug } from '@/lib/slug';
 import { ShieldCheck, Lock, Check, ArrowLeft, Truck, RotateCcw } from 'lucide-react';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import LocalizedLink from '@/components/LocalizedLink';
-import { getProductAvailability, getProductPricing } from '@/lib/productMerchant';
+import { getProductAvailability } from '@/lib/productMerchant';
 
 export default function Checkout({ id: idProp, initialProduct = null }) {
   const { t } = useTranslation();
+  const { locale, getPricing, formatMoney: formatPrice } = useStorefrontPricing();
   const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const { user, isLoadingAuth } = useAuth();
   const { localePath } = useLanguage();
@@ -24,6 +25,9 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const [submitting, setSubmitting] = useState(false);
   const [order, setOrder] = useState(null);
   const [done, setDone] = useState(false);
+  const [revisedPricing, setRevisedPricing] = useState(null);
+  const [checkoutError, setCheckoutError] = useState('');
+  useEffect(() => { setRevisedPricing(null); setCheckoutError(''); }, [locale, id]);
 
   // Billing (pre-filled from user profile)
   const [billing, setBilling] = useState({
@@ -64,7 +68,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const [idempotencyKey] = useState(() => (typeof crypto !== 'undefined' ? crypto.randomUUID() : `checkout-${id}-${Date.now()}`));
 
   const effectiveShipping = useBillingAsShipping ? billing : shipping;
-  const pricing = getProductPricing(product || {});
+  const pricing = revisedPricing?.locale === locale ? revisedPricing.value : getPricing(product || {});
   const availableToPurchase = getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null;
 
   const canSubmit = () => {
@@ -80,6 +84,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const handleSubmit = async () => {
     if (!canSubmit() || submitting) return;
     setSubmitting(true);
+    setCheckoutError('');
     try {
       // Save billing address as the buyer's default profile for next time.
       await saveMyProfile({
@@ -90,16 +95,20 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
         phoneNumber: billing.phone
       });
 
-      const res = await createOrder({ productId: id, shippingDetails: effectiveShipping, idempotencyKey });
+      const res = await createOrder({ productId: id, shippingDetails: effectiveShipping, idempotencyKey, locale, expectedPrice: pricing.price, expectedCurrency: pricing.currency });
       if (res.ok) {
         setOrder(res.order);
         setDone(true);
       } else {
-        alert(res.error);
+        if (res.code === 'PRICE_CHANGED' && res.pricing) {
+          setRevisedPricing({ locale, value: res.pricing });
+          setAgreed(false);
+        }
+        setCheckoutError(res.error);
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to create order');
+      setCheckoutError(locale === 'cs' ? 'Objednávku se nepodařilo vytvořit. Zkuste to prosím znovu.' : locale === 'de' ? 'Die Bestellung konnte nicht erstellt werden.' : 'Failed to create order. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -124,6 +133,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
           </p>
         </div>
         <div className="border border-border p-5 space-y-2">
+          <div className="flex justify-between text-sm"><span>{t('pages.checkout.total')}</span><strong>{formatPrice(order.totalAmount, order.currency)}</strong></div>
           <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.escrowRef')}</span><span className="text-foreground font-mono font-bold">{order.escrowReference}</span></div>
           <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.status')}</span><span className="text-primary">{t('pages.checkout.orderConfirmedStatus')}</span></div>
         </div>
@@ -229,6 +239,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
             </section>
 
             {/* Continue button */}
+            {checkoutError && <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">{checkoutError}</p>}
             <button
               onClick={handleSubmit}
               disabled={!canSubmit() || submitting}
@@ -257,6 +268,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                   <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.subtotal')}</span><span className="text-foreground">{priceLabel}</span></div>
                   <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.shipping')}</span><span className="text-foreground">{t('pages.checkout.free')}</span></div>
                   <div className="flex justify-between text-sm font-medium pt-2 border-t border-border"><span className="text-foreground">{t('pages.checkout.total')}</span><span className="text-primary">{priceLabel}</span></div>
+                  {locale === 'cs' && <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{pricing.price != null ? 'Objednávku uhradíte v českých korunách (CZK). Potvrzená částka zůstává beze změny.' : 'Aktuální cenu v Kč se nepodařilo ověřit. Objednání je dočasně pozastaveno.'}</p>}
                 </div>
               </div>
               <EscrowTrustBadge />

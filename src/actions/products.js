@@ -6,6 +6,8 @@ import { requireAdmin, requireDealer } from '@/lib/serverAuth';
 import { STORE_ID, shapeProductRows, Products } from '@/lib/supabaseData';
 import { slugify } from '@/lib/slug';
 import { translateMissingProductContent } from '@/lib/productTranslation';
+import { loadCatalogTranslations } from '@/lib/catalogTranslations';
+import { SUPPORTED_LOCALES } from '@/lib/locales';
 
 // Called after every product create/update/delete: clears the in-process
 // catalog cache (src/lib/supabaseData.js) and Next's own page cache, so a
@@ -19,11 +21,13 @@ function invalidateCatalog() {
   revalidatePath('/', 'layout');
 }
 
-async function upsertTranslations(entityType, entityId, fieldValues, automaticKeys = new Set()) {
+async function upsertTranslations(entityType, entityId, fieldValues, automaticKeys = new Set(), savedTranslations = {}) {
   const rows = [];
   for (const [fieldName, locales] of Object.entries(fieldValues)) {
     for (const [locale, value] of Object.entries(locales)) {
-      if (value) {
+      // Do not relabel unchanged machine translations as human or touch their
+      // timestamps. Saved manual corrections also remain entirely untouched.
+      if (value && value !== savedTranslations[`${fieldName}_${locale}`]) {
         rows.push({
           store_id: STORE_ID,
           entity_type: entityType,
@@ -43,16 +47,38 @@ async function upsertTranslations(entityType, entityId, fieldValues, automaticKe
   if (error) throw error;
 }
 
-async function prepareProductPayload(payload) {
-  return translateMissingProductContent(payload);
+async function prepareProductPayload(payload, existingRow = null) {
+  const saved = existingRow ? await loadCatalogTranslations(supabaseAdmin, STORE_ID, 'product', [existingRow.id]) : {};
+  const savedTranslations = saved[existingRow?.id] || {};
+  const combined = { ...savedTranslations, ...payload };
+  if (existingRow) {
+    const fields = { productTitle: 'name', productDescription: 'description', shortDescription: 'short_description' };
+    for (const [field, column] of Object.entries(fields)) {
+      const savedEnglish = saved[existingRow.id]?.[`${field}_en`];
+      // A plain-text dealer edit follows Kariv's English authoring contract.
+      if (typeof payload[field] === 'string' && payload[field] !== existingRow[column] && !payload[`${field}_en`]) {
+        combined[`${field}_en`] = payload[field];
+      } else if (savedEnglish && !payload[`${field}_en`]) {
+        combined[`${field}_en`] = savedEnglish;
+      }
+      if (combined[field] === undefined) combined[field] = existingRow[column];
+      for (const language of SUPPORTED_LOCALES) {
+        const key = `${field}_${language}`;
+        // Empty form fields must not discard translations saved in the dashboard.
+        if (!combined[key] && saved[existingRow.id]?.[key]) combined[key] = saved[existingRow.id][key];
+      }
+    }
+  }
+  const prepared = await translateMissingProductContent(combined);
+  return { ...prepared, savedTranslations };
 }
 
-async function saveProductTranslations(entityId, payload, automaticKeys) {
+async function saveProductTranslations(entityId, payload, automaticKeys, savedTranslations) {
   await upsertTranslations('product', entityId, {
-    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en },
-  }, automaticKeys);
+    productTitle: { de: payload.productTitle_de, en: payload.productTitle_en, cs: payload.productTitle_cs },
+    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en, cs: payload.shortDescription_cs },
+    productDescription: { de: payload.productDescription_de, en: payload.productDescription_en, cs: payload.productDescription_cs },
+  }, automaticKeys, savedTranslations);
 }
 
 async function resolveBrandId(brandName) {
@@ -100,7 +126,7 @@ function buildAttributes(payload, existing = {}) {
 }
 
 async function buildProductRow(payload, existingRow = null) {
-  const name = payload.productTitle_de || payload.productTitle_en || payload.productTitle || existingRow?.name;
+  const name = payload.productTitle_en || payload.productTitle || payload.productTitle_de || existingRow?.name;
   const brandId = payload.brand ? await resolveBrandId(payload.brand) : existingRow?.brand_id ?? null;
   const collectionId = payload.collection
     ? await resolveCollectionId(payload.collection, brandId)
@@ -114,9 +140,9 @@ async function buildProductRow(payload, existingRow = null) {
   return {
     store_id: STORE_ID,
     name,
-    slug: payload.slug || existingRow?.slug || slugify(name),
-    description: payload.productDescription_de || payload.productDescription_en || payload.productDescription || existingRow?.description,
-    short_description: payload.shortDescription_de || payload.shortDescription_en || payload.shortDescription || existingRow?.short_description,
+    slug: existingRow?.slug || payload.slug || slugify(name),
+    description: payload.productDescription_en || payload.productDescription || payload.productDescription_de || existingRow?.description,
+    short_description: payload.shortDescription_en || payload.shortDescription || payload.shortDescription_de || existingRow?.short_description,
     brand_id: brandId,
     collection_id: collectionId,
     reference_number: payload.referenceNumber ?? existingRow?.reference_number,
@@ -136,7 +162,7 @@ export async function createProduct(payload) {
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
-  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
+  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys, prepared.savedTranslations);
   invalidateCatalog();
 
   return { id: data.id, translationWarning: prepared.warning || undefined };
@@ -144,13 +170,14 @@ export async function createProduct(payload) {
 
 export async function updateProduct(id, payload) {
   await requireAdmin();
-  const { data: existingRow } = await supabaseAdmin.from('products').select('*').eq('id', id).single();
-  const prepared = await prepareProductPayload(payload);
+  const { data: existingRow, error: fetchError } = await supabaseAdmin.from('products').select('*').eq('store_id', STORE_ID).eq('id', id).single();
+  if (fetchError || !existingRow) throw new Error('Product not found in this store');
+  const prepared = await prepareProductPayload(payload, existingRow);
   const row = await buildProductRow(prepared.payload, existingRow);
-  const { error } = await supabaseAdmin.from('products').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('products').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
 
-  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
+  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys, prepared.savedTranslations);
   invalidateCatalog();
 
   return { id, translationWarning: prepared.warning || undefined };
@@ -158,7 +185,7 @@ export async function updateProduct(id, payload) {
 
 export async function deleteProduct(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('products').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('products').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidateCatalog();
 }
@@ -174,7 +201,7 @@ export async function createDealerListing(payload) {
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
-  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys);
+  await saveProductTranslations(data.id, prepared.payload, prepared.automaticKeys, prepared.savedTranslations);
   invalidateCatalog();
 
   return { id: data.id, translationWarning: prepared.warning || undefined };
@@ -186,16 +213,17 @@ export async function updateDealerListing(id, payload) {
     .from('products')
     .select('*')
     .eq('id', id)
+    .eq('store_id', STORE_ID)
     .eq('dealer_id', dealer.id)
     .single();
   if (fetchError || !existingRow) throw new Error('Listing not found or not owned by you');
 
-  const prepared = await prepareProductPayload(payload);
+  const prepared = await prepareProductPayload(payload, existingRow);
   const row = await buildProductRow(prepared.payload, existingRow);
-  const { error } = await supabaseAdmin.from('products').update(row).eq('id', id).eq('dealer_id', dealer.id);
+  const { error } = await supabaseAdmin.from('products').update(row).eq('store_id', STORE_ID).eq('id', id).eq('dealer_id', dealer.id);
   if (error) throw new Error(error.message);
 
-  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys);
+  await saveProductTranslations(id, prepared.payload, prepared.automaticKeys, prepared.savedTranslations);
   invalidateCatalog();
 
   return { id, translationWarning: prepared.warning || undefined };
@@ -203,7 +231,7 @@ export async function updateDealerListing(id, payload) {
 
 export async function deleteDealerListing(id) {
   const dealer = await requireDealer();
-  const { error } = await supabaseAdmin.from('products').delete().eq('id', id).eq('dealer_id', dealer.id);
+  const { error } = await supabaseAdmin.from('products').delete().eq('store_id', STORE_ID).eq('id', id).eq('dealer_id', dealer.id);
   if (error) throw new Error(error.message);
   invalidateCatalog();
 }
@@ -226,6 +254,7 @@ export async function getMyDealerListing(id) {
     .from('products')
     .select('*')
     .eq('id', id)
+    .eq('store_id', STORE_ID)
     .eq('dealer_id', dealer.id)
     .single();
   if (error || !data) return null;

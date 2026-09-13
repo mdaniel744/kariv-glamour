@@ -5,9 +5,19 @@ import { useLanguage } from '@/lib/languageContext';
 const LANGUAGE_OPTIONS = {
   de: { label: 'Deutsch' },
   en: { label: 'English' },
+  cs: { label: 'Čeština' },
 };
 
 function FlagIcon({ locale, className = '' }) {
+  if (locale === 'cs') {
+    return (
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 60 36" className={`overflow-hidden rounded-[2px] shadow-[0_0_0_1px_rgba(0,0,0,0.12)] ${className}`}>
+        <rect width="60" height="18" fill="#fff" />
+        <rect width="60" height="18" y="18" fill="#D7141A" />
+        <path d="M0 0 30 18 0 36Z" fill="#11457E" />
+      </svg>
+    );
+  }
   if (locale === 'en') {
     return (
       <svg aria-hidden="true" focusable="false" viewBox="0 0 60 36" className={`overflow-hidden rounded-[2px] shadow-[0_0_0_1px_rgba(0,0,0,0.12)] ${className}`}>
@@ -33,7 +43,7 @@ export default function LanguageSwitcher({ className = '' }) {
   const { locale, setLocale, supportedLocales } = useLanguage();
   const [open, setOpen] = useState(false);
   const switcherRef = useRef(null);
-  const switcherLabel = locale === 'de' ? 'Sprache ändern' : 'Change language';
+  const switcherLabel = { de: 'Sprache ändern', en: 'Change language', cs: 'Změnit jazyk' }[locale];
 
   useEffect(() => {
     if (!open) return undefined;

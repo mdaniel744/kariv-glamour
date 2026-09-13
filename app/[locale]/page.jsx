@@ -2,12 +2,14 @@ import { notFound } from 'next/navigation';
 import HomePageClient from '@/components/next-pages/HomePageClient';
 import enCommon from '@/locales/en/common.json';
 import deCommon from '@/locales/de/common.json';
-import { getSiteUrl, safeJsonLd } from '@/lib/seo';
+import csCommon from '@/locales/cs/common.json';
+import { getSiteUrl, safeJsonLd, localizedMetadata, SUPPORTED_LOCALES } from '@/lib/seo';
+import { LOCALE_TAGS } from '@/lib/locales';
 
-const SUPPORTED_LOCALES = ['de', 'en'];
 const DICTIONARIES = {
   de: deCommon,
   en: enCommon,
+  cs: csCommon,
 };
 
 export function generateStaticParams() {
@@ -19,25 +21,7 @@ export async function generateMetadata({ params }) {
   const dictionary = DICTIONARIES[locale] || DICTIONARIES.de;
   const seo = dictionary.seo?.home || {};
 
-  return {
-    title: seo.title,
-    description: seo.description,
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        de: '/de',
-        en: '/en',
-        'x-default': '/de',
-      },
-    },
-    openGraph: {
-      title: seo.title,
-      description: seo.description,
-      locale: locale === 'de' ? 'de_DE' : 'en_US',
-      alternateLocale: locale === 'de' ? ['en_US'] : ['de_DE'],
-      url: `/${locale}`,
-    },
-  };
+  return localizedMetadata({ locale, title: seo.title, description: seo.description });
 }
 
 export default async function LocaleHomePage({ params }) {
@@ -64,7 +48,7 @@ export default async function LocaleHomePage({ params }) {
       url: siteUrl,
       name: 'Kariv Glamour',
       publisher: { '@id': `${siteUrl}/#organization` },
-      inLanguage: locale === 'de' ? 'de-DE' : 'en-US',
+      inLanguage: LOCALE_TAGS[locale],
       potentialAction: {
         '@type': 'SearchAction',
         target: {

@@ -26,10 +26,10 @@ export default function CartierCollectionGrid() {
           <p className="text-sm max-w-2xl mx-auto text-muted-foreground">{t('collectionCarousel.description', { brand: BRAND })}</p>
         </div>
         <div className="mb-6 hidden items-center justify-end gap-2 md:flex">
-          <button type="button" onClick={() => scroll(-1)} aria-label="Previous Cartier collections" className="flex h-10 w-10 items-center justify-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary">
+          <button type="button" onClick={() => scroll(-1)} aria-label={t('common:previous')} className="flex h-10 w-10 items-center justify-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary">
             <ChevronLeft size={18} />
           </button>
-          <button type="button" onClick={() => scroll(1)} aria-label="Next Cartier collections" className="flex h-10 w-10 items-center justify-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary">
+          <button type="button" onClick={() => scroll(1)} aria-label={t('common:next')} className="flex h-10 w-10 items-center justify-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary">
             <ChevronRight size={18} />
           </button>
         </div>

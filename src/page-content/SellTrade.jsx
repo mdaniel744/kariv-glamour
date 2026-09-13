@@ -92,7 +92,7 @@ export default function SellTrade() {
                 <select value={formData.condition} onChange={e => setFormData({...formData, condition: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full">
                   <option value="" className="bg-popover">{t('pages.sellTrade.placeholderCondition')}</option>
                   {["New", "Unworn", "Excellent", "Very Good", "Good", "Vintage"].map(c => (
-                    <option key={c} value={c} className="bg-popover">{c}</option>
+                    <option key={c} value={c} className="bg-popover">{t(`products:conditions.${c}`)}</option>
                   ))}
                 </select>
               </div>

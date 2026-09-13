@@ -66,12 +66,12 @@ export async function createBrand(payload) {
   const { data, error } = await supabaseAdmin.from('brands').insert(row).select().single();
   if (error) throw new Error(error.message);
   await upsertTranslations('brand', data.id, {
-    brandName: { de: payload.brandName_de, en: payload.brandName_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    longDescription: { de: payload.longDescription_de, en: payload.longDescription_en },
-    brandDisclaimer: { de: payload.brandDisclaimer_de, en: payload.brandDisclaimer_en },
-    seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en },
-    seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en },
+    brandName: { de: payload.brandName_de, en: payload.brandName_en, cs: payload.brandName_cs },
+    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en, cs: payload.shortDescription_cs },
+    longDescription: { de: payload.longDescription_de, en: payload.longDescription_en, cs: payload.longDescription_cs },
+    brandDisclaimer: { de: payload.brandDisclaimer_de, en: payload.brandDisclaimer_en, cs: payload.brandDisclaimer_cs },
+    seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en, cs: payload.seoTitle_cs },
+    seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en, cs: payload.seoDescription_cs },
   });
   invalidate(Brands);
   return { id: data.id };
@@ -91,15 +91,15 @@ export async function updateBrand(id, payload) {
     logo_dark_url: payload.brandLogoDark,
     hero_image_url: payload.heroImage,
   };
-  const { error } = await supabaseAdmin.from('brands').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('brands').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   await upsertTranslations('brand', id, {
-    brandName: { de: payload.brandName_de, en: payload.brandName_en },
-    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en },
-    longDescription: { de: payload.longDescription_de, en: payload.longDescription_en },
-    brandDisclaimer: { de: payload.brandDisclaimer_de, en: payload.brandDisclaimer_en },
-    seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en },
-    seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en },
+    brandName: { de: payload.brandName_de, en: payload.brandName_en, cs: payload.brandName_cs },
+    shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en, cs: payload.shortDescription_cs },
+    longDescription: { de: payload.longDescription_de, en: payload.longDescription_en, cs: payload.longDescription_cs },
+    brandDisclaimer: { de: payload.brandDisclaimer_de, en: payload.brandDisclaimer_en, cs: payload.brandDisclaimer_cs },
+    seoTitle: { de: payload.seoTitle_de, en: payload.seoTitle_en, cs: payload.seoTitle_cs },
+    seoDescription: { de: payload.seoDescription_de, en: payload.seoDescription_en, cs: payload.seoDescription_cs },
   });
   invalidate(Brands);
   return { id };
@@ -107,7 +107,7 @@ export async function updateBrand(id, payload) {
 
 export async function deleteBrand(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('brands').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('brands').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidate(Brands);
 }
@@ -128,8 +128,8 @@ export async function createCollection(payload) {
   const { data, error } = await supabaseAdmin.from('collections').insert(row).select().single();
   if (error) throw new Error(error.message);
   await upsertTranslations('collection', data.id, {
-    collectionName: { de: payload.collectionName_de, en: payload.collectionName_en },
-    description: { de: payload.description_de, en: payload.description_en },
+    collectionName: { de: payload.collectionName_de, en: payload.collectionName_en, cs: payload.collectionName_cs },
+    description: { de: payload.description_de, en: payload.description_en, cs: payload.description_cs },
   });
   invalidate(Collections);
   return { id: data.id };
@@ -145,11 +145,11 @@ export async function updateCollection(id, payload) {
     description: payload.description,
     image_url: payload.heroImage,
   };
-  const { error } = await supabaseAdmin.from('collections').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('collections').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   await upsertTranslations('collection', id, {
-    collectionName: { de: payload.collectionName_de, en: payload.collectionName_en },
-    description: { de: payload.description_de, en: payload.description_en },
+    collectionName: { de: payload.collectionName_de, en: payload.collectionName_en, cs: payload.collectionName_cs },
+    description: { de: payload.description_de, en: payload.description_en, cs: payload.description_cs },
   });
   invalidate(Collections);
   return { id };
@@ -157,7 +157,7 @@ export async function updateCollection(id, payload) {
 
 export async function deleteCollection(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('collections').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('collections').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidate(Collections);
 }
@@ -170,8 +170,8 @@ export async function createFaq(payload) {
   const { data, error } = await supabaseAdmin.from('faqs').insert(row).select().single();
   if (error) throw new Error(error.message);
   await upsertTranslations('faq', data.id, {
-    question: { de: payload.question_de, en: payload.question_en },
-    answer: { de: payload.answer_de, en: payload.answer_en },
+    question: { de: payload.question_de, en: payload.question_en, cs: payload.question_cs },
+    answer: { de: payload.answer_de, en: payload.answer_en, cs: payload.answer_cs },
   });
   invalidate(FAQ);
   return { id: data.id };
@@ -180,11 +180,11 @@ export async function createFaq(payload) {
 export async function updateFaq(id, payload) {
   await requireAdmin();
   const row = { question: payload.question, answer: payload.answer, category: payload.category };
-  const { error } = await supabaseAdmin.from('faqs').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('faqs').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   await upsertTranslations('faq', id, {
-    question: { de: payload.question_de, en: payload.question_en },
-    answer: { de: payload.answer_de, en: payload.answer_en },
+    question: { de: payload.question_de, en: payload.question_en, cs: payload.question_cs },
+    answer: { de: payload.answer_de, en: payload.answer_en, cs: payload.answer_cs },
   });
   invalidate(FAQ);
   return { id };
@@ -192,7 +192,7 @@ export async function updateFaq(id, payload) {
 
 export async function deleteFaq(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('faqs').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('faqs').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidate(FAQ);
 }
@@ -213,9 +213,9 @@ export async function createGuide(payload) {
   const { data, error } = await supabaseAdmin.from('guides').insert(row).select().single();
   if (error) throw new Error(error.message);
   await upsertTranslations('guide', data.id, {
-    title: { de: payload.title_de, en: payload.title_en },
-    excerpt: { de: payload.excerpt_de, en: payload.excerpt_en },
-    content: { de: payload.content_de, en: payload.content_en },
+    title: { de: payload.title_de, en: payload.title_en, cs: payload.title_cs },
+    excerpt: { de: payload.excerpt_de, en: payload.excerpt_en, cs: payload.excerpt_cs },
+    content: { de: payload.content_de, en: payload.content_en, cs: payload.content_cs },
   });
   invalidate(WatchGuides);
   return { id: data.id };
@@ -231,12 +231,12 @@ export async function updateGuide(id, payload) {
     content: payload.content,
     published: !!payload.published,
   };
-  const { error } = await supabaseAdmin.from('guides').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('guides').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   await upsertTranslations('guide', id, {
-    title: { de: payload.title_de, en: payload.title_en },
-    excerpt: { de: payload.excerpt_de, en: payload.excerpt_en },
-    content: { de: payload.content_de, en: payload.content_en },
+    title: { de: payload.title_de, en: payload.title_en, cs: payload.title_cs },
+    excerpt: { de: payload.excerpt_de, en: payload.excerpt_en, cs: payload.excerpt_cs },
+    content: { de: payload.content_de, en: payload.content_en, cs: payload.content_cs },
   });
   invalidate(WatchGuides);
   return { id };
@@ -244,7 +244,7 @@ export async function updateGuide(id, payload) {
 
 export async function deleteGuide(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('guides').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('guides').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidate(WatchGuides);
 }
@@ -264,8 +264,8 @@ export async function createLegalPage(payload) {
   const { data, error } = await supabaseAdmin.from('legal_pages').insert(row).select().single();
   if (error) throw new Error(error.message);
   await upsertTranslations('legal_page', data.id, {
-    title: { de: payload.title_de, en: payload.title_en },
-    content: { de: payload.content_de, en: payload.content_en },
+    title: { de: payload.title_de, en: payload.title_en, cs: payload.title_cs },
+    content: { de: payload.content_de, en: payload.content_en, cs: payload.content_cs },
   });
   invalidate(LegalPages);
   return { id: data.id };
@@ -280,11 +280,11 @@ export async function updateLegalPage(id, payload) {
     meta_title: payload.seoTitle,
     meta_description: payload.seoDescription,
   };
-  const { error } = await supabaseAdmin.from('legal_pages').update(row).eq('id', id);
+  const { error } = await supabaseAdmin.from('legal_pages').update(row).eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   await upsertTranslations('legal_page', id, {
-    title: { de: payload.title_de, en: payload.title_en },
-    content: { de: payload.content_de, en: payload.content_en },
+    title: { de: payload.title_de, en: payload.title_en, cs: payload.title_cs },
+    content: { de: payload.content_de, en: payload.content_en, cs: payload.content_cs },
   });
   invalidate(LegalPages);
   return { id };
@@ -292,7 +292,7 @@ export async function updateLegalPage(id, payload) {
 
 export async function deleteLegalPage(id) {
   await requireAdmin();
-  const { error } = await supabaseAdmin.from('legal_pages').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('legal_pages').delete().eq('store_id', STORE_ID).eq('id', id);
   if (error) throw new Error(error.message);
   invalidate(LegalPages);
 }

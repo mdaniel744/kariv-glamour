@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { normalizeLocale } from './src/lib/locales';
 
 const isAdminRoute = createRouteMatcher(['/:locale/admin(.*)']);
 const isDealerRoute = createRouteMatcher(['/:locale/portal/listings(.*)', '/:locale/portal/sales(.*)']);
@@ -12,7 +13,7 @@ const isSignedInRoute = createRouteMatcher([
 
 function localeFromPath(pathname) {
   const segment = pathname.split('/')[1];
-  return segment === 'en' ? 'en' : 'de';
+  return normalizeLocale(segment);
 }
 
 export default clerkMiddleware(async (auth, request) => {

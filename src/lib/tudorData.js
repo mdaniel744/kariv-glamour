@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Tudor collections, filters, and SEO data
 // Tudor is positioned as robust Swiss luxury with tool-watch character,
 // Black Bay heritage, dive watches, sport models, and versatile everyday luxury.
@@ -451,3 +454,7 @@ export const TUDOR_SEO_PAGES = {
     ],
   },
 };
+
+applyCzechSeoPages(TUDOR_SEO_PAGES, 'Tudor', 'tudor');
+applyCzechBrandFaqs(TUDOR_FAQS, 'tudor');
+applyCzechBrandContent('tudor', TUDOR_COLLECTIONS, TUDOR_QUICK_FILTERS, TUDOR_SEO_CARDS, TUDOR_READ_MORE, TUDOR_INTERNAL_LINKS);

@@ -1,5 +1,6 @@
 import { localizedField } from './seo.js';
 import { stripHtmlToText } from './sanitize.js';
+import { convertPricing } from './currencyConversion.js';
 
 const SCHEMA = 'https://schema.org/';
 const CURRENCIES = typeof Intl.supportedValuesOf === 'function' ? new Set(Intl.supportedValuesOf('currency')) : null;
@@ -22,6 +23,7 @@ export function merchantPlainText(value) {
 
 export function productMetaDescription(product, locale, maxLength = 320) {
   const text = merchantPlainText(
+    (locale === 'cs' && (product.metaDescription_cs || product.shortDescription_cs || product.productDescription_cs)) ||
     localizedField(product, 'metaDescription', locale) || localizedField(product, 'shortDescription', locale) ||
     localizedField(product, 'productDescription', locale)
   );
@@ -31,20 +33,24 @@ export function productMetaDescription(product, locale, maxLength = 320) {
   return `${(wordEnd > 0 ? excerpt.slice(0, wordEnd) : excerpt).trimEnd()}…`;
 }
 
+export function hasCzechProductCopy(product = {}) {
+  return Boolean(merchantPlainText(product.productTitle_cs) && merchantPlainText(product.productDescription_cs));
+}
+
 function positiveAmount(value) {
   if (value == null || value === '') return null;
   const amount = Number(value);
   return Number.isFinite(amount) && amount > 0 ? amount : null;
 }
 
-export function getProductPricing(product = {}) {
+export function getProductPricing(product = {}, options = {}) {
   const regularPrice = positiveAmount(product.price);
   const proposedSale = positiveAmount(product.salePrice);
   const salePrice = regularPrice != null && proposedSale != null && proposedSale < regularPrice ? proposedSale : null;
   const recordedCurrency = String(product.currency || 'EUR').trim().toUpperCase();
   const currency = /^[A-Z]{3}$/.test(recordedCurrency) && (!CURRENCIES || CURRENCIES.has(recordedCurrency))
     ? recordedCurrency : null;
-  return { price: salePrice ?? regularPrice, regularPrice, salePrice, currency };
+  return convertPricing({ price: salePrice ?? regularPrice, regularPrice, salePrice, currency }, options);
 }
 
 export function getProductAvailability(product = {}) {
@@ -90,8 +96,8 @@ export function productIdentifiers(product = {}) {
   return result;
 }
 
-export function buildProductMerchantSchema(product, { locale, url }) {
-  const pricing = getProductPricing(product);
+export function buildProductMerchantSchema(product, { locale, url, exchangeRates }) {
+  const pricing = getProductPricing(product, { locale, exchangeRates });
   const availability = getProductAvailability(product);
   const images = [...new Set([
     ...(Array.isArray(product.productImages) ? product.productImages : []), product.featuredImage,
@@ -111,7 +117,7 @@ export function buildProductMerchantSchema(product, { locale, url }) {
     ...productIdentifiers(product),
     brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
     category: 'Luxury Watches',
-    ...(product.isPublished === true && pricing.price != null && pricing.currency ? {
+    ...(product.isPublished === true && pricing.price != null && pricing.currency && (locale !== 'cs' || hasCzechProductCopy(product)) ? {
       offers: {
         '@type': 'Offer', url, price: pricing.price, priceCurrency: pricing.currency,
         availability: availability.schema, itemCondition: getProductCondition(product),

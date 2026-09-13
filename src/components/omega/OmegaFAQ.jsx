@@ -7,7 +7,11 @@ import { OMEGA_FAQS } from '@/lib/omegaData';
 
 const BRAND = 'Omega';
 
-function FaqItem({ faq, index, localize }) {
+export function omegaFaqAnswerSegments(faq, locale) {
+  return locale === 'cs' && Array.isArray(faq.answer_cs) ? faq.answer_cs : faq.answer;
+}
+
+function FaqItem({ faq, index, localize, locale }) {
   const [open, setOpen] = useState(index === 0);
   return (
     <div className="border-b border-border">
@@ -18,7 +22,7 @@ function FaqItem({ faq, index, localize }) {
       {open &&
         <div className="pb-5">
           <p className="text-xs leading-relaxed text-muted-foreground">
-            {faq.answer.map((seg, i) => seg.link ?
+            {omegaFaqAnswerSegments(faq, locale).map((seg, i) => seg.link ?
               <LocalizedLink key={i} to={seg.link} className="underline decoration-dotted hover:opacity-70 text-primary">{localize(seg, 'text')}</LocalizedLink> :
               <span key={i}>{localize(seg, 'text')}</span>
             )}
@@ -38,7 +42,7 @@ export default function OmegaFAQ() {
       '@context': 'https://schema.org', '@type': 'FAQPage',
       mainEntity: OMEGA_FAQS.map((faq) => ({
         '@type': 'Question', name: localize(faq, 'question'),
-        acceptedAnswer: { '@type': 'Answer', text: faq.answer.map((seg) => localize(seg, 'text')).join('') },
+        acceptedAnswer: { '@type': 'Answer', text: omegaFaqAnswerSegments(faq, locale).map((seg) => localize(seg, 'text')).join('') },
       })),
     };
     const script = document.createElement('script');
@@ -55,7 +59,7 @@ export default function OmegaFAQ() {
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-4 text-primary">{t('faq.eyebrow')}</span>
           <h2 className="text-3xl md:text-4xl text-foreground [font-family:'Cormorant_Garamond',_serif] font-semibold">{t('faq.heading', { brand: BRAND })}</h2>
         </div>
-        <div>{OMEGA_FAQS.map((faq, i) => <FaqItem key={i} faq={faq} index={i} localize={localize} />)}</div>
+        <div>{OMEGA_FAQS.map((faq, i) => <FaqItem key={i} faq={faq} index={i} localize={localize} locale={locale} />)}</div>
         <div className="mt-10 text-center">
           <LocalizedLink to="/customer-service" className="text-[11px] tracking-[0.12em] uppercase underline text-primary">{t('faq.contactCS')}</LocalizedLink>
         </div>

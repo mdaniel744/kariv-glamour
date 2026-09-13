@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Rolex theme colors
 export const ROLEX_THEME = {
   emerald: '#0B4D3C',
@@ -112,6 +115,10 @@ export const ROLEX_SEO_CARDS = [
 export const ROLEX_EDITORIAL_SECTIONS = [
   {
     id: 'rolex-story',
+    eyebrow_cs: 'Odkaz značky',
+    title_cs: 'Příběh značky Rolex',
+    description_cs: 'Rolex již více než století utváří svět jemného hodinářství a propojuje neustálé inovace s nezaměnitelným designem. Od vodotěsného pouzdra Oyster až po profesionální hodinky, které doprovázely průzkumníky, potápěče a piloty, je jeho příběh spojen s přesností, prestiží a kulturním významem. V Kariv Glamour tento odkaz představujeme prostřednictvím pečlivě vybraných hodinek Rolex s transparentními údaji a odborným pohledem.',
+    cta_cs: 'Přečíst příběh značky Rolex',
     eyebrow_en: 'Heritage', eyebrow_de: 'Erbe',
     title_en: 'The Rolex Story', title_de: 'Die Rolex Story',
     description_en: 'Rolex has shaped the world of fine watchmaking for over a century, combining relentless innovation with an unmistakable design language. From the first waterproof Oyster case to the professional tool watches that accompanied explorers, divers, and aviators, the Rolex story is one of precision, prestige, and cultural recognition. At Kariv Glamour, we celebrate this heritage by offering carefully selected Rolex timepieces, each presented with full transparency and expert insight.',
@@ -126,6 +133,10 @@ export const ROLEX_EDITORIAL_SECTIONS = [
   },
   {
     id: 'rolex-watchmaking',
+    eyebrow_cs: 'Řemeslné mistrovství',
+    title_cs: 'Hodinářství Rolex',
+    description_cs: 'Hodinářství Rolex znamená přesnost, odolnou konstrukci pouzdra a spolehlivé automatické strojky. Od legendárního pouzdra Oyster po pečlivě vybrané materiály, náramky a lunety je každá součást navržena s ohledem na dlouhou životnost a výkon. Kariv Glamour vám pomáhá porozumět řemeslu za jednotlivými hodinkami Rolex, abyste se mohli rozhodnout informovaně a s jistotou.',
+    cta_cs: 'Objevit hodinářství Rolex',
     eyebrow_en: 'Craftsmanship', eyebrow_de: 'Handwerkskunst',
     title_en: 'Rolex Watchmaking', title_de: 'Rolex Uhrmacherei',
     description_en: 'Rolex watchmaking stands for precision, robust case construction, and reliable automatic movements. From the legendary Oyster case to carefully selected materials, bracelets, and bezels, every component is engineered for longevity and performance. At Kariv Glamour, we help you understand the craftsmanship behind each Rolex, so you can make an informed and confident decision.',
@@ -141,6 +152,10 @@ export const ROLEX_EDITORIAL_SECTIONS = [
   },
   {
     id: 'rolex-maintenance',
+    eyebrow_cs: 'Péče',
+    title_cs: 'Údržba hodinek Rolex',
+    description_cs: 'Správná péče zachovává krásu, spolehlivost a hodnotu hodinek Rolex. Pravidelný servis, kontrola vodotěsnosti, péče o náramek a pouzdro, bezpečné uložení a ochrana před nárazy, magnety a neodbornými úpravami přispívají k dlouhodobému fungování. U použitých hodinek Rolex mají zvláštní význam doklady a servisní historie. Kariv Glamour přináší informace, které vám pomohou pečovat o hodinky s jistotou.',
+    cta_cs: 'Více o údržbě hodinek Rolex',
     eyebrow_en: 'Care', eyebrow_de: 'Pflege',
     title_en: 'Rolex Maintenance', title_de: 'Rolex Wartung',
     description_en: 'Proper care preserves the beauty, reliability, and value of a Rolex watch. Regular servicing, water resistance checks, bracelet and case care, careful storage, and avoiding shocks, magnets, and unauthorized modifications all contribute to long-term performance. For pre-owned Rolex watches, documentation and service history are especially important. Kariv Glamour provides guidance to help you maintain your timepiece with confidence.',
@@ -493,3 +508,7 @@ export const ROLEX_SEO_PAGES = {
     isGuide: true,
   },
 };
+
+applyCzechSeoPages(ROLEX_SEO_PAGES, 'Rolex', 'rolex');
+applyCzechBrandFaqs(ROLEX_FAQS, 'rolex');
+applyCzechBrandContent('rolex', ROLEX_COLLECTIONS, ROLEX_QUICK_FILTERS, ROLEX_SEO_CARDS, ROLEX_READ_MORE, ROLEX_INTERNAL_LINKS, ROLEX_EDITORIAL_SECTIONS, ROLEX_TRUST_POINTS, ROLEX_TRUST_LINKS);

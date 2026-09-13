@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import BrandHero from '@/components/shared/BrandHero';
 
@@ -6,6 +7,7 @@ const BRAND = 'Rolex';
 
 export default function RolexHero() {
   const { t } = useTranslation('brandComponents');
+  const { locale } = useLanguage();
   const links = [
     { label: t('hero.anchorCollections'), href: '#rolex-collections' },
     { label: t('hero.anchorNewArrivals'), href: '#rolex-products' },
@@ -14,5 +16,5 @@ export default function RolexHero() {
     { label: t('hero.anchorMaintenance'), href: '#rolex-maintenance' },
   ];
 
-  return <BrandHero brand={BRAND} image="/brand-assets/rolex/collections/rolex-submariner.png" imageAlt="Rolex Submariner watch" shopTo="/rolex-uhr-kaufen" collectionsHref="#rolex-collections" links={links} />;
+  return <BrandHero brand={BRAND} image="/brand-assets/rolex/collections/rolex-submariner.png" imageAlt={locale === 'cs' ? "Hodinky Rolex Submariner" : "Rolex Submariner watch"} shopTo="/rolex-uhr-kaufen" collectionsHref="#rolex-collections" links={links} />;
 }

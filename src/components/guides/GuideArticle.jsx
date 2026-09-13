@@ -5,6 +5,13 @@ import { EDITORIAL_GUIDES, localizeEditorialGuide } from '@/lib/editorialGuides'
 import ResearchSources, { SourceLinks } from './ResearchSources';
 
 const UI = {
+  cs: {
+    home: 'Úvod', guides: 'Průvodce hodinkami', contents: 'Obsah průvodce',
+    keyPoints: 'Nejdůležitější body', faq: 'Časté otázky', related: 'Pokračujte ve čtení',
+    shopTitle: 'Chcete si prohlédnout nabídku?',
+    shopText: 'Projděte dostupné hodinky s podrobným popisem, informacemi o stavu a možnostech nákupu.',
+    shopCta: 'Prohlédnout hodinky', readArticle: 'Přečíst článek',
+  },
   en: {
     home: 'Home',
     guides: 'Watch Guides',
@@ -40,7 +47,7 @@ export default function GuideArticle({ guide, locale }) {
     <article className="bg-background font-body text-foreground">
       <header className="border-b border-border bg-secondary/55">
         <div className="mx-auto max-w-6xl px-5 py-10 sm:px-7 md:py-16 lg:px-10">
-          <nav aria-label="Breadcrumb" className="mb-8 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground">
+          <nav aria-label={locale === 'cs' ? 'Drobečková navigace' : locale === 'de' ? 'Brotkrumennavigation' : 'Breadcrumb'} className="mb-8 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground">
             <Link href={`/${locale}`} className="transition-colors hover:text-primary">{copy.home}</Link>
             <ChevronRight size={13} aria-hidden="true" />
             <Link href={`/${locale}/guides`} className="transition-colors hover:text-primary">{copy.guides}</Link>
@@ -126,7 +133,7 @@ export default function GuideArticle({ guide, locale }) {
             )}
 
             {guide.sources && <ResearchSources ids={guide.sources} locale={locale} />}
-            <p className="mt-6 text-base leading-7"><Link className="text-primary underline underline-offset-4" href={`/${locale}/guides#brand-guides`}>{locale === 'de' ? 'Referenzen, Technik und Geschichte nach Uhrenmarke vertiefen' : 'Explore reference, technology and history guides by watch brand'}</Link></p>
+            <p className="mt-6 text-base leading-7"><Link className="text-primary underline underline-offset-4" href={`/${locale}/guides#brand-guides`}>{locale === 'cs' ? 'Prozkoumat reference, techniku a historii podle značky hodinek' : locale === 'de' ? 'Referenzen, Technik und Geschichte nach Uhrenmarke vertiefen' : 'Explore reference, technology and history guides by watch brand'}</Link></p>
             <section aria-labelledby="guide-faq" className="mt-14 border-t border-border pt-10">
               <h2 id="guide-faq" className="text-2xl font-bold tracking-[-0.025em] text-foreground md:text-3xl">{copy.faq}</h2>
               <div className="mt-6 divide-y divide-border border-y border-border">

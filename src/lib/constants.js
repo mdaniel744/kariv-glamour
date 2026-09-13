@@ -164,6 +164,6 @@ export const SORT_OPTIONS = [
 
 export const BRAND_DISCLAIMER = "Kariv Glamour is an independent luxury watch ecommerce platform. Unless expressly stated, Kariv Glamour is not affiliated with, endorsed by, or an official authorized dealer of the brands displayed on this website. Brand names, model names, and trademarks are used only to identify authentic products available for sale.";
 
-export const formatPrice = (price, currency = "EUR") => {
-  return new Intl.NumberFormat('de-DE', { style: 'currency', currency }).format(price);
+export const formatPrice = (price, currency = "EUR", locale) => {
+  return new Intl.NumberFormat(locale === 'cs' || (!locale && currency === 'CZK') ? 'cs-CZ' : locale === 'en' ? 'en-GB' : 'de-DE', { style: 'currency', currency }).format(price);
 };

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/languageContext';
 import { getSiteUrl } from '@/lib/seo';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, OPEN_GRAPH_LOCALES } from '@/lib/locales';
 
 const SITE_NAME = 'Kariv Glamour';
-const LOCALE_FULL = { de: 'de_DE', en: 'en_US' };
 
 function upsertMeta(attr, key, content) {
   if (!content) return;
@@ -80,16 +80,12 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     const currentUrl = origin + pathname;
 
     // Build hreflang alternate URLs by swapping the locale segment
-    const otherLocale = locale === 'de' ? 'en' : 'de';
     const segments = pathname.split('/').filter(Boolean);
-    if (segments.length > 0 && (segments[0] === 'de' || segments[0] === 'en')) {
-      segments[0] = otherLocale;
-    }
-    const altPath = '/' + segments.join('/');
-    const altUrl = origin + altPath;
+    if (SUPPORTED_LOCALES.includes(segments[0])) segments.shift();
+    const path = segments.length ? '/' + segments.join('/') : '';
 
     // Title
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — ${locale === 'de' ? 'Authentische Luxusuhren' : 'Authenticated Luxury Watches'}`;
+    const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — ${{ de: 'Authentische Luxusuhren', en: 'Authenticated Luxury Watches', cs: 'Ověřené luxusní hodinky' }[locale]}`;
     document.title = fullTitle;
 
     // Description
@@ -102,9 +98,8 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     upsertLink('canonical', currentUrl);
 
     // hreflang alternates
-    upsertLink('alternate', currentUrl, locale);
-    upsertLink('alternate', altUrl, otherLocale);
-    upsertLink('alternate', origin + altPath.replace(`/${otherLocale}`, ''), 'x-default');
+    for (const language of SUPPORTED_LOCALES) upsertLink('alternate', `${origin}/${language}${path}`, language);
+    upsertLink('alternate', `${origin}/${DEFAULT_LOCALE}${path}`, 'x-default');
 
     // Open Graph
     upsertMeta('property', 'og:title', fullTitle);
@@ -112,8 +107,14 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     upsertMeta('property', 'og:url', currentUrl);
     upsertMeta('property', 'og:type', type);
     upsertMeta('property', 'og:site_name', SITE_NAME);
-    upsertMeta('property', 'og:locale', LOCALE_FULL[locale]);
-    upsertMeta('property', 'og:locale:alternate', LOCALE_FULL[otherLocale]);
+    upsertMeta('property', 'og:locale', OPEN_GRAPH_LOCALES[locale]);
+    document.head.querySelectorAll('meta[property="og:locale:alternate"]').forEach((element) => element.remove());
+    for (const language of SUPPORTED_LOCALES.filter((language) => language !== locale)) {
+      const element = document.createElement('meta');
+      element.setAttribute('property', 'og:locale:alternate');
+      element.setAttribute('content', OPEN_GRAPH_LOCALES[language]);
+      document.head.appendChild(element);
+    }
     if (image) upsertMeta('property', 'og:image', image);
 
     // Twitter Card

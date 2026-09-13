@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useBrandProducts } from '@/hooks/useBrandProducts';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +32,7 @@ const matchesFeature = (p, feat) => {
 
 export default function GrandSeikoProductGrid() {
   const { t } = useTranslation('brandComponents');
+  const { getPricing } = useStorefrontPricing();
   const { localize } = useLocalizedField();
   const { products, loading } = useBrandProducts(BRAND);
   const [sortBy, setSortBy] = useState('-created_date');
@@ -63,19 +65,19 @@ export default function GrandSeikoProductGrid() {
     if (f.type.length) result = result.filter((p) => f.type.some((tp) => tp === 'New' && ['New', 'Unworn'].includes(p.condition) || tp === 'Pre-Owned' && !['New', 'Unworn'].includes(p.condition) || tp === 'Vintage' && (p.isVintage || p.condition === 'Vintage')));
     if (f.boxPapers.length) result = result.filter((p) => f.boxPapers.some((opt) => opt === 'Box included' && p.boxIncluded || opt === 'Papers included' && p.papersIncluded || opt === 'Full set' && p.boxIncluded && p.papersIncluded));
     if (f.availability.length) result = result.filter((p) => f.availability.includes(p.availability));
-    if (f.priceMin) result = result.filter((p) => p.price >= Number(f.priceMin));
-    if (f.priceMax) result = result.filter((p) => p.price <= Number(f.priceMax));
+    if (f.priceMin) result = result.filter((p) => getPricing(p).price != null && getPricing(p).price >= Number(f.priceMin));
+    if (f.priceMax) result = result.filter((p) => getPricing(p).price != null && getPricing(p).price <= Number(f.priceMax));
     if (quickFilter.length) result = result.filter((p) => matchesBrandQuickFilter(p, quickFilter));
     return [...result].sort((a, b) => {
       switch (sortBy) {
-        case 'price':return a.price - b.price;
-        case '-price':return b.price - a.price;
+        case 'price':return (getPricing(a).price ?? Infinity) - (getPricing(b).price ?? Infinity);
+        case '-price':return (getPricing(b).price ?? -Infinity) - (getPricing(a).price ?? -Infinity);
         case '-yearOfProduction':return (b.yearOfProduction || 0) - (a.yearOfProduction || 0);
         case 'limited':return (b.isLimitedEdition ? 1 : 0) - (a.isLimitedEdition ? 1 : 0) || new Date(b.created_date) - new Date(a.created_date);
         default:return new Date(b.created_date) - new Date(a.created_date);
       }
     });
-  }, [products, filters, sortBy, quickFilter]);
+  }, [products, filters, sortBy, quickFilter, getPricing]);
 
   return (
     <section id="shop" className="brand-products-section bg-secondary py-5 sm:py-6 md:py-8">

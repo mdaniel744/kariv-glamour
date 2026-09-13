@@ -7,7 +7,8 @@ import { useCart } from '@/lib/cartContext';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
-import { formatPrice } from '@/lib/constants';
+import { useStorefrontPricing } from '@/lib/currencyContext';
+import { useAttributeLabel } from '@/hooks/useAttributeLabel';
 import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import TrustBar from '@/components/shared/TrustBar';
@@ -16,7 +17,7 @@ import SafeHtml from '@/components/shared/SafeHtml';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductDealerCard from '@/components/product/ProductDealerCard';
 import RelatedProducts from '@/components/product/RelatedProducts';
-import { getProductAvailability, getProductPricing } from '@/lib/productMerchant';
+import { getProductAvailability } from '@/lib/productMerchant';
 
 const EMPTY_RELATED = [];
 
@@ -28,6 +29,8 @@ function productIdFromPath() {
 
 export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = EMPTY_RELATED, initialDealerProfile = null, dealerSlot, relatedSlot }) {
   const { t } = useTranslation();
+  const { locale, getPricing, formatMoney: formatPrice } = useStorefrontPricing();
+  const attributeLabel = useAttributeLabel();
   const id = idProp || productIdFromPath();
   const router = useRouter();
   const { toggleWishlist, isInWishlist } = useCart();
@@ -105,7 +108,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const images = product.productImages?.length > 0 ? product.productImages :
   product.featuredImage ? [product.featuredImage] : [];
   const wishlisted = isInWishlist(product.id);
-  const pricing = getProductPricing(product);
+  const pricing = getPricing(product);
   const availability = getProductAvailability(product);
   const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null;
 
@@ -123,18 +126,18 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   { label: t('pages.productDetail.specs.model'), value: product.model },
   { label: t('pages.productDetail.specs.reference'), value: product.referenceNumber },
   { label: t('pages.productDetail.specs.year'), value: product.yearOfProduction },
-  { label: t('pages.productDetail.specs.condition'), value: product.condition },
+  { label: t('pages.productDetail.specs.condition'), value: attributeLabel(product.condition) },
   { label: t('pages.productDetail.specs.caseDiameter'), value: product.caseDiameter },
-  { label: t('pages.productDetail.specs.caseMaterial'), value: product.caseMaterial },
-  { label: t('pages.productDetail.specs.dialColor'), value: product.dialColor },
-  { label: t('pages.productDetail.specs.bracelet'), value: product.braceletMaterial },
-  { label: t('pages.productDetail.specs.movement'), value: product.movementType },
+  { label: t('pages.productDetail.specs.caseMaterial'), value: attributeLabel(product.caseMaterial) },
+  { label: t('pages.productDetail.specs.dialColor'), value: attributeLabel(product.dialColor) },
+  { label: t('pages.productDetail.specs.bracelet'), value: attributeLabel(product.braceletMaterial) },
+  { label: t('pages.productDetail.specs.movement'), value: attributeLabel(product.movementType) },
   { label: t('pages.productDetail.specs.functions'), value: localize(product, 'functions') },
   { label: t('pages.productDetail.specs.waterResistance'), value: product.waterResistance },
-  { label: t('pages.productDetail.specs.crystal'), value: product.crystalType },
+  { label: t('pages.productDetail.specs.crystal'), value: attributeLabel(product.crystalType) },
   { label: t('pages.productDetail.specs.powerReserve'), value: product.powerReserve },
-  { label: t('pages.productDetail.specs.shape'), value: product.watchShape },
-  { label: t('pages.productDetail.specs.gender'), value: product.gender }].
+  { label: t('pages.productDetail.specs.shape'), value: attributeLabel(product.watchShape) },
+  { label: t('pages.productDetail.specs.gender'), value: attributeLabel(product.gender) }].
   filter((s) => s.value);
 
   return (
@@ -172,9 +175,9 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
                 next: t('pages.productDetail.nextImage'),
                 view: (number) => t('pages.productDetail.viewImage', { number }),
                 imageCount: (current, total) => t('pages.productDetail.imageCount', { current, total }),
-                openZoom: localePath('/').startsWith('/de') ? 'Bild vergrößern' : 'Enlarge image',
-                zoom: localePath('/').startsWith('/de') ? 'Produktbild vergrößert' : 'Enlarged product image',
-                closeZoom: localePath('/').startsWith('/de') ? 'Vergrößerte Ansicht schließen' : 'Close enlarged view',
+                openZoom: locale === 'cs' ? 'Zvětšit obrázek' : locale === 'de' ? 'Bild vergrößern' : 'Enlarge image',
+                zoom: locale === 'cs' ? 'Zvětšený obrázek produktu' : locale === 'de' ? 'Produktbild vergrößert' : 'Enlarged product image',
+                closeZoom: locale === 'cs' ? 'Zavřít zvětšený obrázek' : locale === 'de' ? 'Vergrößerte Ansicht schließen' : 'Close enlarged view',
               }}
             />
           </div>

@@ -19,14 +19,14 @@ export async function generateMetadata({ params }) {
     return localizedMetadata({
       locale,
       path: `dealer-profile/${id}`,
-      title: locale === 'de' ? 'Händlerprofil' : 'Dealer profile',
+      title: locale === 'cs' ? 'Profil prodejce' : locale === 'de' ? 'Händlerprofil' : 'Dealer profile',
       description: '',
       index: false,
     });
   }
 
   const description = data.profile?.bio ||
-    (locale === 'de'
+    (locale === 'cs' ? `Profil prodejce ${displayName} na Kariv Glamour.` : locale === 'de'
       ? `Verifiziertes Händlerprofil von ${displayName} bei Kariv Glamour.`
       : `Verified dealer profile for ${displayName} at Kariv Glamour.`);
 

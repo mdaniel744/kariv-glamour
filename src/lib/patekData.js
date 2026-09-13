@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Patek Philippe theme colors
 export const PATEK_THEME = {
   navy: '#1A2B4A',
@@ -104,6 +107,10 @@ export const PATEK_SEO_CARDS = [
 export const PATEK_EDITORIAL_SECTIONS = [
   {
     id: 'patek-story',
+    eyebrow_cs: 'Odkaz značky',
+    title_cs: 'Příběh značky Patek Philippe',
+    description_cs: 'Patek Philippe patří k nejuznávanějším jménům vysokého hodinářství. Jeho tradice vyrůstá ze ženevského řemesla a rodinného vlastnictví napříč generacemi. Od prvních kapesních hodinek po ikonický Nautilus a mimořádné Grand Complications jde o příběh výjimečného řemesla, sběratelské prestiže a vytrvalého důrazu na jemné hodinářství. Kariv Glamour tento odkaz představuje pečlivým výběrem hodinek Patek Philippe, doplněným transparentními údaji a odbornými informacemi.',
+    cta_cs: 'Přečíst příběh Patek Philippe',
     eyebrow_en: 'Heritage', eyebrow_de: 'Erbe',
     title_en: 'The Patek Philippe Story', title_de: 'Die Patek Philippe Geschichte',
     description_en: 'Patek Philippe stands as one of the most revered names in haute horlogerie, with a heritage rooted in Geneva watchmaking and a legacy shaped by family ownership across generations. From the earliest pocket watches to the iconic Nautilus and the extraordinary Grand Complications, the Patek Philippe story is one of rare craftsmanship, collector prestige, and an unwavering commitment to fine watchmaking. At Kariv Glamour, we celebrate this heritage by offering carefully selected Patek Philippe timepieces, each presented with full transparency and expert insight.',
@@ -121,6 +128,10 @@ export const PATEK_EDITORIAL_SECTIONS = [
   },
   {
     id: 'patek-watchmaking',
+    eyebrow_cs: 'Řemeslné mistrovství',
+    title_cs: 'Hodinářství Patek Philippe',
+    description_cs: 'Hodinářství Patek Philippe představuje vrchol jemného mechanického řemesla: ručně dokončované strojky, propracovaná pouzdra a mimořádnou škálu komplikací. Od jednoduchých hodinek Calatrava ukazujících čas po věčné kalendáře, minutové repetice a tourbillony vyjadřuje každý kus důraz na přesnost a tradici. Pro sběratele jsou důležité referenční číslo, typ strojku, materiál pouzdra i období výroby — společně tvoří příběh konkrétních hodinek. Kariv Glamour vám pomáhá těmto souvislostem porozumět a nakupovat s jistotou.',
+    cta_cs: 'Objevit hodinářství Patek Philippe',
     eyebrow_en: 'Craftsmanship', eyebrow_de: 'Handwerkskunst',
     title_en: 'Patek Philippe Watchmaking', title_de: 'Patek Philippe Uhrmacherei',
     description_en: 'Patek Philippe watchmaking represents the pinnacle of fine mechanical artistry, combining hand-finished movements, exquisite case design, and an extraordinary range of complications. From simple time-only Calatrava watches to perpetual calendars, minute repeaters, and tourbillons, each timepiece reflects a deep commitment to precision and tradition. Collectors value Patek Philippe for its reference numbers, movement types, case materials, and production periods, all of which contribute to the story behind every watch. At Kariv Glamour, we help you understand the craftsmanship behind each Patek Philippe, so you can make an informed and confident decision.',
@@ -138,6 +149,10 @@ export const PATEK_EDITORIAL_SECTIONS = [
   },
   {
     id: 'patek-maintenance',
+    eyebrow_cs: 'Péče',
+    title_cs: 'Údržba hodinek Patek Philippe',
+    description_cs: 'Správná péče pomáhá uchovat krásu, spolehlivost a hodnotu hodinek Patek Philippe. Základem je pravidelný servis kvalifikovaným odborníkem, kontrola vodotěsnosti, bezpečné uložení a ochrana před nárazy i magnetickým polem. Kožené řemínky chraňte před vlhkostí a potem; složité hodinky vyžadují zvláštní pozornost. U použitých a sběratelských kusů je důležité uchovat krabičku, doklady, archivní výpis, servisní záznamy a původní faktury. Kariv Glamour nabízí informace pro uvážlivou péči o vaše hodinky.',
+    cta_cs: 'Více o údržbě Patek Philippe',
     eyebrow_en: 'Care', eyebrow_de: 'Pflege',
     title_en: 'Patek Philippe Maintenance', title_de: 'Patek Philippe Wartung',
     description_en: 'Proper care preserves the beauty, reliability, and value of a Patek Philippe watch. Regular servicing by qualified professionals, water resistance checks, safe storage, and avoiding shocks and magnetic exposure are all essential. Leather straps should be protected from moisture and perspiration, while complicated watches require special attention. For pre-owned and collectible Patek Philippe watches, preserving the box, papers, archives extract, service documents, and original invoices is especially important for long-term value. Kariv Glamour provides guidance to help you maintain your timepiece with confidence.',
@@ -555,3 +570,7 @@ export const PATEK_SEO_PAGES = {
     isGuide: true,
   },
 };
+
+applyCzechSeoPages(PATEK_SEO_PAGES, 'Patek Philippe', 'patekPhilippe');
+applyCzechBrandFaqs(PATEK_FAQS, 'patekPhilippe');
+applyCzechBrandContent('patekPhilippe', PATEK_COLLECTIONS, PATEK_QUICK_FILTERS, PATEK_SEO_CARDS, PATEK_READ_MORE, PATEK_INTERNAL_LINKS, PATEK_EDITORIAL_SECTIONS, PATEK_TRUST_POINTS, PATEK_TRUST_LINKS);

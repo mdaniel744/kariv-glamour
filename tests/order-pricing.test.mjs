@@ -6,6 +6,7 @@ import ts from 'typescript';
 import * as productMerchant from '../src/lib/productMerchant.js';
 import * as orderShaping from '../src/lib/orderShaping.js';
 import * as escrowConstants from '../src/lib/escrowConstants.js';
+import * as currencyConversion from '../src/lib/currencyConversion.js';
 
 // Execute the real server action with an entirely in-memory database and auth
 // boundary. This cannot access Supabase, write an order or contact a customer.
@@ -54,10 +55,13 @@ function fixture({ product = baseProduct, existing = null, signedIn = true } = {
       requireAdmin: () => { throw new Error('Unexpected admin operation'); },
     },
     '@/lib/supabaseData': { STORE_ID: 'kariv' },
+    '@/lib/catalogTranslations': { loadCatalogTranslations: async () => ({}) },
     '@/lib/orderIdentities': { loadIdentities: async () => new Map() },
     '@/lib/orderShaping': orderShaping,
     '@/lib/escrowConstants': escrowConstants,
     '@/lib/productMerchant': productMerchant,
+    '@/lib/currencyConversion': currencyConversion,
+    '@/lib/exchangeRatesServer': { getCzkExchangeRates: async () => { throw new Error('English checkout must not fetch exchange rates'); } },
   };
   const module = { exports: {} };
   compileFunction(outputText, ['require', 'module', 'exports'])((specifier) => {
@@ -67,12 +71,12 @@ function fixture({ product = baseProduct, existing = null, signedIn = true } = {
   return { createOrder: module.exports.createOrder, reads, writes, authCalls: () => authCalls };
 }
 
-const input = { productId: 'watch', shippingDetails: { fullName: 'Test buyer', country: 'CZ' }, idempotencyKey: 'test-key' };
+const input = { productId: 'watch', shippingDetails: { fullName: 'Test buyer', country: 'CZ' }, idempotencyKey: 'test-key', locale: 'en', expectedPrice: 2500, expectedCurrency: 'CHF' };
 
 test('real order action snapshots the shared validated current price and recorded currency', async () => {
   for (const [sale_price, expected] of [[2500, 2500], [null, 3000], [0, 3000], [-20, 3000], [4000, 3000], [3000, 3000]]) {
     const f = fixture({ product: { ...baseProduct, sale_price } });
-    const result = await f.createOrder({ ...input, total: 1, price: 1, currency: 'USD' });
+    const result = await f.createOrder({ ...input, expectedPrice: expected, total: 1, price: 1, currency: 'USD' });
     assert.equal(result.ok, true);
     const row = f.writes.find(({ table }) => table === 'orders').row;
     assert.equal(row.total_amount, expected);
@@ -129,7 +133,8 @@ test('replaying an existing order returns its historical amount without repricin
 
 test('checkout uses current pricing; the order portal displays saved amounts without recalculation', () => {
   const checkout = readFileSync(new URL('../src/page-content/Checkout.jsx', import.meta.url), 'utf8');
-  assert.match(checkout, /getProductPricing\(product \|\| \{\}\)/);
+  assert.match(checkout, /useStorefrontPricing\(\)/);
+  assert.match(checkout, /getPricing\(product \|\| \{\}\)/);
   assert.match(checkout, /formatPrice\(pricing.price, pricing.currency\)/);
   assert.match(checkout, /if \(!availableToPurchase\) return false/);
   assert.match(checkout, /if \(!canSubmit\(\) \|\| submitting\) return/);

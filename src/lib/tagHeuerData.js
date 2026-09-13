@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // TAG Heuer collections, filters, and SEO data
 // TAG Heuer is positioned around motorsport heritage, racing chronographs,
 // dive watches (Aquaracer), sport watches (Formula 1), the square Monaco icon,
@@ -493,3 +496,7 @@ export const TH_SEO_PAGES = {
     ],
   },
 };
+
+applyCzechSeoPages(TH_SEO_PAGES, 'TAG Heuer', 'tagHeuer');
+applyCzechBrandFaqs(TH_FAQS, 'tagHeuer');
+applyCzechBrandContent('tagHeuer', TH_COLLECTIONS, TH_QUICK_FILTERS, TH_SEO_CARDS, TH_READ_MORE, TH_INTERNAL_LINKS);

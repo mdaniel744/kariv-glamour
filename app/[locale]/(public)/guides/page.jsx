@@ -13,8 +13,8 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   return localizedMetadata({
     locale, path: 'guides',
-    title: locale === 'de' ? 'Uhren-Guides: Kauf, Technik und Markenwissen' : 'Watch guides: buying, movements and brand knowledge',
-    description: locale === 'de' ? 'Fundierte Leitfäden zu gebrauchten Luxusuhren, Box und Papieren, Uhrwerken und Modellunterschieden. Mit Herstellerquellen und praktischen Kaufprüfungen.' : 'Research-backed guides to pre-owned luxury watches, box and papers, movements and model differences. Manufacturer sources and practical buying checks.',
+    title: locale === 'cs' ? 'Průvodce hodinkami: nákup, strojky a značky' : locale === 'de' ? 'Uhren-Guides: Kauf, Technik und Markenwissen' : 'Watch guides: buying, movements and brand knowledge',
+    description: locale === 'cs' ? 'Podložené průvodce použitými luxusními hodinkami, krabičkou a doklady, strojky a rozdíly mezi modely. Zdroje výrobců a praktické kontroly před nákupem.' : locale === 'de' ? 'Fundierte Leitfäden zu gebrauchten Luxusuhren, Box und Papieren, Uhrwerken und Modellunterschieden. Mit Herstellerquellen und praktischen Kaufprüfungen.' : 'Research-backed guides to pre-owned luxury watches, box and papers, movements and model differences. Manufacturer sources and practical buying checks.',
   });
 }
 
@@ -22,6 +22,7 @@ export default async function GuidesPage({ params }) {
   const { locale } = await params;
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
   const de = locale === 'de';
+  const cs = locale === 'cs';
   const records = await getPublishedGuides();
   const builtIn = new Set(EDITORIAL_GUIDES.map((guide) => guide.slug));
   const additional = records.filter((guide) => !builtIn.has(guide.slug) && localizedField(guide, 'content', locale));
@@ -31,15 +32,15 @@ export default async function GuidesPage({ params }) {
   return <div className="mx-auto max-w-7xl px-5 py-9 font-body text-foreground sm:px-7 md:py-12">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd({
       '@context': 'https://schema.org', '@type': 'CollectionPage',
-      name: de ? 'Uhren-Guides' : 'Watch guides', url: `${site}/${locale}/guides`, inLanguage: locale,
+      name: cs ? 'Průvodce hodinkami' : de ? 'Uhren-Guides' : 'Watch guides', url: `${site}/${locale}/guides`, inLanguage: locale,
       hasPart: routes.map((route) => ({ '@type': 'Article', name: getResearchArticle(route, locale).title, url: `${site}/${locale}/${route.slug}` })),
     }) }} />
     <header className="mb-8 max-w-3xl">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{de ? 'Uhrenwissen für bessere Kaufentscheidungen' : 'Watch knowledge for better buying decisions'}</h1>
-      <p className="mt-4 text-lg leading-8">{de ? 'Beginnen Sie mit den Grundlagen oder vertiefen Sie Ihr Wissen zu einer Marke. Unsere Guides erklären Unterschiede zwischen Referenzen, Technik und Zustand – mit nachvollziehbaren Quellen statt pauschalen Versprechen.' : 'Start with the fundamentals or explore a brand in detail. Our guides explain reference differences, technology and condition—with traceable sources rather than blanket promises.'}</p>
-      <a className="mt-5 inline-block text-primary underline underline-offset-4" href="#brand-guides">{de ? 'Direkt zu den Marken-Guides' : 'Go straight to brand guides'}</a>
+      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{cs ? 'Poznejte hodinky a vybírejte s jistotou' : de ? 'Uhrenwissen für bessere Kaufentscheidungen' : 'Watch knowledge for better buying decisions'}</h1>
+      <p className="mt-4 text-lg leading-8">{cs ? 'Začněte od základů nebo se podrobněji seznamte s konkrétní značkou. Naše průvodce vysvětlují rozdíly mezi referencemi, technikou a stavem hodinek s dohledatelnými zdroji, nikoli s obecnými přísliby.' : de ? 'Beginnen Sie mit den Grundlagen oder vertiefen Sie Ihr Wissen zu einer Marke. Unsere Guides erklären Unterschiede zwischen Referenzen, Technik und Zustand – mit nachvollziehbaren Quellen statt pauschalen Versprechen.' : 'Start with the fundamentals or explore a brand in detail. Our guides explain reference differences, technology and condition—with traceable sources rather than blanket promises.'}</p>
+      <a className="mt-5 inline-block text-primary underline underline-offset-4" href="#brand-guides">{cs ? 'Přejít na průvodce podle značek' : de ? 'Direkt zu den Marken-Guides' : 'Go straight to brand guides'}</a>
     </header>
-    <section aria-label={de ? 'Grundlagen zum Uhrenkauf' : 'Watch-buying fundamentals'} className="grid gap-6 md:grid-cols-3">
+    <section aria-label={cs ? 'Základy nákupu hodinek' : de ? 'Grundlagen zum Uhrenkauf' : 'Watch-buying fundamentals'} className="grid gap-6 md:grid-cols-3">
       {EDITORIAL_GUIDES.map((guide) => {
         const article = localizeEditorialGuide(guide, locale);
         return <Link key={guide.slug} href={`/${locale}/guides/${guide.slug}`} className="group overflow-hidden rounded-2xl border border-border">
@@ -49,8 +50,8 @@ export default async function GuidesPage({ params }) {
       })}
     </section>
     <section id="brand-guides" className="mt-12 scroll-mt-32">
-      <h2 className="text-2xl font-semibold">{de ? 'Guides nach Uhrenmarke' : 'Guides by watch brand'}</h2>
-      <nav aria-label={de ? 'Marken im Guide-Verzeichnis' : 'Brands in the guide directory'} className="mt-5 flex gap-3 overflow-x-auto pb-3">{groups.map((name) => {
+      <h2 className="text-2xl font-semibold">{cs ? 'Průvodce podle značky hodinek' : de ? 'Guides nach Uhrenmarke' : 'Guides by watch brand'}</h2>
+      <nav aria-label={cs ? 'Značky v přehledu průvodců' : de ? 'Marken im Guide-Verzeichnis' : 'Brands in the guide directory'} className="mt-5 flex gap-3 overflow-x-auto pb-3">{groups.map((name) => {
         const route = routes.find((item) => item.brandName === name);
         return <a key={name} href={`#guides-${route.brandSlug}`} className="flex-none rounded-full border border-border px-4 py-2 text-sm hover:border-primary">{name}</a>;
       })}</nav>
@@ -62,11 +63,11 @@ export default async function GuidesPage({ params }) {
           <div className="p-5">
           <h3 className="text-xl font-semibold">{name}</h3>
           <ul className="mt-4 space-y-3">{group.map((route) => <li key={route.slug}><Link href={`/${locale}/${route.slug}`} className="text-base leading-7 text-primary underline-offset-4 hover:underline">{getResearchArticle(route, locale).title}</Link></li>)}</ul>
-          <Link href={`/${locale}/brands/${group[0].brandSlug}`} className="mt-5 inline-block text-sm font-medium underline underline-offset-4">{de ? 'Verfügbare Uhren' : 'Available watches'} →</Link>
+          <Link href={`/${locale}/brands/${group[0].brandSlug}`} className="mt-5 inline-block text-sm font-medium underline underline-offset-4">{cs ? 'Dostupné hodinky' : de ? 'Verfügbare Uhren' : 'Available watches'} →</Link>
           </div>
         </section>;
       })}</div>
     </section>
-    {additional.length > 0 && <section className="mt-12"><h2 className="text-2xl font-semibold">{de ? 'Weitere Artikel' : 'More articles'}</h2><ul className="mt-5 space-y-4">{additional.map((guide) => <li key={guide.id}><Link className="text-primary underline underline-offset-4" href={`/${locale}/guides/${guide.slug || guide.id}`}>{localizedField(guide, 'title', locale)}</Link></li>)}</ul></section>}
+    {additional.length > 0 && <section className="mt-12"><h2 className="text-2xl font-semibold">{cs ? 'Další články' : de ? 'Weitere Artikel' : 'More articles'}</h2><ul className="mt-5 space-y-4">{additional.map((guide) => <li key={guide.id}><Link className="text-primary underline underline-offset-4" href={`/${locale}/guides/${guide.slug || guide.id}`}>{localizedField(guide, 'title', locale)}</Link></li>)}</ul></section>}
   </div>;
 }

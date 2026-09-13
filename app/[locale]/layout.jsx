@@ -5,15 +5,16 @@ import SiteChrome from '@/components/layout/SiteChrome';
 import Providers from '../providers';
 import { Poppins } from 'next/font/google';
 import { getSiteUrl } from '@/lib/seo';
+import { SUPPORTED_LOCALES } from '@/lib/locales';
+import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 
 const poppins = Poppins({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-poppins',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
 });
 
-const SUPPORTED_LOCALES = ['de', 'en'];
 const SITE_NAME = 'Kariv Glamour';
 const SITE_DESCRIPTION = 'Authenticated luxury watches from Kariv Glamour.';
 const themeInitializationScript = `
@@ -57,6 +58,7 @@ export default async function LocaleLayout({ children, params }) {
   if (!SUPPORTED_LOCALES.includes(locale)) {
     notFound();
   }
+  const initialExchangeRates = locale === 'cs' ? await getCzkExchangeRates() : null;
 
   return (
     <html lang={locale} className={poppins.variable} suppressHydrationWarning>
@@ -65,7 +67,7 @@ export default async function LocaleLayout({ children, params }) {
       </head>
       <body data-next-native="true">
         <ClerkProvider>
-          <Providers initialLocale={locale}>
+          <Providers initialLocale={locale} initialExchangeRates={initialExchangeRates}>
             <SiteChrome>{children}</SiteChrome>
           </Providers>
         </ClerkProvider>

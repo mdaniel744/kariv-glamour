@@ -4,7 +4,9 @@ import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageCl
 import { getProductBySlug } from '@/lib/base44Server';
 import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
-import { buildProductMerchantSchema, productMetaDescription } from '@/lib/productMerchant';
+import { buildProductMerchantSchema, productMetaDescription, hasCzechProductCopy } from '@/lib/productMerchant';
+import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
+import { CurrencyProvider } from '@/lib/currencyContext';
 import {
   getSiteUrl,
   localizedField,
@@ -24,25 +26,28 @@ export async function generateMetadata({ params }) {
     return localizedMetadata({
       locale,
       path: `product/${slug}`,
-      title: locale === 'de' ? 'Uhr nicht gefunden' : 'Watch not found',
+      title: locale === 'cs' ? 'Hodinky nebyly nalezeny' : locale === 'de' ? 'Uhr nicht gefunden' : 'Watch not found',
       description: '',
       index: false,
     });
   }
 
   const title =
+    (locale === 'cs' && (product.metaTitle_cs || product.productTitle_cs)) ||
     localizedField(product, 'metaTitle', locale) ||
     localizedField(product, 'productTitle', locale);
 
-  return localizedMetadata({
+  const metadata = localizedMetadata({
     locale,
     path: `product/${productSlug(product)}`,
     title,
     description: productMetaDescription(product, locale),
     image: product.featuredImage || product.productImages?.[0],
     type: 'website',
-    index: product.isPublished === true,
+    index: product.isPublished === true && (locale !== 'cs' || hasCzechProductCopy(product)),
   });
+  if (!hasCzechProductCopy(product)) delete metadata.alternates.languages.cs;
+  return metadata;
 }
 
 export default async function ProductPage({ params }) {
@@ -55,15 +60,16 @@ export default async function ProductPage({ params }) {
   const name = localizedField(product, 'productTitle', locale);
   const siteUrl = getSiteUrl();
   const productUrl = `${siteUrl}/${locale}/product/${productSlug(product)}`;
+  const exchangeRates = locale === 'cs' ? await getCzkExchangeRates() : null;
 
   const jsonLd = [
-    buildProductMerchantSchema(product, { locale, url: productUrl }),
+    buildProductMerchantSchema(product, { locale, url: productUrl, exchangeRates }),
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-        { '@type': 'ListItem', position: 2, name: locale === 'de' ? 'Shop' : 'Shop', item: `${siteUrl}/${locale}/shop` },
+        { '@type': 'ListItem', position: 1, name: locale === 'cs' ? 'Úvod' : locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
+        { '@type': 'ListItem', position: 2, name: locale === 'cs' ? 'Obchod' : 'Shop', item: `${siteUrl}/${locale}/shop` },
         { '@type': 'ListItem', position: 3, name, item: productUrl },
       ],
     },
@@ -75,7 +81,7 @@ export default async function ProductPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <ProductDetailPageClient
+      <CurrencyProvider exchangeRates={exchangeRates}><ProductDetailPageClient
         key={product.id}
         product={product}
         dealerSlot={(product.dealerId || product.created_by_id) ? (
@@ -88,7 +94,7 @@ export default async function ProductPage({ params }) {
             <RelatedProductsSection product={product} />
           </Suspense>
         )}
-      />
+      /></CurrencyProvider>
     </>
   );
 }

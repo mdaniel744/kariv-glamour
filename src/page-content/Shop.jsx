@@ -7,6 +7,7 @@ import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { SlidersHorizontal, X, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
 import { positivePage, searchShopProducts, SHOP_PAGE_SIZE } from '@/lib/shopSearch';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 
 // Default filter state
 const DEFAULT_FILTERS = {
@@ -78,7 +79,7 @@ function serializeFiltersToURL(filters, page, sortBy) {
 }
 
 // Build the shared catalogue search payload from filter state.
-function buildSearchPayload(filters, page, sortBy, locale) {
+function buildSearchPayload(filters, page, sortBy, locale, exchangeRates) {
   const payload = {
     search: filters.search || '',
     brands: filters.brand,
@@ -102,6 +103,7 @@ function buildSearchPayload(filters, page, sortBy, locale) {
     page: page,
     pageSize: SHOP_PAGE_SIZE,
     locale,
+    exchangeRates,
   };
   return payload;
 }
@@ -115,8 +117,8 @@ const searchProducts = (payload) => searchShopProducts(dataClient.entities.Produ
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useUrlSearchParams();
-  const { t, i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage?.startsWith('de') ? 'de' : 'en';
+  const { t } = useTranslation();
+  const { locale, exchangeRates } = useStorefrontPricing();
   const sortOptions = [
     { value: 'newest', label: t('common:shop.sortNewest') },
     { value: 'price_low', label: t('common:shop.sortPriceLow') },
@@ -190,7 +192,7 @@ export default function Shop() {
       setLoading(true);
       setError(null);
       try {
-        const payload = buildSearchPayload(filters, page, sortBy, locale);
+        const payload = buildSearchPayload(filters, page, sortBy, locale, exchangeRates);
         const results = await searchProducts(payload);
 
         // Ignore stale responses — only process if this is the latest request
@@ -215,7 +217,7 @@ export default function Shop() {
       }
     };
     load();
-  }, [filterCacheKey(filters), sortBy, page, locale, t, syncURL]);
+  }, [filterCacheKey(filters), sortBy, page, locale, exchangeRates, t, syncURL]);
 
   // ── Filter change handlers ──
   const handleFiltersChange = (newFilters) => {
@@ -248,7 +250,7 @@ export default function Shop() {
     const currentRequestId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
-    const payload = buildSearchPayload(filters, page, sortBy, locale);
+    const payload = buildSearchPayload(filters, page, sortBy, locale, exchangeRates);
     searchProducts(payload)
       .then(results => {
         if (currentRequestId !== requestIdRef.current) return;
@@ -487,7 +489,7 @@ export default function Shop() {
                 <span className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{t('common:shop.title')}</span>
                 <h2 className="mt-1 font-display text-2xl font-semibold text-foreground">{t('common:shop.filters')}</h2>
               </div>
-              <button onClick={() => setFiltersOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground" aria-label="Close filters">
+              <button onClick={() => setFiltersOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground" aria-label={t('common:close')}>
                 <X size={22} />
               </button>
             </div>

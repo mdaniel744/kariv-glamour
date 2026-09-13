@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
 import { getMyOrders } from '@/actions/orders';
 import { getMyDealerListings } from '@/actions/products';
 import { useAuth } from '@/lib/AuthContext';
@@ -12,6 +13,7 @@ import { isDealer } from '@/lib/escrowConstants';
 import LocalizedLink from '@/components/LocalizedLink';
 
 export default function PortalDashboard() {
+  const { localize } = useLocalizedField();
   const { t } = useTranslation();
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -77,14 +79,14 @@ export default function PortalDashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-medium text-foreground">{t('pages.dealer.listings')}</h2>
             <div className="flex items-center gap-4">
-              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline flex items-center gap-1"><Plus size={11} /> List Watch</LocalizedLink>
+              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline flex items-center gap-1"><Plus size={11} /> {t('pages.dealer.listNewWatch')}</LocalizedLink>
               <LocalizedLink to="/portal/listings" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.viewAll')}</LocalizedLink>
             </div>
           </div>
           {listings.length === 0 ? (
             <div className="border border-border p-6 text-center">
-              <p className="text-xs text-muted-foreground mb-3">No listings yet.</p>
-              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</LocalizedLink>
+              <p className="text-xs text-muted-foreground mb-3">{t('pages.portal.noListings')}</p>
+              <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">{t('pages.portal.firstListing')}</LocalizedLink>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -93,7 +95,7 @@ export default function PortalDashboard() {
                   {p.featuredImage ? <img src={p.featuredImage} alt="" className="w-full aspect-square object-cover" /> : <div className="w-full aspect-square bg-muted" />}
                   <div className="p-2">
                     <p className="text-[9px] tracking-[0.1em] uppercase text-primary truncate">{p.brand}</p>
-                    <p className="text-[10px] text-foreground truncate">{p.productTitle}</p>
+                    <p className="text-[10px] text-foreground truncate">{localize(p, 'productTitle')}</p>
                     <p className="text-xs text-foreground mt-0.5">{formatPrice(p.price)}</p>
                   </div>
                 </LocalizedLink>
@@ -125,12 +127,12 @@ export default function PortalDashboard() {
                   <div className="flex items-center gap-3">
                     {order.products?.[0]?.featuredImage && <img src={order.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
                     <div>
-                      <p className="text-xs font-medium text-foreground">{order.products?.[0]?.productTitle || t('pages.portal.order')}</p>
+                      <p className="text-xs font-medium text-foreground">{localize(order.products?.[0], 'productTitle') || t('pages.portal.order')}</p>
                       <p className="text-[10px] text-muted-foreground font-mono">{order.escrowReference}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-foreground">{formatPrice(order.totalAmount)}</p>
+                    <p className="text-sm text-foreground">{formatPrice(order.totalAmount, order.currency || 'EUR')}</p>
                     <EscrowStatusBadge status={order.escrowStatus} />
                   </div>
                 </div>

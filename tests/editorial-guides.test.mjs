@@ -5,7 +5,7 @@ import { EDITORIAL_GUIDES } from '../src/lib/editorialGuides.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
-test('home editorial cards have complete dedicated bilingual articles', () => {
+test('home editorial cards have complete dedicated English, German and Czech articles', () => {
   assert.equal(EDITORIAL_GUIDES.length, 3);
   assert.equal(new Set(EDITORIAL_GUIDES.map((guide) => guide.slug)).size, EDITORIAL_GUIDES.length);
 
@@ -15,7 +15,7 @@ test('home editorial cards have complete dedicated bilingual articles', () => {
     assert.ok(guide.datePublished);
     assert.ok(guide.dateModified);
 
-    for (const locale of ['en', 'de']) {
+    for (const locale of ['en', 'de', 'cs']) {
       const article = guide.translations[locale];
       assert.ok(article.title.length > 20, `${guide.slug} needs a qualified ${locale} title`);
       assert.ok(article.excerpt.length > 60, `${guide.slug} needs a useful ${locale} excerpt`);
@@ -53,4 +53,3 @@ test('dedicated guide route exposes article, breadcrumb, and FAQ metadata', () =
   assert.match(sitemap, /EDITORIAL_GUIDES/);
   assert.match(sitemap, /guides\/\$\{guide\.slug\}/);
 });
-

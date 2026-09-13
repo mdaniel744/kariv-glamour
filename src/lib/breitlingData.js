@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Breitling-specific filter option lists and SEO data
 
 const BREITLING_PAGE_ASSET_BASE = '/brand-assets/breitling/page';
@@ -157,3 +160,7 @@ export const BREITLING_SEO_PAGES = {
   'welche-breitling-uhr-kaufen': { h1_en: 'Which Breitling Watch to Buy?', h1_de: 'Welche Breitling Uhr kaufen?', title_en: 'Which Breitling Watch to Buy | Kariv Glamour', title_de: 'Welche Breitling Uhr kaufen | Kariv Glamour', description_en: 'Breitling buying guide — compare Navitimer, Chronomat, Superocean and other collections.', description_de: 'Breitling Kaufberatung – vergleichen Sie Navitimer, Chronomat, Superocean und weitere Kollektionen.', intro_en: 'Which Breitling watch is right for you? Compare collections, features and case sizes to make the right decision.', intro_de: 'Welche Breitling Uhr passt zu Ihnen? Vergleichen Sie Kollektionen, Funktionen und Gehäusegrößen, um die richtige Entscheidung zu treffen.', isGuide: true },
   'breitling-story': { h1_en: 'Breitling Story', h1_de: 'Breitling Story', title_en: 'Breitling Story | Kariv Glamour', title_de: 'Breitling Story | Kariv Glamour', description_en: 'The Breitling Story — aviation heritage, chronograph expertise and instruments for professionals.', description_de: 'Die Breitling Story – Aviation-Erbe, Chronographen-Expertise und Instrumente für Profis.', intro_en: 'Breitling is known for its aviation heritage, chronograph expertise and identity as instruments for professionals — from the iconic Navitimer to the Professional collection.', intro_de: 'Breitling ist bekannt für sein Aviation-Erbe, seine Chronographen-Expertise und seine Identität als Instrumente für Profis – von der ikonischen Navitimer bis zur Professional-Kollektion.', isGuide: true },
 };
+
+applyCzechSeoPages(BREITLING_SEO_PAGES, 'Breitling', 'breitling');
+applyCzechBrandFaqs(BREITLING_FAQS, 'breitling');
+applyCzechBrandContent('breitling', BREITLING_COLLECTIONS, BREITLING_QUICK_FILTERS, BREITLING_SEO_CARDS, BREITLING_READ_MORE, BREITLING_INTERNAL_LINKS);

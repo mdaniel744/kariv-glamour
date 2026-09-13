@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocalizedField } from '@/lib/localize';
 import { getMyOrders } from '@/actions/orders';
 import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ import { formatPrice } from '@/lib/constants';
 import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
 
 export default function PortalOrders() {
+  const { localize } = useLocalizedField();
   const { t } = useTranslation();
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -41,7 +43,7 @@ export default function PortalOrders() {
                     <div className="w-14 h-14 bg-muted flex-shrink-0" />
                   )}
                   <div className="min-w-0">
-                    <p className="text-xs font-medium text-foreground truncate">{order.products?.[0]?.productTitle || t('pages.portal.order')}</p>
+                    <p className="text-xs font-medium text-foreground truncate">{localize(order.products?.[0], 'productTitle') || t('pages.portal.order')}</p>
                     <p className="text-[10px] text-muted-foreground">{order.products?.[0]?.brand}</p>
                     <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{order.escrowReference}</p>
                   </div>

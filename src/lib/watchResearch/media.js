@@ -59,6 +59,29 @@ const SUPPORTING_MEDIA = {
   girardPerregaux: photo('girard-perregaux/collections/girard-perregaux-bridges-collection.png', 'Girard-Perregaux Bridges', 'Girard-Perregaux Bridges', true),
 };
 
+const CZECH_ALT = {
+  'A selection of Rolex watches': 'Výběr hodinek Rolex',
+  'Patek Philippe Nautilus in its presentation box': 'Patek Philippe Nautilus v prezentační krabičce',
+  'Omega watches': 'Hodinky Omega',
+  'Breitling watch detail': 'Detail hodinek Breitling',
+  'TAG Heuer Carrera chronograph': 'Chronograf TAG Heuer Carrera',
+  'Rolex presentation box and documents': 'Prezentační krabička Rolex a doklady',
+  'Patek Philippe presentation box and documents': 'Prezentační krabička Patek Philippe a doklady',
+  'Gloved hands inspecting a Rolex watch': 'Ruce v rukavicích prohlížející hodinky Rolex',
+  'Patek Philippe watchmaking detail': 'Detail hodinářské práce Patek Philippe',
+  'A watchmaker working on a movement': 'Hodinář při práci na strojku',
+  'Work on a watch movement': 'Práce na hodinovém strojku',
+  'Grand Seiko Spring Drive dive watch': 'Potápěčské hodinky Grand Seiko Spring Drive',
+  'Grand Seiko Shunbun and Snowflake dial designs': 'Číselníky Grand Seiko Shunbun a Snowflake',
+  'IWC automatic watch': 'Automatické hodinky IWC',
+  'IWC Pilot’s Watch chronograph with a blue dial': 'Chronograf IWC Pilot’s Watch s modrým číselníkem',
+  'Jaeger-LeCoultre Master Control chronograph with calendar': 'Chronograf Jaeger-LeCoultre Master Control s kalendářem',
+  'TAG Heuer Carrera and Formula 1 watches': 'Hodinky TAG Heuer Carrera a Formula 1',
+  'Jackpot Tourbillon: tourbillon, reel display and chime — a conceptual diagram, not the watch layout': 'Jackpot Tourbillon: tourbillon, válcová indikace a zvukový mechanismus — koncepční schéma, nikoli uspořádání hodinek',
+  'Rolex Submariner dial and bezel variations': 'Varianty číselníků a lunet Rolex Submariner',
+  'Panerai Submersible with rotating timing bezel': 'Panerai Submersible s otočnou měřicí lunetou',
+};
+
 export function getGuideMedia(route, locale = 'en') {
   const topic = guideTopic(route.slug);
   const hero = TECHNICAL_MEDIA[topic] || BRAND_MEDIA[route.pageKey];
@@ -69,6 +92,6 @@ export function getGuideMedia(route, locale = 'en') {
     ? SUPPORTING_MEDIA[route.pageKey] : null;
   if (topic === 'speedSeamaster') supporting = photo('omega/page/omega-seamaster-guide.jpg', 'Omega Seamaster', 'Omega Seamaster');
   if (topic === 'luminorSubmersible') supporting = photo('panerai/page/panerai-submersible-guide.avif', 'Panerai Submersible with rotating timing bezel', 'Panerai Submersible mit drehbarer Zeitlünette', true);
-  const localize = (media) => media && ({ ...media, alt: media.alt[locale] || media.alt.en });
+  const localize = (media) => media && ({ ...media, alt: locale === 'cs' ? (CZECH_ALT[media.alt.en] || media.alt.en) : media.alt[locale] || media.alt.en });
   return { hero: localize(hero), supporting: localize(supporting) };
 }

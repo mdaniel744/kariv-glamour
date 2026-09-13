@@ -25,6 +25,7 @@ export async function generateMetadata({ params }) {
       locale, path: `guides/${published.slug || published.id}`,
       title: localizedField(published, 'title', locale),
       description: localizedField(published, 'excerpt', locale), type: 'article',
+      index: locale !== 'cs' || Boolean(published.title_cs && published.content_cs),
     });
   }
 
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }) {
     return localizedMetadata({
       locale: SUPPORTED_LOCALES.includes(locale) ? locale : 'en',
       path: `guides/${slug}`,
-      title: locale === 'de' ? 'Guide nicht gefunden' : 'Guide not found',
+      title: locale === 'cs' ? 'Průvodce nenalezen' : locale === 'de' ? 'Guide nicht gefunden' : 'Guide not found',
       description: '',
       index: false,
     });
@@ -82,8 +83,8 @@ export default async function EditorialGuidePage({ params }) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-        { '@type': 'ListItem', position: 2, name: locale === 'de' ? 'Uhren-Guides' : 'Watch Guides', item: `${siteUrl}/${locale}/guides` },
+        { '@type': 'ListItem', position: 1, name: locale === 'cs' ? 'Úvod' : locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
+        { '@type': 'ListItem', position: 2, name: locale === 'cs' ? 'Průvodce hodinkami' : locale === 'de' ? 'Uhren-Guides' : 'Watch Guides', item: `${siteUrl}/${locale}/guides` },
         { '@type': 'ListItem', position: 3, name: article.title, item: url },
       ],
     },

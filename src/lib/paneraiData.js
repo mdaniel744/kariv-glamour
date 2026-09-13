@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Panerai collections, filters, and SEO data
 // Panerai is positioned around bold Italian design, large cases, strong wrist presence,
 // luminous dials, cushion cases, crown-protecting bridge, military/diving heritage,
@@ -460,3 +463,7 @@ export const PANERAI_SEO_PAGES = {
     ],
   },
 };
+
+applyCzechSeoPages(PANERAI_SEO_PAGES, 'Panerai', 'panerai');
+applyCzechBrandFaqs(PANERAI_FAQS, 'panerai');
+applyCzechBrandContent('panerai', PANERAI_COLLECTIONS, PANERAI_QUICK_FILTERS, PANERAI_SEO_CARDS, PANERAI_READ_MORE, PANERAI_INTERNAL_LINKS);

@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { createI18nInstance } from '@/lib/i18n';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, normalizeLocale } from '@/lib/locales';
 
 const LanguageContext = createContext();
-
-const SUPPORTED_LOCALES = ['de', 'en'];
-const DEFAULT_LOCALE = 'de';
 
 export function detectLocaleFromPath(pathname) {
   const segments = pathname.split('/').filter(Boolean);
@@ -18,14 +16,15 @@ export function detectLocaleFromPath(pathname) {
 function detectBrowserLocale() {
   if (typeof navigator === 'undefined') return DEFAULT_LOCALE;
   const browserLang = navigator.language || navigator.userLanguage || 'de';
-  return browserLang.toLowerCase().startsWith('en') ? 'en' : 'de';
+  return normalizeLocale(browserLang);
 }
 
 function resolveInitialLocale(initialLocale) {
   if (SUPPORTED_LOCALES.includes(initialLocale)) return initialLocale;
   const fromPath = typeof window !== 'undefined' ? detectLocaleFromPath(window.location.pathname) : null;
   if (fromPath) return fromPath;
-  return (typeof localStorage !== 'undefined' && localStorage.getItem('kariv-locale')) || detectBrowserLocale();
+  const saved = typeof localStorage !== 'undefined' && localStorage.getItem('kariv-locale');
+  return normalizeLocale(saved, detectBrowserLocale());
 }
 
 export function LanguageProvider({ children, initialLocale }) {
@@ -58,6 +57,7 @@ export function LanguageProvider({ children, initialLocale }) {
   }, [i18nInstance, locale]);
 
   const setLocale = (newLocale) => {
+    if (!SUPPORTED_LOCALES.includes(newLocale)) return;
     setLocaleState(newLocale);
     localStorage.setItem('kariv-locale', newLocale);
     // Rewrite the URL to include the new locale prefix
@@ -69,7 +69,15 @@ export function LanguageProvider({ children, initialLocale }) {
       segments.unshift(newLocale);
     }
     const newPath = '/' + segments.join('/');
-    window.location.href = newPath + window.location.search + window.location.hash;
+    const query = new URLSearchParams(window.location.search);
+    if ((locale === 'cs') !== (newLocale === 'cs')) {
+      // Numeric price bounds are denominated in the selected storefront
+      // currency. Never reinterpret an EUR budget as the same number in CZK.
+      query.delete('priceMin');
+      query.delete('priceMax');
+      query.delete('page');
+    }
+    window.location.href = newPath + (query.size ? `?${query}` : '') + window.location.hash;
   };
 
   const localePath = (path) => {

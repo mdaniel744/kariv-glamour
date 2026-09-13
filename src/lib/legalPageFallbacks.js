@@ -1,21 +1,28 @@
+import { CZECH_LEGAL_PAGES } from './legalPageCzech.js';
+
 const LAST_UPDATED_EN = 'Last updated: 25 August 2026';
 const LAST_UPDATED_DE = 'Zuletzt aktualisiert: 25. August 2026';
 
 function createLegalPage({ slug, titleEn, titleDe, descriptionEn, descriptionDe, contentEn, contentDe }) {
+  const cs = CZECH_LEGAL_PAGES[slug];
   return Object.freeze({
     slug,
     title: titleEn,
     title_en: titleEn,
     title_de: titleDe,
+    title_cs: cs.title,
     content: contentEn,
     content_en: contentEn,
     content_de: contentDe,
+    content_cs: cs.content,
     seoTitle: `${titleEn} | Kariv Glamour`,
     seoTitle_en: `${titleEn} | Kariv Glamour`,
     seoTitle_de: `${titleDe} | Kariv Glamour`,
+    seoTitle_cs: `${cs.title} | Kariv Glamour`,
     seoDescription: descriptionEn,
     seoDescription_en: descriptionEn,
     seoDescription_de: descriptionDe,
+    seoDescription_cs: cs.description,
   });
 }
 
@@ -682,10 +689,18 @@ export function getAllLegalPageFallbacks() {
 }
 
 export function mergeLegalPageFallbacks(records = []) {
-  const remotePages = Array.isArray(records) ? records.filter(Boolean) : [];
+  const remotePages = Array.isArray(records) ? records.filter(Boolean).map(withCzechLegalFallback) : [];
   const remoteSlugs = new Set(remotePages.map((page) => page.slug));
   return [
     ...remotePages,
     ...getAllLegalPageFallbacks().filter((page) => !remoteSlugs.has(page.slug)),
   ];
+}
+
+// Preserve any published human-edited Czech text; supply local Czech policy
+// fields only when a dashboard record has no Czech version yet.
+export function withCzechLegalFallback(record) {
+  const fallback = getLegalPageFallback(record?.slug);
+  if (!record || !fallback) return record;
+  return { ...record, ...Object.fromEntries(['title_cs', 'content_cs', 'seoTitle_cs', 'seoDescription_cs'].map((key) => [key, record[key] || fallback[key]])) };
 }

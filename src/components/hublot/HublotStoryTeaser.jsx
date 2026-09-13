@@ -17,15 +17,15 @@ export default function HublotStoryTeaser() {
           <span className="text-[10px] tracking-[0.3em] uppercase block mb-3 text-primary">{t('story.title', { brand: BRAND })}</span>
           <h2 className="text-3xl md:text-4xl mb-6 [font-family:'Cormorant_Garamond',_serif] font-semibold text-[hsl(var(--primary))]">{t('story.title', { brand: BRAND })}</h2>
           <p className="text-base leading-relaxed mb-6 text-muted-foreground">
-            {localize({ text_en: 'Hublot is recognized for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design. Its collections are known for strong visual identity, technical presence and a distinctive fusion of materials. Explore the ', text_de: 'Hublot wird anerkannt für seinen modernen Ansatz in der Luxusuhrenherstellung, der unerwartete Materialien, markante Architektur und zeitgenössisches Design verbindet. Seine Kollektionen sind bekannt für starke visuelle Identität, technische Präsenz und eine unverkennbare Fusion von Materialien. Entdecken Sie die ' }, 'text')}
-            <LocalizedLink to="/hublot/big-bang" className="text-primary underline">{localize({ text_en: 'Big Bang', text_de: 'Big Bang' }, 'text')}</LocalizedLink>
-            {localize({ text_en: ', ', text_de: ', ' }, 'text')}
-            <LocalizedLink to="/hublot/classic-fusion" className="text-primary underline">{localize({ text_en: 'Classic Fusion', text_de: 'Classic Fusion' }, 'text')}</LocalizedLink>
-            {localize({ text_en: ', ', text_de: ', ' }, 'text')}
-            <LocalizedLink to="/guides" className="text-primary underline">{localize({ text_en: 'modern materials', text_de: 'modernen Materialien' }, 'text')}</LocalizedLink>
-            {localize({ text_en: ' and our selection of ', text_de: ' und unsere Auswahl an ' }, 'text')}
-            <LocalizedLink to="/hublot-gebraucht" className="text-primary underline">{localize({ text_en: 'pre-owned Hublot', text_de: 'gebrauchten Hublot' }, 'text')}</LocalizedLink>
-            {localize({ text_en: ' watches.', text_de: ' Uhren.' }, 'text')}
+            {localize({ text_cs: "Hublot je známý moderním přístupem k luxusnímu hodinářství, který propojuje nečekané materiály, výraznou stavbu pouzdra a současný design. Jeho kolekce vynikají silnou vizuální identitou, technickým charakterem a osobitým spojením materiálů. Prozkoumejte ", text_en: 'Hublot is recognized for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design. Its collections are known for strong visual identity, technical presence and a distinctive fusion of materials. Explore the ', text_de: 'Hublot wird anerkannt für seinen modernen Ansatz in der Luxusuhrenherstellung, der unerwartete Materialien, markante Architektur und zeitgenössisches Design verbindet. Seine Kollektionen sind bekannt für starke visuelle Identität, technische Präsenz und eine unverkennbare Fusion von Materialien. Entdecken Sie die ' }, 'text')}
+            <LocalizedLink to="/hublot/big-bang" className="text-primary underline">{localize({ text_cs: "Big Bang", text_en: 'Big Bang', text_de: 'Big Bang' }, 'text')}</LocalizedLink>
+            {localize({ text_cs: ", ", text_en: ', ', text_de: ', ' }, 'text')}
+            <LocalizedLink to="/hublot/classic-fusion" className="text-primary underline">{localize({ text_cs: "Classic Fusion", text_en: 'Classic Fusion', text_de: 'Classic Fusion' }, 'text')}</LocalizedLink>
+            {localize({ text_cs: ", ", text_en: ', ', text_de: ', ' }, 'text')}
+            <LocalizedLink to="/guides" className="text-primary underline">{localize({ text_cs: "moderní materiály", text_en: 'modern materials', text_de: 'modernen Materialien' }, 'text')}</LocalizedLink>
+            {localize({ text_cs: " a náš výběr ", text_en: ' and our selection of ', text_de: ' und unsere Auswahl an ' }, 'text')}
+            <LocalizedLink to="/hublot-gebraucht" className="text-primary underline">{localize({ text_cs: "již nošených hodinek Hublot", text_en: 'pre-owned Hublot', text_de: 'gebrauchten Hublot' }, 'text')}</LocalizedLink>
+            {localize({ text_cs: ".", text_en: ' watches.', text_de: ' Uhren.' }, 'text')}
           </p>
           <LocalizedLink to="/hublot/story" className="inline-flex items-center justify-center px-7 py-3.5 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium hover:opacity-90 transition-opacity">{t('cta.readStory', { brand: BRAND })}</LocalizedLink>
         </motion.div>

@@ -1,0 +1,198 @@
+{
+  "eyebrow": {
+    "explore": "Prozkoumat",
+    "discover": "Objevte",
+    "editorial": "Magazín",
+    "shop": "Obchod",
+    "faq": "Časté dotazy",
+    "trust": "Důvěra",
+    "collections": "Kolekce",
+    "maison": "Hodinářský dům",
+    "yourNextTimepiece": "Vaše další hodinky",
+    "readMore": "Číst více"
+  },
+  "heading": {
+    "exploreMore": "Objevte více z Kariv Glamour",
+    "discoverBrand": "Objevte hodinky {{brand}}",
+    "readMoreAbout": "Více o hodinkách {{brand}}",
+    "shopBrand": "Koupit hodinky {{brand}}",
+    "findYourNext": "Najděte své další hodinky {{brand}}",
+    "brandFAQ": "Časté dotazy k {{brand}}",
+    "discoverCollections": "Objevte kolekce {{brand}}",
+    "buyingWithConfidence": "Nakupujte hodinky {{brand}} s jistotou"
+  },
+  "cta": {
+    "shopBrand": "Koupit hodinky {{brand}}",
+    "exploreBuyingGuide": "Průvodce nákupem hodinek {{brand}}",
+    "exploreCollection": "Prohlédnout kolekci",
+    "readMore": "Číst více",
+    "viewDetails": "Zobrazit podrobnosti",
+    "quickView": "Rychlý náhled",
+    "discover": "Objevte",
+    "readStory": "Příběh značky {{brand}}"
+  },
+  "filters": {
+    "collection": "Kolekce",
+    "condition": "Stav",
+    "caseMaterial": "Materiál pouzdra",
+    "dialColor": "Barva ciferníku",
+    "gender": "Určení",
+    "bracelet": "Náramek",
+    "movement": "Strojek",
+    "boxPapers": "Krabička a doklady",
+    "availability": "Dostupnost",
+    "filter": "Filtrovat",
+    "any": "Libovolné",
+    "boxOnly": "Pouze krabička",
+    "papersOnly": "Pouze doklady",
+    "inStock": "Skladem",
+    "sold": "Prodáno",
+    "reserved": "Rezervováno",
+    "comingSoon": "Již brzy",
+    "newestArrivals": "Nejnovější nabídky",
+    "priceLowToHigh": "Od nejnižší ceny",
+    "priceHighToLow": "Od nejvyšší ceny",
+    "yearNewestFirst": "Od nejnovějšího roku výroby",
+    "featured": "Doporučené"
+  },
+  "product": {
+    "new": "Nové",
+    "vintage": "Vintage",
+    "verified": "Ověřeno",
+    "box": "Krabička",
+    "noBox": "Bez krabičky",
+    "papers": "Doklady",
+    "noPapers": "Bez dokladů",
+    "ref": "Ref.",
+    "watchesCount": "Hodinky {{brand}}: {{count}}",
+    "noMatches": "Vašim filtrům momentálně neodpovídají žádné hodinky {{brand}}. Upravte filtry nebo si prohlédněte všechny kolekce.",
+    "showResults": "Zobrazit výsledky: {{count}}"
+  },
+  "finalCTA": {
+    "findYourNext": "Najděte své další hodinky {{brand}}",
+    "description": "Prohlédněte si pečlivě vybrané hodinky {{brand}} a na jednom místě porovnejte modely, reference, materiály, stav i ceny."
+  },
+  "trust": {
+    "buyingWithConfidence": "Nakupujte hodinky {{brand}} s jistotou"
+  },
+  "story": {
+    "title": "Příběh značky {{brand}}"
+  },
+  "hero": {
+    "boutique": "Butik {{brand}}",
+    "title": "Hodinky {{brand}}",
+    "description": "Objevte výběr hodinek {{brand}}, od nadčasových společenských hodinek po ikonické sběratelské modely.",
+    "shopCTA": "Koupit hodinky {{brand}}",
+    "discoverCollections": "Objevte kolekce {{brand}}",
+    "anchorCollections": "Kolekce",
+    "anchorNewArrivals": "Nově v nabídce",
+    "anchorPreOwned": "Použité hodinky {{brand}}",
+    "anchorBuyingGuide": "Průvodce nákupem {{brand}}",
+    "anchorWatchmaking": "Hodinářství",
+    "anchorMaintenance": "Údržba"
+  },
+  "intro": {
+    "eyebrow": "Úvod",
+    "title": "Ikona vysokého hodinářství"
+  },
+  "collectionCarousel": {
+    "eyebrow": "Kolekce",
+    "heading": "Objevte kolekce {{brand}}",
+    "description": "Prozkoumejte nejvýznamnější modelové řady {{brand}}, od nadčasových společenských hodinek přes mistrovské komplikace až po moderní sportovní ikony.",
+    "exploreCollection": "Prohlédnout kolekci"
+  },
+  "productGrid": {
+    "eyebrow": "Obchod",
+    "heading": "Koupit hodinky {{brand}}",
+    "collection": "Kolekce",
+    "filter": "Filtrovat",
+    "count": "Hodinky {{brand}}: {{count}}",
+    "noMatches": "Vašim filtrům momentálně neodpovídají žádné hodinky {{brand}}. Upravte filtry nebo si prohlédněte všechny kolekce.",
+    "quickView": "Rychlý náhled",
+    "viewDetails": "Zobrazit podrobnosti",
+    "box": "Krabička",
+    "noBox": "Bez krabičky",
+    "papers": "Doklady",
+    "noPapers": "Bez dokladů",
+    "new": "Nové",
+    "verified": "Ověřeno",
+    "boxPapers": "Krabička a doklady",
+    "any": "Libovolné",
+    "boxOnly": "Pouze krabička",
+    "papersOnly": "Pouze doklady",
+    "availability": "Dostupnost",
+    "inStock": "Skladem",
+    "sold": "Prodáno",
+    "reserved": "Rezervováno",
+    "comingSoon": "Již brzy",
+    "showResults": "Zobrazit výsledky: {{count}}",
+    "condition": "Stav",
+    "caseMaterial": "Materiál pouzdra",
+    "dialColor": "Barva ciferníku",
+    "gender": "Určení",
+    "bracelet": "Náramek",
+    "movement": "Strojek",
+    "watchShape": "Tvar hodinek",
+    "complication": "Komplikace",
+    "sortNewest": "Nejnovější nabídky",
+    "sortPriceLow": "Od nejnižší ceny",
+    "sortPriceHigh": "Od nejvyšší ceny",
+    "sortYearNewest": "Od nejnovějšího roku výroby",
+    "sortFeatured": "Doporučené",
+    "sortPopular": "Nejoblíbenější",
+    "sortLimited": "Limitované edice nejdříve",
+    "caseSize": "Velikost pouzdra",
+    "priceRange": "Cenové rozpětí",
+    "clearFilters": "Zrušit všechny filtry",
+    "features": "Vlastnosti",
+    "type": "Typ",
+    "timepieces": "Počet hodinek: {{count}}"
+  },
+  "faq": {
+    "eyebrow": "Časté dotazy",
+    "heading": "Časté dotazy k {{brand}}",
+    "contactCS": "Kontaktovat zákaznický servis"
+  },
+  "trustSection": {
+    "eyebrow": "Důvěra",
+    "heading": "Nakupujte hodinky {{brand}} s jistotou",
+    "description": "V Kariv Glamour dbáme na transparentnost, pravost a potřeby sběratelů. U každých hodinek {{brand}} uvádíme podrobnosti, na kterých záleží."
+  },
+  "internalLinks": {
+    "popularSearches": "Oblíbená hledání {{brand}}",
+    "iconicCollections": "Ikonické kolekce {{brand}}",
+    "complicationsGuides": "Průvodce komplikacemi a sběratelstvím",
+    "learningGuides": "Průvodce hodinkami {{brand}}",
+    "relatedBrands": "Další luxusní značky hodinek",
+    "relatedCategories": "Související kategorie hodinek"
+  },
+  "seoLanding": {
+    "boutique": "Butik {{brand}}",
+    "availableWatches": "Dostupné hodinky {{brand}}",
+    "noWatches": "V této kategorii momentálně nejsou dostupné žádné hodinky {{brand}}.",
+    "viewAll": "Zobrazit všechny hodinky {{brand}}",
+    "exploreFullCollection": "Prohlédnout celou kolekci {{brand}}",
+    "visitBoutique": "Navštívit butik {{brand}}",
+    "pageNotFound": "Stránka nenalezena",
+    "returnToBrand": "Zpět na {{brand}}",
+    "guideText1": "V Kariv Glamour věříme, že nákup hodinek {{brand}} má vycházet z dostatku informací a jistoty. Ať už vybíráte své první hodinky {{brand}}, nebo rozšiřujete zavedenou sbírku, je důležité rozumět jednotlivým kolekcím, stavu i referencím.",
+    "guideText2": "Náš tým hodinářských odborníků pečlivě prověřuje každý kus a uvádí srozumitelné informace o produktu, jasné hodnocení stavu i referenční číslo. Repliky ani padělky neprodáváme a na každé produktové stránce najdete informace pro informované rozhodnutí.",
+    "guideText3": "Prohlédněte si kompletní nabídku {{brand}}, vybírejte podle modelové řady nebo si přečtěte naše průvodce hodinářstvím, údržbou a historií značky {{brand}}.",
+    "shopWatches": "Koupit hodinky {{brand}}",
+    "preOwned": "Použité hodinky {{brand}}"
+  },
+  "collectionPage": {
+    "collectionLabel": "Kolekce {{brand}}",
+    "watchesAvailable": "Dostupných hodinek: {{count}}",
+    "allBrand": "Všechny hodinky {{brand}}",
+    "noWatches": "Hodinky {{brand}} {{collection}} momentálně nejsou dostupné. Podívejte se prosím později.",
+    "viewAll": "Zobrazit všechny hodinky {{brand}}",
+    "notFound": "Kolekce nenalezena",
+    "returnToBrand": "Zpět na {{brand}}",
+    "watchesTitle": "Hodinky {{brand}} {{collection}}"
+  },
+  "breadcrumb": {
+    "home": "Úvod",
+    "brands": "Značky"
+  }
+}

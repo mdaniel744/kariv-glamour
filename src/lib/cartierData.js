@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Cartier-inspired luxury palette
 export const CARTIER_COLORS = {
   ivory: '#F7F2EA',
@@ -178,3 +181,7 @@ export const CARTIER_SEO_PAGES = {
   'cartier-damen': { h1_en: 'Cartier Watches for Women', h1_de: 'Cartier Uhren für Damen', title_en: 'Cartier Watches for Women | Kariv Glamour', title_de: 'Cartier Uhr Damen | Kariv Glamour', description_en: 'Cartier watches for women at Kariv Glamour – Panthère, Baignoire, Tank and Ballon Bleu.', description_de: 'Cartier Uhren für Damen bei Kariv Glamour – Panthère, Baignoire, Tank und Ballon Bleu.', intro_en: 'Discover Cartier watches for women like Panthère, Baignoire, Tank and Ballon Bleu – jewellery-like elegance and graceful proportions.', intro_de: 'Entdecken Sie Cartier Uhren für Damen wie Panthère, Baignoire, Tank und Ballon Bleu – schmuckhafte Eleganz und anmutige Proportionen.', filter: { gender: 'Women' } },
   'cartier-story': { h1_en: 'Cartier Story', h1_de: 'Cartier Story', title_en: 'Cartier Story | Kariv Glamour', title_de: 'Cartier Story | Kariv Glamour', description_en: 'The Cartier Story – design heritage, watchmaking elegance and iconic watch families.', description_de: 'Die Cartier Story – Designheritage, Uhrmachereleganz und ikonische Uhrenfamilien.', intro_en: 'Cartier has shaped luxury design through a unique combination of jewellery expertise, watchmaking creativity, and instantly recognizable forms.', intro_de: 'Cartier hat das Luxusdesign durch eine einzigartige Verbindung aus Schmuckexpertise, uhrmacherischer Kreativität und unverkennbaren Formen geprägt.', isGuide: true },
 };
+
+applyCzechSeoPages(CARTIER_SEO_PAGES, 'Cartier', 'cartier');
+applyCzechBrandFaqs(CARTIER_FAQS, 'cartier');
+applyCzechBrandContent('cartier', CARTIER_COLLECTIONS, CARTIER_QUICK_FILTERS, CARTIER_SEO_CARDS, CARTIER_READ_MORE, CARTIER_INTERNAL_LINKS);

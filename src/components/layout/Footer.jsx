@@ -34,7 +34,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <LocalizedLink to="/" aria-label="Kariv Glamour home" className="mb-5 inline-flex max-w-full items-center">
+            <LocalizedLink to="/" aria-label={`Kariv Glamour — ${t('common:home')}`} className="mb-5 inline-flex max-w-full items-center">
               <MediaImage
                 src="/logos/kariv-glamour-desktop-green.webp"
                 alt="Kariv Glamour"
@@ -90,7 +90,7 @@ export default function Footer() {
 
       <div className="border-t border-[#dce5df] dark:border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[11px] text-[#60766c] dark:text-white/60 font-body">© {new Date().getFullYear()} Kariv Glamour. {t('footer.allRightsReserved', { defaultValue: 'All rights reserved.' })}</p>
+          <p className="text-[11px] text-[#60766c] dark:text-white/60 font-body">{t('common:copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex gap-6">
             <LocalizedLink to="/legal/privacy-policy" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.privacyPolicy')}</LocalizedLink>
             <LocalizedLink to="/legal/terms-and-conditions" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.termsConditions')}</LocalizedLink>

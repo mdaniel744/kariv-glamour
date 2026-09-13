@@ -112,13 +112,14 @@ test('visible product and card prices use the same helpers as structured data an
   const detail = readFileSync(new URL('../src/page-content/ProductDetail.jsx', import.meta.url), 'utf8');
   const card = readFileSync(new URL('../src/components/shared/ProductCard.jsx', import.meta.url), 'utf8');
   for (const source of [detail, card]) {
-    assert.match(source, /getProductPricing\(product\)/);
+    assert.match(source, /useStorefrontPricing\(\)/);
+    assert.match(source, /getPricing\(product\)/);
     assert.match(source, /formatPrice\(pricing\.price, pricing\.currency\)/);
     assert.doesNotMatch(source, /formatPrice\(product\.(salePrice|price)\)/);
   }
   assert.match(detail, /disabled=\{!canPurchase\}/);
   assert.match(detail, /if \(!canPurchase\) return/);
   const route = readFileSync(new URL('../app/[locale]/product/[slug]/page.jsx', import.meta.url), 'utf8');
-  assert.match(route, /buildProductMerchantSchema\(product, \{ locale, url: productUrl \}\)/);
+  assert.match(route, /buildProductMerchantSchema\(product, \{ locale, url: productUrl, exchangeRates \}\)/);
   assert.doesNotMatch(route, /PreOrder|referenceNumber \|\| undefined|salePrice \|\| product\.price/);
 });

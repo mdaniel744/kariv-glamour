@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Bvlgari collections, filters, and SEO data
 // Bvlgari has two strong identities: jewellery-watch (Serpenti, Lvcea) and
 // modern men's haute-horology (Octo, Octo Finissimo, Octo Roma).
@@ -427,3 +430,7 @@ export const BVLGARI_SEO_PAGES = {
     ],
   },
 };
+
+applyCzechSeoPages(BVLGARI_SEO_PAGES, 'Bvlgari', 'bvlgari');
+applyCzechBrandFaqs(BVLGARI_FAQS, 'bvlgari');
+applyCzechBrandContent('bvlgari', BVLGARI_COLLECTIONS, BVLGARI_QUICK_FILTERS, BVLGARI_SEO_CARDS, BVLGARI_READ_MORE, BVLGARI_INTERNAL_LINKS);

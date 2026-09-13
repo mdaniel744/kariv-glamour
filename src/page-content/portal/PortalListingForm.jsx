@@ -34,7 +34,14 @@ export default function PortalListingForm({ id: providedId }) {
 
   useEffect(() => {
     if (isEdit) {
-      getMyDealerListing(id).then((p) => { if (p) setProduct(p); }).catch(console.error);
+      getMyDealerListing(id).then((p) => {
+        if (p) setProduct({
+          ...p,
+          productTitle: p.productTitle_en || p.productTitle,
+          shortDescription: p.shortDescription_en || p.shortDescription,
+          productDescription: p.productDescription_en || p.productDescription,
+        });
+      }).catch(console.error);
     }
   }, [id]);
 
@@ -64,10 +71,10 @@ export default function PortalListingForm({ id: providedId }) {
       const { authenticationStatus: _authenticationStatus, ...rest } = product;
       const payload = {
         ...rest,
-        sourceLocale: locale,
-        [`productTitle_${locale}`]: product.productTitle,
-        [`shortDescription_${locale}`]: product.shortDescription,
-        [`productDescription_${locale}`]: product.productDescription,
+        sourceLocale: 'en',
+        productTitle_en: product.productTitle,
+        shortDescription_en: product.shortDescription,
+        productDescription_en: product.productDescription,
         price: Number(product.price),
         salePrice: product.salePrice ? Number(product.salePrice) : undefined,
         yearOfProduction: product.yearOfProduction ? Number(product.yearOfProduction) : undefined,

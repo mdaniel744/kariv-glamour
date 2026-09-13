@@ -23,6 +23,8 @@ test('company-detail labels are localized for English and German legal pages', (
   assert.equal(getCompanyDetailsCopy('en').heading, 'Company details');
   assert.equal(getCompanyDetailsCopy('de').heading, 'Unternehmensangaben');
   assert.equal(getCompanyDetailsCopy('de').manager, 'Geschäftsführer');
+  assert.equal(getCompanyDetailsCopy('cs').heading, 'Údaje o společnosti');
+  assert.equal(getCompanyDetailsCopy('cs').manager, 'Jednatel');
   assert.equal(getCompanyDetailsCopy('fr'), getCompanyDetailsCopy('en'));
 });
 
@@ -55,6 +57,8 @@ test('every footer policy has complete English and German fallback content', () 
     assert.ok(page.title_de.length > 0, `${slug} needs a German title`);
     assert.ok(page.content_en.length > 150, `${slug} needs English policy content`);
     assert.ok(page.content_de.length > 150, `${slug} needs German policy content`);
+    assert.ok(page.title_cs.length > 0, `${slug} needs a Czech title`);
+    assert.ok(page.content_cs.length > 150, `${slug} needs Czech policy content`);
   });
 });
 
@@ -62,9 +66,18 @@ test('remote legal records override a matching fallback without hiding other pol
   const remotePrivacy = { slug: 'privacy-policy', title: 'Remote privacy text' };
   const merged = mergeLegalPageFallbacks([remotePrivacy]);
 
-  assert.equal(merged.find((page) => page.slug === 'privacy-policy'), remotePrivacy);
+  const privacy = merged.find((page) => page.slug === 'privacy-policy');
+  assert.equal(privacy.title, remotePrivacy.title);
+  assert.equal(privacy.content_cs, getLegalPageFallback('privacy-policy').content_cs);
+  assert.deepEqual(remotePrivacy, { slug: 'privacy-policy', title: 'Remote privacy text' }, 'input record is not mutated');
   assert.ok(merged.some((page) => page.slug === 'shipping-policy'));
   assert.equal(merged.length, getAllLegalPageFallbacks().length);
+});
+
+test('published human-authored Czech legal corrections take precedence', () => {
+  const authored = { slug: 'privacy-policy', title_cs: 'Vlastní nadpis', content_cs: 'Právně schválený český text', seoTitle_cs: 'Vlastní SEO', seoDescription_cs: 'Vlastní popis' };
+  const result = mergeLegalPageFallbacks([authored])[0];
+  for (const [key, value] of Object.entries(authored)) assert.equal(result[key], value);
 });
 
 test('shipping policy states Czech and EU charges and delivery estimates in both languages', () => {

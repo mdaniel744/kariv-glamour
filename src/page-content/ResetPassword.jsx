@@ -1,3 +1,4 @@
+import { getAuthText } from '@/lib/authCopy';
 import React, { useState } from "react";
 import { useSignIn } from "@clerk/nextjs/legacy";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,8 @@ import LocalizedLink from "@/components/LocalizedLink";
 
 export default function ResetPassword() {
   const [searchParams] = useUrlSearchParams();
-  const { localePath } = useLanguage();
+  const { locale, localePath } = useLanguage();
+  const text = (value) => getAuthText(locale, value);
   const emailFromLink = searchParams.get("email") || "";
   const { signIn, setActive, isLoaded } = useSignIn();
 
@@ -28,7 +30,7 @@ export default function ResetPassword() {
     if (!isLoaded) return;
     setError("");
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(text("Passwords do not match"));
       return;
     }
     setLoading(true);
@@ -39,14 +41,14 @@ export default function ResetPassword() {
         password: newPassword,
       });
       if (result.status !== "complete") {
-        setError("Verification incomplete — please check the code and try again.");
+        setError(text("Verification incomplete — please check the code and try again."));
         return;
       }
       await setActive({ session: result.createdSessionId });
       const returnTo = getSafeReturnUrl(searchParams.get('returnTo'));
-      window.location.href = /^\/(de|en|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
+      window.location.href = /^\/(de|en|cs|admin)(\/|$)/.test(returnTo) ? returnTo : localePath(returnTo);
     } catch (err) {
-      setError(err.errors?.[0]?.message || "Failed to reset password");
+      setError(err.errors?.[0]?.message || text("Failed to reset password"));
     } finally {
       setLoading(false);
     }
@@ -56,16 +58,16 @@ export default function ResetPassword() {
     return (
       <AuthLayout
         icon={AlertTriangle}
-        title="Missing email"
-        subtitle="Request a reset code first"
+        title={text("Missing email")}
+        subtitle={text("Request a reset code first")}
         footer={
           <LocalizedLink to="/forgot-password" className="text-primary font-medium hover:underline">
-            Request a new code
+            {text("Request a new code")}
           </LocalizedLink>
         }
       >
         <p className="text-sm text-foreground text-center">
-          Please request a password reset code first.
+          {text("Please request a password reset code first.")}
         </p>
       </AuthLayout>
     );
@@ -74,8 +76,8 @@ export default function ResetPassword() {
   return (
     <AuthLayout
       icon={Lock}
-      title="New password"
-      subtitle={`Enter the code sent to ${email} and your new password`}
+      title={text("New password")}
+      subtitle={locale === 'cs' ? `Zadejte kód zaslaný na ${email} a své nové heslo` : `Enter the code sent to ${email} and your new password`}
     >
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -84,7 +86,7 @@ export default function ResetPassword() {
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="code">Reset code</Label>
+          <Label htmlFor="code">{text("Reset code")}</Label>
           <div className="relative">
             <Input
               id="code"
@@ -100,7 +102,7 @@ export default function ResetPassword() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">New Password</Label>
+          <Label htmlFor="password">{text("New Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -117,7 +119,7 @@ export default function ResetPassword() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirm">Confirm Password</Label>
+          <Label htmlFor="confirm">{text("Confirm Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
@@ -136,10 +138,10 @@ export default function ResetPassword() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Resetting...
+              {text("Resetting...")}
             </>
           ) : (
-            "Reset password"
+            text("Reset password")
           )}
         </Button>
       </form>

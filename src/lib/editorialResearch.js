@@ -25,6 +25,38 @@ export const EDITORIAL_RESEARCH = {
     ],
   },
 };
+
+const CZECH_RESEARCH = {
+  'how-to-safely-buy-a-pre-owned-luxury-watch': {
+    title: 'Ověřte skutečnou záruku a možnosti servisu',
+    paragraphs: [
+      'Záruka výrobce, záruka prodejce a doložený servis jsou tři různé věci. Rolex uvádí konkrétní podmínky záruky na nové hodinky včetně původního prodeje a vyplněné záruční karty. Nabídka z druhé ruky neznamená, že začíná nová záruka výrobce. Zjistěte, kdo bude případnou reklamaci řešit a jaké podklady hodinky doprovázejí.',
+      'Před koupí neobvyklé reference ověřte také dostupný servis. Patek Philippe popisuje dlouhodobý závazek ke svým hodinkám, konkrétní oprava však stále vyžaduje posouzení a cenovou nabídku. Zjistěte možnosti servisu přesně těch hodinek, o které máte zájem, místo předpokladu, že každá oprava bude rychlá nebo levná.',
+    ],
+  },
+  'what-box-and-papers-mean-for-luxury-watches': {
+    title: 'Archivní výpisy a servisní karty',
+    paragraphs: [
+      'Patek Philippe rozlišuje původní Certificate of Origin a Extract from the Archives. Původní certifikát nelze nahradit; archivní výpis zaznamenává historické údaje podle podmínek žádosti výrobce. Výpis je třeba přesně popsat, nikoli jej vydávat za původní doklady nově doplněné kompletní sady.',
+      'Servisní karta Rolex se vztahuje k práci provedené v servisní síti a k související servisní záruce. Plní jinou funkci než původní záruka při prodeji. Ptejte se, co dokument skutečně zaznamenává, a nepovažujte každou kartu se značkou za rovnocenný doklad původu.',
+    ],
+  },
+  'are-pre-owned-luxury-watches-a-good-investment': {
+    title: 'Zájem o trh není prognózou výnosu',
+    paragraphs: [
+      'Zpráva Deloitte Swiss Watch Industry Insights 2024, vydaná v lednu 2025, zkoumá trh použitých hodinek jako samostatnou část hodinářského odvětví. Nabízí tržní kontext, nikoli ocenění jednotlivých hodinek ani předpověď růstu konkrétní reference. Průzkum zájmu kupujících není cenovým indexem dokončených prodejů.',
+      'Sestavte přehled nákladů: nákup a doprava, očekávaný servis, pojištění a budoucí prodej. Porovnejte realistický čistý výnos z prodeje s celkovou částkou. Pokud si hodinky můžete dovolit pouze za předpokladu zdražení, nejde o pohodlný sběratelský rozpočet. Tento průvodce nepředpokládá pevné zhodnocení ani pořadí investiční výhodnosti.',
+    ],
+  },
+};
+
+for (const [slug, article] of Object.entries(CZECH_RESEARCH)) {
+  EDITORIAL_RESEARCH[slug].title.cs = article.title;
+  EDITORIAL_RESEARCH[slug].paragraphs.forEach((paragraph, index) => {
+    paragraph.cs = article.paragraphs[index];
+  });
+}
+
 export function enrichEditorialGuide(guide) {
   const research = EDITORIAL_RESEARCH[guide.slug];
   if (!research) return guide;

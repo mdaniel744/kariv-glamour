@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Grand Seiko collections, filters, and SEO data
 // Grand Seiko is positioned around Japanese craftsmanship, precision,
 // nature-inspired dials, Spring Drive, and the Grammar of Design.
@@ -299,3 +302,7 @@ export const GS_SEO_PAGES = {
     isGuide: true,
   },
 };
+
+applyCzechSeoPages(GS_SEO_PAGES, 'Grand Seiko', 'grandSeiko');
+applyCzechBrandFaqs(GS_FAQS, 'grandSeiko');
+applyCzechBrandContent('grandSeiko', GS_COLLECTIONS, GS_QUICK_FILTERS, GS_SEO_CARDS, GS_READ_MORE, GS_INTERNAL_LINKS);

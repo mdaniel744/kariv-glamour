@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // IWC Schaffhausen collections, filters, and SEO data
 // Positioned around engineering precision, aviation heritage,
 // Portugieser elegance, Portofino dress watches, and Ingenieur sports watches.
@@ -296,3 +299,7 @@ export const IWC_SEO_PAGES = {
     isGuide: true,
   },
 };
+
+applyCzechSeoPages(IWC_SEO_PAGES, 'IWC Schaffhausen', 'iwc');
+applyCzechBrandFaqs(IWC_FAQS, 'iwc');
+applyCzechBrandContent('iwc', IWC_COLLECTIONS, IWC_QUICK_FILTERS, IWC_SEO_CARDS, IWC_READ_MORE, IWC_INTERNAL_LINKS);

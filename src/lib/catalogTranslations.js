@@ -23,7 +23,7 @@ export function mergeCatalogTranslations(entityType, rows) {
   for (const row of rows) {
     if (!row.entity_id || !row.field_name || typeof row.value !== 'string' || !row.value.trim()) continue;
     const locale = String(row.locale || '').trim().toLowerCase().split(/[-_]/)[0];
-    if (!['de', 'en'].includes(locale)) continue;
+    if (!['de', 'en', 'cs'].includes(locale)) continue;
     const field = aliases[row.field_name] || row.field_name;
     const key = JSON.stringify([row.entity_id, field, locale]);
     const previous = chosen.get(key);

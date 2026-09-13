@@ -34,7 +34,7 @@ export async function generateMetadata({ params }) {
     return localizedMetadata({
       locale,
       path: slug,
-      title: locale === 'de' ? 'Seite nicht gefunden' : 'Page not found',
+      title: locale === 'cs' ? 'Stránka nebyla nalezena' : locale === 'de' ? 'Seite nicht gefunden' : 'Page not found',
       description: '',
       index: false,
     });
@@ -98,8 +98,8 @@ export default async function SeoLandingPage({ params }) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
-        { '@type': 'ListItem', position: 2, name: route.pageData.isGuide ? (locale === 'de' ? 'Uhren-Guides' : 'Watch guides') : (locale === 'de' ? 'Marken' : 'Brands'), item: `${siteUrl}/${locale}/${route.pageData.isGuide ? 'guides' : 'brands'}` },
+        { '@type': 'ListItem', position: 1, name: locale === 'cs' ? 'Úvod' : locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
+        { '@type': 'ListItem', position: 2, name: route.pageData.isGuide ? (locale === 'cs' ? 'Průvodci hodinkami' : locale === 'de' ? 'Uhren-Guides' : 'Watch guides') : (locale === 'cs' ? 'Značky' : locale === 'de' ? 'Marken' : 'Brands'), item: `${siteUrl}/${locale}/${route.pageData.isGuide ? 'guides' : 'brands'}` },
         { '@type': 'ListItem', position: 3, name: route.brandName, item: `${siteUrl}/${locale}/brands/${route.brandSlug}` },
         { '@type': 'ListItem', position: 4, name: title, item: url },
       ],

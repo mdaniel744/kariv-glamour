@@ -3,8 +3,10 @@ import { getMyProfile, saveMyProfile } from '@/actions/customers';
 import { useAuth } from '@/lib/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Save, Upload, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function PortalProfile() {
+  const { t } = useTranslation();
   const { user, updateProfileImage } = useAuth();
   const { toast } = useToast();
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -43,8 +45,8 @@ export default function PortalProfile() {
         postalCode: profile.postalCode,
         country: profile.country
       });
-      if (res.ok) toast({ title: 'Profile updated successfully' });
-      else toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      if (res.ok) toast({ title: t('pages.portal.profileUpdated') });
+      else toast({ title: t('error'), description: res.error, variant: 'destructive' });
     } finally {
       setSaving(false);
     }
@@ -55,7 +57,7 @@ export default function PortalProfile() {
     setUploadingAvatar(true);
     try {
       const res = await updateProfileImage(file);
-      if (!res.ok) toast({ title: 'Error', description: res.error, variant: 'destructive' });
+      if (!res.ok) toast({ title: t('error'), description: res.error, variant: 'destructive' });
     } finally {
       setUploadingAvatar(false);
       if (avatarInputRef.current) avatarInputRef.current.value = '';
@@ -64,7 +66,7 @@ export default function PortalProfile() {
 
   return (
     <div className="max-w-lg">
-      <h1 className="text-xl font-display text-foreground font-light mb-6">My Profile</h1>
+      <h1 className="text-xl font-display text-foreground font-light mb-6">{t('pages.portal.myProfile')}</h1>
 
       <div className="space-y-4">
         <div className="flex items-center gap-4">
@@ -78,39 +80,39 @@ export default function PortalProfile() {
           <div>
             <label className="cursor-pointer inline-flex items-center gap-1.5 border border-border px-3 py-2 text-xs text-foreground hover:border-primary transition-colors">
               {uploadingAvatar ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
-              {uploadingAvatar ? 'Uploading...' : 'Change Photo'}
+              {uploadingAvatar ? t('pages.portal.uploading') : t('pages.portal.changePhoto')}
               <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" disabled={uploadingAvatar} onChange={e => handleAvatarChange(e.target.files?.[0])} />
             </label>
           </div>
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Email</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.customerService.emailTitle')}</label>
           <input value={user?.email || ''} disabled className="w-full bg-muted border border-border px-4 py-3 text-sm text-muted-foreground" />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Full Name</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.fullName')}</label>
           <input value={profile.full_name} disabled className="w-full bg-muted border border-border px-4 py-3 text-sm text-muted-foreground" />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Phone</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.phone')}</label>
           <input value={profile.phoneNumber} onChange={e => setProfile({...profile, phoneNumber: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Street Address</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.street')}</label>
           <input value={profile.streetAddress} onChange={e => setProfile({...profile, streetAddress: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Postal Code</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.postalCode')}</label>
             <input value={profile.postalCode} onChange={e => setProfile({...profile, postalCode: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">City</label>
+            <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.city')}</label>
             <input value={profile.city} onChange={e => setProfile({...profile, city: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
           </div>
         </div>
         <div>
-          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">Country</label>
+          <label className="text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5 block">{t('pages.checkout.country')}</label>
           <input value={profile.country} onChange={e => setProfile({...profile, country: e.target.value})} className="w-full bg-card border border-border px-4 py-3 text-sm text-foreground outline-none focus:border-primary" />
         </div>
 
@@ -119,7 +121,7 @@ export default function PortalProfile() {
           disabled={saving}
           className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-3 flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <Save size={14} /> {saving ? 'Saving...' : 'Save Changes'}
+          <Save size={14} /> {saving ? t('pages.portal.saving') : t('save')}
         </button>
       </div>
     </div>

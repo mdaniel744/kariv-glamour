@@ -1,6 +1,12 @@
 import { localizedMetadata } from '@/lib/seo';
 
 const AUTH_COPY = {
+  cs: {
+    login: ['Přihlášení', 'Přihlaste se ke svému účtu Kariv Glamour.'],
+    register: ['Vytvořit účet', 'Vytvořte si účet Kariv Glamour.'],
+    forgotPassword: ['Obnovit heslo', 'Požádejte o bezpečný odkaz pro obnovení hesla.'],
+    resetPassword: ['Nové heslo', 'Nastavte nové heslo ke svému účtu Kariv Glamour.'],
+  },
   de: {
     login: ['Anmelden', 'Melden Sie sich bei Ihrem Kariv-Glamour-Konto an.'],
     register: ['Konto erstellen', 'Erstellen Sie Ihr Kariv-Glamour-Konto.'],

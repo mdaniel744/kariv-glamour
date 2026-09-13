@@ -44,10 +44,10 @@ export default function BvlgariCollectionGrid() {
         </div>
 
         <div className="relative">
-          <button onClick={() => scrollByDir(-1)} disabled={!canPrev} aria-label="Previous collections" className="absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-3 md:-ml-4 w-11 h-11 flex items-center justify-center border border-border bg-background/90 backdrop-blur-sm text-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none">
+          <button onClick={() => scrollByDir(-1)} disabled={!canPrev} aria-label={t('common:previous')} className="absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-3 md:-ml-4 w-11 h-11 flex items-center justify-center border border-border bg-background/90 backdrop-blur-sm text-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none">
             <ChevronLeft size={18} />
           </button>
-          <button onClick={() => scrollByDir(1)} disabled={!canNext} aria-label="Next collections" className="absolute right-0 top-1/2 -translate-y-1/2 z-20 -mr-3 md:-mr-4 w-11 h-11 flex items-center justify-center border border-border bg-background/90 backdrop-blur-sm text-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none">
+          <button onClick={() => scrollByDir(1)} disabled={!canNext} aria-label={t('common:next')} className="absolute right-0 top-1/2 -translate-y-1/2 z-20 -mr-3 md:-mr-4 w-11 h-11 flex items-center justify-center border border-border bg-background/90 backdrop-blur-sm text-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none">
             <ChevronRight size={18} />
           </button>
 

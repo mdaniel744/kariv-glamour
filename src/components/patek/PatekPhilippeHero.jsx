@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import BrandHero from '@/components/shared/BrandHero';
 
@@ -6,6 +7,7 @@ const BRAND = 'Patek Philippe';
 
 export default function PatekPhilippeHero() {
   const { t } = useTranslation('brandComponents');
+  const { locale } = useLanguage();
   const links = [
     { label: t('hero.anchorCollections'), href: '#patek-collections' },
     { label: t('hero.anchorNewArrivals'), href: '#patek-products' },
@@ -14,5 +16,5 @@ export default function PatekPhilippeHero() {
     { label: t('hero.anchorWatchmaking'), href: '#patek-watchmaking' },
   ];
 
-  return <BrandHero brand={BRAND} image="/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png" imageAlt="Patek Philippe Nautilus watch" shopTo="/patek-philippe-uhr-kaufen" collectionsHref="#patek-collections" links={links} />;
+  return <BrandHero brand={BRAND} image="/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png" imageAlt={locale === 'cs' ? "Hodinky Patek Philippe Nautilus" : "Patek Philippe Nautilus watch"} shopTo="/patek-philippe-uhr-kaufen" collectionsHref="#patek-collections" links={links} />;
 }

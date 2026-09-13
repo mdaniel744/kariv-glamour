@@ -17,10 +17,13 @@ const BUILT_IN_GUIDES = EDITORIAL_GUIDES.map((guide) => ({
   created_date: guide.datePublished,
   title_en: guide.translations.en.title,
   title_de: guide.translations.de.title,
+  title_cs: guide.translations.cs.title,
   excerpt_en: guide.translations.en.excerpt,
   excerpt_de: guide.translations.de.excerpt,
+  excerpt_cs: guide.translations.cs.excerpt,
   category_en: guide.translations.en.category,
   category_de: guide.translations.de.category,
+  category_cs: guide.translations.cs.category,
 }));
 
 export default function Guides() {

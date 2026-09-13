@@ -1,3 +1,4 @@
+import { getAuthText } from '@/lib/authCopy';
 import React, { useState } from "react";
 import { useSignIn } from "@clerk/nextjs/legacy";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,8 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const { signIn, isLoaded } = useSignIn();
-  const { localePath } = useLanguage();
+  const { locale, localePath } = useLanguage();
+  const text = (value) => getAuthText(locale, value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,30 +35,30 @@ export default function ForgotPassword() {
   return (
     <AuthLayout
       icon={Mail}
-      title="Reset password"
-      subtitle="We'll send you a link to reset it"
+      title={text("Reset password")}
+      subtitle={text("We'll send you a link to reset it")}
       footer={
         <LocalizedLink to="/login" className="text-primary font-medium hover:underline">
-          <ArrowLeft className="w-3 h-3 inline mr-1" />Back to log in
+          <ArrowLeft className="w-3 h-3 inline mr-1" />{text("Back to log in")}
         </LocalizedLink>
       }
     >
       {sent ? (
         <div className="text-center space-y-4">
           <p className="text-sm text-foreground">
-            If an account exists with that email, you'll receive a code shortly.
+            {text("If an account exists with that email, you'll receive a code shortly.")}
           </p>
           <LocalizedLink
             to={`/reset-password?email=${encodeURIComponent(email)}`}
             className="inline-block bg-primary text-primary-foreground text-xs tracking-[0.15em] uppercase px-6 py-3"
           >
-            Enter code
+            {text("Enter code")}
           </LocalizedLink>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email address</Label>
+            <Label htmlFor="email">{text("Email address")}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
               <Input
@@ -76,10 +78,10 @@ export default function ForgotPassword() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Sending...
+                {text("Sending...")}
               </>
             ) : (
-              "Send reset link"
+              text("Send reset link")
             )}
           </Button>
         </form>

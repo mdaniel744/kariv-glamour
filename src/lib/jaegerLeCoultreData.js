@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Jaeger-LeCoultre collections, filters, and SEO data
 // Positioned around refined Swiss watchmaking, the iconic Reverso case,
 // ultra-thin dress watches, Polaris sport models, and high horology.
@@ -282,3 +285,7 @@ export const JLC_SEO_PAGES = {
     isGuide: true,
   },
 };
+
+applyCzechSeoPages(JLC_SEO_PAGES, 'Jaeger-LeCoultre', 'jaegerLeCoultre');
+applyCzechBrandFaqs(JLC_FAQS, 'jaegerLeCoultre');
+applyCzechBrandContent('jaegerLeCoultre', JLC_COLLECTIONS, JLC_QUICK_FILTERS, JLC_SEO_CARDS, JLC_READ_MORE, JLC_INTERNAL_LINKS);

@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Audemars Piguet collections, filters, and SEO data
 
 const AP_COLLECTION_ASSET_BASE = '/brand-assets/audemars-piguet/collections';
@@ -151,3 +154,7 @@ export const AP_SEO_PAGES = {
   'welche-audemars-piguet-kaufen': { h1_en: 'Which Audemars Piguet to Buy?', h1_de: 'Welche Audemars Piguet kaufen?', title_en: 'Which Audemars Piguet to Buy | Kariv Glamour', title_de: 'Welche Audemars Piguet kaufen | Kariv Glamour', description_en: 'Audemars Piguet buying guide — compare Royal Oak, Royal Oak Offshore, Royal Oak Concept and Code 11.59.', description_de: 'Audemars Piguet Kaufberatung \u2013 vergleichen Sie Royal Oak, Royal Oak Offshore, Royal Oak Concept und Code 11.59.', intro_en: 'Which Audemars Piguet watch is right for you? Compare collections, features and case sizes to make the right decision.', intro_de: 'Welche Audemars Piguet Uhr passt zu Ihnen? Vergleichen Sie Kollektionen, Funktionen und Geh\u00e4usegr\u00f6\u00dfen, um die richtige Entscheidung zu treffen.', isGuide: true },
   'audemars-piguet-story': { h1_en: 'Audemars Piguet Story', h1_de: 'Audemars Piguet Story', title_en: 'Audemars Piguet Story | Kariv Glamour', title_de: 'Audemars Piguet Story | Kariv Glamour', description_en: 'The Audemars Piguet Story — bold case architecture, integrated bracelet design and high-end finishing.', description_de: 'Die Audemars Piguet Story \u2013 bold case architecture, integrated bracelet design und high-end finishing.', intro_en: 'Audemars Piguet is known for bold case architecture, integrated bracelet design, high-end finishing and complications — from the iconic Royal Oak to the Code 11.59 collection.', intro_de: 'Audemars Piguet ist bekannt f\u00fcr bold case architecture, integrated bracelet design, high-end finishing und Komplikationen \u2013 von der ikonischen Royal Oak bis zur Code 11.59 Kollektion.', isGuide: true },
 };
+
+applyCzechSeoPages(AP_SEO_PAGES, 'Audemars Piguet', 'audemarsPiguet');
+applyCzechBrandFaqs(AP_FAQS, 'audemarsPiguet');
+applyCzechBrandContent('audemarsPiguet', AP_COLLECTIONS, AP_QUICK_FILTERS, AP_SEO_CARDS, AP_READ_MORE, AP_INTERNAL_LINKS);

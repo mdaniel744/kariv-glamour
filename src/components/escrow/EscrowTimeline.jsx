@@ -1,12 +1,16 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import { ESCROW_STEPS } from '@/lib/escrowConstants';
+import { getEscrowCopy } from '@/lib/escrowCopy';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function EscrowTimeline({ currentStatus }) {
+  const { locale } = useLanguage();
+  const copy = getEscrowCopy(locale);
   if (currentStatus === 'cancelled') {
     return (
       <div className="border border-red-500/20 bg-red-500/5 p-4 text-center">
-        <p className="text-xs text-red-600 dark:text-red-400 tracking-wide">This order has been cancelled.</p>
+        <p className="text-xs text-red-600 dark:text-red-400 tracking-wide">{copy.descriptions.cancelled}</p>
       </div>
     );
   }
@@ -29,7 +33,7 @@ export default function EscrowTimeline({ currentStatus }) {
                 {isComplete ? <Check size={14} /> : <span className="text-[10px] font-bold">{i + 1}</span>}
               </div>
               <p className={`text-[9px] tracking-[0.05em] text-center mt-2 leading-tight ${isCurrent ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
-                {step.label}
+                {copy.steps[step.key]}
               </p>
             </div>
             {i < ESCROW_STEPS.length - 1 && (

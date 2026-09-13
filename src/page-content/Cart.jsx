@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -6,7 +6,9 @@ import { useCart } from '@/lib/cartContext';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
-import { formatPrice } from '@/lib/constants';
+import { useStorefrontPricing } from '@/lib/currencyContext';
+import { dataClient } from '@/lib/dataClient';
+import { getProductAvailability } from '@/lib/productMerchant';
 import { useSEO } from '@/hooks/useSEO';
 import { Trash2, ShoppingBag, ArrowLeft, ShieldCheck, Truck, Lock, ChevronRight } from 'lucide-react';
 import { productSlug } from '@/lib/slug';
@@ -15,22 +17,40 @@ import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
 export default function Cart() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { cartItems, removeFromCart, cartTotal, clearCart } = useCart();
+  const { cartItems: savedItems, removeFromCart, clearCart } = useCart();
+  const { getPricing, formatMoney: formatPrice } = useStorefrontPricing();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
   const { localePath } = useLanguage();
   const { localize } = useLocalizedField();
   const [showAuthModal, setShowAuthModal] = useState(false);
   useSEO({ title: t('common:seo.cart.title'), description: t('common:seo.cart.description'), noindex: true });
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    Promise.all(savedItems.map(async ({ productId }) => {
+      try { return await dataClient.entities.Products.get(productId) || { id: productId }; }
+      catch { return { id: productId }; }
+    })).then((items) => { if (active) { setCartItems(items); setLoading(false); } });
+    return () => { active = false; };
+  }, [savedItems]);
+  const firstPricing = getPricing(cartItems[0] || {});
+  const canCheckout = !loading && getProductAvailability(cartItems[0] || {}).inStock && firstPricing.price != null;
+  // The backend checks out one watch per order. Do not show a multi-watch
+  // total beside a button that will actually order only the first watch.
+  const totalLabel = firstPricing.price != null ? formatPrice(firstPricing.price, firstPricing.currency) : t('common:priceUnavailable');
 
   // createOrder is single-product per order (matches the existing backend
   // contract) — checkout uses the first cart item; the rest stay in the cart.
   const checkoutPath = cartItems[0] ? `/checkout/${cartItems[0].id}` : null;
   const handleCheckout = () => {
-    if (!checkoutPath) return;
+    if (!checkoutPath || !canCheckout) return;
     if (!isAuthenticated) { setShowAuthModal(true); return; }
     router.push(localePath(checkoutPath));
   };
 
+  if (loading) return <div role="status" className="min-h-64 grid place-items-center">{t('common:loading')}</div>;
   if (cartItems.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-20 text-center">
@@ -77,11 +97,11 @@ export default function Cart() {
               <div className="flex-1 flex flex-col justify-between">
                 <div>
                   <p className="text-[10px] tracking-[0.15em] uppercase text-primary">{item.brand}</p>
-                  <LocalizedLink to={`/product/${productSlug(item)}`} className="text-sm text-foreground hover:text-primary transition-colors line-clamp-2">{localize(item, 'productTitle')}</LocalizedLink>
+                  <LocalizedLink to={`/product/${productSlug(item)}`} className="text-sm text-foreground hover:text-primary transition-colors line-clamp-2">{localize(item, 'productTitle') || t('common:currentlyUnavailable')}</LocalizedLink>
                   {item.referenceNumber && <p className="text-[10px] text-muted-foreground mt-1">{t('pages.productDetail.ref')} {item.referenceNumber}</p>}
                 </div>
                 <div className="flex items-end justify-between mt-3">
-                  <span className="text-sm text-foreground font-medium">{formatPrice(item.salePrice || item.price)}</span>
+                  <span className="text-sm text-foreground font-medium">{getPricing(item).price != null ? formatPrice(getPricing(item).price, getPricing(item).currency) : t('common:priceUnavailable')}</span>
                   <button onClick={() => removeFromCart(item.id)} className="text-muted-foreground hover:text-destructive transition-colors">
                     <Trash2 size={14} />
                   </button>
@@ -98,8 +118,8 @@ export default function Cart() {
 
             <div className="space-y-3 border-b border-border pb-5">
               <div className="flex justify-between text-xs">
-                <span className="text-muted-foreground">{t('pages.cart.subtotal', { count: cartItems.length })}</span>
-                <span className="text-foreground">{formatPrice(cartTotal)}</span>
+                <span className="text-muted-foreground">{t('pages.cart.subtotal', { count: 1 })}</span>
+                <span className="text-foreground">{totalLabel}</span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-muted-foreground">{t('pages.cart.shipping')}</span>
@@ -109,12 +129,13 @@ export default function Cart() {
 
             <div className="flex justify-between">
               <span className="text-xs text-foreground font-medium">{t('pages.cart.total')}</span>
-              <span className="font-display text-2xl text-foreground">{formatPrice(cartTotal)}</span>
+              <span className="font-display text-2xl text-foreground">{totalLabel}</span>
             </div>
 
             <button
               onClick={handleCheckout}
-              className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
+              disabled={!canCheckout}
+              className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors disabled:opacity-50">
               {t('pages.cart.checkout')}
             </button>
             {cartItems.length > 1 && (

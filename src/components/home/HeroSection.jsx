@@ -5,6 +5,7 @@ import { useLanguage } from '@/lib/languageContext';
 import { ArrowRight, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import MediaImage from '@/components/shared/MediaImage';
+import { useStorefrontPricing } from '@/lib/currencyContext';
 
 const HERO = {
   eyebrow: 'components.hero.slide1.eyebrow',
@@ -21,6 +22,8 @@ const HERO = {
 
 export default function HeroSection() {
   const { t } = useTranslation();
+  const { locale, fromEuro, formatMoney } = useStorefrontPricing();
+  const budget = fromEuro(10000);
   const router = useRouter();
   const { localePath } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,7 +84,7 @@ export default function HeroSection() {
             <LocalizedLink to="/shop?brand=Rolex" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">Rolex</LocalizedLink>
             <LocalizedLink to="/shop?brand=Omega" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">Omega</LocalizedLink>
             <LocalizedLink to="/shop?isCertifiedPreOwned=true" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{t('components.hero.certified')}</LocalizedLink>
-            <LocalizedLink to="/shop?priceMax=10000" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{t('components.hero.underTen')}</LocalizedLink>
+            {budget != null && <LocalizedLink to={`/shop?priceMax=${budget}`} className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{locale === 'cs' ? `Do ${formatMoney(budget)}` : t('components.hero.underTen')}</LocalizedLink>}
           </div>
 
           <LocalizedLink

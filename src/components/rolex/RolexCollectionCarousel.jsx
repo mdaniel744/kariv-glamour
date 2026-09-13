@@ -25,8 +25,8 @@ export default function RolexCollectionCarousel() {
         </div>
 
         <div className="hidden md:flex items-center justify-end gap-2 mb-6">
-          <button onClick={() => scroll(-1)} className="w-10 h-10 border border-border flex items-center justify-center transition-colors hover:border-primary hover:text-primary text-foreground"><ChevronLeft size={18} /></button>
-          <button onClick={() => scroll(1)} className="w-10 h-10 border border-border flex items-center justify-center transition-colors hover:border-primary hover:text-primary text-foreground"><ChevronRight size={18} /></button>
+          <button aria-label={t('common:previous')} onClick={() => scroll(-1)} className="w-10 h-10 border border-border flex items-center justify-center transition-colors hover:border-primary hover:text-primary text-foreground"><ChevronLeft size={18} /></button>
+          <button aria-label={t('common:next')} onClick={() => scroll(1)} className="w-10 h-10 border border-border flex items-center justify-center transition-colors hover:border-primary hover:text-primary text-foreground"><ChevronRight size={18} /></button>
         </div>
 
         <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-4 sm:gap-5 md:pb-2 scroll-smooth snap-x no-scrollbar">

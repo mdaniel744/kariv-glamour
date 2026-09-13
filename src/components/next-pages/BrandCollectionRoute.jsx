@@ -29,7 +29,7 @@ export async function buildBrandCollectionMetadata({ params }, routeKey) {
 
   const name = route.collection.name;
   const description = localizedField(route.collection, 'description', locale);
-  const title = locale === 'de'
+  const title = locale === 'cs' ? `Hodinky ${route.brandName} ${name}` : locale === 'de'
     ? `${route.brandName} ${name} kaufen`
     : `Buy ${route.brandName} ${name} Watches`;
 
@@ -73,7 +73,7 @@ export default async function BrandCollectionRoute({ params, routeKey }) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
+        { '@type': 'ListItem', position: 1, name: locale === 'cs' ? 'Úvod' : locale === 'de' ? 'Startseite' : 'Home', item: `${siteUrl}/${locale}` },
         { '@type': 'ListItem', position: 2, name: route.brandName, item: `${siteUrl}/${locale}/brands/${route.brandSlug}` },
         { '@type': 'ListItem', position: 3, name, item: url },
       ],

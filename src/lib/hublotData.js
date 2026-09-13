@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Hublot-specific filter option lists
 const HUBLOT_PAGE_ASSET_BASE = '/brand-assets/hublot/page';
 
@@ -154,3 +157,7 @@ export const HUBLOT_SEO_PAGES = {
   'hublot-square-bang-kaufen': { h1_en: 'Buy Hublot Square Bang', h1_de: 'Hublot Square Bang kaufen', title_en: 'Buy Hublot Square Bang | Kariv Glamour', title_de: 'Hublot Square Bang kaufen | Kariv Glamour', description_en: 'Buy Hublot Square Bang at Kariv Glamour — square design.', description_de: 'Hublot Square Bang kaufen bei Kariv Glamour – quadratisches Design.', intro_en: 'Buy Hublot Square Bang at Kariv Glamour — square geometry with bold case and modern design.', intro_de: 'Hublot Square Bang kaufen bei Kariv Glamour – quadratische Geometrie mit markantem Gehäuse und modernem Design.', filter: { collection: 'Square Bang' } },
   'hublot-story': { h1_en: 'Hublot Story', h1_de: 'Hublot Story', title_en: 'Hublot Story | Kariv Glamour', title_de: 'Hublot Story | Kariv Glamour', description_en: 'The Hublot Story — modern materials, bold architecture and contemporary design.', description_de: 'Die Hublot Story – moderne Materialien, markante Architektur und zeitgemäßes Design.', intro_en: 'Hublot is known for its modern approach to luxury watchmaking, combining unexpected materials, bold architecture and contemporary design.', intro_de: 'Hublot ist bekannt für seinen modernen Ansatz in der Luxusuhrenherstellung – eine Verbindung unerwarteter Materialien, markanter Architektur und zeitgemäßen Designs.', isGuide: true },
 };
+
+applyCzechSeoPages(HUBLOT_SEO_PAGES, 'Hublot', 'hublot');
+applyCzechBrandFaqs(HUBLOT_FAQS, 'hublot');
+applyCzechBrandContent('hublot', HUBLOT_COLLECTIONS, HUBLOT_QUICK_FILTERS, HUBLOT_SEO_CARDS, HUBLOT_READ_MORE, HUBLOT_INTERNAL_LINKS);

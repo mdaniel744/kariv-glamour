@@ -74,6 +74,7 @@ function matchesModelFamilies(product, selectedModels) {
     product.productTitle,
     product.productTitle_en,
     product.productTitle_de,
+    product.productTitle_cs,
   ].map(normalizeFilterValue).filter(Boolean);
 
   return selected.some((requested) => {
@@ -94,8 +95,8 @@ export function isTrueProductFlag(value) {
   return ['true', '1', 'yes', 'on'].includes(normalizeFilterValue(value));
 }
 
-function effectivePrice(product) {
-  return getProductPricing(product).price ?? 0;
+function effectivePrice(product, payload) {
+  return getProductPricing(product, payload).price;
 }
 
 function matchesSearch(product, query) {
@@ -106,6 +107,7 @@ function matchesSearch(product, query) {
     product.productTitle,
     product.productTitle_en,
     product.productTitle_de,
+    product.productTitle_cs,
     product.brand,
     product.collection,
     product.model,
@@ -113,6 +115,7 @@ function matchesSearch(product, query) {
     product.productDescription,
     product.productDescription_en,
     product.productDescription_de,
+    product.productDescription_cs,
   ].map((value) => normalizeFilterValue(String(value ?? '').replace(/<[^>]*>/g, ' '))).join(' ');
   // A shopper may enter a brand and a reference saved in separate fields,
   // or words in a different order from the listing title. Every search term
@@ -133,6 +136,7 @@ export function productMatchesSearchPayload(product, payload) {
     product.productTitle,
     product.productTitle_en,
     product.productTitle_de,
+    product.productTitle_cs,
   ], payload.collections, { contains: true })) return false;
 
   if (!matchesSelectedValues(product.condition, payload.conditions)) return false;
@@ -148,7 +152,8 @@ export function productMatchesSearchPayload(product, payload) {
     normalizeFilterValue(product.condition) === 'vintage'
   )) return false;
 
-  const price = effectivePrice(product);
+  const price = effectivePrice(product, payload);
+  if (price == null && (payload.minPrice != null || payload.maxPrice != null)) return false;
   if (payload.minPrice !== null && payload.minPrice !== undefined && price < payload.minPrice) return false;
   if (payload.maxPrice !== null && payload.maxPrice !== undefined && price > payload.maxPrice) return false;
 

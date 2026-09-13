@@ -7,8 +7,10 @@ import StarRating from '@/components/dealer/StarRating';
 import MediaImage from '@/components/shared/MediaImage';
 import { getDealerRatingSummary } from '@/actions/dealerReviews';
 import { getMediaVariant } from '@/lib/media';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function ProductDealerCard({ product, initialProfile = null }) {
+  const { locale } = useLanguage();
   const dealerUserId = product.dealerId || product.created_by_id;
   const [profile, setProfile] = useState(initialProfile);
 
@@ -42,12 +44,12 @@ export default function ProductDealerCard({ product, initialProfile = null }) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">Sold By</p>
-          <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">{profile?.displayName || product.dealerName || 'View Dealer Profile'}</p>
+          <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">{locale === 'cs' ? 'Prodejce' : locale === 'de' ? 'Verkäufer' : 'Sold By'}</p>
+          <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">{profile?.displayName || product.dealerName || (locale === 'cs' ? 'Zobrazit profil prodejce' : locale === 'de' ? 'Händlerprofil ansehen' : 'View Dealer Profile')}</p>
           {averageRating > 0 && (
             <div className="flex items-center gap-1.5 mt-0.5">
               <StarRating rating={Math.round(averageRating)} size={10} />
-              <span className="text-[10px] text-muted-foreground">{averageRating.toFixed(1)} ({profile.totalReviews} reviews)</span>
+              <span className="text-[10px] text-muted-foreground">{averageRating.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({profile.totalReviews} {locale === 'cs' ? 'hodnocení' : locale === 'de' ? 'Bewertungen' : 'reviews'})</span>
             </div>
           )}
         </div>

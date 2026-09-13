@@ -1,3 +1,6 @@
+import { applyCzechSeoPages, applyCzechBrandContent } from './czechBrandData.js';
+import { applyCzechBrandFaqs } from './czechBrandFaqs.js';
+
 // Omega theme colors
 export const OMEGA_THEME = {
   red: '#C8102E',
@@ -134,6 +137,10 @@ export const OMEGA_SEO_CARDS = [
 export const OMEGA_EDITORIAL_SECTIONS = [
   {
     id: 'omega-story',
+    eyebrow_cs: 'Odkaz značky',
+    title_cs: 'Příběh značky Omega',
+    description_cs: 'Omega vybudovala tradici přesnosti, inovací a dobrodružství. Od časomíry olympijských her přes doprovod astronautů na Měsíci a potápěčské hodinky Seamaster až po chronograf Speedmaster zahrnuje její příběh více než století hodinářských úspěchů. V Kariv Glamour tento odkaz představujeme pečlivě vybranými hodinkami Omega, u nichž najdete transparentní údaje a odborný pohled.',
+    cta_cs: 'Přečíst příběh značky Omega',
     eyebrow_en: 'Heritage', eyebrow_de: 'Erbe',
     title_en: 'The Omega Story', title_de: 'Die Omega Story',
     description_en: 'Omega has built a legacy of precision, innovation and adventure. From timing the Olympic Games to accompanying astronauts on the Moon, and from equipping divers with the Seamaster to defining the modern chronograph with the Speedmaster, the Omega story spans over a century of horological achievement. At Kariv Glamour, we celebrate this heritage by offering carefully selected Omega timepieces, each presented with full transparency and expert insight.',
@@ -151,6 +158,10 @@ export const OMEGA_EDITORIAL_SECTIONS = [
   },
   {
     id: 'omega-watchmaking',
+    eyebrow_cs: 'Řemeslné mistrovství',
+    title_cs: 'Hodinářství Omega',
+    description_cs: 'Hodinářství Omega stojí na přesnosti, inovacích a spolehlivosti. Jeho vývoj zahrnuje krok Co-Axial, certifikaci Master Chronometer, odolnost vůči magnetickému poli i promyšlenou konstrukci potápěčských hodinek. Kariv Glamour vám pomáhá porozumět řemeslu konkrétních hodinek Omega — číslům kalibrů, typům strojků, vodotěsnosti a rozdílům mezi společenskými hodinkami, sportovními modely a chronografy.',
+    cta_cs: 'Objevit hodinářství Omega',
     eyebrow_en: 'Craftsmanship', eyebrow_de: 'Handwerkskunst',
     title_en: 'Omega Watchmaking', title_de: 'Omega Uhrmacherei',
     description_en: 'Omega watchmaking stands for precision, innovation and reliability. From the revolutionary Co-Axial escapement to Master Chronometer certification, anti-magnetic performance and carefully engineered dive-watch construction, every Omega is built to exacting standards. At Kariv Glamour, we help you understand the craftsmanship behind each Omega, including calibre numbers, movement types, water resistance and the difference between dress watches, sports watches and chronographs.',
@@ -169,6 +180,10 @@ export const OMEGA_EDITORIAL_SECTIONS = [
   },
   {
     id: 'omega-maintenance',
+    eyebrow_cs: 'Péče',
+    title_cs: 'Údržba hodinek Omega',
+    description_cs: 'Správná péče zachovává krásu, spolehlivost a hodnotu hodinek Omega. Pravidelný servis, kontrola vodotěsnosti, péče o náramek, ochrana kožených a kaučukových řemínků a opláchnutí vhodných potápěčských hodinek sladkou vodou po kontaktu se slanou vodou podporují dlouhodobé fungování. U použitých a sběratelských hodinek Omega je důležité uchovat krabičku, doklady, záruční karty, servisní záznamy a faktury. Kariv Glamour přináší rady, které vám pomohou o hodinky pečovat s jistotou.',
+    cta_cs: 'Více o údržbě hodinek Omega',
     eyebrow_en: 'Care', eyebrow_de: 'Pflege',
     title_en: 'Omega Maintenance', title_de: 'Omega Wartung',
     description_en: 'Proper care preserves the beauty, reliability and value of an Omega watch. Regular servicing, water resistance checks, bracelet and strap care, leather and rubber strap protection, and post-salt-water rinsing for dive watches all contribute to long-term performance. For pre-owned and collectible Omega watches, preserving box, papers, warranty cards, service documents and invoices is especially important. Kariv Glamour provides guidance to help you maintain your timepiece with confidence.',
@@ -553,3 +568,7 @@ export const OMEGA_SEO_PAGES = {
     collectionFilter: null, isGuide: true,
   },
 };
+
+applyCzechSeoPages(OMEGA_SEO_PAGES, 'Omega', 'omega');
+applyCzechBrandFaqs(OMEGA_FAQS, 'omega');
+applyCzechBrandContent('omega', OMEGA_COLLECTIONS, OMEGA_QUICK_FILTERS, OMEGA_SEO_CARDS, OMEGA_READ_MORE, OMEGA_INTERNAL_LINKS, OMEGA_EDITORIAL_SECTIONS, OMEGA_TRUST_POINTS, OMEGA_TRUST_LINKS);

@@ -1,10 +1,12 @@
 import React from 'react';
+import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
 import BrandHero from '@/components/shared/BrandHero';
 
 const BRAND = 'Cartier';
 
 export default function CartierHero() {
+  const { locale } = useLanguage();
   const { t } = useTranslation('brandComponents');
   const links = [
     { label: t('hero.anchorCollections'), href: '#collections' },
@@ -14,5 +16,5 @@ export default function CartierHero() {
     { label: t('hero.anchorPreOwned', { brand: BRAND }), to: '/cartier-gebraucht-kaufen' },
   ];
 
-  return <BrandHero brand={BRAND} image="/brand-assets/cartier/collections/cartier-santos-de-cartier.png" imageAlt="Cartier Santos watch" shopTo="/cartier-uhr-kaufen" links={links} />;
+  return <BrandHero brand={BRAND} image="/brand-assets/cartier/collections/cartier-santos-de-cartier.png" imageAlt={locale === 'cs' ? "Hodinky Cartier Santos" : "Cartier Santos watch"} shopTo="/cartier-uhr-kaufen" links={links} />;
 }

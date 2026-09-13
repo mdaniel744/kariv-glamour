@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function BrandFilterDrawer({
   open,
@@ -9,6 +10,7 @@ export default function BrandFilterDrawer({
   resultsLabel,
   children,
 }) {
+  const { t } = useTranslation();
   useEffect(() => {
     if (!open) return undefined;
 
@@ -48,7 +50,7 @@ export default function BrandFilterDrawer({
             type="button"
             onClick={onClose}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground"
-            aria-label={`Close ${title}`}
+            aria-label={`${t('common:close')} ${title}`}
           >
             <X size={22} />
           </button>

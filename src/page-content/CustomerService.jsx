@@ -16,7 +16,15 @@ export default function CustomerService() {
   const { localize } = useLocalizedField();
   const { locale } = useLanguage();
   const companyCopy = getCompanyDetailsCopy(locale);
-  const contactCopy = locale === 'de' ? {
+  const contactCopy = locale === 'cs' ? {
+    introduction: 'Máte dotaz k hodinkám, objednávce nebo nákupu? Kontaktujte Kariv Glamour pomocí údajů níže.',
+    emailHint: 'Dotazy k produktům a zákaznická podpora',
+    officeHint: 'Sídlo společnosti — případné vrácení s námi prosím předem dohodněte.',
+    draftExplanation: 'Tento formulář připraví koncept ve vaší e-mailové aplikaci. Zprávu přes tuto stránku neodesílá.',
+    openDraft: 'Otevřít koncept e-mailu',
+    draftStatus: 'Zpráva zatím nebyla odeslána. Odešlete koncept ve své e-mailové aplikaci. Pokud se aplikace neotevře, použijte e-mailovou adresu níže.',
+    emailFallback: 'Můžete nám také napsat přímo:',
+  } : locale === 'de' ? {
     introduction: 'Fragen zu einer Uhr, einer Bestellung oder zum Einkauf? Kontaktieren Sie Kariv Glamour über die unten angegebenen Kontaktdaten.',
     emailHint: 'Für Produktfragen und Kundenservice',
     officeHint: 'Eingetragener Firmensitz — Rücksendungen bitte vorab abstimmen.',

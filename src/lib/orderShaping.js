@@ -26,6 +26,7 @@ export function mapOrderLineItem(item) {
   return {
     productId: item.product_id,
     productTitle: item.title,
+    ...Object.fromEntries(['en', 'de', 'cs'].flatMap((language) => item[`title_${language}`] ? [[`productTitle_${language}`, item[`title_${language}`]]] : [])),
     brand: item.brand || '',
     condition: item.condition || '',
     price: item.price,

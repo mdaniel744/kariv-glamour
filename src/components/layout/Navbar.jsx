@@ -25,6 +25,12 @@ const LOGOS = {
   },
 };
 
+const NAVIGATION_COPY = {
+  cs: { open: 'Otevřít navigaci', close: 'Zavřít navigaci', home: 'Kariv Glamour — úvod', account: 'Můj účet', signIn: 'Přihlásit se', signUp: 'Registrovat se', createAccount: 'Vytvořit účet', mobile: 'Mobilní navigace', clearSearch: 'Vymazat hledání' },
+  de: { open: 'Navigation öffnen', close: 'Navigation schließen', home: 'Kariv Glamour — Startseite', account: 'Mein Konto', signIn: 'Anmelden', signUp: 'Registrieren', createAccount: 'Konto erstellen', mobile: 'Mobile Navigation', clearSearch: 'Suche löschen' },
+  en: { open: 'Open navigation menu', close: 'Close navigation menu', home: 'Kariv Glamour home', account: 'Account', signIn: 'Sign In', signUp: 'Sign Up', createAccount: 'Create Account', mobile: 'Mobile navigation', clearSearch: 'Clear search' },
+};
+
 function KarivLogo({ theme }) {
   const mode = theme === 'dark' ? 'dark' : 'light';
 
@@ -63,7 +69,8 @@ export default function Navbar() {
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation('navigation');
-  const { localePath } = useLanguage();
+  const { localePath, locale } = useLanguage();
+  const copy = NAVIGATION_COPY[locale] || NAVIGATION_COPY.en;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [buyOpen, setBuyOpen] = useState(false);
@@ -153,12 +160,12 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="-ml-2 flex h-10 w-10 items-center justify-center text-foreground md:hidden"
-                aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-label={mobileOpen ? copy.close : copy.open}
                 aria-expanded={mobileOpen}
               >
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
-              <LocalizedLink to="/" onClick={closeMobile} className="flex-shrink-0 flex items-center" aria-label="Kariv Glamour home">
+              <LocalizedLink to="/" onClick={closeMobile} className="flex-shrink-0 flex items-center" aria-label={copy.home}>
                 <KarivLogo theme={theme} />
               </LocalizedLink>
             </div>
@@ -173,7 +180,7 @@ export default function Navbar() {
                 className="flex-1 w-full bg-transparent text-foreground text-sm placeholder:text-muted-foreground outline-none font-body" />
               
               {searchQuery &&
-              <button type="button" onClick={() => setSearchQuery('')} className="text-muted-foreground hover:text-foreground">
+              <button type="button" aria-label={copy.clearSearch} onClick={() => setSearchQuery('')} className="text-muted-foreground hover:text-foreground">
                   <X size={14} />
                 </button>
               }
@@ -181,7 +188,7 @@ export default function Navbar() {
 
             {/* Actions */}
             <div className="flex shrink-0 items-center gap-1 md:gap-4">
-              <LocalizedLink to="/wishlist" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Wishlist">
+              <LocalizedLink to="/wishlist" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label={t('common:pages.wishlist.title')}>
                 <Heart size={18} />
                 {wishlistCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -189,7 +196,7 @@ export default function Navbar() {
                   </span>
                 }
               </LocalizedLink>
-              <LocalizedLink to="/cart" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Cart">
+              <LocalizedLink to="/cart" className="relative flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label={t('common:pages.cart.label')}>
                 <ShoppingBag size={18} />
                 {cartCount > 0 &&
                 <span className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -199,20 +206,20 @@ export default function Navbar() {
               </LocalizedLink>
               <NotificationBell />
               {isAuthenticated ? (
-                <LocalizedLink to="/portal" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label="Account">
+                <LocalizedLink to="/portal" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label={copy.account}>
                   <User size={18} />
                 </LocalizedLink>
               ) : (
                 <>
-                <LocalizedLink to="/login" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden" aria-label="Sign in">
+                <LocalizedLink to="/login" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden" aria-label={copy.signIn}>
                   <User size={18} />
                 </LocalizedLink>
                 <div className="hidden items-center gap-3 md:flex">
                   <LocalizedLink to="/login" className="text-xs font-medium uppercase tracking-[0.06em] text-foreground transition-colors hover:text-primary">
-                    Sign In
+                    {copy.signIn}
                   </LocalizedLink>
                   <LocalizedLink to="/register" className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.06em] text-primary-foreground transition-colors hover:bg-primary/90">
-                    Sign Up
+                    {copy.signUp}
                   </LocalizedLink>
                 </div>
                 </>
@@ -323,7 +330,7 @@ export default function Navbar() {
           className="site-navigation fixed bottom-0 left-0 right-0 top-[102px] z-40 overflow-y-auto overscroll-contain border-t border-border bg-background font-body"
           role="dialog"
           aria-modal="true"
-          aria-label="Mobile navigation">
+          aria-label={copy.mobile}>
           
             <div className="px-6 py-5 pb-10 space-y-1">
               {/* Buy a watch — expandable */}
@@ -414,8 +421,8 @@ export default function Navbar() {
               </div>
               {!isAuthenticated && (
                 <div className="pt-4 mt-2 border-t border-border space-y-1">
-                  <LocalizedLink to="/login" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Sign In</LocalizedLink>
-                  <LocalizedLink to="/register" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">Create Account</LocalizedLink>
+                  <LocalizedLink to="/login" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{copy.signIn}</LocalizedLink>
+                  <LocalizedLink to="/register" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{copy.createAccount}</LocalizedLink>
                 </div>
               )}
             </div>

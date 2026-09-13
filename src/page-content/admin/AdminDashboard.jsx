@@ -51,7 +51,7 @@ export default function AdminDashboard() {
                   <p className="text-[10px] text-[#8E8E93]">{order.customerEmail}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-[#E5E5E5]">{formatPrice(order.totalAmount)}</p>
+                  <p className="text-xs text-[#E5E5E5]">{formatPrice(order.totalAmount, order.currency || 'EUR')}</p>
                   <span className={`text-[9px] tracking-wide uppercase px-2 py-0.5 ${
                     order.orderStatus === 'Delivered' ? 'bg-green-900/30 text-green-400' :
                     order.orderStatus === 'Shipped' ? 'bg-blue-900/30 text-blue-400' :

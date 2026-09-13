@@ -179,14 +179,14 @@ export default function AdminOrderDetail({ id: providedId }) {
                   <p className="text-[10px] tracking-[0.1em] uppercase text-[#C5A367]">{p.brand}</p>
                   <p className="text-xs text-[#E5E5E5]">{p.productTitle}</p>
                   <p className="text-[10px] text-[#8E8E93]">{p.condition}</p>
-                  <p className="text-sm text-[#E5E5E5] mt-1">{formatPrice(p.price)}</p>
+                  <p className="text-sm text-[#E5E5E5] mt-1">{formatPrice(p.price, p.currency || order.currency || 'EUR')}</p>
                 </div>
               </div>
             ))}
             <div className="border-t border-white/5 mt-4 pt-3 space-y-1">
-              <div className="flex justify-between text-xs"><span className="text-[#8E8E93]">Subtotal</span><span className="text-[#E5E5E5]">{formatPrice(order.totalAmount)}</span></div>
+              <div className="flex justify-between text-xs"><span className="text-[#8E8E93]">Subtotal</span><span className="text-[#E5E5E5]">{formatPrice(order.totalAmount, order.currency || 'EUR')}</span></div>
               <div className="flex justify-between text-xs"><span className="text-[#8E8E93]">Insured Shipping</span><span className="text-[#E5E5E5]">Free</span></div>
-              <div className="flex justify-between text-sm font-medium pt-2 border-t border-white/5"><span className="text-[#E5E5E5]">Total</span><span className="text-[#C5A367]">{formatPrice(order.totalAmount)}</span></div>
+              <div className="flex justify-between text-sm font-medium pt-2 border-t border-white/5"><span className="text-[#E5E5E5]">Total</span><span className="text-[#C5A367]">{formatPrice(order.totalAmount, order.currency || 'EUR')}</span></div>
             </div>
           </div>
 

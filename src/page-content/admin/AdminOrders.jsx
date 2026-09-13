@@ -107,7 +107,7 @@ export default function AdminOrders() {
                     </div>
                   </LocalizedLink>
                   <div className="text-right">
-                    <p className="text-sm text-[#C5A367] font-medium mb-1">{formatPrice(o.totalAmount)}</p>
+                    <p className="text-sm text-[#C5A367] font-medium mb-1">{formatPrice(o.totalAmount, o.currency || 'EUR')}</p>
                     <EscrowStatusBadge status={o.escrowStatus} />
                   </div>
                 </div>
