@@ -72,8 +72,11 @@ const loadBrandBySlug = unstable_cache(
   ['public-brand-v2', STORE_ID],
   { revalidate: 300 },
 );
-const loadBrandProducts = unstable_cache(
-  (brandName) => Products.filter({ brand: brandName, isPublished: true }, '-created_date'),
+const fetchBrandProducts = (brandName) => Products.filter({ brand: brandName, isPublished: true }, '-created_date');
+// Full translated catalogues can exceed Next's development data-cache limit.
+// Keep request-level deduplication locally without writing oversized entries.
+const loadBrandProducts = process.env.NODE_ENV === 'development' ? cache(fetchBrandProducts) : unstable_cache(
+  fetchBrandProducts,
   ['public-brand-products-v2', STORE_ID],
   { revalidate: 60 },
 );
