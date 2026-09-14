@@ -38,3 +38,6 @@ base44/.app.jsonc
 
 # local-only Claude Code instructions — never push, see CLAUDE.md itself
 /CLAUDE.md
+/reports/marketplace/
+/data/marketplace-dealers.private.json
+/data/marketplace-assignments.private.csv

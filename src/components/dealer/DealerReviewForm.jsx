@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { submitDealerReview } from '@/actions/dealerReviews';
+import { submitDealerReview, editMyDealerReview } from '@/actions/dealerReviews';
+import { useLanguage } from '@/lib/languageContext';
 import StarRating from './StarRating';
 import { useToast } from '@/components/ui/use-toast';
 
-export default function DealerReviewForm({ dealerId, dealerName, orderId, orderReference, onSubmitted }) {
+export default function DealerReviewForm({ dealerId, dealerName, orderId, orderReference = '', onSubmitted, initialReview = null }) {
+  const fieldId = useId();
+  const { locale } = useLanguage();
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [rating, setRating] = useState(0);
-  const [title, setTitle] = useState('');
-  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(initialReview?.rating || 0);
+  const [title, setTitle] = useState(initialReview?.title || '');
+  const [reviewText, setReviewText] = useState(initialReview?.reviewText || '');
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async () => {
@@ -20,7 +23,8 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
 
     setSaving(true);
     try {
-      const result = await submitDealerReview({ dealerId, orderId, rating, title, reviewText });
+      const input = { dealerId, orderId, rating, title, reviewText, locale };
+      const result = initialReview ? await editMyDealerReview(initialReview.id, input) : await submitDealerReview(input);
       if (!result.ok) {
         toast({ title: t('components.dealerReviews.error'), description: result.error, variant: 'destructive' });
         return;
@@ -53,10 +57,10 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
           <StarRating rating={rating} size={24} interactive onChange={setRating} />
         </div>
         <div>
-          <label className="mb-1 block text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+          <label htmlFor={fieldId + '-title'} className="mb-1 block text-sm text-muted-foreground">
             {t('components.dealerReviews.titleLabel')}
           </label>
-          <input
+          <input id={fieldId + '-title'}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             maxLength={120}
@@ -65,10 +69,10 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
           />
         </div>
         <div>
-          <label className="mb-1 block text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+          <label htmlFor={fieldId + '-review'} className="mb-1 block text-sm text-muted-foreground">
             {t('components.dealerReviews.reviewLabel')}
           </label>
-          <textarea
+          <textarea id={fieldId + '-review'}
             value={reviewText}
             onChange={(event) => setReviewText(event.target.value)}
             maxLength={2000}

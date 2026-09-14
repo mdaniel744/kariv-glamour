@@ -2,16 +2,16 @@
 // commercial commitments or replace the company's legal review.
 const page = (title, description, content) => ({ title, description, content: `_Poslední aktualizace: 25. srpna 2026_\n\n${content}` });
 export const CZECH_LEGAL_PAGES = {
-  'shipping-policy': page('Informace o dopravě', 'Doprava, sledování zásilek, pojištění, doručení a celní informace pro objednávky Kariv Glamour.', `## 1. Kam doručujeme
+  'shipping-policy': page('Informace o dopravě', 'Bezplatná doprava v EU, sledování zásilek, pojištění, doručení a celní informace pro objednávky Kariv Glamour.', `## 1. Kam doručujeme
 
 Dostupné země doručení jsou uvedeny u produktu nebo potvrzeny při objednávání. Pro některé hodinky, prodejce nebo pojištěné dopravce mohou platit územní omezení. Pokud nelze objednávku doručit na zadanou adresu, před odesláním vás kontaktujeme a dohodneme vhodné řešení nebo vrácení peněz.
 
 ## 2. Cena dopravy a předpokládané doručení
 
 - **Doručení v České republice:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jejího stavu jako **Odesláno** doručení obvykle trvá **1–3 pracovní dny**.
-- **Doručení do ostatních zemí EU:** Doprava je zpoplatněna; cenu uvidíte před odesláním objednávky. Po potvrzení objednávky a označení jako **Odesláno** doručení obvykle trvá **3–7 pracovních dnů**.
+- **Doručení do ostatních zemí EU:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jako **Odesláno** doručení obvykle trvá **3–7 pracovních dnů**.
 
-Jde o odhady, nikoli zaručené termíny. Doručení může trvat déle kvůli přípravě u prodejce, ověřování pravosti, výpadkům dopravce, svátkům nebo událostem mimo přiměřenou kontrolu. Příslušné dopravné, daně a další částky související s doručením placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
+Standardní doprava je zdarma do všech podporovaných destinací v Evropské unii. Jde o odhady, nikoli zaručené termíny. Doručení může trvat déle kvůli přípravě u prodejce, ověřování pravosti, výpadkům dopravce, svátkům nebo událostem mimo přiměřenou kontrolu. Příslušné daně a další částky mimo dopravné placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
 
 ## 3. Pojištění a sledování zásilky
 

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { compileFunction } from 'node:vm';
 import ts from 'typescript';
+import * as marketplace from '../src/lib/marketplace.js';
+import { testSeller } from './fixtures/marketplace.mjs';
 import { getProductPricing } from '../src/lib/productMerchant.js';
 import { matchesCheckoutPrice } from '../src/lib/currencyConversion.js';
 import * as orderShaping from '../src/lib/orderShaping.js';
@@ -43,6 +45,8 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
     },
   };
   const imports = {
+    '@/lib/marketplace': marketplace,
+    '@/lib/marketplaceServer': { requirePurchasableSeller: async () => testSeller },
     '@/lib/supabaseAdmin': { supabaseAdmin: client },
     '@/lib/serverAuth': { requireUser: async () => ({ id: 'buyer' }), requireDealer() {}, requireAdmin() {} },
     '@/lib/supabaseData': { STORE_ID: 'kariv' },

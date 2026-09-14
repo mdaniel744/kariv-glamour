@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { productSlug } from '@/lib/slug';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
+import SellerIdentity from '@/components/marketplace/SellerIdentity';
 
 export default function ProductCard({ product, enableGallery = true }) {
   const { t } = useTranslation();
@@ -201,6 +202,7 @@ export default function ProductCard({ product, enableGallery = true }) {
         </div>
       </div>
 
+      <SellerIdentity seller={product.seller} compact />
       {/* Info remains above the link visually while clicks pass through to it. */}
       <div className="pointer-events-none relative z-20 space-y-1.5">
         <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-primary">{product.brand}</p>

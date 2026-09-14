@@ -35,7 +35,7 @@ This repository cannot configure or backfill the separate Ecom King import/trans
 
 Payment is currently bank transfer after dealer confirmation. The storefront stores and displays the agreed CZK amount, but bank beneficiary instructions are supplied through the separate dashboard. Confirm the receiving/escrow account accepts **CZK**, and that instructions, receipts, invoices, refunds and dealer settlement use the stored order currency and amount. Do not send EUR-only instructions for a CZK order or re-convert its total. No live bank transfer has been executed during implementation.
 
-The existing free-shipping checkout behavior is separate from currency. The published policy charges for other EU destinations, while no approved EU shipping tariff is configured here. That mismatch still needs the business's actual shipping rates before a Google Merchant launch; no rates have been invented in this update.
+Standard shipping is free for every supported EU destination. The published policy and checkout now use the same zero-shipping-charge rule, and checkout requires a complete delivery address including the country. Merchant Center shipping settings must mirror this free-EU rule and the published delivery estimates.
 
 ## Verification and deployment
 

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Check, RefreshCw, ShieldCheck, Star, X } from 'lucide-react';
 import { listAdminDealerReviews, moderateDealerReview } from '@/actions/dealerReviews';
 import StarRating from '@/components/dealer/StarRating';
+import DealerReviewCard from '@/components/dealer/DealerReviewCard';
 import { useToast } from '@/components/ui/use-toast';
 
-const FILTERS = ['pending', 'approved', 'rejected', 'all'];
+const FILTERS = ['pending', 'approved', 'rejected', 'spam', 'all'];
 
 export default function AdminDealerReviews() {
   const { toast } = useToast();
@@ -12,6 +13,7 @@ export default function AdminDealerReviews() {
   const [status, setStatus] = useState('pending');
   const [loading, setLoading] = useState(true);
   const [workingId, setWorkingId] = useState(null);
+  const [reasons, setReasons] = useState({});
 
   const load = async () => {
     setLoading(true);
@@ -32,7 +34,7 @@ export default function AdminDealerReviews() {
   const moderate = async (reviewId, nextStatus) => {
     setWorkingId(reviewId);
     try {
-      const result = await moderateDealerReview(reviewId, nextStatus);
+      const result = await moderateDealerReview(reviewId, nextStatus, reasons[reviewId] || '');
       if (!result.ok) {
         toast({ title: 'Moderation failed', description: result.error, variant: 'destructive' });
         return;
@@ -96,7 +98,7 @@ export default function AdminDealerReviews() {
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-sm font-medium text-[#E5E5E5]">{review.dealerName}</p>
                     <span className="flex items-center gap-1 text-[9px] uppercase tracking-[0.1em] text-emerald-400">
-                      <ShieldCheck size={10} /> Verified purchase
+                      <ShieldCheck size={10} /> {review.isVerifiedPurchase ? 'Verified purchase' : 'Purchase evidence not verified'}
                     </span>
                   </div>
                   <p className="mt-1 text-[10px] text-[#8E8E93]">
@@ -115,7 +117,12 @@ export default function AdminDealerReviews() {
               <p className="whitespace-pre-line text-xs leading-relaxed text-[#B5B5B8]">{review.reviewText}</p>
               <p className="mt-3 text-[9px] text-[#666]">Submitted {new Date(review.created_date).toLocaleString()}</p>
 
-              {review.status === 'pending' && (
+              <details className="mt-4"><summary>Public preview</summary><DealerReviewCard review={{ ...review, orderReference: undefined }} /></details>
+              <label className="mt-4 block text-sm">Internal reason (required for rejection or spam)
+                <input className="mt-1 w-full rounded-xl border bg-background p-3" value={reasons[review.id] || ''} onChange={e => setReasons({ ...reasons, [review.id]: e.target.value })} />
+              </label>
+              {review.internalReason && <p className="mt-2 text-xs">Previous reason: {review.internalReason}</p>}
+              {(
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-white/5 pt-4">
                   <button
                     type="button"
@@ -133,6 +140,7 @@ export default function AdminDealerReviews() {
                   >
                     <X size={13} /> Reject
                   </button>
+                  <button disabled={workingId === review.id} className="rounded-full border px-4 py-2 text-sm" onClick={() => moderate(review.id, 'spam')}>Mark as spam</button>
                 </div>
               )}
             </article>

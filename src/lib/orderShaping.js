@@ -4,6 +4,8 @@
 // reads (those screens were built against the old Base44 shape and were
 // never renamed — this file bridges the gap instead).
 
+import { publicSellerSnapshot, sellerDisplayName } from './marketplace.js';
+
 export function formatEscrowReference(id) {
   return 'KG-' + String(id).replace(/-/g, '').slice(0, 8).toUpperCase();
 }
@@ -33,6 +35,7 @@ export function mapOrderLineItem(item) {
     currency: item.currency,
     featuredImage: item.image,
     quantity: item.quantity,
+    sellerSnapshot: publicSellerSnapshot(item.seller_snapshot),
   };
 }
 
@@ -42,7 +45,6 @@ export function mapOrderLineItem(item) {
 export function mapOrderRow(row, { justificationMessage = null, identities = new Map() } = {}) {
   const products = Array.isArray(row.products) ? row.products.map(mapOrderLineItem) : [];
   const buyerIdentity = identities.get(row.buyer_user_id);
-  const dealerIdentity = row.dealer_user_id ? identities.get(row.dealer_user_id) : null;
 
   return {
     id: row.id,
@@ -68,7 +70,7 @@ export function mapOrderRow(row, { justificationMessage = null, identities = new
     dealerId: row.dealer_user_id,
     customerName: buyerIdentity?.fullName || '',
     customerEmail: buyerIdentity?.email || '',
-    dealerName: dealerIdentity?.fullName || '',
+    dealerName: products[0]?.sellerSnapshot ? sellerDisplayName(products[0].sellerSnapshot) : '',
     idempotencyKey: row.idempotency_key,
     created_date: row.created_at,
     updated_date: row.updated_at,

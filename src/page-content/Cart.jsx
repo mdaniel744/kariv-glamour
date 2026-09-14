@@ -1,3 +1,6 @@
+import { canPurchaseFromSeller, groupBySeller } from '@/lib/marketplace';
+import { marketplaceCopy } from '@/lib/marketplaceCopy';
+import SellerIdentity from '@/components/marketplace/SellerIdentity';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +25,7 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
-  const { localePath } = useLanguage();
+  const { localePath, locale } = useLanguage();
   const { localize } = useLocalizedField();
   const [showAuthModal, setShowAuthModal] = useState(false);
   useSEO({ title: t('common:seo.cart.title'), description: t('common:seo.cart.description'), noindex: true });
@@ -36,7 +39,7 @@ export default function Cart() {
     return () => { active = false; };
   }, [savedItems]);
   const firstPricing = getPricing(cartItems[0] || {});
-  const canCheckout = !loading && getProductAvailability(cartItems[0] || {}).inStock && firstPricing.price != null;
+  const canCheckout = canPurchaseFromSeller(cartItems[0]) && !loading && getProductAvailability(cartItems[0] || {}).inStock && firstPricing.price != null;
   // The backend checks out one watch per order. Do not show a multi-watch
   // total beside a button that will actually order only the first watch.
   const totalLabel = firstPricing.price != null ? formatPrice(firstPricing.price, firstPricing.currency) : t('common:priceUnavailable');
@@ -85,7 +88,10 @@ export default function Cart() {
       <div className="grid md:grid-cols-3 gap-12">
         {/* Items */}
         <div className="md:col-span-2 space-y-6">
-          {cartItems.map(item => (
+          <p className="text-sm text-muted-foreground">{marketplaceCopy(locale).mixed}</p>
+          {groupBySeller(cartItems).map(group => <section className="space-y-4" key={group.id}>
+          <SellerIdentity seller={group.seller} compact />
+          {group.products.map(item => (
             <div key={item.id} className="flex gap-5 border-b border-border pb-6">
               <LocalizedLink to={`/product/${productSlug(item)}`} className="w-24 h-24 md:w-32 md:h-32 bg-card flex-shrink-0 overflow-hidden">
                 {item.featuredImage ? (
@@ -109,6 +115,7 @@ export default function Cart() {
               </div>
             </div>
           ))}
+          </section>)}
         </div>
 
         {/* Summary */}

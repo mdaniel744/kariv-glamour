@@ -6,6 +6,9 @@ import React from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ts from 'typescript';
+import * as marketplace from '../src/lib/marketplace.js';
+import * as marketplaceCopy from '../src/lib/marketplaceCopy.js';
+import { testSeller } from './fixtures/marketplace.mjs';
 import { mergeCatalogTranslations } from '../src/lib/catalogTranslations.js';
 import { localizedField } from '../src/lib/seo.js';
 import * as productMerchant from '../src/lib/productMerchant.js';
@@ -28,6 +31,7 @@ function loadSource(path, imports) {
 }
 
 const watch = {
+  seller: testSeller, ownershipVerificationStatus: 'verified',
   id: 'watch-1', slug: 'rolex-daytona', productTitle: 'Rolex Daytona Steel', brand: 'Rolex',
   price: 12000, stockQuantity: 1, availability: 'In Stock', isPublished: true, dealerId: 'dealer-1',
   productImages: ['/watch.webp'], productDescription: 'Watch description',
@@ -38,6 +42,8 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
   const icon = () => null;
   let locale = 'en';
   const imports = {
+    '@/lib/marketplace': marketplace,
+    '@/lib/marketplaceCopy': marketplaceCopy,
     react: { ...React, useEffect: (effect) => effects.push(effect) },
     'react/jsx-runtime': jsxRuntime,
     'next/navigation': { useRouter: () => ({ push() {} }), notFound: () => { throw new Error('Not found'); } },
@@ -74,6 +80,8 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     },
   };
   for (const [specifier, path] of [
+    ['@/lib/useLiveSeller', 'src/lib/useLiveSeller.js'],
+    ['@/components/marketplace/SellerIdentity', 'src/components/marketplace/SellerIdentity.jsx'],
     ['@/lib/localize', 'src/lib/localize.jsx'],
     ['@/components/shared/ProductCard', 'src/components/shared/ProductCard.jsx'],
     ['@/components/product/ProductDealerCard', 'src/components/product/ProductDealerCard.jsx'],
@@ -143,7 +151,7 @@ test('optional dealer/related failures leave the main details and dealer fallbac
   const html = renderToStaticMarkup(React.cloneElement(client, { dealerSlot: dealerNode, relatedSlot: relatedNode }));
   assert.match(html, /Rolex Daytona Steel/);
   assert.match(html, /data-gallery="true"/);
-  assert.match(html, /View Dealer Profile/);
+  assert.match(html, /TEST Approved Dealer/);
   assert.match(html, /dealer-profile\/dealer-1/);
 });
 
@@ -159,8 +167,8 @@ test('resolved dealer company name/logo and related cards preserve their existin
     dealerSlot: await dealerSection.type(dealerSection.props),
     relatedSlot: await relatedSection.type(relatedSection.props),
   }));
-  assert.match(html, /Example Watches s\.r\.o\./);
-  assert.match(html, /dealer-logo\.webp/);
+  assert.match(html, /TEST Approved Dealer/);
+  assert.doesNotMatch(html, /Example Watches/); // Clerk/display fallbacks cannot override approved identity.
   assert.match(html, /Related Rolex Watch/);
 });
 
@@ -173,7 +181,8 @@ test('legacy detail props still render recommendations without server slots', ()
   }));
   assert.match(html, /Rolex Daytona Steel/);
   assert.match(html, /Legacy related watch/);
-  assert.match(html, /Legacy dealer/);
+  assert.doesNotMatch(html, /Legacy dealer/);
+  assert.match(html, /TEST Approved Dealer/);
 });
 
 test('storefront cards, detail headings, descriptions and metadata follow the selected product language', () => {

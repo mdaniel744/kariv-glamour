@@ -16,6 +16,8 @@ import { getProductPricing } from '@/lib/productMerchant';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 import { matchesCheckoutPrice } from '@/lib/currencyConversion';
 import { loadCatalogTranslations } from '@/lib/catalogTranslations';
+import { requirePurchasableSeller } from '@/lib/marketplaceServer';
+import { sellerSnapshot } from '@/lib/marketplace';
 
 async function shapeRows(rows) {
   const ids = rows.flatMap(r => [r.buyer_user_id, r.dealer_user_id]);
@@ -86,7 +88,6 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey, 
   const user = await requireUser();
   if (!['en', 'de', 'cs'].includes(locale)) return { ok: false, error: 'Unsupported checkout language.' };
   if (typeof idempotencyKey !== 'string' || !idempotencyKey || idempotencyKey.length > 150) return { ok: false, error: 'Invalid checkout reference.' };
-
   const { data: existing } = await supabaseAdmin
     .from('orders')
     .select('*')
@@ -95,6 +96,18 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey, 
     .eq('buyer_user_id', user.id)
     .maybeSingle();
   if (existing) return { ok: true, order: await shapeOrderDetail(existing) };
+
+  const requiredAddressFields = ['fullName', 'street', 'city', 'postalCode', 'country'];
+  if (!shippingDetails || requiredAddressFields.some((field) => typeof shippingDetails[field] !== 'string' || !shippingDetails[field].trim())) {
+    return {
+      ok: false,
+      error: locale === 'cs'
+        ? 'Vyplňte prosím úplnou doručovací adresu včetně země.'
+        : locale === 'de'
+          ? 'Bitte geben Sie eine vollständige Lieferadresse einschließlich des Landes ein.'
+          : 'Please provide a complete delivery address, including the country.',
+    };
+  }
 
   const { data: product, error: productError } = await supabaseAdmin
     .from('products')
@@ -105,6 +118,9 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey, 
   if (productError || !product) return { ok: false, error: 'This watch is no longer available.' };
   if (product.status !== 'active') return { ok: false, error: 'This watch is no longer available for purchase.' };
   if ((product.stock_quantity ?? 0) < 1) return { ok: false, error: 'This watch has already sold.' };
+  let seller;
+  try { seller = await requirePurchasableSeller(product); }
+  catch (error) { return { ok: false, error: error.message }; }
 
   const attrs = product.attributes || {};
   // Recompute from the fresh, tenant-scoped database row, never a client total.
@@ -130,6 +146,7 @@ export async function createOrder({ productId, shippingDetails, idempotencyKey, 
     currency: pricing.currency,
     image: Array.isArray(product.images) ? product.images[0] : null,
     quantity: 1,
+    seller_snapshot: sellerSnapshot(seller),
     ...(pricing.conversion ? { conversion: pricing.conversion } : {}),
   };
 
@@ -550,6 +567,8 @@ export async function requestJustification(orderId, subject, message) {
 
 export async function markAdminOrderThreadRead(orderId) {
   await requireAdmin();
+  const { data: parent, error: parentError } = await supabaseAdmin.from('orders').select('id').eq('store_id', STORE_ID).eq('id', orderId).maybeSingle();
+  if (parentError || !parent) return { ok: false, error: 'Order not found.' };
   const { error } = await supabaseAdmin.from('order_messages').update({ is_read: true }).eq('order_id', orderId).eq('recipient_role', 'buyer').eq('sender', 'buyer');
   if (error) return { ok: false, error: error.message };
   return { ok: true };
@@ -557,6 +576,8 @@ export async function markAdminOrderThreadRead(orderId) {
 
 export async function getAdminOrderDispute(orderId) {
   await requireAdmin();
+  const { data: parent, error: parentError } = await supabaseAdmin.from('orders').select('id').eq('store_id', STORE_ID).eq('id', orderId).maybeSingle();
+  if (parentError || !parent) return null;
   const { data, error } = await supabaseAdmin
     .from('disputes').select('*').eq('order_id', orderId).order('created_at', { ascending: false }).limit(1).maybeSingle();
   if (error) throw new Error(error.message);

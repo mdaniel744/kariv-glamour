@@ -1,3 +1,4 @@
+import SellerIdentity from '@/components/marketplace/SellerIdentity';
 import React, { useState, useEffect } from 'react';
 import { useLocalizedField } from '@/lib/localize';
 import { getMyOrder, getMyOrderDispute, selectPaymentMethod, flagOrder, confirmPaymentSent } from '@/actions/orders';
@@ -163,6 +164,7 @@ export default function PortalOrderDetail({ id: providedId }) {
       {order.paymentMethod && order.escrowStatus === 'dealer_accepted' && order.paymentStatus !== 'Paid' && (
         <div className="border border-primary/30 bg-primary/5 p-5 mb-6">
           <p className="text-xs font-medium text-primary mb-3">{t('pages.portal.paymentInstructions', { defaultValue: 'Payment Instructions' })}</p>
+          {(order.products || []).map((item, index) => <SellerIdentity key={index} seller={item.sellerSnapshot} snapshot compact />)}
 
           {order.paymentMethod === 'bank_transfer' && (
             <div className="space-y-1.5 text-xs mb-4">
@@ -229,6 +231,7 @@ export default function PortalOrderDetail({ id: providedId }) {
               <div className="flex-1">
                 <p className="text-[10px] tracking-[0.1em] uppercase text-primary">{p.brand}</p>
                 <p className="text-xs text-foreground">{localize(p, 'productTitle')}</p>
+                <SellerIdentity seller={p.sellerSnapshot} snapshot compact />
                 <p className="text-[10px] text-muted-foreground">{p.condition ? t(`products:conditions.${p.condition}`, { defaultValue: p.condition }) : ''}</p>
                 <p className="text-sm text-foreground mt-1">{formatPrice(p.price, p.currency || order.currency || 'EUR')}</p>
               </div>

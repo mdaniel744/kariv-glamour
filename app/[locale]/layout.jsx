@@ -39,6 +39,9 @@ export const metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  verification: {
+    google: '4OzTksrDE0TTdalip4DhOPFHOiphvlyRu5-3QyOUf_c',
+  },
   openGraph: {
     siteName: SITE_NAME,
     type: 'website',

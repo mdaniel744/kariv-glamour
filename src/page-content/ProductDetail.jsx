@@ -1,3 +1,4 @@
+import { canPurchaseFromSeller } from '@/lib/marketplace';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LocalizedLink from '@/components/LocalizedLink';
@@ -110,7 +111,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const wishlisted = isInWishlist(product.id);
   const pricing = getPricing(product);
   const availability = getProductAvailability(product);
-  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null;
+  const canPurchase = canPurchaseFromSeller(product) && availability.inStock && pricing.price != null && pricing.currency != null;
 
   const checkoutPath = `/checkout/${product.id}`;
   const handleBuyNow = () => {
@@ -234,6 +235,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </div>
 
             {/* Actions */}
+            <ProductDealerCard product={product} />
             <div className="space-y-3">
               <button
                 onClick={handleBuyNow}
@@ -274,8 +276,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               )}
             </div>
 
-            {/* Dealer info */}
-            {dealerSlot !== undefined ? dealerSlot : <ProductDealerCard key={product.dealerId || product.created_by_id} product={product} initialProfile={initialDealerProfile} />}
+
           </div>
         </div>
 

@@ -27,7 +27,7 @@ All following public pages returned HTTP 200. Both product language versions dec
 | Sample | Observed result |
 | --- | --- |
 | [Customer service](https://24kariv.com/en/customer-service) | Placeholder German phone number, Germany location, a different support email from the policies, and unverified response/opening-time promises. |
-| [Shipping information](https://24kariv.com/en/legal/shipping-policy) | Czech delivery free; other EU delivery charged before the order; 1–3 / 3–7 business-day transit estimates after dispatch. |
+| [Shipping information](https://24kariv.com/en/legal/shipping-policy) | Standard delivery is free throughout the EU; 1–3 / 3–7 business-day transit estimates apply after dispatch. |
 | [Returns and refunds](https://24kariv.com/en/legal/returns-refund-policy) | Separate page with company/address/email, withdrawal instructions, refund timing and return-cost qualifications. |
 | [Cartier product, English](https://24kariv.com/en/product/cartier-pasha-perpetual-calendar-moon-gerald-genta-design-quartz-18k-yellow-gold) | EUR 22,668, in stock, Very Good condition, nine photographs; its authentication status is pending while surrounding site-wide badges say authenticated. |
 | [Same Cartier, German](https://24kariv.com/de/product/cartier-pasha-perpetual-calendar-moon-gerald-genta-design-quartz-18k-yellow-gold) | German product name/description in structured data; same price, currency, stock and photographs as English. |
@@ -45,11 +45,11 @@ Baseline `src/page-content/CustomerService.jsx` used `service@kariv-glamour.com`
 
 Google asks merchants to provide reachable contact and remove technical/placeholder flaws; consistent information matters across website and Merchant Center. [Google contact-information guidance](https://support.google.com/merchants/answer/12472091?hl=en), [editorial and technical requirements](https://support.google.com/merchants/answer/12079604?hl=en).
 
-### 2. Shipping totals contradict the published policy — release blocker until business rates are supplied
+### 2. Free EU shipping is consistent in the storefront — Merchant settings still require verification
 
-`src/page-content/Checkout.jsx` renders shipping as Free for every destination, permits a free-text country and does not require it in `canSubmit`. `src/actions/orders.js#createOrder` sets `total_amount` to the watch price with no country-based shipping calculation. The live shipping page promises that other-EU shipping is charged and disclosed before order placement.
+The published policy and checkout now apply a zero standard-shipping charge to supported EU destinations. Checkout requires a country in the delivery address, and the server rejects incomplete delivery addresses before creating an order. Czech delivery is estimated at 1–3 business days after dispatch and other-EU delivery at 3–7 business days after dispatch.
 
-**Required decision:** confirm deliverable countries, actual other-EU rates or rate rules, dispatch/handling times, and whether third-party sellers share those rules. Then enforce the approved total and destination rules server-side, display them before confirmation, and mirror them in Merchant Center. Do not silently invent rates, assume worldwide free delivery, or publish shipping schema with guessed handling times. Existing 1–3 / 3–7 figures describe transit after dispatch, not total order-to-delivery time.
+**Required account check:** configure Merchant Center with free shipping for the Czech and German target countries and mirror the published transit estimates. Confirm all participating sellers follow the same rule. The existing 1–3 / 3–7 figures describe transit after dispatch, not total order-to-delivery time, so handling time must still be configured truthfully rather than guessed.
 
 Google requires accurate final pricing, consistent currency and readily accessible purchase information throughout checkout. Account creation is allowed if straightforward; guest checkout is not an absolute requirement. [Checkout requirements](https://support.google.com/merchants/answer/9158778?hl=en).
 
@@ -99,7 +99,7 @@ Use actual photographs of the offered watch for product ads, not the editorial b
 ## Before asking Google to review
 
 1. Deploy and click-test the truthful contact flow, shop search and correct published-product totals on mobile and desktop; do not equate inactive/draft inventory with available products.
-2. Resolve shipping rates, destination validation and seller/account structure with the owner. Ensure website, order totals and Merchant Center agree.
+2. Mirror free EU shipping and the approved handling/transit times in Merchant Center, and resolve the seller/account structure with the owner.
 3. Test both languages with available, sold, sale-price, missing-identifier and modified/pre-owned examples. Compare rendered content, structured data and the actual active data source.
 4. Test an authorized end-to-end purchase/refund in an appropriate controlled workflow, including dealer acceptance, payment instructions, final amount, email/order confirmation and stock updates. Do not create live orders merely for this audit.
 5. Confirm the verified/claimed Merchant Center website is 24kariv.com, business identity/address and verified phone match real records, and shipping/returns/target countries are configured. Verification and account access are owner-controlled steps.

@@ -25,6 +25,12 @@ export async function requireAdmin() {
   return user;
 }
 
+export async function requireMainAdmin() {
+  const user = await getCurrentUser();
+  if (!user || user.role !== 'super_admin') throw new Error('Main administrator access required');
+  return user;
+}
+
 export async function requireDealer() {
   const user = await getCurrentUser();
   if (!user || user.role !== 'dealer') {
