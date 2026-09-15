@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { testSeller } from './fixtures/marketplace.mjs';
 import { readFileSync } from 'node:fs';
 import {
   buildProductMerchantSchema, getProductAvailability, getProductCondition, getProductPricing,
@@ -10,7 +9,6 @@ import { selectShopResults } from '../src/lib/shopSearch.js';
 
 const options = { locale: 'en', url: 'https://24kariv.com/en/product/watch' };
 const product = {
-  seller: testSeller, ownershipVerificationStatus: 'verified',
   id: 'watch', isPublished: true, productTitle_en: 'Example watch', productTitle_de: 'Beispieluhr',
   productDescription_en: '<p>Blue dial &amp; steel case.</p>', productDescription_de: '<p>Blaues Zifferblatt &amp; Stahlgehäuse.</p>',
   price: 3000, salePrice: 2500, currency: 'EUR', stockQuantity: 1, availability: 'In Stock', condition: 'Excellent',

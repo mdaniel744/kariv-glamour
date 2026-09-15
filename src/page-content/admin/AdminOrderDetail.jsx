@@ -1,4 +1,3 @@
-import SellerIdentity from '@/components/marketplace/SellerIdentity';
 import React, { useState, useEffect } from 'react';
 import {
   getAdminOrder, getAdminOrderMessages, getAdminOrderDispute,
@@ -179,7 +178,6 @@ export default function AdminOrderDetail({ id: providedId }) {
                 <div className="flex-1">
                   <p className="text-[10px] tracking-[0.1em] uppercase text-[#C5A367]">{p.brand}</p>
                   <p className="text-xs text-[#E5E5E5]">{p.productTitle}</p>
-                  <SellerIdentity seller={p.sellerSnapshot} snapshot compact />
                   <p className="text-[10px] text-[#8E8E93]">{p.condition}</p>
                   <p className="text-sm text-[#E5E5E5] mt-1">{formatPrice(p.price, p.currency || order.currency || 'EUR')}</p>
                 </div>

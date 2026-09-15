@@ -1,8 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { loadSeller, requireActiveDealer } from '@/lib/marketplaceServer';
-import { publicSeller } from '@/lib/marketplace';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { requireAdmin, requireDealer } from '@/lib/serverAuth';
 import { STORE_ID, shapeProductRows, Products } from '@/lib/supabaseData';
@@ -158,13 +156,9 @@ async function buildProductRow(payload, existingRow = null) {
 }
 
 export async function createProduct(payload) {
-  const admin = await requireAdmin();
-  const seller = await loadSeller(payload.dealerId);
-  if (!publicSeller(seller)) throw new Error('Choose an approved seller for this product.');
+  await requireAdmin();
   const prepared = await prepareProductPayload(payload);
   const row = await buildProductRow(prepared.payload);
-  Object.assign(row, { dealer_id: seller.user_id, status: 'draft', ownership_verification_status: 'pending',
-    merchant_feed_eligible: false, ownership_changed_by: admin.id, ownership_change_reason: 'Admin selected seller; ownership verification pending' });
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
@@ -178,7 +172,6 @@ export async function updateProduct(id, payload) {
   await requireAdmin();
   const { data: existingRow, error: fetchError } = await supabaseAdmin.from('products').select('*').eq('store_id', STORE_ID).eq('id', id).single();
   if (fetchError || !existingRow) throw new Error('Product not found in this store');
-  if (payload.dealerId !== undefined && payload.dealerId !== existingRow.dealer_id) throw new Error('Use Marketplace ownership management to change the seller.');
   const prepared = await prepareProductPayload(payload, existingRow);
   const row = await buildProductRow(prepared.payload, existingRow);
   const { error } = await supabaseAdmin.from('products').update(row).eq('store_id', STORE_ID).eq('id', id);
@@ -201,13 +194,10 @@ export async function deleteProduct(id) {
 
 export async function createDealerListing(payload) {
   const dealer = await requireDealer();
-  await requireActiveDealer(dealer.id);
   const prepared = await prepareProductPayload(payload);
   const row = await buildProductRow(prepared.payload);
   row.dealer_id = dealer.id;
   row.status = 'draft'; // dealer-created listings start as draft pending review
-  Object.assign(row, { ownership_verification_status: 'pending', merchant_feed_eligible: false,
-    ownership_changed_by: dealer.id, ownership_change_reason: 'Dealer submission; ownership verification pending' });
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
 
@@ -219,7 +209,6 @@ export async function createDealerListing(payload) {
 
 export async function updateDealerListing(id, payload) {
   const dealer = await requireDealer();
-  await requireActiveDealer(dealer.id);
   const { data: existingRow, error: fetchError } = await supabaseAdmin
     .from('products')
     .select('*')

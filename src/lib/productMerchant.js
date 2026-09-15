@@ -1,7 +1,6 @@
 import { localizedField } from './seo.js';
 import { stripHtmlToText } from './sanitize.js';
 import { convertPricing } from './currencyConversion.js';
-import { canPurchaseFromSeller, sellerOrganization } from './marketplace.js';
 
 const SCHEMA = 'https://schema.org/';
 const CURRENCIES = typeof Intl.supportedValuesOf === 'function' ? new Set(Intl.supportedValuesOf('currency')) : null;
@@ -118,11 +117,10 @@ export function buildProductMerchantSchema(product, { locale, url, exchangeRates
     ...productIdentifiers(product),
     brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
     category: 'Luxury Watches',
-    ...(product.isPublished === true && canPurchaseFromSeller(product) && pricing.price != null && pricing.currency && (locale !== 'cs' || hasCzechProductCopy(product)) ? {
+    ...(product.isPublished === true && pricing.price != null && pricing.currency && (locale !== 'cs' || hasCzechProductCopy(product)) ? {
       offers: {
         '@type': 'Offer', url, price: pricing.price, priceCurrency: pricing.currency,
         availability: availability.schema, itemCondition: getProductCondition(product),
-        seller: sellerOrganization(product.seller, new URL('/' + locale + '/dealer-profile/' + encodeURIComponent(product.seller.user_id), url).href),
       },
     } : {}),
   };

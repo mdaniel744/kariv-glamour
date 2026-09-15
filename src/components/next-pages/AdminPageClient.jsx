@@ -4,7 +4,6 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 
 const ADMIN_PAGES = {
-  marketplace: dynamic(() => import('@/page-content/admin/AdminMarketplace')),
   dashboard: dynamic(() => import('@/page-content/admin/AdminDashboard')),
   products: dynamic(() => import('@/page-content/admin/AdminProducts')),
   brands: dynamic(() => import('@/page-content/admin/AdminBrands')),

@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { testSeller } from './fixtures/marketplace.mjs';
 import { parseCnbRates, convertToCzk, isUsableCnbSnapshot, matchesCheckoutPrice } from '../src/lib/currencyConversion.js';
 import { getProductPricing, buildProductMerchantSchema } from '../src/lib/productMerchant.js';
 import { selectShopResults } from '../src/lib/shopSearch.js';
@@ -65,7 +64,7 @@ test('Czech search thresholds compare displayed CZK prices including discounted 
 
 test('Czech structured offers use the same CZK amount and disappear when FX is unavailable', () => {
   const exchangeRates = { ...rates, date: new Date().toISOString().slice(0, 10) };
-  const product = { seller: testSeller, ownershipVerificationStatus: 'verified', price: 1000, currency: 'EUR', isPublished: true, availability: 'In Stock', stockQuantity: 1, productTitle_cs: 'Hodinky', productDescription_cs: 'Popis hodinek.' };
+  const product = { price: 1000, currency: 'EUR', isPublished: true, availability: 'In Stock', stockQuantity: 1, productTitle_cs: 'Hodinky', productDescription_cs: 'Popis hodinek.' };
   const schema = buildProductMerchantSchema(product, { locale: 'cs', exchangeRates, url: 'https://24kariv.com/cs/product/test' });
   assert.equal(schema.offers.priceCurrency, 'CZK');
   assert.equal(schema.offers.price, getProductPricing(product, { locale: 'cs', exchangeRates }).price);

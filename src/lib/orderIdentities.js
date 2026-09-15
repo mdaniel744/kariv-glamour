@@ -6,8 +6,7 @@ import { clerkClient } from '@clerk/nextjs/server';
 // process) — good enough since a single request never needs more than a
 // couple dozen identities.
 export async function loadIdentities(userIds) {
-  // Canonical marketplace/demo identities are not invented Clerk accounts.
-  const ids = [...new Set(userIds.filter(id => id && id !== 'kariv-owned' && !id.startsWith('demo-dealer-')))];
+  const ids = [...new Set(userIds.filter(Boolean))];
   const map = new Map();
   if (ids.length === 0) return map;
 

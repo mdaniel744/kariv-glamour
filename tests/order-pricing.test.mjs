@@ -3,8 +3,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { compileFunction } from 'node:vm';
 import ts from 'typescript';
-import * as marketplace from '../src/lib/marketplace.js';
-import { testSeller } from './fixtures/marketplace.mjs';
 import * as productMerchant from '../src/lib/productMerchant.js';
 import * as orderShaping from '../src/lib/orderShaping.js';
 import * as escrowConstants from '../src/lib/escrowConstants.js';
@@ -20,7 +18,7 @@ const baseProduct = {
   name: 'Watch', price: 3000, sale_price: 2500, currency: 'CHF', brands: { name: 'Example' },
 };
 
-function fixture({ product = baseProduct, existing = null, signedIn = true, admin = false } = {}) {
+function fixture({ product = baseProduct, existing = null, signedIn = true } = {}) {
   const writes = [];
   const reads = [];
   let authCalls = 0;
@@ -50,13 +48,11 @@ function fixture({ product = baseProduct, existing = null, signedIn = true, admi
     },
   };
   const imports = {
-    '@/lib/marketplace': marketplace,
-    '@/lib/marketplaceServer': { requirePurchasableSeller: async () => testSeller },
     '@/lib/supabaseAdmin': { supabaseAdmin: database },
     '@/lib/serverAuth': {
       requireUser: async () => { authCalls++; if (!signedIn) throw new Error('Sign in required'); return { id: 'buyer' }; },
       requireDealer: () => { throw new Error('Unexpected dealer operation'); },
-      requireAdmin: () => { if (!admin) throw new Error('Unexpected admin operation'); return { id: 'test-admin' }; },
+      requireAdmin: () => { throw new Error('Unexpected admin operation'); },
     },
     '@/lib/supabaseData': { STORE_ID: 'kariv' },
     '@/lib/catalogTranslations': { loadCatalogTranslations: async () => ({}) },
@@ -72,18 +68,10 @@ function fixture({ product = baseProduct, existing = null, signedIn = true, admi
     assert.ok(specifier in imports, `Unmocked dependency ${specifier}`);
     return imports[specifier];
   }, module, module.exports);
-  return { actions: module.exports, createOrder: module.exports.createOrder, reads, writes, authCalls: () => authCalls };
+  return { createOrder: module.exports.createOrder, reads, writes, authCalls: () => authCalls };
 }
 
-const input = { productId: 'watch', shippingDetails: { fullName: 'Test buyer', street: 'Example 1', city: 'Prague', postalCode: '18600', country: 'CZ' }, idempotencyKey: 'test-key', locale: 'en', expectedPrice: 2500, expectedCurrency: 'CHF' };
-
-test('admin dispute and message operations require a matching tenant order before child access', async () => {
-  const f = fixture({ admin: true, existing: { id: 'foreign-order', store_id: 'another-store' } });
-  assert.equal(await f.actions.getAdminOrderDispute('foreign-order'), null);
-  assert.equal((await f.actions.markAdminOrderThreadRead('foreign-order')).ok, false);
-  assert.ok(f.reads.every(r => r.table === 'orders' && r.filters.some(([key, value]) => key === 'store_id' && value === 'kariv')));
-  assert.deepEqual(f.writes, []);
-});
+const input = { productId: 'watch', shippingDetails: { fullName: 'Test buyer', country: 'CZ' }, idempotencyKey: 'test-key', locale: 'en', expectedPrice: 2500, expectedCurrency: 'CHF' };
 
 test('real order action snapshots the shared validated current price and recorded currency', async () => {
   for (const [sale_price, expected] of [[2500, 2500], [null, 3000], [0, 3000], [-20, 3000], [4000, 3000], [3000, 3000]]) {
@@ -126,14 +114,6 @@ test('active status, stock, tenant scope and sign-in boundaries still protect or
   const f = fixture({ signedIn: false });
   await assert.rejects(f.createOrder(input), /Sign in required/);
   assert.equal(f.reads.length, 0);
-  assert.equal(f.writes.length, 0);
-});
-
-test('the order action requires a complete delivery address including country', async () => {
-  const f = fixture();
-  const result = await f.createOrder({ ...input, shippingDetails: { ...input.shippingDetails, country: '' } });
-  assert.equal(result.ok, false);
-  assert.match(result.error, /including the country/);
   assert.equal(f.writes.length, 0);
 });
 

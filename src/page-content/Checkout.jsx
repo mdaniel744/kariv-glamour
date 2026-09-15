@@ -1,5 +1,3 @@
-import { canPurchaseFromSeller } from '@/lib/marketplace';
-import SellerIdentity from '@/components/marketplace/SellerIdentity';
 import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { createOrder } from '@/actions/orders';
@@ -71,14 +69,14 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
 
   const effectiveShipping = useBillingAsShipping ? billing : shipping;
   const pricing = revisedPricing?.locale === locale ? revisedPricing.value : getPricing(product || {});
-  const availableToPurchase = canPurchaseFromSeller(product) && getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null;
+  const availableToPurchase = getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null;
 
   const canSubmit = () => {
     if (!availableToPurchase) return false;
     if (!agreed) return false;
-    if (!billing.fullName || !billing.street || !billing.city || !billing.postalCode || !billing.country) return false;
+    if (!billing.fullName || !billing.street || !billing.city || !billing.postalCode) return false;
     if (!useBillingAsShipping) {
-      if (!shipping.fullName || !shipping.street || !shipping.city || !shipping.postalCode || !shipping.country) return false;
+      if (!shipping.fullName || !shipping.street || !shipping.city || !shipping.postalCode) return false;
     }
     return true;
   };
@@ -140,9 +138,6 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
           <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.status')}</span><span className="text-primary">{t('pages.checkout.orderConfirmedStatus')}</span></div>
         </div>
         <EscrowTrustBadge />
-        <div className="mt-5 space-y-3">
-          {(order.products || []).map((item, index) => <SellerIdentity key={item.productId || index} seller={item.sellerSnapshot} snapshot />)}
-        </div>
         <div className="flex gap-3 mt-6">
           <LocalizedLink to="/portal/orders" className="flex-1 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 text-center">{t('pages.checkout.viewOrders')}</LocalizedLink>
           <LocalizedLink to="/shop" className="flex-1 border border-border text-[11px] tracking-[0.15em] uppercase py-4 text-foreground text-center hover:border-primary">{t('pages.checkout.continueShopping')}</LocalizedLink>
@@ -182,7 +177,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                   <input value={billing.postalCode} onChange={e => setBilling({ ...billing, postalCode: e.target.value })} placeholder={t('pages.checkout.postalCode')} className={inputClass} />
                   <input value={billing.city} onChange={e => setBilling({ ...billing, city: e.target.value })} placeholder={t('pages.checkout.city')} className={inputClass} />
                 </div>
-                <input required autoComplete="country-name" value={billing.country} onChange={e => setBilling({ ...billing, country: e.target.value })} placeholder={t('pages.checkout.country')} className={inputClass} />
+                <input value={billing.country} onChange={e => setBilling({ ...billing, country: e.target.value })} placeholder={t('pages.checkout.country')} className={inputClass} />
                 <input value={billing.phone} onChange={e => setBilling({ ...billing, phone: e.target.value })} placeholder={t('pages.checkout.phone')} className={inputClass} />
               </div>
             </section>
@@ -203,7 +198,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                     <input value={shipping.postalCode} onChange={e => setShipping({ ...shipping, postalCode: e.target.value })} placeholder={t('pages.checkout.postalCode')} className={inputClass} />
                     <input value={shipping.city} onChange={e => setShipping({ ...shipping, city: e.target.value })} placeholder={t('pages.checkout.city')} className={inputClass} />
                   </div>
-                  <input required autoComplete="country-name" value={shipping.country} onChange={e => setShipping({ ...shipping, country: e.target.value })} placeholder={t('pages.checkout.country')} className={inputClass} />
+                  <input value={shipping.country} onChange={e => setShipping({ ...shipping, country: e.target.value })} placeholder={t('pages.checkout.country')} className={inputClass} />
                   <input value={shipping.phone} onChange={e => setShipping({ ...shipping, phone: e.target.value })} placeholder={t('pages.checkout.phone')} className={inputClass} />
                 </div>
               )}
@@ -265,7 +260,6 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                     <img src={product.featuredImage} alt={localize(product, 'productTitle')} className="w-full h-full object-cover" />
                   </div>
                 )}
-                <SellerIdentity seller={product.seller} compact />
                 <p className="text-[10px] tracking-[0.1em] uppercase text-primary">{product.brand}</p>
                 <h3 className="text-sm text-foreground font-medium mt-1 leading-snug">{localize(product, 'productTitle')}</h3>
                 {product.referenceNumber && <p className="text-xs text-muted-foreground mt-1">{t('pages.productDetail.ref')} {product.referenceNumber}</p>}

@@ -5,7 +5,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { createPublicReferenceLoader, loadFilteredCatalogRows } from './catalogQueries.js';
 import { loadCatalogTranslations } from './catalogTranslations.js';
-import { publicSeller } from './marketplace.js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -126,9 +125,6 @@ function mapProduct(row, brandsById, collectionsById, translationsById) {
     googleMerchantDescription: row.google_description || '',
     isPublished: row.status === 'active',
     dealerId: row.dealer_id || null,
-    ownershipVerificationStatus: row.ownership_verification_status || 'ambiguous',
-    merchantFeedEligible: row.merchant_feed_eligible === true,
-    stableFeedId: row.stable_feed_id || null,
     created_date: row.created_at,
     updated_date: row.updated_at,
   };
@@ -197,24 +193,6 @@ const loadCollectionsById = createPublicReferenceLoader(async () => {
 const catalogReferences = { brands: loadBrandsById, collections: loadCollectionsById };
 const publicCatalogCaches = new Set([loadBrandsById, loadCollectionsById]);
 
-async function attachPublicSellers(products) {
-  const keys = [...new Set(products.map(p => p.dealerId).filter(Boolean))];
-  const sellers = [], ratings = [];
-  if (keys.length && getSupabase()) {
-    for (let offset = 0; offset < keys.length; offset += 100) {
-      const batch = keys.slice(offset, offset + 100);
-      const [profiles, aggregates] = await Promise.all([
-        getSupabase().from('marketplace_public_sellers').select('*').eq('store_id', STORE_ID).in('user_id', batch),
-        getSupabase().from('marketplace_public_ratings').select('*').eq('store_id', STORE_ID).in('dealer_user_id', batch),
-      ]);
-      if (profiles.error || aggregates.error) throw new Error('Marketplace seller data is unavailable');
-      sellers.push(...(profiles.data || [])); ratings.push(...(aggregates.data || []));
-    }
-  }
-  const byId = new Map(sellers.map(s => [s.user_id, publicSeller({ ...s, ...ratings.find(a => a.dealer_user_id === s.user_id) })]));
-  return products.map(p => ({ ...p, seller: byId.get(p.dealerId) || null }));
-}
-
 function invalidatePublicCatalogCaches() {
   // Product/collection shapes embed reference names, so a brand or collection
   // edit must also evict cached lists that contain those names.
@@ -231,7 +209,7 @@ export async function shapeProductRows(rows) {
     loadCollectionsById(),
     fetchTranslationsById('product', rows.map((r) => r.id)),
   ]);
-  return attachPublicSellers(rows.map((row) => mapProduct(row, brandsById, collectionsById, translationsById)));
+  return rows.map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
 export async function loadAllProductsShaped(query = {}) {
@@ -244,7 +222,7 @@ export async function loadAllProductsShaped(query = {}) {
     loadCollectionsById(),
   ]);
   const translationsById = await fetchTranslationsById('product', (products || []).map((p) => p.id));
-  return attachPublicSellers((products || []).map((row) => mapProduct(row, brandsById, collectionsById, translationsById)));
+  return (products || []).map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
 export async function loadAllBrandsShaped(query = {}) {

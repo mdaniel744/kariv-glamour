@@ -4,6 +4,9 @@ import { unstable_cache } from 'next/cache';
 import { productSlug } from '@/lib/slug';
 import { Products, Brands, Collections, LegalPages, STORE_ID } from '@/lib/supabaseData';
 import { getLegalPageFallback, mergeLegalPageFallbacks } from '@/lib/legalPageFallbacks';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { loadIdentities } from '@/lib/orderIdentities';
+import { loadApprovedDealerReviews, summarizeDealerReviews } from '@/lib/dealerReviewsData';
 
 export const getProductById = cache(async (id) => {
   if (!id) return null;
@@ -152,14 +155,100 @@ export async function getLegalPageBySlug(slug) {
   }
 }
 
-// Compatibility exports resolve only the canonical approved seller model.
+// dealer_profiles may not exist yet — this read is wrapped so the page
+// degrades gracefully until that table is available.
+async function getRealDealerProfile(userId) {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('dealer_profiles').select('*').eq('store_id', STORE_ID).eq('user_id', userId).maybeSingle();
+    if (error || !data) return null;
+    return {
+      displayName: data.display_name || '',
+      bio: data.bio || '',
+      logoImage: data.logo_image || '',
+      bannerImage: data.banner_image || '',
+      location: data.location || '',
+      specialties: data.specialties || [],
+      establishedYear: data.established_year || null,
+      responseTime: data.response_time || '',
+      websiteUrl: data.website_url || '',
+      averageRating: 0,
+      totalReviews: 0,
+    };
+  } catch {
+    return null; // table doesn't exist yet
+  }
+}
+
+// Until a dealer fills out their real DealerProfileSettings form (or while
+// the dealer_profiles table doesn't exist at all yet), fall back to what we
+// already have on file — their approved application's company name/website,
+// and their Clerk account photo — rather than showing a bare "Dealer"
+// placeholder with no image.
+async function getFallbackDealerProfile(userId) {
+  const [application, identities] = await Promise.all([
+    supabaseAdmin
+      .from('dealer_applications').select('company_name, website')
+      .eq('store_id', STORE_ID).eq('dealer_user_id', userId).eq('status', 'approved')
+      .order('created_at', { ascending: false }).limit(1).maybeSingle()
+      .then(({ data }) => data).catch(() => null),
+    loadIdentities([userId]),
+  ]);
+  const identity = identities.get(userId);
+  const displayName = application?.company_name || identity?.fullName || '';
+  const logoImage = identity?.imageUrl || '';
+  if (!displayName && !logoImage) return null;
+
+  return {
+    displayName,
+    bio: '', bannerImage: '', location: '', specialties: [], establishedYear: null, responseTime: '',
+    websiteUrl: application?.website || '',
+    logoImage,
+    averageRating: 0,
+    totalReviews: 0,
+  };
+}
+
 export async function getDealerProfileSummary(userId) {
   if (!userId) return null;
-  const { loadSeller } = await import('@/lib/marketplaceServer');
-  const { publicSeller } = await import('@/lib/marketplace');
-  return publicSeller(await loadSeller(userId));
+  return (await getRealDealerProfile(userId)) || (await getFallbackDealerProfile(userId));
 }
+
 export async function getDealerPageData(userId) {
-  const { loadDealerPage } = await import('@/lib/marketplaceServer');
-  return loadDealerPage(userId);
+  if (!userId) {
+    return { profile: null, listings: [], reviews: [] };
+  }
+
+  const [listingsResult, reviewsResult, identitiesResult, profileResult] = await Promise.allSettled([
+    Products.filter({ dealerId: userId }, '-created_date', 100, 0),
+    loadApprovedDealerReviews(userId, 100),
+    loadIdentities([userId]),
+    getDealerProfileSummary(userId),
+  ]);
+  const listings = listingsResult.status === 'fulfilled' ? listingsResult.value : [];
+  const reviews = reviewsResult.status === 'fulfilled' ? reviewsResult.value : [];
+  const identities = identitiesResult.status === 'fulfilled' ? identitiesResult.value : new Map();
+  const identity = identities.get(userId);
+  const summary = summarizeDealerReviews(reviews);
+  const savedProfile = profileResult.status === 'fulfilled' ? profileResult.value : null;
+  const displayName = savedProfile?.displayName || identity?.fullName || listings[0]?.dealerName || 'Dealer';
+
+  if (listingsResult.status === 'rejected') {
+    console.error('Unable to load dealer listings from Supabase:', listingsResult.reason?.message || listingsResult.reason);
+  }
+  if (reviewsResult.status === 'rejected') {
+    console.error('Unable to load dealer reviews from Supabase:', reviewsResult.reason?.message || reviewsResult.reason);
+  }
+
+  return {
+    profile: {
+      userId,
+      verifiedStatus: 'verified',
+      ...(savedProfile || {}),
+      displayName,
+      ...summary,
+    },
+    listings,
+    reviews,
+  };
 }

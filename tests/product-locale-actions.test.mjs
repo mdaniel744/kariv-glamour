@@ -3,8 +3,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { compileFunction } from 'node:vm';
 import ts from 'typescript';
-import * as marketplace from '../src/lib/marketplace.js';
-import { testSeller } from './fixtures/marketplace.mjs';
 
 function loadActions({ existingRow, translations = {}, generated = {} } = {}) {
   const writes = [];
@@ -31,11 +29,9 @@ function loadActions({ existingRow, translations = {}, generated = {} } = {}) {
     },
   };
   const imports = {
-    '@/lib/marketplace': marketplace,
-    '@/lib/marketplaceServer': { loadSeller: async key => key ? testSeller : null, requireActiveDealer: async () => testSeller },
     'next/cache': { revalidatePath() {} },
     '@/lib/supabaseAdmin': { supabaseAdmin: client },
-    '@/lib/serverAuth': { requireAdmin: async () => ({ id: 'admin' }), requireDealer: async () => ({ id: 'dealer' }) },
+    '@/lib/serverAuth': { requireAdmin: async () => {}, requireDealer: async () => ({ id: 'dealer' }) },
     '@/lib/supabaseData': { STORE_ID: 'kariv-store', shapeProductRows: async (rows) => rows, Products: { invalidate() {} } },
     '@/lib/slug': { slugify: (name) => name.toLowerCase().replaceAll(' ', '-') },
     '@/lib/locales': { SUPPORTED_LOCALES: ['de', 'en', 'cs'] },
@@ -138,7 +134,7 @@ test('an explicitly edited target is saved as human without touching other trans
 test('new admin and dealer listings still save English originals and generated targets', async () => {
   for (const action of ['createProduct', 'createDealerListing']) {
     const fixture = loadActions({ generated: { productTitle_de: 'Deutscher Titel', productTitle_cs: 'Český název' } });
-    await fixture.actions[action]({ productTitle_en: 'English original', dealerId: testSeller.user_id });
+    await fixture.actions[action]({ productTitle_en: 'English original' });
     const rows = fixture.writes.find((write) => write.table === 'translations').value;
     assert.equal(rows.length, 3, action);
     assert.ok(rows.every((row) => row.store_id === 'kariv-store' && row.entity_id === 'new-watch'));

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { createProduct, updateProduct, deleteProduct } from '@/actions/products';
-import { getApprovedSellerOptions } from '@/actions/marketplace';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, BRAND_DATA, CONDITIONS, GENDERS, CASE_MATERIALS, DIAL_COLORS, MOVEMENT_TYPES, WATCH_SHAPES } from '@/lib/constants';
 import { Plus, Pencil, Trash2, X, Save, Search } from 'lucide-react';
@@ -16,7 +15,6 @@ export default function AdminProducts() {
   const { t } = useTranslation('admin');
   const { toast } = useToast();
   const [products, setProducts] = useState([]);
-  const [sellers, setSellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({});
@@ -35,7 +33,6 @@ export default function AdminProducts() {
   };
 
   useEffect(() => { loadProducts(); }, []);
-  useEffect(() => { getApprovedSellerOptions().then(setSellers).catch(e => toast({ title: 'Seller information unavailable', description: e.message, variant: 'destructive' })); }, [toast]);
 
   const openNew = () => {
     setForm({ brand: '', collection: '', model: '', referenceNumber: '', price: '', condition: 'Excellent', gender: 'Men', caseDiameter: '', caseMaterial: '', dialColor: '', braceletMaterial: '', movementType: '', yearOfProduction: '', availability: 'In Stock', featured: false, isNewArrival: false, isCertifiedPreOwned: false, isVintage: false, authenticationStatus: 'Pending', boxIncluded: false, papersIncluded: false, productTitle_de: '', productTitle_en: '', shortDescription_de: '', shortDescription_en: '', productDescription_de: '', productDescription_en: '' });
@@ -122,13 +119,6 @@ export default function AdminProducts() {
           <button onClick={() => setEditing(null)} className="text-[#8E8E93] hover:text-[#E5E5E5]"><X size={18} /></button>
         </div>
         <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <label className="text-sm">Seller
-            <select required disabled={editing !== 'new'} value={form.dealerId || ''} onChange={e => setForm({ ...form, dealerId: e.target.value })} className="mt-1 w-full rounded-xl border bg-background p-3">
-              <option value="">Choose the contractual seller</option>
-              {sellers.map(s => <option key={s.user_id} value={s.user_id}>{s.seller_type === 'marketplace_owned' ? s.legal_name : s.public_name}</option>)}
-            </select>
-            {editing !== 'new' && <span className="text-xs text-muted-foreground">Ownership changes require Marketplace review.</span>}
-          </label>
           <Field label={t('fields.brand')} name="brand" type="select" options={BRAND_DATA.map(b => b.name)} onChange={(e) => handleBrandChange(e.target.value)} />
           <Field label={t('fields.collection')} name="collection" type="select" options={collectionOptions} disabled={!form.brand} />
           <Field label={t('fields.model')} name="model" />

@@ -30,7 +30,6 @@ export default function AdminLayout({ children }) {
   })[locale] || { applications: 'Dealer Applications', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' };
 
   const navItems = [
-    { to: '/admin/marketplace', icon: Store, label: locale === 'cs' ? 'Tržiště a prodejci' : locale === 'de' ? 'Marktplatz & Händler' : 'Marketplace & dealers' },
     { to: '/admin', icon: LayoutDashboard, label: t('dashboard'), exact: true },
     { to: '/admin/products', icon: Package, label: t('products') },
     { to: '/admin/brands', icon: Tag, label: t('brands') },

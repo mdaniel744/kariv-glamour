@@ -30,8 +30,8 @@ const SHIPPING_POLICY = createLegalPage({
   slug: 'shipping-policy',
   titleEn: 'Shipping Information',
   titleDe: 'Versandinformationen',
-  descriptionEn: 'Free EU shipping, tracking, insurance, delivery and customs information for Kariv Glamour orders.',
-  descriptionDe: 'Informationen zu kostenlosem EU-Versand, Sendungsverfolgung, Versicherung, Lieferung und Zoll bei Kariv Glamour.',
+  descriptionEn: 'Shipping, tracking, insurance, delivery and customs information for Kariv Glamour orders.',
+  descriptionDe: 'Informationen zu Versand, Sendungsverfolgung, Versicherung, Lieferung und Zoll bei Kariv Glamour.',
   contentEn: `_${LAST_UPDATED_EN}_
 
 ## 1. Where we deliver
@@ -41,9 +41,9 @@ Available delivery destinations are shown on the product listing or confirmed du
 ## 2. Shipping charges and delivery estimates
 
 - **Delivery within the Czech Republic:** Shipping is free on every order. Once your order has been confirmed and its status has been marked **Shipped**, delivery normally takes **1–3 business days**.
-- **Delivery to other EU countries:** Shipping is free on every order. Once your order has been confirmed and marked **Shipped**, delivery normally takes **3–7 business days**.
+- **Delivery to other EU countries:** A shipping charge applies and is displayed before you place the order. Once your order has been confirmed and marked **Shipped**, delivery normally takes **3–7 business days**.
 
-Standard delivery is free to every supported destination in the European Union. These timeframes are estimates rather than guaranteed delivery dates. Delivery may take longer because of seller handling time, authentication checks, carrier disruptions, public holidays or events outside reasonable control. Any applicable tax or other non-shipping amount payable through Kariv Glamour is shown before the order is placed.
+These timeframes are estimates rather than guaranteed delivery dates. Delivery may take longer because of seller handling time, authentication checks, carrier disruptions, public holidays or events outside reasonable control. Any applicable shipping charge, tax or other delivery-related amount payable through Kariv Glamour is shown before the order is placed.
 
 ## 3. Insured and tracked delivery
 
@@ -71,9 +71,9 @@ Die verfügbaren Lieferziele werden im Produktangebot angezeigt oder während de
 ## 2. Versandkosten und Lieferprognosen
 
 - **Lieferung innerhalb der Tschechischen Republik:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und mit dem Status **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **1–3 Werktage**.
-- **Lieferung in andere EU-Länder:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und als **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **3–7 Werktage**.
+- **Lieferung in andere EU-Länder:** Für den Versand fallen Kosten an, die Ihnen vor Abgabe der Bestellung angezeigt werden. Nachdem Ihre Bestellung bestätigt und als **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **3–7 Werktage**.
 
-Der Standardversand ist an jedes unterstützte Ziel innerhalb der Europäischen Union kostenlos. Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Die Lieferung kann sich durch Bearbeitungszeiten des Händlers, Echtheitsprüfungen, Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs verzögern. Alle anfallenden Steuern oder sonstigen Beträge außerhalb der Versandkosten, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
+Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Die Lieferung kann sich durch Bearbeitungszeiten des Händlers, Echtheitsprüfungen, Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs verzögern. Alle anfallenden Versandkosten, Steuern oder sonstigen lieferbezogenen Beträge, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
 
 ## 3. Versicherter Versand mit Sendungsverfolgung
 

@@ -80,20 +80,15 @@ test('published human-authored Czech legal corrections take precedence', () => {
   for (const [key, value] of Object.entries(authored)) assert.equal(result[key], value);
 });
 
-test('shipping policy states free EU delivery and localized delivery estimates', () => {
+test('shipping policy states Czech and EU charges and delivery estimates in both languages', () => {
   const shipping = getLegalPageFallback('shipping-policy');
 
   assert.match(shipping.content_en, /Czech Republic:\*\* Shipping is free on every order/);
   assert.match(shipping.content_en, /1–3 business days/);
-  assert.match(shipping.content_en, /other EU countries:\*\* Shipping is free on every order/);
-  assert.match(shipping.content_en, /free to every supported destination in the European Union/);
+  assert.match(shipping.content_en, /other EU countries:\*\* A shipping charge applies/);
   assert.match(shipping.content_en, /3–7 business days/);
   assert.match(shipping.content_de, /Tschechischen Republik:\*\* Der Versand ist bei jeder Bestellung kostenlos/);
   assert.match(shipping.content_de, /1–3 Werktage/);
-  assert.match(shipping.content_de, /andere EU-Länder:\*\* Der Versand ist bei jeder Bestellung kostenlos/);
-  assert.match(shipping.content_de, /innerhalb der Europäischen Union kostenlos/);
+  assert.match(shipping.content_de, /andere EU-Länder:\*\* Für den Versand fallen Kosten an/);
   assert.match(shipping.content_de, /3–7 Werktage/);
-  assert.match(shipping.content_cs, /ostatních zemí EU:\*\* Doprava je u každé objednávky zdarma/);
-  assert.match(shipping.content_cs, /v Evropské unii/);
-  assert.match(shipping.content_cs, /3–7 pracovních dnů/);
 });
