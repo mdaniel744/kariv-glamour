@@ -184,7 +184,7 @@ begin
       raise exception 'Publication requires an approved explicit seller and verified production ownership';
     end if;
   end if;
-  changed = tg_op='INSERT' and new.dealer_id is not null;
+  changed = tg_op='INSERT';
   if tg_op='UPDATE' then changed = new.dealer_id is distinct from old.dealer_id or new.ownership_verification_status is distinct from old.ownership_verification_status; end if;
   if changed then
     if nullif(new.ownership_change_reason,'') is null or nullif(new.ownership_changed_by,'') is null then raise exception 'Ownership changes require actor and reason'; end if;
