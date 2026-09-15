@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPublicReferenceLoader, loadFilteredCatalogRows } from '../src/lib/catalogQueries.js';
 import { searchShopProducts } from '../src/lib/shopSearch.js';
-import { canPurchaseFromSeller } from '../src/lib/marketplace.js';
 
 // Run the actual data adapter against an in-memory HTTP endpoint. No live
 // database credentials or requests are used by these tests.
@@ -84,7 +83,7 @@ function matches(row, field, expression) {
   throw new Error(`Unexpected test filter: ${expression}`);
 }
 
-function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProductOffset = null, emptyProductOffset = null, marketplaceErrors = null } = {}) {
+function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProductOffset = null, emptyProductOffset = null } = {}) {
   Products.invalidate();
   const requests = [];
   t.mock.method(globalThis, 'fetch', async (input) => {
@@ -92,11 +91,6 @@ function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProduct
     assert.equal(url.origin, 'https://catalog.test', 'tests must never access a live service');
     const table = url.pathname.split('/').at(-1);
     requests.push({ table, params: url.searchParams });
-    if (marketplaceErrors?.[table]) {
-      return new Response(JSON.stringify({ code: marketplaceErrors[table], message: 'Seller lookup failed' }), {
-        status: 400, headers: { 'Content-Type': 'application/json' },
-      });
-    }
     let rows = [...fixtures[table]];
     for (const [field, expression] of url.searchParams) {
       if (['select', 'order', 'offset', 'limit'].includes(field)) continue;
@@ -131,58 +125,6 @@ function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProduct
     } });
   });
   return requests;
-}
-
-for (const code of ['PGRST205', '42P01']) {
-  test(`development preview retains catalogue with unresolved sellers when views are missing (${code})`, async (t) => {
-    const previousMode = process.env.NODE_ENV;
-    const previousProduct = fixtures.products[0];
-    t.after(() => {
-      if (previousMode === undefined) delete process.env.NODE_ENV;
-      else process.env.NODE_ENV = previousMode;
-      fixtures.products[0] = previousProduct;
-      Products.invalidate();
-    });
-    process.env.NODE_ENV = 'development';
-    fixtures.products[0] = { ...previousProduct, dealer_id: 'existing-dealer', ownership_verification_status: 'verified' };
-    const requests = useFixtureEndpoint(t, { marketplaceErrors: {
-      marketplace_public_sellers: code, marketplace_public_ratings: code,
-    } });
-    const products = await Products.listPublished();
-    assert.deepEqual(products.map(p => p.id), ['p1', 'p2', 'p3', 'p6']);
-    const product = products.find(p => p.id === 'p1');
-    assert.equal(product.productTitle, previousProduct.name);
-    assert.equal(product.productTitle_de, 'Daytona Deutsch');
-    assert.equal(product.price, previousProduct.price);
-    assert.equal(product.dealerId, 'existing-dealer');
-    assert.equal(product.ownershipVerificationStatus, 'verified');
-    assert.equal(product.seller, null);
-    assert.equal(canPurchaseFromSeller(product), false);
-    assert.ok(requests.every(request => request.params.get('store_id') === 'eq.kariv'));
-  });
-}
-
-for (const [mode, profileCode, ratingCode] of [
-  ['production', 'PGRST205', 'PGRST205'],
-  ['development', '42501', 'PGRST205'],
-  ['development', 'PGRST205', 'PGRST301'],
-]) {
-  test(`seller lookup failures remain blocking in ${mode}: ${profileCode}/${ratingCode}`, async (t) => {
-    const previousMode = process.env.NODE_ENV;
-    const previousProduct = fixtures.products[0];
-    t.after(() => {
-      if (previousMode === undefined) delete process.env.NODE_ENV;
-      else process.env.NODE_ENV = previousMode;
-      fixtures.products[0] = previousProduct;
-      Products.invalidate();
-    });
-    process.env.NODE_ENV = mode;
-    fixtures.products[0] = { ...previousProduct, dealer_id: 'existing-dealer' };
-    useFixtureEndpoint(t, { marketplaceErrors: {
-      marketplace_public_sellers: profileCode, marketplace_public_ratings: ratingCode,
-    } });
-    await assert.rejects(Products.listPublished(), /Marketplace seller data is unavailable/);
-  });
 }
 
 test('brand queries narrow products before translations and retain sorting/offset semantics', async (t) => {

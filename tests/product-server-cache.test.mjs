@@ -11,7 +11,7 @@ const { outputText } = ts.transpileModule(source, {
   fileName: 'base44Server.js',
 });
 
-function createFixture(initialProducts = [], { filter, get, mode = 'production', maxCacheBytes = Infinity } = {}) {
+function createFixture(initialProducts = [], { filter, get } = {}) {
   let products = initialProducts;
   let now = 0;
   const stored = new Map();
@@ -40,7 +40,6 @@ function createFixture(initialProducts = [], { filter, get, mode = 'production',
         // Model Next's persistent cache boundary: retain successful values,
         // including null, but never retain a rejected database read.
         const value = await callback(...args);
-        if (JSON.stringify(value).length > maxCacheBytes) throw new Error('Cache entry is too large');
         stored.set(key, { value, expiresAt: now + revalidate * 1000 });
         return value;
       },
@@ -68,10 +67,10 @@ function createFixture(initialProducts = [], { filter, get, mode = 'production',
     '@/lib/dealerReviewsData': {},
   };
   const module = { exports: {} };
-  compileFunction(outputText, ['require', 'module', 'exports', 'console', 'process'])((specifier) => {
+  compileFunction(outputText, ['require', 'module', 'exports', 'console'])((specifier) => {
     assert.ok(specifier in imports, `Unexpected dependency: ${specifier}`);
     return imports[specifier];
-  }, module, module.exports, { error: (...args) => errors.push(args) }, { env: { NODE_ENV: mode } });
+  }, module, module.exports, { error: (...args) => errors.push(args) });
   return {
     ...module.exports,
     filterCalls, getCalls, errors,
@@ -86,15 +85,6 @@ const watch = {
   productTitle_en: 'Rolex Datejust Watch', productDescription_de: 'Deutsche Beschreibung',
   productDescription_en: 'English description', price: 9000, created_date: '2026-01-01',
 };
-
-test('development brand previews bypass the persistent cache size limit without losing products', async () => {
-  const largeWatch = { ...watch, productDescription_en: 'A'.repeat(3 * 1024 * 1024) };
-  const fixture = createFixture([largeWatch], { mode: 'development', maxCacheBytes: 2 * 1024 * 1024 });
-  assert.deepEqual((await fixture.getBrandPageData('rolex', 'Rolex')).products, [largeWatch]);
-  fixture.setProducts([{ ...largeWatch, price: 9500 }]);
-  assert.equal((await fixture.getBrandPageData('rolex', 'Rolex')).products[0].price, 9500);
-  assert.deepEqual(fixture.errors, []);
-});
 
 test('repeated public product visits reuse a short cache without losing translated fields', async () => {
   const fixture = createFixture([watch]);

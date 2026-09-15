@@ -207,18 +207,7 @@ async function attachPublicSellers(products) {
         getSupabase().from('marketplace_public_sellers').select('*').eq('store_id', STORE_ID).in('user_id', batch),
         getSupabase().from('marketplace_public_ratings').select('*').eq('store_id', STORE_ID).in('dealer_user_id', batch),
       ]);
-      const errors = [profiles.error, aggregates.error].filter(Boolean);
-      if (errors.length) {
-        // Allow local visual previews before the marketplace views are installed.
-        // Missing sellers remain unresolved and cannot pass the purchase gate.
-        // Never suppress permission failures or change production behaviour.
-        if (process.env.NODE_ENV === 'development' &&
-            errors.every(error => ['PGRST205', '42P01'].includes(error.code))) {
-          console.warn('Development preview: marketplace views are missing; seller identities remain unresolved.');
-          return products.map(p => ({ ...p, seller: null }));
-        }
-        throw new Error('Marketplace seller data is unavailable');
-      }
+      if (profiles.error || aggregates.error) throw new Error('Marketplace seller data is unavailable');
       sellers.push(...(profiles.data || [])); ratings.push(...(aggregates.data || []));
     }
   }
