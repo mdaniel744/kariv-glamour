@@ -7,7 +7,7 @@ const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf
 
 test('customer service uses the existing company identity without placeholder contact promises', () => {
   const source = read('src/page-content/CustomerService.jsx');
-  assert.equal(COMPANY_DETAILS.email, 'info@karivglamour.com');
+  assert.equal(COMPANY_DETAILS.email, 'info@24kariv.com');
   for (const field of ['email', 'registeredAddress', 'legalName']) {
     assert.ok(source.includes(`COMPANY_DETAILS.${field}`));
   }

@@ -1,4 +1,5 @@
 import { CZECH_LEGAL_PAGES } from './legalPageCzech.js';
+import { COMPANY_DETAILS } from './companyDetails.js';
 
 const LAST_UPDATED_EN = 'Last updated: 25 August 2026';
 const LAST_UPDATED_DE = 'Zuletzt aktualisiert: 25. August 2026';
@@ -61,7 +62,7 @@ Cross-border orders may be subject to customs procedures, import VAT, duties or 
 
 ## 6. On delivery
 
-Inspect the outer package before accepting it. If it is visibly damaged, note the damage with the carrier where possible, photograph the package before opening it, keep all packaging and contact [info@karivglamour.com](mailto:info@karivglamour.com) promptly. For loss, theft, damage or a delivery discrepancy, include your order number, photographs and any carrier report. This reporting request does not limit mandatory consumer rights.`,
+Inspect the outer package before accepting it. If it is visibly damaged, note the damage with the carrier where possible, photograph the package before opening it, keep all packaging and contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) promptly. For loss, theft, damage or a delivery discrepancy, include your order number, photographs and any carrier report. This reporting request does not limit mandatory consumer rights.`,
   contentDe: `_${LAST_UPDATED_DE}_
 
 ## 1. Liefergebiete
@@ -91,7 +92,7 @@ Bei grenzüberschreitenden Bestellungen können Zollverfahren, Einfuhrumsatzsteu
 
 ## 6. Bei der Zustellung
 
-Prüfen Sie die Außenverpackung vor der Annahme. Dokumentieren Sie sichtbare Schäden nach Möglichkeit beim Versanddienstleister, fotografieren Sie das Paket vor dem Öffnen, bewahren Sie die gesamte Verpackung auf und kontaktieren Sie zeitnah [info@karivglamour.com](mailto:info@karivglamour.com). Geben Sie bei Verlust, Diebstahl, Beschädigung oder Lieferabweichungen Ihre Bestellnummer, Fotos und einen vorhandenen Zustellbericht an. Diese Meldebitte schränkt zwingende Verbraucherrechte nicht ein.`,
+Prüfen Sie die Außenverpackung vor der Annahme. Dokumentieren Sie sichtbare Schäden nach Möglichkeit beim Versanddienstleister, fotografieren Sie das Paket vor dem Öffnen, bewahren Sie die gesamte Verpackung auf und kontaktieren Sie zeitnah [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Geben Sie bei Verlust, Diebstahl, Beschädigung oder Lieferabweichungen Ihre Bestellnummer, Fotos und einen vorhandenen Zustellbericht an. Diese Meldebitte schränkt zwingende Verbraucherrechte nicht ein.`,
 });
 
 const RETURNS_POLICY = createLegalPage({
@@ -106,7 +107,7 @@ const RETURNS_POLICY = createLegalPage({
 
 If you are an EU/EEA consumer buying online from a professional seller, you generally have 14 days after you, or a person designated by you, receives the watch to withdraw from the purchase without giving a reason. Mandatory rights in your country may provide additional protection.
 
-To exercise the right, send a clear statement before the deadline to [info@karivglamour.com](mailto:info@karivglamour.com). Include your name, order number, the watch, delivery date and a reliable contact method. We will acknowledge the request and provide secure return instructions. Do not send a watch to the registered office without receiving return instructions first.
+To exercise the right, send a clear statement before the deadline to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Include your name, order number, the watch, delivery date and a reliable contact method. We will acknowledge the request and provide secure return instructions. Do not send a watch to the registered office without receiving return instructions first.
 
 ## 2. Returning the watch
 
@@ -132,14 +133,14 @@ The right of withdrawal may be excluded only where the law permits—for example
 
 ## 6. Questions
 
-Contact [info@karivglamour.com](mailto:info@karivglamour.com) before returning any high-value item. Nothing in this policy limits rights that cannot lawfully be excluded.`,
+Contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) before returning any high-value item. Nothing in this policy limits rights that cannot lawfully be excluded.`,
   contentDe: `_${LAST_UPDATED_DE}_
 
 ## 1. Gesetzliches Widerrufsrecht
 
 Wenn Sie als Verbraucher im EU-/EWR-Raum online bei einem gewerblichen Verkäufer kaufen, haben Sie grundsätzlich 14 Tage ab dem Tag, an dem Sie oder eine von Ihnen benannte Person die Uhr erhalten, um den Kauf ohne Angabe von Gründen zu widerrufen. Zwingende Vorschriften Ihres Landes können zusätzlichen Schutz bieten.
 
-Zur Ausübung des Widerrufs senden Sie vor Ablauf der Frist eine eindeutige Erklärung an [info@karivglamour.com](mailto:info@karivglamour.com). Nennen Sie Ihren Namen, die Bestellnummer, die Uhr, das Lieferdatum und eine verlässliche Kontaktmöglichkeit. Wir bestätigen die Anfrage und stellen sichere Rücksendeanweisungen bereit. Senden Sie keine Uhr ohne vorherige Rücksendeanweisung an den eingetragenen Firmensitz.
+Zur Ausübung des Widerrufs senden Sie vor Ablauf der Frist eine eindeutige Erklärung an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nennen Sie Ihren Namen, die Bestellnummer, die Uhr, das Lieferdatum und eine verlässliche Kontaktmöglichkeit. Wir bestätigen die Anfrage und stellen sichere Rücksendeanweisungen bereit. Senden Sie keine Uhr ohne vorherige Rücksendeanweisung an den eingetragenen Firmensitz.
 
 ## 2. Rücksendung der Uhr
 
@@ -165,7 +166,7 @@ Das Widerrufsrecht ist nur ausgeschlossen, soweit das Gesetz dies erlaubt—beis
 
 ## 6. Fragen
 
-Kontaktieren Sie [info@karivglamour.com](mailto:info@karivglamour.com), bevor Sie einen hochwertigen Artikel zurücksenden. Diese Richtlinie beschränkt keine Rechte, die gesetzlich nicht ausgeschlossen werden dürfen.`,
+Kontaktieren Sie [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}), bevor Sie einen hochwertigen Artikel zurücksenden. Diese Richtlinie beschränkt keine Rechte, die gesetzlich nicht ausgeschlossen werden dürfen.`,
 });
 
 const WARRANTY_POLICY = createLegalPage({
@@ -192,7 +193,7 @@ Pre-owned and vintage watches are sold with the condition, age, service history 
 
 ## 4. Making a claim
 
-Contact [info@karivglamour.com](mailto:info@karivglamour.com) with the order number, a description of the issue, photographs or video and any relevant service report. Do not arrange third-party repairs before the seller has had a reasonable opportunity to assess the claim, except where urgent action is necessary to prevent further damage. We will coordinate the next steps with the responsible seller.
+Contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) with the order number, a description of the issue, photographs or video and any relevant service report. Do not arrange third-party repairs before the seller has had a reasonable opportunity to assess the claim, except where urgent action is necessary to prevent further damage. We will coordinate the next steps with the responsible seller.
 
 Nothing in this policy limits non-excludable consumer rights.`,
   contentDe: `_${LAST_UPDATED_DE}_
@@ -213,7 +214,7 @@ Gebrauchte und Vintage-Uhren werden mit dem im Angebot beschriebenen Zustand, Al
 
 ## 4. Anspruch geltend machen
 
-Kontaktieren Sie [info@karivglamour.com](mailto:info@karivglamour.com) mit Bestellnummer, Fehlerbeschreibung, Fotos oder Video und gegebenenfalls einem Servicebericht. Lassen Sie keine Reparatur durch Dritte durchführen, bevor der Verkäufer eine angemessene Gelegenheit zur Prüfung hatte, außer eine dringende Maßnahme ist erforderlich, um weiteren Schaden zu verhindern. Wir koordinieren die nächsten Schritte mit dem verantwortlichen Verkäufer.
+Kontaktieren Sie [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) mit Bestellnummer, Fehlerbeschreibung, Fotos oder Video und gegebenenfalls einem Servicebericht. Lassen Sie keine Reparatur durch Dritte durchführen, bevor der Verkäufer eine angemessene Gelegenheit zur Prüfung hatte, außer eine dringende Maßnahme ist erforderlich, um weiteren Schaden zu verhindern. Wir koordinieren die nächsten Schritte mit dem verantwortlichen Verkäufer.
 
 Diese Richtlinie beschränkt keine unabdingbaren Verbraucherrechte.`,
 });
@@ -274,11 +275,11 @@ We work to keep the service secure and available but cannot promise uninterrupte
 
 These terms are governed by Czech law. If you are a consumer, this choice does not deprive you of mandatory protection under the law of your habitual country of residence. Courts with jurisdiction under applicable consumer and civil-procedure rules may hear disputes.
 
-Please contact [info@karivglamour.com](mailto:info@karivglamour.com) first so we can try to resolve a complaint. Consumers may also seek out-of-court resolution from the Czech Trade Inspection Authority (Česká obchodní inspekce), the Czech consumer ADR body: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
+Please contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) first so we can try to resolve a complaint. Consumers may also seek out-of-court resolution from the Czech Trade Inspection Authority (Česká obchodní inspekce), the Czech consumer ADR body: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
 
 ## 12. Changes and contact
 
-We may update these terms prospectively for legal, security or service changes. The version accepted for an order continues to govern that order unless the law requires otherwise. Questions can be sent to [info@karivglamour.com](mailto:info@karivglamour.com).`,
+We may update these terms prospectively for legal, security or service changes. The version accepted for an order continues to govern that order unless the law requires otherwise. Questions can be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
   contentDe: `_${LAST_UPDATED_DE}_
 
 ## 1. Geltungsbereich und Betreiber
@@ -329,11 +330,11 @@ Wir bemühen uns um einen sicheren und verfügbaren Dienst, können jedoch keine
 
 Es gilt tschechisches Recht. Sind Sie Verbraucher, entzieht Ihnen diese Rechtswahl nicht den zwingenden Schutz des Rechts Ihres gewöhnlichen Aufenthaltslandes. Zuständig sind die Gerichte nach den anwendbaren Verbraucher- und Zivilverfahrensregeln.
 
-Kontaktieren Sie bei Beschwerden zunächst [info@karivglamour.com](mailto:info@karivglamour.com), damit wir eine Lösung versuchen können. Verbraucher können sich außerdem an die Tschechische Handelsinspektion (Česká obchodní inspekce) als tschechische Stelle für die außergerichtliche Streitbeilegung wenden: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
+Kontaktieren Sie bei Beschwerden zunächst [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}), damit wir eine Lösung versuchen können. Verbraucher können sich außerdem an die Tschechische Handelsinspektion (Česká obchodní inspekce) als tschechische Stelle für die außergerichtliche Streitbeilegung wenden: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
 
 ## 12. Änderungen und Kontakt
 
-Wir können diese Bedingungen für zukünftige Vorgänge aufgrund rechtlicher, sicherheitsbezogener oder dienstlicher Änderungen anpassen. Für eine Bestellung bleibt die bei Vertragsschluss akzeptierte Fassung maßgeblich, sofern das Gesetz nichts anderes verlangt. Fragen richten Sie an [info@karivglamour.com](mailto:info@karivglamour.com).`,
+Wir können diese Bedingungen für zukünftige Vorgänge aufgrund rechtlicher, sicherheitsbezogener oder dienstlicher Änderungen anpassen. Für eine Bestellung bleibt die bei Vertragsschluss akzeptierte Fassung maßgeblich, sofern das Gesetz nichts anderes verlangt. Fragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
 });
 
 const PRIVACY_POLICY = createLegalPage({
@@ -346,7 +347,7 @@ const PRIVACY_POLICY = createLegalPage({
 
 ## 1. Controller and contact
 
-Kariv Glamour s.r.o. is the controller for personal data processed to operate this website and its marketplace services, except where a clearly identified seller or service provider acts as a separate controller. Questions and data-protection requests may be sent to [info@karivglamour.com](mailto:info@karivglamour.com).
+Kariv Glamour s.r.o. is the controller for personal data processed to operate this website and its marketplace services, except where a clearly identified seller or service provider acts as a separate controller. Questions and data-protection requests may be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## 2. Data we process
 
@@ -388,7 +389,7 @@ We retain data only for as long as needed for the stated purpose. Account data i
 
 Subject to the GDPR and applicable exceptions, you may request access, correction, deletion, restriction, objection and data portability. You may object at any time to direct marketing and may withdraw consent. Where processing relies on legitimate interests, you may object on grounds relating to your situation. You also have rights relating to decisions based solely on automated processing that produce legal or similarly significant effects. Kariv Glamour does not intend to make such decisions without the safeguards required by law.
 
-Send requests to [info@karivglamour.com](mailto:info@karivglamour.com). We may need to verify your identity. We normally respond within one month, subject to lawful extensions for complex requests.
+Send requests to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). We may need to verify your identity. We normally respond within one month, subject to lawful extensions for complex requests.
 
 You may lodge a complaint with the Czech Office for Personal Data Protection (Úřad pro ochranu osobních údajů), Pplk. Sochora 27, 170 00 Praha 7, Czech Republic: [uoou.gov.cz](https://uoou.gov.cz/en). You may also contact the supervisory authority in your EU/EEA country of residence or work.
 
@@ -407,7 +408,7 @@ We may update this notice when services, providers or legal requirements change.
 
 ## 1. Verantwortlicher und Kontakt
 
-Kariv Glamour s.r.o. ist Verantwortlicher für personenbezogene Daten, die zum Betrieb dieser Website und ihrer Marktplatzdienste verarbeitet werden, soweit nicht ein klar ausgewiesener Verkäufer oder Dienstleister als eigener Verantwortlicher handelt. Datenschutzfragen und Betroffenenanfragen richten Sie an [info@karivglamour.com](mailto:info@karivglamour.com).
+Kariv Glamour s.r.o. ist Verantwortlicher für personenbezogene Daten, die zum Betrieb dieser Website und ihrer Marktplatzdienste verarbeitet werden, soweit nicht ein klar ausgewiesener Verkäufer oder Dienstleister als eigener Verantwortlicher handelt. Datenschutzfragen und Betroffenenanfragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## 2. Verarbeitete Daten
 
@@ -449,7 +450,7 @@ Wir speichern Daten nur so lange, wie es für den genannten Zweck erforderlich i
 
 Nach Maßgabe der DSGVO und ihrer Ausnahmen können Sie Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit verlangen. Sie können Direktwerbung jederzeit widersprechen und eine Einwilligung widerrufen. Beruht die Verarbeitung auf berechtigten Interessen, können Sie aus Gründen Ihrer besonderen Situation widersprechen. Sie haben außerdem Rechte bei ausschließlich automatisierten Entscheidungen mit rechtlicher oder ähnlich erheblicher Wirkung. Kariv Glamour beabsichtigt keine solchen Entscheidungen ohne die gesetzlich erforderlichen Schutzmaßnahmen.
 
-Anfragen richten Sie an [info@karivglamour.com](mailto:info@karivglamour.com). Wir können einen Identitätsnachweis verlangen. Die Antwort erfolgt grundsätzlich innerhalb eines Monats; bei komplexen Anfragen sind gesetzliche Verlängerungen möglich.
+Anfragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Wir können einen Identitätsnachweis verlangen. Die Antwort erfolgt grundsätzlich innerhalb eines Monats; bei komplexen Anfragen sind gesetzliche Verlängerungen möglich.
 
 Sie können sich bei der tschechischen Datenschutzbehörde (Úřad pro ochranu osobních údajů), Pplk. Sochora 27, 170 00 Praha 7, Tschechische Republik, beschweren: [uoou.gov.cz](https://uoou.gov.cz/en). Alternativ können Sie die Aufsichtsbehörde in Ihrem EU-/EWR-Wohn- oder Arbeitsland kontaktieren.
 
@@ -507,7 +508,7 @@ Embedded media or services from another provider can place their own cookies onl
 
 ## 6. Updates and contact
 
-We update this policy when technology or legal requirements change. For details about personal-data processing, see the [Privacy Policy](/legal/privacy-policy). Questions may be sent to [info@karivglamour.com](mailto:info@karivglamour.com).`,
+We update this policy when technology or legal requirements change. For details about personal-data processing, see the [Privacy Policy](/legal/privacy-policy). Questions may be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
   contentDe: `_${LAST_UPDATED_DE}_
 
 ## 1. Was Cookies sind
@@ -543,7 +544,7 @@ Eingebettete Medien oder Dienste eines anderen Anbieters dürfen eigene Cookies 
 
 ## 6. Änderungen und Kontakt
 
-Wir aktualisieren diese Richtlinie bei Änderungen der Technologie oder Rechtslage. Einzelheiten zur Verarbeitung personenbezogener Daten finden Sie in der [Datenschutzerklärung](/legal/privacy-policy). Fragen richten Sie an [info@karivglamour.com](mailto:info@karivglamour.com).`,
+Wir aktualisieren diese Richtlinie bei Änderungen der Technologie oder Rechtslage. Einzelheiten zur Verarbeitung personenbezogener Daten finden Sie in der [Datenschutzerklärung](/legal/privacy-policy). Fragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
 });
 
 const AUTHENTICITY_POLICY = createLegalPage({
@@ -570,7 +571,7 @@ Product photographs and condition reports form part of the listing. Buyers shoul
 
 ## 4. If you have a concern
 
-If you reasonably believe a delivered watch is inauthentic or materially different from the listing, do not wear, open, resize, repair or alter it. Keep all packaging and contact [info@karivglamour.com](mailto:info@karivglamour.com) promptly with the order number, photographs and the basis for your concern. We may request independent inspection and will apply the relevant buyer-protection, return and legal-conformity rights.
+If you reasonably believe a delivered watch is inauthentic or materially different from the listing, do not wear, open, resize, repair or alter it. Keep all packaging and contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) promptly with the order number, photographs and the basis for your concern. We may request independent inspection and will apply the relevant buyer-protection, return and legal-conformity rights.
 
 This disclaimer does not exclude liability for fraud or misrepresentation and does not limit mandatory consumer rights.`,
   contentDe: `_${LAST_UPDATED_DE}_
@@ -591,7 +592,7 @@ Produktfotos und Zustandsberichte sind Bestandteil des Angebots. Käufer sollten
 
 ## 4. Bei Zweifeln
 
-Wenn Sie begründet annehmen, dass eine gelieferte Uhr nicht echt ist oder wesentlich vom Angebot abweicht, dürfen Sie sie nicht tragen, öffnen, kürzen, reparieren oder verändern. Bewahren Sie sämtliche Verpackungen auf und kontaktieren Sie zeitnah [info@karivglamour.com](mailto:info@karivglamour.com) mit Bestellnummer, Fotos und Begründung. Wir können eine unabhängige Prüfung verlangen und wenden die einschlägigen Käuferschutz-, Rückgabe- und gesetzlichen Mängelrechte an.
+Wenn Sie begründet annehmen, dass eine gelieferte Uhr nicht echt ist oder wesentlich vom Angebot abweicht, dürfen Sie sie nicht tragen, öffnen, kürzen, reparieren oder verändern. Bewahren Sie sämtliche Verpackungen auf und kontaktieren Sie zeitnah [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) mit Bestellnummer, Fotos und Begründung. Wir können eine unabhängige Prüfung verlangen und wenden die einschlägigen Käuferschutz-, Rückgabe- und gesetzlichen Mängelrechte an.
 
 Dieser Hinweis schließt keine Haftung für Betrug oder Falschdarstellung aus und beschränkt keine zwingenden Verbraucherrechte.`,
 });
@@ -614,7 +615,7 @@ Brand names, logos, model names, reference numbers and other trademarks belong t
 
 ## Product imagery and information
 
-Product photographs are supplied by Kariv Glamour or authorised sellers for the relevant listing. Manufacturer descriptions or historical facts may be summarised for identification and informational purposes. Rights holders may report a concern about inaccurate attribution or unauthorised content to [info@karivglamour.com](mailto:info@karivglamour.com).
+Product photographs are supplied by Kariv Glamour or authorised sellers for the relevant listing. Manufacturer descriptions or historical facts may be summarised for identification and informational purposes. Rights holders may report a concern about inaccurate attribution or unauthorised content to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Warranties and service
 
@@ -631,7 +632,7 @@ Markennamen, Logos, Modellnamen, Referenznummern und sonstige Kennzeichen gehör
 
 ## Produktbilder und Informationen
 
-Produktfotos werden von Kariv Glamour oder zugelassenen Verkäufern für das jeweilige Angebot bereitgestellt. Herstellerbeschreibungen oder historische Fakten können zu Identifikations- und Informationszwecken zusammengefasst werden. Rechteinhaber können Bedenken wegen einer falschen Zuordnung oder unbefugter Inhalte an [info@karivglamour.com](mailto:info@karivglamour.com) melden.
+Produktfotos werden von Kariv Glamour oder zugelassenen Verkäufern für das jeweilige Angebot bereitgestellt. Herstellerbeschreibungen oder historische Fakten können zu Identifikations- und Informationszwecken zusammengefasst werden. Rechteinhaber können Bedenken wegen einer falschen Zuordnung oder unbefugter Inhalte an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) melden.
 
 ## Garantie und Service
 
@@ -648,7 +649,7 @@ const IMPRESSUM = createLegalPage({
 
 ## Responsible for this website
 
-Kariv Glamour s.r.o. is represented by its Managing Director, Peter Vasko. Legal notices may be sent to the registered office or to [info@karivglamour.com](mailto:info@karivglamour.com).
+Kariv Glamour s.r.o. is represented by its Managing Director, Peter Vasko. Legal notices may be sent to the registered office or to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Consumer dispute resolution
 
@@ -659,7 +660,7 @@ We are not obliged or committed to participate before another consumer arbitrati
 
 ## Verantwortlich für diese Website
 
-Kariv Glamour s.r.o. wird durch den Geschäftsführer Peter Vasko vertreten. Rechtliche Mitteilungen können an den eingetragenen Firmensitz oder an [info@karivglamour.com](mailto:info@karivglamour.com) gesendet werden.
+Kariv Glamour s.r.o. wird durch den Geschäftsführer Peter Vasko vertreten. Rechtliche Mitteilungen können an den eingetragenen Firmensitz oder an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) gesendet werden.
 
 ## Verbraucherstreitbeilegung
 

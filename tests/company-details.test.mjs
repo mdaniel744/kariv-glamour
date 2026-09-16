@@ -14,7 +14,7 @@ test('official company details remain complete and consistent', () => {
     companyId: '03964761',
     euid: 'CZVROR.03964761',
     vatId: 'CZ03964761',
-    email: 'info@karivglamour.com',
+    email: 'info@24kariv.com',
     manager: 'Peter Vasko',
   });
 });

@@ -39,7 +39,7 @@ One public Cartier main photograph returned image/jpeg, 1280 × 960 pixels and 1
 
 ### 1. Replace misleading contact mechanisms — definite frontend defect
 
-Baseline `src/page-content/CustomerService.jsx` used `service@kariv-glamour.com`, `+49 (0) 123 456 789`, and `Deutschland`. The existing authoritative application constant is `src/lib/companyDetails.js`: Kariv Glamour s.r.o., the Prague registered address, and info@karivglamour.com. Its form's submit handler only changed local state to display success; it did not send anything. `Footer.jsx` offered four social links pointing only to `#`.
+Baseline `src/page-content/CustomerService.jsx` used `service@kariv-glamour.com`, `+49 (0) 123 456 789`, and `Deutschland`. The existing authoritative application constant is `src/lib/companyDetails.js`: Kariv Glamour s.r.o., the Prague registered address, and info@24kariv.com. Its form's submit handler only changed local state to display success; it did not send anything. `Footer.jsx` offered four social links pointing only to `#`.
 
 **Prepared locally in this revision:** customer service now uses the existing company name, email and address; placeholder phone/hours and unsupported response promises are omitted; the form explicitly prepares a mailto draft, does not claim delivery, preserves the user's text and always shows a direct email fallback. All fields have visible labels in both languages. Nonfunctional footer social links are removed. This is not a backend email-delivery integration and is not yet a live verification result.
 

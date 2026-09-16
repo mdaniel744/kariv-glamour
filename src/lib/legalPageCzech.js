@@ -1,5 +1,7 @@
 // Czech translation of the existing policies. This does not introduce new
 // commercial commitments or replace the company's legal review.
+import { COMPANY_DETAILS } from './companyDetails.js';
+
 const page = (title, description, content) => ({ title, description, content: `_Poslední aktualizace: 25. srpna 2026_\n\n${content}` });
 export const CZECH_LEGAL_PAGES = {
   'shipping-policy': page('Informace o dopravě', 'Doprava, sledování zásilek, pojištění, doručení a celní informace pro objednávky Kariv Glamour.', `## 1. Kam doručujeme
@@ -29,12 +31,12 @@ Přeshraniční objednávky mohou podléhat celnímu řízení, dovozní DPH, cl
 
 ## 6. Při převzetí
 
-Před převzetím zkontrolujte vnější obal. Viditelné poškození podle možností zaznamenejte s dopravcem, balík před otevřením vyfotografujte, uchovejte veškerý obal a bez odkladu kontaktujte [info@karivglamour.com](mailto:info@karivglamour.com). Při ztrátě, krádeži, poškození nebo nesrovnalosti přiložte číslo objednávky, fotografie a případný záznam dopravce. Tento požadavek na oznámení neomezuje zákonná práva spotřebitele.`),
+Před převzetím zkontrolujte vnější obal. Viditelné poškození podle možností zaznamenejte s dopravcem, balík před otevřením vyfotografujte, uchovejte veškerý obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Při ztrátě, krádeži, poškození nebo nesrovnalosti přiložte číslo objednávky, fotografie a případný záznam dopravce. Tento požadavek na oznámení neomezuje zákonná práva spotřebitele.`),
   'returns-refund-policy': page('Vrácení zboží a peněz', 'Odstoupení od smlouvy, podmínky vrácení a refundace nákupů na Kariv Glamour.', `## 1. Zákonné právo odstoupit od smlouvy
 
 Jste-li spotřebitelem v EU/EHP a nakupujete online od podnikatele, zpravidla můžete bez udání důvodu odstoupit do 14 dnů ode dne, kdy hodinky převezmete vy nebo vámi určená osoba. Povinná pravidla vaší země mohou poskytovat další ochranu.
 
-Pro uplatnění práva zašlete před koncem lhůty jednoznačné prohlášení na [info@karivglamour.com](mailto:info@karivglamour.com). Uveďte jméno, číslo objednávky, hodinky, datum doručení a spolehlivý kontakt. Žádost potvrdíme a poskytneme bezpečné pokyny pro vrácení. Hodinky neposílejte do sídla společnosti, dokud neobdržíte pokyny.
+Pro uplatnění práva zašlete před koncem lhůty jednoznačné prohlášení na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Uveďte jméno, číslo objednávky, hodinky, datum doručení a spolehlivý kontakt. Žádost potvrdíme a poskytneme bezpečné pokyny pro vrácení. Hodinky neposílejte do sídla společnosti, dokud neobdržíte pokyny.
 
 ## 2. Odeslání hodinek zpět
 
@@ -60,7 +62,7 @@ Právo na odstoupení lze vyloučit pouze tam, kde to zákon dovoluje, napříkl
 
 ## 6. Dotazy
 
-Před vrácením cenného předmětu kontaktujte [info@karivglamour.com](mailto:info@karivglamour.com). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`),
+Před vrácením cenného předmětu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`),
   'warranty-policy': page('Odpovědnost za vady a záruky', 'Informace o zákonných právech, zárukách a uplatnění reklamace hodinek.', `## 1. Vaše zákonná práva
 
 Spotřebitelé nakupující zboží od podnikatele v EU mají zákonnou ochranu, že zboží odpovídá smlouvě. Tato ochrana je samostatná vůči jakékoli záruce výrobce či obchodní záruce a nelze ji takovou zárukou omezit. Příslušné lhůty a nároky stanoví kogentní právo; podle pravidel EU mají spotřebitelé obecně nejméně dvouletou zákonnou ochranu od doručení. Pro použité zboží mohou platit zvláštní pravidla, pokud vnitrostátní právo dovoluje výslovně dohodnutou kratší dobu, nikdy však pod zákonné minimum.
@@ -77,7 +79,7 @@ Použité a historické hodinky se prodávají se stavem, stářím, servisní h
 
 ## 4. Uplatnění reklamace
 
-Kontaktujte [info@karivglamour.com](mailto:info@karivglamour.com) a uveďte číslo objednávky, popis problému, fotografie či video a příslušnou servisní zprávu. Nezadávejte opravu třetí osobě, dokud prodejce nedostane přiměřenou možnost reklamaci posoudit, ledaže je nutný okamžitý zásah k zabránění další škodě. Další postup zkoordinujeme s odpovědným prodejcem.
+Kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) a uveďte číslo objednávky, popis problému, fotografie či video a příslušnou servisní zprávu. Nezadávejte opravu třetí osobě, dokud prodejce nedostane přiměřenou možnost reklamaci posoudit, ledaže je nutný okamžitý zásah k zabránění další škodě. Další postup zkoordinujeme s odpovědným prodejcem.
 
 Tato pravidla neomezují nevylučitelná práva spotřebitelů.`),
   'terms-and-conditions': page('Obchodní podmínky', 'Podmínky používání tržiště Kariv Glamour a nákupu hodinek.', `## 1. Rozsah a provozovatel
@@ -128,14 +130,14 @@ Usilujeme o bezpečnou a dostupnou službu, nemůžeme však slíbit nepřeruše
 
 Podmínky se řídí českým právem. Spotřebitele tato volba nezbavuje povinné ochrany podle práva země jeho obvyklého bydliště. Spory mohou projednávat soudy příslušné podle spotřebitelských a procesních pravidel.
 
-Nejprve kontaktujte [info@karivglamour.com](mailto:info@karivglamour.com), abychom mohli stížnost řešit přímo. Spotřebitel se může obrátit i na Českou obchodní inspekci, příslušný orgán mimosoudního řešení spotřebitelských sporů: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
+Nejprve kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}), abychom mohli stížnost řešit přímo. Spotřebitel se může obrátit i na Českou obchodní inspekci, příslušný orgán mimosoudního řešení spotřebitelských sporů: [coi.gov.cz](https://coi.gov.cz/en/alternative-dispute-resolution/).
 
 ## 12. Změny a kontakt
 
-Podmínky můžeme do budoucna aktualizovat kvůli změnám práva, bezpečnosti či služby. Objednávku nadále řídí verze přijatá při jejím uzavření, nestanoví-li zákon jinak. Dotazy zasílejte na [info@karivglamour.com](mailto:info@karivglamour.com).`),
+Podmínky můžeme do budoucna aktualizovat kvůli změnám práva, bezpečnosti či služby. Objednávku nadále řídí verze přijatá při jejím uzavření, nestanoví-li zákon jinak. Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`),
   'privacy-policy': page('Ochrana osobních údajů', 'Jak Kariv Glamour zpracovává osobní údaje a jaká máte práva.', `## 1. Správce a kontakt
 
-Kariv Glamour s.r.o. je správcem osobních údajů zpracovávaných pro provoz webu a tržiště, s výjimkou případů, kdy jasně označený prodejce nebo poskytovatel působí jako samostatný správce. Dotazy a žádosti zasílejte na [info@karivglamour.com](mailto:info@karivglamour.com).
+Kariv Glamour s.r.o. je správcem osobních údajů zpracovávaných pro provoz webu a tržiště, s výjimkou případů, kdy jasně označený prodejce nebo poskytovatel působí jako samostatný správce. Dotazy a žádosti zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## 2. Zpracovávané údaje
 
@@ -177,7 +179,7 @@ Někteří poskytovatelé mohou zpracovávat údaje mimo Evropský hospodářsk�
 
 S výhradou GDPR a výjimek můžete požadovat přístup, opravu, výmaz, omezení zpracování a přenositelnost nebo vznést námitku. Proti přímému marketingu můžete namítat kdykoli a souhlas můžete odvolat. Při oprávněném zájmu lze vznést námitku z důvodů vaší konkrétní situace. Máte také práva týkající se výhradně automatizovaných rozhodnutí se závažnými účinky; Kariv Glamour je nezamýšlí přijímat bez zákonných záruk.
 
-Žádosti zasílejte na [info@karivglamour.com](mailto:info@karivglamour.com). Můžeme potřebovat ověření totožnosti. Zpravidla odpovídáme do jednoho měsíce, s možností zákonného prodloužení složité žádosti.
+Žádosti zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Můžeme potřebovat ověření totožnosti. Zpravidla odpovídáme do jednoho měsíce, s možností zákonného prodloužení složité žádosti.
 
 Stížnost můžete podat Úřadu pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7: [uoou.gov.cz](https://uoou.gov.cz/en), případně dozorovému orgánu ve státě EU/EHP, kde žijete nebo pracujete.
 
@@ -225,7 +227,7 @@ Vložená média a služby jiného poskytovatele mohou ukládat vlastní cookies
 
 ## 6. Aktualizace a kontakt
 
-Zásady aktualizujeme při změně technologií či práva. Podrobnosti o osobních údajích najdete v [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [info@karivglamour.com](mailto:info@karivglamour.com).`),
+Zásady aktualizujeme při změně technologií či práva. Podrobnosti o osobních údajích najdete v [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`),
   'authenticity-disclaimer': page('Prohlášení o pravosti', 'Rozsah ověřování pravosti, dokumentace a postup při pochybnostech.', `## 1. Standard ověřování
 
 Kariv Glamour požaduje, aby prodejci nabízeli pravé hodinky a přesné informace. Pokud je nabízena kontrola pravosti, kvalifikovaní posuzovatelé hodnotí hodinky podle tehdy dostupných informací a fyzických znaků. Posouzení může zahrnovat referenci, sériové údaje, strojek, pouzdro, číselník, ručky, náramek, puncy, materiály, zpracování, původ a doklady.
@@ -242,7 +244,7 @@ Fotografie a zprávy o stavu jsou součástí nabídky. Kupující je má posoud
 
 ## 4. Máte-li pochybnosti
 
-Pokud se důvodně domníváte, že dodané hodinky nejsou pravé nebo se podstatně liší od nabídky, nenoste je, neotevírejte, neupravujte velikost ani neopravujte. Uchovejte obal a bez odkladu kontaktujte [info@karivglamour.com](mailto:info@karivglamour.com) s číslem objednávky, fotografiemi a důvody. Můžeme požadovat nezávislou kontrolu; použijí se příslušná práva ochrany kupujícího, vrácení a odpovědnosti za vady.
+Pokud se důvodně domníváte, že dodané hodinky nejsou pravé nebo se podstatně liší od nabídky, nenoste je, neotevírejte, neupravujte velikost ani neopravujte. Uchovejte obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) s číslem objednávky, fotografiemi a důvody. Můžeme požadovat nezávislou kontrolu; použijí se příslušná práva ochrany kupujícího, vrácení a odpovědnosti za vady.
 
 Toto prohlášení nevylučuje odpovědnost za podvod či nepravdivé informace a neomezuje povinná práva spotřebitelů.`),
   'brand-disclaimer': page('Prohlášení o značkách', 'Nezávislé postavení Kariv Glamour a používání ochranných známek.', `## Nezávislé tržiště
@@ -255,14 +257,14 @@ Značky, loga, názvy modelů, reference a další označení patří přísluš
 
 ## Obrázky a informace
 
-Produktové fotografie pro konkrétní nabídku poskytuje Kariv Glamour nebo schválení prodejci. Popisy výrobce a historická fakta mohou být shrnuta pro identifikaci a informování. Vlastníci práv mohou upozornit na nesprávné uvedení zdroje či neoprávněný obsah na [info@karivglamour.com](mailto:info@karivglamour.com).
+Produktové fotografie pro konkrétní nabídku poskytuje Kariv Glamour nebo schválení prodejci. Popisy výrobce a historická fakta mohou být shrnuta pro identifikaci a informování. Vlastníci práv mohou upozornit na nesprávné uvedení zdroje či neoprávněný obsah na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Záruky a servis
 
 Záruka výrobce, servisní způsobilost a následná podpora platí pouze podle vlastních podmínek výrobce a jen jsou-li výslovně zahrnuty s hodinkami. Zobrazení značky nevytváří záruku výrobce. Povinná práva vůči smluvnímu prodejci zůstávají nedotčena.`),
   impressum: page('Identifikační údaje', 'Oficiální firemní a kontaktní údaje společnosti Kariv Glamour s.r.o.', `## Odpovědnost za web
 
-Kariv Glamour s.r.o. zastupuje jednatel Peter Vasko. Právní oznámení lze zasílat do sídla společnosti nebo na [info@karivglamour.com](mailto:info@karivglamour.com).
+Kariv Glamour s.r.o. zastupuje jednatel Peter Vasko. Právní oznámení lze zasílat do sídla společnosti nebo na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Mimosoudní řešení spotřebitelských sporů
 
