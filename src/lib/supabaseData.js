@@ -61,6 +61,9 @@ async function fetchTranslationsById(entityType, ids) {
     return await loadCatalogTranslations(client, STORE_ID, entityType, ids);
   } catch (error) {
     console.error(`Unable to load translations for ${entityType}:`, error.message);
+    // Product indexing and Czech merchant eligibility depend on this result.
+    // An outage must not become a cached "missing translation" / noindex page.
+    if (entityType === 'product') throw error;
     return {};
   }
 }

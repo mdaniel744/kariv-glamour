@@ -30,10 +30,10 @@ const loadProductBySlug = unstable_cache(
     // a real `slug` value (should be rare now that Supabase is the source).
     // Let failures escape the cache callback so a transient outage cannot
     // turn a valid legacy product URL into a cached "not found" result.
-    const products = await Products.filter({ isPublished: true }, '-updated_date', 500, 0);
+    const products = await Products.filter({ isPublished: true }, '-updated_date');
     return products.find((p) => productSlug(p) === slug) || null;
   },
-  ['public-product-by-slug-v2', STORE_ID],
+  ['public-product-by-slug-v3', STORE_ID],
   { revalidate: 60 },
 );
 
@@ -43,7 +43,9 @@ export const getProductBySlug = cache(async (slug) => {
     return await loadProductBySlug(slug);
   } catch (error) {
     console.error('Unable to load product by slug from Supabase:', error?.message || error);
-    return null;
+    // Only a successful lookup may declare a product missing. A failed read
+    // must not turn an existing URL into a 404/noindex response or cached page.
+    throw error;
   }
 });
 
@@ -130,7 +132,9 @@ export async function getPublishedProducts(limit) {
     return await Products.filter({ isPublished: true }, '-updated_date', limit, 0);
   } catch (error) {
     console.error('Unable to load products for sitemap:', error?.message || error);
-    return [];
+    // Let Next retain the previous sitemap on revalidation failures instead
+    // of publishing and caching a successful response with every watch gone.
+    throw error;
   }
 }
 

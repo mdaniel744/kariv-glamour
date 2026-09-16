@@ -4,7 +4,8 @@ import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageCl
 import { getProductBySlug } from '@/lib/base44Server';
 import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
-import { buildProductMerchantSchema, productMetaDescription, hasCzechProductCopy } from '@/lib/productMerchant';
+import { buildProductMerchantSchema, productMetaDescription } from '@/lib/productMerchant';
+import { isProductIndexable } from '@/lib/productIndexing';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 import { CurrencyProvider } from '@/lib/currencyContext';
 import {
@@ -44,9 +45,9 @@ export async function generateMetadata({ params }) {
     description: productMetaDescription(product, locale),
     image: product.featuredImage || product.productImages?.[0],
     type: 'website',
-    index: product.isPublished === true && (locale !== 'cs' || hasCzechProductCopy(product)),
+    index: isProductIndexable(product, locale),
   });
-  if (!hasCzechProductCopy(product)) delete metadata.alternates.languages.cs;
+  if (!isProductIndexable(product, 'cs')) delete metadata.alternates.languages.cs;
   return metadata;
 }
 

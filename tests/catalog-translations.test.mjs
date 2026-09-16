@@ -41,3 +41,18 @@ test('empty reads need no network and database errors are surfaced to the caller
   };
   await assert.rejects(loadCatalogTranslations({ from: () => query }, 'store', 'product', ['watch']), error);
 });
+
+test('translation pagination reads past short pages without a total count', async () => {
+  const offsets = [];
+  const rows = [
+    { ...row, locale: 'cs', value: 'Český název' },
+    { ...row, locale: 'cs', field_name: 'description', value: 'Český popis' },
+  ];
+  const query = {
+    select() { return this; }, eq() { return this; }, in() { return this; }, order() { return this; },
+    range(offset) { offsets.push(offset); return Promise.resolve({ data: rows.slice(offset, offset + 1), count: null }); },
+  };
+  const result = await loadCatalogTranslations({ from: () => query }, 'store', 'product', ['watch']);
+  assert.deepEqual(result.watch, { productTitle_cs: 'Český název', productDescription_cs: 'Český popis' });
+  assert.deepEqual(offsets, [0, 1, 2]);
+});

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText, Star } from 'lucide-react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
+import KarivLogo from '@/components/shared/KarivLogo';
 
 function AdminDarkMode() {
   useEffect(() => {
@@ -54,10 +55,8 @@ export default function AdminLayout({ children }) {
     <div className="min-h-screen bg-background flex">
       <aside className="w-56 border-r border-border flex-shrink-0 hidden md:block">
         <div className="p-5 border-b border-border">
-          <LocalizedLink to="/">
-            <span className="font-display text-sm tracking-[0.08em] text-foreground">
-              <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
-            </span>
+          <LocalizedLink to="/" className="inline-flex">
+            <KarivLogo className="h-20 w-20" loading="eager" />
           </LocalizedLink>
           <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{t('common:pages.portal.adminConsole')}</p>
         </div>

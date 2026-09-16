@@ -67,9 +67,15 @@ export async function loadCatalogTranslations(client, storeId, entityType, ids) 
         .range(offset, offset + PAGE_SIZE - 1);
       if (error) throw error;
       const page = data || [];
+      if (!page.length) {
+        if (count != null && offset < count) throw new Error('The translation response was incomplete. Please retry.');
+        break;
+      }
       rows.push(...page);
       offset += page.length;
-      if (!page.length || (count != null ? offset >= count : page.length < PAGE_SIZE)) break;
+      if (count != null && offset >= count) break;
+      // Without a count, a short response can be the server's row cap, not
+      // the end of the translations. Continue until a genuinely empty page.
     }
     return rows;
   };

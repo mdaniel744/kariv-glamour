@@ -1,6 +1,6 @@
 import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import MediaImage from '@/components/shared/MediaImage';
+import KarivLogo from '@/components/shared/KarivLogo';
 import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 
@@ -35,26 +35,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
             <LocalizedLink to="/" aria-label={`Kariv Glamour — ${t('common:home')}`} className="mb-5 inline-flex max-w-full items-center">
-              <MediaImage
-                src="/logos/kariv-glamour-desktop-green.webp"
-                alt="Kariv Glamour"
-                width={320}
-                height={56}
-                sizes="(min-width: 768px) 220px, 240px"
-                quality={88}
-                className="h-12 w-[240px] max-w-full object-cover object-center md:w-[220px] dark:hidden"
-                draggable={false}
-              />
-              <MediaImage
-                src="/logos/kariv-glamour-desktop-white.webp"
-                alt="Kariv Glamour"
-                width={320}
-                height={56}
-                sizes="(min-width: 768px) 220px, 240px"
-                quality={88}
-                className="hidden h-12 w-[240px] max-w-full object-cover object-center md:w-[220px] dark:block"
-                draggable={false}
-              />
+              <KarivLogo className="h-28 w-28 md:h-32 md:w-32" sizes="(min-width: 768px) 128px, 112px" />
             </LocalizedLink>
             <p className="text-sm text-[#496057] dark:text-white/70 leading-relaxed mb-6 font-body">
               {t('footer.description')}

@@ -23,9 +23,10 @@ export function merchantPlainText(value) {
 
 export function productMetaDescription(product, locale, maxLength = 320) {
   const text = merchantPlainText(
-    (locale === 'cs' && (product.metaDescription_cs || product.shortDescription_cs || product.productDescription_cs)) ||
-    localizedField(product, 'metaDescription', locale) || localizedField(product, 'shortDescription', locale) ||
-    localizedField(product, 'productDescription', locale)
+    locale === 'cs'
+      ? product.metaDescription_cs || product.shortDescription_cs || product.productDescription_cs
+      : localizedField(product, 'metaDescription', locale) || localizedField(product, 'shortDescription', locale) ||
+        localizedField(product, 'productDescription', locale)
   );
   if (text.length <= maxLength) return text;
   const excerpt = text.slice(0, maxLength - 1);

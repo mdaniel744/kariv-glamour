@@ -5,25 +5,13 @@ import { useLanguage } from '@/lib/languageContext';
 import { Search, ShoppingBag, Heart, Menu, X, ChevronDown, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
-import { useTheme } from '@/lib/themeContext';
 import { useAuth } from '@/lib/AuthContext';
 import { BRAND_DATA } from '@/lib/constants';
 import NotificationBell from '@/components/shared/NotificationBell';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
-import MediaImage from '@/components/shared/MediaImage';
-
-const LOGOS = {
-  desktop: {
-    light: '/logos/kariv-glamour-desktop-green.webp',
-    dark: '/logos/kariv-glamour-desktop-white.webp',
-  },
-  mobile: {
-    light: '/logos/kariv-glamour-mobile-green.webp',
-    dark: '/logos/kariv-glamour-mobile-white.webp',
-  },
-};
+import KarivLogo from '@/components/shared/KarivLogo';
 
 const NAVIGATION_COPY = {
   cs: { open: 'Otevřít navigaci', close: 'Zavřít navigaci', home: 'Kariv Glamour — úvod', account: 'Můj účet', signIn: 'Přihlásit se', signUp: 'Registrovat se', createAccount: 'Vytvořit účet', mobile: 'Mobilní navigace', clearSearch: 'Vymazat hledání' },
@@ -31,42 +19,9 @@ const NAVIGATION_COPY = {
   en: { open: 'Open navigation menu', close: 'Close navigation menu', home: 'Kariv Glamour home', account: 'Account', signIn: 'Sign In', signUp: 'Sign Up', createAccount: 'Create Account', mobile: 'Mobile navigation', clearSearch: 'Clear search' },
 };
 
-function KarivLogo({ theme }) {
-  const mode = theme === 'dark' ? 'dark' : 'light';
-
-  return (
-    <>
-      <MediaImage
-        src={LOGOS.desktop[mode]}
-        alt="Kariv Glamour"
-        width={320}
-        height={56}
-        sizes="(min-width: 1024px) 320px, 280px"
-        quality={88}
-        className="hidden md:block h-14 w-[280px] lg:w-[320px] object-cover object-center"
-        draggable={false}
-      />
-      <span className="block md:hidden h-10 w-16 overflow-hidden">
-        <MediaImage
-          src={LOGOS.mobile[mode]}
-          alt="Kariv Glamour"
-          width={128}
-          height={80}
-          sizes="64px"
-          quality={88}
-          className="h-full w-full scale-[1.85] object-cover object-center"
-          draggable={false}
-        />
-      </span>
-    </>
-  );
-}
-
-
 export default function Navbar() {
   const router = useRouter();
   const { cartCount, wishlistCount } = useCart();
-  const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation('navigation');
   const { localePath, locale } = useLanguage();
@@ -166,7 +121,7 @@ export default function Navbar() {
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
               <LocalizedLink to="/" onClick={closeMobile} className="flex-shrink-0 flex items-center" aria-label={copy.home}>
-                <KarivLogo theme={theme} />
+                <KarivLogo className="h-14 w-14 md:h-20 md:w-20" sizes="(min-width: 768px) 80px, 56px" loading="eager" />
               </LocalizedLink>
             </div>
 

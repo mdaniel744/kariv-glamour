@@ -8,7 +8,7 @@ import { productSlug } from '@/lib/slug';
 import { canonicalSeoSlug } from '@/lib/watchResearch/articles';
 import { REVIEW_DATE } from '@/lib/watchResearch/sources';
 import { getPublishedGuides } from '@/lib/publishedGuides';
-import { hasCzechProductCopy } from '@/lib/productMerchant';
+import { isProductIndexable } from '@/lib/productIndexing';
 
 export const revalidate = 3600;
 
@@ -166,7 +166,7 @@ export default async function sitemap() {
     }
 
     for (const product of products) {
-      if (locale === 'cs' && !hasCzechProductCopy(product)) continue;
+      if (!isProductIndexable(product, locale)) continue;
       const slug = productSlug(product);
       entries.push({
         url: localized(`/product/${slug}`),
@@ -177,7 +177,7 @@ export default async function sitemap() {
           languages: {
             de: `${siteUrl}/de/product/${slug}`,
             en: `${siteUrl}/en/product/${slug}`,
-            ...(hasCzechProductCopy(product) ? { cs: `${siteUrl}/cs/product/${slug}` } : {}),
+            ...(isProductIndexable(product, 'cs') ? { cs: `${siteUrl}/cs/product/${slug}` } : {}),
           },
         },
       });

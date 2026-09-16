@@ -97,7 +97,7 @@ test('repeated public product visits reuse a short cache without losing translat
   assert.equal(fixture.filterCalls.length, 2);
 });
 
-test('a failed exact product read is retried on the next visit instead of caching a missing page', async () => {
+test('a failed exact product read rejects without declaring a missing page, then retries', async () => {
   let fail = true;
   const fixture = createFixture([watch], {
     filter: (...args) => {
@@ -105,7 +105,7 @@ test('a failed exact product read is retried on the next visit instead of cachin
       return args.at(-1)(...args.slice(0, -1));
     },
   });
-  assert.equal(await fixture.getProductBySlug(watch.slug), null);
+  await assert.rejects(fixture.getProductBySlug(watch.slug), /temporary database failure/);
   assert.deepEqual(await fixture.getProductBySlug(watch.slug), watch);
   assert.equal(fixture.filterCalls.length, 2);
 });
@@ -121,6 +121,26 @@ test('legacy title-derived product slugs still resolve and blank requests skip t
   ]);
 });
 
+test('a successfully checked missing product remains null', async () => {
+  const fixture = createFixture([watch]);
+  assert.equal(await fixture.getProductBySlug('missing-watch'), null);
+  assert.deepEqual(fixture.filterCalls.map(([query]) => query), [
+    { slug: 'missing-watch' }, { isPublished: true },
+  ]);
+});
+
+test('legacy title-derived slugs resolve beyond the first 500 published watches', async () => {
+  const newerWatches = Array.from({ length: 500 }, (_, index) => ({
+    ...watch, id: `newer-${index}`, slug: `newer-${index}`, updated_date: '2026-09-01',
+  }));
+  const legacyWatch = {
+    ...watch, id: 'legacy-501', slug: '', productTitle: 'Legacy Watch 501', updated_date: '2026-01-01',
+  };
+  const fixture = createFixture([...newerWatches, legacyWatch]);
+  assert.deepEqual(await fixture.getProductBySlug('legacy-watch-501'), legacyWatch);
+  assert.deepEqual(fixture.filterCalls[1], [{ isPublished: true }, '-updated_date']);
+});
+
 test('a failed legacy-slug fallback cannot poison the public product cache', async () => {
   const legacyWatch = { ...watch, slug: '', productTitle: 'Rolex Datejust 36' };
   let failFallback = true;
@@ -133,9 +153,27 @@ test('a failed legacy-slug fallback cannot poison the public product cache', asy
       return args.at(-1)(...args.slice(0, -1));
     },
   });
-  assert.equal(await fixture.getProductBySlug('rolex-datejust-36'), null);
+  await assert.rejects(fixture.getProductBySlug('rolex-datejust-36'), /temporary fallback database failure/);
   assert.deepEqual(await fixture.getProductBySlug('rolex-datejust-36'), legacyWatch);
   assert.equal(fixture.filterCalls.length, 4);
+});
+
+test('sitemap catalogue failures reject instead of publishing an empty product list', async () => {
+  let fail = true;
+  const fixture = createFixture([watch], {
+    filter: (...args) => {
+      if (fail) { fail = false; throw new Error('temporary sitemap database failure'); }
+      return args.at(-1)(...args.slice(0, -1));
+    },
+  });
+  await assert.rejects(fixture.getPublishedProducts(), /temporary sitemap database failure/);
+  assert.deepEqual(await fixture.getPublishedProducts(), [watch]);
+  assert.deepEqual(fixture.filterCalls[1], [{ isPublished: true }, '-updated_date', undefined, 0]);
+});
+
+test('a successfully loaded empty catalogue remains valid for the sitemap', async () => {
+  const fixture = createFixture();
+  assert.deepEqual(await fixture.getPublishedProducts(), []);
 });
 
 test('related products reuse the published brand catalog, newest first, excluding the current watch', async () => {

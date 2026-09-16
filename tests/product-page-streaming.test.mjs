@@ -9,6 +9,7 @@ import ts from 'typescript';
 import { mergeCatalogTranslations } from '../src/lib/catalogTranslations.js';
 import { localizedField } from '../src/lib/seo.js';
 import * as productMerchant from '../src/lib/productMerchant.js';
+import * as productIndexing from '../src/lib/productIndexing.js';
 import * as locales from '../src/lib/locales.js';
 import { attributeLabel } from '../src/lib/attributeLabels.js';
 
@@ -58,6 +59,7 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
       useStorefrontPricing: () => ({ locale, getPricing: (product) => productMerchant.getProductPricing(product, { locale, exchangeRates }), formatMoney: (price, currency = 'EUR') => `${currency} ${price}` }),
     },
     '@/lib/productMerchant': productMerchant,
+    '@/lib/productIndexing': productIndexing,
     '@/components/shared/TrustBar': () => null,
     '@/components/checkout/BuyNowAuthModal': () => null,
     '@/components/shared/SafeHtml': ({ html }) => React.createElement('div', null, html),

@@ -10,6 +10,7 @@ import { isDealer } from '@/lib/escrowConstants';
 import LocalizedLink from '@/components/LocalizedLink';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import KarivLogo from '@/components/shared/KarivLogo';
 
 export default function PortalLayout({ children }) {
   const { t } = useTranslation();
@@ -41,10 +42,8 @@ export default function PortalLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border flex-shrink-0">
         <div className="p-5 border-b border-border">
-          <LocalizedLink to="/" className="block">
-            <span className="font-display text-sm tracking-[0.08em] text-foreground">
-              <span className="font-light">KARIV</span> <span className="text-primary">GLAMOUR</span>
-            </span>
+          <LocalizedLink to="/" className="inline-flex">
+            <KarivLogo className="h-20 w-20" loading="eager" />
           </LocalizedLink>
           <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{t('pages.portal.myPortal')}</p>
           {user && (

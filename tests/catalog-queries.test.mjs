@@ -83,8 +83,8 @@ function matches(row, field, expression) {
   throw new Error(`Unexpected test filter: ${expression}`);
 }
 
-function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProductOffset = null, emptyProductOffset = null } = {}) {
-  Products.invalidate();
+function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProductOffset = null, emptyProductOffset = null, failTranslationOffset = null, emptyTranslationOffset = null, invalidate = true } = {}) {
+  if (invalidate) Products.invalidate();
   const requests = [];
   t.mock.method(globalThis, 'fetch', async (input) => {
     const url = new URL(input);
@@ -117,9 +117,13 @@ function useFixtureEndpoint(t, { rowLimit = 1000, omitCount = false, failProduct
     if (table === 'products' && offset === failProductOffset) {
       return new Response(JSON.stringify({ message: 'Catalogue page failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
+    if (table === 'translations' && offset === failTranslationOffset) {
+      return new Response(JSON.stringify({ message: 'Translation page failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
     const limit = Math.min(Number(url.searchParams.get('limit') || rowLimit), rowLimit);
     rows = rows.slice(offset, offset + limit);
     if (table === 'products' && offset === emptyProductOffset) rows = [];
+    if (table === 'translations' && offset === emptyTranslationOffset) rows = [];
     return new Response(JSON.stringify(rows), { headers: {
       'Content-Type': 'application/json', 'Content-Range': `${offset}-${offset + rows.length - 1}/${omitCount ? '*' : total}`,
     } });
@@ -150,6 +154,39 @@ test('product ID/slug reads request only that product and keep its translated fi
   const bySlug = await Products.filter({ slug: 'speedmaster' });
   assert.deepEqual(bySlug.map((row) => row.id), ['p2']);
   assert.equal(requests.findLast((request) => request.table === 'products').params.get('slug'), 'eq.speedmaster');
+});
+
+test('product translation failures reject rather than caching untranslated noindex candidates', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  useFixtureEndpoint(t, { failTranslationOffset: 0 });
+  await assert.rejects(Products.get('p1'), { message: 'Translation page failed' });
+  await assert.rejects(Products.filter({ slug: 'daytona-steel' }), { message: 'Translation page failed' });
+  await assert.rejects(Products.listPublished(), { message: 'Translation page failed' });
+  t.mock.restoreAll();
+  useFixtureEndpoint(t, { invalidate: false });
+  assert.equal((await Products.listPublished()).find(({ id }) => id === 'p1').productTitle_de, 'Daytona Deutsch');
+});
+
+test('genuinely absent translations remain distinct from a failed translation read', async (t) => {
+  useFixtureEndpoint(t);
+  const product = await Products.get('p6');
+  assert.equal(product.productTitle, 'Datejust');
+  assert.equal(product.productTitle_cs, undefined);
+  assert.equal(product.productDescription_cs, undefined);
+});
+
+test('translation pagination does not drop saved fields when a smaller server cap omits the count', async (t) => {
+  useFixtureEndpoint(t, { rowLimit: 1, omitCount: true });
+  const product = await Products.get('p3');
+  assert.equal(product.productTitle_de, 'Vintage Daytona Deutsch');
+  assert.equal(product.productDescription_de, 'Produktbeschreibung');
+  assert.equal(product.shortDescription_de, 'Kurzbeschreibung');
+});
+
+test('incomplete translation responses cannot masquerade as missing product translations', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  useFixtureEndpoint(t, { rowLimit: 1, emptyTranslationOffset: 1 });
+  await assert.rejects(Products.get('p3'), /translation response was incomplete/);
 });
 
 test('collection queries include legacy attribute-only watches but reject conflicting collection IDs', async (t) => {
