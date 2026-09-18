@@ -21,13 +21,21 @@ export function merchantPlainText(value) {
   }).replace(/\s+/g, ' ').trim();
 }
 
+// Products are authored in English. Optional German/Czech copy must never
+// fall back to English ahead of another field translated into that language.
+export function productLocalizedText(product, field, locale) {
+  const translated = merchantPlainText(product?.[`${field}_${locale}`]);
+  return translated || (locale === 'en' ? merchantPlainText(product?.[field]) : '');
+}
+
+export function productMetaTitle(product, locale) {
+  return productLocalizedText(product, 'metaTitle', locale) || productLocalizedText(product, 'productTitle', locale);
+}
+
 export function productMetaDescription(product, locale, maxLength = 320) {
-  const text = merchantPlainText(
-    locale === 'cs'
-      ? product.metaDescription_cs || product.shortDescription_cs || product.productDescription_cs
-      : localizedField(product, 'metaDescription', locale) || localizedField(product, 'shortDescription', locale) ||
-        localizedField(product, 'productDescription', locale)
-  );
+  const text = productLocalizedText(product, 'metaDescription', locale)
+    || productLocalizedText(product, 'shortDescription', locale)
+    || productLocalizedText(product, 'productDescription', locale);
   if (text.length <= maxLength) return text;
   const excerpt = text.slice(0, maxLength - 1);
   const wordEnd = excerpt.lastIndexOf(' ');

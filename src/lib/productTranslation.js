@@ -1,6 +1,6 @@
 import 'server-only';
 
-const TRANSLATABLE_FIELDS = ['productTitle', 'shortDescription', 'productDescription'];
+const TRANSLATABLE_FIELDS = ['productTitle', 'shortDescription', 'productDescription', 'metaTitle', 'metaDescription'];
 const LANGUAGE_NAMES = { de: 'German', en: 'English', cs: 'Czech' };
 // This deployment belongs to Kariv. Product source copy is English regardless
 // of the editor's UI language; do not reuse a visitor/dealer locale here.

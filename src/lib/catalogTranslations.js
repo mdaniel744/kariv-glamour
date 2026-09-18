@@ -1,7 +1,8 @@
 // The shared dashboard writes database column names; the storefront's older
 // editor writes UI names. Both describe the same localized fields.
 const FIELD_ALIASES = {
-  product: { name: 'productTitle', description: 'productDescription', short_description: 'shortDescription' },
+  product: { name: 'productTitle', description: 'productDescription', short_description: 'shortDescription',
+    meta_title: 'metaTitle', meta_description: 'metaDescription' },
   brand: { name: 'brandName', disclaimer: 'brandDisclaimer', short_description: 'shortDescription' },
   collection: { name: 'collectionName' },
 };

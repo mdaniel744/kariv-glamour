@@ -52,7 +52,7 @@ async function prepareProductPayload(payload, existingRow = null) {
   const savedTranslations = saved[existingRow?.id] || {};
   const combined = { ...savedTranslations, ...payload };
   if (existingRow) {
-    const fields = { productTitle: 'name', productDescription: 'description', shortDescription: 'short_description' };
+    const fields = { productTitle: 'name', productDescription: 'description', shortDescription: 'short_description', metaTitle: 'meta_title', metaDescription: 'meta_description' };
     for (const [field, column] of Object.entries(fields)) {
       const savedEnglish = saved[existingRow.id]?.[`${field}_en`];
       // A plain-text dealer edit follows Kariv's English authoring contract.
@@ -78,6 +78,8 @@ async function saveProductTranslations(entityId, payload, automaticKeys, savedTr
     productTitle: { de: payload.productTitle_de, en: payload.productTitle_en, cs: payload.productTitle_cs },
     shortDescription: { de: payload.shortDescription_de, en: payload.shortDescription_en, cs: payload.shortDescription_cs },
     productDescription: { de: payload.productDescription_de, en: payload.productDescription_en, cs: payload.productDescription_cs },
+    metaTitle: { de: payload.metaTitle_de, en: payload.metaTitle_en, cs: payload.metaTitle_cs },
+    metaDescription: { de: payload.metaDescription_de, en: payload.metaDescription_en, cs: payload.metaDescription_cs },
   }, automaticKeys, savedTranslations);
 }
 
@@ -143,6 +145,8 @@ async function buildProductRow(payload, existingRow = null) {
     slug: existingRow?.slug || payload.slug || slugify(name),
     description: payload.productDescription_en || payload.productDescription || payload.productDescription_de || existingRow?.description,
     short_description: payload.shortDescription_en || payload.shortDescription || payload.shortDescription_de || existingRow?.short_description,
+    meta_title: payload.metaTitle_en || payload.metaTitle || existingRow?.meta_title,
+    meta_description: payload.metaDescription_en || payload.metaDescription || existingRow?.meta_description,
     brand_id: brandId,
     collection_id: collectionId,
     reference_number: payload.referenceNumber ?? existingRow?.reference_number,

@@ -31,9 +31,9 @@ const loadProductBySlug = unstable_cache(
     // Let failures escape the cache callback so a transient outage cannot
     // turn a valid legacy product URL into a cached "not found" result.
     const products = await Products.filter({ isPublished: true }, '-updated_date');
-    return products.find((p) => productSlug(p) === slug) || null;
+    return products.find((p) => productSlug(p) === slug || ['de', 'en', 'cs'].some((locale) => p[`slug_${locale}`] === slug)) || null;
   },
-  ['public-product-by-slug-v3', STORE_ID],
+  ['public-product-by-slug-v4-seo', STORE_ID],
   { revalidate: 60 },
 );
 

@@ -141,3 +141,13 @@ test('new admin and dealer listings still save English originals and generated t
     assert.deepEqual(Object.fromEntries(rows.map((row) => [row.locale, row.translator])), { de: 'openai', en: 'human', cs: 'openai' });
   }
 });
+
+test('SEO source columns and translated SEO fields are saved for new listings', async () => {
+  const fixture = loadActions({ generated: { metaTitle_de: 'SEO-Titel', metaTitle_cs: 'SEO název', metaDescription_de: 'Beschreibung', metaDescription_cs: 'Popis' } });
+  await fixture.actions.createProduct({ productTitle_en: 'Watch', metaTitle_en: 'English SEO', metaDescription_en: 'English description' });
+  const product = fixture.writes.find((write) => write.table === 'products').value;
+  assert.equal(product.meta_title, 'English SEO');
+  assert.equal(product.meta_description, 'English description');
+  const rows = fixture.writes.find((write) => write.table === 'translations').value;
+  assert.equal(rows.filter((row) => ['metaTitle', 'metaDescription'].includes(row.field_name)).length, 6);
+});

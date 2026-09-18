@@ -122,6 +122,8 @@ function mapProduct(row, brandsById, collectionsById, translationsById) {
     badge: row.badge || '',
     shortDescription: row.short_description || '',
     productDescription: row.description || '',
+    metaTitle: row.meta_title || '',
+    metaDescription: row.meta_description || '',
     mpn: row.mpn || '',
     gtin: row.gtin || '',
     googleMerchantTitle: row.google_title || '',

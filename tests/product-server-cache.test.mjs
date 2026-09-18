@@ -86,6 +86,12 @@ const watch = {
   productDescription_en: 'English description', price: 9000, created_date: '2026-01-01',
 };
 
+test('translated dashboard slugs resolve the same product as its original URL', async () => {
+  const fixture = createFixture([{ ...watch, slug_de: 'rolex-uhr', slug_cs: 'rolex-hodinky' }]);
+  assert.equal((await fixture.getProductBySlug('rolex-uhr')).id, watch.id);
+  assert.equal((await fixture.getProductBySlug('rolex-hodinky')).id, watch.id);
+});
+
 test('repeated public product visits reuse a short cache without losing translated fields', async () => {
   const fixture = createFixture([watch]);
   assert.deepEqual(await fixture.getProductBySlug(watch.slug), watch);

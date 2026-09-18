@@ -4,7 +4,7 @@ import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageCl
 import { getProductBySlug } from '@/lib/base44Server';
 import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
-import { buildProductMerchantSchema, productMetaDescription } from '@/lib/productMerchant';
+import { buildProductMerchantSchema, productMetaDescription, productMetaTitle } from '@/lib/productMerchant';
 import { isProductIndexable } from '@/lib/productIndexing';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 import { CurrencyProvider } from '@/lib/currencyContext';
@@ -33,10 +33,7 @@ export async function generateMetadata({ params }) {
     });
   }
 
-  const title =
-    (locale === 'cs' && (product.metaTitle_cs || product.productTitle_cs)) ||
-    localizedField(product, 'metaTitle', locale) ||
-    localizedField(product, 'productTitle', locale);
+  const title = productMetaTitle(product, locale);
 
   const metadata = localizedMetadata({
     locale,

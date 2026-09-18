@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import {
   buildProductMerchantSchema, getProductAvailability, getProductCondition, getProductPricing,
   merchantPlainText, productIdentifiers, productMetaDescription,
+  productMetaTitle, productLocalizedText,
 } from '../src/lib/productMerchant.js';
 import { selectShopResults } from '../src/lib/shopSearch.js';
 
@@ -13,6 +14,23 @@ const product = {
   productDescription_en: '<p>Blue dial &amp; steel case.</p>', productDescription_de: '<p>Blaues Zifferblatt &amp; Stahlgehäuse.</p>',
   price: 3000, salePrice: 2500, currency: 'EUR', stockQuantity: 1, availability: 'In Stock', condition: 'Excellent',
 };
+
+test('translated SEO fields win and untranslated English SEO never outranks localized product copy', () => {
+  for (const locale of ['de', 'cs']) {
+    const input = { ...product, metaTitle: 'English SEO', metaDescription: 'English snippet',
+      [`productTitle_${locale}`]: 'Localized name', [`shortDescription_${locale}`]: 'Localized summary',
+      [`metaTitle_${locale}`]: 'Localized SEO title', [`metaDescription_${locale}`]: 'Localized SEO description' };
+    assert.equal(productMetaTitle(input, locale), 'Localized SEO title');
+    assert.equal(productMetaDescription(input, locale), 'Localized SEO description');
+    assert.equal(productLocalizedText(input, 'shortDescription', locale), 'Localized summary');
+    delete input[`metaTitle_${locale}`];
+    delete input[`metaDescription_${locale}`];
+    assert.equal(productMetaTitle(input, locale), 'Localized name');
+    assert.equal(productMetaDescription(input, locale), 'Localized summary');
+    assert.equal(productLocalizedText({ shortDescription: 'English summary' }, 'shortDescription', locale), '');
+  }
+  assert.equal(productMetaTitle({ metaTitle: 'English SEO title' }, 'en'), 'English SEO title');
+});
 
 test('active price only uses a positive saved sale below a valid regular price', () => {
   assert.equal(getProductPricing(product).price, 2500);

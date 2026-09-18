@@ -17,7 +17,7 @@ import SafeHtml from '@/components/shared/SafeHtml';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductDealerCard from '@/components/product/ProductDealerCard';
 import RelatedProducts from '@/components/product/RelatedProducts';
-import { getProductAvailability } from '@/lib/productMerchant';
+import { getProductAvailability, productLocalizedText } from '@/lib/productMerchant';
 
 const EMPTY_RELATED = [];
 
@@ -195,6 +195,11 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               {product.referenceNumber &&
               <p className="text-xs text-muted-foreground mt-1">{t('pages.productDetail.ref')} {product.referenceNumber}</p>
               }
+              {productLocalizedText(product, 'shortDescription', locale) && (
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground" data-product-short-description>
+                  {productLocalizedText(product, 'shortDescription', locale)}
+                </p>
+              )}
             </div>
 
             {/* Price */}

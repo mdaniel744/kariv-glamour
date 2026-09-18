@@ -68,3 +68,16 @@ test('all localized fields already present require no provider call', async () =
   assert.equal(requests.length, 0);
   assert.equal(result.warning, '');
 });
+
+test('new product short description and SEO metadata generate German and Czech together', async () => {
+  const requests = [];
+  const result = await translator(requests)({ shortDescription: 'Steel watch', metaTitle: 'Watch title', metaDescription: 'Watch description' });
+  for (const field of ['shortDescription', 'metaTitle', 'metaDescription']) {
+    assert.ok(result.payload[`${field}_en`]);
+    for (const locale of ['de', 'cs']) {
+      assert.ok(result.payload[`${field}_${locale}`].startsWith('Translated: '));
+      assert.ok(result.automaticKeys.has(`${field}_${locale}`));
+    }
+  }
+  assert.equal(requests.length, 2);
+});

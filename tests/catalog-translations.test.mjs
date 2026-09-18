@@ -56,3 +56,12 @@ test('translation pagination reads past short pages without a total count', asyn
   assert.deepEqual(result.watch, { productTitle_cs: 'Český název', productDescription_cs: 'Český popis' });
   assert.deepEqual(offsets, [0, 1, 2]);
 });
+
+test('dashboard short descriptions and SEO fields map to the storefront names in both target languages', () => {
+  for (const locale of ['de', 'cs']) {
+    const fields = { short_description: 'shortDescription', meta_title: 'metaTitle', meta_description: 'metaDescription' };
+    const rows = Object.keys(fields).map((field_name) => ({ ...row, locale, field_name, value: `${locale} ${field_name}` }));
+    const result = mergeCatalogTranslations('product', rows).watch;
+    for (const [source, target] of Object.entries(fields)) assert.equal(result[`${target}_${locale}`], `${locale} ${source}`);
+  }
+});

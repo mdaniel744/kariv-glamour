@@ -181,9 +181,13 @@ test('legacy detail props still render recommendations without server slots', ()
 test('storefront cards, detail headings, descriptions and metadata follow the selected product language', () => {
   const titles = { en: 'Steel watch English', de: 'Stahluhr Deutsch', cs: 'Ocelové hodinky česky' };
   const descriptions = { en: 'English watch description.', de: 'Deutsche Uhrenbeschreibung.', cs: 'Český popis hodinek.' };
+  const summaries = { en: 'English summary', de: 'Deutsche Kurzbeschreibung', cs: 'Český krátký popis' };
   const rows = ['en', 'de', 'cs'].flatMap((locale) => [
     { entity_id: watch.id, locale, field_name: 'name', value: titles[locale] },
     { entity_id: watch.id, locale, field_name: 'description', value: `<p>${descriptions[locale]}</p>` },
+    { entity_id: watch.id, locale, field_name: 'short_description', value: summaries[locale] },
+    { entity_id: watch.id, locale, field_name: 'meta_title', value: `SEO ${titles[locale]}` },
+    { entity_id: watch.id, locale, field_name: 'meta_description', value: `SEO ${summaries[locale]}` },
   ]);
   const product = { ...watch, ...mergeCatalogTranslations('product', rows)[watch.id] };
   const { Card, Detail, setLocale } = fixture();
@@ -198,6 +202,10 @@ test('storefront cards, detail headings, descriptions and metadata follow the se
     assert.ok(cardHtml.includes(title));
     assert.ok(detailHtml.includes(title));
     assert.ok(detailHtml.includes(description));
+    assert.ok(detailHtml.includes('data-product-short-description'));
+    assert.ok(detailHtml.includes(summaries[locale]));
+    assert.equal(productMerchant.productMetaTitle(product, locale), `SEO ${title}`);
+    assert.equal(productMerchant.productMetaDescription(product, locale), `SEO ${summaries[locale]}`);
     assert.ok(cardHtml.includes(locale === 'cs' ? 'CZK 291120' : 'EUR 12000'));
     assert.ok(detailHtml.includes(locale === 'cs' ? 'CZK 291120' : 'EUR 12000'));
     assert.ok(!cardHtml.includes(otherTitle));
