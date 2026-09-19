@@ -89,7 +89,7 @@ export default async function ProductPage({ params }) {
         ) : null}
         relatedSlot={(
           <Suspense fallback={null}>
-            <RelatedProductsSection product={product} />
+            <RelatedProductsSection product={product} locale={locale} />
           </Suspense>
         )}
       /></CurrencyProvider>

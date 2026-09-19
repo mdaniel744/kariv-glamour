@@ -16,9 +16,9 @@ export async function ProductDealerSection({ product }) {
   return <ProductDealerCard product={product} initialProfile={profile} />;
 }
 
-export async function RelatedProductsSection({ product }) {
+export async function RelatedProductsSection({ product, locale }) {
   try {
-    const products = await getRelatedProducts(product);
+    const products = await getRelatedProducts(product, 4, locale);
     return <RelatedProducts product={product} products={products} />;
   } catch (error) {
     console.error('Unable to load related watches:', error?.message || error);

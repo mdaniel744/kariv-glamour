@@ -57,7 +57,7 @@ export default async function BrandPage({ params }) {
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
   const staticBrand = staticBrandForSlug(slug);
-  const data = await getBrandPageData(slug, staticBrand?.name);
+  const data = await getBrandPageData(slug, staticBrand?.name, locale);
   if (!staticBrand && !data.brand) notFound();
 
   const name = localizedField(data.brand, 'brandName', locale) || staticBrand?.name || slug;

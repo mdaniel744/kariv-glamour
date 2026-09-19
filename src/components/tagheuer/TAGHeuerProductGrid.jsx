@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useStorefrontPricing } from '@/lib/currencyContext';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useBrandProducts } from '@/hooks/useBrandProducts';
+import { useProgressiveReveal } from '@/hooks/useProgressiveReveal';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
 import { SlidersHorizontal } from 'lucide-react';
@@ -97,6 +98,7 @@ export default function TAGHeuerProductGrid() {
       }
     });
   }, [products, filters, sortBy, quickFilter, getPricing]);
+  const { visibleItems, sentinelRef, hasMore } = useProgressiveReveal(filtered);
 
   return (
     <section id="shop" className="brand-products-section bg-secondary py-5 sm:py-6 md:py-8">
@@ -134,9 +136,12 @@ export default function TAGHeuerProductGrid() {
                 <p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p>
                 <LocalizedLink to="/tag-heuer-uhr" className="text-[11px] tracking-[0.12em] uppercase underline mt-4 inline-block text-primary">{t('seoLanding.viewAll', { brand: BRAND })}</LocalizedLink>
               </div> :
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {filtered.map((p) => <TAGHeuerProductCard key={p.id} product={p} />)}
-              </div>
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {visibleItems.map((p) => <TAGHeuerProductCard key={p.id} product={p} />)}
+                </div>
+                {hasMore && <div ref={sentinelRef} aria-hidden="true" className="h-1" />}
+              </>
             }
           </div>
         </div>

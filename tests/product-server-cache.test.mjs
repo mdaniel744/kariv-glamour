@@ -194,7 +194,7 @@ test('related products reuse the published brand catalog, newest first, excludin
   assert.deepEqual((await fixture.getRelatedProducts(watch)).map((product) => product.id), ['newer', 'older']);
   assert.deepEqual((await fixture.getRelatedProducts(watch, 1)).map((product) => product.id), ['newer']);
   assert.equal(fixture.filterCalls.length, 1);
-  assert.deepEqual(fixture.filterCalls[0], [{ brand: 'Rolex', isPublished: true }, '-created_date']);
+  assert.deepEqual(fixture.filterCalls[0], [{ brand: 'Rolex', isPublished: true }, '-created_date', undefined, 0, undefined]);
 });
 
 test('checkout product-by-id reads stay fresh across requests even when the public page is cached', async () => {

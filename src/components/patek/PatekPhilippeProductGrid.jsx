@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useStorefrontPricing } from '@/lib/currencyContext';
 import { useBrandProducts } from '@/hooks/useBrandProducts';
+import { useProgressiveReveal } from '@/hooks/useProgressiveReveal';
 import { sortBrandProducts } from '@/lib/brandProductSort';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedField } from '@/lib/localize';
@@ -50,6 +51,7 @@ export default function PatekPhilippeProductGrid() {
     if (quickFilter.length) data = data.filter((p) => matchesBrandQuickFilter(p, quickFilter));
     return sortBrandProducts(data, sortBy, getPricing);
   }, [allProducts, sortBy, filters, quickFilter, getPricing]);
+  const { visibleItems, sentinelRef, hasMore } = useProgressiveReveal(products);
 
   const toggleFilter = (key, value) => setFilters((prev) => { const arr = prev[key]; return { ...prev, [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value] }; });
 
@@ -121,7 +123,10 @@ export default function PatekPhilippeProductGrid() {
               </div> :
               products.length === 0 ?
                 <div className="text-center py-20"><p className="text-sm text-muted-foreground">{t('productGrid.noMatches', { brand: BRAND })}</p></div> :
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">{products.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6">{visibleItems.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+                  {hasMore && <div ref={sentinelRef} aria-hidden="true" className="h-1" />}
+                </>
             }
           </div>
         </div>

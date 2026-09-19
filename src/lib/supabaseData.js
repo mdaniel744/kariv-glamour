@@ -68,6 +68,38 @@ async function fetchTranslationsById(entityType, ids) {
   }
 }
 
+// A list response (brand pages, related products, ...) currently ships every
+// localized field in all 3 languages, even though only one is ever displayed
+// — tripling the text payload of large catalogues for no benefit. When a
+// caller knows the page's locale, resolveLocale() collapses each field to
+// the one value that locale would actually show (same fallback localize()
+// already applies: requested locale -> source column -> any other locale),
+// and drops the other languages' copies entirely. Omitting `locale` keeps
+// every language present, unchanged, so any caller that doesn't opt in sees
+// no behavior difference at all.
+const LOCALE_ORDER = ['de', 'en', 'cs'];
+
+function resolveLocale(record, fields, locale) {
+  if (!locale) return record;
+  const resolved = { ...record };
+  for (const field of fields) {
+    let value = record[`${field}_${locale}`] || record[field];
+    if (!value) {
+      for (const altLocale of LOCALE_ORDER) {
+        if (altLocale === locale) continue;
+        if (record[`${field}_${altLocale}`]) { value = record[`${field}_${altLocale}`]; break; }
+      }
+    }
+    resolved[field] = value || '';
+    for (const altLocale of LOCALE_ORDER) delete resolved[`${field}_${altLocale}`];
+  }
+  return resolved;
+}
+
+const PRODUCT_LOCALE_FIELDS = ['productTitle', 'productDescription', 'shortDescription'];
+const BRAND_LOCALE_FIELDS = ['brandName', 'brandDisclaimer', 'shortDescription'];
+const COLLECTION_LOCALE_FIELDS = ['collectionName', 'description'];
+
 // ---- shape adapters ----
 
 function mapProduct(row, brandsById, collectionsById, translationsById) {
@@ -217,7 +249,7 @@ export async function shapeProductRows(rows) {
   return rows.map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
 }
 
-export async function loadAllProductsShaped(query = {}) {
+export async function loadAllProductsShaped(query = {}, locale) {
   const client = getSupabase();
   if (!client) return [];
 
@@ -227,22 +259,23 @@ export async function loadAllProductsShaped(query = {}) {
     loadCollectionsById(),
   ]);
   const translationsById = await fetchTranslationsById('product', (products || []).map((p) => p.id));
-  return (products || []).map((row) => mapProduct(row, brandsById, collectionsById, translationsById));
+  return (products || []).map((row) =>
+    resolveLocale(mapProduct(row, brandsById, collectionsById, translationsById), PRODUCT_LOCALE_FIELDS, locale));
 }
 
-export async function loadAllBrandsShaped(query = {}) {
+export async function loadAllBrandsShaped(query = {}, locale) {
   const rows = await loadFilteredCatalogRows(getSupabase(), STORE_ID, 'brands', query);
   const translationsById = await fetchTranslationsById('brand', rows.map((r) => r.id));
-  return rows.map((row) => mapBrand(row, translationsById));
+  return rows.map((row) => resolveLocale(mapBrand(row, translationsById), BRAND_LOCALE_FIELDS, locale));
 }
 
-export async function loadAllCollectionsShaped(query = {}) {
+export async function loadAllCollectionsShaped(query = {}, locale) {
   const [rows, brandsById] = await Promise.all([
     loadFilteredCatalogRows(getSupabase(), STORE_ID, 'collections', query, catalogReferences),
     loadBrandsById(),
   ]);
   const translationsById = await fetchTranslationsById('collection', rows.map((r) => r.id));
-  return rows.map((row) => mapCollection(row, brandsById, translationsById));
+  return rows.map((row) => resolveLocale(mapCollection(row, brandsById, translationsById), COLLECTION_LOCALE_FIELDS, locale));
 }
 
 // ---- Base44-compatible query helpers ----
@@ -288,18 +321,21 @@ async function notYetWritable() {
 function makeEntity(loadAll, scoped = false) {
   const loadList = createPublicReferenceLoader(loadAll, 30_000);
   publicCatalogCaches.add(loadList);
-  const loadMatching = (query) => scoped ? loadAll(query) : loadList();
+  // Locale-trimming only applies on the scoped (uncached, per-query) path —
+  // the shared 30s list cache has no per-locale keying, so a caller relying
+  // on it still gets every language, exactly as before.
+  const loadMatching = (query, locale) => scoped ? loadAll(query, locale) : loadList();
   return {
-    async filter(query, sort, limit, offset = 0) {
-      const rows = applySort((await loadMatching(query)).filter((r) => matchesQuery(r, query)), sort);
+    async filter(query, sort, limit, offset = 0, locale) {
+      const rows = applySort((await loadMatching(query, locale)).filter((r) => matchesQuery(r, query)), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
     async list(sort, limit, offset = 0) {
       const rows = applySort(await loadList(), sort);
       return limit ? rows.slice(offset, offset + limit) : rows.slice(offset);
     },
-    async get(id) {
-      const rows = await loadMatching({ id });
+    async get(id, locale) {
+      const rows = await loadMatching({ id }, locale);
       return rows.find((r) => r.id === id) || null;
     },
     invalidate: invalidatePublicCatalogCaches,

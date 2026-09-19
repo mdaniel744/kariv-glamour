@@ -49,11 +49,11 @@ export const getProductBySlug = cache(async (slug) => {
   }
 });
 
-export async function getRelatedProducts(product, limit = 4) {
+export async function getRelatedProducts(product, limit = 4, locale) {
   if (!product?.brand) return [];
   try {
     // Reuse the catalog already loaded while browsing this brand.
-    const records = await loadBrandProducts(product.brand);
+    const records = await loadBrandProducts(product.brand, locale);
     return records.filter((record) => record.id !== product.id).slice(0, limit);
   } catch (error) {
     console.error('Unable to load related products from Supabase:', error?.message || error);
@@ -78,8 +78,10 @@ const loadBrandBySlug = unstable_cache(
   { revalidate: 300 },
 );
 const loadBrandProducts = unstable_cache(
-  (brandName) => Products.filter({ brand: brandName, isPublished: true }, '-created_date'),
-  ['public-brand-products-v2', STORE_ID],
+  // locale is part of the call signature (not just a closure value) so
+  // unstable_cache keys each language's shaped result separately.
+  (brandName, locale) => Products.filter({ brand: brandName, isPublished: true }, '-created_date', undefined, 0, locale),
+  ['public-brand-products-v3', STORE_ID],
   { revalidate: 60 },
 );
 const loadBrandCollections = unstable_cache(
@@ -99,7 +101,7 @@ export const getBrandBySlug = cache(async (slug) => {
   }
 });
 
-export async function getBrandPageData(slug, brandName) {
+export async function getBrandPageData(slug, brandName, locale) {
   const brand = await getBrandBySlug(slug);
   const resolvedName = brand?.brandName || brandName;
 
@@ -108,7 +110,7 @@ export async function getBrandPageData(slug, brandName) {
   }
 
   const [productsResult, collectionsResult] = await Promise.allSettled([
-    loadBrandProducts(resolvedName),
+    loadBrandProducts(resolvedName, locale),
     loadBrandCollections(resolvedName),
   ]);
 
