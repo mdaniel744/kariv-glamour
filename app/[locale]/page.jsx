@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import HomePageClient from '@/components/next-pages/HomePageClient';
+import { getHomeFeaturedSections } from '@/lib/base44Server';
 import enCommon from '@/locales/en/common.json';
 import deCommon from '@/locales/de/common.json';
 import csCommon from '@/locales/cs/common.json';
@@ -31,6 +32,7 @@ export default async function LocaleHomePage({ params }) {
     notFound();
   }
 
+  const featuredSections = await getHomeFeaturedSections(locale);
   const siteUrl = getSiteUrl();
   const jsonLd = [
     {
@@ -66,7 +68,7 @@ export default async function LocaleHomePage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <HomePageClient />
+      <HomePageClient {...featuredSections} />
     </>
   );
 }

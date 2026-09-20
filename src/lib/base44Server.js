@@ -129,6 +129,27 @@ export async function getBrandPageData(slug, brandName, locale) {
   };
 }
 
+// Home page sections previously fetched with dataClient.entities.Products.filter
+// directly from the visitor's own browser to Supabase's cloud servers — every
+// other page on the site is server-rendered and only ever needs the visitor to
+// reach this server, not a third-party service directly. Fetching these here
+// instead removes that dependency entirely and gets the same locale trimming
+// as everything else.
+export async function getHomeFeaturedSections(locale) {
+  const sections = await Promise.allSettled([
+    Products.filter({ isFeatured: true }, '-created_date', 4, 0, locale),
+    Products.filter({ isNewArrival: true }, '-created_date', 4, 0, locale),
+    Products.filter({ isCertifiedPreOwned: true }, '-created_date', 4, 0, locale),
+  ]);
+  const [featured, newArrivals, certifiedPreOwned] = sections.map((result) => {
+    if (result.status === 'rejected') {
+      console.error('Unable to load home page section from Supabase:', result.reason?.message || result.reason);
+    }
+    return result.status === 'fulfilled' ? result.value : [];
+  });
+  return { featured, newArrivals, certifiedPreOwned };
+}
+
 export async function getPublishedProducts(limit) {
   try {
     return await Products.filter({ isPublished: true }, '-updated_date', limit, 0);

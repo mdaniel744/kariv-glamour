@@ -5,24 +5,32 @@ import ProductCard from '@/components/shared/ProductCard';
 import SectionHeading from '@/components/shared/SectionHeading';
 import { useLanguage } from '@/lib/languageContext';
 
-export default function FeaturedProducts({ title = "Featured Timepieces", subtitle, filter = {}, linkTo = "/shop", index, limit = 4 }) {
+export default function FeaturedProducts({ title = "Featured Timepieces", subtitle, filter = {}, initialProducts = null, linkTo = "/shop", index, limit = 4 }) {
   const { locale } = useLanguage();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(initialProducts ?? []);
+  const [loading, setLoading] = useState(initialProducts === null);
 
   useEffect(() => {
+    // The server already fetched this section for the page's own locale. An
+    // empty server result is still a complete result, not a reason to fall
+    // back to a client-side fetch straight to Supabase from the visitor's
+    // own device — only missing data (no server render happened at all)
+    // triggers this fallback.
+    if (initialProducts !== null) return;
+    let active = true;
     const load = async () => {
       try {
         const data = asArray(await dataClient.entities.Products.filter(filter, '-created_date', limit, 0, locale));
-        setProducts(data);
+        if (active) setProducts(data);
       } catch (e) {
         console.error(e);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
     load();
-  }, [locale]);
+    return () => { active = false; };
+  }, [locale, initialProducts]);
 
   if (loading) {
     return (

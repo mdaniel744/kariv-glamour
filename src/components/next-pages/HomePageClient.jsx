@@ -11,7 +11,7 @@ import EditorialSection from '@/components/home/EditorialSection';
 import EditorialHero from '@/components/home/EditorialHero';
 import TrustBar from '@/components/shared/TrustBar';
 
-export default function HomePageClient() {
+export default function HomePageClient({ featured, newArrivals, certifiedPreOwned }) {
   const { t } = useTranslation();
 
   return (
@@ -24,7 +24,8 @@ export default function HomePageClient() {
         index="01"
         title={t('components.featuredProducts.section01.title')}
         subtitle={t('components.featuredProducts.section01.subtitle')}
-        filter={{ featured: true }}
+        filter={{ isFeatured: true }}
+        initialProducts={featured}
         linkTo="/shop"
         limit={4}
       />
@@ -34,6 +35,7 @@ export default function HomePageClient() {
         title={t('components.featuredProducts.section02.title')}
         subtitle={t('components.featuredProducts.section02.subtitle')}
         filter={{ isNewArrival: true }}
+        initialProducts={newArrivals}
         linkTo="/shop?isNewArrival=true"
         limit={4}
       />
@@ -43,6 +45,7 @@ export default function HomePageClient() {
         title={t('components.featuredProducts.section03.title')}
         subtitle={t('components.featuredProducts.section03.subtitle')}
         filter={{ isCertifiedPreOwned: true }}
+        initialProducts={certifiedPreOwned}
         linkTo="/shop?isCertifiedPreOwned=true"
         limit={4}
       />
