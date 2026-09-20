@@ -3,15 +3,17 @@ import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import ProductCard from '@/components/shared/ProductCard';
 import SectionHeading from '@/components/shared/SectionHeading';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function FeaturedProducts({ title = "Featured Timepieces", subtitle, filter = {}, linkTo = "/shop", index, limit = 4 }) {
+  const { locale } = useLanguage();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const data = asArray(await dataClient.entities.Products.filter(filter, '-created_date', limit));
+        const data = asArray(await dataClient.entities.Products.filter(filter, '-created_date', limit, 0, locale));
         setProducts(data);
       } catch (e) {
         console.error(e);
@@ -20,7 +22,7 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
       }
     };
     load();
-  }, []);
+  }, [locale]);
 
   if (loading) {
     return (

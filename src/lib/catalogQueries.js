@@ -49,6 +49,11 @@ export async function loadFilteredCatalogRows(client, storeId, table, filters = 
     if (filters.isPublished === false) query = query.or('status.neq.active,status.is.null');
     if (filters.isFeatured === true) query = query.eq('is_featured', true);
     if (filters.isFeatured === false) query = query.or('is_featured.eq.false,is_featured.is.null');
+    // Stored inside the attributes JSONB blob, not a real column — the ->> text
+    // extraction reads the same whether the saved value is a JSON boolean or
+    // a JSON string, so this matches both representations transparently.
+    if (filters.isNewArrival === true) query = query.eq('attributes->>isNewArrival', 'true');
+    if (filters.isCertifiedPreOwned === true) query = query.eq('attributes->>isCertifiedPreOwned', 'true');
 
     if ('collection' in filters) {
       const names = nonEmptyStrings(filters.collection);

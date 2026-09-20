@@ -42,7 +42,7 @@ export default function Home() {
         index="01"
         title={t('components.featuredProducts.section01.title')}
         subtitle={t('components.featuredProducts.section01.subtitle')}
-        filter={{ featured: true }}
+        filter={{ isFeatured: true }}
         linkTo="/shop"
         limit={4}
       />
