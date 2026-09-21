@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUrlSearchParams } from '@/hooks/useUrlSearchParams';
-import { dataClient } from '@/lib/dataClient';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '@/components/shared/ProductCard';
 import ShopFilters from '@/components/shop/ShopFilters';
 import { SlidersHorizontal, X, ChevronRight, Search, AlertCircle, RotateCcw } from 'lucide-react';
-import { positivePage, searchShopProducts, SHOP_PAGE_SIZE } from '@/lib/shopSearch';
+import { positivePage, SHOP_PAGE_SIZE } from '@/lib/shopSearch';
+import { searchShopProductsAction } from '@/actions/shopSearch';
 import { useStorefrontPricing } from '@/lib/currencyContext';
 
 // Default filter state
@@ -113,7 +113,7 @@ function filterCacheKey(filters) {
   return JSON.stringify(filters);
 }
 
-const searchProducts = (payload) => searchShopProducts(dataClient.entities.Products, payload);
+const searchProducts = (payload) => searchShopProductsAction(payload);
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useUrlSearchParams();
