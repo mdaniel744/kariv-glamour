@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Package, Heart, User, Store, LogOut, Mail, ShoppingCart, MessageSquareText, Handshake } from 'lucide-react';
 import { isDealer } from '@/lib/escrowConstants';
 import LocalizedLink from '@/components/LocalizedLink';
 import Navbar from '@/components/layout/Navbar';
@@ -22,12 +22,14 @@ export default function PortalLayout({ children }) {
   const navItems = [
     { to: '/portal', icon: LayoutDashboard, label: t('pages.portal.dashboard'), exact: true },
     { to: '/portal/orders', icon: Package, label: t('pages.portal.orders') },
+    { to: '/portal/inquiries', icon: MessageSquareText, label: t('pages.portal.buyerInquiries'), exact: true },
     { to: '/portal/mails', icon: Mail, label: t('pages.portal.mails') },
     { to: '/portal/wishlist', icon: Heart, label: t('pages.portal.wishlist') },
     ...(dealer ? [
       { to: '/portal/listings', icon: Store, label: t('pages.dealer.listings') },
-      { to: '/portal/sales', icon: ShoppingCart, label: t('pages.dealer.sales') },
-      { to: '/portal/sales-messages', icon: Mail, label: t('pages.portal.salesMessages') },
+      { to: '/portal/sales', icon: ShoppingCart, label: t('pages.dealer.sales'), exact: true },
+      { to: '/portal/sales-inquiries', icon: Handshake, label: t('pages.portal.salesInquiries'), exact: true },
+      { to: '/portal/sales-messages', icon: Mail, label: t('pages.portal.salesMessages'), exact: true },
     ] : []),
     { to: '/portal/profile', icon: User, label: t('pages.portal.profile') },
   ];

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 
-export default function StarRating({ rating = 0, size = 14, interactive = false, onChange }) {
+export default function StarRating({ rating = 0, size = 14, interactive = false, onChange = null }) {
   const [hover, setHover] = useState(0);
   const display = hover || rating;
 

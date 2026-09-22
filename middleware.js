@@ -37,7 +37,10 @@ export default clerkMiddleware(async (auth, request) => {
 
     if (!userId) {
       const loginUrl = new URL(`/${locale}/login`, request.url);
-      loginUrl.searchParams.set('returnTo', pathname);
+      // Preserve route choices such as ?protection=kariv through sign-in.
+      // pathname + search is same-origin by construction and the login page
+      // still validates return targets before navigating.
+      loginUrl.searchParams.set('returnTo', `${pathname}${search}`);
       return NextResponse.redirect(loginUrl);
     }
 

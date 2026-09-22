@@ -2,12 +2,14 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import ProductDetailPageClient from '@/components/next-pages/ProductDetailPageClient';
 import { getProductBySlug } from '@/lib/base44Server';
-import { ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
+import { DealerCustomerReviewsSection, ProductDealerSection, RelatedProductsSection } from '@/components/product/ProductPageSections';
 import { productSlug } from '@/lib/slug';
 import { buildProductMerchantSchema, productMetaDescription, productMetaTitle } from '@/lib/productMerchant';
 import { isProductIndexable } from '@/lib/productIndexing';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 import { CurrencyProvider } from '@/lib/currencyContext';
+import { getProductPurchasePolicy } from '@/lib/purchasePolicyServer';
+import { publicPurchasePolicy } from '@/lib/purchasePolicyUi';
 import {
   getSiteUrl,
   localizedField,
@@ -54,11 +56,16 @@ export default async function ProductPage({ params }) {
 
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  const [rawPurchasePolicy, exchangeRates] = await Promise.all([
+    getProductPurchasePolicy(product),
+    locale === 'cs' ? getCzkExchangeRates() : Promise.resolve(null),
+  ]);
+  const purchasePolicy = publicPurchasePolicy(rawPurchasePolicy);
+  const productWithPolicy = { ...product, purchasePolicy };
 
   const name = localizedField(product, 'productTitle', locale);
   const siteUrl = getSiteUrl();
   const productUrl = `${siteUrl}/${locale}/product/${productSlug(product)}`;
-  const exchangeRates = locale === 'cs' ? await getCzkExchangeRates() : null;
 
   const jsonLd = [
     buildProductMerchantSchema(product, { locale, url: productUrl, exchangeRates }),
@@ -81,8 +88,8 @@ export default async function ProductPage({ params }) {
       />
       <CurrencyProvider exchangeRates={exchangeRates}><ProductDetailPageClient
         key={product.id}
-        product={product}
-        dealerSlot={(product.dealerId || product.created_by_id) ? (
+        product={productWithPolicy}
+        dealerSlot={product.dealerId ? (
           <Suspense fallback={<div aria-busy="true" className="h-20 rounded-xl border border-border bg-card motion-safe:animate-pulse" />}>
             <ProductDealerSection product={product} />
           </Suspense>
@@ -92,6 +99,11 @@ export default async function ProductPage({ params }) {
             <RelatedProductsSection product={product} locale={locale} />
           </Suspense>
         )}
+        dealerReviewSlot={product.dealerId ? (
+          <Suspense fallback={null}>
+            <DealerCustomerReviewsSection product={product} />
+          </Suspense>
+        ) : null}
       /></CurrencyProvider>
     </>
   );

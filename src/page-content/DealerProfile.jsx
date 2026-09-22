@@ -3,14 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { dataClient } from '@/lib/dataClient';
 import { asArray } from '@/lib/base44Data';
 import { useAuth } from '@/lib/AuthContext';
-import { getDealerReviewEligibility } from '@/actions/dealerReviews';
 import StarRating from '@/components/dealer/StarRating';
 import DealerReviewCard from '@/components/dealer/DealerReviewCard';
-import DealerReviewForm from '@/components/dealer/DealerReviewForm';
+import DealerReviewComposer from '@/components/dealer/DealerReviewComposer';
 import ProductCard from '@/components/shared/ProductCard';
 import { BadgeCheck, MapPin, Clock, Globe, ShieldCheck, Star, Package } from 'lucide-react';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
+import { useLanguage } from '@/lib/languageContext';
+
+const PURCHASE_ROUTE_NOTE = {
+  en: 'Payment and protection options are shown separately on each listing and at checkout. Eligible purchases can use Kariv Protected Payment; other purchases are paid directly to the clearly identified seller.',
+  de: 'Zahlungs- und Schutzoptionen werden bei jedem Angebot und an der Kasse separat angezeigt. Berechtigte Käufe können die geschützte Kariv-Zahlung nutzen; andere Käufe werden direkt an den eindeutig ausgewiesenen Verkäufer bezahlt.',
+  cs: 'Možnosti platby a ochrany jsou uvedeny samostatně u každé nabídky a při dokončení objednávky. Způsobilé nákupy mohou využít chráněnou platbu Kariv; ostatní jsou placeny přímo jasně označenému prodejci.',
+};
 
 export default function DealerProfile({
   id: idProp,
@@ -19,13 +25,12 @@ export default function DealerProfile({
   initialReviews = [],
 }) {
   const { t } = useTranslation();
+  const { locale } = useLanguage();
   const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const { user } = useAuth();
   const [profile, setProfile] = useState(initialProfile);
   const [listings, setListings] = useState(initialListings);
   const [reviews, setReviews] = useState(initialReviews);
-  const [eligibleOrder, setEligibleOrder] = useState(null);
-  const [submittedReview, setSubmittedReview] = useState(null);
   const [loading, setLoading] = useState(!initialProfile && initialListings.length === 0 && initialReviews.length === 0);
 
   useEffect(() => {
@@ -53,25 +58,6 @@ export default function DealerProfile({
     load();
     window.scrollTo(0, 0);
   }, [id, user, initialProfile, initialListings, initialReviews]);
-
-  useEffect(() => {
-    let mounted = true;
-    if (!user || !id) {
-      setEligibleOrder(null);
-      setSubmittedReview(null);
-      return () => { mounted = false; };
-    }
-
-    getDealerReviewEligibility(id)
-      .then((result) => {
-        if (!mounted || !result.ok) return;
-        setEligibleOrder(result.eligibleOrder);
-        setSubmittedReview(result.submittedReview);
-      })
-      .catch(() => {});
-
-    return () => { mounted = false; };
-  }, [id, user]);
 
   if (loading) {
     return (
@@ -223,27 +209,7 @@ export default function DealerProfile({
             </div>
           )}
 
-          {/* Review form for eligible buyers */}
-          {eligibleOrder && (
-            <div className="mb-6">
-              <DealerReviewForm
-                dealerId={id}
-                dealerName={displayName}
-                orderId={eligibleOrder.id}
-                orderReference={eligibleOrder.escrowReference}
-                onSubmitted={() => {
-                  setEligibleOrder(null);
-                  setSubmittedReview({ status: 'pending' });
-                }}
-              />
-            </div>
-          )}
-
-          {submittedReview?.status === 'pending' && (
-            <div className="mb-6 border border-amber-500/25 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-700 dark:text-amber-300">
-              {t('components.dealerReviews.pendingNotice')}
-            </div>
-          )}
+          <DealerReviewComposer dealerId={id} dealerName={displayName} />
 
           {/* Review list */}
           {reviews.length === 0 ? (
@@ -261,7 +227,7 @@ export default function DealerProfile({
         <div className="border border-primary/20 bg-primary/5 p-5 mb-12 flex items-start gap-3">
           <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
           <p className="text-xs text-muted-foreground">
-            All purchases from this dealer are protected by our escrow service. Your payment is held securely until you confirm delivery and complete your 14-day inspection period.
+            {PURCHASE_ROUTE_NOTE[locale] || PURCHASE_ROUTE_NOTE.en}
           </p>
         </div>
       </div>

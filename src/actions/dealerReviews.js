@@ -6,17 +6,20 @@ import { requireAdmin, requireUser } from '@/lib/serverAuth';
 import { STORE_ID } from '@/lib/supabaseData';
 import { formatEscrowReference } from '@/lib/orderShaping';
 import { loadIdentities } from '@/lib/orderIdentities';
+import { mapDealerReviewRow, mapPurchasedWatchSnapshots } from '@/lib/dealerReviewsData';
 import {
-  loadApprovedDealerReviews,
-  mapDealerReviewRow,
-  summarizeDealerReviews,
-} from '@/lib/dealerReviewsData';
+  approvedPublicDealerIds,
+  buildDealerRatingSummaries,
+  emptyDealerRatingSummary,
+  normalizePublicDealerIds,
+} from '@/lib/dealerRatingSummaries';
 
-const ELIGIBLE_ESCROW_STATUSES = ['verified', 'funds_released'];
+const COMPLETED_PURCHASE_FILTER = 'purchase_status.in.(delivered,completed),escrow_status.eq.funds_released';
+const DEALER_RATING_PAGE_SIZE = 1000;
 const REVIEW_STATUSES = ['pending', 'approved', 'rejected'];
 
 function reviewServiceError(error) {
-  if (error?.code === '42P01') {
+  if (isMissingReviewTable(error)) {
     return 'Dealer reviews are not configured in the database yet.';
   }
   return error?.message || 'Unable to complete the review request.';
@@ -25,45 +28,132 @@ function reviewServiceError(error) {
 function revalidateDealerProfile(dealerId) {
   revalidatePath(`/de/dealer-profile/${dealerId}`);
   revalidatePath(`/en/dealer-profile/${dealerId}`);
+  revalidatePath(`/cs/dealer-profile/${dealerId}`);
+  revalidatePath('/[locale]/product/[slug]', 'page');
+}
+
+function isMissingReviewTable(error) {
+  return ['42P01', 'PGRST205'].includes(error?.code);
+}
+
+function isMissingPurchaseStatus(error) {
+  return ['42703', 'PGRST204'].includes(error?.code)
+    && String(error?.message || '').includes('purchase_status');
+}
+
+async function loadApprovedRatingRows(dealerIds) {
+  const rows = [];
+  let expectedCount = null;
+  let offset = 0;
+
+  while (expectedCount == null || rows.length < expectedCount) {
+    const { data, count, error } = await supabaseAdmin
+      .from('dealer_reviews')
+      .select('id, dealer_user_id, rating, status', { count: offset === 0 ? 'exact' : undefined })
+      .eq('store_id', STORE_ID)
+      .in('dealer_user_id', dealerIds)
+      .eq('status', 'approved')
+      .order('id', { ascending: true })
+      .range(offset, offset + DEALER_RATING_PAGE_SIZE - 1);
+
+    if (error) {
+      if (!isMissingReviewTable(error)) {
+        console.error('Unable to load dealer rating rows:', error?.message || error);
+      }
+      return { rows: [], ratingsAvailable: false };
+    }
+
+    if (expectedCount == null && count != null) expectedCount = Number(count);
+    const page = data || [];
+    rows.push(...page);
+    // Supabase/PostgREST may enforce a response cap below the requested range.
+    // Keep paging until the exact count is reached (or an empty page proves the
+    // end when a count is unavailable) instead of silently treating a short
+    // server-capped page as the final page.
+    if (page.length === 0 || (expectedCount != null && rows.length >= expectedCount)) break;
+    offset += page.length;
+  }
+
+  return { rows, ratingsAvailable: true };
+}
+
+export async function getDealerRatingSummaries(dealerIds) {
+  const ids = normalizePublicDealerIds(dealerIds);
+  if (ids.length === 0) return {};
+
+  let approvedIds = [];
+  try {
+    const applicationResult = await supabaseAdmin
+      .from('dealer_applications')
+      .select('dealer_user_id, company_name, status, created_at')
+      .eq('store_id', STORE_ID)
+      .in('dealer_user_id', ids)
+      .order('created_at', { ascending: false });
+    if (applicationResult.error) throw applicationResult.error;
+
+    const applicationRows = applicationResult.data || [];
+    approvedIds = approvedPublicDealerIds(ids, applicationRows);
+    if (approvedIds.length === 0) return {};
+
+    const [reviewResult, identities] = await Promise.all([
+      loadApprovedRatingRows(approvedIds),
+      loadIdentities(approvedIds).catch(() => new Map()),
+    ]);
+
+    return buildDealerRatingSummaries({
+      dealerIds: approvedIds,
+      reviewRows: reviewResult.rows,
+      applicationRows,
+      identitiesById: identities,
+      ratingsAvailable: reviewResult.ratingsAvailable,
+    });
+  } catch (error) {
+    console.error('Unable to load dealer rating summaries:', error?.message || error);
+    return Object.fromEntries(approvedIds.map((dealerId) => [dealerId, emptyDealerRatingSummary()]));
+  }
 }
 
 export async function getDealerRatingSummary(dealerId) {
-  try {
-    const reviews = await loadApprovedDealerReviews(dealerId, 500);
-    const identities = await loadIdentities([dealerId]);
-    const identity = identities.get(dealerId);
-    return {
-      displayName: identity?.fullName || '',
-      verifiedStatus: 'verified',
-      ...summarizeDealerReviews(reviews),
-    };
-  } catch (error) {
-    console.error('Unable to load dealer rating summary:', error?.message || error);
-    return { displayName: '', verifiedStatus: 'verified', averageRating: 0, totalReviews: 0 };
-  }
+  const normalizedId = normalizePublicDealerIds([dealerId])[0];
+  if (!normalizedId) return emptyDealerRatingSummary();
+  const summaries = await getDealerRatingSummaries([normalizedId]);
+  return summaries[normalizedId] || emptyDealerRatingSummary();
 }
 
 export async function getDealerReviewEligibility(dealerId) {
   const user = await requireUser();
   if (!dealerId) return { ok: false, error: 'Dealer not found.' };
 
-  const { data: orders, error: orderError } = await supabaseAdmin
+  let orderResult = await supabaseAdmin
     .from('orders')
-    .select('id, escrow_status, created_at')
+    .select('id, products, escrow_status, created_at')
     .eq('store_id', STORE_ID)
     .eq('buyer_user_id', user.id)
     .eq('dealer_user_id', dealerId)
-    .in('escrow_status', ELIGIBLE_ESCROW_STATUSES)
+    .or(COMPLETED_PURCHASE_FILTER)
     .order('created_at', { ascending: false });
 
+  if (isMissingPurchaseStatus(orderResult.error)) {
+    orderResult = await supabaseAdmin
+      .from('orders')
+      .select('id, products, escrow_status, created_at')
+      .eq('store_id', STORE_ID)
+      .eq('buyer_user_id', user.id)
+      .eq('dealer_user_id', dealerId)
+      .eq('escrow_status', 'funds_released')
+      .order('created_at', { ascending: false });
+  }
+  const { data: orders, error: orderError } = orderResult;
+
   if (orderError) return { ok: false, error: orderError.message };
-  if (!orders?.length) return { ok: true, eligibleOrder: null, submittedReview: null };
+  if (!orders?.length) return { ok: true, eligibleOrder: null, submittedReview: null, reviewableOrders: [] };
 
   const { data: existing, error: reviewError } = await supabaseAdmin
     .from('dealer_reviews')
     .select('*')
     .eq('store_id', STORE_ID)
     .eq('buyer_user_id', user.id)
+    .eq('dealer_user_id', dealerId)
     .in('order_id', orders.map((order) => order.id));
 
   if (reviewError) return { ok: false, error: reviewServiceError(reviewError) };
@@ -83,7 +173,30 @@ export async function getDealerReviewEligibility(dealerId) {
       ? { id: eligible.id, escrowReference: formatEscrowReference(eligible.id) }
       : null,
     submittedReview: submitted ? mapDealerReviewRow(submitted) : null,
+    // This private response goes only to the authenticated buyer. Public
+    // review loaders use a separate projection without order identifiers.
+    reviewableOrders: orders.map((order) => ({
+      id: order.id,
+      orderReference: formatEscrowReference(order.id),
+      purchasedWatches: mapPurchasedWatchSnapshots(order.products),
+      review: existingByOrder.has(order.id) ? mapDealerReviewRow(existingByOrder.get(order.id)) : null,
+    })),
   };
+}
+
+async function loadCompletedReviewOrder(userId, dealerId, orderId) {
+  const query = () => supabaseAdmin
+    .from('orders')
+    .select('id, dealer_user_id, escrow_status')
+    .eq('id', orderId)
+    .eq('store_id', STORE_ID)
+    .eq('buyer_user_id', userId)
+    .eq('dealer_user_id', dealerId);
+  let result = await query().or(COMPLETED_PURCHASE_FILTER).maybeSingle();
+  if (isMissingPurchaseStatus(result.error)) {
+    result = await query().eq('escrow_status', 'funds_released').maybeSingle();
+  }
+  return result;
 }
 
 export async function submitDealerReview({ dealerId, orderId, rating, title = '', reviewText = '' }) {
@@ -101,15 +214,8 @@ export async function submitDealerReview({ dealerId, orderId, rating, title = ''
     return { ok: false, error: 'The review must be between 10 and 2,000 characters.' };
   }
 
-  const { data: order, error: orderError } = await supabaseAdmin
-    .from('orders')
-    .select('id, dealer_user_id, escrow_status')
-    .eq('id', orderId)
-    .eq('store_id', STORE_ID)
-    .eq('buyer_user_id', user.id)
-    .eq('dealer_user_id', dealerId)
-    .in('escrow_status', ELIGIBLE_ESCROW_STATUSES)
-    .maybeSingle();
+  const orderResult = await loadCompletedReviewOrder(user.id, dealerId, orderId);
+  const { data: order, error: orderError } = orderResult;
 
   if (orderError || !order) {
     return { ok: false, error: 'Only verified buyers with a completed order can review this dealer.' };
@@ -146,7 +252,10 @@ export async function submitDealerReview({ dealerId, orderId, rating, title = ''
   };
 
   const mutation = existing
-    ? supabaseAdmin.from('dealer_reviews').update(values).eq('id', existing.id).select().single()
+    ? supabaseAdmin.from('dealer_reviews').update(values)
+      .eq('id', existing.id).eq('store_id', STORE_ID).eq('buyer_user_id', user.id)
+      .eq('dealer_user_id', dealerId).eq('order_id', orderId).eq('status', 'rejected')
+      .eq('updated_at', existing.updated_at).select().maybeSingle()
     : supabaseAdmin.from('dealer_reviews').insert(values).select().single();
   const { data, error } = await mutation;
 
@@ -154,8 +263,48 @@ export async function submitDealerReview({ dealerId, orderId, rating, title = ''
     if (error.code === '23505') return { ok: false, error: 'A review for this order has already been submitted.' };
     return { ok: false, error: reviewServiceError(error) };
   }
+  if (!data) return { ok: false, error: 'The review changed. Please refresh and try again.' };
 
   revalidateDealerProfile(dealerId);
+  return { ok: true, review: mapDealerReviewRow(data) };
+}
+
+// A buyer can add to or revise their written feedback after rating a dealer.
+// Reuse the same moderated review: edits never bypass approval or create a
+// second rating for one purchase, and the original star rating is preserved.
+export async function updateDealerReviewComment({ reviewId, reviewText = '', expectedUpdatedAt }) {
+  const user = await requireUser();
+  const cleanReview = String(reviewText).trim();
+  if (!reviewId || !expectedUpdatedAt) return { ok: false, error: 'Review and version are required.' };
+  if (cleanReview.length < 10 || cleanReview.length > 2000) {
+    return { ok: false, error: 'The comment must be between 10 and 2,000 characters.' };
+  }
+
+  const { data: existing, error: readError } = await supabaseAdmin.from('dealer_reviews')
+    .select('*').eq('id', reviewId).eq('store_id', STORE_ID).eq('buyer_user_id', user.id).maybeSingle();
+  if (readError) return { ok: false, error: reviewServiceError(readError) };
+  if (!existing) return { ok: false, error: 'Review not found.' };
+  if (existing.updated_at !== expectedUpdatedAt) {
+    return { ok: false, error: 'The review changed. Please refresh and try again.' };
+  }
+  const { data: order, error: orderError } = await loadCompletedReviewOrder(user.id, existing.dealer_user_id, existing.order_id);
+  if (orderError || !order) {
+    return { ok: false, error: 'Only verified buyers with a completed order can comment on this dealer.' };
+  }
+  if (cleanReview === existing.review_text) return { ok: true, review: mapDealerReviewRow(existing) };
+
+  const { data, error } = await supabaseAdmin.from('dealer_reviews').update({
+    review_text: cleanReview,
+    status: 'pending',
+    reviewed_by: null,
+    reviewed_at: null,
+    updated_at: new Date().toISOString(),
+  }).eq('id', reviewId).eq('store_id', STORE_ID).eq('buyer_user_id', user.id)
+    .eq('dealer_user_id', existing.dealer_user_id).eq('order_id', existing.order_id)
+    .eq('updated_at', expectedUpdatedAt).select().maybeSingle();
+  if (error) return { ok: false, error: reviewServiceError(error) };
+  if (!data) return { ok: false, error: 'The review changed. Please refresh and try again.' };
+  revalidateDealerProfile(existing.dealer_user_id);
   return { ok: true, review: mapDealerReviewRow(data) };
 }
 
@@ -165,7 +314,7 @@ export async function listAdminDealerReviews({ status = 'pending', limit = 200 }
     .from('dealer_reviews')
     .select('*')
     .eq('store_id', STORE_ID)
-    .order('created_at', { ascending: false })
+    .order('updated_at', { ascending: false })
     .limit(limit);
   if (REVIEW_STATUSES.includes(status)) query = query.eq('status', status);
 
@@ -180,11 +329,12 @@ export async function listAdminDealerReviews({ status = 'pending', limit = 200 }
   }));
 }
 
-export async function moderateDealerReview(reviewId, status) {
+export async function moderateDealerReview(reviewId, status, expectedUpdatedAt) {
   const admin = await requireAdmin();
   if (!['approved', 'rejected'].includes(status)) {
     return { ok: false, error: 'Choose approve or reject.' };
   }
+  if (!expectedUpdatedAt) return { ok: false, error: 'Refresh the review before moderating it.' };
 
   const { data, error } = await supabaseAdmin
     .from('dealer_reviews')
@@ -196,11 +346,12 @@ export async function moderateDealerReview(reviewId, status) {
     })
     .eq('id', reviewId)
     .eq('store_id', STORE_ID)
+    .eq('updated_at', expectedUpdatedAt)
     .select()
     .maybeSingle();
 
   if (error) return { ok: false, error: reviewServiceError(error) };
-  if (!data) return { ok: false, error: 'Review not found.' };
+  if (!data) return { ok: false, error: 'The review changed. Refresh to read the latest comment before approving it.' };
   revalidateDealerProfile(data.dealer_user_id);
   return { ok: true, review: mapDealerReviewRow(data) };
 }

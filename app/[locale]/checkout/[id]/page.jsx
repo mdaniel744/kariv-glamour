@@ -5,6 +5,8 @@ import { getProductById } from '@/lib/base44Server';
 import { localizedField, localizedMetadata, SUPPORTED_LOCALES } from '@/lib/seo';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
 import { CurrencyProvider } from '@/lib/currencyContext';
+import { getProductPurchasePolicy } from '@/lib/purchasePolicyServer';
+import { publicPurchasePolicy } from '@/lib/purchasePolicyUi';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,17 +25,25 @@ export async function generateMetadata({ params }) {
   });
 }
 
-export default async function CheckoutRoute({ params }) {
+export default async function CheckoutRoute({ params, searchParams }) {
   const { locale, id } = await params;
+  const query = await searchParams;
   if (!SUPPORTED_LOCALES.includes(locale)) notFound();
 
   const product = await getProductById(id);
   if (!product) notFound();
-  const exchangeRates = locale === 'cs' ? await getCzkExchangeRates() : null;
+  const [rawPurchasePolicy, exchangeRates] = await Promise.all([
+    getProductPurchasePolicy(product),
+    locale === 'cs' ? getCzkExchangeRates() : Promise.resolve(null),
+  ]);
+  const purchasePolicy = publicPurchasePolicy(rawPurchasePolicy);
+  const productWithPolicy = { ...product, purchasePolicy };
 
   return (
     <ProtectedArea>
-      <CurrencyProvider exchangeRates={exchangeRates}><CheckoutPageClient product={product} /></CurrencyProvider>
+      <CurrencyProvider exchangeRates={exchangeRates}>
+        <CheckoutPageClient product={productWithPolicy} buyerRequestsProtection={query?.protection === 'kariv'} />
+      </CurrencyProvider>
     </ProtectedArea>
   );
 }

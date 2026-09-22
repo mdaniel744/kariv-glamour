@@ -77,13 +77,27 @@ const loadBrandBySlug = unstable_cache(
   ['public-brand-v2', STORE_ID],
   { revalidate: 300 },
 );
-const loadBrandProducts = unstable_cache(
-  // locale is part of the call signature (not just a closure value) so
-  // unstable_cache keys each language's shaped result separately.
-  (brandName, locale) => Products.filter({ brand: brandName, isPublished: true }, '-created_date', undefined, 0, locale),
-  ['public-brand-products-v3', STORE_ID],
-  { revalidate: 60 },
+const fetchBrandProducts = (brandName, locale) => Products.filter(
+  { brand: brandName, isPublished: true },
+  '-created_date',
+  undefined,
+  0,
+  locale,
 );
+
+// Next's development data cache rejects individual values larger than 2 MB.
+// Large brands can exceed that once their image galleries and translations are
+// included, causing the preview to show an empty catalogue. Request-local
+// memoization keeps duplicate reads out of a render in development. In
+// production, locale stays in the call signature so each language's shaped
+// result receives its own persistent cache entry.
+const loadBrandProducts = process.env.NODE_ENV === 'development'
+  ? cache(fetchBrandProducts)
+  : unstable_cache(
+      fetchBrandProducts,
+      ['public-brand-products-v3', STORE_ID],
+      { revalidate: 60 },
+    );
 const loadBrandCollections = unstable_cache(
   (brandName) => Collections.filter({ brand: brandName }, 'collectionName'),
   ['public-brand-collections-v2', STORE_ID],
@@ -215,21 +229,22 @@ async function getRealDealerProfile(userId) {
 async function getFallbackDealerProfile(userId) {
   const [application, identities] = await Promise.all([
     supabaseAdmin
-      .from('dealer_applications').select('company_name, website')
-      .eq('store_id', STORE_ID).eq('dealer_user_id', userId).eq('status', 'approved')
+      .from('dealer_applications').select('company_name, website, status')
+      .eq('store_id', STORE_ID).eq('dealer_user_id', userId)
       .order('created_at', { ascending: false }).limit(1).maybeSingle()
       .then(({ data }) => data).catch(() => null),
     loadIdentities([userId]),
   ]);
+  const approvedApplication = application?.status === 'approved' ? application : null;
   const identity = identities.get(userId);
-  const displayName = application?.company_name || identity?.fullName || '';
+  const displayName = approvedApplication?.company_name || identity?.fullName || '';
   const logoImage = identity?.imageUrl || '';
   if (!displayName && !logoImage) return null;
 
   return {
     displayName,
     bio: '', bannerImage: '', location: '', specialties: [], establishedYear: null, responseTime: '',
-    websiteUrl: application?.website || '',
+    websiteUrl: approvedApplication?.website || '',
     logoImage,
     averageRating: 0,
     totalReviews: 0,
@@ -246,11 +261,23 @@ export async function getDealerPageData(userId) {
     return { profile: null, listings: [], reviews: [] };
   }
 
-  const [listingsResult, reviewsResult, identitiesResult, profileResult] = await Promise.allSettled([
+  const [listingsResult, reviewsResult, identitiesResult, profileResult, approvalResult] = await Promise.allSettled([
     Products.filter({ dealerId: userId }, '-created_date', 100, 0),
     loadApprovedDealerReviews(userId, 100),
     loadIdentities([userId]),
     getDealerProfileSummary(userId),
+    supabaseAdmin
+      .from('dealer_applications')
+      .select('id, status')
+      .eq('store_id', STORE_ID)
+      .eq('dealer_user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return data;
+      }),
   ]);
   const listings = listingsResult.status === 'fulfilled' ? listingsResult.value : [];
   const reviews = reviewsResult.status === 'fulfilled' ? reviewsResult.value : [];
@@ -258,6 +285,8 @@ export async function getDealerPageData(userId) {
   const identity = identities.get(userId);
   const summary = summarizeDealerReviews(reviews);
   const savedProfile = profileResult.status === 'fulfilled' ? profileResult.value : null;
+  const latestApplication = approvalResult.status === 'fulfilled' ? approvalResult.value : null;
+  const approvedApplication = latestApplication?.status === 'approved' ? latestApplication : null;
   const displayName = savedProfile?.displayName || identity?.fullName || listings[0]?.dealerName || 'Dealer';
 
   if (listingsResult.status === 'rejected') {
@@ -270,9 +299,9 @@ export async function getDealerPageData(userId) {
   return {
     profile: {
       userId,
-      verifiedStatus: 'verified',
       ...(savedProfile || {}),
       displayName,
+      verifiedStatus: approvedApplication ? 'verified' : 'unverified',
       ...summary,
     },
     listings,

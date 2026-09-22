@@ -79,12 +79,15 @@ export function isAdmin(user) {
 export const ESCROW_TRANSITIONS = {
   pending_review: ['dealer_accepted', 'cancelled'],
   dealer_accepted: ['funds_secured', 'cancelled'],
-  funds_secured: ['shipped', 'cancelled'],
+  // Once payment is recorded, cancellation must go through the dedicated
+  // dispute/refund workflow so the UI can never imply money was returned
+  // when only an order status changed.
+  funds_secured: ['shipped'],
   shipped: ['verified'],
   // A dispute resolved in the buyer's favor after delivery needs a legal
   // path out of `verified` besides funds_released — added for the refund
   // branch of resolveDispute().
-  verified: ['funds_released', 'cancelled'],
+  verified: ['funds_released'],
   funds_released: [],
   cancelled: []
 };

@@ -6,14 +6,17 @@ import { useAuth } from '@/lib/AuthContext';
 import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 import { useStorefrontPricing } from '@/lib/currencyContext';
 import { productSlug } from '@/lib/slug';
 import { ShieldCheck, Lock, Check, ArrowLeft, Truck, RotateCcw } from 'lucide-react';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import LocalizedLink from '@/components/LocalizedLink';
 import { getProductAvailability } from '@/lib/productMerchant';
+import { isProtectedPurchase, readPurchasePolicy } from '@/lib/purchasePolicyUi';
 
-export default function Checkout({ id: idProp, initialProduct = null }) {
+export default function Checkout({ id: idProp, initialProduct = null, initialBuyerRequestsProtection = false }) {
+  const router = useRouter();
   const { t } = useTranslation();
   const { locale, getPricing, formatMoney: formatPrice } = useStorefrontPricing();
   const id = idProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
@@ -27,6 +30,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
   const [done, setDone] = useState(false);
   const [revisedPricing, setRevisedPricing] = useState(null);
   const [checkoutError, setCheckoutError] = useState('');
+  const [buyerRequestsProtection, setBuyerRequestsProtection] = useState(initialBuyerRequestsProtection);
   useEffect(() => { setRevisedPricing(null); setCheckoutError(''); }, [locale, id]);
 
   // Billing (pre-filled from user profile)
@@ -69,7 +73,11 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
 
   const effectiveShipping = useBillingAsShipping ? billing : shipping;
   const pricing = revisedPricing?.locale === locale ? revisedPricing.value : getPricing(product || {});
-  const availableToPurchase = getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null;
+  const purchasePolicy = readPurchasePolicy(product || {});
+  const protectedPurchase = isProtectedPurchase(purchasePolicy, buyerRequestsProtection);
+  const isDealerDirect = purchasePolicy.purchaseRoute === 'dealer_direct' && !protectedPurchase;
+  const isManualReview = purchasePolicy.purchaseRoute === 'manual_review';
+  const availableToPurchase = getProductAvailability(product || {}).inStock && pricing.price != null && pricing.currency != null && !isManualReview;
 
   const canSubmit = () => {
     if (!availableToPurchase) return false;
@@ -95,7 +103,19 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
         phoneNumber: billing.phone
       });
 
-      const res = await createOrder({ productId: id, shippingDetails: effectiveShipping, idempotencyKey, locale, expectedPrice: pricing.price, expectedCurrency: pricing.currency });
+      const res = await createOrder({
+        productId: id,
+        shippingDetails: effectiveShipping,
+        idempotencyKey,
+        locale,
+        expectedPrice: pricing.price,
+        expectedCurrency: pricing.currency,
+        expectedPurchaseRoute: protectedPurchase ? 'escrow' : purchasePolicy.purchaseRoute,
+        expectedSellerKey: purchasePolicy.sellerType === 'dealer' && purchasePolicy.dealerId
+          ? `dealer:${purchasePolicy.dealerId}`
+          : 'kariv',
+        buyerRequestsProtection: purchasePolicy.buyerMayChooseProtection && buyerRequestsProtection,
+      });
       if (res.ok) {
         setOrder(res.order);
         setDone(true);
@@ -103,6 +123,13 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
         if (res.code === 'PRICE_CHANGED' && res.pricing) {
           setRevisedPricing({ locale, value: res.pricing });
           setAgreed(false);
+        }
+        if (res.code === 'PURCHASE_ROUTE_CHANGED' || res.code === 'MANUAL_REVIEW_REQUIRED') {
+          setAgreed(false);
+          // Reload the authoritative server-rendered policy without discarding
+          // the address fields held by this client component. Never patch the
+          // route from action output into local state.
+          router.refresh();
         }
         setCheckoutError(res.error);
       }
@@ -121,6 +148,12 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
 
   // Confirmation screen
   if (done && order) {
+    // An idempotent retry can return an order created under an earlier policy
+    // decision. Confirmation copy must describe that immutable order, never
+    // the buyer's current toggle or a newly rendered live policy.
+    const confirmedRoute = order.purchaseRoute || (protectedPurchase ? 'escrow' : purchasePolicy.purchaseRoute);
+    const orderIsProtected = confirmedRoute === 'escrow';
+    const orderIsDealerDirect = confirmedRoute === 'dealer_direct';
     return (
       <div className="max-w-2xl mx-auto px-6 py-16">
         <div className="text-center py-6">
@@ -129,15 +162,19 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
           </div>
           <h1 className="font-display text-2xl text-foreground font-light mb-2">{t('pages.checkout.orderConfirmed')}</h1>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            {t('pages.checkout.orderConfirmedDesc', { email: order.customerEmail })}
+            {orderIsProtected
+              ? t('pages.checkout.orderConfirmedProtectedDesc', { email: order.customerEmail })
+              : orderIsDealerDirect
+                ? t('pages.checkout.orderConfirmedDealerDesc', { email: order.customerEmail, seller: order.dealerName })
+                : t('pages.checkout.orderConfirmedKarivDesc', { email: order.customerEmail })}
           </p>
         </div>
         <div className="border border-border p-5 space-y-2">
           <div className="flex justify-between text-sm"><span>{t('pages.checkout.total')}</span><strong>{formatPrice(order.totalAmount, order.currency)}</strong></div>
-          <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.escrowRef')}</span><span className="text-foreground font-mono font-bold">{order.escrowReference}</span></div>
-          <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.status')}</span><span className="text-primary">{t('pages.checkout.orderConfirmedStatus')}</span></div>
+          <div className="flex justify-between text-xs"><span className="text-muted-foreground">{orderIsProtected ? t('pages.checkout.escrowRef') : t('pages.checkout.orderRef')}</span><span className="text-foreground font-mono font-bold">{order.orderReference || order.escrowReference}</span></div>
+          <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.status')}</span><span className="text-primary">{orderIsProtected ? t('pages.checkout.orderConfirmedProtectedStatus') : t('pages.checkout.orderConfirmedDirectStatus')}</span></div>
         </div>
-        <EscrowTrustBadge />
+        {orderIsProtected && <EscrowTrustBadge />}
         <div className="flex gap-3 mt-6">
           <LocalizedLink to="/portal/orders" className="flex-1 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 text-center">{t('pages.checkout.viewOrders')}</LocalizedLink>
           <LocalizedLink to="/shop" className="flex-1 border border-border text-[11px] tracking-[0.15em] uppercase py-4 text-foreground text-center hover:border-primary">{t('pages.checkout.continueShopping')}</LocalizedLink>
@@ -156,8 +193,18 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
           <button onClick={() => window.location.assign(localePath(`/product/${productSlug(product)}`))} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft size={10} /> {t('pages.checkout.backToProduct')}
           </button>
-          <h1 className="font-display text-3xl md:text-4xl text-foreground font-light">{t('pages.checkout.yourOrder')}</h1>
-          <p className="text-sm text-muted-foreground mt-2">{t('pages.checkout.yourOrderDesc')}</p>
+          <h1 className="font-display text-3xl md:text-4xl text-foreground font-light">
+            {isManualReview ? t('pages.checkout.manualReviewTitle') : protectedPurchase ? t('pages.checkout.protectedCheckoutTitle') : t('pages.checkout.yourOrder')}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            {isManualReview
+              ? t('pages.checkout.manualReviewDesc')
+              : protectedPurchase
+              ? t('pages.checkout.protectedCheckoutDesc')
+              : isDealerDirect
+                ? t('pages.checkout.dealerDirectCheckoutDesc', { seller: purchasePolicy.sellerName })
+                : t('pages.checkout.karivCheckoutDesc')}
+          </p>
         </div>
       </div>
 
@@ -204,22 +251,69 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
               )}
             </section>
 
-            {/* Buyer Protection Summary */}
-            <section className="border border-border p-6 bg-card">
+            {purchasePolicy.buyerMayChooseProtection && (
+              <section>
+                <h2 className="font-display text-xl text-foreground font-medium mb-1">{t('pages.checkout.paymentRouteTitle')}</h2>
+                <p className="text-xs text-muted-foreground mb-5">{t('pages.checkout.paymentRouteDesc')}</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    aria-pressed={!buyerRequestsProtection}
+                    onClick={() => {
+                      if (buyerRequestsProtection) setAgreed(false);
+                      setBuyerRequestsProtection(false);
+                    }}
+                    className={`rounded-xl border p-4 text-left transition-colors ${!buyerRequestsProtection ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-primary/50'}`}
+                  >
+                    <span className="block text-sm font-medium text-foreground">{t('pages.checkout.payDealerDirectly')}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{t('pages.checkout.payDealerDirectlyDesc', { seller: purchasePolicy.sellerName })}</span>
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={buyerRequestsProtection}
+                    onClick={() => {
+                      if (!buyerRequestsProtection) setAgreed(false);
+                      setBuyerRequestsProtection(true);
+                    }}
+                    className={`rounded-xl border p-4 text-left transition-colors ${buyerRequestsProtection ? 'border-primary bg-primary/5' : 'border-border bg-card hover:border-primary/50'}`}
+                  >
+                    <span className="flex items-center gap-2 text-sm font-medium text-foreground"><ShieldCheck size={15} className="text-primary" />{t('pages.checkout.addProtectedPayment')}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{t('pages.checkout.addProtectedPaymentDesc')}</span>
+                  </button>
+                </div>
+              </section>
+            )}
+
+            {/* Purchase route summary */}
+            <section className="rounded-xl border border-border p-6 bg-card">
               <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck size={18} className="text-primary" />
-                <h2 className="font-display text-lg text-foreground font-medium">{t('pages.checkout.buyerProtection')}</h2>
+                {protectedPurchase ? <ShieldCheck size={18} className="text-primary" /> : <Lock size={18} className="text-primary" />}
+                <h2 className="font-display text-lg text-foreground font-medium">
+                  {isManualReview ? t('pages.checkout.manualReviewTitle') : protectedPurchase ? t('pages.checkout.buyerProtection') : isDealerDirect ? t('pages.checkout.directDealerPurchase') : t('pages.checkout.karivPurchase')}
+                </h2>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                {t('pages.checkout.buyerProtectionDesc')}
+                {isManualReview
+                  ? t('pages.checkout.manualReviewDesc')
+                  : protectedPurchase
+                  ? t('pages.checkout.buyerProtectionDesc')
+                  : isDealerDirect
+                    ? t('pages.checkout.directDealerPurchaseDesc', { seller: purchasePolicy.sellerName })
+                    : t('pages.checkout.karivPurchaseDesc')}
               </p>
               <div className="space-y-2">
-                {[
-                  { icon: Lock, text: t('pages.checkout.bpEscrow') },
-                  { icon: ShieldCheck, text: t('pages.checkout.bpAuth') },
-                  { icon: RotateCcw, text: t('pages.checkout.bpReturns') },
-                  { icon: Truck, text: t('pages.checkout.bpShipping') }
-                ].map((item, i) => (
+                {(protectedPurchase
+                  ? [
+                    { icon: Lock, text: t('pages.checkout.bpEscrow') },
+                    { icon: ShieldCheck, text: t('pages.checkout.bpAuth') },
+                    { icon: RotateCcw, text: t('pages.checkout.bpReturns') },
+                    { icon: Truck, text: t('pages.checkout.bpShipping') },
+                  ]
+                  : [
+                    { icon: Lock, text: t('pages.checkout.accountOrderTracking') },
+                    { icon: RotateCcw, text: t('pages.checkout.sellerTermsApply') },
+                    { icon: Truck, text: t('pages.checkout.bpShipping') },
+                  ]).map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <item.icon size={14} className="text-primary flex-shrink-0" />
                     <span className="text-xs text-muted-foreground">{item.text}</span>
@@ -233,7 +327,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
               <label className="flex items-start gap-3 cursor-pointer">
                 <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="w-4 h-4 accent-primary mt-0.5 flex-shrink-0" />
                 <span className="text-xs text-muted-foreground leading-relaxed">
-                  {t('pages.checkout.termsAgree')} <LocalizedLink to="/legal/terms-and-conditions" className="text-primary underline">{t('pages.checkout.termsLink')}</LocalizedLink>{t('pages.checkout.termsAgreeEnd')}
+                  {t('pages.checkout.termsAgree')} <LocalizedLink to="/legal/terms-and-conditions" className="text-primary underline">{protectedPurchase ? t('pages.checkout.termsLink') : t('pages.checkout.directTermsLink')}</LocalizedLink>{t('pages.checkout.termsAgreeEnd')}
                 </span>
               </label>
             </section>
@@ -246,7 +340,13 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
               className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 disabled:opacity-50 hover:bg-primary/90 transition-colors"
             >
               <Lock size={16} />
-              {!availableToPurchase ? t('common:currentlyUnavailable') : submitting ? t('pages.checkout.processing') : t('pages.checkout.placeOrder')}
+              {!availableToPurchase
+                ? isManualReview ? t('pages.productDetail.purchaseUnderReview') : t('common:currentlyUnavailable')
+                : submitting
+                  ? t('pages.checkout.processing')
+                  : protectedPurchase
+                    ? t('pages.checkout.placeProtectedOrder')
+                    : t('pages.checkout.placeOrder')}
             </button>
           </div>
 
@@ -264,6 +364,19 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                 <h3 className="text-sm text-foreground font-medium mt-1 leading-snug">{localize(product, 'productTitle')}</h3>
                 {product.referenceNumber && <p className="text-xs text-muted-foreground mt-1">{t('pages.productDetail.ref')} {product.referenceNumber}</p>}
                 {product.condition && <p className="text-xs text-muted-foreground mt-0.5">{product.condition}</p>}
+                <div className="mt-4 rounded-lg border border-border bg-background/60 p-3">
+                  <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground">{t('pages.checkout.sellerOfRecord')}</p>
+                  <p className="mt-1 text-sm font-medium text-foreground">{purchasePolicy.sellerName || t('pages.productDetail.verifiedDealer')}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {isManualReview
+                      ? t('pages.productDetail.manualReviewDisclosure')
+                      : protectedPurchase
+                      ? t('pages.checkout.protectedSellerDisclosure')
+                      : isDealerDirect
+                        ? t('pages.checkout.directSellerDisclosure')
+                        : t('pages.checkout.karivSellerDisclosure')}
+                  </p>
+                </div>
                 <div className="mt-4 pt-4 border-t border-border space-y-1.5">
                   <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.subtotal')}</span><span className="text-foreground">{priceLabel}</span></div>
                   <div className="flex justify-between text-xs"><span className="text-muted-foreground">{t('pages.checkout.shipping')}</span><span className="text-foreground">{t('pages.checkout.free')}</span></div>
@@ -271,7 +384,7 @@ export default function Checkout({ id: idProp, initialProduct = null }) {
                   {locale === 'cs' && <p className="pt-3 text-xs leading-relaxed text-muted-foreground">{pricing.price != null ? 'Objednávku uhradíte v českých korunách (CZK). Potvrzená částka zůstává beze změny.' : 'Aktuální cenu v Kč se nepodařilo ověřit. Objednání je dočasně pozastaveno.'}</p>}
                 </div>
               </div>
-              <EscrowTrustBadge />
+              {protectedPurchase && <EscrowTrustBadge />}
             </div>
           </div>
         </div>

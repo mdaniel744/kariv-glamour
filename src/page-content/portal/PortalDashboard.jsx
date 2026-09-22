@@ -8,7 +8,8 @@ import { useAuth } from '@/lib/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Package, ShieldCheck, Store, ChevronRight, Plus } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
-import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
+import OrderStatusBadge from '@/components/orders/OrderStatusBadge';
+import { isProtectedOrder } from '@/lib/orderPresentation';
 import { isDealer } from '@/lib/escrowConstants';
 import LocalizedLink from '@/components/LocalizedLink';
 
@@ -33,7 +34,7 @@ export default function PortalDashboard() {
 
   const stats = [
     { icon: Package, label: t('pages.portal.activeOrders'), value: orders.filter(o => !['funds_released', 'cancelled'].includes(o.escrowStatus)).length, color: 'text-blue-500' },
-    { icon: ShieldCheck, label: t('pages.portal.inEscrow'), value: orders.filter(o => ['funds_secured', 'shipped', 'verified'].includes(o.escrowStatus)).length, color: 'text-emerald-500' },
+    { icon: ShieldCheck, label: t('pages.portal.inEscrow'), value: orders.filter(o => isProtectedOrder(o) && ['funds_secured', 'shipped', 'verified'].includes(o.escrowStatus)).length, color: 'text-emerald-500' },
     { icon: Package, label: t('pages.portal.completed'), value: orders.filter(o => o.escrowStatus === 'funds_released').length, color: 'text-primary' },
   ];
 
@@ -128,12 +129,12 @@ export default function PortalDashboard() {
                     {order.products?.[0]?.featuredImage && <img src={order.products[0].featuredImage} alt="" className="w-12 h-12 object-cover" />}
                     <div>
                       <p className="text-xs font-medium text-foreground">{localize(order.products?.[0], 'productTitle') || t('pages.portal.order')}</p>
-                      <p className="text-[10px] text-muted-foreground font-mono">{order.escrowReference}</p>
+                      <p className="text-[10px] text-muted-foreground font-mono">{order.orderReference || order.escrowReference}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-foreground">{formatPrice(order.totalAmount, order.currency || 'EUR')}</p>
-                    <EscrowStatusBadge status={order.escrowStatus} />
+                    <OrderStatusBadge order={order} />
                   </div>
                 </div>
               </LocalizedLink>

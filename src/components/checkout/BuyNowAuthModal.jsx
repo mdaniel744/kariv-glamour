@@ -5,12 +5,36 @@ import { ShieldCheck, Lock } from 'lucide-react';
 import { useLanguage } from '@/lib/languageContext';
 
 const COPY = {
-  en: { title: 'Create Your Account to Continue', description: 'To place your order securely through our escrow service, please register or log in to your Kariv Glamour account.', register: 'Register Now', login: 'I Already Have an Account', protection: 'Protected by Kariv Buyer Protection & Escrow' },
-  de: { title: 'Erstellen Sie Ihr Konto, um fortzufahren', description: 'Registrieren Sie sich oder melden Sie sich bei Ihrem Kariv Glamour Konto an, um über unseren Treuhandservice zu bestellen.', register: 'Jetzt registrieren', login: 'Ich habe bereits ein Konto', protection: 'Kariv Käuferschutz & Treuhandservice' },
-  cs: { title: 'Pokračujte vytvořením účtu', description: 'Pro objednávku prostřednictvím naší úschovy se zaregistrujte nebo přihlaste ke svému účtu Kariv Glamour.', register: 'Zaregistrovat se', login: 'Již mám účet', protection: 'Ochrana kupujících Kariv a úschova platby' },
+  en: {
+    title: 'Create Your Account to Continue',
+    directDescription: 'Please register or sign in to your Kariv Glamour account before continuing to checkout.',
+    protectedDescription: 'Please register or sign in to continue with Kariv Protected Payment.',
+    register: 'Register Now',
+    login: 'I Already Have an Account',
+    directNote: 'An account is required to place and manage your order',
+    protectedNote: 'Kariv Protected Payment selected',
+  },
+  de: {
+    title: 'Erstellen Sie Ihr Konto, um fortzufahren',
+    directDescription: 'Registrieren Sie sich oder melden Sie sich bei Ihrem Kariv Glamour Konto an, bevor Sie zur Kasse gehen.',
+    protectedDescription: 'Registrieren Sie sich oder melden Sie sich an, um mit der geschützten Zahlung von Kariv fortzufahren.',
+    register: 'Jetzt registrieren',
+    login: 'Ich habe bereits ein Konto',
+    directNote: 'Ein Konto ist erforderlich, um Ihre Bestellung aufzugeben und zu verwalten',
+    protectedNote: 'Geschützte Zahlung von Kariv ausgewählt',
+  },
+  cs: {
+    title: 'Pokračujte vytvořením účtu',
+    directDescription: 'Před pokračováním k pokladně se zaregistrujte nebo přihlaste ke svému účtu Kariv Glamour.',
+    protectedDescription: 'Pro pokračování s chráněnou platbou Kariv se zaregistrujte nebo přihlaste.',
+    register: 'Zaregistrovat se',
+    login: 'Již mám účet',
+    directNote: 'Pro vytvoření a správu objednávky je vyžadován účet',
+    protectedNote: 'Vybrána chráněná platba Kariv',
+  },
 };
 
-export default function BuyNowAuthModal({ open, onClose, continueTo }) {
+export default function BuyNowAuthModal({ open, onClose, continueTo, protectedPurchase = false }) {
   const { locale } = useLanguage();
   const copy = COPY[locale] || COPY.en;
   const returnUrl = continueTo ? `?returnTo=${encodeURIComponent(continueTo)}` : '';
@@ -26,7 +50,7 @@ export default function BuyNowAuthModal({ open, onClose, continueTo }) {
             {copy.title}
           </DialogTitle>
           <DialogDescription className="text-center text-sm text-muted-foreground mt-2">
-            {copy.description}
+            {protectedPurchase ? copy.protectedDescription : copy.directDescription}
           </DialogDescription>
         </DialogHeader>
 
@@ -47,7 +71,7 @@ export default function BuyNowAuthModal({ open, onClose, continueTo }) {
 
         <div className="flex items-center justify-center gap-2 mt-4 text-[10px] text-muted-foreground">
           <ShieldCheck size={12} className="text-primary" />
-          <span>{copy.protection}</span>
+          <span>{protectedPurchase ? copy.protectedNote : copy.directNote}</span>
         </div>
       </DialogContent>
     </Dialog>

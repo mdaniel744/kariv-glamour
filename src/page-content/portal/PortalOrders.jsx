@@ -6,12 +6,15 @@ import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { Package, ChevronRight } from 'lucide-react';
 import { formatPrice } from '@/lib/constants';
-import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
+import OrderStatusBadge from '@/components/orders/OrderStatusBadge';
+import { getPurchaseRouteLabel } from '@/lib/orderPresentation';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function PortalOrders() {
   const { localize } = useLocalizedField();
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { locale } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,12 +48,13 @@ export default function PortalOrders() {
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-foreground truncate">{localize(order.products?.[0], 'productTitle') || t('pages.portal.order')}</p>
                     <p className="text-[10px] text-muted-foreground">{order.products?.[0]?.brand}</p>
-                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{order.escrowReference}</p>
+                    <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{order.orderReference || order.escrowReference}</p>
+                    <p className="mt-1 text-[9px] uppercase tracking-[0.08em] text-primary">{getPurchaseRouteLabel(order, locale)}</p>
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="text-sm text-foreground mb-1">{formatPrice(order.totalAmount, order.currency || 'EUR')}</p>
-                  <EscrowStatusBadge status={order.escrowStatus} />
+                  <OrderStatusBadge order={order} />
                 </div>
                 <ChevronRight size={16} className="text-muted-foreground flex-shrink-0" />
               </div>

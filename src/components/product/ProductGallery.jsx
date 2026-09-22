@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Expand, Heart, X } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import MediaImage from '@/components/shared/MediaImage';
 import { getMediaVariant } from '@/lib/media';
@@ -11,6 +11,8 @@ export default function ProductGallery({
   images,
   title,
   labels,
+  wishlisted = false,
+  onToggleWishlist,
 }) {
   const [api, setApi] = useState(null);
   const [selected, setSelected] = useState(0);
@@ -79,12 +81,7 @@ export default function ProductGallery({
         <CarouselContent className="ml-0">
           {imageList.map((image, index) => (
             <CarouselItem key={`${image}-${index}`} className="pl-0">
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className="relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden bg-card sm:aspect-square"
-                aria-label={`${labels.openZoom} — ${labels.imageCount(index + 1, imageList.length)}`}
-              >
+              <div className="relative block aspect-[4/5] w-full overflow-hidden bg-card sm:aspect-square">
                 {loaded.has(index) && (
                   <MediaImage
                     src={getMediaVariant(image, 'display')}
@@ -97,13 +94,36 @@ export default function ProductGallery({
                     className="select-none object-cover"
                   />
                 )}
-                <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground shadow-sm backdrop-blur">
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(true)}
+                  className="absolute inset-0 z-[1] cursor-zoom-in"
+                  aria-label={`${labels.openZoom} — ${labels.imageCount(index + 1, imageList.length)}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(true)}
+                  className="absolute right-3 top-16 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground shadow-sm backdrop-blur transition-colors hover:border-primary hover:text-primary"
+                  aria-label={`${labels.openZoom} — ${labels.imageCount(index + 1, imageList.length)}`}
+                >
                   <Expand size={17} aria-hidden="true" />
-                </span>
-              </button>
+                </button>
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
+
+        {onToggleWishlist && (
+          <button
+            type="button"
+            onClick={onToggleWishlist}
+            aria-pressed={wishlisted}
+            aria-label={labels.wishlist}
+            className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-border/70 bg-background/90 text-foreground shadow-sm backdrop-blur transition-colors hover:border-primary hover:text-primary"
+          >
+            <Heart size={18} className={wishlisted ? 'fill-primary text-primary' : ''} aria-hidden="true" />
+          </button>
+        )}
 
         {imageList.length > 1 && (
           <>

@@ -16,7 +16,8 @@ export default function ProtectedArea({ children, requireDealer = false, require
   // and a client-side fallback in case of a stale/cached page.
   useEffect(() => {
     if (authChecked && !isLoadingAuth && !isAuthenticated) {
-      window.location.replace(`${localePath('/login')}?returnTo=${encodeURIComponent(pathname)}`);
+      const returnTo = `${pathname}${window.location.search}`;
+      window.location.replace(`${localePath('/login')}?returnTo=${encodeURIComponent(returnTo)}`);
     }
   }, [authChecked, isAuthenticated, isLoadingAuth, localePath, pathname]);
 

@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, FileCheck2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { uploadImage } from '@/actions/storage';
+import { uploadPaymentProof } from '@/actions/storage';
 
-export default function PaymentProofUploader({ paymentMethod, onUploaded, proofUrl }) {
+export default function PaymentProofUploader({ orderId, paymentMethod, onUploaded, proofUrl }) {
   const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(proofUrl || null);
+  const [previewKind, setPreviewKind] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleFile = async (file) => {
@@ -28,11 +29,11 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('purpose', 'payment-proof');
-      const res = await uploadImage(formData);
+      const res = await uploadPaymentProof(orderId, formData);
       if (res.ok) {
-        setPreviewUrl(res.url);
-        onUploaded(res.url);
+        setPreviewUrl(res.previewUrl);
+        setPreviewKind(res.media?.kind || null);
+        onUploaded(res.key);
       } else {
         setError(res.error);
       }
@@ -46,6 +47,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
 
   const handleRemove = () => {
     setPreviewUrl(null);
+    setPreviewKind(null);
     onUploaded(null);
   };
 
@@ -85,7 +87,7 @@ export default function PaymentProofUploader({ paymentMethod, onUploaded, proofU
         </button>
       ) : (
         <div className="flex items-center gap-3 border border-border p-3 bg-card">
-          {previewUrl.match(/\.(jpg|jpeg|png|webp|gif|avif)$/i) ? (
+          {previewKind === 'image' ? (
             <img src={previewUrl} alt={t('pages.portal.proofAlt')} className="w-12 h-12 object-cover rounded" />
           ) : (
             <div className="w-12 h-12 flex items-center justify-center bg-primary/10 rounded">

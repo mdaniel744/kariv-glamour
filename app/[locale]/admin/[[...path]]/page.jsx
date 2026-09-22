@@ -13,6 +13,8 @@ const ADMIN_ROUTES = {
   faq: 'faq',
   'dealer-applications': 'dealerApplications',
   'dealer-reviews': 'dealerReviews',
+  'dealer-purchase-rules': 'dealerPurchaseRules',
+  offers: 'karivOffers',
   translations: 'translations',
   glossary: 'glossary',
   strings: 'strings',

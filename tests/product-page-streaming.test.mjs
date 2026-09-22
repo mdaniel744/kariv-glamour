@@ -12,6 +12,7 @@ import * as productMerchant from '../src/lib/productMerchant.js';
 import * as productIndexing from '../src/lib/productIndexing.js';
 import * as locales from '../src/lib/locales.js';
 import { attributeLabel } from '../src/lib/attributeLabels.js';
+import * as purchasePolicyUi from '../src/lib/purchasePolicyUi.js';
 
 const exchangeRates = { source: 'CNB', date: new Date().toISOString().slice(0, 10), rates: { EUR: 24.26, CZK: 1 } };
 
@@ -34,7 +35,7 @@ const watch = {
   productImages: ['/watch.webp'], productDescription: 'Watch description',
 };
 
-function fixture({ related = async () => [], dealer = async () => null } = {}) {
+function fixture({ related = async () => [], dealer = async () => null, dealerPreview = dealer } = {}) {
   const effects = [];
   const icon = () => null;
   let locale = 'en';
@@ -43,11 +44,11 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     'react/jsx-runtime': jsxRuntime,
     'next/navigation': { useRouter: () => ({ push() {} }), notFound: () => { throw new Error('Not found'); } },
     'react-i18next': { useTranslation: () => ({ t: (key) => key }) },
-    'lucide-react': Object.fromEntries(['Heart', 'ShieldCheck', 'Truck', 'RotateCcw', 'Award', 'ChevronLeft', 'ChevronRight', 'MessageCircle', 'Lock', 'Store'].map((key) => [key, icon])),
+    'lucide-react': Object.fromEntries(['Heart', 'ShieldCheck', 'Truck', 'RotateCcw', 'Award', 'ChevronLeft', 'ChevronRight', 'MessageCircle', 'Lock', 'ShoppingBag', 'Store'].map((key) => [key, icon])),
     '@/components/LocalizedLink': ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children),
     '@/lib/dataClient': { dataClient: { entities: { Products: { get: async () => watch, filter: related } } } },
     '@/lib/base44Data': { asArray: (rows) => rows || [] },
-    '@/lib/cartContext': { useCart: () => ({ toggleWishlist() {}, isInWishlist: () => false }) },
+    '@/lib/cartContext': { useCart: () => ({ addToCart() {}, toggleWishlist() {}, isInCart: () => false, isInWishlist: () => false }) },
     '@/lib/AuthContext': { useAuth: () => ({ isAuthenticated: false }) },
     '@/lib/languageContext': { useLanguage: () => ({ locale, localePath: (path) => `/${locale}${path}` }) },
     '@/lib/constants': { formatPrice: (price) => `EUR ${price}` },
@@ -60,8 +61,27 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     },
     '@/lib/productMerchant': productMerchant,
     '@/lib/productIndexing': productIndexing,
+    '@/lib/purchasePolicyUi': purchasePolicyUi,
+    '@/lib/purchasePolicyServer': {
+      getProductPurchasePolicy: async (product) => ({
+        sellerType: product.dealerId ? 'dealer' : 'kariv',
+        dealerId: product.dealerId || null,
+        sellerName: product.dealerId ? 'Dealer' : 'Kariv Glamour',
+        dealerTier: product.dealerId ? 'probationary' : null,
+        purchaseRoute: product.dealerId ? 'escrow' : 'kariv_direct',
+        directEligible: !product.dealerId,
+        escrowRequired: Boolean(product.dealerId),
+        buyerMayChooseProtection: false,
+        directLimitEur: product.dealerId ? 0 : null,
+        reasonCodes: product.dealerId ? ['dealer_probationary'] : ['kariv_owned_inventory'],
+      }),
+    },
     '@/components/shared/TrustBar': () => null,
     '@/components/checkout/BuyNowAuthModal': () => null,
+    '@/components/product/ContactSellerDialog': () => React.createElement('button', null, 'pages.productDetail.sellerContact.button'),
+    '@/components/product/KarivOfferDialog': () => React.createElement('button', null, 'pages.productDetail.counterOffer'),
+    '@/components/product/DealerCustomerReviewsPreview': ({ dealer: preview }) => React.createElement('section', null, preview.displayName),
+    '@/components/product/ProductDealerRating': () => null,
     '@/components/shared/SafeHtml': ({ html }) => React.createElement('div', null, html),
     '@/components/product/ProductGallery': ({ title }) => React.createElement('div', { 'data-gallery': true }, title),
     '@/components/dealer/StarRating': () => null,
@@ -69,6 +89,7 @@ function fixture({ related = async () => [], dealer = async () => null } = {}) {
     '@/lib/media': { getMediaVariant: (src) => src },
     '@/actions/dealerReviews': { getDealerRatingSummary: async () => null },
     '@/lib/base44Server': { getProductBySlug: async () => watch, getRelatedProducts: related, getDealerProfileSummary: dealer },
+    '@/lib/productDealerPreviewServer': { getProductDealerPreviewData: dealerPreview },
     '@/lib/slug': { productSlug: (product) => product.slug },
     '@/lib/seo': {
       getSiteUrl: () => 'https://example.test', localizedField: (record, key) => record?.[key] || '',
@@ -110,6 +131,7 @@ test('product route returns the selected watch before unresolved dealer and rela
   assert.equal(client.props.product.id, watch.id);
   assert.equal(client.props.dealerSlot.type, React.Suspense);
   assert.equal(client.props.relatedSlot.type, React.Suspense);
+  assert.equal(client.props.dealerReviewSlot.type, React.Suspense);
 
   // React 18's plain HTML renderer cannot execute async server components.
   // Start the actual section readers, then represent each unresolved server
@@ -123,11 +145,12 @@ test('product route returns the selected watch before unresolved dealer and rela
   const html = renderToStaticMarkup(React.cloneElement(client, {
     dealerSlot: unresolvedSlot(client.props.dealerSlot),
     relatedSlot: unresolvedSlot(client.props.relatedSlot),
+    dealerReviewSlot: unresolvedSlot(client.props.dealerReviewSlot),
   }));
   assert.match(html, /data-gallery="true"/);
   assert.match(html, /Rolex Daytona Steel/);
   assert.match(html, /EUR 12000/);
-  assert.match(html, /pages\.productDetail\.buyNow/);
+  assert.match(html, /pages\.productDetail\.(?:buyNow|buyWithProtection)/);
 });
 
 test('optional dealer/related failures leave the main details and dealer fallback visible', async (t) => {
@@ -138,11 +161,13 @@ test('optional dealer/related failures leave the main details and dealer fallbac
   const client = clientElement(tree);
   const dealerSection = client.props.dealerSlot.props.children;
   const relatedSection = client.props.relatedSlot.props.children;
-  const [dealerNode, relatedNode] = await Promise.all([
-    dealerSection.type(dealerSection.props), relatedSection.type(relatedSection.props),
+  const dealerReviewSection = client.props.dealerReviewSlot.props.children;
+  const [dealerNode, relatedNode, dealerReviewNode] = await Promise.all([
+    dealerSection.type(dealerSection.props), relatedSection.type(relatedSection.props), dealerReviewSection.type(dealerReviewSection.props),
   ]);
   assert.equal(relatedNode, null);
-  const html = renderToStaticMarkup(React.cloneElement(client, { dealerSlot: dealerNode, relatedSlot: relatedNode }));
+  assert.equal(dealerReviewNode, null);
+  const html = renderToStaticMarkup(React.cloneElement(client, { dealerSlot: dealerNode, relatedSlot: relatedNode, dealerReviewSlot: dealerReviewNode }));
   assert.match(html, /Rolex Daytona Steel/);
   assert.match(html, /data-gallery="true"/);
   assert.match(html, /View Dealer Profile/);
@@ -157,9 +182,11 @@ test('resolved dealer company name/logo and related cards preserve their existin
   const client = clientElement(await route.default({ params: { locale: 'en', slug: watch.slug } }));
   const dealerSection = client.props.dealerSlot.props.children;
   const relatedSection = client.props.relatedSlot.props.children;
+  const dealerReviewSection = client.props.dealerReviewSlot.props.children;
   const html = renderToStaticMarkup(React.cloneElement(client, {
     dealerSlot: await dealerSection.type(dealerSection.props),
     relatedSlot: await relatedSection.type(relatedSection.props),
+    dealerReviewSlot: await dealerReviewSection.type(dealerReviewSection.props),
   }));
   assert.match(html, /Example Watches s\.r\.o\./);
   assert.match(html, /dealer-logo\.webp/);

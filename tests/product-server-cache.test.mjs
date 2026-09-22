@@ -11,7 +11,12 @@ const { outputText } = ts.transpileModule(source, {
   fileName: 'base44Server.js',
 });
 
-function createFixture(initialProducts = [], { filter, get } = {}) {
+function createFixture(initialProducts = [], {
+  filter,
+  get,
+  mode = 'production',
+  maxCacheBytes = Number.POSITIVE_INFINITY,
+} = {}) {
   let products = initialProducts;
   let now = 0;
   const stored = new Map();
@@ -40,6 +45,9 @@ function createFixture(initialProducts = [], { filter, get } = {}) {
         // Model Next's persistent cache boundary: retain successful values,
         // including null, but never retain a rejected database read.
         const value = await callback(...args);
+        if (Buffer.byteLength(JSON.stringify(value)) > maxCacheBytes) {
+          throw new Error(`cache value exceeded ${maxCacheBytes} bytes`);
+        }
         stored.set(key, { value, expiresAt: now + revalidate * 1000 });
         return value;
       },
@@ -67,10 +75,10 @@ function createFixture(initialProducts = [], { filter, get } = {}) {
     '@/lib/dealerReviewsData': {},
   };
   const module = { exports: {} };
-  compileFunction(outputText, ['require', 'module', 'exports', 'console'])((specifier) => {
+  compileFunction(outputText, ['require', 'module', 'exports', 'console', 'process'])((specifier) => {
     assert.ok(specifier in imports, `Unexpected dependency: ${specifier}`);
     return imports[specifier];
-  }, module, module.exports, { error: (...args) => errors.push(args) });
+  }, module, module.exports, { error: (...args) => errors.push(args) }, { env: { NODE_ENV: mode } });
   return {
     ...module.exports,
     filterCalls, getCalls, errors,
@@ -195,6 +203,38 @@ test('related products reuse the published brand catalog, newest first, excludin
   assert.deepEqual((await fixture.getRelatedProducts(watch, 1)).map((product) => product.id), ['newer']);
   assert.equal(fixture.filterCalls.length, 1);
   assert.deepEqual(fixture.filterCalls[0], [{ brand: 'Rolex', isPublished: true }, '-created_date', undefined, 0, undefined]);
+});
+
+test('development brand reads bypass the 2 MB persistent-cache limit without losing product data', async () => {
+  const largeWatch = {
+    ...watch,
+    productDescription: 'x'.repeat(2_100_000),
+    productImages: ['front.jpg', 'side.jpg', 'clasp.jpg'],
+  };
+  const fixture = createFixture([largeWatch], { mode: 'development', maxCacheBytes: 2_000_000 });
+
+  const first = await fixture.getBrandPageData('rolex', 'Rolex');
+  assert.deepEqual(first.products, [largeWatch]);
+
+  const updatedWatch = { ...largeWatch, price: 9500 };
+  fixture.setProducts([updatedWatch]);
+  const second = await fixture.getBrandPageData('rolex', 'Rolex');
+  assert.deepEqual(second.products, [updatedWatch]);
+  assert.equal(fixture.filterCalls.length, 2);
+  assert.deepEqual(fixture.errors, []);
+});
+
+test('production brand reads keep the short cache and preserve galleries and translations', async () => {
+  const translatedWatch = {
+    ...watch,
+    productImages: ['front.jpg', 'side.jpg', 'clasp.jpg'],
+  };
+  const fixture = createFixture([translatedWatch]);
+
+  assert.deepEqual((await fixture.getBrandPageData('rolex', 'Rolex')).products, [translatedWatch]);
+  fixture.setProducts([{ ...translatedWatch, price: 9500 }]);
+  assert.deepEqual((await fixture.getBrandPageData('rolex', 'Rolex')).products, [translatedWatch]);
+  assert.equal(fixture.filterCalls.length, 1);
 });
 
 test('checkout product-by-id reads stay fresh across requests even when the public page is cached', async () => {

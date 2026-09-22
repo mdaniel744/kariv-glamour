@@ -9,15 +9,18 @@ import { useLanguage } from '@/lib/languageContext';
 import { useLocalizedField } from '@/lib/localize';
 import { useStorefrontPricing } from '@/lib/currencyContext';
 import { useAttributeLabel } from '@/hooks/useAttributeLabel';
-import { Heart, ShieldCheck, Truck, RotateCcw, Award, ChevronRight, MessageCircle, Lock } from 'lucide-react';
+import { ShieldCheck, Truck, RotateCcw, Award, ChevronRight, Lock, ShoppingBag, Store } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import TrustBar from '@/components/shared/TrustBar';
 import BuyNowAuthModal from '@/components/checkout/BuyNowAuthModal';
+import ContactSellerDialog from '@/components/product/ContactSellerDialog';
+import KarivOfferDialog from '@/components/product/KarivOfferDialog';
 import SafeHtml from '@/components/shared/SafeHtml';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductDealerCard from '@/components/product/ProductDealerCard';
 import RelatedProducts from '@/components/product/RelatedProducts';
 import { getProductAvailability, productLocalizedText } from '@/lib/productMerchant';
+import { checkoutPath as buildCheckoutPath, isProtectedPurchase, readPurchasePolicy } from '@/lib/purchasePolicyUi';
 
 const EMPTY_RELATED = [];
 
@@ -27,13 +30,13 @@ function productIdFromPath() {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = EMPTY_RELATED, initialDealerProfile = null, dealerSlot, relatedSlot }) {
+export default function ProductDetail({ id: idProp, initialProduct = null, initialRelated = EMPTY_RELATED, initialDealerProfile = null, dealerSlot, relatedSlot, dealerReviewSlot }) {
   const { t } = useTranslation();
   const { locale, getPricing, formatMoney: formatPrice } = useStorefrontPricing();
   const attributeLabel = useAttributeLabel();
   const id = idProp || productIdFromPath();
   const router = useRouter();
-  const { toggleWishlist, isInWishlist } = useCart();
+  const { addToCart, toggleWishlist, isInCart, isInWishlist } = useCart();
   const { isAuthenticated } = useAuth();
   const { localePath } = useLanguage();
   const { localize } = useLocalizedField();
@@ -41,6 +44,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const [loading, setLoading] = useState(!initialProduct);
   const [related, setRelated] = useState(initialRelated);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [buyerRequestsProtection, setBuyerRequestsProtection] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -110,13 +114,29 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const wishlisted = isInWishlist(product.id);
   const pricing = getPricing(product);
   const availability = getProductAvailability(product);
-  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null;
+  const purchasePolicy = readPurchasePolicy(product);
+  const isKarivOwned = purchasePolicy.sellerType === 'kariv';
+  const isManualReview = purchasePolicy.purchaseRoute === 'manual_review';
+  const protectedPurchase = isProtectedPurchase(purchasePolicy, buyerRequestsProtection);
+  const usesTraditionalCart = isKarivOwned || (
+    purchasePolicy.purchaseRoute === 'dealer_direct' && !protectedPurchase
+  );
+  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null && !isManualReview;
+  const inCart = isInCart(product.id);
 
-  const checkoutPath = `/checkout/${product.id}`;
+  const checkoutPath = buildCheckoutPath(product.id, protectedPurchase && purchasePolicy.buyerMayChooseProtection);
   const handleBuyNow = () => {
     if (!canPurchase) return;
     if (!isAuthenticated) { setShowAuthModal(true); return; }
     router.push(localePath(checkoutPath));
+  };
+  const handleCartAction = () => {
+    if (!canPurchase || !usesTraditionalCart) return;
+    if (inCart) {
+      router.push(localePath('/cart'));
+      return;
+    }
+    addToCart(product);
   };
   const brandSlug = product.brand?.toLowerCase().replace(/\s+/g, '-');
 
@@ -168,6 +188,8 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               key={product.id}
               images={images}
               title={localize(product, 'productTitle')}
+              wishlisted={wishlisted}
+              onToggleWishlist={() => toggleWishlist(product)}
               labels={{
                 gallery: t('pages.productDetail.galleryLabel'),
                 noImage: t('pages.productDetail.noImage'),
@@ -178,6 +200,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
                 openZoom: locale === 'cs' ? 'Zvětšit obrázek' : locale === 'de' ? 'Bild vergrößern' : 'Enlarge image',
                 zoom: locale === 'cs' ? 'Zvětšený obrázek produktu' : locale === 'de' ? 'Produktbild vergrößert' : 'Enlarged product image',
                 closeZoom: locale === 'cs' ? 'Zavřít zvětšený obrázek' : locale === 'de' ? 'Vergrößerte Ansicht schließen' : 'Close enlarged view',
+                wishlist: wishlisted ? t('pages.productDetail.saved') : t('pages.productDetail.wishlist'),
               }}
             />
           </div>
@@ -240,27 +263,84 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
             {/* Actions */}
             <div className="space-y-3">
-              <button
-                onClick={handleBuyNow}
-                disabled={!canPurchase}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors disabled:cursor-not-allowed disabled:opacity-50">
-                <Lock size={16} />
-                {canPurchase ? t('pages.productDetail.buyNow') : t('common:currentlyUnavailable')}
-              </button>
-              <BuyNowAuthModal open={showAuthModal && canPurchase} onClose={() => setShowAuthModal(false)} continueTo={checkoutPath} />
-              <div className="grid gap-3 sm:grid-cols-2">
+              {purchasePolicy.buyerMayChooseProtection && (
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/60">
+                  <input
+                    type="checkbox"
+                    checked={buyerRequestsProtection}
+                    onChange={(event) => setBuyerRequestsProtection(event.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+                  />
+                  <span>
+                    <span className="block text-sm font-medium text-foreground">{t('pages.productDetail.addProtection')}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{t('pages.productDetail.addProtectionDesc')}</span>
+                  </span>
+                </label>
+              )}
+              {usesTraditionalCart ? (
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <button
+                    onClick={handleCartAction}
+                    disabled={!canPurchase}
+                    className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
+                    <ShoppingBag size={16} />
+                    {!canPurchase ? t('common:currentlyUnavailable') : inCart ? t('pages.productDetail.viewCart') : t('pages.productDetail.addToCart')}
+                  </button>
+                  <button
+                    onClick={handleBuyNow}
+                    disabled={!canPurchase}
+                    className="flex min-h-14 items-center justify-center gap-2 rounded-xl border border-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary transition-colors hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50">
+                    <Lock size={16} />
+                    {canPurchase ? t('pages.productDetail.buyNowDirect') : t('common:currentlyUnavailable')}
+                  </button>
+                </div>
+              ) : (
                 <button
-                  onClick={() => toggleWishlist(product)}
-                  className="flex min-h-12 items-center justify-center gap-2 border border-border px-3 py-3 text-[11px] tracking-[0.12em] uppercase text-foreground transition-colors hover:border-primary">
-                  <Heart size={14} className={wishlisted ? 'fill-primary text-primary' : ''} />
-                  {wishlisted ? t('pages.productDetail.saved') : t('pages.productDetail.wishlist')}
+                  onClick={handleBuyNow}
+                  disabled={!canPurchase}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
+                  {protectedPurchase ? <ShieldCheck size={16} /> : <Store size={16} />}
+                  {isManualReview
+                    ? t('pages.productDetail.purchaseUnderReview')
+                    : !canPurchase
+                      ? t('common:currentlyUnavailable')
+                      : protectedPurchase
+                        ? t('pages.productDetail.buyWithProtection')
+                        : t('pages.productDetail.buyFromDealer', { seller: purchasePolicy.sellerName || t('pages.productDetail.verifiedDealer') })}
                 </button>
-                <LocalizedLink                   to="/customer-service"
-                  className="flex min-h-12 items-center justify-center gap-2 border border-border px-3 py-3 text-[11px] tracking-[0.12em] uppercase text-foreground transition-colors hover:border-primary">
-                  <MessageCircle size={14} />
-                  {t('pages.productDetail.askExpert')}
-                </LocalizedLink>
-              </div>
+              )}
+              <BuyNowAuthModal
+                open={showAuthModal && canPurchase}
+                onClose={() => setShowAuthModal(false)}
+                continueTo={checkoutPath}
+                protectedPurchase={protectedPurchase}
+              />
+              {isKarivOwned ? (
+                <KarivOfferDialog
+                  product={product}
+                  localizedTitle={localize(product, 'productTitle')}
+                  displayCurrency={pricing.currency}
+                  locale={locale}
+                  available={canPurchase}
+                />
+              ) : (
+                <ContactSellerDialog product={product} sellerName={purchasePolicy.sellerName} />
+              )}
+
+              {!isManualReview && !isKarivOwned && (
+                <div className="rounded-xl border border-border bg-card/60 p-4">
+                  <div className="flex items-start gap-3">
+                    {protectedPurchase ? <ShieldCheck size={16} className="mt-0.5 shrink-0 text-primary" /> : <Store size={16} className="mt-0.5 shrink-0 text-primary" />}
+                    <div>
+                      <p className="text-xs leading-relaxed text-muted-foreground">
+                        {protectedPurchase
+                          ? t('pages.productDetail.protectedDisclosure')
+                          : t('pages.productDetail.directDealerDisclosure', { seller: purchasePolicy.sellerName || t('pages.productDetail.verifiedDealer') })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Trust cluster */}
@@ -280,7 +360,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             </div>
 
             {/* Dealer info */}
-            {dealerSlot !== undefined ? dealerSlot : <ProductDealerCard key={product.dealerId || product.created_by_id} product={product} initialProfile={initialDealerProfile} />}
+            {dealerSlot !== undefined ? dealerSlot : <ProductDealerCard key={product.dealerId || 'kariv'} product={product} initialProfile={initialDealerProfile} />}
           </div>
         </div>
 
@@ -314,6 +394,9 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
       {relatedSlot !== undefined ? relatedSlot : <RelatedProducts product={product} products={related} />}
 
       <TrustBar />
+
+      {/* Approved dealer profile and customer-review preview */}
+      {dealerReviewSlot !== undefined ? dealerReviewSlot : null}
     </div>
   );
 }

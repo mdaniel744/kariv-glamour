@@ -12,10 +12,44 @@ const ICON_MAP = { Building2 };
 // later is a one-line change.
 const AVAILABLE_METHODS = PAYMENT_METHODS.filter(m => m.key === 'bank_transfer');
 
-export default function PaymentMethodSelector({ selected, onSelect, escrowReference }) {
+const DIRECT_COPY = {
+  en: {
+    heading: 'Direct payment to verified seller',
+    karivHeading: 'Payment to Kariv',
+    description: (seller) => `Pay ${seller || 'the verified seller'} directly using the instructions supplied for this order. This payment is not held in Kariv escrow.`,
+    karivDescription: 'Pay Kariv directly using the instructions supplied for this order.',
+    reference: 'Use this order reference with your payment.',
+  },
+  de: {
+    heading: 'Direktzahlung an den verifizierten Verkäufer',
+    karivHeading: 'Zahlung an Kariv',
+    description: (seller) => `Zahlen Sie direkt an ${seller || 'den verifizierten Verkäufer'} gemäß den Anweisungen dieser Bestellung. Diese Zahlung wird nicht von Kariv treuhänderisch verwahrt.`,
+    karivDescription: 'Zahlen Sie Kariv direkt gemäß den Anweisungen dieser Bestellung.',
+    reference: 'Verwenden Sie diese Bestellreferenz bei Ihrer Zahlung.',
+  },
+  cs: {
+    heading: 'Přímá platba ověřenému prodejci',
+    karivHeading: 'Platba společnosti Kariv',
+    description: (seller) => `Zaplaťte přímo prodejci ${seller || ''} podle pokynů u objednávky. Tato platba není držena v úschově Kariv.`,
+    karivDescription: 'Zaplaťte přímo společnosti Kariv podle pokynů u objednávky.',
+    reference: 'U platby použijte tuto referenci objednávky.',
+  },
+};
+
+export default function PaymentMethodSelector({
+  selected,
+  onSelect,
+  escrowReference = null,
+  orderReference = null,
+  protectedPayment = true,
+  sellerName = '',
+  sellerType = 'dealer',
+}) {
   const { locale } = useLanguage();
   const { t } = useTranslation();
   const copy = getEscrowCopy(locale);
+  const directCopy = DIRECT_COPY[locale] || DIRECT_COPY.en;
+  const reference = orderReference || escrowReference;
   const [expanded, setExpanded] = useState(null);
 
   return (
@@ -23,7 +57,7 @@ export default function PaymentMethodSelector({ selected, onSelect, escrowRefere
       <div className="flex items-center gap-2 mb-4">
         <ShieldCheck size={16} className="text-primary" />
         <p className="text-[10px] tracking-[0.15em] uppercase text-primary font-medium">
-          {copy.secured}
+          {protectedPayment ? copy.secured : sellerType === 'kariv' ? directCopy.karivHeading : directCopy.heading}
         </p>
       </div>
 
@@ -43,7 +77,9 @@ export default function PaymentMethodSelector({ selected, onSelect, escrowRefere
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">{copy.bank}</p>
-                <p className="text-xs text-muted-foreground">{copy.bankDescription}</p>
+                <p className="text-xs text-muted-foreground">
+                  {protectedPayment ? copy.bankDescription : sellerType === 'kariv' ? directCopy.karivDescription : directCopy.description(sellerName)}
+                </p>
               </div>
               {isSelected && <Check size={18} className="text-primary" />}
             </button>
@@ -52,11 +88,11 @@ export default function PaymentMethodSelector({ selected, onSelect, escrowRefere
               <div className="px-4 pb-4 border-t border-border/50 pt-3">
                 <div className="space-y-1.5 text-xs">
                   <p className="text-muted-foreground">
-                    {t('pages.portal.bankTransferInfo')}
+                    {protectedPayment ? t('pages.portal.bankTransferInfo') : directCopy.reference}
                   </p>
                   <div className="flex justify-between pt-1">
                     <span className="text-muted-foreground">{t('pages.portal.paymentReference')}:</span>
-                    <span className="text-primary font-mono font-bold">{escrowReference}</span>
+                    <span className="text-primary font-mono font-bold">{reference}</span>
                   </div>
                 </div>
               </div>

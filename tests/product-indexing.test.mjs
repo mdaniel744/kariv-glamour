@@ -21,6 +21,8 @@ function productRoute(getProductBySlug) {
     '@/lib/base44Server': { getProductBySlug },
     '@/lib/seo': seo, '@/lib/productMerchant': merchant, '@/lib/productIndexing': indexing, '@/lib/slug': slug,
     '@/lib/exchangeRatesServer': {}, '@/lib/currencyContext': {},
+    '@/lib/purchasePolicyServer': { getProductPurchasePolicy: async () => null },
+    '@/lib/purchasePolicyUi': { publicPurchasePolicy: (policy) => policy },
     '@/components/product/ProductPageSections': {},
     '@/components/next-pages/ProductDetailPageClient': {},
   };

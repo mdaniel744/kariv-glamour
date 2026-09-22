@@ -12,6 +12,8 @@ export async function getCurrentUser() {
   return {
     id: user.id,
     email: user.primaryEmailAddress?.emailAddress || '',
+    emailVerified: user.primaryEmailAddress?.verification?.status === 'verified',
+    createdAt: user.createdAt ? new Date(user.createdAt).toISOString() : null,
     fullName: user.fullName || '',
     role: user.publicMetadata?.role || 'buyer',
   };

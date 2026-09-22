@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useLocalizedField } from '@/lib/localize';
-import { getMyOrder, getMyOrderDispute, selectPaymentMethod, flagOrder, confirmPaymentSent } from '@/actions/orders';
+import { cancelMyUnpaidOrder, getMyOrder, getMyOrderDispute, selectPaymentMethod, flagOrder, confirmPaymentSent } from '@/actions/orders';
 import { useTranslation } from 'react-i18next';
 import LocalizedLink from '@/components/LocalizedLink';
 import { formatPrice } from '@/lib/constants';
-import { ArrowLeft, ShieldCheck, Truck, Package, Building2, CreditCard, Bitcoin, Flag, AlertTriangle, X, Star } from 'lucide-react';
-import EscrowTimeline from '@/components/escrow/EscrowTimeline';
-import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
+import { ArrowLeft, ShieldCheck, Truck, Package, Flag, AlertTriangle, X, Star } from 'lucide-react';
+import OrderTimeline from '@/components/orders/OrderTimeline';
+import OrderStatusBadge from '@/components/orders/OrderStatusBadge';
 import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import PaymentMethodSelector from '@/components/escrow/PaymentMethodSelector';
 import { getEscrowCopy } from '@/lib/escrowCopy';
 import { useLanguage } from '@/lib/languageContext';
 import CryptoCheckoutButton from '@/components/escrow/CryptoCheckoutButton';
 import PaymentProofUploader from '@/components/escrow/PaymentProofUploader';
-
-const ICON_MAP = { Building2, CreditCard, Bitcoin };
+import { getDirectOrderCopy, getPurchaseRouteLabel, isProtectedOrder } from '@/lib/orderPresentation';
 
 const ORDER_COPY = {
   cs: {
@@ -55,6 +54,7 @@ export default function PortalOrderDetail({ id: providedId }) {
   const [flagReason, setFlagReason] = useState('');
   const [flagDescription, setFlagDescription] = useState('');
   const [flagging, setFlagging] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -114,10 +114,26 @@ export default function PortalOrderDetail({ id: providedId }) {
     }
   };
 
+  const handleCancelOrder = async () => {
+    if (!window.confirm(t('pages.portal.cancelUnpaidConfirm'))) return;
+    setCancelling(true);
+    try {
+      const res = await cancelMyUnpaidOrder(id);
+      if (res.ok) setOrder(res.order);
+      else alert(res.error);
+    } finally {
+      setCancelling(false);
+    }
+  };
+
   if (loading) return <div className="space-y-3">{[...Array(4)].map((_, i) => <div key={i} className="h-16 bg-card animate-pulse" />)}</div>;
   if (!order) return <div className="text-center py-12"><p className="text-sm text-muted-foreground">{t('pages.portal.orderNotFound', { defaultValue: 'Order not found.' })}</p></div>;
 
+  const protectedOrder = isProtectedOrder(order);
+  const orderCopy = protectedOrder ? escrowCopy : getDirectOrderCopy(locale);
+  const orderReference = order.orderReference || order.escrowReference;
   const showPaymentSelector = order.escrowStatus === 'dealer_accepted' && !order.paymentMethod;
+  const canCancelUnpaid = ['pending_review', 'dealer_accepted'].includes(order.escrowStatus) && !order.paymentProofUrl;
 
   return (
     <div>
@@ -128,27 +144,52 @@ export default function PortalOrderDetail({ id: providedId }) {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-xl font-display text-foreground font-light">{t('pages.portal.orderDetails')}</h1>
-          <p className="text-[10px] text-muted-foreground font-mono mt-1">{order.escrowReference}</p>
+          <p className="text-[10px] text-muted-foreground font-mono mt-1">{orderReference}</p>
+          <p className="mt-1 text-[9px] uppercase tracking-[0.08em] text-primary">{getPurchaseRouteLabel(order, locale)}</p>
         </div>
-        <EscrowStatusBadge status={order.escrowStatus} size="lg" />
+        <OrderStatusBadge order={order} size="lg" />
       </div>
 
       {/* Timeline */}
       <div className="bg-card border border-border p-5 mb-6 overflow-x-auto">
-        <EscrowTimeline currentStatus={order.escrowStatus} />
+        <OrderTimeline order={order} />
       </div>
 
       {/* Status description */}
       <div className="bg-primary/5 border border-primary/20 p-4 mb-6 flex items-start gap-3">
         <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
-        <p className="text-xs text-foreground">{escrowCopy.descriptions[order.escrowStatus]}</p>
+        <p className="text-xs text-foreground">{orderCopy.descriptions[order.escrowStatus]}</p>
       </div>
+
+      {canCancelUnpaid && (
+        <div className="mb-6 rounded-xl border border-border bg-card p-4 sm:flex sm:items-center sm:justify-between sm:gap-4">
+          <div>
+            <p className="text-xs font-medium text-foreground">{t('pages.portal.cancelUnpaidTitle')}</p>
+            <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">{t('pages.portal.cancelUnpaidDesc')}</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleCancelOrder}
+            disabled={cancelling}
+            className="mt-3 w-full rounded-xl border border-destructive/40 px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-destructive transition-colors hover:bg-destructive/5 disabled:opacity-50 sm:mt-0 sm:w-auto sm:flex-shrink-0"
+          >
+            {cancelling ? t('pages.portal.cancellingOrder') : t('pages.portal.cancelUnpaidOrder')}
+          </button>
+        </div>
+      )}
 
       {/* Payment selection — only when dealer accepted and no method chosen */}
       {showPaymentSelector && (
         <div className="border border-primary/30 p-5 mb-6">
           <h2 className="text-sm font-medium text-foreground mb-4">{t('pages.portal.selectPayment', { defaultValue: 'Select Your Payment Method' })}</h2>
-          <PaymentMethodSelector selected={paymentMethod} onSelect={setPaymentMethod} escrowReference={order.escrowReference} />
+          <PaymentMethodSelector
+            selected={paymentMethod}
+            onSelect={setPaymentMethod}
+            orderReference={orderReference}
+            protectedPayment={protectedOrder}
+            sellerName={order.dealerName || 'Kariv'}
+            sellerType={order.dealerId ? 'dealer' : 'kariv'}
+          />
           <button
             onClick={handleSelectPayment}
             disabled={!paymentMethod || savingPayment}
@@ -167,21 +208,38 @@ export default function PortalOrderDetail({ id: providedId }) {
           {order.paymentMethod === 'bank_transfer' && (
             <div className="space-y-1.5 text-xs mb-4">
               <p className="text-muted-foreground">
-                {t('pages.portal.bankTransferInfo', { defaultValue: 'Bank transfer details will be provided after the dealer confirms availability. Use your Escrow Reference as the payment reference.' })}
+                {protectedOrder
+                  ? t('pages.portal.protectedPaymentInstructionsIntro')
+                  : order.dealerId
+                    ? t('pages.portal.directPaymentInstructionsIntro', { seller: order.dealerName || t('pages.productDetail.verifiedDealer') })
+                    : t('pages.portal.karivPaymentInstructionsIntro')}
               </p>
-              <div className="flex justify-between pt-1"><span className="text-muted-foreground">{t('pages.portal.paymentReference')}:</span><span className="text-primary font-mono font-bold">{order.escrowReference}</span></div>
+              {order.sellerPaymentInstructions && (
+                <div className="my-3 rounded-xl border border-primary/25 bg-background p-4">
+                  <p className="mb-2 text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{t('pages.portal.verifiedPaymentDetails')}</p>
+                  <p className="whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground">{order.sellerPaymentInstructions}</p>
+                </div>
+              )}
+              {!order.sellerPaymentInstructions && (
+                <p className="my-3 rounded-xl border border-amber-500/25 bg-amber-500/5 p-3 text-[11px] text-amber-700 dark:text-amber-300">{t('pages.portal.paymentDetailsUnavailable')}</p>
+              )}
+              <div className="flex justify-between pt-1"><span className="text-muted-foreground">{t('pages.portal.paymentReference')}:</span><span className="text-primary font-mono font-bold">{orderReference}</span></div>
               <div className="flex justify-between pt-1"><span className="text-muted-foreground">{t('pages.portal.total')}</span><span className="text-primary font-bold">{formatPrice(order.totalAmount, order.currency || 'EUR')} ({order.currency || 'EUR'})</span></div>
             </div>
           )}
 
           {order.paymentMethod === 'crypto' && (
-            <CryptoCheckoutButton orderId={order.id} escrowReference={order.escrowReference} />
+            <CryptoCheckoutButton orderId={order.id} escrowReference={orderReference} />
           )}
 
-          {order.paymentStatus === 'Awaiting Confirmation' ? (
+          {order.sellerPaymentInstructions && (order.paymentStatus === 'Awaiting Confirmation' ? (
             <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 mt-3 pt-3 border-t border-border">
               <ShieldCheck size={14} />
-              <span>{t('pages.portal.paymentSent', { defaultValue: 'Payment sent — awaiting admin confirmation. You will be notified once funds are verified in escrow.' })}</span>
+              <span>
+                {protectedOrder
+                  ? t('pages.portal.paymentSent', { defaultValue: 'Payment sent — awaiting confirmation. You will be notified once protected funds are verified.' })
+                  : t('pages.portal.directPaymentSent')}
+              </span>
             </div>
           ) : (
             <>
@@ -194,6 +252,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                 </div>
               )}
               <PaymentProofUploader
+                orderId={order.id}
                 paymentMethod={order.paymentMethod}
                 onUploaded={setPaymentProofUrl}
                 proofUrl={order.paymentProofUrl}
@@ -215,7 +274,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                 </p>
               )}
             </>
-          )}
+          ))}
         </div>
       )}
 
@@ -272,7 +331,11 @@ export default function PortalOrderDetail({ id: providedId }) {
                 <Package size={18} className="text-primary flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inTransit', { defaultValue: 'Watch In Transit' })}</p>
-                  <p className="text-[11px] text-muted-foreground">{t('pages.portal.courierDeliveryNote', { defaultValue: 'Your watch is on its way. Delivery will be confirmed by our courier service. Once confirmed, your 14-day inspection period will begin automatically — no action needed from you.' })}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {protectedOrder
+                      ? t('pages.portal.courierDeliveryNote', { defaultValue: 'Your watch is on its way. Delivery will be confirmed by our courier service. Once confirmed, your 14-day inspection period will begin automatically — no action needed from you.' })
+                      : t('pages.portal.directInTransitDesc')}
+                  </p>
                 </div>
               </div>
             </div>
@@ -284,9 +347,16 @@ export default function PortalOrderDetail({ id: providedId }) {
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={18} className="text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-xs font-medium text-primary mb-1">{t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })}</p>
+                    <p className="text-xs font-medium text-primary mb-1">
+                      {protectedOrder
+                        ? t('pages.portal.inspectionPeriod', { defaultValue: '14-Day Inspection Period Active' })
+                        : t('pages.portal.directDeliveryWindowTitle')}
+                    </p>
                     <p className="text-[11px] text-muted-foreground">
-                      {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString(locale)}. {t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your payment is held in escrow. Funds will be released to the dealer after the 14-day inspection period ends, unless you file a dispute.' })}
+                      {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString(locale)}.{' '}
+                      {protectedOrder
+                        ? t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your protected payment remains held during the 14-day inspection period unless a dispute is filed.' })
+                        : t('pages.portal.directDeliveryWindowDesc')}
                     </p>
                   </div>
                 </div>
@@ -300,7 +370,9 @@ export default function PortalOrderDetail({ id: providedId }) {
                     <div>
                       <p className="text-xs font-medium text-amber-500 mb-1">{t('pages.portal.disputeOpen', { defaultValue: 'Dispute Case Open' })}</p>
                       <p className="text-[11px] text-muted-foreground mb-2">
-                        {t('pages.portal.disputeOpenDesc', { defaultValue: 'You flagged this order. Our mediation team is reviewing your case. Escrow funds are frozen until the dispute is resolved.' })}
+                        {protectedOrder
+                          ? t('pages.portal.disputeOpenDesc', { defaultValue: 'You flagged this order. Our mediation team is reviewing your case. Protected funds remain frozen while the dispute is reviewed.' })
+                          : t('pages.portal.directDisputeOpenDesc')}
                       </p>
                       <div className="text-[11px] text-muted-foreground space-y-0.5">
                         <p><span className="text-foreground">{copy.reason}:</span> {copy.reasons[dispute.reason] || dispute.reason.replace(/_/g, ' ')}</p>
@@ -318,7 +390,11 @@ export default function PortalOrderDetail({ id: providedId }) {
                     <Flag size={18} className="text-destructive flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="text-xs font-medium text-destructive mb-1">{t('pages.portal.flagOrder', { defaultValue: 'Flag This Order' })}</p>
-                      <p className="text-[11px] text-muted-foreground">{t('pages.portal.flagOrderDesc', { defaultValue: 'Experiencing an issue with your watch? Flag this order to open a dispute case. Our mediation team will review and resolve it per our buyer protection policy. Funds remain frozen in escrow until resolved.' })}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {protectedOrder
+                          ? t('pages.portal.flagOrderDesc', { defaultValue: 'Experiencing an issue with your watch? Flag this order for review. Protected funds remain on hold while the case is reviewed.' })
+                          : t('pages.portal.directFlagOrderDesc')}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -417,7 +493,7 @@ export default function PortalOrderDetail({ id: providedId }) {
       )}
 
       <div className="mt-6">
-        <EscrowTrustBadge />
+        {protectedOrder && <EscrowTrustBadge />}
       </div>
     </div>
   );

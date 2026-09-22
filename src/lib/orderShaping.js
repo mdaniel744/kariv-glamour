@@ -8,14 +8,19 @@ export function formatEscrowReference(id) {
   return 'KG-' + String(id).replace(/-/g, '').slice(0, 8).toUpperCase();
 }
 
-export function deriveOrderStatus(escrowStatus) {
+export function deriveOrderStatus(escrowStatus, purchaseStatus = null) {
+  if (purchaseStatus === 'completed' || purchaseStatus === 'delivered') return 'Delivered';
+  if (purchaseStatus === 'shipped') return 'Shipped';
+  if (purchaseStatus === 'cancelled') return 'Cancelled';
+  if (purchaseStatus) return 'Processing';
   if (escrowStatus === 'funds_released') return 'Delivered';
   if (escrowStatus === 'shipped' || escrowStatus === 'verified') return 'Shipped';
   if (escrowStatus === 'cancelled') return 'Cancelled';
   return 'Processing';
 }
 
-export function derivePaymentStatus({ escrowStatus, paymentReference, justificationMessage }) {
+export function derivePaymentStatus({ escrowStatus, purchaseStatus, paymentReference, justificationMessage }) {
+  if (['paid', 'shipped', 'delivered', 'completed'].includes(purchaseStatus)) return 'Paid';
   if (['funds_secured', 'shipped', 'verified', 'funds_released'].includes(escrowStatus)) return 'Paid';
   if (justificationMessage) return 'Justification Requested';
   if (paymentReference) return 'Awaiting Confirmation';
@@ -39,24 +44,35 @@ export function mapOrderLineItem(item) {
 // identities: Map<clerkUserId, {fullName, email, phone}> from loadIdentities()
 // justificationMessage: string|null — always null until Phase 6 wires the
 // order_messages.kind-based derivation.
-export function mapOrderRow(row, { justificationMessage = null, identities = new Map() } = {}) {
+export function mapOrderRow(row, { justificationMessage = null, identities = new Map(), includePolicyAudit = false } = {}) {
   const products = Array.isArray(row.products) ? row.products.map(mapOrderLineItem) : [];
   const buyerIdentity = identities.get(row.buyer_user_id);
   const dealerIdentity = row.dealer_user_id ? identities.get(row.dealer_user_id) : null;
+  const purchaseRoute = row.purchase_route || (row.dealer_user_id ? 'escrow' : 'kariv_direct');
+  const policySnapshot = row.purchase_policy_snapshot || null;
+  const orderReference = formatEscrowReference(row.id);
 
-  return {
+  const shaped = {
     id: row.id,
-    escrowReference: formatEscrowReference(row.id),
+    orderReference,
+    escrowReference: orderReference,
     escrowStatus: row.escrow_status,
-    orderStatus: deriveOrderStatus(row.escrow_status),
+    purchaseRoute,
+    isProtected: purchaseRoute === 'escrow',
+    purchaseStatus: row.purchase_status || null,
+    buyerSelectedProtection: row.buyer_selected_protection === true,
+    orderStatus: deriveOrderStatus(row.escrow_status, row.purchase_status),
     paymentMethod: row.payment_method,
     paymentStatus: derivePaymentStatus({
       escrowStatus: row.escrow_status,
+      purchaseStatus: row.purchase_status,
       paymentReference: row.payment_reference,
       justificationMessage,
     }),
     justificationMessage,
     paymentProofUrl: row.payment_reference || null,
+    paymentReviewDeadline: row.payment_review_deadline || null,
+    sellerPaymentInstructions: row.seller_payment_instructions || '',
     products,
     totalAmount: row.total_amount,
     currency: row.currency,
@@ -68,14 +84,33 @@ export function mapOrderRow(row, { justificationMessage = null, identities = new
     dealerId: row.dealer_user_id,
     customerName: buyerIdentity?.fullName || '',
     customerEmail: buyerIdentity?.email || '',
-    dealerName: dealerIdentity?.fullName || '',
+    // Keep the verified business shown as seller of record stable for the
+    // lifetime of the order. Clerk identity changes must not rewrite who the
+    // buyer was told they were paying at checkout.
+    dealerName: policySnapshot?.seller_name || dealerIdentity?.fullName || '',
     idempotencyKey: row.idempotency_key,
+    inventoryReserved: row.inventory_reserved === true,
+    reservationExpiresAt: row.reservation_expires_at || null,
     created_date: row.created_at,
     updated_date: row.updated_at,
   };
+
+  if (includePolicyAudit) {
+    shaped.purchasePolicyVersion = row.purchase_policy_version ?? policySnapshot?.version ?? 0;
+    shaped.policySnapshot = policySnapshot;
+    shaped.routeDecision = {
+      purchaseRoute,
+      reasonCodes: policySnapshot?.reason_codes || [],
+      dealerTier: policySnapshot?.dealer_tier || null,
+      directLimitEur: policySnapshot?.direct_limit_eur ?? null,
+      sourceValueEur: policySnapshot?.source_value_eur ?? null,
+    };
+  }
+
+  return shaped;
 }
 
-export function mapOrderMessageRow(row, { order, identities = new Map() } = {}) {
+export function mapOrderMessageRow(row, { order = null, identities = new Map() } = {}) {
   const buyerIdentity = order ? identities.get(order.buyer_user_id) : null;
   const senderIdentity = identities.get(row.sender_user_id);
   return {

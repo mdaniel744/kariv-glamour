@@ -3,12 +3,31 @@ import LocalizedLink from '@/components/LocalizedLink';
 import { getAdminOrders, updateEscrowStatus, updateTrackingNumber, requestJustification, adminReplyToOrder } from '@/actions/orders';
 import { formatPrice } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
-import EscrowStatusBadge from '@/components/escrow/EscrowStatusBadge';
-import { ESCROW_STATUS_LABELS, ESCROW_TRANSITIONS } from '@/lib/escrowConstants';
+import OrderStatusBadge from '@/components/orders/OrderStatusBadge';
+import { ESCROW_TRANSITIONS } from '@/lib/escrowConstants';
+import { getEscrowCopy } from '@/lib/escrowCopy';
+import { getDirectOrderCopy, getPurchaseRouteLabel, isProtectedOrder } from '@/lib/orderPresentation';
+import { useLanguage } from '@/lib/languageContext';
 import { ChevronDown, Truck, FileCheck2, ExternalLink, Send } from 'lucide-react';
+
+function availableTransitions(order) {
+  let transitions = ESCROW_TRANSITIONS[order.escrowStatus] || [];
+  if (order.purchaseRoute === 'dealer_direct') {
+    const dealerOwnedTransitions = new Set(['dealer_accepted', 'funds_secured', 'shipped']);
+    transitions = transitions.filter((status) => !dealerOwnedTransitions.has(status));
+  }
+  if (!String(order.trackingNumber || '').trim()) {
+    transitions = transitions.filter((status) => status !== 'shipped');
+  }
+  if (order.escrowStatus !== 'verified') return transitions;
+  const deliveredAt = Date.parse(order.deliveryConfirmedAt || '');
+  const reviewEnded = Number.isFinite(deliveredAt) && Date.now() >= deliveredAt + 14 * 24 * 60 * 60 * 1000;
+  return reviewEnded ? transitions : transitions.filter((status) => status !== 'funds_released');
+}
 
 export default function AdminOrders() {
   const { toast } = useToast();
+  const { locale } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
@@ -23,11 +42,15 @@ export default function AdminOrders() {
     getAdminOrders({ limit: 50 }).then(setOrders).catch(console.error).finally(() => setLoading(false));
   }, []);
 
-  const updateEscrow = async (id, escrowStatus) => {
+  const statusCopyFor = (order) => isProtectedOrder(order) ? getEscrowCopy(locale) : getDirectOrderCopy(locale);
+
+  const updateEscrow = async (order, escrowStatus) => {
+    const id = order.id;
     const res = await updateEscrowStatus(id, escrowStatus);
     if (res.ok) {
       setOrders(prev => prev.map(o => o.id === id ? res.order : o));
-      toast({ title: `Escrow status updated to ${ESCROW_STATUS_LABELS[escrowStatus]}` });
+      const prefix = isProtectedOrder(res.order) ? 'Protected payment' : 'Order';
+      toast({ title: `${prefix} status updated to ${statusCopyFor(res.order).labels[escrowStatus]}` });
     } else {
       toast({ title: 'Error', description: res.error, variant: 'destructive' });
     }
@@ -84,7 +107,7 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <h1 className="text-xl font-display text-[#E5E5E5] font-light mb-6">Orders & Escrow</h1>
+      <h1 className="text-xl font-display text-[#E5E5E5] font-light mb-6">Orders</h1>
       {loading ? (
         <div className="space-y-2">{[...Array(3)].map((_, i) => <div key={i} className="h-20 bg-[#111] animate-pulse" />)}</div>
       ) : orders.length === 0 ? (
@@ -103,12 +126,13 @@ export default function AdminOrders() {
                         <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                       </p>
                       <p className="text-[10px] text-[#8E8E93]">{o.customerEmail}</p>
-                      <p className="text-[10px] text-[#8E8E93] font-mono">{o.escrowReference}</p>
+                      <p className="text-[10px] text-[#8E8E93] font-mono">{o.orderReference || o.escrowReference}</p>
+                      <p className="mt-1 text-[9px] uppercase tracking-[0.1em] text-[#C5A367]">{getPurchaseRouteLabel(o, locale)}</p>
                     </div>
                   </LocalizedLink>
                   <div className="text-right">
                     <p className="text-sm text-[#C5A367] font-medium mb-1">{formatPrice(o.totalAmount, o.currency || 'EUR')}</p>
-                    <EscrowStatusBadge status={o.escrowStatus} />
+                    <OrderStatusBadge order={o} status={o.escrowStatus} locale={locale} />
                   </div>
                 </div>
                 <button onClick={() => setExpanded(expanded === o.id ? null : o.id)} className="flex items-center gap-1 text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] hover:text-[#E5E5E5]">
@@ -118,11 +142,11 @@ export default function AdminOrders() {
 
               {expanded === o.id && (
                 <div className="border-t border-white/5 p-4 space-y-3">
-                  {/* Escrow status controls */}
+                  {/* Status controls */}
                   <div>
-                    <p className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-1.5">Escrow Status</p>
-                    <select value={o.escrowStatus} onChange={e => updateEscrow(o.id, e.target.value)} className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 outline-none focus:border-[#C5A367]">
-                      {[o.escrowStatus, ...(ESCROW_TRANSITIONS[o.escrowStatus] || [])].map(key => <option key={key} value={key}>{ESCROW_STATUS_LABELS[key]}</option>)}
+                    <p className="text-[10px] tracking-[0.1em] uppercase text-[#8E8E93] mb-1.5">{isProtectedOrder(o) ? 'Protected Payment Status' : 'Order Status'}</p>
+                    <select value={o.escrowStatus} onChange={e => updateEscrow(o, e.target.value)} className="w-full bg-[#0A0A0B] border border-white/10 text-[10px] text-[#E5E5E5] px-2 py-1.5 outline-none focus:border-[#C5A367]">
+                      {[o.escrowStatus, ...availableTransitions(o)].map(key => <option key={key} value={key}>{statusCopyFor(o).labels[key]}</option>)}
                     </select>
                   </div>
 

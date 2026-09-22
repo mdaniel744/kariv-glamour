@@ -39,6 +39,21 @@ export const metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  icons: {
+    icon: [
+      {
+        url: '/logos/kariv-emblem-light.png',
+        type: 'image/png',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/logos/kariv-emblem-dark.png',
+        type: 'image/png',
+        media: '(prefers-color-scheme: dark)',
+      },
+    ],
+    apple: '/logos/kariv-emblem-light.png',
+  },
   verification: {
     google: '4OzTksrDE0TTdalip4DhOPFHOiphvlyRu5-3QyOUf_c',
   },

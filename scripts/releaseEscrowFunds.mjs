@@ -1,13 +1,12 @@
-// 14-day escrow auto-release job. Finds orders that have sat in `verified`
-// past their inspection window and releases funds, unless a dispute is
-// still open. Run on a schedule (see ecosystem.config.cjs) via PM2's
+// Protected-order and reservation maintenance job. It identifies orders that
+// have passed their 14-day inspection window so an administrator can complete
+// the real dealer payout and record its reference. It never claims or records
+// a payout merely because time elapsed. Run on a schedule (see ecosystem.config.cjs) via PM2's
 // --cron-restart, not Supabase pg_cron — this is Kariv-specific business
 // logic (dispute freeze, buyer notification), not something that belongs
 // in a Supabase project shared with two other stores.
 //
-// Idempotent by construction: the update is conditioned on
-// escrow_status = 'verified', so running this twice in a row is a no-op
-// the second time. Safe to re-run after a crash.
+// Expired unpaid inventory holds are released atomically and idempotently.
 //
 // Run manually with:
 //   node --env-file=.env.local scripts/releaseEscrowFunds.mjs
@@ -44,6 +43,7 @@ async function main() {
     .from('orders')
     .select('id, delivery_confirmed_at')
     .eq('store_id', STORE_ID)
+    .eq('purchase_route', 'escrow')
     .eq('escrow_status', 'verified')
     .lte('delivery_confirmed_at', cutoff);
 
@@ -52,61 +52,57 @@ async function main() {
     process.exit(1);
   }
 
-  if (!candidates.length) {
-    console.log('[releaseEscrowFunds] checked=0 released=0 frozen=0');
-    return;
+  // Payout itself happens outside this job. The admin order screen requires a
+  // completed bank/provider reference and the database writes an immutable
+  // financial event before the order can become completed.
+  const payoutDue = (candidates || []).length;
+
+  // Release abandoned unpaid inventory holds. A submitted payment proof is
+  // never auto-cancelled; staff must review it even if the original hold
+  // deadline has passed.
+  const now = new Date().toISOString();
+  const { count: overdueProofReviews, error: proofReviewError } = await supabase
+    .from('orders')
+    .select('id', { count: 'exact', head: true })
+    .eq('store_id', STORE_ID)
+    .eq('escrow_status', 'dealer_accepted')
+    .eq('purchase_status', 'awaiting_payment')
+    .not('payment_reference', 'is', null)
+    .lte('payment_review_deadline', now);
+
+  if (proofReviewError) {
+    console.error('[releaseEscrowFunds] Failed to count overdue payment-proof reviews:', proofReviewError.message);
   }
 
-  const ids = candidates.map(o => o.id);
-  const { data: openDisputes, error: disputeError } = await supabase
-    .from('disputes')
-    .select('order_id')
-    .in('order_id', ids)
-    .in('status', ['open', 'under_review']);
+  const { data: expiredReservations, error: reservationError } = await supabase
+    .from('orders')
+    .select('id')
+    .eq('store_id', STORE_ID)
+    .eq('inventory_reserved', true)
+    .is('payment_reference', null)
+    .in('escrow_status', ['pending_review', 'dealer_accepted'])
+    .lte('reservation_expires_at', now)
+    .limit(200);
 
-  if (disputeError) {
-    console.error('[releaseEscrowFunds] Failed to check disputes:', disputeError.message);
+  if (reservationError) {
+    console.error('[releaseEscrowFunds] Failed to fetch expired reservations:', reservationError.message);
     process.exit(1);
   }
 
-  const frozenIds = new Set((openDisputes || []).map(d => d.order_id));
-  let released = 0;
-
-  for (const order of candidates) {
-    if (frozenIds.has(order.id)) continue;
-
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ escrow_status: 'funds_released', updated_at: new Date().toISOString() })
-      .eq('id', order.id)
-      .eq('escrow_status', 'verified') // guard against a concurrent admin/dispute transition
-      .select('id')
-      .maybeSingle();
-
+  let reservationsReleased = 0;
+  for (const order of expiredReservations || []) {
+    const { data, error } = await supabase.rpc('cancel_kariv_order_before_payment', {
+      p_store_id: STORE_ID,
+      p_order_id: order.id,
+    });
     if (error) {
-      console.error(`[releaseEscrowFunds] Failed to release order ${order.id}:`, error.message);
+      console.error(`[releaseEscrowFunds] Failed to release reservation ${order.id}:`, error.message);
       continue;
     }
-    if (!data) continue; // someone else moved it between fetch and update — skip
-
-    // Best-effort system message. sender_user_id/subject/kind columns may
-    // not exist yet or may be non-nullable in ways this doesn't anticipate
-    // — a failure here shouldn't block the release itself.
-    await supabase.from('order_messages').insert({
-      order_id: order.id,
-      sender: 'admin',
-      sender_user_id: 'system',
-      recipient_role: 'buyer',
-      subject: 'Funds Released',
-      message: 'The 14-day inspection period has ended with no dispute filed. Funds have been released to the dealer.',
-      kind: 'message',
-      is_read: false,
-    });
-
-    released += 1;
+    if (data === true) reservationsReleased += 1;
   }
 
-  console.log(`[releaseEscrowFunds] checked=${candidates.length} released=${released} frozen=${frozenIds.size}`);
+  console.log(`[releaseEscrowFunds] protectedPayoutsDue=${payoutDue} overdueProofReviews=${overdueProofReviews ?? 'unavailable'} expiredReservations=${(expiredReservations || []).length} reservationsReleased=${reservationsReleased}`);
 }
 
 main().then(() => process.exit(0)).catch(e => {

@@ -202,7 +202,7 @@ export default function AdminCustomers() {
                         <div className={`max-w-[80%] border p-3 ${msg.sender === 'buyer' ? 'border-amber-600/30 bg-amber-950/20' : 'border-[#C5A367]/20 bg-[#C5A367]/5'}`}>
                           <div className="flex items-center gap-2 mb-1">
                             <p className="text-[10px] font-medium text-[#E5E5E5]">
-                              {msg.sender === 'admin' ? 'You (Escrow)' : selectedCustomer.fullName}
+                              {msg.sender === 'admin' ? 'You (Admin)' : selectedCustomer.fullName}
                             </p>
                             {msg.sender === 'admin' && <ShieldCheck size={10} className="text-[#C5A367]" />}
                             <p className="text-[9px] text-[#8E8E93]">{new Date(msg.created_date).toLocaleString()}</p>

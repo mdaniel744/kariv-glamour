@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { getProductPricing } from '../src/lib/productMerchant.js';
 import { matchesCheckoutPrice } from '../src/lib/currencyConversion.js';
 import * as orderShaping from '../src/lib/orderShaping.js';
+import * as purchasePolicy from '../src/lib/purchasePolicy.js';
 
 const today = new Date().toISOString().slice(0, 10);
 const snapshot = { date: today, source: 'CNB', rates: { EUR: 24.2, USD: 22, CZK: 1 } };
@@ -14,8 +15,34 @@ const product = { id: 'watch', store_id: 'kariv', name: 'Watch', price: 1000, sa
 function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
   const reads = [];
   const writes = [];
+  let createdOrder = null;
   let rateCalls = 0;
   const client = {
+    async rpc(name, args) {
+      assert.equal(name, 'create_kariv_order_with_reservation');
+      createdOrder = {
+        id: '12345678-order',
+        store_id: args.p_store_id,
+        buyer_user_id: args.p_buyer_user_id,
+        dealer_user_id: args.p_dealer_user_id,
+        products: args.p_products,
+        total_amount: args.p_total_amount,
+        currency: args.p_currency,
+        payment_method: args.p_payment_method,
+        escrow_status: args.p_escrow_status,
+        purchase_route: args.p_purchase_route,
+        purchase_status: args.p_purchase_status,
+        buyer_selected_protection: args.p_buyer_selected_protection,
+        purchase_policy_version: args.p_purchase_policy_version,
+        purchase_policy_snapshot: args.p_purchase_policy_snapshot,
+        shipping_status: args.p_shipping_status,
+        shipping_address: args.p_shipping_address,
+        idempotency_key: args.p_idempotency_key,
+        inventory_reserved: true,
+      };
+      writes.push({ table: 'orders', value: createdOrder });
+      return { data: createdOrder.id, error: null };
+    },
     from(table) {
       const query = {
         filters: [], value: null, operation: 'read',
@@ -26,7 +53,7 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
         async maybeSingle() {
           reads.push({ table, filters: this.filters });
           if (table === 'products') return { data: watch, error: null };
-          if (table === 'orders') return { data: existing, error: null };
+          if (table === 'orders') return { data: existing || createdOrder, error: null };
           throw new Error('Unexpected read ' + table);
         },
         async single() {
@@ -44,7 +71,7 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
   };
   const imports = {
     '@/lib/supabaseAdmin': { supabaseAdmin: client },
-    '@/lib/serverAuth': { requireUser: async () => ({ id: 'buyer' }), requireDealer() {}, requireAdmin() {} },
+    '@/lib/serverAuth': { requireUser: async () => ({ id: 'buyer', emailVerified: true }), requireDealer() {}, requireAdmin() {} },
     '@/lib/supabaseData': { STORE_ID: 'kariv' },
     '@/lib/catalogTranslations': { loadCatalogTranslations: async () => ({ watch: { productTitle_cs: 'České hodinky', productTitle_en: 'English watch' } }) },
     '@/lib/orderIdentities': { loadIdentities: async () => new Map() },
@@ -53,6 +80,15 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
     '@/lib/productMerchant': { getProductPricing },
     '@/lib/currencyConversion': { matchesCheckoutPrice },
     '@/lib/exchangeRatesServer': { getCzkExchangeRates: async () => { rateCalls++; return rates; } },
+    '@/lib/purchasePolicy': purchasePolicy,
+    '@/lib/purchasePolicyServer': {
+      getProductPurchasePolicy: async (item, { buyerRequestsProtection = false } = {}) => purchasePolicy.evaluatePurchasePolicy({
+        dealerId: item.dealer_id || null,
+        sellerApproved: Boolean(item.dealer_id),
+        sourceValueEur: item.sale_price || item.price,
+        buyerRequestsProtection,
+      }),
+    },
   };
   const source = readFileSync(new URL('../src/actions/orders.js', import.meta.url), 'utf8');
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
@@ -63,7 +99,7 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
   return { createOrder: module.exports.createOrder, reads, writes, get rateCalls() { return rateCalls; } };
 }
 
-const request = { productId: 'watch', shippingDetails: { fullName: 'Buyer', street: 'Example 1', city: 'Praha', country: 'CZ', postalCode: '18600' }, idempotencyKey: 'checkout-reference', locale: 'cs', expectedPrice: 19360, expectedCurrency: 'CZK' };
+const request = { productId: 'watch', shippingDetails: { fullName: 'Buyer', street: 'Example 1', city: 'Praha', country: 'CZ', postalCode: '18600' }, idempotencyKey: 'checkout-reference', locale: 'cs', expectedPrice: 19360, expectedCurrency: 'CZK', expectedPurchaseRoute: 'escrow', expectedSellerKey: 'dealer:dealer' };
 
 test('Czech checkout stores real CZK order and line totals computed from fresh EUR sale price', async () => {
   const fixture = checkout();
@@ -80,6 +116,9 @@ test('Czech checkout stores real CZK order and line totals computed from fresh E
   assert.equal(saved.products[0].conversion.rate, 24.2);
   assert.equal(saved.products[0].conversion.rate_date, today);
   assert.equal(saved.payment_method, 'bank_transfer');
+  assert.equal(saved.purchase_route, 'escrow');
+  assert.equal(saved.purchase_status, 'awaiting_seller_confirmation');
+  assert.equal(saved.purchase_policy_snapshot.purchase_route, 'escrow');
   assert.equal(saved.store_id, 'kariv');
   assert.equal(saved.buyer_user_id, 'buyer');
   for (const read of fixture.reads) assert.ok(read.filters.some(([key, value]) => key === 'store_id' && value === 'kariv'));

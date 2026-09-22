@@ -29,10 +29,10 @@ export default function AdminDealerReviews() {
     load();
   }, [status]);
 
-  const moderate = async (reviewId, nextStatus) => {
+  const moderate = async (reviewId, nextStatus, updatedAt) => {
     setWorkingId(reviewId);
     try {
-      const result = await moderateDealerReview(reviewId, nextStatus);
+      const result = await moderateDealerReview(reviewId, nextStatus, updatedAt);
       if (!result.ok) {
         toast({ title: 'Moderation failed', description: result.error, variant: 'destructive' });
         return;
@@ -113,13 +113,13 @@ export default function AdminDealerReviews() {
 
               {review.title && <h2 className="mb-2 text-xs font-medium text-[#E5E5E5]">{review.title}</h2>}
               <p className="whitespace-pre-line text-xs leading-relaxed text-[#B5B5B8]">{review.reviewText}</p>
-              <p className="mt-3 text-[9px] text-[#666]">Submitted {new Date(review.created_date).toLocaleString()}</p>
+              <p className="mt-3 text-[9px] text-[#666]">Last updated {new Date(review.updated_date || review.created_date).toLocaleString()}</p>
 
               {review.status === 'pending' && (
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-white/5 pt-4">
                   <button
                     type="button"
-                    onClick={() => moderate(review.id, 'approved')}
+                    onClick={() => moderate(review.id, 'approved', review.updated_date)}
                     disabled={workingId === review.id}
                     className="flex items-center gap-2 bg-emerald-600 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-white disabled:opacity-50"
                   >
@@ -127,7 +127,7 @@ export default function AdminDealerReviews() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => moderate(review.id, 'rejected')}
+                    onClick={() => moderate(review.id, 'rejected', review.updated_date)}
                     disabled={workingId === review.id}
                     className="flex items-center gap-2 border border-red-500/30 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-red-400 disabled:opacity-50"
                   >

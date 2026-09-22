@@ -1,35 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ChevronRight, Store } from 'lucide-react';
 import LocalizedLink from '@/components/LocalizedLink';
 import StarRating from '@/components/dealer/StarRating';
 import MediaImage from '@/components/shared/MediaImage';
-import { getDealerRatingSummary } from '@/actions/dealerReviews';
 import { getMediaVariant } from '@/lib/media';
 import { useLanguage } from '@/lib/languageContext';
 
 export default function ProductDealerCard({ product, initialProfile = null }) {
   const { locale } = useLanguage();
-  const dealerUserId = product.dealerId || product.created_by_id;
-  const [profile, setProfile] = useState(initialProfile);
-
-  useEffect(() => {
-    setProfile(initialProfile);
-    if (!dealerUserId) return;
-    let active = true;
-    getDealerRatingSummary(dealerUserId).then((summary) => {
-      if (active && summary) {
-        setProfile({
-          ...summary,
-          ...(initialProfile || {}),
-          averageRating: summary.averageRating,
-          totalReviews: summary.totalReviews,
-        });
-      }
-    }).catch(() => {});
-    return () => { active = false; };
-  }, [dealerUserId, initialProfile]);
+  const dealerUserId = product.dealerId;
+  const profile = initialProfile;
 
   if (!dealerUserId) return null;
   const averageRating = Number(profile?.averageRating || 0);
@@ -46,12 +28,19 @@ export default function ProductDealerCard({ product, initialProfile = null }) {
         <div className="flex-1 min-w-0">
           <p className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground">{locale === 'cs' ? 'Prodejce' : locale === 'de' ? 'Verkäufer' : 'Sold By'}</p>
           <p className="text-sm text-foreground truncate group-hover:text-primary transition-colors">{profile?.displayName || product.dealerName || (locale === 'cs' ? 'Zobrazit profil prodejce' : locale === 'de' ? 'Händlerprofil ansehen' : 'View Dealer Profile')}</p>
-          {averageRating > 0 && (
+          {profile?.ratingsAvailable === true ? (
             <div className="flex items-center gap-1.5 mt-0.5">
               <StarRating rating={Math.round(averageRating)} size={10} />
-              <span className="text-[10px] text-muted-foreground">{averageRating.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({profile.totalReviews} {locale === 'cs' ? 'hodnocení' : locale === 'de' ? 'Bewertungen' : 'reviews'})</span>
+              <span className="text-[10px] text-muted-foreground">{averageRating.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({Number(profile.totalReviews || 0)} {locale === 'cs' ? 'hodnocení' : locale === 'de' ? 'Bewertungen' : 'reviews'})</span>
             </div>
-          )}
+          ) : profile?.ratingsAvailable === false ? (
+            <div className="mt-0.5 flex items-center gap-1.5">
+              <StarRating rating={0} size={10} />
+              <span className="text-[10px] text-muted-foreground">
+                {locale === 'cs' ? 'Hodnocení není dostupné' : locale === 'de' ? 'Bewertungen nicht verfügbar' : 'Ratings unavailable'}
+              </span>
+            </div>
+          ) : null}
         </div>
         <ChevronRight size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
       </div>
