@@ -138,11 +138,19 @@ test('dealer-owned product renders standard cart actions plus Contact Seller cho
     ...baseProduct,
     dealerId: 'dealer-1',
     dealerName: 'Chronos Prague',
+    purchasePolicy: {
+      sellerType: 'dealer',
+      dealerId: 'dealer-1',
+      sellerName: 'Chronos Prague',
+      purchaseRoute: 'manual_review',
+      buyerMayChooseProtection: false,
+    },
   });
 
   assert.match(html, />Contact Seller</);
   assert.match(html, />Add to Cart</);
   assert.match(html, />Buy Now</);
+  assert.doesNotMatch(html, />Currently unavailable</);
   assert.match(html, />Request a quote</);
   assert.match(html, />Make an offer</);
   assert.doesNotMatch(html, />Ask an Expert</);

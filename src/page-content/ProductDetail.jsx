@@ -117,7 +117,10 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const isKarivOwned = purchasePolicy.sellerType === 'kariv';
   const isManualReview = purchasePolicy.purchaseRoute === 'manual_review';
   const protectedPurchase = isProtectedPurchase(purchasePolicy);
-  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null && !isManualReview;
+  // Catalogue availability and dealer payment routing are separate concerns.
+  // An in-stock, correctly priced dealer watch can enter the standard cart;
+  // the server revalidates its seller/payment route at checkout.
+  const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null;
   const inCart = isInCart(product.id);
 
   const checkoutPath = buildCheckoutPath(product.id);

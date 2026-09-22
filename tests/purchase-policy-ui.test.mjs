@@ -96,9 +96,10 @@ test('authentication redirect preserves an optional protection route', () => {
   assert.match(middleware, /searchParams\.set\('returnTo', `\$\{pathname\}\$\{search\}`\)/);
 });
 
-test('manual-review products keep their safety blocker without showing the removed disclosure card', () => {
+test('dealer routing review does not make an in-stock product look unavailable', () => {
   const detail = readFileSync(new URL('../src/page-content/ProductDetail.jsx', import.meta.url), 'utf8');
-  assert.match(detail, /const canPurchase = [^;]*&& !isManualReview/);
+  assert.match(detail, /const canPurchase = availability\.inStock && pricing\.price != null && pricing\.currency != null;/);
+  assert.doesNotMatch(detail, /const canPurchase = [^;]*!isManualReview/);
   assert.match(detail, /disabled=\{!canPurchase\}/);
   assert.match(detail, /\{!isManualReview && !isKarivOwned && \(/);
   assert.doesNotMatch(detail, /manualReviewDisclosure/);
