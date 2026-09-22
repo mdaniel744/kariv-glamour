@@ -6,6 +6,10 @@ const migration = await readFile(
   new URL('../supabase/migrations/20260921090000_create_purchase_routing.sql', import.meta.url),
   'utf8',
 );
+const approvalOnlyMigration = await readFile(
+  new URL('../supabase/migrations/20260922130000_approved_dealer_checkout.sql', import.meta.url),
+  'utf8',
+);
 
 test('purchase routing migration is explicitly limited to the Kariv tenant', () => {
   assert.match(migration, /store_id = '7efd71bc-0287-4f40-8a2f-1de330c49522'::uuid/);
@@ -40,7 +44,7 @@ test('shared database collisions and nullable routing inputs fail closed', () =>
   assert.match(migration, /p_purchase_policy_version is distinct from 2/);
 });
 
-test('pending dealer applications can use protection but never direct payment', () => {
+test('the original migration established transaction-safe dealer routing', () => {
   const protectedEligibility = migration.match(
     /create or replace function public\.kariv_dealer_protected_eligible[\s\S]*?\n\$\$;/,
   )?.[0] || '';
@@ -70,6 +74,16 @@ test('pending dealer applications can use protection but never direct payment', 
   assert.match(createOrder, /p_purchase_route = 'escrow'[\s\S]*public\.kariv_dealer_protected_eligible/);
   assert.match(createOrder, /from public\.store_payment_destinations[\s\S]*v_destination\.verified_at is null/);
   assert.match(acceptProtected, /public\.kariv_dealer_protected_eligible/);
+});
+
+test('the latest migration makes admin approval the sole dealer-level checkout gate', () => {
+  assert.match(approvalOnlyMigration, /create or replace function public\.kariv_dealer_protected_eligible/);
+  assert.match(approvalOnlyMigration, /from public\.dealer_applications[\s\S]*order by created_at desc[\s\S]*limit 1/);
+  assert.match(approvalOnlyMigration, /return coalesce\(v_application_status = 'approved', false\)/);
+  assert.doesNotMatch(approvalOnlyMigration, /from public\.dealer_commerce_profiles|v_completed_sales|v_open_disputes|v_direct_limit|v_effective_tier/);
+  assert.match(approvalOnlyMigration, /p_store_id <> '7efd71bc-0287-4f40-8a2f-1de330c49522'::uuid/);
+  assert.match(approvalOnlyMigration, /revoke all on function public\.kariv_dealer_protected_eligible/);
+  assert.match(approvalOnlyMigration, /grant execute on function public\.kariv_dealer_protected_eligible[\s\S]*to service_role/);
 });
 
 test('payout details and purchase RPCs are service-role only', () => {

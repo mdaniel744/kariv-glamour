@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText, Star, ShieldCheck, HandCoins } from 'lucide-react';
+import { Package, Tag, Layers, ShoppingCart, Users, FileText, BookOpen, HelpCircle, LayoutDashboard, Store, Languages, BookMarked, Type, Settings, ScrollText, Star, HandCoins } from 'lucide-react';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
 import KarivLogo from '@/components/shared/KarivLogo';
@@ -25,10 +25,10 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const { localePath, locale } = useLanguage();
   const copy = ({
-    cs: { applications: 'Žádosti prodejců', purchaseRules: 'Pravidla plateb prodejců', offers: 'Cenové nabídky', translations: 'Překlady', glossary: 'Slovníček', strings: 'Texty rozhraní', settings: 'Nastavení překladů', logs: 'Protokol překladů' },
-    de: { applications: 'Händleranträge', purchaseRules: 'Händler-Zahlungsregeln', offers: 'Preisangebote', translations: 'Übersetzungen', glossary: 'Glossar', strings: 'Oberflächentexte', settings: 'Übersetzungseinstellungen', logs: 'Übersetzungsprotokolle' },
-    en: { applications: 'Dealer Applications', purchaseRules: 'Dealer Purchase Rules', offers: 'Product Offers', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' },
-  })[locale] || { applications: 'Dealer Applications', purchaseRules: 'Dealer Purchase Rules', offers: 'Product Offers', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' };
+    cs: { applications: 'Žádosti prodejců', offers: 'Cenové nabídky', translations: 'Překlady', glossary: 'Slovníček', strings: 'Texty rozhraní', settings: 'Nastavení překladů', logs: 'Protokol překladů' },
+    de: { applications: 'Händleranträge', offers: 'Preisangebote', translations: 'Übersetzungen', glossary: 'Glossar', strings: 'Oberflächentexte', settings: 'Übersetzungseinstellungen', logs: 'Übersetzungsprotokolle' },
+    en: { applications: 'Dealer Applications', offers: 'Product Offers', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' },
+  })[locale] || { applications: 'Dealer Applications', offers: 'Product Offers', translations: 'Translations', glossary: 'Glossary', strings: 'Strings', settings: 'Translation Settings', logs: 'Translation Logs' };
 
   const navItems = [
     { to: '/admin', icon: LayoutDashboard, label: t('dashboard'), exact: true },
@@ -37,7 +37,6 @@ export default function AdminLayout({ children }) {
     { to: '/admin/collections', icon: Layers, label: t('collections') },
     { to: '/admin/orders', icon: ShoppingCart, label: t('orders') },
     { to: '/admin/dealer-applications', icon: Store, label: copy.applications },
-    { to: '/admin/dealer-purchase-rules', icon: ShieldCheck, label: copy.purchaseRules },
     { to: '/admin/offers', icon: HandCoins, label: copy.offers },
     { to: '/admin/dealer-reviews', icon: Star, label: t('dealerReviews') },
     { to: '/admin/customers', icon: Users, label: t('customers') },

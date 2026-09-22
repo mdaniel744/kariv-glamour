@@ -121,7 +121,7 @@ test('Kariv checkout remains direct with a complete platform payment account', a
   assert.deepEqual(f.reads, []);
 });
 
-test('an approved new dealer with no commerce history uses protected checkout', async () => {
+test('an approved dealer immediately uses protected marketplace checkout', async () => {
   const f = fixture({
     profile: null,
     destinations: [{
@@ -142,12 +142,12 @@ test('an approved new dealer with no commerce history uses protected checkout', 
   const policy = await f.getProductPurchasePolicy(dealerProduct);
 
   assert.equal(policy.sellerName, 'New Dealer Ltd');
-  assert.equal(policy.dealerTier, purchasePolicy.DEALER_TIERS.PROBATIONARY);
-  assert.equal(policy.completedSales, 0);
+  assert.equal(policy.dealerTier, null);
   assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
   assert.equal(policy.escrowRequired, true);
   assert.equal(policy.directEligible, false);
-  assert.ok(policy.reasonCodes.includes('dealer_probationary'));
+  assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
+  assert.deepEqual(f.reads.map(({ table }) => table).sort(), ['dealer_applications', 'store_payment_destinations']);
 });
 
 test('a missing routing migration remains under review instead of opening a broken checkout', async () => {
@@ -174,7 +174,7 @@ test('a missing routing migration remains under review instead of opening a brok
   assert.equal(policy.escrowRequired, false);
 });
 
-test('real dealer-profile read failures remain under review', async () => {
+test('dealer commerce-profile failures no longer restrict an approved account', async () => {
   const f = fixture({
     profileError: { code: 'PGRST000', message: 'Database connection failed' },
     destinations: [{
@@ -194,12 +194,13 @@ test('real dealer-profile read failures remain under review', async () => {
 
   const policy = await f.getProductPurchasePolicy(dealerProduct);
 
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.MANUAL_REVIEW);
-  assert.equal(policy.escrowRequired, false);
-  assert.ok(policy.reasonCodes.includes('compliance_review'));
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
+  assert.equal(policy.escrowRequired, true);
+  assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
+  assert.equal(f.reads.some(({ table }) => table === 'dealer_commerce_profiles'), false);
 });
 
-test('latest pending application routes through escrow without pretending the dealer is approved', async () => {
+test('the latest dealer application must be approved before checkout is enabled', async () => {
   const f = fixture({
     application: { company_name: 'Pending Dealer', status: 'pending', created_at: new Date().toISOString() },
     destinations: [{ purchase_route: 'escrow', beneficiary_name: 'Kariv', iban: 'CZ00', bank_name: 'Bank', verified_at: new Date().toISOString() }],
@@ -208,10 +209,10 @@ test('latest pending application routes through escrow without pretending the de
   });
   const policy = await f.getProductPurchasePolicy(dealerProduct);
   assert.equal(policy.sellerApproved, false);
-  assert.equal(policy.dealerTier, 'probationary');
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
-  assert.ok(policy.reasonCodes.includes('seller_pending_approval'));
-  assert.ok(f.reads.filter((read) => ['dealer_applications', 'dealer_commerce_profiles'].includes(read.table))
+  assert.equal(policy.dealerTier, null);
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.MANUAL_REVIEW);
+  assert.deepEqual(policy.reasonCodes, ['seller_not_approved']);
+  assert.ok(f.reads.filter((read) => read.table === 'dealer_applications')
     .every((read) => read.filters.some(([field, value]) => field === 'store_id' && value === 'kariv')));
 });
 
@@ -227,7 +228,7 @@ test('missing, rejected or unreadable applications do not become pending onboard
   assert.equal((await unavailable.getProductPurchasePolicy(dealerProduct)).purchaseRoute, purchasePolicy.PURCHASE_ROUTES.MANUAL_REVIEW);
 });
 
-test('unavailable dispute counts cannot qualify an enterprise dealer for direct payment', async () => {
+test('sales history, tiers and dispute metrics are not queried for approved dealer checkout', async () => {
   const f = fixture({
     application: { status: 'approved', company_name: 'Dealer', created_at: '2025-01-01' },
     profile: { tier: 'enterprise', underwritten: true, direct_sales_enabled: true, seller_verified: true,
@@ -239,5 +240,6 @@ test('unavailable dispute counts cannot qualify an enterprise dealer for direct 
   });
   const policy = await f.getProductPurchasePolicy(dealerProduct);
   assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
-  assert.ok(policy.reasonCodes.includes('unresolved_disputes'));
+  assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
+  assert.equal(f.reads.some(({ table }) => ['dealer_commerce_profiles', 'orders', 'disputes'].includes(table)), false);
 });

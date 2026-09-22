@@ -199,7 +199,7 @@ test('replaying an existing order returns its historical amount without repricin
   assert.equal(f.writes.length, 0);
 });
 
-test('server policy—not a client route—selects and snapshots dealer routing', async () => {
+test('server approval—not legacy dealer metrics or a client route—selects marketplace checkout', async () => {
   const dealerProduct = { ...baseProduct, dealer_id: 'dealer-1', currency: 'EUR' };
   const healthyDealer = {
     dealerId: 'dealer-1', sellerName: 'Prague Timepieces s.r.o.', configuredTier: 'standard',
@@ -217,15 +217,15 @@ test('server policy—not a client route—selects and snapshots dealer routing'
   const result = await f.createOrder({
     ...input,
     expectedCurrency: 'EUR',
-    expectedPurchaseRoute: 'dealer_direct',
+    expectedPurchaseRoute: 'escrow',
     expectedSellerKey: 'dealer:dealer-1',
     purchaseRoute: 'kariv_direct',
     buyerRequestsProtection: false,
   });
   assert.equal(result.ok, true);
   const row = f.writes.find(({ table }) => table === 'orders').row;
-  assert.equal(row.purchase_route, 'dealer_direct');
-  assert.equal(row.purchase_policy_snapshot.purchase_route, 'dealer_direct');
+  assert.equal(row.purchase_route, 'escrow');
+  assert.equal(row.purchase_policy_snapshot.purchase_route, 'escrow');
   assert.equal(row.purchase_policy_snapshot.seller_name, 'Prague Timepieces s.r.o.');
   assert.equal(row.buyer_selected_protection, false);
   assert.equal(f.rpcCalls[0].args.p_expected_source_price, 2500);
@@ -248,7 +248,7 @@ test('a client cannot mark Kariv-owned inventory as buyer-protected', async () =
   assert.equal(row.purchase_policy_snapshot.reason_codes, undefined);
 });
 
-test('buyer can upgrade an eligible dealer order to protection, but manual review cannot create an order', async () => {
+test('approved dealers use one marketplace route, while an unapproved dealer cannot create an order', async () => {
   const dealerProduct = { ...baseProduct, dealer_id: 'dealer-1', currency: 'EUR' };
   const dealer = {
     dealerId: 'dealer-1', configuredTier: 'standard', activeDays: 100, completedSales: 12,
@@ -263,13 +263,13 @@ test('buyer can upgrade an eligible dealer order to protection, but manual revie
   assert.equal(protectedResult.ok, true);
   const protectedRow = protectedFixture.writes.find(({ table }) => table === 'orders').row;
   assert.equal(protectedRow.purchase_route, 'escrow');
-  assert.equal(protectedRow.buyer_selected_protection, true);
-  assert.equal(protectedRow.purchase_policy_snapshot.buyer_selected_protection, true);
+  assert.equal(protectedRow.buyer_selected_protection, false);
+  assert.equal(protectedRow.purchase_policy_snapshot.buyer_selected_protection, false);
   assert.equal(protectedRow.purchase_policy_snapshot.reason_codes, undefined);
 
   const heldFixture = fixture({
     product: dealerProduct,
-    policyResolver: () => purchasePolicy.evaluatePurchasePolicy({ ...dealer, complianceStatus: 'review' }),
+    policyResolver: () => purchasePolicy.evaluatePurchasePolicy({ ...dealer, sellerApproved: false }),
   });
   const heldResult = await heldFixture.createOrder({ ...input, expectedCurrency: 'EUR', expectedPurchaseRoute: 'dealer_direct', expectedSellerKey: 'dealer:dealer-1' });
   assert.equal(heldResult.ok, false);

@@ -12,51 +12,6 @@ function currentSourcePrice(product = {}) {
   return Number.isFinite(proposedSale) && proposedSale > 0 && proposedSale < regular ? proposedSale : regular;
 }
 
-function ageInDays(value, now = Date.now()) {
-  const stamp = Date.parse(value || '');
-  return Number.isFinite(stamp) && stamp <= now ? Math.floor((now - stamp) / 86_400_000) : 0;
-}
-
-function latestTimestamp(...values) {
-  const valid = values
-    .map((value) => ({ value, stamp: Date.parse(value || '') }))
-    .filter(({ stamp }) => Number.isFinite(stamp) && stamp <= Date.now())
-    .sort((a, b) => b.stamp - a.stamp);
-  return valid[0]?.value || null;
-}
-
-async function countCompletedDealerSales(dealerId) {
-  // purchase_status is route-neutral. The fallback keeps the evaluator safe
-  // while the migration is rolling out and counts historical escrow orders.
-  const current = await supabaseAdmin
-    .from('orders')
-    .select('id', { count: 'exact', head: true })
-    .eq('store_id', STORE_ID)
-    .eq('dealer_user_id', dealerId)
-    .or('purchase_status.eq.completed,escrow_status.eq.funds_released');
-  if (!current.error && Number.isSafeInteger(current.count) && current.count >= 0) return current.count;
-
-  const historical = await supabaseAdmin
-    .from('orders')
-    .select('id', { count: 'exact', head: true })
-    .eq('store_id', STORE_ID)
-    .eq('dealer_user_id', dealerId)
-    .eq('escrow_status', 'funds_released');
-  return !historical.error && Number.isSafeInteger(historical.count) && historical.count >= 0 ? historical.count : 0;
-}
-
-async function countOpenDealerDisputes(dealerId) {
-  const { count, error } = await supabaseAdmin
-    .from('disputes')
-    .select('id, orders!inner(id)', { count: 'exact', head: true })
-    .in('status', ['open', 'under_review'])
-    .eq('orders.store_id', STORE_ID)
-    .eq('orders.dealer_user_id', dealerId);
-  // Missing metrics must never make a dealer appear safer. One open dispute
-  // keeps the effective tier probationary/direct-ineligible until readable.
-  return !error && Number.isSafeInteger(count) && count >= 0 ? count : 1;
-}
-
 async function loadPlatformPaymentReadiness() {
   if (!isSupabaseAdminConfigured || !supabaseAdmin) return { karivDirect: false, escrow: false };
   const { data, error } = await supabaseAdmin
@@ -74,13 +29,7 @@ async function loadPlatformPaymentReadiness() {
 export async function loadDealerCommerceAssessment(dealerId) {
   if (!dealerId || !isSupabaseAdminConfigured || !supabaseAdmin) return null;
 
-  const [profileResult, applicationResult, completedSales, unresolvedDisputes, identities] = await Promise.all([
-    supabaseAdmin
-      .from('dealer_commerce_profiles')
-      .select('*')
-      .eq('store_id', STORE_ID)
-      .eq('dealer_user_id', dealerId)
-      .maybeSingle(),
+  const [applicationResult, identities] = await Promise.all([
     supabaseAdmin
       .from('dealer_applications')
       .select('company_name, status, reviewed_at, created_at')
@@ -89,22 +38,12 @@ export async function loadDealerCommerceAssessment(dealerId) {
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
-    countCompletedDealerSales(dealerId),
-    countOpenDealerDisputes(dealerId),
     loadIdentities([dealerId]).catch(() => new Map()),
   ]);
 
-  const profileUnavailable = Boolean(profileResult.error);
-  const profile = profileUnavailable ? null : profileResult.data;
   const latestApplication = applicationResult.error ? null : applicationResult.data;
   const application = latestApplication?.status === 'approved' ? latestApplication : null;
   const identity = identities.get(dealerId);
-  // A reactivation or a newly reviewed application restarts probation. Use
-  // the most recent authoritative event so an old activation date can never
-  // mask a later suspension/re-approval cycle.
-  const activatedAt = application
-    ? latestTimestamp(profile?.reactivated_at, application.reviewed_at, application.created_at, profile?.activated_at)
-    : null;
 
   return {
     dealerId,
@@ -112,30 +51,8 @@ export async function loadDealerCommerceAssessment(dealerId) {
     approvedApplication: Boolean(application),
     sellerApproved: Boolean(application),
     sellerPendingApproval: latestApplication?.status === 'pending',
-    configuredTier: profile?.tier || 'probationary',
-    activeDays: ageInDays(activatedAt),
-    completedSales,
-    unresolvedDisputes,
-    directSalesEnabled: !profileUnavailable && profile?.direct_sales_enabled === true,
-    sellerVerified: Boolean(application && profile?.seller_verified === true),
-    paymentDetailsVerified: Boolean(
-      profile?.payment_details_verified_at &&
-      String(profile?.payment_beneficiary_name || '').trim() &&
-      String(profile?.payment_iban || '').trim() &&
-      String(profile?.payment_bank_name || '').trim()
-    ),
-    // A missing row is the deliberate probationary/escrow default. A failed
-    // read is different: unknown compliance must stop checkout rather than
-    // making a suspended dealer look clear.
-    escrowEnabled: profileUnavailable ? false : profile?.escrow_enabled !== false,
-    complianceStatus: profileUnavailable ? 'review' : (profile?.compliance_status || 'clear'),
-    refundStatus: profileUnavailable ? 'overdue' : (profile?.refund_status || 'clear'),
-    underwritten: profile?.underwritten === true,
-    policyRevision: Number.isInteger(Number(profile?.policy_revision))
-      ? Number(profile.policy_revision)
-      : 0,
-    configuredDirectLimitEur: profile?.direct_limit_eur == null ? null : Number(profile.direct_limit_eur),
-    activatedAt,
+    policyRevision: 0,
+    applicationApprovedAt: application?.reviewed_at || application?.created_at || null,
   };
 }
 
@@ -199,9 +116,6 @@ export async function getProductPurchasePolicy(productOrId, { buyerRequestsProte
 
   return {
     ...policy,
-    completedSales: assessment?.completedSales || 0,
-    activeDays: assessment?.activeDays || 0,
-    unresolvedDisputes: assessment?.unresolvedDisputes || 0,
-    policyRevision: assessment?.policyRevision || 0,
+    policyRevision: 0,
   };
 }

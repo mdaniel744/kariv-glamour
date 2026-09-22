@@ -2,28 +2,34 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const actions = await readFile(new URL('../src/actions/dealerPurchasePolicies.js', import.meta.url), 'utf8');
-const adminPage = await readFile(new URL('../src/page-content/admin/AdminDealerPurchaseRules.jsx', import.meta.url), 'utf8');
+const policy = await readFile(new URL('../src/lib/purchasePolicy.js', import.meta.url), 'utf8');
+const serverPolicy = await readFile(new URL('../src/lib/purchasePolicyServer.js', import.meta.url), 'utf8');
+const adminLayout = await readFile(new URL('../src/page-content/admin/AdminLayout.jsx', import.meta.url), 'utf8');
+const legacyRoute = await readFile(new URL('../src/page-content/admin/AdminDealerPurchaseRules.jsx', import.meta.url), 'utf8');
 
-test('dealer policy writes are admin-only and scoped to the Kariv tenant', () => {
-  assert.match(actions, /await requireAdmin\(\)/);
-  assert.match(actions, /\.eq\('store_id', STORE_ID\)/);
-  assert.match(actions, /store_id: STORE_ID/);
-  assert.match(actions, /onConflict: 'store_id,dealer_user_id'/);
+test('approved dealer checkout has no tier, age, sales, dispute or per-dealer payment gate', () => {
+  const dealerBranch = policy.slice(policy.indexOf('// Dealer approval is the sole'), policy.indexOf('export function purchasePolicySnapshot'));
+  assert.match(dealerBranch, /if \(!sellerApproved\)/);
+  assert.match(dealerBranch, /purchaseRoute: PURCHASE_ROUTES\.ESCROW/);
+  assert.match(dealerBranch, /reasonCodes: \['dealer_approved'\]/);
+  assert.doesNotMatch(dealerBranch, /completedSales|activeDays|unresolvedDisputes|configuredTier|directLimitEur,/);
 });
 
-test('unsafe policy combinations fail closed', () => {
-  assert.match(actions, /tier === 'probationary'[\s\S]*directSalesEnabled = false/);
-  assert.match(actions, /!sellerVerified \|\| !paymentDetailsVerified \|\| complianceStatus !== 'clear' \|\| refundStatus !== 'clear'/);
-  assert.match(actions, /tier === 'enterprise' && !underwritten/);
-  assert.match(actions, /if \(!approvedApplication\) directSalesEnabled = false/);
-  assert.match(actions, /Standard dealers cannot exceed a €10,000/);
-  assert.match(actions, /Trusted dealers cannot exceed a €50,000/);
+test('storefront policy reads only the latest application instead of a commerce profile', () => {
+  const assessment = serverPolicy.slice(
+    serverPolicy.indexOf('export async function loadDealerCommerceAssessment'),
+    serverPolicy.indexOf('// Accepts a product id'),
+  );
+  assert.match(assessment, /from\('dealer_applications'\)/);
+  assert.match(assessment, /order\('created_at', \{ ascending: false \}\)/);
+  assert.equal((assessment.match(/\.limit\(1\)/g) || []).length, 1);
+  assert.doesNotMatch(assessment, /dealer_commerce_profiles|from\('orders'\)|from\('disputes'\)/);
 });
 
-test('admin explains the agreed dealer tiers and live checkout re-evaluation', () => {
-  assert.match(adminPage, /90\+ days and 10\+ completed sales/);
-  assert.match(adminPage, /180\+ days and 25\+ completed sales/);
-  assert.match(adminPage, /Checkout re-evaluates live sales history and unresolved disputes/);
-  assert.match(adminPage, /Dealer approval and account roles remain exclusively managed in the Ecom King dashboard/);
+test('the legacy dealer purchase-rules screen is no longer advertised in admin navigation', () => {
+  assert.doesNotMatch(adminLayout, /to: '\/admin\/dealer-purchase-rules'/);
+  assert.match(adminLayout, /to: '\/admin\/dealer-applications'/);
+  assert.match(legacyRoute, /Dealer purchase restrictions are paused/);
+  assert.match(legacyRoute, /latest application is approved/);
+  assert.doesNotMatch(legacyRoute, /90\+ days|10\+ completed sales|Direct-payment limit|Save rules/);
 });

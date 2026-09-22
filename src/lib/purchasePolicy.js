@@ -101,24 +101,10 @@ export function convertSourceValueToEur(amount, currency, exchangeRates) {
 export function evaluatePurchasePolicy({
   dealerId = null,
   sellerName = '',
-  configuredTier = DEALER_TIERS.PROBATIONARY,
-  activeDays = 0,
-  completedSales = 0,
-  unresolvedDisputes = 0,
-  directSalesEnabled = false,
   sellerApproved = false,
-  sellerPendingApproval = false,
-  sellerVerified = false,
-  paymentDetailsVerified = false,
   platformDirectPaymentReady = true,
   platformEscrowPaymentReady = true,
-  escrowEnabled = true,
-  complianceStatus = 'clear',
-  refundStatus = 'clear',
-  underwritten = false,
-  configuredDirectLimitEur = null,
   sourceValueEur = null,
-  buyerRequestsProtection = false,
 } = {}) {
   if (!dealerId) {
     if (!platformDirectPaymentReady) {
@@ -148,109 +134,47 @@ export function evaluatePurchasePolicy({
     };
   }
 
-  const openDisputes = Number.isFinite(Number(unresolvedDisputes))
-    ? Math.max(0, Number(unresolvedDisputes))
-    : 0;
-  const clearCompliance = complianceStatus === 'clear';
-  const clearRefunds = refundStatus === 'clear';
-  const cleanHealth = clearCompliance && clearRefunds && openDisputes === 0;
-  const stablePerformance = cleanHealth;
-  const excellentPerformance = cleanHealth;
-  const dealerTier = sellerApproved ? deriveEffectiveDealerTier({
-    configuredTier,
-    activeDays,
-    completedSales,
-    stablePerformance,
-    excellentPerformance,
-    underwritten,
-  }) : DEALER_TIERS.PROBATIONARY;
-  const directLimitEur = resolveDirectLimitEur(dealerTier, configuredDirectLimitEur);
   const euroValue = positiveNumber(sourceValueEur);
-  const healthHold = !clearCompliance || !clearRefunds;
 
-  // An identified onboarding dealer can sell through Kariv protection while
-  // awaiting approval. Missing, rejected or unreadable applications are not
-  // onboarding and must never be silently promoted into a payment route.
-  if (!sellerApproved && !sellerPendingApproval) {
+  // Dealer approval is the sole account-level storefront gate. Pending,
+  // rejected, revoked, missing, or unreadable applications remain blocked;
+  // an approved application needs no additional tier, account-age, sales,
+  // dispute, per-dealer payment, or commerce-profile qualification.
+  if (!sellerApproved) {
     return {
       policyVersion: PURCHASE_POLICY_VERSION,
-      sellerType: 'dealer', sellerApproved: false, dealerId, sellerName, dealerTier,
+      sellerType: 'dealer', sellerApproved: false, dealerId, sellerName, dealerTier: null,
       purchaseRoute: PURCHASE_ROUTES.MANUAL_REVIEW,
       directEligible: false, escrowRequired: false, buyerMayChooseProtection: false,
-      directLimitEur, sourceValueEur: euroValue,
+      directLimitEur: null, sourceValueEur: euroValue,
       reasonCodes: ['seller_not_approved'],
     };
   }
 
-  if (healthHold) {
+  // Approved marketplace sellers use one consistent Kariv-managed checkout.
+  // This avoids making a dealer configure a second eligibility profile before
+  // their approved account and listings can function. Payment destination
+  // readiness is a store-level operational requirement, not a dealer rule.
+  if (!platformEscrowPaymentReady) {
     return {
       policyVersion: PURCHASE_POLICY_VERSION,
-      sellerType: 'dealer', sellerApproved, dealerId, sellerName, dealerTier,
+      sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier: null,
       purchaseRoute: PURCHASE_ROUTES.MANUAL_REVIEW,
       directEligible: false, escrowRequired: false, buyerMayChooseProtection: false,
-      directLimitEur, sourceValueEur: euroValue,
-      reasonCodes: [
-        ...(clearCompliance ? [] : [`compliance_${complianceStatus || 'review'}`]),
-        ...(clearRefunds ? [] : [`refund_${refundStatus || 'overdue'}`]),
-      ],
-    };
-  }
-
-  const directBlockers = [
-    ...(!sellerApproved ? ['seller_pending_approval'] : []),
-    ...(!sellerVerified ? ['seller_not_verified'] : []),
-    ...(!paymentDetailsVerified ? ['payment_destination_unverified'] : []),
-    ...(!directSalesEnabled ? ['direct_sales_disabled'] : []),
-    ...(dealerTier === DEALER_TIERS.PROBATIONARY ? ['dealer_probationary'] : []),
-    ...(openDisputes > 0 ? ['unresolved_disputes'] : []),
-    ...(euroValue == null ? ['value_conversion_unavailable'] : []),
-    ...(euroValue != null && directLimitEur != null && euroValue > directLimitEur ? ['above_direct_limit'] : []),
-    ...(directLimitEur == null ? ['direct_limit_not_configured'] : []),
-  ];
-
-  // A buyer choice is meaningful only when this order otherwise qualifies
-  // for direct dealer payment. A stale or crafted request must not relabel a
-  // mandatory protected route as voluntarily selected in the audit record.
-  if (directBlockers.length === 0 && buyerRequestsProtection) {
-    return {
-      policyVersion: PURCHASE_POLICY_VERSION,
-      sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier,
-      purchaseRoute: escrowEnabled && platformEscrowPaymentReady ? PURCHASE_ROUTES.ESCROW : PURCHASE_ROUTES.MANUAL_REVIEW,
-      directEligible: false,
-      escrowRequired: escrowEnabled && platformEscrowPaymentReady,
-      buyerMayChooseProtection: false,
-      directLimitEur, sourceValueEur: euroValue,
-      reasonCodes: [escrowEnabled && platformEscrowPaymentReady ? 'buyer_requested_protection' : 'buyer_protection_unavailable'],
-    };
-  }
-
-  if (directBlockers.length === 0) {
-    return {
-      policyVersion: PURCHASE_POLICY_VERSION,
-      sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier,
-      purchaseRoute: PURCHASE_ROUTES.DEALER_DIRECT,
-      directEligible: true,
-      escrowRequired: false,
-      // Optional protection is only actionable when Kariv has a verified
-      // protected-payment destination. Do not advertise a choice that the
-      // server would subsequently have to reject at checkout.
-      buyerMayChooseProtection: Boolean(escrowEnabled && platformEscrowPaymentReady),
-      directLimitEur, sourceValueEur: euroValue,
-      reasonCodes: ['dealer_direct_eligible'],
+      directLimitEur: null, sourceValueEur: euroValue,
+      reasonCodes: ['marketplace_payment_destination_unavailable'],
     };
   }
 
   return {
     policyVersion: PURCHASE_POLICY_VERSION,
-    sellerType: 'dealer', sellerApproved, dealerId, sellerName, dealerTier,
-    purchaseRoute: escrowEnabled && platformEscrowPaymentReady ? PURCHASE_ROUTES.ESCROW : PURCHASE_ROUTES.MANUAL_REVIEW,
+    sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier: null,
+    purchaseRoute: PURCHASE_ROUTES.ESCROW,
     directEligible: false,
-    escrowRequired: Boolean(escrowEnabled && platformEscrowPaymentReady),
+    escrowRequired: true,
     buyerMayChooseProtection: false,
-    directLimitEur, sourceValueEur: euroValue,
-    reasonCodes: escrowEnabled && platformEscrowPaymentReady
-      ? directBlockers
-      : [...directBlockers, platformEscrowPaymentReady ? 'escrow_unavailable' : 'escrow_payment_destination_unavailable'],
+    directLimitEur: null, sourceValueEur: euroValue,
+    reasonCodes: ['dealer_approved'],
   };
 }
 
