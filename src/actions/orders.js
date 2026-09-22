@@ -246,9 +246,6 @@ export async function createOrder({
     .eq('buyer_user_id', user.id)
     .maybeSingle();
   if (existing) return { ok: true, order: await shapeOrderDetail(existing) };
-  if (user.emailVerified !== true) {
-    return { ok: false, error: 'Verify your email address before reserving a watch.' };
-  }
   // These values only prove which terms the buyer reviewed. They never choose
   // the live route or seller: both are recalculated below from current,
   // tenant-scoped records. Check them after an idempotent replay so a retry of
@@ -346,78 +343,38 @@ export async function createOrder({
     // schema change. Revisit (make it nullable, or let this be a real
     // choice again) if/when crypto payments come back.
     payment_method: 'bank_transfer',
-    // escrow_status remains populated for backward compatibility with the
-    // established portal/admin lifecycle. purchase_route/purchase_status are
-    // the route-neutral source of truth for all new UI and reporting.
-    escrow_status: purchasePolicy.purchaseRoute === PURCHASE_ROUTES.KARIV_DIRECT ? 'dealer_accepted' : 'pending_review',
+    // Keep the proven pre-routing lifecycle: checkout creates an ordinary
+    // order for admin fulfilment. The compatibility fields remain populated
+    // because the shared database schema now validates them for this tenant.
+    escrow_status: 'pending_review',
     purchase_route: purchasePolicy.purchaseRoute,
-    purchase_status: purchasePolicy.purchaseRoute === PURCHASE_ROUTES.KARIV_DIRECT
-      ? 'awaiting_payment'
-      : 'awaiting_seller_confirmation',
-    // Record only a protection choice the server actually accepted. A caller
-    // can request protection, but cannot make Kariv-owned inventory or an
-    // otherwise ineligible route look protected in the audit trail.
-    buyer_selected_protection: purchasePolicy.reasonCodes.includes('buyer_requested_protection'),
+    purchase_status: 'awaiting_seller_confirmation',
+    buyer_selected_protection: false,
     purchase_policy_version: PURCHASE_POLICY_VERSION,
     purchase_policy_snapshot: purchasePolicySnapshot(purchasePolicy),
+    inventory_reserved: false,
+    reservation_expires_at: null,
     shipping_status: 'not_shipped',
     shipping_address: shippingDetails,
     idempotency_key: idempotencyKey,
   };
 
-  const sourcePrice = Number.isFinite(Number(product.sale_price)) && Number(product.sale_price) > 0 && Number(product.sale_price) < Number(product.price)
-    ? Number(product.sale_price)
-    : Number(product.price);
-  const sourceCurrency = String(product.currency || '').trim().toUpperCase();
-  const { data: createdId, error } = await supabaseAdmin.rpc('create_kariv_order_with_reservation', {
-    p_store_id: STORE_ID,
-    p_product_id: product.id,
-    p_buyer_user_id: user.id,
-    p_dealer_user_id: product.dealer_id || null,
-    p_products: row.products,
-    p_total_amount: row.total_amount,
-    p_currency: row.currency,
-    p_payment_method: row.payment_method,
-    p_escrow_status: row.escrow_status,
-    p_purchase_route: row.purchase_route,
-    p_purchase_status: row.purchase_status,
-    p_buyer_selected_protection: row.buyer_selected_protection,
-    p_purchase_policy_version: row.purchase_policy_version,
-    p_purchase_policy_snapshot: row.purchase_policy_snapshot,
-    p_shipping_status: row.shipping_status,
-    p_shipping_address: row.shipping_address,
-    p_idempotency_key: row.idempotency_key,
-    p_expected_source_price: sourcePrice,
-    p_expected_source_currency: sourceCurrency,
-    p_expected_source_value_eur: purchasePolicy.sourceValueEur,
-    p_expected_policy_revision: product.dealer_id ? (purchasePolicy.policyRevision || 0) : null,
-  });
+  // Deliberately use the original direct order write. The recently introduced
+  // reservation RPC also required separate payment-destination and dealer-risk
+  // records; with none configured it blocked every Kariv and dealer checkout.
+  const { data: created, error } = await supabaseAdmin
+    .from('orders')
+    .insert(row)
+    .select()
+    .single();
   if (error) {
     if (error.code === '23505') {
       const { data: raced } = await supabaseAdmin
         .from('orders').select('*').eq('store_id', STORE_ID).eq('idempotency_key', idempotencyKey).eq('buyer_user_id', user.id).maybeSingle();
       if (raced) return { ok: true, order: await shapeOrderDetail(raced) };
     }
-    if (/price changed|seller changed|eligibility changed|purchase route is not valid/i.test(error.message || '')) {
-      return { ok: false, code: 'PURCHASE_ROUTE_CHANGED', error: 'The product or seller changed while checkout was open. Please review the updated details and confirm again.' };
-    }
-    if (/no longer available/i.test(error.message || '')) {
-      return { ok: false, error: 'This watch has already sold.' };
-    }
-    if (/payment destination is not configured/i.test(error.message || '')) {
-      return { ok: false, code: 'MANUAL_REVIEW_REQUIRED', error: 'Payment setup for this purchase is temporarily unavailable. Please contact Kariv support.' };
-    }
     return { ok: false, error: error.message };
   }
-
-  const { data: created, error: createdReadError } = await supabaseAdmin
-    .from('orders')
-    .select('*')
-    .eq('id', createdId)
-    .eq('store_id', STORE_ID)
-    .eq('buyer_user_id', user.id)
-    .maybeSingle();
-  if (createdReadError || !created) return { ok: false, error: createdReadError?.message || 'The order was created but could not be loaded.' };
 
   // Save this as the buyer's default shipping profile for next time.
   await supabaseAdmin.from('customers').upsert(
@@ -1027,51 +984,9 @@ async function transitionEscrow(orderRow, nextStatus, extraFields = {}) {
 }
 
 export async function updateEscrowStatus(orderId, nextStatus) {
-  const admin = await requireAdmin();
+  await requireAdmin();
   const { data: orderRow, error } = await supabaseAdmin.from('orders').select('*').eq('id', orderId).eq('store_id', STORE_ID).maybeSingle();
   if (error || !orderRow) return { ok: false, error: 'Order not found.' };
-  if (
-    nextStatus === 'dealer_accepted' &&
-    orderRow.dealer_user_id
-  ) {
-    return { ok: false, error: 'The assigned dealer must accept this order through their seller portal.' };
-  }
-  if (
-    orderRow.purchase_route === PURCHASE_ROUTES.DEALER_DIRECT &&
-    ['funds_secured', 'shipped'].includes(nextStatus)
-  ) {
-    return { ok: false, error: nextStatus === 'funds_secured'
-      ? 'The verified dealer must confirm receipt of a direct payment.'
-      : 'The verified dealer must add tracking and mark this direct order as shipped.' };
-  }
-  if (nextStatus === 'funds_secured' && !orderRow.payment_reference) {
-    return { ok: false, error: 'Payment proof must be submitted before payment can be confirmed.' };
-  }
-  if (nextStatus === 'cancelled') {
-    const { data: cancelled, error: cancellationError } = await supabaseAdmin.rpc('cancel_kariv_order_before_payment', {
-      p_store_id: STORE_ID,
-      p_order_id: orderId,
-    });
-    if (cancellationError) return { ok: false, error: cancellationError.message };
-    if (!cancelled) return { ok: false, error: 'Paid or fulfilled orders require the dedicated dispute/refund workflow.' };
-    const { data: cancelledOrder } = await supabaseAdmin.from('orders').select('*').eq('id', orderId).eq('store_id', STORE_ID).maybeSingle();
-    return cancelledOrder ? { ok: true, order: await shapeOrderDetail(cancelledOrder) } : { ok: false, error: 'Order not found.' };
-  }
-  if (nextStatus === 'funds_released') {
-    if (orderRow.purchase_route === PURCHASE_ROUTES.ESCROW) {
-      return { ok: false, error: 'Complete the dealer payout first, then record its transaction reference with the protected-payout action.' };
-    }
-    const { data: completed, error: completionError } = await supabaseAdmin.rpc('complete_kariv_order_after_review', {
-      p_store_id: STORE_ID,
-      p_order_id: orderId,
-      p_financial_reference: null,
-      p_recorded_by: admin.id,
-    });
-    if (completionError) return { ok: false, error: completionError.message };
-    if (!completed) return { ok: false, error: 'The 14-day review period has not ended or an open dispute is blocking completion.' };
-    const { data: completedOrder } = await supabaseAdmin.from('orders').select('*').eq('id', orderId).eq('store_id', STORE_ID).maybeSingle();
-    return completedOrder ? { ok: true, order: await shapeOrderDetail(completedOrder) } : { ok: false, error: 'Order not found.' };
-  }
   const result = await transitionEscrow(orderRow, nextStatus);
   if (!result.ok) return result;
   return { ok: true, order: await shapeOrderDetail(result.order) };

@@ -121,7 +121,7 @@ test('Kariv checkout remains direct with a complete platform payment account', a
   assert.deepEqual(f.reads, []);
 });
 
-test('an approved dealer immediately uses protected marketplace checkout', async () => {
+test('an approved dealer immediately uses ordinary marketplace checkout', async () => {
   const f = fixture({
     profile: null,
     destinations: [{
@@ -143,14 +143,14 @@ test('an approved dealer immediately uses protected marketplace checkout', async
 
   assert.equal(policy.sellerName, 'New Dealer Ltd');
   assert.equal(policy.dealerTier, null);
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
-  assert.equal(policy.escrowRequired, true);
-  assert.equal(policy.directEligible, false);
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.DEALER_DIRECT);
+  assert.equal(policy.escrowRequired, false);
+  assert.equal(policy.directEligible, true);
   assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
-  assert.deepEqual(f.reads.map(({ table }) => table).sort(), ['dealer_applications', 'store_payment_destinations']);
+  assert.deepEqual(f.reads.map(({ table }) => table), ['dealer_applications']);
 });
 
-test('a missing routing migration remains under review instead of opening a broken checkout', async () => {
+test('a missing routing migration does not block an approved dealer checkout', async () => {
   const f = fixture({
     profileError: {
       code: 'PGRST205',
@@ -170,7 +170,7 @@ test('a missing routing migration remains under review instead of opening a brok
 
   const policy = await f.getProductPurchasePolicy(dealerProduct);
 
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.MANUAL_REVIEW);
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.DEALER_DIRECT);
   assert.equal(policy.escrowRequired, false);
 });
 
@@ -194,8 +194,8 @@ test('dealer commerce-profile failures no longer restrict an approved account', 
 
   const policy = await f.getProductPurchasePolicy(dealerProduct);
 
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
-  assert.equal(policy.escrowRequired, true);
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.DEALER_DIRECT);
+  assert.equal(policy.escrowRequired, false);
   assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
   assert.equal(f.reads.some(({ table }) => table === 'dealer_commerce_profiles'), false);
 });
@@ -239,7 +239,7 @@ test('sales history, tiers and dispute metrics are not queried for approved deal
     destinations: [{ purchase_route: 'escrow', beneficiary_name: 'Kariv', iban: 'CZ00', bank_name: 'Bank', verified_at: '2026-01-01' }],
   });
   const policy = await f.getProductPurchasePolicy(dealerProduct);
-  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.ESCROW);
+  assert.equal(policy.purchaseRoute, purchasePolicy.PURCHASE_ROUTES.DEALER_DIRECT);
   assert.deepEqual(policy.reasonCodes, ['dealer_approved']);
   assert.equal(f.reads.some(({ table }) => ['dealer_commerce_profiles', 'orders', 'disputes'].includes(table)), false);
 });

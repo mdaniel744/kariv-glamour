@@ -12,20 +12,6 @@ function currentSourcePrice(product = {}) {
   return Number.isFinite(proposedSale) && proposedSale > 0 && proposedSale < regular ? proposedSale : regular;
 }
 
-async function loadPlatformPaymentReadiness() {
-  if (!isSupabaseAdminConfigured || !supabaseAdmin) return { karivDirect: false, escrow: false };
-  const { data, error } = await supabaseAdmin
-    .from('store_payment_destinations')
-    .select('purchase_route, beneficiary_name, iban, bank_name, verified_at')
-    .eq('store_id', STORE_ID)
-    .in('purchase_route', ['kariv_direct', 'escrow']);
-  if (error) return { karivDirect: false, escrow: false };
-  const ready = new Set((data || [])
-    .filter((row) => row.verified_at && String(row.beneficiary_name || '').trim() && String(row.iban || '').trim() && String(row.bank_name || '').trim())
-    .map((row) => row.purchase_route));
-  return { karivDirect: ready.has('kariv_direct'), escrow: ready.has('escrow') };
-}
-
 export async function loadDealerCommerceAssessment(dealerId) {
   if (!dealerId || !isSupabaseAdminConfigured || !supabaseAdmin) return null;
 
@@ -100,16 +86,14 @@ export async function getProductPurchasePolicy(productOrId, { buyerRequestsProte
     });
   }
 
-  const [assessment, exchangeRates, paymentReadiness] = await Promise.all([
+  const [assessment, exchangeRates] = await Promise.all([
     loadDealerCommerceAssessment(dealerId),
     sourceCurrency === 'EUR' ? Promise.resolve(null) : getCzkExchangeRates(),
-    loadPlatformPaymentReadiness(),
   ]);
   const sourceValueEur = convertSourceValueToEur(sourcePrice, sourceCurrency, exchangeRates);
   const policy = evaluatePurchasePolicy({
     ...assessment,
     dealerId,
-    platformEscrowPaymentReady: paymentReadiness.escrow,
     sourceValueEur,
     buyerRequestsProtection: buyerRequestsProtection === true,
   });

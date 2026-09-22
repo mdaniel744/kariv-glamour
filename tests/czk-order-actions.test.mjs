@@ -99,7 +99,7 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
   return { createOrder: module.exports.createOrder, reads, writes, get rateCalls() { return rateCalls; } };
 }
 
-const request = { productId: 'watch', shippingDetails: { fullName: 'Buyer', street: 'Example 1', city: 'Praha', country: 'CZ', postalCode: '18600' }, idempotencyKey: 'checkout-reference', locale: 'cs', expectedPrice: 19360, expectedCurrency: 'CZK', expectedPurchaseRoute: 'escrow', expectedSellerKey: 'dealer:dealer' };
+const request = { productId: 'watch', shippingDetails: { fullName: 'Buyer', street: 'Example 1', city: 'Praha', country: 'CZ', postalCode: '18600' }, idempotencyKey: 'checkout-reference', locale: 'cs', expectedPrice: 19360, expectedCurrency: 'CZK', expectedPurchaseRoute: 'dealer_direct', expectedSellerKey: 'dealer:dealer' };
 
 test('Czech checkout stores real CZK order and line totals computed from fresh EUR sale price', async () => {
   const fixture = checkout();
@@ -116,9 +116,9 @@ test('Czech checkout stores real CZK order and line totals computed from fresh E
   assert.equal(saved.products[0].conversion.rate, 24.2);
   assert.equal(saved.products[0].conversion.rate_date, today);
   assert.equal(saved.payment_method, 'bank_transfer');
-  assert.equal(saved.purchase_route, 'escrow');
+  assert.equal(saved.purchase_route, 'dealer_direct');
   assert.equal(saved.purchase_status, 'awaiting_seller_confirmation');
-  assert.equal(saved.purchase_policy_snapshot.purchase_route, 'escrow');
+  assert.equal(saved.purchase_policy_snapshot.purchase_route, 'dealer_direct');
   assert.equal(saved.store_id, 'kariv');
   assert.equal(saved.buyer_user_id, 'buyer');
   for (const read of fixture.reads) assert.ok(read.filters.some(([key, value]) => key === 'store_id' && value === 'kariv'));

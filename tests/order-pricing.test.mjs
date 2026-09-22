@@ -135,17 +135,15 @@ test('real order action snapshots the shared validated current price and recorde
     assert.equal(row.buyer_user_id, 'buyer');
     assert.equal(row.store_id, 'kariv');
     assert.equal(row.payment_method, 'bank_transfer');
-    assert.equal(row.escrow_status, 'dealer_accepted');
+    assert.equal(row.escrow_status, 'pending_review');
     assert.equal(row.purchase_route, 'kariv_direct');
-    assert.equal(row.purchase_status, 'awaiting_payment');
+    assert.equal(row.purchase_status, 'awaiting_seller_confirmation');
     assert.equal(row.purchase_policy_version, purchasePolicy.PURCHASE_POLICY_VERSION);
     assert.equal(row.purchase_policy_snapshot.purchase_route, 'kariv_direct');
     assert.deepEqual(row.shipping_address, input.shippingDetails);
-    assert.equal(f.rpcCalls.length, 1);
-    assert.equal(f.rpcCalls[0].args.p_expected_source_price, expected);
-    assert.equal(f.rpcCalls[0].args.p_expected_source_currency, 'CHF');
-    assert.equal(f.rpcCalls[0].args.p_expected_source_value_eur, expected);
-    assert.equal(f.rpcCalls[0].args.p_expected_policy_revision, null);
+    assert.equal(row.inventory_reserved, false);
+    assert.equal(row.reservation_expires_at, null);
+    assert.equal(f.rpcCalls.length, 0);
     assert.equal(result.order.totalAmount, expected);
     assert.equal(result.order.currency, 'CHF');
     assert.equal(f.authCalls(), 1);
@@ -175,14 +173,13 @@ test('active status, stock, tenant scope and sign-in boundaries still protect or
   assert.equal(f.writes.length, 0);
 });
 
-test('a signed-in buyer must verify their email before reserving new inventory', async () => {
+test('a signed-in buyer can place an ordinary order without an extra email-verification gate', async () => {
   const f = fixture({ emailVerified: false });
   const result = await f.createOrder(input);
-  assert.equal(result.ok, false);
-  assert.match(result.error, /verify your email address/i);
-  assert.equal(f.reads.some(({ table }) => table === 'products'), false);
+  assert.equal(result.ok, true);
+  assert.equal(f.reads.some(({ table }) => table === 'products'), true);
   assert.equal(f.rpcCalls.length, 0);
-  assert.equal(f.writes.length, 0);
+  assert.ok(f.writes.some(({ table }) => table === 'orders'));
 });
 
 test('replaying an existing order returns its historical amount without repricing or new writes', async () => {
@@ -217,21 +214,18 @@ test('server approval—not legacy dealer metrics or a client route—selects ma
   const result = await f.createOrder({
     ...input,
     expectedCurrency: 'EUR',
-    expectedPurchaseRoute: 'escrow',
+    expectedPurchaseRoute: 'dealer_direct',
     expectedSellerKey: 'dealer:dealer-1',
     purchaseRoute: 'kariv_direct',
     buyerRequestsProtection: false,
   });
   assert.equal(result.ok, true);
   const row = f.writes.find(({ table }) => table === 'orders').row;
-  assert.equal(row.purchase_route, 'escrow');
-  assert.equal(row.purchase_policy_snapshot.purchase_route, 'escrow');
+  assert.equal(row.purchase_route, 'dealer_direct');
+  assert.equal(row.purchase_policy_snapshot.purchase_route, 'dealer_direct');
   assert.equal(row.purchase_policy_snapshot.seller_name, 'Prague Timepieces s.r.o.');
   assert.equal(row.buyer_selected_protection, false);
-  assert.equal(f.rpcCalls[0].args.p_expected_source_price, 2500);
-  assert.equal(f.rpcCalls[0].args.p_expected_source_currency, 'EUR');
-  assert.equal(f.rpcCalls[0].args.p_expected_source_value_eur, 2500);
-  assert.equal(f.rpcCalls[0].args.p_expected_policy_revision, 0);
+  assert.equal(f.rpcCalls.length, 0);
   assert.equal(f.policyCalls[0].options.buyerRequestsProtection, false);
 });
 
@@ -255,17 +249,17 @@ test('approved dealers use one marketplace route, while an unapproved dealer can
     directSalesEnabled: true, sellerApproved: true, sellerVerified: true, paymentDetailsVerified: true, escrowEnabled: true,
     complianceStatus: 'clear', refundStatus: 'clear', sourceValueEur: 2500,
   };
-  const protectedFixture = fixture({
+  const approvedFixture = fixture({
     product: dealerProduct,
     policyResolver: (_watch, options) => purchasePolicy.evaluatePurchasePolicy({ ...dealer, buyerRequestsProtection: options.buyerRequestsProtection }),
   });
-  const protectedResult = await protectedFixture.createOrder({ ...input, expectedCurrency: 'EUR', expectedPurchaseRoute: 'escrow', expectedSellerKey: 'dealer:dealer-1', buyerRequestsProtection: true });
-  assert.equal(protectedResult.ok, true);
-  const protectedRow = protectedFixture.writes.find(({ table }) => table === 'orders').row;
-  assert.equal(protectedRow.purchase_route, 'escrow');
-  assert.equal(protectedRow.buyer_selected_protection, false);
-  assert.equal(protectedRow.purchase_policy_snapshot.buyer_selected_protection, false);
-  assert.equal(protectedRow.purchase_policy_snapshot.reason_codes, undefined);
+  const approvedResult = await approvedFixture.createOrder({ ...input, expectedCurrency: 'EUR', expectedPurchaseRoute: 'dealer_direct', expectedSellerKey: 'dealer:dealer-1', buyerRequestsProtection: true });
+  assert.equal(approvedResult.ok, true);
+  const approvedRow = approvedFixture.writes.find(({ table }) => table === 'orders').row;
+  assert.equal(approvedRow.purchase_route, 'dealer_direct');
+  assert.equal(approvedRow.buyer_selected_protection, false);
+  assert.equal(approvedRow.purchase_policy_snapshot.buyer_selected_protection, false);
+  assert.equal(approvedRow.purchase_policy_snapshot.reason_codes, undefined);
 
   const heldFixture = fixture({
     product: dealerProduct,
@@ -294,7 +288,7 @@ test('a live route change requires the buyer to review terms again', async () =>
   const result = await f.createOrder({
     ...input,
     expectedCurrency: 'EUR',
-    expectedPurchaseRoute: 'dealer_direct',
+    expectedPurchaseRoute: 'escrow',
     expectedSellerKey: 'dealer:dealer-1',
   });
   assert.equal(result.ok, false);

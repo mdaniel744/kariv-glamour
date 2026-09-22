@@ -102,21 +102,9 @@ export function evaluatePurchasePolicy({
   dealerId = null,
   sellerName = '',
   sellerApproved = false,
-  platformDirectPaymentReady = true,
-  platformEscrowPaymentReady = true,
   sourceValueEur = null,
 } = {}) {
   if (!dealerId) {
-    if (!platformDirectPaymentReady) {
-      return {
-        policyVersion: PURCHASE_POLICY_VERSION,
-        sellerType: 'kariv', sellerApproved: true, dealerId: null, sellerName: 'Kariv Glamour', dealerTier: null,
-        purchaseRoute: PURCHASE_ROUTES.MANUAL_REVIEW,
-        directEligible: false, escrowRequired: false, buyerMayChooseProtection: false,
-        directLimitEur: null, sourceValueEur: positiveNumber(sourceValueEur),
-        reasonCodes: ['kariv_payment_destination_unavailable'],
-      };
-    }
     return {
       policyVersion: PURCHASE_POLICY_VERSION,
       sellerType: 'kariv',
@@ -151,27 +139,15 @@ export function evaluatePurchasePolicy({
     };
   }
 
-  // Approved marketplace sellers use one consistent Kariv-managed checkout.
-  // This avoids making a dealer configure a second eligibility profile before
-  // their approved account and listings can function. Payment destination
-  // readiness is a store-level operational requirement, not a dealer rule.
-  if (!platformEscrowPaymentReady) {
-    return {
-      policyVersion: PURCHASE_POLICY_VERSION,
-      sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier: null,
-      purchaseRoute: PURCHASE_ROUTES.MANUAL_REVIEW,
-      directEligible: false, escrowRequired: false, buyerMayChooseProtection: false,
-      directLimitEur: null, sourceValueEur: euroValue,
-      reasonCodes: ['marketplace_payment_destination_unavailable'],
-    };
-  }
-
+  // Once Kariv approves a dealer application, that seller uses the same
+  // ordinary account checkout as first-party inventory. No tier, sales-count,
+  // escrow, bank-destination or probation rule is allowed to block an order.
   return {
     policyVersion: PURCHASE_POLICY_VERSION,
     sellerType: 'dealer', sellerApproved: true, dealerId, sellerName, dealerTier: null,
-    purchaseRoute: PURCHASE_ROUTES.ESCROW,
-    directEligible: false,
-    escrowRequired: true,
+    purchaseRoute: PURCHASE_ROUTES.DEALER_DIRECT,
+    directEligible: true,
+    escrowRequired: false,
     buyerMayChooseProtection: false,
     directLimitEur: null, sourceValueEur: euroValue,
     reasonCodes: ['dealer_approved'],

@@ -6,8 +6,6 @@
 // logic (dispute freeze, buyer notification), not something that belongs
 // in a Supabase project shared with two other stores.
 //
-// Expired unpaid inventory holds are released atomically and idempotently.
-//
 // Run manually with:
 //   node --env-file=.env.local scripts/releaseEscrowFunds.mjs
 
@@ -57,9 +55,6 @@ async function main() {
   // financial event before the order can become completed.
   const payoutDue = (candidates || []).length;
 
-  // Release abandoned unpaid inventory holds. A submitted payment proof is
-  // never auto-cancelled; staff must review it even if the original hold
-  // deadline has passed.
   const now = new Date().toISOString();
   const { count: overdueProofReviews, error: proofReviewError } = await supabase
     .from('orders')
@@ -74,35 +69,7 @@ async function main() {
     console.error('[releaseEscrowFunds] Failed to count overdue payment-proof reviews:', proofReviewError.message);
   }
 
-  const { data: expiredReservations, error: reservationError } = await supabase
-    .from('orders')
-    .select('id')
-    .eq('store_id', STORE_ID)
-    .eq('inventory_reserved', true)
-    .is('payment_reference', null)
-    .in('escrow_status', ['pending_review', 'dealer_accepted'])
-    .lte('reservation_expires_at', now)
-    .limit(200);
-
-  if (reservationError) {
-    console.error('[releaseEscrowFunds] Failed to fetch expired reservations:', reservationError.message);
-    process.exit(1);
-  }
-
-  let reservationsReleased = 0;
-  for (const order of expiredReservations || []) {
-    const { data, error } = await supabase.rpc('cancel_kariv_order_before_payment', {
-      p_store_id: STORE_ID,
-      p_order_id: order.id,
-    });
-    if (error) {
-      console.error(`[releaseEscrowFunds] Failed to release reservation ${order.id}:`, error.message);
-      continue;
-    }
-    if (data === true) reservationsReleased += 1;
-  }
-
-  console.log(`[releaseEscrowFunds] protectedPayoutsDue=${payoutDue} overdueProofReviews=${overdueProofReviews ?? 'unavailable'} expiredReservations=${(expiredReservations || []).length} reservationsReleased=${reservationsReleased}`);
+  console.log(`[releaseEscrowFunds] protectedPayoutsDue=${payoutDue} overdueProofReviews=${overdueProofReviews ?? 'unavailable'}`);
 }
 
 main().then(() => process.exit(0)).catch(e => {

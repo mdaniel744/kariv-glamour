@@ -10,7 +10,7 @@ const legacyRoute = await readFile(new URL('../src/page-content/admin/AdminDeale
 test('approved dealer checkout has no tier, age, sales, dispute or per-dealer payment gate', () => {
   const dealerBranch = policy.slice(policy.indexOf('// Dealer approval is the sole'), policy.indexOf('export function purchasePolicySnapshot'));
   assert.match(dealerBranch, /if \(!sellerApproved\)/);
-  assert.match(dealerBranch, /purchaseRoute: PURCHASE_ROUTES\.ESCROW/);
+  assert.match(dealerBranch, /purchaseRoute: PURCHASE_ROUTES\.DEALER_DIRECT/);
   assert.match(dealerBranch, /reasonCodes: \['dealer_approved'\]/);
   assert.doesNotMatch(dealerBranch, /completedSales|activeDays|unresolvedDisputes|configuredTier|directLimitEur,/);
 });
