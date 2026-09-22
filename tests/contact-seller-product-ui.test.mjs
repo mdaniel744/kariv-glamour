@@ -133,7 +133,7 @@ const baseProduct = {
   productImages: ['/watch.webp'],
 };
 
-test('dealer-owned product renders Contact Seller with quote and offer choices', () => {
+test('dealer-owned product renders standard cart actions plus Contact Seller choices', () => {
   const html = renderProduct({
     ...baseProduct,
     dealerId: 'dealer-1',
@@ -141,6 +141,8 @@ test('dealer-owned product renders Contact Seller with quote and offer choices',
   });
 
   assert.match(html, />Contact Seller</);
+  assert.match(html, />Add to Cart</);
+  assert.match(html, />Buy Now</);
   assert.match(html, />Request a quote</);
   assert.match(html, />Make an offer</);
   assert.doesNotMatch(html, />Ask an Expert</);

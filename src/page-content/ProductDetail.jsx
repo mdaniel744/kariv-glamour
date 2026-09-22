@@ -44,7 +44,6 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const [loading, setLoading] = useState(!initialProduct);
   const [related, setRelated] = useState(initialRelated);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [buyerRequestsProtection, setBuyerRequestsProtection] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -117,21 +116,18 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
   const purchasePolicy = readPurchasePolicy(product);
   const isKarivOwned = purchasePolicy.sellerType === 'kariv';
   const isManualReview = purchasePolicy.purchaseRoute === 'manual_review';
-  const protectedPurchase = isProtectedPurchase(purchasePolicy, buyerRequestsProtection);
-  const usesTraditionalCart = isKarivOwned || (
-    purchasePolicy.purchaseRoute === 'dealer_direct' && !protectedPurchase
-  );
+  const protectedPurchase = isProtectedPurchase(purchasePolicy);
   const canPurchase = availability.inStock && pricing.price != null && pricing.currency != null && !isManualReview;
   const inCart = isInCart(product.id);
 
-  const checkoutPath = buildCheckoutPath(product.id, protectedPurchase && purchasePolicy.buyerMayChooseProtection);
+  const checkoutPath = buildCheckoutPath(product.id);
   const handleBuyNow = () => {
     if (!canPurchase) return;
     if (!isAuthenticated) { setShowAuthModal(true); return; }
     router.push(localePath(checkoutPath));
   };
   const handleCartAction = () => {
-    if (!canPurchase || !usesTraditionalCart) return;
+    if (!canPurchase) return;
     if (inCart) {
       router.push(localePath('/cart'));
       return;
@@ -263,52 +259,22 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
 
             {/* Actions */}
             <div className="space-y-3">
-              {purchasePolicy.buyerMayChooseProtection && (
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/60">
-                  <input
-                    type="checkbox"
-                    checked={buyerRequestsProtection}
-                    onChange={(event) => setBuyerRequestsProtection(event.target.checked)}
-                    className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
-                  />
-                  <span>
-                    <span className="block text-sm font-medium text-foreground">{t('pages.productDetail.addProtection')}</span>
-                    <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{t('pages.productDetail.addProtectionDesc')}</span>
-                  </span>
-                </label>
-              )}
-              {usesTraditionalCart ? (
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <button
-                    onClick={handleCartAction}
-                    disabled={!canPurchase}
-                    className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
-                    <ShoppingBag size={16} />
-                    {!canPurchase ? t('common:currentlyUnavailable') : inCart ? t('pages.productDetail.viewCart') : t('pages.productDetail.addToCart')}
-                  </button>
-                  <button
-                    onClick={handleBuyNow}
-                    disabled={!canPurchase}
-                    className="flex min-h-14 items-center justify-center gap-2 rounded-xl border border-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary transition-colors hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50">
-                    <Lock size={16} />
-                    {canPurchase ? t('pages.productDetail.buyNowDirect') : t('common:currentlyUnavailable')}
-                  </button>
-                </div>
-              ) : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  onClick={handleCartAction}
+                  disabled={!canPurchase}
+                  className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
+                  <ShoppingBag size={16} />
+                  {!canPurchase ? t('common:currentlyUnavailable') : inCart ? t('pages.productDetail.viewCart') : t('pages.productDetail.addToCart')}
+                </button>
                 <button
                   onClick={handleBuyNow}
                   disabled={!canPurchase}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
-                  {protectedPurchase ? <ShieldCheck size={16} /> : <Store size={16} />}
-                  {isManualReview
-                    ? t('pages.productDetail.purchaseUnderReview')
-                    : !canPurchase
-                      ? t('common:currentlyUnavailable')
-                      : protectedPurchase
-                        ? t('pages.productDetail.buyWithProtection')
-                        : t('pages.productDetail.buyFromDealer', { seller: purchasePolicy.sellerName || t('pages.productDetail.verifiedDealer') })}
+                  className="flex min-h-14 items-center justify-center gap-2 rounded-xl border border-primary px-4 py-4 text-[11px] font-medium uppercase tracking-[0.15em] text-primary transition-colors hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50">
+                  <Lock size={16} />
+                  {canPurchase ? t('pages.productDetail.buyNowDirect') : t('common:currentlyUnavailable')}
                 </button>
-              )}
+              </div>
               <BuyNowAuthModal
                 open={showAuthModal && canPurchase}
                 onClose={() => setShowAuthModal(false)}

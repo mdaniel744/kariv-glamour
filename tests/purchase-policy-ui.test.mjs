@@ -98,7 +98,8 @@ test('authentication redirect preserves an optional protection route', () => {
 
 test('manual-review products keep their safety blocker without showing the removed disclosure card', () => {
   const detail = readFileSync(new URL('../src/page-content/ProductDetail.jsx', import.meta.url), 'utf8');
-  assert.match(detail, /isManualReview[\s\S]*purchaseUnderReview/);
+  assert.match(detail, /const canPurchase = [^;]*&& !isManualReview/);
+  assert.match(detail, /disabled=\{!canPurchase\}/);
   assert.match(detail, /\{!isManualReview && !isKarivOwned && \(/);
   assert.doesNotMatch(detail, /manualReviewDisclosure/);
   assert.doesNotMatch(detail, /karivDirectDisclosure/);
@@ -106,12 +107,14 @@ test('manual-review products keep their safety blocker without showing the remov
   assert.match(detail, /directDealerDisclosure/);
 });
 
-test('direct-dealer cart and buy-now paths preserve both sign-in gates', () => {
+test('all product pages use the standard cart and buy-now entry while preserving sign-in gates', () => {
   const detail = readFileSync(new URL('../src/page-content/ProductDetail.jsx', import.meta.url), 'utf8');
   const cart = readFileSync(new URL('../src/page-content/Cart.jsx', import.meta.url), 'utf8');
 
-  assert.match(detail, /const usesTraditionalCart = isKarivOwned \|\| \([\s\S]*purchasePolicy\.purchaseRoute === 'dealer_direct' && !protectedPurchase/);
-  assert.match(detail, /if \(!canPurchase \|\| !usesTraditionalCart\) return/);
+  assert.doesNotMatch(detail, /usesTraditionalCart/);
+  assert.match(detail, /if \(!canPurchase\) return/);
+  assert.doesNotMatch(detail, /checked=\{buyerRequestsProtection\}/);
+  assert.match(detail, /<ShoppingBag size=\{16\} \/>[\s\S]*pages\.productDetail\.addToCart/);
   assert.match(detail, /if \(!isAuthenticated\) \{ setShowAuthModal\(true\); return; \}/);
   assert.match(detail, /<BuyNowAuthModal[\s\S]*open=\{showAuthModal && canPurchase\}/);
   assert.match(cart, /if \(!isAuthenticated\) \{ setShowAuthModal\(true\); return; \}/);
