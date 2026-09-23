@@ -13,6 +13,10 @@ const snapshot = { date: today, source: 'CNB', rates: { EUR: 24.2, USD: 22, CZK:
 const product = { id: 'watch', store_id: 'kariv', name: 'Watch', price: 1000, sale_price: 800, currency: 'EUR', stock_quantity: 1, status: 'active', dealer_id: 'dealer', images: [], brands: { name: 'Rolex' } };
 
 function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
+  // Copy defensively: the stock-claim update mutates this object in place,
+  // and callers that omit `watch` all share the same module-level `product`
+  // reference by default.
+  watch = { ...watch };
   const reads = [];
   const writes = [];
   let createdOrder = null;
@@ -50,9 +54,19 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
         order() { return this; }, limit() { return this; },
         insert(value) { this.operation = 'insert'; this.value = value; return this; },
         upsert(value) { this.operation = 'upsert'; this.value = value; return this; },
+        update(value) { this.operation = 'update'; this.value = value; return this; },
         async maybeSingle() {
           reads.push({ table, filters: this.filters });
-          if (table === 'products') return { data: watch, error: null };
+          if (table === 'products') {
+            if (this.operation === 'update') {
+              const matches = this.filters.every(([key, value]) => watch[key] === value);
+              if (!matches) return { data: null, error: null };
+              Object.assign(watch, this.value);
+              writes.push({ table, value: this.value });
+              return { data: watch, error: null };
+            }
+            return { data: watch, error: null };
+          }
           if (table === 'orders') return { data: existing || createdOrder, error: null };
           throw new Error('Unexpected read ' + table);
         },
@@ -62,6 +76,11 @@ function checkout({ watch = product, rates = snapshot, existing = null } = {}) {
           return { data: { id: '12345678-order', ...this.value }, error: null };
         },
         then(resolve) {
+          if (table === 'products' && this.operation === 'update') {
+            const matches = this.filters.every(([key, value]) => watch[key] === value);
+            if (matches) { Object.assign(watch, this.value); writes.push({ table, value: this.value }); }
+            return Promise.resolve({ data: null, error: null }).then(resolve);
+          }
           if (this.operation !== 'read') writes.push({ table, value: this.value });
           return Promise.resolve({ data: [], error: null }).then(resolve);
         },

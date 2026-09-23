@@ -20,6 +20,11 @@ const baseProduct = {
 };
 
 function fixture({ product = baseProduct, existing = null, signedIn = true, emailVerified = true, policyResolver = null } = {}) {
+  // Copy defensively: the stock-claim update below mutates this object in
+  // place, and callers that omit `product` all share the same baseProduct
+  // reference by default. Without this, one test's claimed stock would leak
+  // into every later test that also relies on the default.
+  product = { ...product };
   const writes = [];
   const reads = [];
   const rpcCalls = [];
@@ -56,20 +61,37 @@ function fixture({ product = baseProduct, existing = null, signedIn = true, emai
     from(table) {
       const filters = [];
       let inserted;
+      let pendingUpdate = null;
       const query = {
         select() { return query; },
         eq(key, value) { filters.push([key, value]); return query; },
         order() { return query; },
         limit() { return query; },
+        update(patch) { pendingUpdate = patch; return query; },
         async maybeSingle() {
           reads.push({ table, filters: [...filters] });
           const row = table === 'products' ? product : table === 'orders' ? (existing || createdOrder) : null;
-          return { data: row && filters.every(([key, value]) => row[key] === value) ? row : null, error: null };
+          const matches = Boolean(row) && filters.every(([key, value]) => row[key] === value);
+          if (pendingUpdate) {
+            if (!matches) return { data: null, error: null };
+            Object.assign(row, pendingUpdate);
+            writes.push({ table, row: { ...row } });
+            return { data: row, error: null };
+          }
+          return { data: matches ? row : null, error: null };
         },
         insert(row) { inserted = { id: 'order-1', ...row }; writes.push({ table, row }); return query; },
         async single() { return { data: inserted, error: null }; },
         async upsert(row) { writes.push({ table, row }); return { error: null }; },
         then(resolve, reject) {
+          if (pendingUpdate && table === 'products') {
+            const matches = Boolean(product) && filters.every(([key, value]) => product[key] === value);
+            if (matches) {
+              Object.assign(product, pendingUpdate);
+              writes.push({ table, row: { ...product } });
+            }
+            return Promise.resolve({ data: null, error: null }).then(resolve, reject);
+          }
           if (table !== 'order_messages') throw new Error(`Unexpected fixture query ${table}`);
           return Promise.resolve({ data: [], error: null }).then(resolve, reject);
         },
@@ -141,8 +163,14 @@ test('real order action snapshots the shared validated current price and recorde
     assert.equal(row.purchase_policy_version, purchasePolicy.PURCHASE_POLICY_VERSION);
     assert.equal(row.purchase_policy_snapshot.purchase_route, 'kariv_direct');
     assert.deepEqual(row.shipping_address, input.shippingDetails);
-    assert.equal(row.inventory_reserved, false);
+    // The atomic stock claim below reserves the unit up front, so cancelling
+    // an unpaid order can correctly give it back via the existing
+    // cancel_kariv_order_before_payment RPC, which checks this flag.
+    assert.equal(row.inventory_reserved, true);
     assert.equal(row.reservation_expires_at, null);
+    const stockClaim = f.writes.find(({ table }) => table === 'products');
+    assert.ok(stockClaim, 'the order product row must be atomically decremented');
+    assert.equal(stockClaim.row.stock_quantity, 0);
     assert.equal(f.rpcCalls.length, 0);
     assert.equal(result.order.totalAmount, expected);
     assert.equal(result.order.currency, 'CHF');
@@ -171,6 +199,16 @@ test('active status, stock, tenant scope and sign-in boundaries still protect or
   await assert.rejects(f.createOrder(input), /Sign in required/);
   assert.equal(f.reads.length, 0);
   assert.equal(f.writes.length, 0);
+});
+
+test('a one-off watch cannot be sold twice: the second order sees it already claimed', async () => {
+  const f = fixture({ product: { ...baseProduct, stock_quantity: 1 } });
+  const first = await f.createOrder({ ...input, idempotencyKey: 'buyer-one' });
+  assert.equal(first.ok, true);
+  const second = await f.createOrder({ ...input, idempotencyKey: 'buyer-two' });
+  assert.equal(second.ok, false);
+  assert.match(second.error, /already sold/);
+  assert.equal(f.writes.filter(({ table }) => table === 'orders').length, 1);
 });
 
 test('a signed-in buyer can place an ordinary order without an extra email-verification gate', async () => {

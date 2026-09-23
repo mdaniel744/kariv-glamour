@@ -329,6 +329,25 @@ export async function createOrder({
     ...(pricing.conversion ? { conversion: pricing.conversion } : {}),
   };
 
+  // Atomically claim one unit of stock before creating the order. The `eq`
+  // on the just-read quantity makes this a compare-and-swap: if a concurrent
+  // buyer already bought the last unit between our read above and this
+  // write, the WHERE clause no longer matches, zero rows update, and we
+  // report the watch as sold instead of allowing a second sale of the same
+  // one-off piece. The plain order insert below has no row lock of its own,
+  // so this claim has to happen first and separately.
+  const { data: claimed, error: stockClaimError } = await supabaseAdmin
+    .from('products')
+    .update({ stock_quantity: product.stock_quantity - 1, updated_at: new Date().toISOString() })
+    .eq('id', product.id)
+    .eq('store_id', STORE_ID)
+    .eq('stock_quantity', product.stock_quantity)
+    .select('id')
+    .maybeSingle();
+  if (stockClaimError || !claimed) {
+    return { ok: false, error: 'This watch has already sold.' };
+  }
+
   const row = {
     store_id: STORE_ID,
     buyer_user_id: user.id,
@@ -352,7 +371,10 @@ export async function createOrder({
     buyer_selected_protection: false,
     purchase_policy_version: PURCHASE_POLICY_VERSION,
     purchase_policy_snapshot: purchasePolicySnapshot(purchasePolicy),
-    inventory_reserved: false,
+    // True because the stock claim above already reserved this unit.
+    // cancel_kariv_order_before_payment reads this flag to decide whether
+    // cancelling the order should give the unit back.
+    inventory_reserved: true,
     reservation_expires_at: null,
     shipping_status: 'not_shipped',
     shipping_address: shippingDetails,
@@ -372,6 +394,18 @@ export async function createOrder({
       const { data: raced } = await supabaseAdmin
         .from('orders').select('*').eq('store_id', STORE_ID).eq('idempotency_key', idempotencyKey).eq('buyer_user_id', user.id).maybeSingle();
       if (raced) return { ok: true, order: await shapeOrderDetail(raced) };
+    }
+    // The order was never created after the stock claim above succeeded —
+    // give the unit back instead of leaving it permanently unavailable.
+    try {
+      await supabaseAdmin
+        .from('products')
+        .update({ stock_quantity: product.stock_quantity, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+        .eq('store_id', STORE_ID)
+        .eq('stock_quantity', product.stock_quantity - 1);
+    } catch {
+      // Best effort: the stock claim still holds even if this restore fails.
     }
     return { ok: false, error: error.message };
   }
