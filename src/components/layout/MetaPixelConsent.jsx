@@ -42,7 +42,10 @@ export const COOKIE_SETTINGS_LABEL = {
 let pixelInitialized = false;
 
 function initializePixel() {
-  if (pixelInitialized) return;
+  if (pixelInitialized || window.__karivMetaPixelInitialized) {
+    pixelInitialized = true;
+    return;
+  }
 
   // Meta's standard queue lets PageView be sent even while its script loads asynchronously.
   if (!window.fbq) {
@@ -64,6 +67,7 @@ function initializePixel() {
   }
 
   window.fbq('init', PIXEL_ID);
+  window.__karivMetaPixelInitialized = true;
   pixelInitialized = true;
 }
 
@@ -92,7 +96,10 @@ export default function MetaPixelConsent() {
   useEffect(() => {
     if (!ready || choice !== 'accepted') return;
     initializePixel();
-    window.fbq('track', 'PageView');
+    if (window.__karivMetaPixelTrackedPath !== pathname) {
+      window.fbq('track', 'PageView');
+      window.__karivMetaPixelTrackedPath = pathname;
+    }
   }, [ready, choice, pathname]);
 
   const saveChoice = (value) => {
