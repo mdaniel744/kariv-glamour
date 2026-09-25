@@ -23,6 +23,9 @@ export default function SiteChrome({ children }) {
       </main>
       <Footer />
       <MetaPixelConsent />
+      <noscript>
+        <img height="1" width="1" style={{ display: 'none' }} src="/api/meta-pixel-noscript" alt="" />
+      </noscript>
     </div>
   );
 }

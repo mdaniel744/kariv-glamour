@@ -41,6 +41,14 @@ export const COOKIE_SETTINGS_LABEL = {
 
 let pixelInitialized = false;
 
+function persistConsentCookie(value) {
+  try {
+    document.cookie = `${CONSENT_KEY}=${value}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+  } catch {
+    // Storage restrictions may prevent the no-JavaScript fallback.
+  }
+}
+
 function initializePixel() {
   if (pixelInitialized || window.__karivMetaPixelInitialized) {
     pixelInitialized = true;
@@ -82,7 +90,10 @@ export default function MetaPixelConsent() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(CONSENT_KEY);
-      if (saved === 'accepted' || saved === 'declined') setChoice(saved);
+      if (saved === 'accepted' || saved === 'declined') {
+        setChoice(saved);
+        persistConsentCookie(saved);
+      }
     } catch {
       // Visitors who block storage can still make a choice for this page load.
     }
@@ -108,6 +119,7 @@ export default function MetaPixelConsent() {
     } catch {
       // The current page still respects the visitor's choice.
     }
+    persistConsentCookie(value);
     setSettingsOpen(false);
     setChoice(value);
 
