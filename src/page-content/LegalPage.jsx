@@ -29,6 +29,12 @@ const markdownComponents = {
   table: MarkdownTable,
 };
 
+const META_PIXEL_DISCLOSURE = {
+  en: 'If you allow marketing cookies, the Meta Pixel (provided by Meta Platforms) loads and sends page-view information to Meta to measure our advertising. Pixel ID: 1084417767682071. It stays off if you decline or have not chosen. You can change your choice through Cookie settings in the footer.',
+  de: 'Wenn Sie Marketing-Cookies erlauben, wird das Meta-Pixel (von Meta Platforms) geladen und übermittelt Informationen zu Seitenaufrufen an Meta, um unsere Werbung zu messen. Pixel-ID: 1084417767682071. Ohne Einwilligung oder bei Ablehnung bleibt es deaktiviert. Ihre Auswahl können Sie über die Cookie-Einstellungen in der Fußzeile ändern.',
+  cs: 'Pokud povolíte marketingové cookies, načte se Meta Pixel (poskytovaný společností Meta Platforms) a odešle společnosti Meta údaje o zobrazení stránek pro měření naší reklamy. ID pixelu: 1084417767682071. Bez souhlasu nebo při odmítnutí zůstane vypnutý. Svou volbu můžete změnit v nastavení cookies v zápatí.',
+};
+
 export default function LegalPage({ slug: slugProp, initialPage = null }) {
   const slug = slugProp || (typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean).pop() : '');
   const [page, setPage] = useState(initialPage);
@@ -84,6 +90,8 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
     );
   }
 
+  const content = localize(page, 'content') || '';
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 md:py-20 font-body">
       {/* Breadcrumb */}
@@ -96,7 +104,10 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
       <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-10">{localize(page, 'title')}</h1>
       <CompanyDetails locale={locale} compact={slug !== 'impressum'} />
       <div className="legal-content">
-        <ReactMarkdown components={markdownComponents}>{localize(page, 'content')}</ReactMarkdown>
+        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+        {slug === 'cookie-policy' && !content.includes('1084417767682071') && (
+          <p>{META_PIXEL_DISCLOSURE[locale] || META_PIXEL_DISCLOSURE.en}</p>
+        )}
       </div>
     </div>
   );

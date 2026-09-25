@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import MetaPixelConsent from './MetaPixelConsent';
 
 export default function SiteChrome({ children }) {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export default function SiteChrome({ children }) {
         {children}
       </main>
       <Footer />
+      <MetaPixelConsent />
     </div>
   );
 }

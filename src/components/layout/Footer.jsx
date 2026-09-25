@@ -3,9 +3,12 @@ import LocalizedLink from '@/components/LocalizedLink';
 import KarivLogo from '@/components/shared/KarivLogo';
 import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import { useLanguage } from '@/lib/languageContext';
+import { COOKIE_SETTINGS_EVENT, COOKIE_SETTINGS_LABEL } from './MetaPixelConsent';
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
+  const { locale } = useLanguage();
 
   const footerLinks = {
     company: [
@@ -76,6 +79,7 @@ export default function Footer() {
             <LocalizedLink to="/legal/privacy-policy" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.privacyPolicy')}</LocalizedLink>
             <LocalizedLink to="/legal/terms-and-conditions" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.termsConditions')}</LocalizedLink>
             <LocalizedLink to="/legal/cookie-policy" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.cookies')}</LocalizedLink>
+            <button type="button" onClick={() => window.dispatchEvent(new Event(COOKIE_SETTINGS_EVENT))} className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{COOKIE_SETTINGS_LABEL[locale] || COOKIE_SETTINGS_LABEL.en}</button>
           </div>
         </div>
       </div>
