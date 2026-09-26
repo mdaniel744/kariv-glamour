@@ -19,35 +19,47 @@ export default function ImageUploader({
   dropzoneClassName = '',
   purpose = 'catalog',
   helpText = null,
+  multiple = false,
+  maxFiles = null,
+  onUploadingChange,
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef(null);
 
-  const handleFile = async (file) => {
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setError('Please select a JPG, PNG, WebP, GIF, or AVIF image.');
+  const handleFiles = async (files) => {
+    const selected = Array.from(files || []);
+    if (!selected.length) return;
+    if (maxFiles != null && selected.length > maxFiles) {
+      setError(`You can add at most ${maxFiles} more images.`);
       return;
     }
-    if (file.size > 20 * 1024 * 1024) {
-      setError('Images must be under 20MB. Large phone photos are resized automatically.');
+    if (selected.some((file) => !file.type.startsWith('image/'))) {
+      setError('Please select only JPG, PNG, WebP, GIF, or AVIF images.');
+      return;
+    }
+    if (selected.some((file) => file.size > 20 * 1024 * 1024)) {
+      setError('Each image must be under 20MB. Large phone photos are resized automatically.');
       return;
     }
     setError(null);
     setUploading(true);
+    onUploadingChange?.(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('purpose', purpose);
-      const res = await uploadImage(formData);
-      if (res.ok) onChange(res.url);
-      else setError(res.error);
+      for (const file of multiple ? selected : selected.slice(0, 1)) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('purpose', purpose);
+        const res = await uploadImage(formData);
+        if (res.ok) onChange(res.url);
+        else { setError(res.error); break; }
+      }
     } catch {
       setError('Upload failed.');
     } finally {
       setUploading(false);
+      onUploadingChange?.(false);
       if (inputRef.current) inputRef.current.value = '';
     }
   };
@@ -77,7 +89,7 @@ export default function ImageUploader({
         onDrop={(e) => {
           e.preventDefault();
           setDragOver(false);
-          handleFile(e.dataTransfer.files?.[0]);
+          handleFiles(e.dataTransfer.files);
         }}
         disabled={uploading}
         className={`flex flex-col items-center justify-center gap-1.5 border-2 border-dashed px-4 py-6 text-center transition-colors disabled:opacity-50 ${dragOver ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'} ${dropzoneClassName}`}
@@ -85,7 +97,7 @@ export default function ImageUploader({
         {uploading ? <Loader2 size={18} className="animate-spin text-primary" /> : <Upload size={18} className="text-muted-foreground" />}
         <span className="text-[11px] text-muted-foreground">{uploading ? 'Uploading...' : label}</span>
       </button>
-      <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
+      <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={(e) => handleFiles(e.target.files)} />
       <p className="mt-1.5 max-w-sm text-[10px] leading-relaxed text-muted-foreground/75">
         {helpText || (purpose === 'product'
           ? 'Use a sharp, well-lit photo at least 1200px wide. JPG, PNG, WebP or AVIF; up to 20MB. Large phone photos are optimized automatically.'

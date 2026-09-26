@@ -4,10 +4,11 @@ import { readFileSync } from 'node:fs';
 import { compileFunction } from 'node:vm';
 import ts from 'typescript';
 
-function loadActions({ existingRow, translations = {}, generated = {} } = {}) {
+function loadActions({ existingRow, translations = {}, generated = {}, translationWriteError = null } = {}) {
   const writes = [];
   const reads = [];
   const translationInputs = [];
+  let slugSequence = 0;
   const client = {
     from(table) {
       const query = {
@@ -23,12 +24,20 @@ function loadActions({ existingRow, translations = {}, generated = {} } = {}) {
           reads.push({ table, filters: this.filters });
           return { data: existingRow, error: existingRow ? null : new Error('not found') };
         },
-        then(resolve) { writes.push({ table, ...this }); return Promise.resolve({ error: null }).then(resolve); },
+        async maybeSingle() {
+          reads.push({ table, filters: this.filters });
+          if (table === 'categories') {
+            return { data: { id: this.filters.find(([key]) => key === 'id')?.[1] }, error: null };
+          }
+          return { data: null, error: null };
+        },
+        then(resolve) { writes.push({ table, ...this }); return Promise.resolve({ error: table === 'translations' ? translationWriteError : null }).then(resolve); },
       };
       return query;
     },
   };
   const imports = {
+    'node:crypto': { randomUUID: () => String(++slugSequence).padStart(8, '0') },
     'next/cache': { revalidatePath() {} },
     '@/lib/supabaseAdmin': { supabaseAdmin: client },
     '@/lib/serverAuth': { requireAdmin: async () => {}, requireDealer: async () => ({ id: 'dealer' }) },
@@ -134,7 +143,7 @@ test('an explicitly edited target is saved as human without touching other trans
 test('new admin and dealer listings still save English originals and generated targets', async () => {
   for (const action of ['createProduct', 'createDealerListing']) {
     const fixture = loadActions({ generated: { productTitle_de: 'Deutscher Titel', productTitle_cs: 'Český název' } });
-    await fixture.actions[action]({ productTitle_en: 'English original' });
+    await fixture.actions[action]({ productTitle_en: 'English original', brand: 'Rolex', collection: 'Datejust', price: 7500 });
     const rows = fixture.writes.find((write) => write.table === 'translations').value;
     assert.equal(rows.length, 3, action);
     assert.ok(rows.every((row) => row.store_id === 'kariv-store' && row.entity_id === 'new-watch'));
@@ -150,4 +159,93 @@ test('SEO source columns and translated SEO fields are saved for new listings', 
   assert.equal(product.meta_description, 'English description');
   const rows = fixture.writes.find((write) => write.table === 'translations').value;
   assert.equal(rows.filter((row) => ['metaTitle', 'metaDescription'].includes(row.field_name)).length, 6);
+});
+
+test('dealer form saves Ecom classification, media metadata and all watch attributes as a tenant-owned draft', async () => {
+  const fixture = loadActions();
+  await fixture.actions.createDealerListing({
+    productTitle_en: 'Omega Seamaster 300', brand: 'Omega', collection: 'Seamaster',
+    categoryId: 'category-1', referenceNumber: '234.30', sku: 'WATCH-123',
+    price: 7500, salePrice: 7000, stockQuantity: 2, currency: 'EUR',
+    merchantCondition: 'used', badge: 'New Arrival', mpn: 'MPN-123',
+    googleProductCategory: 'Apparel & Accessories > Jewelry > Watches',
+    googleMerchantTitle: 'Omega Seamaster 300 watch',
+    googleMerchantDescription: 'A pre-owned Omega watch.',
+    productImages: ['https://example.com/one.jpg', 'https://example.com/two.jpg'],
+    imageTitles: ['Front', 'Back'], imageAlts: ['Watch front', 'Watch back'],
+    imageDescriptions: ['Front view', 'Caseback view'],
+    model: 'Seamaster 300', caseDiameter: '41 mm', functions: 'Date',
+    waterResistance: '300 m', crystalType: 'Sapphire', powerReserve: '60 h',
+    serviceHistory: 'Serviced 2024', polishedStatus: 'Unpolished',
+    originalPartsStatus: 'Original', warrantyType: 'Dealer', warrantyDuration: '12 months',
+    scopeOfDelivery: 'Watch and papers', boxIncluded: false, papersIncluded: true,
+    attributes: { 'Dial Finish': 'Sunburst', 'Lug Width': '20 mm', Authentication: 'Authenticated', authentication: 'Authenticated' },
+    authenticationStatus: 'Authenticated',
+    featured: true,
+  });
+  const row = fixture.writes.find((write) => write.table === 'products').value;
+  assert.equal(row.store_id, 'kariv-store');
+  assert.equal(row.dealer_id, 'dealer');
+  assert.equal(row.status, 'draft');
+  assert.match(row.slug, /-00000001$/);
+  assert.equal(row.is_featured, false, 'dealers cannot grant featured placement');
+  assert.equal(row.category_id, 'category-1');
+  assert.equal(row.stock_quantity, 2);
+  assert.equal(row.sku, 'WATCH-123');
+  assert.equal(row.mpn, 'MPN-123');
+  assert.equal(row.condition, 'used');
+  assert.equal(row.google_product_category, 'Apparel & Accessories > Jewelry > Watches');
+  assert.deepEqual(row.image_alts, ['Watch front', 'Watch back']);
+  assert.equal(row.attributes['Dial Finish'], 'Sunburst');
+  assert.equal(row.attributes['Lug Width'], '20 mm');
+  assert.equal(row.attributes.Authentication, 'Pending', 'dealers cannot authenticate their own watches');
+  assert.equal(row.attributes.authentication, undefined);
+  assert.equal(row.attributes['Water Resistance'], '300 m');
+  assert.equal(row.attributes['Scope of Delivery'], 'Watch and papers');
+  assert.equal(row.attributes['Box Included'], false);
+  assert.ok(fixture.reads.find((read) => read.table === 'categories')?.filters.some(([key, value]) => key === 'store_id' && value === 'kariv-store'));
+});
+
+test('dealer edits cannot replace an admin-set authentication status', async () => {
+  const fixture = loadActions({ existingRow: {
+    id: 'watch', name: 'Watch', slug: 'watch', attributes: { Authentication: 'Authenticated' },
+  } });
+  await fixture.actions.updateDealerListing('watch', {
+    attributes: { Authentication: 'Pending', 'Dial Finish': 'Sunburst' },
+    authenticationStatus: 'Pending',
+  });
+  const row = fixture.writes.find((write) => write.table === 'products').value;
+  assert.equal(row.attributes.Authentication, 'Authenticated');
+  assert.equal(row.attributes['Dial Finish'], 'Sunburst');
+});
+
+test('a saved dealer draft is reported as created even if its translation write fails', async () => {
+  const fixture = loadActions({ translationWriteError: { message: 'Translation table unavailable' } });
+  const result = await fixture.actions.createDealerListing({ productTitle_en: 'English watch title', brand: 'Rolex', collection: 'Datejust', price: 7500 });
+  assert.equal(result.id, 'new-watch');
+  assert.match(result.translationWarning, /saved.*translations need attention/);
+  assert.equal(fixture.writes.filter((write) => write.table === 'products' && write.operation === 'insert').length, 1);
+});
+
+test('dealer creation rejects incomplete watches and invalid stock before any write', async () => {
+  for (const payload of [
+    { productTitle_en: 'Watch', brand: 'Rolex', collection: 'Datejust', price: 0 },
+    { productTitle_en: 'Watch', brand: 'Rolex', collection: '', price: 7500 },
+    { productTitle_en: 'Watch', brand: 'Rolex', collection: 'Datejust', price: 7500, stockQuantity: -1 },
+  ]) {
+    const fixture = loadActions();
+    await assert.rejects(fixture.actions.createDealerListing(payload));
+    assert.equal(fixture.writes.length, 0);
+  }
+});
+
+test('two watches with the same title receive distinct dealer listing URLs', async () => {
+  const fixture = loadActions();
+  const payload = { productTitle_en: 'Rolex Datejust', brand: 'Rolex', collection: 'Datejust', price: 7500 };
+  await fixture.actions.createDealerListing(payload);
+  await fixture.actions.createDealerListing(payload);
+  const slugs = fixture.writes.filter((write) => write.table === 'products' && write.operation === 'insert')
+    .map((write) => write.value.slug);
+  assert.equal(slugs.length, 2);
+  assert.notEqual(slugs[0], slugs[1]);
 });

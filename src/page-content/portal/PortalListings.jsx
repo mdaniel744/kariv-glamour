@@ -28,7 +28,7 @@ export default function PortalListings() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-display text-foreground font-light">My Listings</h1>
         <LocalizedLink to="/portal/listings/new" className="flex items-center gap-2 bg-primary text-primary-foreground text-[11px] tracking-[0.12em] uppercase px-4 py-2.5">
-          <Plus size={14} /> List Watch
+          <Plus size={14} /> Add Watches
         </LocalizedLink>
       </div>
 
@@ -38,7 +38,7 @@ export default function PortalListings() {
         <div className="border border-border p-12 text-center">
           <Package size={32} className="text-muted-foreground/40 mx-auto mb-4" />
           <p className="text-sm text-muted-foreground mb-4">No listings yet.</p>
-          <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">List Your First Watch</LocalizedLink>
+          <LocalizedLink to="/portal/listings/new" className="text-[11px] tracking-[0.12em] uppercase text-primary hover:underline">Add Your First Watches</LocalizedLink>
         </div>
       ) : (
         <div className="space-y-3">
@@ -49,6 +49,7 @@ export default function PortalListings() {
                 <p className="text-[10px] tracking-[0.1em] uppercase text-primary">{p.brand}</p>
                 <p className="text-xs font-medium text-foreground truncate">{p.productTitle}</p>
                 <div className="flex items-center gap-3 mt-1">
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wide text-primary">{p.listingStatus === 'draft' ? 'Draft' : p.listingStatus}</span>
                   <span className={`text-[9px] tracking-wide uppercase px-2 py-0.5 ${p.availability === 'In Stock' ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : p.availability === 'Reserved' ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400' : 'bg-red-500/15 text-red-600 dark:text-red-400'}`}>{p.availability}</span>
                   <span className="text-sm text-foreground">{formatPrice(p.price)}</span>
                 </div>
