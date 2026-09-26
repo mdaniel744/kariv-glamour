@@ -30,27 +30,6 @@ const themeInitializationScript = `
     } catch (_) {}
   })();
 `;
-const metaPixelHeadScript = `
-  (() => {
-    try {
-      if (localStorage.getItem('kariv-meta-marketing-consent-v1') !== 'accepted') return;
-    } catch { return; }
-    if (/^\\/(?:de|en|cs)\\/(?:admin|dealer|portal|login|register|forgot-password|reset-password)(?:\\/|$)/.test(location.pathname)) return;
-
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window,document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1084417767682071');
-    fbq('track', 'PageView');
-    window.__karivMetaPixelInitialized = true;
-    window.__karivMetaPixelTrackedPath = location.pathname;
-  })();
-`;
 
 export const metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -103,7 +82,6 @@ export default async function LocaleLayout({ children, params }) {
     <html lang={locale} className={poppins.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
-        <script id="meta-pixel" dangerouslySetInnerHTML={{ __html: metaPixelHeadScript }} />
       </head>
       <body data-next-native="true">
         <ClerkProvider>

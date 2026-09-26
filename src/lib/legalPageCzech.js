@@ -211,8 +211,6 @@ Konkrétní cookies se mohou měnit podle zapnutých služeb a funkcí. Spadají
 
 Poskytovatelé přihlášení, například Clerk, mohou ukládat bezpečnostní a relační cookies. Aplikace ukládá také zvolený vzhled. Databázoví a hostingoví poskytovatelé mohou zpracovávat technické informace potřebné pro doručení a zabezpečení služby.
 
-Pokud povolíte marketingové cookies, načte se Meta Pixel (poskytovaný společností Meta Platforms) a odešle společnosti Meta údaje o zobrazení stránek pro měření naší reklamy. ID pixelu: 1084417767682071. Pokud souhlas odmítnete nebo se ještě nerozhodnete, pixel zůstane vypnutý.
-
 ## 3. Souhlas
 
 Nezbytné technologie mohou fungovat bez souhlasu, protože bez nich nelze službu bezpečně poskytnout. Ostatní analytické a marketingové technologie zůstávají vypnuté do vaší aktivní volby, kde je souhlas nutný. Zavření či ignorování výzvy není souhlasem.

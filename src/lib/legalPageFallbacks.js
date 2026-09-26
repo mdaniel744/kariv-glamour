@@ -492,8 +492,6 @@ The precise cookies may vary with the services and features enabled, but they fa
 
 Authentication providers such as Clerk may set security and session cookies. The app also stores the selected appearance preference on the device. Database and hosting providers may process technical request information needed to deliver and secure the service.
 
-If you allow marketing cookies, the Meta Pixel (provided by Meta Platforms) loads and sends page-view information to Meta to measure our advertising. Pixel ID: 1084417767682071. The Pixel stays off when you decline or have not made a choice.
-
 ## 3. Consent
 
 Strictly necessary technologies may operate without consent because the service cannot be securely provided without them. Non-essential analytics or marketing technologies remain disabled until you make an affirmative choice where consent is required. Closing or ignoring a consent prompt is not treated as acceptance.
@@ -529,8 +527,6 @@ Die genauen Cookies können je nach aktivierten Diensten und Funktionen variiere
 | Marketing | Kampagnen messen oder Werbung personalisieren | Nur nach wirksamer Einwilligung |
 
 Authentifizierungsanbieter wie Clerk können Sicherheits- und Sitzungscookies setzen. Die App speichert außerdem die gewählte Darstellungspräferenz auf dem Gerät. Datenbank- und Hostinganbieter können technische Anfrageinformationen verarbeiten, die zur Bereitstellung und Absicherung des Dienstes erforderlich sind.
-
-Wenn Sie Marketing-Cookies erlauben, wird das Meta-Pixel (von Meta Platforms) geladen und übermittelt Informationen zu Seitenaufrufen an Meta, um unsere Werbung zu messen. Pixel-ID: 1084417767682071. Ohne Ihre Einwilligung oder bei Ablehnung bleibt das Pixel deaktiviert.
 
 ## 3. Einwilligung
 
