@@ -4,12 +4,12 @@ import { listAdminDealerReviews, moderateDealerReview } from '@/actions/dealerRe
 import StarRating from '@/components/dealer/StarRating';
 import { useToast } from '@/components/ui/use-toast';
 
-const FILTERS = ['pending', 'approved', 'rejected', 'all'];
+const FILTERS = ['approved', 'pending', 'rejected', 'all'];
 
 export default function AdminDealerReviews() {
   const { toast } = useToast();
   const [reviews, setReviews] = useState([]);
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState('approved');
   const [loading, setLoading] = useState(true);
   const [workingId, setWorkingId] = useState(null);
 
@@ -37,8 +37,10 @@ export default function AdminDealerReviews() {
         toast({ title: 'Moderation failed', description: result.error, variant: 'destructive' });
         return;
       }
-      toast({ title: nextStatus === 'approved' ? 'Review approved' : 'Review rejected' });
-      setReviews((current) => current.filter((review) => review.id !== reviewId));
+      toast({ title: nextStatus === 'approved' ? 'Review published' : 'Review removed' });
+      setReviews((current) => status === 'all'
+        ? current.map((review) => review.id === reviewId ? { ...review, ...result.review } : review)
+        : current.filter((review) => review.id !== reviewId));
     } catch (error) {
       toast({ title: 'Moderation failed', description: error.message, variant: 'destructive' });
     } finally {
@@ -52,7 +54,7 @@ export default function AdminDealerReviews() {
         <div>
           <h1 className="font-display text-xl font-light text-[#E5E5E5]">Dealer Reviews</h1>
           <p className="mt-1 text-[10px] text-[#8E8E93]">
-            Verified-purchase reviews stay private until an administrator approves them.
+            Reviews from completed purchases publish automatically. You can review published feedback here.
           </p>
         </div>
         <button
@@ -115,23 +117,37 @@ export default function AdminDealerReviews() {
               <p className="whitespace-pre-line text-xs leading-relaxed text-[#B5B5B8]">{review.reviewText}</p>
               <p className="mt-3 text-[9px] text-[#666]">Last updated {new Date(review.updated_date || review.created_date).toLocaleString()}</p>
 
-              {review.status === 'pending' && (
+              {review.status !== 'rejected' && (
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-white/5 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => moderate(review.id, 'approved', review.updated_date)}
-                    disabled={workingId === review.id}
-                    className="flex items-center gap-2 bg-emerald-600 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-white disabled:opacity-50"
-                  >
-                    <Check size={13} /> Approve
-                  </button>
+                  {review.status === 'pending' && (
+                    <button
+                      type="button"
+                      onClick={() => moderate(review.id, 'approved', review.updated_date)}
+                      disabled={workingId === review.id}
+                      className="flex items-center gap-2 bg-emerald-600 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-white disabled:opacity-50"
+                    >
+                      <Check size={13} /> Publish earlier review
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => moderate(review.id, 'rejected', review.updated_date)}
                     disabled={workingId === review.id}
                     className="flex items-center gap-2 border border-red-500/30 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-red-400 disabled:opacity-50"
                   >
-                    <X size={13} /> Reject
+                    <X size={13} /> {review.status === 'approved' ? 'Remove review' : 'Reject'}
+                  </button>
+                </div>
+              )}
+              {review.status === 'rejected' && (
+                <div className="mt-5 border-t border-white/5 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => moderate(review.id, 'approved', review.updated_date)}
+                    disabled={workingId === review.id}
+                    className="flex items-center gap-2 bg-emerald-600 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.1em] text-white disabled:opacity-50"
+                  >
+                    <Check size={13} /> Restore review
                   </button>
                 </div>
               )}

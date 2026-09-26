@@ -84,7 +84,7 @@ function BuyerComments({ dealerId, dealerName, available, user, isLoadingAuth })
         </button>
       </div>
 
-      {submitted && <p role="status" className="mt-4 text-sm leading-relaxed text-muted-foreground">{t('components.dealerReviews.pendingNotice')}</p>}
+      {submitted && <p role="status" className="mt-4 text-sm leading-relaxed text-muted-foreground">{t('components.dealerReviews.publishedNotice')}</p>}
 
       {expanded && user && (
         <div className="mt-5">
@@ -113,7 +113,7 @@ function BuyerComments({ dealerId, dealerName, available, user, isLoadingAuth })
               )}
               <DealerReviewPurchases watches={selected.purchasedWatches} className="mb-4" />
               {selected.review?.status === 'pending' && !submitted && (
-                <p className="my-4 text-sm leading-relaxed text-muted-foreground">{t('components.dealerReviews.pendingNotice')}</p>
+                <p className="my-4 text-sm leading-relaxed text-muted-foreground">{t('components.dealerReviews.legacyPendingNotice')}</p>
               )}
               <DealerReviewForm
                 key={`${selected.id}:${selected.review?.updated_date || 'new'}`}

@@ -242,8 +242,9 @@ test('review eligibility accepts completed purchases or released escrow, never m
   const result = await actions.getDealerReviewEligibility('dealer-1');
   assert.equal(result.ok, true);
   const eligibilityFilter = orderCalls.find((call) => call[0] === 'or')?.[1] || '';
-  assert.match(eligibilityFilter, /purchase_status\.in\.\(delivered,completed\)/);
+  assert.match(eligibilityFilter, /purchase_status\.eq\.completed/);
   assert.match(eligibilityFilter, /escrow_status\.eq\.funds_released/);
+  assert.doesNotMatch(eligibilityFilter, /delivered/);
   assert.doesNotMatch(eligibilityFilter, /verified/);
 });
 

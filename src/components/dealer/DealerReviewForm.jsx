@@ -33,7 +33,7 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
       }
       toast({
         title: t('components.dealerReviews.submitted'),
-        description: t('components.dealerReviews.pendingDescription'),
+        description: t('components.dealerReviews.publishedDescription'),
       });
       onSubmitted?.(result.review);
     } catch (error) {
@@ -96,7 +96,7 @@ export default function DealerReviewForm({ dealerId, dealerName, orderId, orderR
           {saving ? t('components.dealerReviews.submitting') : t(editing ? 'components.dealerReviews.submitComment' : 'components.dealerReviews.submit')}
         </button>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          {t(editing ? 'components.dealerReviews.commentModerationNotice' : 'components.dealerReviews.purchaseDisclosure')}
+          {t(editing ? 'components.dealerReviews.commentUpdateNotice' : 'components.dealerReviews.purchaseDisclosure')}
         </p>
       </div>
     </form>

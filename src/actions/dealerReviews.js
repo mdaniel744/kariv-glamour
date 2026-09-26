@@ -14,7 +14,10 @@ import {
   normalizePublicDealerIds,
 } from '@/lib/dealerRatingSummaries';
 
-const COMPLETED_PURCHASE_FILTER = 'purchase_status.in.(delivered,completed),escrow_status.eq.funds_released';
+// Delivery alone is not the end of the purchase: escrow orders remain in the
+// inspection period until funds are released. Only completed purchases can
+// publish a verified-buyer review.
+const COMPLETED_PURCHASE_FILTER = 'purchase_status.eq.completed,escrow_status.eq.funds_released';
 const DEALER_RATING_PAGE_SIZE = 1000;
 const REVIEW_STATUSES = ['pending', 'approved', 'rejected'];
 
@@ -245,7 +248,7 @@ export async function submitDealerReview({ dealerId, orderId, rating, title = ''
     rating: numericRating,
     title: cleanTitle,
     review_text: cleanReview,
-    status: 'pending',
+    status: 'approved',
     reviewed_by: null,
     reviewed_at: null,
     updated_at: new Date().toISOString(),
@@ -269,9 +272,9 @@ export async function submitDealerReview({ dealerId, orderId, rating, title = ''
   return { ok: true, review: mapDealerReviewRow(data) };
 }
 
-// A buyer can add to or revise their written feedback after rating a dealer.
-// Reuse the same moderated review: edits never bypass approval or create a
-// second rating for one purchase, and the original star rating is preserved.
+// A buyer can revise their written feedback after rating a dealer. The order
+// is rechecked before publishing the edit; one purchase still yields only one
+// rating, and the original star rating is preserved.
 export async function updateDealerReviewComment({ reviewId, reviewText = '', expectedUpdatedAt }) {
   const user = await requireUser();
   const cleanReview = String(reviewText).trim();
@@ -295,7 +298,7 @@ export async function updateDealerReviewComment({ reviewId, reviewText = '', exp
 
   const { data, error } = await supabaseAdmin.from('dealer_reviews').update({
     review_text: cleanReview,
-    status: 'pending',
+    status: 'approved',
     reviewed_by: null,
     reviewed_at: null,
     updated_at: new Date().toISOString(),
@@ -336,6 +339,22 @@ export async function moderateDealerReview(reviewId, status, expectedUpdatedAt) 
   }
   if (!expectedUpdatedAt) return { ok: false, error: 'Refresh the review before moderating it.' };
 
+  if (status === 'approved') {
+    const { data: review, error: readError } = await supabaseAdmin.from('dealer_reviews')
+      .select('buyer_user_id, dealer_user_id, order_id, updated_at')
+      .eq('id', reviewId).eq('store_id', STORE_ID).maybeSingle();
+    if (readError) return { ok: false, error: reviewServiceError(readError) };
+    if (!review || review.updated_at !== expectedUpdatedAt) {
+      return { ok: false, error: 'The review changed. Refresh to read the latest comment before publishing it.' };
+    }
+    const { data: order, error: orderError } = await loadCompletedReviewOrder(
+      review.buyer_user_id, review.dealer_user_id, review.order_id,
+    );
+    if (orderError || !order) {
+      return { ok: false, error: 'Only reviews tied to a completed purchase can be published.' };
+    }
+  }
+
   const { data, error } = await supabaseAdmin
     .from('dealer_reviews')
     .update({
@@ -351,7 +370,7 @@ export async function moderateDealerReview(reviewId, status, expectedUpdatedAt) 
     .maybeSingle();
 
   if (error) return { ok: false, error: reviewServiceError(error) };
-  if (!data) return { ok: false, error: 'The review changed. Refresh to read the latest comment before approving it.' };
+  if (!data) return { ok: false, error: 'The review changed. Refresh to read the latest comment before publishing it.' };
   revalidateDealerProfile(data.dealer_user_id);
   return { ok: true, review: mapDealerReviewRow(data) };
 }

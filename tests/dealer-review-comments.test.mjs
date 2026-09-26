@@ -61,12 +61,17 @@ function fixture({
           beforeUpdate?.(tables, call);
           if (updateError) return Promise.resolve({ data: null, error: updateError });
         }
+        if (call.action === 'insert') {
+          const row = { id: 'review-new', created_at: VERSION, ...call.values };
+          tables[table].push(row);
+          return Promise.resolve({ data: structuredClone(single ? row : [row]), error: null });
+        }
         let rows = (tables[table] || []).filter((row) => call.filters.every(([kind, key, value]) => (
           kind === 'in' ? value.includes(row[key]) : row[key] === value
         )));
         if (call.or) {
-          assert.equal(call.or, 'purchase_status.in.(delivered,completed),escrow_status.eq.funds_released');
-          rows = rows.filter((row) => ['delivered', 'completed'].includes(row.purchase_status) || row.escrow_status === 'funds_released');
+          assert.equal(call.or, 'purchase_status.eq.completed,escrow_status.eq.funds_released');
+          rows = rows.filter((row) => row.purchase_status === 'completed' || row.escrow_status === 'funds_released');
         }
         if (call.order) {
           const [key, options] = call.order;
@@ -82,6 +87,7 @@ function fixture({
         or(value) { call.or = value; return query; },
         order(key, options) { call.order = [key, options]; return query; },
         update(values) { call.action = 'update'; call.values = structuredClone(values); return query; },
+        insert(values) { call.action = 'insert'; call.values = structuredClone(values); return query; },
         maybeSingle() { return execute(true); },
         single() { return execute(true); },
         then(resolve, reject) { return execute().then(resolve, reject); },
@@ -116,7 +122,7 @@ function updateInput(extra = {}) {
   return { reviewId: 'review-1', reviewText: NEW_COMMENT, expectedUpdatedAt: VERSION, ...extra };
 }
 
-test('a verified buyer can revise feedback from any moderation state without changing the original rating or title', async () => {
+test('a verified buyer can revise feedback without admin approval or changing the original rating or title', async () => {
   for (const status of ['approved', 'pending', 'rejected']) {
     const { actions, tables, calls, invalidated } = fixture({ reviews: [{ ...defaultReview, status }] });
     const result = await actions.updateDealerReviewComment(updateInput({
@@ -124,7 +130,7 @@ test('a verified buyer can revise feedback from any moderation state without cha
       dealerId: 'other-dealer', orderId: 'other-order', reviewedBy: 'fake-admin',
     }));
     assert.equal(result.ok, true);
-    assert.equal(result.review.status, 'pending');
+    assert.equal(result.review.status, 'approved');
     assert.equal(result.review.rating, defaultReview.rating);
     assert.equal(result.review.title, defaultReview.title);
     assert.equal(result.review.reviewText, NEW_COMMENT);
@@ -143,6 +149,65 @@ test('a verified buyer can revise feedback from any moderation state without cha
       ['/de/dealer-profile/dealer-1'], ['/en/dealer-profile/dealer-1'], ['/cs/dealer-profile/dealer-1'],
       ['/[locale]/product/[slug]', 'page'],
     ]);
+  }
+});
+
+test('a completed purchase publishes a review immediately without an administrator', async () => {
+  const { actions, tables, calls, invalidated } = fixture({ reviews: [] });
+  const result = await actions.submitDealerReview({
+    dealerId: 'dealer-1', orderId: 'order-1', rating: 5,
+    title: 'Excellent dealer', reviewText: 'The watch arrived as described and the purchase was smooth.',
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.review.status, 'approved');
+  assert.equal(tables.dealer_reviews[0].status, 'approved');
+  assert.equal(tables.dealer_reviews[0].reviewed_by, null);
+  assert.equal(tables.dealer_reviews[0].order_id, 'order-1');
+  assert.equal(calls.find((call) => call.action === 'insert').values.store_id, STORE_ID);
+  assert.equal(invalidated.length, 4);
+});
+
+test('a buyer cannot publish twice or submit against another tenant or buyer order', async () => {
+  const duplicate = fixture();
+  const duplicateResult = await duplicate.actions.submitDealerReview({
+    dealerId: 'dealer-1', orderId: 'order-1', rating: 5, reviewText: NEW_COMMENT,
+  });
+  assert.equal(duplicateResult.ok, false);
+  assert.ok(duplicate.calls.every((call) => call.action !== 'insert'));
+
+  for (const mismatch of [{ store_id: 'other-store' }, { buyer_user_id: 'other-buyer' }, { dealer_user_id: 'other-dealer' }]) {
+    const { actions, calls } = fixture({ reviews: [], orders: [{ ...defaultOrder, ...mismatch }] });
+    const result = await actions.submitDealerReview({
+      dealerId: 'dealer-1', orderId: 'order-1', rating: 5, reviewText: NEW_COMMENT,
+    });
+    assert.equal(result.ok, false);
+    assert.ok(calls.every((call) => call.action !== 'insert'));
+  }
+});
+
+test('legacy pending-review backfill is limited to matching completed Kariv purchases', () => {
+  const migration = readFileSync(new URL('../supabase/migrations/20260926090000_publish_completed_kariv_dealer_reviews.sql', import.meta.url), 'utf8');
+  for (const required of [
+    "review.status = 'pending'", 'purchase.id = review.order_id',
+    'purchase.store_id = review.store_id', 'purchase.buyer_user_id = review.buyer_user_id',
+    'purchase.dealer_user_id = review.dealer_user_id', "purchase.purchase_status = 'completed'",
+    "purchase.escrow_status = 'funds_released'", "review.store_id = '7efd71bc-0287-4f40-8a2f-1de330c49522'::uuid",
+  ]) assert.ok(migration.includes(required), `Missing backfill guard: ${required}`);
+  assert.doesNotMatch(migration, /alter table/i);
+});
+
+test('delivery or an unconfirmed purchase cannot publish a review', async () => {
+  for (const status of ['delivered', 'shipped', 'cancelled']) {
+    const { actions, calls } = fixture({ reviews: [], orders: [{
+      ...defaultOrder, purchase_status: status, escrow_status: status === 'delivered' ? 'verified' : 'not_applicable',
+    }] });
+    const result = await actions.submitDealerReview({
+      dealerId: 'dealer-1', orderId: 'order-1', rating: 5,
+      reviewText: 'The watch arrived as described and the purchase was smooth.',
+    });
+    assert.equal(result.ok, false);
+    assert.match(result.error, /completed order/);
+    assert.ok(calls.every((call) => call.action !== 'insert'));
   }
 });
 
@@ -221,7 +286,7 @@ test('invalid comment requests are rejected before any database lookup', async (
 test('eligibility returns all and only the authenticated buyer’s completed purchases for this dealer', async () => {
   const eligibleOrders = [
     defaultOrder,
-    { ...defaultOrder, id: 'order-2', created_at: '2026-09-19T10:00:00.000Z', purchase_status: 'delivered' },
+    { ...defaultOrder, id: 'order-2', created_at: '2026-09-19T10:00:00.000Z', purchase_status: 'completed' },
     { ...defaultOrder, id: 'order-3', created_at: '2026-09-17T10:00:00.000Z', purchase_status: null, escrow_status: 'funds_released' },
   ];
   const hiddenOrders = [
@@ -229,6 +294,7 @@ test('eligibility returns all and only the authenticated buyer’s completed pur
     { ...defaultOrder, id: 'foreign-buyer', buyer_user_id: 'other-buyer' },
     { ...defaultOrder, id: 'foreign-dealer', dealer_user_id: 'other-dealer' },
     { ...defaultOrder, id: 'not-completed', purchase_status: 'shipped', escrow_status: 'verified' },
+    { ...defaultOrder, id: 'delivered-not-completed', purchase_status: 'delivered', escrow_status: 'verified' },
   ];
   const rejectedReview = { ...defaultReview, id: 'review-3', order_id: 'order-3', status: 'rejected' };
   const { actions, calls } = fixture({ reviews: [defaultReview, rejectedReview], orders: [...eligibleOrders, ...hiddenOrders] });
@@ -300,10 +366,26 @@ test('admin moderation cannot publish a missing or stale comment version', async
     assert.equal(tables.dealer_reviews[0].review_text, defaultReview.review_text);
     assert.deepEqual(invalidated, []);
     if (!version) assert.equal(calls.length, 0, 'missing review version must be rejected before writing');
-    else assert.deepEqual(calls[0].filters, [
-      ['eq', 'id', 'review-1'], ['eq', 'store_id', STORE_ID], ['eq', 'updated_at', version],
-    ]);
+    else {
+      assert.deepEqual(calls[0].filters, [
+        ['eq', 'id', 'review-1'], ['eq', 'store_id', STORE_ID],
+      ]);
+      assert.ok(calls.every((call) => call.action !== 'update'));
+    }
   }
+});
+
+test('administrator cannot publish a legacy review for an incomplete purchase', async () => {
+  const { actions, calls, invalidated } = fixture({
+    reviews: [{ ...defaultReview, status: 'pending' }],
+    orders: [{ ...defaultOrder, purchase_status: 'delivered', escrow_status: 'verified' }],
+    adminId: 'admin-2',
+  });
+  const result = await actions.moderateDealerReview('review-1', 'approved', VERSION);
+  assert.equal(result.ok, false);
+  assert.match(result.error, /completed purchase/);
+  assert.ok(calls.every((call) => call.action !== 'update'));
+  assert.deepEqual(invalidated, []);
 });
 
 test('admin can approve the exact reviewed version and the dashboard passes the displayed version', async () => {
@@ -317,7 +399,7 @@ test('admin can approve the exact reviewed version and the dashboard passes the 
   assert.equal(result.review.reviewText, defaultReview.review_text);
   assert.equal(tables.dealer_reviews[0].rating, defaultReview.rating);
   assert.equal(tables.dealer_reviews[0].title, defaultReview.title);
-  assert.deepEqual(calls[0].filters, [
+  assert.deepEqual(calls[2].filters, [
     ['eq', 'id', 'review-1'], ['eq', 'store_id', STORE_ID], ['eq', 'updated_at', VERSION],
   ]);
   assert.equal(invalidated.length, 4);
