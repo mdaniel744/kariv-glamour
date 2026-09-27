@@ -2,6 +2,8 @@ import { notFound, redirect } from 'next/navigation';
 import SeoLandingRouteClient from '@/components/next-pages/SeoLandingRouteClient';
 import { getSeoLandingRoute, SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import BrandResearchArticle from '@/components/guides/BrandResearchArticle';
+import RelatedProductLinks from '@/components/seo/RelatedProductLinks';
+import { getSeoProductLinks } from '@/lib/seoProductLinks';
 import { canonicalSeoSlug, getResearchArticle } from '@/lib/watchResearch/articles';
 import { getGuideMedia } from '@/lib/watchResearch/media';
 import {
@@ -67,6 +69,9 @@ export default async function SeoLandingPage({ params }) {
   const article = getResearchArticle(route, locale);
   const title = article?.title || localizedField(route.pageData, 'title', locale);
   const description = route.pageData.isGuide ? article?.excerpt : localizedField(route.pageData, 'description', locale);
+  const productLinks = route.pageData.isGuide
+    ? []
+    : await getSeoProductLinks(route.brandName, route.pageData.filter, locale);
 
   const jsonLd = [
     {
@@ -113,6 +118,7 @@ export default async function SeoLandingPage({ params }) {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       {!route.pageData.isGuide && <SeoLandingRouteClient pageKey={route.pageKey} slug={slug} />}
+      <RelatedProductLinks locale={locale} products={productLinks} />
       <BrandResearchArticle route={route} locale={locale} compact={!route.pageData.isGuide} />
     </>
   );

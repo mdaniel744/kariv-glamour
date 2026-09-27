@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import BrandRouteClient from '@/components/next-pages/BrandRouteClient';
 import { getBrandBySlug, getBrandPageData } from '@/lib/base44Server';
 import { BRAND_DATA } from '@/lib/constants';
+import { brandCatalogProduct } from '@/lib/brandCatalogProduct';
 import {
   getSiteUrl,
   localizedArray,
@@ -111,7 +112,7 @@ export default async function BrandPage({ params }) {
       <BrandRouteClient
         slug={slug}
         brand={data.brand}
-        products={data.products}
+        products={data.products?.map(brandCatalogProduct) ?? null}
         collections={data.collections}
       />
     </>

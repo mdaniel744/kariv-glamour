@@ -1,15 +1,10 @@
 import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { normalizeLocale } from './src/lib/locales';
+import { isSignedInPath, preferredHostUrl } from './src/lib/publicRoutes';
 
 const isAdminRoute = createRouteMatcher(['/:locale/admin(.*)']);
 const isDealerRoute = createRouteMatcher(['/:locale/portal/listings(.*)', '/:locale/portal/sales(.*)']);
-const isSignedInRoute = createRouteMatcher([
-  '/:locale/portal(.*)',
-  '/:locale/cart(.*)',
-  '/:locale/wishlist(.*)',
-  '/:locale/checkout(.*)',
-]);
 
 function localeFromPath(pathname) {
   const segment = pathname.split('/')[1];
@@ -18,6 +13,8 @@ function localeFromPath(pathname) {
 
 export default clerkMiddleware(async (auth, request) => {
   const { pathname, search } = request.nextUrl;
+  const preferredUrl = preferredHostUrl(request.url, request.headers.get('host'));
+  if (preferredUrl) return NextResponse.redirect(preferredUrl, 308);
 
   if (pathname === '/') {
     return NextResponse.redirect(new URL(`/de${search}`, request.url), 308);
@@ -31,7 +28,7 @@ export default clerkMiddleware(async (auth, request) => {
     return NextResponse.redirect(new URL(`/de${pathname}${search}`, request.url), 308);
   }
 
-  if (isAdminRoute(request) || isDealerRoute(request) || isSignedInRoute(request)) {
+  if (isAdminRoute(request) || isDealerRoute(request) || isSignedInPath(pathname)) {
     const { userId } = await auth();
     const locale = localeFromPath(pathname);
 
@@ -62,5 +59,5 @@ export default clerkMiddleware(async (auth, request) => {
 });
 
 export const config = {
-  matcher: ['/((?!_next|.*\\..*).*)'],
+  matcher: ['/((?!_next|.*\\..*).*)', '/robots.txt', '/sitemap.xml'],
 };

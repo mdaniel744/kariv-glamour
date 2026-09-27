@@ -115,7 +115,7 @@ function filterCacheKey(filters) {
 
 const searchProducts = (payload) => searchShopProductsAction(payload);
 
-export default function Shop() {
+export default function Shop({ initialResults = null }) {
   const [searchParams, setSearchParams] = useUrlSearchParams();
   const { t } = useTranslation();
   const { locale, exchangeRates } = useStorefrontPricing();
@@ -132,12 +132,12 @@ export default function Shop() {
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [page, setPage] = useState(() => positivePage(searchParams.get('page')));
 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(() => initialResults?.items || []);
+  const [loading, setLoading] = useState(() => !initialResults);
   const [error, setError] = useState(null);
-  const [totalCount, setTotalCount] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(() => initialResults?.totalCount || 0);
+  const [totalPages, setTotalPages] = useState(() => initialResults?.totalPages || 0);
+  const [hasMore, setHasMore] = useState(() => initialResults?.hasMore || false);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -158,6 +158,7 @@ export default function Shop() {
   // Refs for stale request cancellation
   const requestIdRef = useRef(0);
   const isInitializedRef = useRef(false);
+  const skipInitialLoadRef = useRef(Boolean(initialResults));
 
   // ── Sync filter changes to URL ──
   // This runs when filters/sort/page change from user interaction.
@@ -187,6 +188,10 @@ export default function Shop() {
 
   // ── Fetch products when filters/sort/page change ──
   useEffect(() => {
+    if (skipInitialLoadRef.current) {
+      skipInitialLoadRef.current = false;
+      return;
+    }
     const currentRequestId = ++requestIdRef.current;
     const load = async () => {
       setLoading(true);

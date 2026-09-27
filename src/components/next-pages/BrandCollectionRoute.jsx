@@ -1,5 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 import BrandCollectionPageClient from '@/components/next-pages/BrandCollectionPageClient';
+import RelatedProductLinks from '@/components/seo/RelatedProductLinks';
+import { getSeoProductLinks } from '@/lib/seoProductLinks';
 import { getBrandCollection } from '@/lib/brandCollectionRegistry';
 import { getSeoLandingRouteForBrandPath, SEO_LANDING_ROUTES } from '@/lib/brandSeoRegistry';
 import { canonicalSeoSlug } from '@/lib/watchResearch/articles';
@@ -59,6 +61,11 @@ export default async function BrandCollectionRoute({ params, routeKey }) {
   const url = `${siteUrl}/${locale}/${route.pathPrefix}/${slug}`;
   const name = `${route.brandName} ${route.collection.name}`;
   const description = localizedField(route.collection, 'description', locale);
+  const productLinks = await getSeoProductLinks(
+    route.brandName,
+    { collection: route.collection.name },
+    locale,
+  );
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -84,6 +91,7 @@ export default async function BrandCollectionRoute({ params, routeKey }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       <BrandCollectionPageClient pageKey={route.pageKey} slug={slug} />
+      <RelatedProductLinks locale={locale} products={productLinks} />
     </>
   );
 }
