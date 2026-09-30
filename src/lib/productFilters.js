@@ -99,28 +99,64 @@ function effectivePrice(product, payload) {
   return getProductPricing(product, payload).price;
 }
 
-function matchesSearch(product, query) {
-  const requested = normalizeFilterValue(query);
-  if (!requested) return true;
+function searchWords(value) {
+  return normalizeFilterValue(String(value ?? '').replace(/<[^>]*>/g, ' ')).split(' ').filter(Boolean);
+}
 
-  const searchable = [
+function hasSearchTerm(words, term, allowShortPrefix = false) {
+  return words.some((word) => word === term || (term.length >= (allowShortPrefix ? 3 : 5) && word.startsWith(term)));
+}
+
+// A brand mentioned in another seller's description is not evidence that the
+// watch is made by that brand. The shop passes a brand constraint when the
+// shopper explicitly names one of the catalogue's brands.
+export function productSearchScore(product, query, requiredBrand = '') {
+  const requested = normalizeFilterValue(query);
+  if (!requested) return 0;
+
+  const titles = [
     product.productTitle,
     product.productTitle_en,
     product.productTitle_de,
     product.productTitle_cs,
-    product.brand,
-    product.collection,
-    product.model,
-    product.referenceNumber,
+  ].map((value) => searchWords(value));
+  const titlePhrases = titles.map((words) => words.join(' '));
+  if (requiredBrand && normalizeFilterValue(product.brand) !== requiredBrand) {
+    // A few legacy watches have no brand relation, but clearly name their
+    // maker in the title. Never admit an explicitly different brand here.
+    if (product.brand || !titlePhrases.some((title) => ` ${title} `.includes(` ${requiredBrand} `))) return -1;
+  }
+  const titleWords = titles.flat();
+  const brandWords = searchWords(product.brand);
+  const detailWords = [product.collection, product.model, product.referenceNumber]
+    .flatMap((value) => searchWords(value));
+  const descriptionWords = [
     product.productDescription,
     product.productDescription_en,
     product.productDescription_de,
     product.productDescription_cs,
-  ].map((value) => normalizeFilterValue(String(value ?? '').replace(/<[^>]*>/g, ' '))).join(' ');
-  // A shopper may enter a brand and a reference saved in separate fields,
-  // or words in a different order from the listing title. Every search term
-  // must match, but they need not be one contiguous phrase in a single field.
-  return requested.split(' ').every((term) => searchable.includes(term));
+  ].flatMap((value) => searchWords(value));
+  const brandTerms = new Set(requiredBrand.split(' '));
+  const terms = requested.split(' ');
+  let score = 0;
+
+  // Every keyword must match a real word (or a useful prefix), but keywords
+  // may be spread across title, description, brand, model and reference.
+  for (const term of terms) {
+    if (hasSearchTerm(titleWords, term, true)) score += brandTerms.has(term) ? 100 : 200;
+    else if (hasSearchTerm(brandWords, term, true)) score += 60;
+    else if (hasSearchTerm(detailWords, term, true)) score += 40;
+    else if (hasSearchTerm(descriptionWords, term)) score += 5;
+    else return -1;
+  }
+  if (titlePhrases.some((title) => title.includes(requested))) score += 500;
+  const modelTerms = terms.filter((term) => !brandTerms.has(term));
+  if (modelTerms.length && modelTerms.every((term) => hasSearchTerm(titleWords, term, true))) score += 100;
+  return score;
+}
+
+function matchesSearch(product, query) {
+  return productSearchScore(product, query) >= 0;
 }
 
 export function productMatchesSearchPayload(product, payload) {

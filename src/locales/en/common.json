@@ -86,6 +86,7 @@
     "yearRange": "Year Range",
     "from": "From",
     "to": "To",
+    "sortRelevance": "Best match",
     "sortNewest": "Newest first",
     "sortPriceLow": "Price: Low to High",
     "sortPriceHigh": "Price: High to Low",

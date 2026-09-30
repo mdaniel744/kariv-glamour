@@ -53,6 +53,10 @@ function parseFiltersFromURL(searchParams) {
   return filters;
 }
 
+function defaultShopSort(search) {
+  return String(search || '').trim() ? 'relevance' : 'newest';
+}
+
 // Serialize filter state into URL search params
 function serializeFiltersToURL(filters, page, sortBy) {
   const params = new URLSearchParams();
@@ -74,7 +78,7 @@ function serializeFiltersToURL(filters, page, sortBy) {
   if (filters.isCertifiedPreOwned) params.set('isCertifiedPreOwned', 'true');
   if (filters.isVintage) params.set('isVintage', 'true');
   if (page > 1) params.set('page', page.toString());
-  if (sortBy && sortBy !== 'newest') params.set('sort', sortBy);
+  if (sortBy && sortBy !== defaultShopSort(filters.search)) params.set('sort', sortBy);
   return params;
 }
 
@@ -99,7 +103,7 @@ function buildSearchPayload(filters, page, sortBy, locale, exchangeRates) {
     isNewArrival: filters.isNewArrival,
     isCertifiedPreOwned: filters.isCertifiedPreOwned,
     isVintage: filters.isVintage,
-    sort: sortBy || 'newest',
+    sort: sortBy || defaultShopSort(filters.search),
     page: page,
     pageSize: SHOP_PAGE_SIZE,
     locale,
@@ -119,18 +123,18 @@ export default function Shop({ initialResults = null }) {
   const [searchParams, setSearchParams] = useUrlSearchParams();
   const { t } = useTranslation();
   const { locale, exchangeRates } = useStorefrontPricing();
+  // Initialize state from URL
+  const [filters, setFilters] = useState(() => parseFiltersFromURL(searchParams));
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || defaultShopSort(searchParams.get('search')));
+  const [page, setPage] = useState(() => positivePage(searchParams.get('page')));
   const sortOptions = [
+    ...(filters.search.trim() ? [{ value: 'relevance', label: t('common:shop.sortRelevance') }] : []),
     { value: 'newest', label: t('common:shop.sortNewest') },
     { value: 'price_low', label: t('common:shop.sortPriceLow') },
     { value: 'price_high', label: t('common:shop.sortPriceHigh') },
     { value: 'name_asc', label: t('common:shop.sortNameAsc') },
     { value: 'name_desc', label: t('common:shop.sortNameDesc') },
   ];
-
-  // Initialize state from URL
-  const [filters, setFilters] = useState(() => parseFiltersFromURL(searchParams));
-  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
-  const [page, setPage] = useState(() => positivePage(searchParams.get('page')));
 
   const [products, setProducts] = useState(() => initialResults?.items || []);
   const [loading, setLoading] = useState(() => !initialResults);
@@ -179,7 +183,7 @@ export default function Shop({ initialResults = null }) {
 
     const urlFilters = parseFiltersFromURL(searchParams);
     const urlPage = positivePage(searchParams.get('page'));
-    const urlSort = searchParams.get('sort') || 'newest';
+    const urlSort = searchParams.get('sort') || defaultShopSort(urlFilters.search);
 
     setFilters(urlFilters);
     setPage(urlPage);
@@ -226,9 +230,13 @@ export default function Shop({ initialResults = null }) {
 
   // ── Filter change handlers ──
   const handleFiltersChange = (newFilters) => {
+    const nextSort = newFilters.search !== filters.search && sortBy === defaultShopSort(filters.search)
+      ? defaultShopSort(newFilters.search)
+      : sortBy;
     setFilters(newFilters);
+    setSortBy(nextSort);
     setPage(1); // Reset to page 1 when filters change
-    syncURL(newFilters, 1, sortBy);
+    syncURL(newFilters, 1, nextSort);
   };
 
   const handleSortChange = (newSort) => {
@@ -245,8 +253,9 @@ export default function Shop({ initialResults = null }) {
 
   const handleClearFilters = () => {
     setFilters({ ...DEFAULT_FILTERS });
+    setSortBy('newest');
     setPage(1);
-    syncURL({ ...DEFAULT_FILTERS }, 1, sortBy);
+    syncURL({ ...DEFAULT_FILTERS }, 1, 'newest');
   };
 
   const handleRetry = () => {

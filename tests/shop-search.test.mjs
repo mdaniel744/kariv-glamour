@@ -84,6 +84,28 @@ test('localized searches match across title, brand, reference and rich-text fiel
   assert.equal(selectShopResults(input, { search: 'strong' }).totalCount, 0);
 });
 
+test('brand searches exclude other makers that mention the brand in descriptions', () => {
+  const input = [
+    { id: 'omega', isPublished: true, brand: 'Omega', productTitle: 'Speedmaster', productDescription: 'An alternative to the Rolex Submariner', created_date: '2026-09-03' },
+    { id: 'rolex-datejust', isPublished: true, brand: 'Rolex', productTitle: 'Rolex Datejust', productDescription: 'A subtle dial', created_date: '2026-09-02' },
+    { id: 'rolex-sub', isPublished: true, brand: 'Rolex', productTitle: 'Submariner Date 126610LN', created_date: '2026-01-01' },
+    { id: 'legacy-rolex', isPublished: true, brand: '', productTitle: 'Rolex Submariner 16610', created_date: '2025-01-01' },
+  ];
+  const results = selectShopResults(input, { search: 'rolex sub' });
+  assert.deepEqual(results.items.map(({ id }) => id), ['legacy-rolex', 'rolex-sub']);
+  assert.equal(results.totalCount, 2);
+});
+
+test('title matches rank above description mentions unless a shopper chooses a different sort', () => {
+  const input = [
+    { id: 'mention', isPublished: true, brand: 'Rolex', productTitle: 'Rolex Datejust', productDescription: 'Similar to a Rolex Submariner', created_date: '2026-09-02' },
+    { id: 'actual', isPublished: true, brand: 'Rolex', productTitle: 'Submariner Date', created_date: '2026-01-01' },
+  ];
+  assert.deepEqual(selectShopResults(input, { search: 'rolex submariner' }).items.map(({ id }) => id), ['actual', 'mention']);
+  assert.deepEqual(selectShopResults(input, { search: 'rolex submariner', sort: 'newest' }).items.map(({ id }) => id), ['mention', 'actual']);
+  assert.equal(selectShopResults(input, { search: 'similar rolex' }).totalCount, 1, 'descriptions remain searchable');
+});
+
 test('invalid pages normalize and a stale bookmarked page resolves to a valid results page', () => {
   for (const value of [null, '', 'abc', -1, 0, Infinity]) assert.equal(positivePage(value), 1);
   assert.equal(positivePage('2.5'), 2);
@@ -112,8 +134,8 @@ test('English and German search headings interpolate the real query, including p
 
 test('shop clears filter paging, corrects clamped pages and keeps counts hidden while loading', () => {
   const source = readFileSync(new URL('../src/page-content/Shop.jsx', import.meta.url), 'utf8');
-  assert.match(source, /handleFiltersChange = \(newFilters\) => \{[\s\S]*?setPage\(1\)[\s\S]*?syncURL\(newFilters, 1, sortBy\)/);
-  assert.match(source, /handleClearFilters = \(\) => \{[\s\S]*?setPage\(1\)[\s\S]*?syncURL\(\{ \.\.\.DEFAULT_FILTERS \}, 1, sortBy\)/);
+  assert.match(source, /handleFiltersChange = \(newFilters\) => \{[\s\S]*?setPage\(1\)[\s\S]*?syncURL\(newFilters, 1, nextSort\)/);
+  assert.match(source, /handleClearFilters = \(\) => \{[\s\S]*?setPage\(1\)[\s\S]*?syncURL\(\{ \.\.\.DEFAULT_FILTERS \}, 1, 'newest'\)/);
   assert.match(source, /if \(results\.page !== page\)[\s\S]*?syncURL\(filters, results\.page, sortBy\)/);
   assert.match(source, /loading \? '…' : error \? t\('common:error'\)/);
   assert.doesNotMatch(source, /LOCAL_SEARCH_LIMIT|functions\.invoke\('searchProducts'/);

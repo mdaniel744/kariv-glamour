@@ -1,4 +1,4 @@
-import { productMatchesSearchPayload } from './productFilters.js';
+import { normalizeFilterValue, productMatchesSearchPayload, productSearchScore } from './productFilters.js';
 import { getProductPricing } from './productMerchant.js';
 
 export const SHOP_PAGE_SIZE = 24;
@@ -25,14 +25,35 @@ function sortValue(product, field, locale, exchangeRates) {
   return product[field];
 }
 
+function requestedBrand(products, query) {
+  const normalizedQuery = ` ${normalizeFilterValue(query)} `;
+  const brands = new Set(products.map((product) => normalizeFilterValue(product.brand)).filter(Boolean));
+  const named = [...brands].filter((brand) => normalizedQuery.includes(` ${brand} `));
+  return named.length === 1 ? named[0] : '';
+}
+
 // Filter the full public catalogue before sorting or taking a display page.
 // A display limit must never become the source of the catalogue total.
 export function selectShopResults(products, payload = {}) {
   const locale = ['de', 'en', 'cs'].includes(payload.locale) ? payload.locale : 'en';
-  const [field, direction] = SORT_FIELDS[payload.sort] || SORT_FIELDS.newest;
-  const sorted = products.filter((product) => (
-    product.isPublished === true && productMatchesSearchPayload(product, payload)
-  )).sort((a, b) => {
+  const search = normalizeFilterValue(payload.search);
+  const sort = payload.sort || (search ? 'relevance' : 'newest');
+  const [field, direction] = SORT_FIELDS[sort] || SORT_FIELDS.newest;
+  const brand = search ? requestedBrand(products, payload.search) : '';
+  const scores = new Map();
+  const filterPayload = search ? { ...payload, search: '' } : payload;
+  const sorted = products.filter((product) => {
+    if (product.isPublished !== true || !productMatchesSearchPayload(product, filterPayload)) return false;
+    if (!search) return true;
+    const score = productSearchScore(product, payload.search, brand);
+    if (score < 0) return false;
+    scores.set(product, score);
+    return true;
+  }).sort((a, b) => {
+    if (search && sort === 'relevance') {
+      const scoreDifference = scores.get(b) - scores.get(a);
+      if (scoreDifference) return scoreDifference;
+    }
     const av = sortValue(a, field, locale, payload.exchangeRates);
     const bv = sortValue(b, field, locale, payload.exchangeRates);
     if (av === bv) return String(a.id || '').localeCompare(String(b.id || ''));
