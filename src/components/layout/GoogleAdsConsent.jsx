@@ -6,24 +6,24 @@ import { useLanguage } from '@/lib/languageContext';
 
 const COPY = {
   en: {
-    title: 'Advertising cookies',
-    description: 'With your permission, we use the Google tag to measure visits and shopping actions. You can change your choice at any time in the footer.',
-    accept: 'Allow',
-    reject: 'Decline',
+    title: 'Cookie choices',
+    description: 'We use essential cookies to run the website. With your permission, optional cookies help us understand visits and measure advertising. You can change your choice in Cookie settings at any time.',
+    accept: 'Accept optional cookies',
+    reject: 'Reject optional cookies',
     policy: 'Cookie policy',
   },
   de: {
-    title: 'Werbe-Cookies',
-    description: 'Mit Ihrer Einwilligung nutzen wir das Google-Tag, um Besuche und Einkaufsaktionen zu messen. Ihre Auswahl können Sie jederzeit im Footer ändern.',
-    accept: 'Zulassen',
-    reject: 'Ablehnen',
+    title: 'Cookie-Auswahl',
+    description: 'Notwendige Cookies ermöglichen den Betrieb der Website. Mit Ihrer Einwilligung helfen uns optionale Cookies, Besuche zu verstehen und Werbung zu messen. Ihre Auswahl können Sie jederzeit in den Cookie-Einstellungen ändern.',
+    accept: 'Optionale Cookies akzeptieren',
+    reject: 'Optionale Cookies ablehnen',
     policy: 'Cookie-Richtlinie',
   },
   cs: {
-    title: 'Reklamní cookies',
-    description: 'S vaším souhlasem používáme značku Google k měření návštěv a nákupních akcí. Svou volbu můžete kdykoli změnit v zápatí.',
-    accept: 'Povolit',
-    reject: 'Odmítnout',
+    title: 'Nastavení cookies',
+    description: 'Nezbytné cookies zajišťují fungování webu. S vaším souhlasem nám volitelné cookies pomáhají porozumět návštěvám a měřit reklamu. Volbu můžete kdykoli změnit v nastavení cookies.',
+    accept: 'Přijmout volitelné cookies',
+    reject: 'Odmítnout volitelné cookies',
     policy: 'Zásady cookies',
   },
 };

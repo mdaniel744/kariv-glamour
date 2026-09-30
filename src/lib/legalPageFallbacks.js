@@ -473,82 +473,52 @@ const COOKIE_POLICY = createLegalPage({
   titleDe: 'Cookie-Richtlinie',
   descriptionEn: 'Information about cookies, local storage and consent choices on Kariv Glamour.',
   descriptionDe: 'Informationen zu Cookies, lokaler Speicherung und Einwilligungsoptionen bei Kariv Glamour.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 1 October 2026_
 
-## 1. What cookies are
+## What cookies are
 
-Cookies are small text files stored by a website on your device. Similar technologies include local storage, pixels and identifiers used to remember a session or preference. Session cookies expire when the session ends; persistent cookies remain until their stated expiry or until deleted.
+Cookies and similar technologies help a website remember information on your device. Some are used only during a visit; others remain until they expire or you delete them.
 
-## 2. Technologies used on Kariv Glamour
+## How we use them
 
-The precise cookies may vary with the services and features enabled, but they fall into these categories:
+- **Essential cookies** keep the website secure and support sign-in, the shopping cart, checkout and your cookie choice.
+- **Preference storage** remembers settings you choose, such as language and appearance.
+- **Optional cookies** help us understand visits and measure the effectiveness of advertising. We use these only with your consent.
 
-| Category | Purpose | Basis |
-| --- | --- | --- |
-| Strictly necessary | Sign-in, account security, fraud prevention, cart, checkout, network routing and saving a cookie choice | Necessary to provide the requested service or comply with security obligations |
-| Preferences | Remember language, appearance and other user-requested settings, including through local storage | Necessary for the requested preference or consent where required |
-| Analytics | Understand aggregate use, errors and performance so the service can be improved | Used only with consent where consent is required |
-| Marketing | Measure campaigns or personalise advertising | Used only after valid consent |
+We currently use Google Ads for optional advertising measurement. Its tag is not loaded unless you accept optional cookies. Service providers may process information under their own privacy notices.
 
-Authentication providers such as Clerk may set security and session cookies. The app also stores the selected appearance preference on the device. Database and hosting providers may process technical request information needed to deliver and secure the service.
+## Your choices
 
-## 3. Consent
+Optional cookies are off by default. You can accept or reject them in the cookie banner, and change your choice at any time using **Cookie settings** in the footer. Closing or ignoring the banner does not count as consent. Rejecting optional cookies does not prevent you from shopping or checking out.
 
-Strictly necessary technologies may operate without consent because the service cannot be securely provided without them. Non-essential analytics or marketing technologies remain disabled until you make an affirmative choice where consent is required. Closing or ignoring a consent prompt is not treated as acceptance.
+You can also manage or delete cookies in your browser. Blocking essential cookies may affect sign-in, the cart or checkout. Withdrawing consent does not affect processing that took place while it was valid.
 
-If you allow advertising cookies, the Google tag (Google Ads) may measure visits and shopping actions. The tag is not loaded before that choice. Declining does not prevent you from using the shop or checkout.
+## More information
 
-You can withdraw a non-essential consent as easily as it was given through the cookie settings control when such technologies are enabled. Withdrawal does not affect earlier lawful processing.
+For information about personal data, see our [Privacy Policy](/legal/privacy-policy). Questions can be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
+  contentDe: `_Zuletzt aktualisiert: 1. Oktober 2026_
 
-## 4. Managing device storage
+## Was Cookies sind
 
-Browser settings let you inspect, block or delete cookies and local-storage data. Blocking strictly necessary cookies can prevent sign-in, cart, checkout or security functions from working. Deleting preference storage may reset language, theme or consent choices. Instructions differ by browser and device.
+Cookies und ähnliche Technologien helfen einer Website, Informationen auf Ihrem Gerät zu speichern. Manche werden nur während eines Besuchs verwendet; andere bleiben bestehen, bis sie ablaufen oder gelöscht werden.
 
-## 5. Third-party content
+## Wofür wir sie verwenden
 
-Embedded media or services from another provider can place their own cookies only where technically necessary or after the required consent. Those providers may act under their own privacy and cookie notices. Kariv Glamour does not use the fact that you accepted one provider as consent for an unrelated provider or purpose.
+- **Notwendige Cookies** unterstützen den sicheren Betrieb der Website, die Anmeldung, den Warenkorb, den Checkout und die Speicherung Ihrer Cookie-Auswahl.
+- **Gespeicherte Einstellungen** merken sich Ihre Auswahl, etwa Sprache und Darstellung.
+- **Optionale Cookies** helfen uns, Besuche zu verstehen und die Wirksamkeit von Werbung zu messen. Wir verwenden sie nur mit Ihrer Einwilligung.
 
-## 6. Updates and contact
+Derzeit nutzen wir Google Ads zur optionalen Werbemessung. Das Tag wird erst geladen, wenn Sie optionale Cookies akzeptieren. Dienstleister können Daten gemäß ihren eigenen Datenschutzhinweisen verarbeiten.
 
-We update this policy when technology or legal requirements change. For details about personal-data processing, see the [Privacy Policy](/legal/privacy-policy). Questions may be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
-  contentDe: `_${LAST_UPDATED_DE}_
+## Ihre Auswahl
 
-## 1. Was Cookies sind
+Optionale Cookies sind zunächst deaktiviert. Sie können sie im Cookie-Banner akzeptieren oder ablehnen und Ihre Auswahl jederzeit über **Cookie-Einstellungen** im Footer ändern. Das Schließen oder Ignorieren des Banners gilt nicht als Einwilligung. Eine Ablehnung hindert Sie nicht am Einkaufen oder am Checkout.
 
-Cookies sind kleine Textdateien, die eine Website auf Ihrem Gerät speichert. Ähnliche Technologien sind lokaler Speicher, Pixel und Kennungen, mit denen eine Sitzung oder Präferenz gespeichert wird. Sitzungscookies enden mit der Sitzung; dauerhafte Cookies bleiben bis zu ihrem angegebenen Ablauf oder bis zur Löschung bestehen.
+Sie können Cookies auch in Ihrem Browser verwalten oder löschen. Das Blockieren notwendiger Cookies kann Anmeldung, Warenkorb oder Checkout beeinträchtigen. Ein Widerruf der Einwilligung berührt nicht die Verarbeitung, die während ihrer Gültigkeit stattgefunden hat.
 
-## 2. Bei Kariv Glamour eingesetzte Technologien
+## Weitere Informationen
 
-Die genauen Cookies können je nach aktivierten Diensten und Funktionen variieren. Sie gehören zu folgenden Kategorien:
-
-| Kategorie | Zweck | Grundlage |
-| --- | --- | --- |
-| Unbedingt erforderlich | Anmeldung, Kontosicherheit, Betrugsprävention, Warenkorb, Checkout, Netzwerkrouting und Speicherung der Cookie-Auswahl | Erforderlich zur Bereitstellung des angeforderten Dienstes oder zur Erfüllung von Sicherheitsanforderungen |
-| Präferenzen | Speicherung von Sprache, Darstellung und anderen vom Nutzer gewünschten Einstellungen, auch im lokalen Speicher | Für die gewünschte Einstellung erforderlich oder Einwilligung, soweit vorgeschrieben |
-| Analyse | Aggregierte Nutzung, Fehler und Leistung verstehen, um den Dienst zu verbessern | Nur mit Einwilligung, soweit diese erforderlich ist |
-| Marketing | Kampagnen messen oder Werbung personalisieren | Nur nach wirksamer Einwilligung |
-
-Authentifizierungsanbieter wie Clerk können Sicherheits- und Sitzungscookies setzen. Die App speichert außerdem die gewählte Darstellungspräferenz auf dem Gerät. Datenbank- und Hostinganbieter können technische Anfrageinformationen verarbeiten, die zur Bereitstellung und Absicherung des Dienstes erforderlich sind.
-
-## 3. Einwilligung
-
-Unbedingt erforderliche Technologien dürfen ohne Einwilligung betrieben werden, weil der Dienst ohne sie nicht sicher bereitgestellt werden kann. Nicht erforderliche Analyse- oder Marketingtechnologien bleiben deaktiviert, bis Sie eine aktive Auswahl getroffen haben, soweit eine Einwilligung erforderlich ist. Das Schließen oder Ignorieren einer Einwilligungsabfrage gilt nicht als Zustimmung.
-
-Wenn Sie Werbe-Cookies zulassen, kann das Google-Tag (Google Ads) Besuche und Einkaufsaktionen messen. Vor dieser Auswahl wird das Tag nicht geladen. Eine Ablehnung schränkt die Nutzung des Shops oder der Kasse nicht ein.
-
-Eine Einwilligung in nicht erforderliche Technologien kann über die Cookie-Einstellungen ebenso einfach widerrufen werden, wie sie erteilt wurde, sobald solche Technologien aktiviert sind. Der Widerruf berührt die Rechtmäßigkeit der vorherigen Verarbeitung nicht.
-
-## 4. Gerätespeicher verwalten
-
-In den Browsereinstellungen können Sie Cookies und lokale Speicherdaten prüfen, blockieren oder löschen. Werden unbedingt erforderliche Cookies blockiert, können Anmeldung, Warenkorb, Checkout oder Sicherheitsfunktionen ausfallen. Das Löschen von Präferenzdaten kann Sprache, Theme oder Einwilligungsauswahl zurücksetzen. Die Anleitung hängt vom Browser und Gerät ab.
-
-## 5. Inhalte Dritter
-
-Eingebettete Medien oder Dienste eines anderen Anbieters dürfen eigene Cookies nur setzen, wenn dies technisch erforderlich ist oder die notwendige Einwilligung vorliegt. Diese Anbieter können nach eigenen Datenschutz- und Cookie-Hinweisen handeln. Die Zustimmung zu einem Anbieter gilt nicht als Einwilligung für einen anderen Anbieter oder Zweck.
-
-## 6. Änderungen und Kontakt
-
-Wir aktualisieren diese Richtlinie bei Änderungen der Technologie oder Rechtslage. Einzelheiten zur Verarbeitung personenbezogener Daten finden Sie in der [Datenschutzerklärung](/legal/privacy-policy). Fragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
+Informationen zu personenbezogenen Daten finden Sie in unserer [Datenschutzerklärung](/legal/privacy-policy). Fragen richten Sie an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
 });
 
 const AUTHENTICITY_POLICY = createLegalPage({

@@ -2,7 +2,7 @@
 // commercial commitments or replace the company's legal review.
 import { COMPANY_DETAILS } from './companyDetails.js';
 
-const page = (title, description, content) => ({ title, description, content: `_Poslední aktualizace: 25. srpna 2026_\n\n${content}` });
+const page = (title, description, content, updated = '25. srpna 2026') => ({ title, description, content: `_Poslední aktualizace: ${updated}_\n\n${content}` });
 export const CZECH_LEGAL_PAGES = {
   'shipping-policy': page('Informace o dopravě', 'Doprava, sledování zásilek, pojištění, doručení a celní informace pro objednávky Kariv Glamour.', `## 1. Kam doručujeme
 
@@ -194,42 +194,27 @@ Používáme přiměřená technická a organizační opatření, ale internetov
 ## 10. Změny
 
 Oznámení můžeme aktualizovat při změně služeb, poskytovatelů či práva. Podstatné změny vhodně oznámíme; aktuální datum je uvedeno výše.`),
-  'cookie-policy': page('Zásady používání cookies', 'Cookies, místní úložiště, souhlas a nastavení zařízení na Kariv Glamour.', `## 1. Co jsou cookies
+  'cookie-policy': page('Zásady používání cookies', 'Jak používáme cookies, k čemu slouží a jak můžete změnit svou volbu.', `## Co jsou cookies
 
-Cookies jsou malé textové soubory ukládané webem do zařízení. Obdobné technologie zahrnují místní úložiště, pixely a identifikátory pro zapamatování relace či předvolby. Relační cookies končí s relací; trvalé zůstávají do stanovené doby nebo smazání.
+Cookies a podobné technologie pomáhají webu zapamatovat si informace ve vašem zařízení. Některé se používají jen během návštěvy, jiné zůstávají do vypršení platnosti nebo smazání.
 
-## 2. Technologie na Kariv Glamour
+## Jak je používáme
 
-Konkrétní cookies se mohou měnit podle zapnutých služeb a funkcí. Spadají do těchto kategorií:
+- **Nezbytné cookies** zajišťují bezpečný provoz webu, přihlášení, košík, dokončení objednávky a uložení vaší volby cookies.
+- **Uložené předvolby** uchovávají vámi zvolená nastavení, například jazyk a vzhled.
+- **Volitelné cookies** nám pomáhají porozumět návštěvám a měřit účinnost reklamy. Používáme je jen s vaším souhlasem.
 
-| Kategorie | Účel | Základ |
-| --- | --- | --- |
-| Nezbytné | Přihlášení, bezpečnost účtu, prevence podvodů, košík, objednávka, směrování sítě a uložení volby cookies | Poskytnutí vyžádané služby nebo splnění bezpečnostních povinností |
-| Předvolby | Zapamatování jazyka, vzhledu a nastavení zvolených uživatelem včetně místního úložiště | Vyžádaná předvolba nebo souhlas, je-li nutný |
-| Analytika | Souhrnné používání, chyby a výkon pro zlepšení služby | Souhlas tam, kde je vyžadován |
-| Marketing | Měření kampaní a přizpůsobení reklamy | Pouze po platném souhlasu |
+Pro volitelné měření reklamy nyní používáme Google Ads. Příslušná značka se načte až po přijetí volitelných cookies. Poskytovatelé služeb mohou zpracovávat údaje podle svých zásad ochrany osobních údajů.
 
-Poskytovatelé přihlášení, například Clerk, mohou ukládat bezpečnostní a relační cookies. Aplikace ukládá také zvolený vzhled. Databázoví a hostingoví poskytovatelé mohou zpracovávat technické informace potřebné pro doručení a zabezpečení služby.
+## Vaše volba
 
-## 3. Souhlas
+Volitelné cookies jsou ve výchozím nastavení vypnuté. Můžete je přijmout nebo odmítnout v liště cookies a svou volbu kdykoli změnit přes **Nastavení cookies** v patičce. Zavření nebo ignorování lišty se nepovažuje za souhlas. Odmítnutí volitelných cookies nebrání nákupu ani dokončení objednávky.
 
-Nezbytné technologie mohou fungovat bez souhlasu, protože bez nich nelze službu bezpečně poskytnout. Ostatní analytické a marketingové technologie zůstávají vypnuté do vaší aktivní volby, kde je souhlas nutný. Zavření či ignorování výzvy není souhlasem.
+Cookies můžete také spravovat nebo smazat v prohlížeči. Blokování nezbytných cookies může ovlivnit přihlášení, košík nebo dokončení objednávky. Odvolání souhlasu nemá vliv na zpracování, které proběhlo během jeho platnosti.
 
-Pokud povolíte reklamní cookies, značka Google (Google Ads) může měřit návštěvy a nákupní akce. Před touto volbou se značka nenačítá. Odmítnutí neomezuje používání obchodu ani dokončení objednávky.
+## Další informace
 
-Souhlas s nezbytně nepotřebnými technologiemi lze odvolat stejně snadno, jako byl udělen, prostřednictvím nastavení cookies, pokud jsou tyto technologie zapnuté. Odvolání neovlivní předchozí zákonné zpracování.
-
-## 4. Správa úložiště zařízení
-
-V prohlížeči lze cookies a místní data kontrolovat, blokovat a mazat. Blokování nezbytných cookies může znemožnit přihlášení, košík, objednávku či zabezpečení. Smazání předvoleb může obnovit výchozí jazyk, vzhled nebo volbu souhlasu. Postup závisí na zařízení a prohlížeči.
-
-## 5. Obsah třetích stran
-
-Vložená média a služby jiného poskytovatele mohou ukládat vlastní cookies pouze tehdy, je-li to technicky nezbytné nebo po požadovaném souhlasu. Poskytovatelé se mohou řídit vlastními zásadami. Souhlas s jedním poskytovatelem nepovažujeme za souhlas s nesouvisejícím poskytovatelem či účelem.
-
-## 6. Aktualizace a kontakt
-
-Zásady aktualizujeme při změně technologií či práva. Podrobnosti o osobních údajích najdete v [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`),
+Informace o osobních údajích najdete v našich [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`, '1. října 2026'),
   'authenticity-disclaimer': page('Prohlášení o pravosti', 'Rozsah ověřování pravosti, dokumentace a postup při pochybnostech.', `## 1. Standard ověřování
 
 Kariv Glamour požaduje, aby prodejci nabízeli pravé hodinky a přesné informace. Pokud je nabízena kontrola pravosti, kvalifikovaní posuzovatelé hodnotí hodinky podle tehdy dostupných informací a fyzických znaků. Posouzení může zahrnovat referenci, sériové údaje, strojek, pouzdro, číselník, ručky, náramek, puncy, materiály, zpracování, původ a doklady.
