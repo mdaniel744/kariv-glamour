@@ -496,6 +496,8 @@ Authentication providers such as Clerk may set security and session cookies. The
 
 Strictly necessary technologies may operate without consent because the service cannot be securely provided without them. Non-essential analytics or marketing technologies remain disabled until you make an affirmative choice where consent is required. Closing or ignoring a consent prompt is not treated as acceptance.
 
+If you allow advertising cookies, the Google tag (Google Ads) may measure visits and shopping actions. The tag is not loaded before that choice. Declining does not prevent you from using the shop or checkout.
+
 You can withdraw a non-essential consent as easily as it was given through the cookie settings control when such technologies are enabled. Withdrawal does not affect earlier lawful processing.
 
 ## 4. Managing device storage
@@ -531,6 +533,8 @@ Authentifizierungsanbieter wie Clerk können Sicherheits- und Sitzungscookies se
 ## 3. Einwilligung
 
 Unbedingt erforderliche Technologien dürfen ohne Einwilligung betrieben werden, weil der Dienst ohne sie nicht sicher bereitgestellt werden kann. Nicht erforderliche Analyse- oder Marketingtechnologien bleiben deaktiviert, bis Sie eine aktive Auswahl getroffen haben, soweit eine Einwilligung erforderlich ist. Das Schließen oder Ignorieren einer Einwilligungsabfrage gilt nicht als Zustimmung.
+
+Wenn Sie Werbe-Cookies zulassen, kann das Google-Tag (Google Ads) Besuche und Einkaufsaktionen messen. Vor dieser Auswahl wird das Tag nicht geladen. Eine Ablehnung schränkt die Nutzung des Shops oder der Kasse nicht ein.
 
 Eine Einwilligung in nicht erforderliche Technologien kann über die Cookie-Einstellungen ebenso einfach widerrufen werden, wie sie erteilt wurde, sobald solche Technologien aktiviert sind. Der Widerruf berührt die Rechtmäßigkeit der vorherigen Verarbeitung nicht.
 

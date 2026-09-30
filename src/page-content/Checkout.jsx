@@ -14,6 +14,7 @@ import EscrowTrustBadge from '@/components/escrow/EscrowTrustBadge';
 import LocalizedLink from '@/components/LocalizedLink';
 import { getProductAvailability } from '@/lib/productMerchant';
 import { isProtectedPurchase, readPurchasePolicy } from '@/lib/purchasePolicyUi';
+import { trackCheckoutOrderCreated } from '@/lib/googleAdsTag';
 
 export default function Checkout({ id: idProp, initialProduct = null, initialBuyerRequestsProtection = false }) {
   const router = useRouter();
@@ -43,6 +44,14 @@ export default function Checkout({ id: idProp, initialProduct = null, initialBuy
     fullName: '', street: '', city: '', postalCode: '', country: '', phone: ''
   });
   const [agreed, setAgreed] = useState(false);
+
+  useEffect(() => {
+    if (!done || !order) return;
+    const trackPurchase = () => trackCheckoutOrderCreated(order);
+    trackPurchase();
+    window.addEventListener('kariv:ads-consent-granted', trackPurchase);
+    return () => window.removeEventListener('kariv:ads-consent-granted', trackPurchase);
+  }, [done, order]);
 
   useEffect(() => {
     if (initialProduct?.id === id) {

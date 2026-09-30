@@ -2,11 +2,13 @@ import '@/index.css';
 import { notFound } from 'next/navigation';
 import { ClerkProvider } from '@clerk/nextjs';
 import SiteChrome from '@/components/layout/SiteChrome';
+import GoogleAdsConsent from '@/components/layout/GoogleAdsConsent';
 import Providers from '../providers';
 import { Poppins } from 'next/font/google';
 import { getSiteUrl } from '@/lib/seo';
 import { SUPPORTED_LOCALES } from '@/lib/locales';
 import { getCzkExchangeRates } from '@/lib/exchangeRatesServer';
+import { googleAdsBootstrap } from '@/lib/googleAdsTag';
 
 const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
@@ -82,11 +84,13 @@ export default async function LocaleLayout({ children, params }) {
     <html lang={locale} className={poppins.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
+        <script id="kariv-google-ads-tag" dangerouslySetInnerHTML={{ __html: googleAdsBootstrap() }} />
       </head>
       <body data-next-native="true">
         <ClerkProvider>
           <Providers initialLocale={locale} initialExchangeRates={initialExchangeRates}>
             <SiteChrome>{children}</SiteChrome>
+            <GoogleAdsConsent />
           </Providers>
         </ClerkProvider>
       </body>

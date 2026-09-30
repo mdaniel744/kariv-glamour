@@ -215,6 +215,8 @@ Poskytovatelé přihlášení, například Clerk, mohou ukládat bezpečnostní 
 
 Nezbytné technologie mohou fungovat bez souhlasu, protože bez nich nelze službu bezpečně poskytnout. Ostatní analytické a marketingové technologie zůstávají vypnuté do vaší aktivní volby, kde je souhlas nutný. Zavření či ignorování výzvy není souhlasem.
 
+Pokud povolíte reklamní cookies, značka Google (Google Ads) může měřit návštěvy a nákupní akce. Před touto volbou se značka nenačítá. Odmítnutí neomezuje používání obchodu ani dokončení objednávky.
+
 Souhlas s nezbytně nepotřebnými technologiemi lze odvolat stejně snadno, jako byl udělen, prostřednictvím nastavení cookies, pokud jsou tyto technologie zapnuté. Odvolání neovlivní předchozí zákonné zpracování.
 
 ## 4. Správa úložiště zařízení

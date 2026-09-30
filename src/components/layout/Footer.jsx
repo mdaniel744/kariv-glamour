@@ -4,9 +4,12 @@ import KarivLogo from '@/components/shared/KarivLogo';
 import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { COMPANY_DETAILS } from '@/lib/companyDetails';
+import { useLanguage } from '@/lib/languageContext';
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
+  const { locale } = useLanguage();
+  const cookieSettingsLabel = locale === 'cs' ? 'Nastavení cookies' : locale === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings';
 
   const footerLinks = {
     company: [
@@ -80,10 +83,13 @@ export default function Footer() {
       <div className="border-t border-[#dce5df] dark:border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[11px] text-[#60766c] dark:text-white/60 font-body">{t('common:copyright', { year: new Date().getFullYear() })}</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <LocalizedLink to="/legal/privacy-policy" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.privacyPolicy')}</LocalizedLink>
             <LocalizedLink to="/legal/terms-and-conditions" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.termsConditions')}</LocalizedLink>
             <LocalizedLink to="/legal/cookie-policy" className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">{t('footer.cookies')}</LocalizedLink>
+            <button type="button" onClick={() => window.dispatchEvent(new Event('kariv:open-ads-consent'))} className="text-[11px] text-[#496057] hover:text-primary dark:text-white/60 dark:hover:text-[#C5A367] transition-colors">
+              {cookieSettingsLabel}
+            </button>
           </div>
         </div>
       </div>
