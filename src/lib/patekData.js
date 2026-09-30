@@ -336,9 +336,9 @@ export const PATEK_TRUST_LINKS = [
   { text_en: 'Condition Grading', text_de: 'Zustandsbewertung', link: '/condition-grading' },
   { text_en: 'Box and Papers Guide', text_de: 'Box-und-Papiere-Guide', link: '/watch-guides/box-and-papers' },
   { text_en: 'Archives Extract Guide', text_de: 'Archives Extract Guide', link: '/patek-philippe-archives-extract-guide' },
-  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Rückerstattungen', link: '/returns-and-refunds' },
-  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/shipping-policy' },
-  { text_en: 'Contact Customer Service', text_de: 'Kundenservice kontaktieren', link: '/contact' },
+  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Rückerstattungen', link: '/legal/returns-refund-policy' },
+  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/legal/shipping-policy' },
+  { text_en: 'Contact Customer Service', text_de: 'Kundenservice kontaktieren', link: '/customer-service' },
 ];
 
 // SEO Landing pages content

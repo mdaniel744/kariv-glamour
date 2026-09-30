@@ -3,6 +3,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import KarivLogo from '@/components/shared/KarivLogo';
 import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import { COMPANY_DETAILS } from '@/lib/companyDetails';
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
@@ -40,6 +41,13 @@ export default function Footer() {
             <p className="text-sm text-[#496057] dark:text-white/70 leading-relaxed mb-6 font-body">
               {t('footer.description')}
             </p>
+            <address className="space-y-1 text-sm not-italic leading-relaxed text-[#213d34] dark:text-white/80">
+              <p className="font-semibold">{COMPANY_DETAILS.legalName}</p>
+              <p>{COMPANY_DETAILS.registeredAddress}</p>
+              <a href={`mailto:${COMPANY_DETAILS.email}`} className="inline-block break-all text-primary underline underline-offset-4 dark:text-[#C5A367]">
+                {COMPANY_DETAILS.email}
+              </a>
+            </address>
             <div className="mt-8">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
                 {t('footer.appearance')}

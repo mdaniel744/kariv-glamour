@@ -42,9 +42,9 @@ Available delivery destinations are shown on the product listing or confirmed du
 ## 2. Shipping charges and delivery estimates
 
 - **Delivery within the Czech Republic:** Shipping is free on every order. Once your order has been confirmed and its status has been marked **Shipped**, delivery normally takes **1–3 business days**.
-- **Delivery to other EU countries:** A shipping charge applies and is displayed before you place the order. Once your order has been confirmed and marked **Shipped**, delivery normally takes **3–7 business days**.
+- **Delivery to other EU countries:** Shipping is free on every order. Once your order has been confirmed and marked **Shipped**, delivery normally takes **3–7 business days**.
 
-These timeframes are estimates rather than guaranteed delivery dates. Delivery may take longer because of seller handling time, authentication checks, carrier disruptions, public holidays or events outside reasonable control. Any applicable shipping charge, tax or other delivery-related amount payable through Kariv Glamour is shown before the order is placed.
+These timeframes are estimates rather than guaranteed delivery dates. Delivery may take longer because of seller handling time, authentication checks, carrier disruptions, public holidays or events outside reasonable control. No delivery charge is added for an available EU destination. Any applicable tax or other mandatory amount payable through Kariv Glamour is shown before the order is placed.
 
 ## 3. Insured and tracked delivery
 
@@ -72,9 +72,9 @@ Die verfügbaren Lieferziele werden im Produktangebot angezeigt oder während de
 ## 2. Versandkosten und Lieferprognosen
 
 - **Lieferung innerhalb der Tschechischen Republik:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und mit dem Status **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **1–3 Werktage**.
-- **Lieferung in andere EU-Länder:** Für den Versand fallen Kosten an, die Ihnen vor Abgabe der Bestellung angezeigt werden. Nachdem Ihre Bestellung bestätigt und als **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **3–7 Werktage**.
+- **Lieferung in andere EU-Länder:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und als **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **3–7 Werktage**.
 
-Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Die Lieferung kann sich durch Bearbeitungszeiten des Händlers, Echtheitsprüfungen, Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs verzögern. Alle anfallenden Versandkosten, Steuern oder sonstigen lieferbezogenen Beträge, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
+Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Die Lieferung kann sich durch Bearbeitungszeiten des Händlers, Echtheitsprüfungen, Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs verzögern. Für ein verfügbares Lieferziel in der EU fällt keine Versandgebühr an. Alle anfallenden Steuern oder sonstigen verpflichtenden Beträge, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
 
 ## 3. Versicherter Versand mit Sendungsverfolgung
 
@@ -247,7 +247,7 @@ Submitting an order is an offer to purchase. An automated acknowledgement does n
 
 ## 5. Prices, taxes and payment
 
-The price, currency, included taxes, shipping charge and known mandatory fees are shown before the order is placed. Cross-border duties or import taxes are handled as stated in the Shipping Information page. Use only the payment instructions shown in the authenticated order area. Payments made directly to a seller or another person outside the approved process are not covered by Kariv Buyer Protection.
+The price, currency, included taxes, shipping amount (free for available EU destinations) and known mandatory fees are shown before the order is placed. Cross-border duties or import taxes are handled as stated in the Shipping Information page. Use only the payment instructions shown in the authenticated order area. Payments made directly to a seller or another person outside the approved process are not covered by Kariv Buyer Protection.
 
 Eligible transactions may use a protected payment or escrow-style process. Funds are released according to the transaction status, delivery confirmation, inspection period and any open dispute. The availability and precise operation of that service are shown with the order.
 
@@ -302,7 +302,7 @@ Mit der Bestellung geben Sie ein Kaufangebot ab. Eine automatische Eingangsbest�
 
 ## 5. Preise, Steuern und Zahlung
 
-Preis, Währung, enthaltene Steuern, Versandkosten und bekannte zwingende Gebühren werden vor Abgabe der Bestellung angezeigt. Grenzüberschreitende Zölle oder Einfuhrsteuern richten sich nach den Versandinformationen. Verwenden Sie ausschließlich die Zahlungsanweisungen im authentifizierten Bestellbereich. Direktzahlungen an einen Verkäufer oder Dritten außerhalb des genehmigten Prozesses sind nicht vom Kariv-Käuferschutz umfasst.
+Preis, Währung, enthaltene Steuern, Versandbetrag (für verfügbare EU-Lieferziele kostenlos) und bekannte zwingende Gebühren werden vor Abgabe der Bestellung angezeigt. Grenzüberschreitende Zölle oder Einfuhrsteuern richten sich nach den Versandinformationen. Verwenden Sie ausschließlich die Zahlungsanweisungen im authentifizierten Bestellbereich. Direktzahlungen an einen Verkäufer oder Dritten außerhalb des genehmigten Prozesses sind nicht vom Kariv-Käuferschutz umfasst.
 
 Für berechtigte Transaktionen kann ein geschützter Zahlungs- oder Treuhandprozess angeboten werden. Die Freigabe der Gelder richtet sich nach Transaktionsstatus, Lieferbestätigung, Prüfzeitraum und offenen Streitfällen. Verfügbarkeit und genaue Funktionsweise werden bei der Bestellung angezeigt.
 

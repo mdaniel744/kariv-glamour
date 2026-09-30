@@ -307,8 +307,8 @@ export const ROLEX_TRUST_POINTS = [
 export const ROLEX_TRUST_LINKS = [
   { text_en: 'Authentication Process', text_de: 'Authentifizierungsprozess', link: '/authentication' },
   { text_en: 'Condition Grading', text_de: 'Zustandsbewertung', link: '/condition-grading' },
-  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Rückerstattungen', link: '/returns-and-refunds' },
-  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/shipping-policy' },
+  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Rückerstattungen', link: '/legal/returns-refund-policy' },
+  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/legal/shipping-policy' },
   { text_en: 'Contact Customer Service', text_de: 'Kundenservice kontaktieren', link: '/customer-service' },
 ];
 

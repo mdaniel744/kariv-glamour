@@ -381,7 +381,7 @@ export const OMEGA_FAQS = [
     question_en: 'Can I return an Omega watch purchased online?', question_de: 'Kann ich eine online gekaufte Omega Uhr zurückgeben?',
     answer: [
       { text_en: 'Yes. Kariv Glamour offers a return policy for eligible purchases. Please review our ', text_de: 'Ja. Kariv Glamour bietet eine Rückgaberichtlinie für berechtigte Käufe. Bitte lesen Sie unsere ' },
-      { text_en: 'returns', text_de: 'Rückgaben', link: '/returns-and-refunds' },
+      { text_en: 'returns', text_de: 'Rückgaben', link: '/legal/returns-refund-policy' },
       { text_en: ' page for full details on return conditions and process.', text_de: ' Seite für vollständige Details zu Rückgabebedingungen und -prozess.' },
     ],
   },
@@ -406,8 +406,8 @@ export const OMEGA_TRUST_LINKS = [
   { text_en: 'Condition Grading', text_de: 'Zustandsbewertung', link: '/condition-grading' },
   { text_en: 'Box and Papers Guide', text_de: 'Box und Papiere Guide', link: '/watch-guides/box-and-papers' },
   { text_en: 'Service History Guide', text_de: 'Service-Historie Guide', link: '/watch-guides/service-history' },
-  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Erstattungen', link: '/returns-and-refunds' },
-  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/shipping-policy' },
+  { text_en: 'Returns and Refunds', text_de: 'Rückgaben und Erstattungen', link: '/legal/returns-refund-policy' },
+  { text_en: 'Shipping Policy', text_de: 'Versandrichtlinie', link: '/legal/shipping-policy' },
   { text_en: 'Contact Customer Service', text_de: 'Kundenservice kontaktieren', link: '/customer-service' },
 ];
 

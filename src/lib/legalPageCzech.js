@@ -11,9 +11,9 @@ Dostupné země doručení jsou uvedeny u produktu nebo potvrzeny při objednáv
 ## 2. Cena dopravy a předpokládané doručení
 
 - **Doručení v České republice:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jejího stavu jako **Odesláno** doručení obvykle trvá **1–3 pracovní dny**.
-- **Doručení do ostatních zemí EU:** Doprava je zpoplatněna; cenu uvidíte před odesláním objednávky. Po potvrzení objednávky a označení jako **Odesláno** doručení obvykle trvá **3–7 pracovních dnů**.
+- **Doručení do ostatních zemí EU:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jako **Odesláno** doručení obvykle trvá **3–7 pracovních dnů**.
 
-Jde o odhady, nikoli zaručené termíny. Doručení může trvat déle kvůli přípravě u prodejce, ověřování pravosti, výpadkům dopravce, svátkům nebo událostem mimo přiměřenou kontrolu. Příslušné dopravné, daně a další částky související s doručením placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
+Jde o odhady, nikoli zaručené termíny. Doručení může trvat déle kvůli přípravě u prodejce, ověřování pravosti, výpadkům dopravce, svátkům nebo událostem mimo přiměřenou kontrolu. Za doručení do dostupné destinace v EU se neúčtuje dopravné. Příslušné daně a jiné povinné částky placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
 
 ## 3. Pojištění a sledování zásilky
 
@@ -102,7 +102,7 @@ Odeslání objednávky je nabídkou ke koupi. Automatické přijetí zprávy nem
 
 ## 5. Ceny, daně a platby
 
-Cena, měna, zahrnuté daně, doprava a známé povinné poplatky se zobrazují před objednáním. Přeshraniční clo a dovozní daně se řídí Informacemi o dopravě. Používejte pouze platební pokyny v přihlášené části objednávky. Platby prodejci nebo jiné osobě mimo schválený postup nespadají pod Kariv Buyer Protection.
+Cena, měna, zahrnuté daně, doprava (do dostupných destinací v EU zdarma) a známé povinné poplatky se zobrazují před objednáním. Přeshraniční clo a dovozní daně se řídí Informacemi o dopravě. Používejte pouze platební pokyny v přihlášené části objednávky. Platby prodejci nebo jiné osobě mimo schválený postup nespadají pod Kariv Buyer Protection.
 
 Způsobilé transakce mohou využívat chráněnou platbu nebo postup obdobný úschově. Prostředky se uvolňují podle stavu transakce, potvrzení doručení, kontrolní lhůty a případného otevřeného sporu. Dostupnost a přesné fungování služby jsou uvedeny u objednávky.
 

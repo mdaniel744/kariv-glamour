@@ -19,11 +19,11 @@ export const revalidate = 900;
 const LEGACY_REDIRECTS = {
   'authentication-process': '/authentication',
   'certified-pre-owned': '/shop?isCertifiedPreOwned=true',
-  'condition-grading': '/buyer-protection',
+  'condition-grading': '/guides/how-to-safely-buy-a-pre-owned-luxury-watch#condition-service',
   contact: '/customer-service',
   'mens-watches': '/shop?gender=Men',
-  'returns-and-refunds': '/customer-service',
-  'shipping-policy': '/customer-service',
+  'returns-and-refunds': '/legal/returns-refund-policy',
+  'shipping-policy': '/legal/shipping-policy',
   'vintage-watches': '/shop?isVintage=true',
   'womens-watches': '/shop?gender=Women',
 };

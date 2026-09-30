@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { createI18nInstance } from '@/lib/i18n';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, normalizeLocale } from '@/lib/locales';
+import { localizedHref } from '@/lib/localizedHref';
 
 const LanguageContext = createContext();
 
@@ -80,11 +81,7 @@ export function LanguageProvider({ children, initialLocale }) {
     window.location.href = newPath + (query.size ? `?${query}` : '') + window.location.hash;
   };
 
-  const localePath = (path) => {
-    if (!path || path.startsWith('http') || path.startsWith('#')) return path;
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `/${locale}${cleanPath}`;
-  };
+  const localePath = (path) => localizedHref(path, locale);
 
   return (
     <I18nextProvider i18n={i18nInstance}>
@@ -101,7 +98,7 @@ export function useLanguage() {
     return {
       locale: DEFAULT_LOCALE,
       setLocale: () => {},
-      localePath: (p) => `/de${p.startsWith('/') ? p : '/' + p}`,
+      localePath: (path) => localizedHref(path, DEFAULT_LOCALE),
       supportedLocales: SUPPORTED_LOCALES,
     };
   }
