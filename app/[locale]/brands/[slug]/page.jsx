@@ -62,25 +62,11 @@ export default async function BrandPage({ params }) {
   if (!staticBrand && !data.brand) notFound();
 
   const name = localizedField(data.brand, 'brandName', locale) || staticBrand?.name || slug;
-  const description =
-    (locale === 'cs' && (data.brand?.seoDescription_cs || data.brand?.shortDescription_cs || fallbackDescription(name, locale))) ||
-    localizedField(data.brand, 'seoDescription', locale) ||
-    localizedField(data.brand, 'shortDescription', locale) ||
-    fallbackDescription(name, locale);
   const siteUrl = getSiteUrl();
   const brandUrl = `${siteUrl}/${locale}/brands/${slug}`;
   const faqs = locale === 'cs' && !data.brand?.faqs_cs ? [] : localizedArray(data.brand, 'faqs', locale);
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Brand',
-      '@id': `${brandUrl}#brand`,
-      name,
-      description,
-      logo: data.brand?.brandLogoLight || undefined,
-      url: brandUrl,
-    },
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

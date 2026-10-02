@@ -85,7 +85,7 @@ export function useSEO({ title, description, image, type = 'website', jsonLd, no
     const path = segments.length ? '/' + segments.join('/') : '';
 
     // Title
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — ${{ de: 'Authentische Luxusuhren', en: 'Authenticated Luxury Watches', cs: 'Ověřené luxusní hodinky' }[locale]}`;
+    const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — ${{ de: 'Luxusuhren entdecken', en: 'Explore Luxury Watches', cs: 'Objevte luxusní hodinky' }[locale]}`;
     document.title = fullTitle;
 
     // Description

@@ -275,10 +275,10 @@ export const PANERAI_SEO_PAGES = {
   'panerai-gebraucht-kaufen': {
     h1_en: 'Buy Pre-Owned Panerai', h1_de: 'Panerai gebraucht kaufen',
     title_en: 'Buy Pre-Owned Panerai | Kariv Glamour', title_de: 'Panerai gebraucht kaufen | Kariv Glamour',
-    description_en: 'Buy pre-owned Panerai at Kariv Glamour — inspected pre-owned watches with condition reports.',
-    description_de: 'Panerai gebraucht kaufen bei Kariv Glamour — geprüfte Gebrauchtuhren mit Zustandsbericht.',
-    intro_en: 'Buy pre-owned Panerai at Kariv Glamour: inspected watches with transparent condition reports and authentication.',
-    intro_de: 'Panerai gebraucht kaufen bei Kariv Glamour: geprüfte Uhren mit transparentem Zustandsbericht und Authentifizierung.',
+    description_en: 'Buy pre-owned Panerai at Kariv Glamour — compare condition and seller details for each listing.',
+    description_de: 'Panerai gebraucht kaufen bei Kariv Glamour — Zustand und Verkäuferangaben je Angebot vergleichen.',
+    intro_en: 'Explore pre-owned Panerai listings with condition details. Listing information is reviewed; physical authentication is identified separately when documented for a specific watch.',
+    intro_de: 'Entdecken Sie gebrauchte Panerai mit Zustandsangaben. Angebotsinformationen werden geprüft; eine physische Echtheitsprüfung wird nur bei Nachweis für die jeweilige Uhr gesondert ausgewiesen.',
     filter: {},
   },
   'gebrauchte-panerai-uhren': {

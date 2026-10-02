@@ -303,7 +303,7 @@ export default function PortalListingForm({ id: providedId }) {
           <div className="mt-5 flex flex-wrap gap-4">
             {[
               ['boxIncluded', 'Box included'], ['papersIncluded', 'Papers included'],
-              ['isNewArrival', 'New arrival'], ['isCertifiedPreOwned', 'Certified pre-owned'], ['isVintage', 'Vintage'],
+              ['isNewArrival', 'New arrival'], ['isCertifiedPreOwned', 'Selected pre-owned'], ['isVintage', 'Vintage'],
             ].map(([key, label]) => <label key={key} className="inline-flex min-h-10 items-center gap-2 text-sm text-foreground"><input type="checkbox" checked={!!product[key]} onChange={(event) => setField(key, event.target.checked)} /> {label}</label>)}
           </div>
         </section>

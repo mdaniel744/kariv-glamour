@@ -14,7 +14,7 @@
   "sellTrade": "Sell & Trade",
   "categories": {
     "newArrivals": "New Arrivals",
-    "certifiedPreOwned": "Certified Pre-Owned",
+    "certifiedPreOwned": "Selected Pre-Owned",
     "vintageWatches": "Vintage Watches",
     "mensWatches": "Men's Watches",
     "womensWatches": "Women's Watches",
@@ -27,7 +27,7 @@
     "shippingDelivery": "Shipping & Delivery"
   },
   "footer": {
-    "description": "Your destination for authenticated luxury watches from the world's most iconic manufacturers.",
+    "description": "An independent marketplace for luxury watch listings from iconic manufacturers.",
     "company": "Company",
     "service": "Customer Service",
     "legal": "Legal",

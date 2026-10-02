@@ -35,9 +35,9 @@
   "copyright": "© {{year}} Kariv Glamour. Alle Rechte vorbehalten.",
   "securePayment": "Sichere Zahlung",
   "buyerProtectionIncluded": "Käuferschutz inklusive",
-  "insuredShipping": "Weltweit versichert",
+  "insuredShipping": "Versicherter Versand innerhalb der EU",
   "conditionAssessment": "Detaillierte Zustandsberichte",
-  "authenticatedLuxuryWatches": "Authentifizierte Luxusuhren",
+  "authenticatedLuxuryWatches": "Luxusuhren-Angebote",
   "trustedWatchMarketplace": "Ihr vertrauenswürdiger Marktplatz für Luxusuhren",
   "buyNow": "Jetzt kaufen",
   "makeOffer": "Angebot machen",
@@ -56,7 +56,7 @@
     "title": "Luxusuhren",
     "allWatches": "Alle Uhren",
     "newArrivals": "Neuheiten",
-    "certifiedPreOwned": "Certified Pre-Owned",
+    "certifiedPreOwned": "Ausgewählte gebrauchte Uhren",
     "vintage": "Vintage Kollektion",
     "mensWatches": "Herrenuhren",
     "womensWatches": "Damenuhren",
@@ -102,7 +102,7 @@
     },
     "shop": {
       "title": "Luxusuhren Shop — Alle Uhren",
-      "description": "Durchstöbern Sie unser komplettes Inventar an authentischen Luxusuhren. Rolex, Omega, Patek Philippe, Cartier und mehr — alle geprüft und authentifiziert."
+      "description": "Entdecken Sie neue, gebrauchte und Vintage-Uhren unabhängiger Verkäufer. Vergleichen Sie Fotos, Zustand und die für jedes Angebot geprüften Angaben."
     },
     "brands": {
       "title": "Luxusuhren Marken",
@@ -114,11 +114,11 @@
     },
     "authentication": {
       "title": "Uhren Authentifizierung",
-      "description": "Erfahren Sie, wie Kariv Glamour jede Uhr durch rigorose Prüfung durch Uhrmacher-Experten authentifiziert — vom Zustand bis zur Originalität der Teile."
+      "description": "Erfahren Sie, wie Kariv Uhrenangebote prüft, welche Angaben Verkäufer machen müssen und ob für eine bestimmte Uhr eine physische Echtheitsprüfung dokumentiert ist."
     },
     "buyerProtection": {
       "title": "Käuferschutz",
-      "description": "Unser umfassender Käuferschutz: authentifizierte Uhren, versicherter Versand, sichere Zahlung und 14-tägige Rückgaberecht."
+      "description": "Informationen zu Verkäuferstandards, Zahlung, Versand, Rückgabe und zur Meldung von Zweifeln an der Echtheit einer Uhr."
     },
     "customerService": {
       "title": "Kundenservice",
@@ -144,7 +144,7 @@
   "components": {
     "hero": {
       "slide1": {
-        "eyebrow": "Authentifizierte Luxusuhren",
+        "eyebrow": "Unabhängiger Marktplatz für Luxusuhren",
         "title1": "Kaufen Sie",
         "title2": "Uhren",
         "title3": "von den ikonischsten",
@@ -163,11 +163,11 @@
       },
       "slide3": {
         "eyebrow": "Kariv Sicherheit",
-        "title1": "Jede Uhr",
-        "title2": "geprüft,",
-        "title3": "zertifiziert",
-        "title4": "und garantiert.",
-        "description": "Unsere mehrstufige Authentifizierung durch zertifizierte Uhrmacher sorgt dafür, dass jedes Zeitmesser genau das ist, was es sein soll — echt.",
+        "title1": "Jedes Angebot",
+        "title2": "verdient",
+        "title3": "klare Angaben",
+        "title4": "und Verantwortung.",
+        "description": "Wir verlangen echte Uhren und prüfen die eingereichten Angebotsangaben. Eine physische Echtheitsprüfung wird nur angegeben, wenn sie für die konkrete Uhr dokumentiert ist.",
         "cta": "Unser Prozess"
       },
       "slide4": {
@@ -186,7 +186,7 @@
       "searchPlaceholder": "Nach Marke, Modell oder Referenz suchen...",
       "searchCta": "Uhren suchen",
       "popularSearches": "Beliebt",
-      "certified": "Certified Pre-Owned",
+      "certified": "Ausgewählte gebrauchte Uhren",
       "underTen": "Unter 10.000 €"
     },
     "brandMarquee": {
@@ -204,7 +204,7 @@
       "womens": { "title": "Damenuhren", "subtitle": "Eleganz neu definiert" },
       "vintage": { "title": "Vintage & Sammlerstücke", "subtitle": "Zeitlose Schätze" },
       "newArrivals": { "title": "Neuheiten", "subtitle": "Frisch eingetroffen" },
-      "certified": { "title": "Certified Pre-Owned", "subtitle": "Geprüft und authentifiziert" },
+      "certified": { "title": "Ausgewählte gebrauchte Uhren", "subtitle": "Zustand und Verkäuferangaben vergleichen" },
       "automatic": { "title": "Automatikuhren", "subtitle": "Mechanische Handwerkskunst" },
       "gold": { "title": "Golduhren", "subtitle": "Bleibende Eleganz" },
       "underTen": { "title": "Unter 10.000 €", "subtitle": "Luxus in Reichweite" }
@@ -212,7 +212,7 @@
     "editorialHero": {
       "eyebrow": "Das Kariv Prinzip",
       "title": "Jede Uhr ein Versprechen.",
-      "description": "Wir kuratieren nicht nur Uhren — wir kuratieren Vertrauen. Jedes Zeitmesser durchläuft eine mehrstufige Authentifizierung durch zertifizierte Uhrmacher, bevor er Teil unserer Kollektion wird.",
+      "description": "Verkäufer müssen echte Uhren anbieten und sie zutreffend beschreiben. Prüfen Sie die Angaben zum konkreten Angebot und fragen Sie bei Bedarf nach Belegen.",
       "cta": "Unser Prozess",
       "alt": "Kariv Glamour Kuratierung"
     },
@@ -237,7 +237,7 @@
     "featuredProducts": {
       "section01": { "title": "Ausgewählte Zeitmesser", "subtitle": "Handverlesene Auswahl aus unserem kuratierten Inventar" },
       "section02": { "title": "Neuheiten", "subtitle": "Die neuesten Ergänzungen unserer Kollektion" },
-      "section03": { "title": "Certified Pre-Owned", "subtitle": "Authentifizierte und geprüfte gebrauchte Luxusuhren" }
+      "section03": { "title": "Ausgewählte gebrauchte Uhren", "subtitle": "Gebrauchte Uhren mit Angaben zu Zustand und Verkäufer" }
     },
     "productCard": {
       "noImage": "Kein Bild",
@@ -307,7 +307,7 @@
   "pages": {
     "cart": {
       "emptyTitle": "Ihr Warenkorb ist leer",
-      "emptyDesc": "Entdecken Sie unsere Kollektion authentifizierter Luxusuhren.",
+      "emptyDesc": "Entdecken Sie unsere Auswahl an Luxusuhren-Angeboten.",
       "continueShopping": "Weiter einkaufen",
       "breadcrumb": "Warenkorb",
       "label": "Warenkorb",
@@ -322,25 +322,25 @@
       "checkout": "Zur Kasse",
       "trustSecure": "Sicherer verschlüsselter Checkout",
       "trustShipping": "Weltweit versicherter Versand",
-      "trustAuth": "Alle Uhren authentifiziert"
+      "trustAuth": "Echtheitsangaben zur einzelnen Uhr prüfen"
     },
     "about": {
       "breadcrumb": "Über uns",
       "eyebrow": "Über uns",
       "heroTitle1": "Ein Ziel für",
       "heroTitle2": "anspruchsvolle Sammler",
-      "heroDesc": "Kariv Glamour ist eine unabhängige Luxusuhren-E-Commerce-Plattform, die Sammler mit authentifizierten Zeitmessern der ikonischsten Manufakturen der Welt verbindet. Wir glauben, dass der Erwerb einer Luxusuhr genauso außergewöhnlich sein sollte wie der Zeitmesser selbst.",
+      "heroDesc": "Kariv Glamour ist ein unabhängiger Marktplatz für Luxusuhren bekannter Hersteller. Wir verlangen echte Produkte und klare Angebotsangaben, damit Käufer informiert entscheiden können.",
       "storyEyebrow": "Unsere Geschichte",
       "storyTitle1": "Von Sammlern gegründet,",
       "storyTitle2": "für Sammler",
-      "storyP1": "Kariv Glamour entstand aus einer einfachen Beobachtung: Der Erwerb einer authentifizierten Luxusuhr sollte unkompliziert, transparent und angenehm sein. Zu oft stehen Sammler vor Unsicherheit bezüglich Authentizität, intransparenter Preisgestaltung und unpersönlichem Service.",
-      "storyP2": "Unsere Plattform vereint die feinsten neuen, gebrauchten, vintage und Sammler-Uhren, jede inspiziert und authentifiziert von unserem Team horologischer Experten. Von der ersten Omega Speedmaster bis zu einer seltenen Patek Philippe Grand Complication kuratieren wir Uhren, die Geschichten erzählen.",
+      "storyP1": "Kariv Glamour entstand aus einer einfachen Beobachtung: Der Kauf einer Luxusuhr sollte unkompliziert und transparent sein. Käufer brauchen klare Angaben zu Zustand, Herkunft, Verkäufer und einer gegebenenfalls durchgeführten Echtheitsprüfung.",
+      "storyP2": "Unsere Plattform vereint neue, gebrauchte, Vintage- und Sammleruhren. Wir prüfen eingereichte Angebotsangaben und verlangen, dass Verkäufer bekannte Ersatzteile oder nicht originale Teile offenlegen. Eine Angebotsprüfung ist keine physische Echtheitsprüfung.",
       "storyP3": "Mit Sitz in Prag, Tschechische Republik, vereint Kariv Glamour die Uhrensuche und Produktinformationen auf einem Online-Marktplatz.",
       "storyAlt": "Luxusuhren Handwerkskunst",
       "valuesEyebrow": "Unsere Prinzipien",
       "valuesTitle": "Was uns leitet",
       "v1Title": "Authentizität zuerst",
-      "v1Desc": "Jeder Zeitmesser durchläuft eine strenge Authentifizierung durch unser Team zertifizierter horologischer Experten, bevor er in unsere Kollektion aufgenommen wird.",
+      "v1Desc": "Wir verbieten gefälschte Uhren, prüfen Angebotsangaben und verlangen zutreffende Beschreibungen von Zustand, Teilen und beigefügten Unterlagen.",
       "v2Title": "Transparenz",
       "v2Desc": "Detaillierte Zustandsbewertung, umfassende Fotografie und ehrliche Beschreibungen sorgen dafür, dass Sie genau wissen, was Sie erwerben.",
       "v3Title": "Exzellenz",
@@ -358,19 +358,19 @@
       "eyebrow": "Unser Prozess",
       "heroTitle1": "Authentifizierung &",
       "heroTitle2": "Inspektion",
-      "heroDesc": "Jeder Zeitmesser bei Kariv Glamour durchläuft unseren strengen mehrstufigen Authentifizierungsprozess. Wir kompromittieren nie bei der Authentizität — Ihr Vertrauen ist unsere Priorität.",
+      "heroDesc": "Kariv verlangt echte Uhren und prüft eingereichte Angebotsangaben. Das ist nicht gleichbedeutend mit einer physischen Prüfung oder Zertifizierung jeder Uhr. Achten Sie beim konkreten Angebot auf dokumentierte Nachweise.",
       "s1Title": "Erste Bewertung",
-      "s1Desc": "Jeder Zeitmesser beginnt mit einer gründlichen visuellen Inspektion von Gehäuse, Zifferblatt, Zeigern, Lünette und Krone auf Authentizität und Zustand.",
+      "s1Desc": "Wir prüfen die für ein Angebot eingereichten Angaben und Fotos, darunter Marke, Modell, Referenz und Zustand.",
       "s2Title": "Uhrwerk-Inspektion",
-      "s2Desc": "Unsere zertifizierten Uhrmacher öffnen und inspizieren das Uhrwerk, verifizieren Kaliber, Seriennummern und bestätigen, dass alle Komponenten echt und original sind.",
+      "s2Desc": "Eine physische Prüfung von Uhrwerk oder Seriennummern erfolgt nicht automatisch. Falls sie für eine Uhr durchgeführt wurde, fragen Sie nach Bericht und Prüfumfang.",
       "s3Title": "Dokumentationsprüfung",
-      "s3Desc": "Wir verifizieren alle begleitenden Dokumente einschließlich Originalpapiere, Zertifikate, Service-Historie und Provenienz.",
+      "s3Desc": "Verkäufer sollen angeben, welche Box, Papiere, Servicebelege oder sonstigen Unterlagen beiliegen. Deren Vorhandensein allein beweist keine Echtheit.",
       "s4Title": "Zustandsbewertung",
-      "s4Desc": "Jede Uhr erhält eine transparente Zustandsnote — von Neu bis Vintage — mit detaillierter Fotografie jedes Aspekts.",
+      "s4Desc": "Prüfen Sie Zustand und Fotos des konkreten Angebots. Fragen Sie bei fehlenden Ansichten, ausgetauschten Teilen oder unklarer Vorgeschichte nach.",
       "s5Title": "Zertifizierung",
-      "s5Desc": "Uhren, die unsere Inspektion bestehen, erhalten die Kariv Glamour Authentifizierungszertifizierung, Ihre Garantie für Authentizität.",
+      "s5Desc": "Die Prüfung eines Angebots führt nicht automatisch zu einem Zertifikat. Eine uhrenspezifische Echtheitsprüfung oder Bescheinigung muss durch eigene Unterlagen belegt sein.",
       "noFakesTitle": "Null Toleranz für Fälschungen",
-      "noFakesDesc": "Kariv Glamour hat eine strikte Null-Toleranz-Politik für gefälschte, replizierte oder fake Uhren. Jede Uhr auf unserer Plattform ist garantiert 100% authentisch. Wir verwenden Markennamen und Modellnamen ausschließlich zur Identifizierung echter Produkte."
+      "noFakesDesc": "Gefälschte Uhren und Repliken sind nicht erlaubt. Melden Sie Bedenken zu einem Angebot oder einer gelieferten Uhr dem Kariv-Support. Wir prüfen den Fall und wenden die geltenden Käufer- und Rückgaberechte an. Marken- und Modellnamen dienen der Produktbezeichnung, nicht als Hinweis auf eine Herstellerpartnerschaft."
     },
     "customerService": {
       "breadcrumb": "Kundenservice",
@@ -527,9 +527,10 @@
         "noReviews": "Dieser Händler hat noch keine freigegebenen Kundenbewertungen erhalten.",
         "recentReviewsUnavailable": "Aktuelle Bewertungen sind vorübergehend nicht verfügbar."
       },
-      "guaranteeTitle": "Die Kariv Garantie",
-      "guarantee1": "Von Kariv Glamour authentifiziert",
-      "guarantee1Pending": "Authentifizierung ausstehend",
+      "guaranteeTitle": "Informationen zum Kauf",
+      "guarantee1": "Echtheitsprüfung für diese Uhr vermerkt; fordern Sie die Belege an",
+      "guarantee1Reviewed": "Angebotsangaben geprüft; physische Echtheitsprüfung nicht dokumentiert",
+      "guarantee1Pending": "Physische Echtheitsprüfung nicht dokumentiert; fragen Sie den Verkäufer",
       "guarantee2": "Lieferländer und Versandbedingungen beachten",
       "guarantee3": "Rückgabe innerhalb von 14 Tagen",
       "guarantee3Final": "Finaler Verkauf — keine Rückgabe",
@@ -610,11 +611,11 @@
       "manualReviewDesc": "Kariv muss den Verkäufer oder Zahlungsweg prüfen, bevor diese Bestellung fortgesetzt werden kann. Auf dieser Seite ist keine Zahlung möglich.",
       "selectedWatch": "Ausgewählte Uhr",
       "buyerProtection": "Käuferschutz",
-      "buyerProtectionDesc": "Dank des Käuferschutzes profitieren Sie von zahlreichen Sicherheitsfunktionen wie der Zahlung über unseren Escrow-Service, der Garantie der Authentizität und dem 14-tägigen gesetzlichen Widerrufsrecht.",
-      "bpEscrow": "Zahlung über unseren Escrow-Service — Gelder werden erst nach Verifizierung freigegeben",
-      "bpAuth": "Garantie der Authentizität durch erfahrene Uhrmacher",
+      "buyerProtectionDesc": "Prüfen Sie vor dem Kauf die verfügbaren Zahlungsarten sowie die Angaben zur Uhr und zum Verkäufer. Gesetzliche Widerrufsrechte und unsere veröffentlichten Richtlinien gelten, soweit anwendbar.",
+      "bpEscrow": "Prüfen Sie beim Checkout den für diese Bestellung angebotenen Zahlungsweg",
+      "bpAuth": "Prüfen Sie den angegebenen Authentifizierungsstatus und fordern Sie Nachweise an",
       "bpReturns": "14-tägiges gesetzliches Widerrufsrecht",
-      "bpShipping": "Weltweit versicherter Versand",
+      "bpShipping": "Versicherter Versand in verfügbare EU-Ziele",
       "paymentRouteTitle": "Zahlungsschutz wählen",
       "paymentRouteDesc": "Für diesen Händlerkauf stehen Direktzahlung oder optionaler Kariv-Schutz zur Verfügung.",
       "payDealerDirectly": "Direkt an den Händler zahlen",
@@ -641,7 +642,7 @@
       "orderTitle": "Ihre Bestellung — Kariv Glamour",
       "trustSecure": "Sicherer verschlüsselter Checkout",
       "trustShipping": "Weltweit versicherter Versand",
-      "trustAuth": "Alle Uhren authentifiziert"
+      "trustAuth": "Echtheitsangaben zur einzelnen Uhr prüfen"
     },
     "wishlist": {
       "empty": "Ihre Wunschliste ist leer",

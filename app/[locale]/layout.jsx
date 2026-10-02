@@ -18,7 +18,7 @@ const poppins = Poppins({
 });
 
 const SITE_NAME = 'Kariv Glamour';
-const SITE_DESCRIPTION = 'Authenticated luxury watches from Kariv Glamour.';
+const SITE_DESCRIPTION = 'Explore luxury watch listings from Kariv Glamour and independent sellers.';
 const themeInitializationScript = `
   (() => {
     try {

@@ -255,7 +255,7 @@ export const OMEGA_INTERNAL_LINKS = {
     { text_en: 'Patek Philippe watches', text_de: 'Patek Philippe Uhren', link: '/brands/patek-philippe' },
   ],
   relatedCategories: [
-    { text_en: 'Certified Pre-Owned Watches', text_de: 'Zertifizierte gebrauchte Uhren', link: '/certified-pre-owned' },
+    { text_en: 'Selected Pre-Owned Watches', text_de: 'Ausgewählte gebrauchte Uhren', link: '/shop?isCertifiedPreOwned=true' },
     { text_en: 'Vintage Watches', text_de: 'Vintage Uhren', link: '/vintage-watches' },
     { text_en: 'Men\u2019s Luxury Watches', text_de: 'Herren-Luxusuhren', link: '/mens-watches' },
     { text_en: 'Women\u2019s Luxury Watches', text_de: 'Damen-Luxusuhren', link: '/womens-watches' },
@@ -284,7 +284,7 @@ export const OMEGA_FAQS = [
     answer: [
       { text_en: 'Yes. When you buy a ', text_de: 'Ja. Wenn Sie eine ' },
       { text_en: 'pre-owned Omega', text_de: 'gebrauchte Omega', link: '/omega-gebraucht-kaufen' },
-      { text_en: ' from Kariv Glamour, each watch is carefully reviewed and presented with clear ', text_de: ' bei Kariv Glamour kaufen, wird jede Uhr sorgfältig geprüft und mit klarer ' },
+      { text_en: ' from Kariv Glamour, the listing information is reviewed and each watch is presented with clear ', text_de: ' bei Kariv Glamour kaufen, werden die Angebotsinformationen geprüft und jede Uhr mit klarer ' },
       { text_en: 'condition grading', text_de: 'Zustandsbewertung', link: '/condition-grading' },
       { text_en: ', ', text_de: ', ' },
       { text_en: 'box and papers', text_de: 'Box und Papiere', link: '/watch-guides/box-and-papers' },
@@ -429,7 +429,7 @@ export const OMEGA_SEO_PAGES = {
   },
   'omega-gebraucht-kaufen': {
     title_en: 'Buy Pre-Owned Omega | Pre-Owned Omega Watches | Kariv Glamour', title_de: 'Omega gebraucht kaufen | Pre-Owned Omega Uhren | Kariv Glamour',
-    description_en: 'Buy pre-owned Omega at Kariv Glamour. Discover tested pre-owned Omega watches with clear condition grading, box and papers information and detailed product presentation.', description_de: 'Omega gebraucht kaufen bei Kariv Glamour. Entdecken Sie geprüfte pre-owned Omega Uhren mit klarer Zustandsbewertung, Box und Papiere Informationen und detaillierter Produktpräsentation.',
+    description_en: 'Buy pre-owned Omega at Kariv Glamour. Compare condition, box and papers information and seller details for each listing.', description_de: 'Omega gebraucht kaufen bei Kariv Glamour. Vergleichen Sie Zustand, Angaben zu Box und Papieren sowie Verkäuferinformationen je Angebot.',
     h1_en: 'Buy Pre-Owned Omega', h1_de: 'Omega gebraucht kaufen',
     intro_en: 'If you want to buy a pre-owned Omega, Kariv Glamour offers a curated selection of pre-owned timepieces. Each watch is presented with clear condition grading, box and papers information and reference number visibility.', intro_de: 'Wenn Sie eine Omega gebraucht kaufen möchten, bietet Kariv Glamour eine kuratierte Auswahl an pre-owned Zeitmessern. Jede Uhr wird mit klarer Zustandsbewertung, Box und Papiere Informationen und Referenznummern-Sichtbarkeit präsentiert.',
     collectionFilter: { isCertifiedPreOwned: true },

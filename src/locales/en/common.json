@@ -35,9 +35,9 @@
   "copyright": "© {{year}} Kariv Glamour. All rights reserved.",
   "securePayment": "Secure Payment",
   "buyerProtectionIncluded": "Buyer Protection Included",
-  "insuredShipping": "Insured Shipping Worldwide",
+  "insuredShipping": "Insured Shipping in the EU",
   "conditionAssessment": "Detailed Condition Reports",
-  "authenticatedLuxuryWatches": "Authenticated Luxury Watches",
+  "authenticatedLuxuryWatches": "Luxury Watch Listings",
   "trustedWatchMarketplace": "Your trusted luxury watch marketplace",
   "buyNow": "Buy Now",
   "makeOffer": "Make an Offer",
@@ -56,7 +56,7 @@
     "title": "Luxury Watches",
     "allWatches": "All Watches",
     "newArrivals": "New Arrivals",
-    "certifiedPreOwned": "Certified Pre-Owned",
+    "certifiedPreOwned": "Selected Pre-Owned",
     "vintage": "Vintage Collection",
     "mensWatches": "Mens Watches",
     "womensWatches": "Womens Watches",
@@ -102,7 +102,7 @@
     },
     "shop": {
       "title": "Luxury Watch Shop — All Watches",
-      "description": "Browse our complete inventory of authentic luxury watches. Rolex, Omega, Patek Philippe, Cartier and more — all verified and authenticated."
+      "description": "Browse new, pre-owned and vintage watches from independent sellers. Compare photos, condition and the information reviewed for each listing."
     },
     "brands": {
       "title": "Luxury Watch Brands",
@@ -114,11 +114,11 @@
     },
     "authentication": {
       "title": "Watch Authentication",
-      "description": "Learn how Kariv Glamour authenticates every watch through rigorous inspection by master watchmakers — from condition to parts originality."
+      "description": "Learn how Kariv reviews watch listings, what sellers must disclose, and how to check whether a specific watch has documented physical authentication."
     },
     "buyerProtection": {
       "title": "Buyer Protection",
-      "description": "Our comprehensive buyer protection: authenticated watches, insured shipping, secure payment, and 14-day return policy."
+      "description": "Learn about seller standards, payment, shipping, returns and how to raise an authenticity concern about a watch."
     },
     "customerService": {
       "title": "Customer Service",
@@ -144,7 +144,7 @@
   "components": {
     "hero": {
       "slide1": {
-        "eyebrow": "Authenticated Luxury Watches",
+        "eyebrow": "Independent Luxury Watch Marketplace",
         "title1": "Buy",
         "title2": "watches",
         "title3": "from the world's most",
@@ -163,11 +163,11 @@
       },
       "slide3": {
         "eyebrow": "Kariv Security",
-        "title1": "Every watch",
-        "title2": "inspected,",
-        "title3": "certified,",
-        "title4": "and guaranteed.",
-        "description": "Our multi-stage authentication by certified watchmakers ensures every timepiece is exactly what it should be — authentic.",
+        "title1": "Every listing",
+        "title2": "deserves",
+        "title3": "clear details",
+        "title4": "and accountability.",
+        "description": "We require genuine watches and review submitted listing information. Physical authentication is identified separately when documented for a specific watch.",
         "cta": "Our Process"
       },
       "slide4": {
@@ -186,7 +186,7 @@
       "searchPlaceholder": "Search by brand, model, or reference...",
       "searchCta": "Search watches",
       "popularSearches": "Popular",
-      "certified": "Certified pre-owned",
+      "certified": "Selected pre-owned",
       "underTen": "Under €10,000"
     },
     "brandMarquee": {
@@ -204,7 +204,7 @@
       "womens": { "title": "Women's Watches", "subtitle": "Elegance redefined" },
       "vintage": { "title": "Vintage & Collectibles", "subtitle": "Timeless treasures" },
       "newArrivals": { "title": "New Arrivals", "subtitle": "Freshly arrived" },
-      "certified": { "title": "Certified Pre-Owned", "subtitle": "Inspected and authenticated" },
+      "certified": { "title": "Selected Pre-Owned", "subtitle": "Compare condition and seller details" },
       "automatic": { "title": "Automatic Watches", "subtitle": "Mechanical craftsmanship" },
       "gold": { "title": "Gold Watches", "subtitle": "Enduring distinction" },
       "underTen": { "title": "Under €10,000", "subtitle": "Luxury within reach" }
@@ -212,7 +212,7 @@
     "editorialHero": {
       "eyebrow": "The Kariv Principle",
       "title": "Every watch is a promise.",
-      "description": "We don't just curate watches — we curate trust. Every timepiece undergoes a multi-stage authentication by certified watchmakers before joining our collection.",
+      "description": "We require sellers to offer genuine watches and describe each one accurately. Review the listing details and request supporting documents when they matter to your purchase.",
       "cta": "Our Process",
       "alt": "Kariv Glamour Curation"
     },
@@ -237,7 +237,7 @@
     "featuredProducts": {
       "section01": { "title": "Featured Timepieces", "subtitle": "Hand-picked selection from our curated inventory" },
       "section02": { "title": "New Arrivals", "subtitle": "The latest additions to our collection" },
-      "section03": { "title": "Certified Pre-Owned", "subtitle": "Authenticated and inspected pre-owned luxury watches" }
+      "section03": { "title": "Selected Pre-Owned", "subtitle": "Pre-owned watches with individual condition and seller details" }
     },
     "productCard": {
       "noImage": "No Image",
@@ -307,7 +307,7 @@
   "pages": {
     "cart": {
       "emptyTitle": "Your cart is empty",
-      "emptyDesc": "Discover our collection of authenticated luxury watches.",
+      "emptyDesc": "Discover our selection of luxury watch listings.",
       "continueShopping": "Continue Shopping",
       "breadcrumb": "Cart",
       "label": "Cart",
@@ -322,25 +322,25 @@
       "checkout": "Checkout",
       "trustSecure": "Secure encrypted checkout",
       "trustShipping": "Insured shipping worldwide",
-      "trustAuth": "All watches authenticated"
+      "trustAuth": "Review each watch’s authenticity information"
     },
     "about": {
       "breadcrumb": "About",
       "eyebrow": "About",
       "heroTitle1": "One destination for",
       "heroTitle2": "discerning collectors",
-      "heroDesc": "Kariv Glamour is an independent luxury watch e-commerce platform connecting collectors with authenticated timepieces from the world's most iconic manufacturers. We believe acquiring a luxury watch should be as exceptional as the timepiece itself.",
+      "heroDesc": "Kariv Glamour is an independent marketplace connecting collectors with luxury watches from iconic manufacturers. We require genuine items and clear listing information so buyers can make informed decisions.",
       "storyEyebrow": "Our Story",
       "storyTitle1": "Founded by collectors,",
       "storyTitle2": "for collectors",
-      "storyP1": "Kariv Glamour was born from a simple observation: acquiring an authenticated luxury watch should be straightforward, transparent, and enjoyable. Too often, collectors face uncertainty about authenticity, opaque pricing, and impersonal service.",
-      "storyP2": "Our platform brings together the finest new, pre-owned, vintage, and collector watches, each inspected and authenticated by our team of horological experts. From the iconic Omega Speedmaster to a rare Patek Philippe Grand Complication, we curate watches that tell stories.",
+      "storyP1": "Kariv Glamour was born from a simple observation: buying a luxury watch should be straightforward and transparent. Buyers need clear information about condition, origin, seller and any authentication performed on a specific watch.",
+      "storyP2": "Our platform brings together new, pre-owned, vintage and collector watches. We review submitted listing information and require sellers to disclose known replacement or non-original parts; a listing review is not a physical authentication of the watch.",
       "storyP3": "Based in Prague, Czech Republic, Kariv Glamour brings watch discovery and product information together in one online marketplace.",
       "storyAlt": "Luxury watch craftsmanship",
       "valuesEyebrow": "Our Principles",
       "valuesTitle": "What Guides Us",
       "v1Title": "Authenticity First",
-      "v1Desc": "Every timepiece undergoes rigorous authentication by our team of certified horological experts before joining our collection.",
+      "v1Desc": "We prohibit counterfeit watches, review listing information and ask sellers to describe condition, parts and accompanying documents accurately.",
       "v2Title": "Transparency",
       "v2Desc": "Detailed condition assessments, comprehensive photography, and honest descriptions ensure you know exactly what you're acquiring.",
       "v3Title": "Excellence",
@@ -358,19 +358,19 @@
       "eyebrow": "Our Process",
       "heroTitle1": "Authentication &",
       "heroTitle2": "Inspection",
-      "heroDesc": "Every timepiece at Kariv Glamour undergoes our rigorous multi-stage authentication process. We never compromise on authenticity — your trust is our priority.",
+      "heroDesc": "Kariv requires sellers to list genuine watches and reviews submitted listing information. This is not the same as physically inspecting or certifying every watch; check the individual listing for documented authentication.",
       "s1Title": "Initial Assessment",
-      "s1Desc": "Every timepiece begins with a thorough visual inspection of the case, dial, hands, bezel, and crown for authenticity and condition.",
+      "s1Desc": "We review the information and photographs supplied for a listing, including the stated brand, model, reference and condition.",
       "s2Title": "Movement Inspection",
-      "s2Desc": "Our certified watchmakers open and inspect the movement, verify caliber, serial numbers, and confirm all components are genuine and original.",
+      "s2Desc": "A physical inspection of the movement or serial numbers is not automatic. If one has been performed for a watch, ask for the report and its scope.",
       "s3Title": "Documentation Review",
-      "s3Desc": "We verify all accompanying documents including original papers, certificates, service history, and provenance.",
+      "s3Desc": "Sellers should state which box, papers, service records or other documents accompany the watch. Their presence alone does not prove authenticity.",
       "s4Title": "Condition Grading",
-      "s4Desc": "Each watch receives a transparent condition grade — from New to Vintage — with detailed photography of every aspect.",
+      "s4Desc": "Review the condition and photographs in the specific listing. Ask the seller to clarify any missing views, replaced parts or unclear history.",
       "s5Title": "Certification",
-      "s5Desc": "Watches that pass our inspection receive the Kariv Glamour Authentication Certification, your guarantee of authenticity.",
+      "s5Desc": "We do not issue a certificate merely because a listing was reviewed. Any watch-specific authentication or certificate must be supported by its own documentation.",
       "noFakesTitle": "Zero Tolerance for Counterfeits",
-      "noFakesDesc": "Kariv Glamour has a strict zero-tolerance policy for fake, replica, or counterfeit watches. Every watch on our platform is guaranteed 100% authentic. We use brand and model names solely to identify genuine products."
+      "noFakesDesc": "Counterfeit and replica watches are not permitted. Report a concern about any listing or delivered watch to Kariv support; we review it and apply the relevant buyer-protection and return rights. Brand and model names identify the products, not a manufacturer partnership."
     },
     "customerService": {
       "breadcrumb": "Customer Service",
@@ -527,9 +527,10 @@
         "noReviews": "This dealer has not received any approved customer reviews yet.",
         "recentReviewsUnavailable": "Recent reviews are temporarily unavailable."
       },
-      "guaranteeTitle": "The Kariv Guarantee",
-      "guarantee1": "Authenticated by Kariv Glamour",
-      "guarantee1Pending": "Authentication pending",
+      "guaranteeTitle": "Purchase information",
+      "guarantee1": "Authentication recorded for this watch; request its supporting documentation",
+      "guarantee1Reviewed": "Listing information reviewed; physical authentication not documented",
+      "guarantee1Pending": "Physical authentication not documented; ask the seller for details",
       "guarantee2": "See delivery destinations and shipping terms",
       "guarantee3": "14-day return policy",
       "guarantee3Final": "Final sale — no returns",
@@ -610,11 +611,11 @@
       "manualReviewDesc": "Kariv must verify the seller or payment route before this order can continue. No payment can be made from this page.",
       "selectedWatch": "Selected Watch",
       "buyerProtection": "Buyer Protection",
-      "buyerProtectionDesc": "Thanks to buyer protection, you benefit from many security features such as payment via our escrow service, the guarantee of authenticity and the 14-day statutory right of withdrawal.",
-      "bpEscrow": "Payment via our escrow service — funds released only after verification",
-      "bpAuth": "Guarantee of authenticity by expert watchmakers",
+      "buyerProtectionDesc": "Review the available payment options, watch details and seller information before purchase. Statutory withdrawal rights and our published policies apply where eligible.",
+      "bpEscrow": "Review the payment route offered for this order at checkout",
+      "bpAuth": "Check the watch's stated authentication status and request supporting documentation",
       "bpReturns": "14-day statutory right of withdrawal",
-      "bpShipping": "Insured worldwide shipping",
+      "bpShipping": "Insured shipping to available EU destinations",
       "paymentRouteTitle": "Choose payment protection",
       "paymentRouteDesc": "This dealer purchase is eligible for direct payment or optional Kariv protection.",
       "payDealerDirectly": "Pay dealer directly",
@@ -641,7 +642,7 @@
       "orderTitle": "Your Order — Kariv Glamour",
       "trustSecure": "Secure encrypted checkout",
       "trustShipping": "Insured shipping worldwide",
-      "trustAuth": "All watches authenticated"
+      "trustAuth": "Review each watch’s authenticity information"
     },
     "wishlist": {
       "empty": "Your wishlist is empty",

@@ -13,6 +13,9 @@ export default function BrandHero({ brand }) {
         >
           {t('hero.title', { brand })}
         </h1>
+        <p className="mt-2 text-sm leading-relaxed text-[#52635b] dark:text-[#b8c6d1]">
+          {t('hero.independent', { brand })}
+        </p>
       </div>
     </section>
   );

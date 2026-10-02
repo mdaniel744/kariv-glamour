@@ -290,10 +290,10 @@ export const BVLGARI_SEO_PAGES = {
   'bvlgari-gebraucht-kaufen': {
     h1_en: 'Buy Pre-Owned Bvlgari', h1_de: 'Bvlgari gebraucht kaufen',
     title_en: 'Buy Pre-Owned Bvlgari | Kariv Glamour', title_de: 'Bvlgari gebraucht kaufen | Kariv Glamour',
-    description_en: 'Buy pre-owned Bvlgari at Kariv Glamour — inspected pre-owned watches with condition reports.',
-    description_de: 'Bvlgari gebraucht kaufen bei Kariv Glamour — geprüfte Gebrauchtuhren mit Zustandsbericht.',
-    intro_en: 'Buy pre-owned Bvlgari at Kariv Glamour: inspected watches with transparent condition reports and authentication.',
-    intro_de: 'Bvlgari gebraucht kaufen bei Kariv Glamour: geprüfte Uhren mit transparentem Zustandsbericht und Authentifizierung.',
+    description_en: 'Buy pre-owned Bvlgari at Kariv Glamour — compare condition and seller details for each listing.',
+    description_de: 'Bvlgari gebraucht kaufen bei Kariv Glamour — Zustand und Verkäuferangaben je Angebot vergleichen.',
+    intro_en: 'Explore pre-owned Bvlgari listings with condition details. Listing information is reviewed; physical authentication is identified separately when documented for a specific watch.',
+    intro_de: 'Entdecken Sie gebrauchte Bvlgari mit Zustandsangaben. Angebotsinformationen werden geprüft; eine physische Echtheitsprüfung wird nur bei Nachweis für die jeweilige Uhr gesondert ausgewiesen.',
     filter: {},
   },
   'gebrauchte-bvlgari-uhren': {

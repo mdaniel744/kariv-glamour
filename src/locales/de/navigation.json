@@ -14,7 +14,7 @@
   "sellTrade": "Verkaufen & Tauschen",
   "categories": {
     "newArrivals": "Neuheiten",
-    "certifiedPreOwned": "Geprüfte Gebrauchte",
+    "certifiedPreOwned": "Ausgewählte gebrauchte Uhren",
     "vintageWatches": "Vintage Uhren",
     "mensWatches": "Herrenuhren",
     "womensWatches": "Damenuhren",
@@ -27,7 +27,7 @@
     "shippingDelivery": "Versand & Lieferung"
   },
   "footer": {
-    "description": "Ihr Ziel für authentifizierte Luxusuhren von den ikonischsten Manufakturen der Welt.",
+    "description": "Ein unabhängiger Marktplatz für Luxusuhren renommierter Hersteller.",
     "company": "Unternehmen",
     "service": "Kundenservice",
     "legal": "Rechtliches",

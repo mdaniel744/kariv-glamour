@@ -47,7 +47,7 @@ const LABELS = {
   'Which {brand} to Buy?': 'Jak vybrat hodinky {brand}?', '{brand} New or Pre-Owned?': '{brand}: nové, nebo použité?',
   '{brand} Box and Papers Guide': '{brand}: krabička a doklady', '{brand} with Box and Papers': '{brand} s krabičkou a doklady',
   '{brand} Box and Papers': '{brand}: krabička a doklady',
-  '{brand} Maintenance and Care': 'Servis a péče o {brand}', 'Certified Pre-Owned Watches': 'Certifikované použité hodinky',
+  '{brand} Maintenance and Care': 'Servis a péče o {brand}', 'Selected Pre-Owned Watches': 'Vybrané použité hodinky',
   'Vintage Watches': 'Historické hodinky', 'Men’s Luxury Watches': 'Pánské luxusní hodinky', 'Women’s Luxury Watches': 'Dámské luxusní hodinky',
   'Dive Watches': 'Potápěčské hodinky', 'Chronograph Watches': 'Chronografy', 'Travel / GMT Watches': 'Cestovní hodinky / GMT',
   'Dress Watches': 'Společenské hodinky', '{brand} Buying Guide': 'Průvodce výběrem {brand}',

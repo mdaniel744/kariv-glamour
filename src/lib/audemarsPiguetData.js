@@ -103,7 +103,7 @@ export const AP_INTERNAL_LINKS = [
   {
     title_en: 'Related Watch Categories', title_de: 'Verwandte Uhrenkategorien',
     links: [
-      { label_en: 'Certified Pre-Owned Watches', label_de: 'Zertifizierte gebrauchte Uhren', to: '/shop?isCertifiedPreOwned=true' },
+      { label_en: 'Selected Pre-Owned Watches', label_de: 'Ausgewählte gebrauchte Uhren', to: '/shop?isCertifiedPreOwned=true' },
       { label_en: 'Men\u2019s watches', label_de: 'Herrenuhren', to: '/shop?gender=Men' },
       { label_en: 'Women\u2019s watches', label_de: 'Damenuhren', to: '/shop?gender=Women' },
       { label_en: 'Chronograph Watches', label_de: 'Chronographen', to: '/shop' },

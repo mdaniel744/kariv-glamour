@@ -79,8 +79,9 @@
     "title": "The {{brand}} Story"
   },
   "hero": {
-    "boutique": "{{brand}} Boutique",
+    "boutique": "{{brand}} watches at Kariv",
     "title": "{{brand}} Watches",
+    "independent": "Independent marketplace · Not affiliated with {{brand}}",
     "description": "Discover a curated selection of {{brand}} watches, from timeless dress watches to iconic collector models.",
     "shopCTA": "Shop {{brand}} Watches",
     "discoverCollections": "Discover {{brand}} Collections",
@@ -167,16 +168,16 @@
     "relatedCategories": "Related Watch Categories"
   },
   "seoLanding": {
-    "boutique": "{{brand}} Boutique",
+    "boutique": "{{brand}} watches at Kariv",
     "availableWatches": "Available {{brand}} Watches",
     "noWatches": "No {{brand}} watches currently available in this category.",
     "viewAll": "View All {{brand}} Watches",
     "exploreFullCollection": "Explore the Full {{brand}} Collection",
-    "visitBoutique": "Visit {{brand}} Boutique",
+    "visitBoutique": "View {{brand}} watches at Kariv",
     "pageNotFound": "Page Not Found",
     "returnToBrand": "Return to {{brand}}",
     "guideText1": "At Kariv Glamour, we believe that buying a {{brand}} should be an informed and confident experience. Whether you are considering your first {{brand}} or adding to an established collection, understanding the nuances of each collection, condition, and reference is essential.",
-    "guideText2": "Our team of horological experts carefully reviews each timepiece, presenting it with transparent product details, clear condition grading, and reference number visibility. We do not sell replica or counterfeit watches, and every product page provides the information you need to make a confident decision.",
+    "guideText2": "Kariv reviews the submitted listing information and requires sellers to offer genuine watches. Check the individual watch description, condition, reference and any documented inspection before buying. A listing review is not a physical authentication.",
     "guideText3": "Explore our full {{brand}} collection, browse by model family, or read our educational guides to deepen your understanding of {{brand}} watchmaking, maintenance, and heritage.",
     "shopWatches": "Shop {{brand}} Watches",
     "preOwned": "Pre-Owned {{brand}}"

@@ -217,7 +217,7 @@ export const ROLEX_INTERNAL_LINKS = {
     { text_en: 'Tudor watches', text_de: 'Tudor Uhren', link: '/brands/tudor' },
   ],
   relatedCategories: [
-    { text_en: 'Certified Pre-Owned Watches', text_de: 'Zertifizierte gebrauchte Uhren', link: '/certified-pre-owned' },
+    { text_en: 'Selected Pre-Owned Watches', text_de: 'Ausgewählte gebrauchte Uhren', link: '/shop?isCertifiedPreOwned=true' },
     { text_en: 'Vintage Watches', text_de: 'Vintage Uhren', link: '/vintage-watches' },
     { text_en: 'Men\u2019s Luxury Watches', text_de: 'Herren-Luxusuhren', link: '/mens-watches' },
     { text_en: 'Women\u2019s Luxury Watches', text_de: 'Damen-Luxusuhren', link: '/womens-watches' },
@@ -239,8 +239,8 @@ export const ROLEX_FAQS = [
   {
     question_en: 'Is it safe to buy a pre-owned Rolex?',
     question_de: 'Ist es sicher, eine gebrauchte Rolex zu kaufen?',
-    answer_en: 'Yes. When you buy a pre-owned Rolex from Kariv Glamour, each watch is carefully reviewed and presented with clear condition grading, box and papers information, and service history where available. We do not sell replica or counterfeit watches, and every product page provides the details you need to make a confident decision.',
-    answer_de: 'Ja. Wenn Sie eine gebrauchte Rolex bei Kariv Glamour kaufen, wird jede Uhr sorgfältig geprüft und mit klarer Zustandsbewertung, Box- und Papiere-Informationen und Service-Historie (sofern verfügbar) präsentiert. Wir verkaufen keine Replika- oder Fälschungsuhren, und jede Produktseite bietet die Details, die Sie für eine zuversichtliche Entscheidung benötigen.',
+    answer_en: 'Kariv requires genuine watches and reviews submitted listing information. Check each Rolex listing for condition, box and papers, service history and any documented physical authentication. A listing review alone does not establish that the watch has been physically inspected.',
+    answer_de: 'Kariv verlangt Originaluhren und prüft die eingereichten Angebotsinformationen. Prüfen Sie bei jeder Rolex Zustand, Box und Papiere, Servicehistorie sowie eine gegebenenfalls dokumentierte physische Echtheitsprüfung. Die Prüfung eines Angebots bedeutet nicht, dass die Uhr physisch untersucht wurde.',
   },
   {
     question_en: 'What does "box and papers" mean when buying a Rolex?',
@@ -328,8 +328,8 @@ export const ROLEX_SEO_PAGES = {
   'rolex-gebraucht-kaufen': {
     title_de: 'Rolex gebraucht kaufen | Pre-Owned Rolex Uhren | Kariv Glamour',
     title_en: 'Buy Pre-Owned Rolex | Pre-Owned Rolex Watches | Kariv Glamour',
-    description_de: 'Rolex gebraucht kaufen bei Kariv Glamour. Entdecken Sie geprüfte pre-owned Rolex Uhren mit klarer Zustandsbewertung, Box und Papiere Informationen und detaillierter Produktpräsentation.',
-    description_en: 'Buy pre-owned Rolex at Kariv Glamour. Discover verified pre-owned Rolex watches with clear condition grading, box and papers information, and detailed product presentation.',
+    description_de: 'Rolex gebraucht kaufen bei Kariv Glamour. Vergleichen Sie Zustand, Angaben zu Box und Papieren sowie Verkäuferinformationen je Angebot.',
+    description_en: 'Buy pre-owned Rolex at Kariv Glamour. Compare condition, box and papers information and seller details for each listing.',
     h1_de: 'Rolex gebraucht kaufen',
     h1_en: 'Buy Pre-Owned Rolex',
     intro_de: 'Wenn Sie eine Rolex gebraucht kaufen möchten, bietet Kariv Glamour eine kuratierte Auswahl an pre-owned Zeitmessern. Jede Uhr wird mit klarer Zustandsbewertung, Box und Papiere Informationen und Referenznummern-Sichtbarkeit präsentiert.',

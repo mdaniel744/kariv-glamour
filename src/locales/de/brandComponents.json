@@ -79,8 +79,9 @@
     "title": "Die {{brand}} Geschichte"
   },
   "hero": {
-    "boutique": "{{brand}} Boutique",
+    "boutique": "{{brand}} Uhren bei Kariv",
     "title": "{{brand}} Uhren",
+    "independent": "Unabhängiger Marktplatz · Keine Verbindung zu {{brand}}",
     "description": "Entdecken Sie eine kuratierte Auswahl an {{brand}} Uhren — von zeitlosen Dress-Watches bis zu ikonischen Sammlermodellen.",
     "shopCTA": "{{brand}} Uhren kaufen",
     "discoverCollections": "{{brand}} Kollektionen entdecken",
@@ -167,16 +168,16 @@
     "relatedCategories": "Verwandte Uhren-Kategorien"
   },
   "seoLanding": {
-    "boutique": "{{brand}} Boutique",
+    "boutique": "{{brand}} Uhren bei Kariv",
     "availableWatches": "Verfügbare {{brand}} Uhren",
     "noWatches": "Aktuell sind keine {{brand}} Uhren in dieser Kategorie verfügbar.",
     "viewAll": "Alle {{brand}} Uhren ansehen",
     "exploreFullCollection": "Die gesamte {{brand}} Kollektion entdecken",
-    "visitBoutique": "{{brand}} Boutique besuchen",
+    "visitBoutique": "{{brand}} Uhren bei Kariv ansehen",
     "pageNotFound": "Seite nicht gefunden",
     "returnToBrand": "Zurück zu {{brand}}",
     "guideText1": "Bei Kariv Glamour glauben wir, dass der Kauf einer {{brand}} Uhr eine informierte und zuversichtliche Erfahrung sein sollte. Egal, ob Sie Ihre erste {{brand}} in Betracht ziehen oder eine bestehende Sammlung erweitern — das Verständnis der Nuancen jeder Kollektion, jedes Zustands und jeder Referenz ist entscheidend.",
-    "guideText2": "Unser Team aus Uhrenexperten prüft jede Uhr sorgfältig und präsentiert sie mit transparenten Produktdetails, klarer Zustandsbewertung und Referenznummern-Sichtbarkeit. Wir verkaufen keine Replika- oder Fälschungsuhren, und jede Produktseite bietet die Informationen, die Sie für eine zuversichtliche Entscheidung benötigen.",
+    "guideText2": "Kariv prüft die eingereichten Angebotsangaben und verlangt von Verkäufern echte Uhren. Prüfen Sie die Beschreibung der konkreten Uhr, den Zustand, die Referenz und eine gegebenenfalls dokumentierte Untersuchung. Eine Angebotsprüfung ist keine physische Echtheitsprüfung.",
     "guideText3": "Entdecken Sie unsere vollständige {{brand}} Kollektion, stöbern Sie nach Modelfamilien oder lesen Sie unsere Bildungsguides, um Ihr Verständnis von {{brand}} Uhrmacherei, Wartung und Erbe zu vertiefen.",
     "shopWatches": "{{brand}} Uhren kaufen",
     "preOwned": "Gebrauchte {{brand}}"

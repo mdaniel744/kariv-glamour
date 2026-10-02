@@ -249,10 +249,10 @@ export const GP_SEO_PAGES = {
   'girard-perregaux-gebraucht-kaufen': {
     h1_en: 'Buy Pre-Owned Girard-Perregaux', h1_de: 'Girard-Perregaux gebraucht kaufen',
     title_en: 'Buy Pre-Owned Girard-Perregaux | Kariv Glamour', title_de: 'Girard-Perregaux gebraucht kaufen | Kariv Glamour',
-    description_en: 'Buy pre-owned Girard-Perregaux at Kariv Glamour — inspected pre-owned watches with condition reports.',
-    description_de: 'Girard-Perregaux gebraucht kaufen bei Kariv Glamour — geprüfte Gebrauchtuhren mit Zustandsbericht.',
-    intro_en: 'Buy pre-owned Girard-Perregaux at Kariv Glamour: inspected watches with transparent condition reports and authentication.',
-    intro_de: 'Girard-Perregaux gebraucht kaufen bei Kariv Glamour: geprüfte Uhren mit transparentem Zustandsbericht und Authentifizierung.',
+    description_en: 'Buy pre-owned Girard-Perregaux at Kariv Glamour — compare condition and seller details for each listing.',
+    description_de: 'Girard-Perregaux gebraucht kaufen bei Kariv Glamour — Zustand und Verkäuferangaben je Angebot vergleichen.',
+    intro_en: 'Explore pre-owned Girard-Perregaux listings with condition details. Listing information is reviewed; physical authentication is identified separately when documented for a specific watch.',
+    intro_de: 'Entdecken Sie gebrauchte Girard-Perregaux mit Zustandsangaben. Angebotsinformationen werden geprüft; eine physische Echtheitsprüfung wird nur bei Nachweis für die jeweilige Uhr gesondert ausgewiesen.',
     filter: {},
   },
   'gebrauchte-girard-perregaux-uhren': {

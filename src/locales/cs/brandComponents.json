@@ -79,8 +79,9 @@
     "title": "Příběh značky {{brand}}"
   },
   "hero": {
-    "boutique": "Butik {{brand}}",
+    "boutique": "Hodinky {{brand}} v Kariv",
     "title": "Hodinky {{brand}}",
+    "independent": "Nezávislé tržiště · Bez spojení se značkou {{brand}}",
     "description": "Objevte výběr hodinek {{brand}}, od nadčasových společenských hodinek po ikonické sběratelské modely.",
     "shopCTA": "Koupit hodinky {{brand}}",
     "discoverCollections": "Objevte kolekce {{brand}}",
@@ -167,16 +168,16 @@
     "relatedCategories": "Související kategorie hodinek"
   },
   "seoLanding": {
-    "boutique": "Butik {{brand}}",
+    "boutique": "Hodinky {{brand}} v Kariv",
     "availableWatches": "Dostupné hodinky {{brand}}",
     "noWatches": "V této kategorii momentálně nejsou dostupné žádné hodinky {{brand}}.",
     "viewAll": "Zobrazit všechny hodinky {{brand}}",
     "exploreFullCollection": "Prohlédnout celou kolekci {{brand}}",
-    "visitBoutique": "Navštívit butik {{brand}}",
+    "visitBoutique": "Prohlédnout hodinky {{brand}} v Kariv",
     "pageNotFound": "Stránka nenalezena",
     "returnToBrand": "Zpět na {{brand}}",
     "guideText1": "V Kariv Glamour věříme, že nákup hodinek {{brand}} má vycházet z dostatku informací a jistoty. Ať už vybíráte své první hodinky {{brand}}, nebo rozšiřujete zavedenou sbírku, je důležité rozumět jednotlivým kolekcím, stavu i referencím.",
-    "guideText2": "Náš tým hodinářských odborníků pečlivě prověřuje každý kus a uvádí srozumitelné informace o produktu, jasné hodnocení stavu i referenční číslo. Repliky ani padělky neprodáváme a na každé produktové stránce najdete informace pro informované rozhodnutí.",
+    "guideText2": "Kariv kontroluje dodané údaje o nabídkách a vyžaduje, aby prodejci nabízeli originální hodinky. Před nákupem si projděte popis konkrétního kusu, stav, referenci a případnou doloženou kontrolu. Kontrola nabídky není fyzickým ověřením pravosti.",
     "guideText3": "Prohlédněte si kompletní nabídku {{brand}}, vybírejte podle modelové řady nebo si přečtěte naše průvodce hodinářstvím, údržbou a historií značky {{brand}}.",
     "shopWatches": "Koupit hodinky {{brand}}",
     "preOwned": "Použité hodinky {{brand}}"

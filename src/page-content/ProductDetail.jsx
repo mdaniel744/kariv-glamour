@@ -316,7 +316,11 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
             <div className="border border-border p-4 space-y-3 sm:p-5">
               <h3 className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium">{t('pages.productDetail.guaranteeTitle')}</h3>
               {[
-              { icon: ShieldCheck, text: product.authenticationStatus === 'Authenticated' ? t('pages.productDetail.guarantee1') : t('pages.productDetail.guarantee1Pending') },
+              { icon: ShieldCheck, text: product.authenticationStatus === 'Authenticated'
+                ? t('pages.productDetail.guarantee1')
+                : product.authenticationStatus === 'Verified'
+                  ? t('pages.productDetail.guarantee1Reviewed')
+                  : t('pages.productDetail.guarantee1Pending') },
               { icon: Truck, text: t('pages.productDetail.guarantee2') },
               { icon: RotateCcw, text: product.returnEligibility !== false ? t('pages.productDetail.guarantee3') : t('pages.productDetail.guarantee3Final') },
               { icon: Award, text: t('pages.productDetail.guarantee4') }].

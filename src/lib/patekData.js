@@ -230,7 +230,7 @@ export const PATEK_INTERNAL_LINKS = {
     { text_en: 'Omega watches', text_de: 'Omega Uhren', link: '/brands/omega' },
   ],
   relatedCategories: [
-    { text_en: 'Certified Pre-Owned Watches', text_de: 'Zertifizierte gebrauchte Uhren', link: '/certified-pre-owned' },
+    { text_en: 'Selected Pre-Owned Watches', text_de: 'Ausgewählte gebrauchte Uhren', link: '/shop?isCertifiedPreOwned=true' },
     { text_en: 'Vintage Watches', text_de: 'Vintage Uhren', link: '/vintage-watches' },
     { text_en: 'Men\u2019s Luxury Watches', text_de: 'Herren-Luxusuhren', link: '/mens-watches' },
     { text_en: 'Women\u2019s Luxury Watches', text_de: 'Damen-Luxusuhren', link: '/womens-watches' },
@@ -252,8 +252,8 @@ export const PATEK_FAQS = [
   {
     question_en: 'Is it safe to buy a pre-owned Patek Philippe?',
     question_de: 'Ist es sicher, eine gebrauchte Patek Philippe zu kaufen?',
-    answer_en: 'Yes. When you buy a pre-owned Patek Philippe from Kariv Glamour, each watch is carefully reviewed and presented with clear condition grading, box and papers information, and service history where available. We do not sell replica or counterfeit watches, and every product page provides the details you need to make a confident decision.',
-    answer_de: 'Ja. Wenn Sie eine gebrauchte Patek Philippe bei Kariv Glamour kaufen, wird jede Uhr sorgfältig geprüft und mit klarer Zustandsbewertung, Box- und Papiere-Informationen und Service-Historie (sofern verfügbar) präsentiert. Wir verkaufen keine Replika- oder Fälschungsuhren, und jede Produktseite bietet die Details, die Sie für eine zuversichtliche Entscheidung benötigen.',
+    answer_en: 'Kariv requires genuine watches and reviews submitted listing information. Check each Patek Philippe listing for condition, box and papers, service history and any documented physical authentication. A listing review alone does not establish that the watch has been physically inspected.',
+    answer_de: 'Kariv verlangt Originaluhren und prüft die eingereichten Angebotsinformationen. Prüfen Sie bei jeder Patek Philippe Zustand, Box und Papiere, Servicehistorie sowie eine gegebenenfalls dokumentierte physische Echtheitsprüfung. Die Prüfung eines Angebots bedeutet nicht, dass die Uhr physisch untersucht wurde.',
   },
   {
     question_en: 'What does "box and papers" mean when buying a Patek Philippe?',
@@ -357,8 +357,8 @@ export const PATEK_SEO_PAGES = {
   'patek-philippe-gebraucht-kaufen': {
     title_de: 'Patek Philippe gebraucht kaufen | Pre-Owned Patek Philippe | Kariv Glamour',
     title_en: 'Buy Pre-Owned Patek Philippe | Pre-Owned Patek Philippe | Kariv Glamour',
-    description_de: 'Patek Philippe gebraucht kaufen bei Kariv Glamour. Entdecken Sie geprüfte pre-owned Patek Philippe Uhren mit klarer Zustandsbewertung, Box und Papiere Informationen und detaillierter Produktpräsentation.',
-    description_en: 'Buy pre-owned Patek Philippe at Kariv Glamour. Discover verified pre-owned Patek Philippe watches with clear condition grading, box and papers information, and detailed product presentation.',
+    description_de: 'Patek Philippe gebraucht kaufen bei Kariv Glamour. Vergleichen Sie Zustand, Angaben zu Box und Papieren sowie Verkäuferinformationen je Angebot.',
+    description_en: 'Buy pre-owned Patek Philippe at Kariv Glamour. Compare condition, box and papers information and seller details for each listing.',
     h1_de: 'Patek Philippe gebraucht kaufen',
     h1_en: 'Buy Pre-Owned Patek Philippe',
     intro_de: 'Wenn Sie eine Patek Philippe gebraucht kaufen möchten, bietet Kariv Glamour eine kuratierte Auswahl an pre-owned Zeitmessern. Jede Uhr wird mit klarer Zustandsbewertung, Box und Papiere Informationen, Archives Extract Verfügbarkeit und Referenznummern-Sichtbarkeit präsentiert.',

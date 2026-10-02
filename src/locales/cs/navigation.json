@@ -14,7 +14,7 @@
   "sellTrade": "Prodej a výměna",
   "categories": {
     "newArrivals": "Nově v nabídce",
-    "certifiedPreOwned": "Certifikované použité hodinky",
+    "certifiedPreOwned": "Vybrané použité hodinky",
     "vintageWatches": "Vintage hodinky",
     "mensWatches": "Pánské hodinky",
     "womensWatches": "Dámské hodinky",
@@ -27,7 +27,7 @@
     "shippingDelivery": "Doprava a doručení"
   },
   "footer": {
-    "description": "Vaše místo pro ověřené luxusní hodinky od nejznámějších světových výrobců.",
+    "description": "Nezávislé tržiště s nabídkou luxusních hodinek známých výrobců.",
     "company": "Společnost",
     "service": "Zákaznický servis",
     "legal": "Právní informace",
