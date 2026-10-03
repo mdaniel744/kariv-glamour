@@ -93,6 +93,7 @@ for each row execute function public.bump_kariv_dealer_policy_revision();
 create or replace function public.lock_kariv_dealer_application_change()
 returns trigger
 language plpgsql
+security definer
 set search_path = public
 as $$
 declare
@@ -414,7 +415,7 @@ begin
   select count(*) into v_invalid_count
   from public.orders
   where store_id = '7efd71bc-0287-4f40-8a2f-1de330c49522'::uuid
-    and coalesce(escrow_status, '') <> 'cancelled'
+    and coalesce(escrow_status::text, '') <> 'cancelled'
     and coalesce(products -> 0 ->> 'product_id', '') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$';
 
   select string_agg(id::text, ', ' order by id::text) into v_examples
@@ -422,7 +423,7 @@ begin
     select id
     from public.orders
     where store_id = '7efd71bc-0287-4f40-8a2f-1de330c49522'::uuid
-      and coalesce(escrow_status, '') <> 'cancelled'
+      and coalesce(escrow_status::text, '') <> 'cancelled'
       and coalesce(products -> 0 ->> 'product_id', '') !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
     order by id
     limit 10
@@ -924,9 +925,9 @@ begin
     shipping_status, shipping_address, idempotency_key, inventory_reserved, reservation_expires_at
   ) values (
     p_store_id, p_buyer_user_id, p_dealer_user_id, p_products, p_total_amount, p_currency,
-    p_payment_method, p_escrow_status, p_purchase_route, p_purchase_status,
+    p_payment_method::order_payment_method, p_escrow_status::order_escrow_status, p_purchase_route, p_purchase_status,
     p_buyer_selected_protection, p_purchase_policy_version, p_purchase_policy_snapshot,
-    p_shipping_status, p_shipping_address, p_idempotency_key, true, now() + interval '24 hours'
+    p_shipping_status::order_shipping_status, p_shipping_address, p_idempotency_key, true, now() + interval '24 hours'
   ) returning id into v_order_id;
 
   if p_purchase_route in ('kariv_direct', 'escrow') then
@@ -1125,7 +1126,7 @@ begin
       0
     ));
   end if;
-  if coalesce(v_order.escrow_status, '') not in ('pending_review', 'dealer_accepted')
+  if coalesce(v_order.escrow_status::text, '') not in ('pending_review', 'dealer_accepted')
     or coalesce(v_order.purchase_status, '') not in ('awaiting_seller_confirmation', 'awaiting_payment')
     or v_order.payment_reference is not null
   then
@@ -1592,7 +1593,7 @@ begin
   where id = p_order_id and store_id = p_store_id
   for update;
   if not found then raise exception 'Order not found.'; end if;
-  if coalesce(v_order.escrow_status, '') not in ('dealer_accepted', 'funds_secured', 'shipped')
+  if coalesce(v_order.escrow_status::text, '') not in ('dealer_accepted', 'funds_secured', 'shipped')
     or (v_order.escrow_status = 'dealer_accepted' and nullif(trim(v_order.payment_reference), '') is null)
   then
     return false;
@@ -1670,7 +1671,7 @@ begin
   where d.id = p_dispute_id
     and o.store_id = p_store_id
   for update of d;
-  if not found or coalesce(v_dispute.status, '') not in ('open', 'under_review') then
+  if not found or coalesce(v_dispute.status::text, '') not in ('open', 'under_review') then
     raise exception 'Open dispute not found.';
   end if;
 
