@@ -19,10 +19,10 @@ function staticBrandForSlug(slug) {
 }
 
 function fallbackDescription(name, locale) {
-  if (locale === 'cs') return `Prohlédněte si luxusní hodinky ${name}. Porovnejte kolekce, reference, stav a podrobnosti jednotlivých nabídek na Kariv Glamour.`;
+  if (locale === 'cs') return `Prohlédněte si nabídky hodinek ${name} na nezávislém tržišti Kariv Glamour. Porovnejte kolekce, reference, stav a údaje o prodejci. Kariv není propojen s výrobcem.`;
   return locale === 'de'
-    ? `Entdecken Sie authentische ${name} Luxusuhren bei Kariv Glamour – mit transparenten Produktdetails, sicherer Abwicklung und internationaler Lieferung.`
-    : `Discover authentic ${name} luxury watches at Kariv Glamour, with transparent product details, secure checkout, and international delivery.`;
+    ? `Vergleichen Sie Angebote für ${name} Uhren, Zustand und Verkäuferangaben auf Kariv Glamour. Unabhängiger Marktplatz ohne Verbindung zum Hersteller.`
+    : `Browse ${name} watch listings and compare condition and seller details on Kariv Glamour, an independent marketplace with no manufacturer affiliation.`;
 }
 
 export async function generateMetadata({ params }) {

@@ -13,7 +13,7 @@ Dostupné země doručení jsou uvedeny u produktu nebo potvrzeny při objednáv
 - **Doručení v České republice:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jejího stavu jako **Odesláno** doručení obvykle trvá **1–3 pracovní dny**.
 - **Doručení do ostatních zemí EU:** Doprava je u každé objednávky zdarma. Po potvrzení objednávky a označení jako **Odesláno** doručení obvykle trvá **3–7 pracovních dnů**.
 
-Jde o odhady, nikoli zaručené termíny. Doručení může trvat déle kvůli přípravě u prodejce, ověřování pravosti, výpadkům dopravce, svátkům nebo událostem mimo přiměřenou kontrolu. Za doručení do dostupné destinace v EU se neúčtuje dopravné. Příslušné daně a jiné povinné částky placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
+Jde o odhady, nikoli zaručené termíny. Příprava u prodejce a případná samostatně dohodnutá prohlídka probíhají před odesláním; fyzické ověření pravosti není automatickou součástí každé objednávky. Doručení mohou zpozdit výpadky dopravce, svátky nebo události mimo přiměřenou kontrolu. Za doručení do dostupné destinace v EU se neúčtuje dopravné. Příslušné daně a jiné povinné částky placené prostřednictvím Kariv Glamour jsou zobrazeny před objednáním.
 
 ## 3. Pojištění a sledování zásilky
 
@@ -27,11 +27,11 @@ Před objednáním adresu pečlivě zkontrolujte. Po odeslání ji z bezpečnost
 
 ## 5. Clo a dovozní poplatky
 
-Přeshraniční objednávky mohou podléhat celnímu řízení, dovozní DPH, clu nebo poplatkům za odbavení. Pokud objednávkový proces výslovně neuvádí, že jsou tyto náklady zahrnuty, odpovídá za ně příjemce. Celní řízení může doručení zpozdit; řídí je příslušný úřad, nikoli Kariv Glamour nebo prodejce.
+Zboží odeslané a doručené uvnitř celního území EU nepodléhá clu jen proto, že překročí hranici mezi zeměmi EU. Pokud hodinky přicházejí z místa mimo toto území, mohou se uplatnit dovozní postupy, daně nebo poplatky za odbavení. Prodejce musí před nákupem jasně uvést místo odeslání a odpovědnost za případné náklady. Doprava po EU zdarma se týká ceny přepravy a sama neznamená osvobození dovezených hodinek od daní či cla. Není-li místo odeslání nebo celková cena jasná, kontaktujte Kariv před objednáním.
 
 ## 6. Při převzetí
 
-Před převzetím zkontrolujte vnější obal. Viditelné poškození podle možností zaznamenejte s dopravcem, balík před otevřením vyfotografujte, uchovejte veškerý obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Při ztrátě, krádeži, poškození nebo nesrovnalosti přiložte číslo objednávky, fotografie a případný záznam dopravce. Tento požadavek na oznámení neomezuje zákonná práva spotřebitele.`),
+Před převzetím zkontrolujte vnější obal. Viditelné poškození podle možností zaznamenejte s dopravcem, balík před otevřením vyfotografujte, uchovejte veškerý obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Při ztrátě, krádeži, poškození nebo nesrovnalosti přiložte číslo objednávky, fotografie a případný záznam dopravce. Tento požadavek na oznámení neomezuje zákonná práva spotřebitele.`, '2. října 2026'),
   'returns-refund-policy': page('Vrácení zboží a peněz', 'Odstoupení od smlouvy, podmínky vrácení a refundace nákupů na Kariv Glamour.', `## 1. Zákonné právo odstoupit od smlouvy
 
 Jste-li spotřebitelem v EU/EHP a nakupujete online od podnikatele, zpravidla můžete bez udání důvodu odstoupit do 14 dnů ode dne, kdy hodinky převezmete vy nebo vámi určená osoba. Povinná pravidla vaší země mohou poskytovat další ochranu.
@@ -54,24 +54,28 @@ Peníze se zpravidla vracejí původní platební cestou nebo příslušným pos
 
 ## 4. Vadné, poškozené nebo nesprávně popsané hodinky
 
-Pokud hodinky dorazí poškozené, vadné, neúplné, nepravé nebo se podstatně liší od nabídky, kontaktujte nás bez odkladu a v období ochrany kupujícího uvedeném u objednávky. Hodinky nenoste, nezkracujte náramek, neotevírejte, neopravujte ani jinak neupravujte. Přiložte fotografie a jasný popis. Podle situace můžeme zajistit prohlídku, pojištěné vrácení, opravu, výměnu, slevu nebo refundaci. Přiměřené uznané náklady vrácení nebudou účtovány spotřebiteli.
+Pokud hodinky dorazí poškozené, vadné, neúplné, nepravé nebo se podstatně liší od nabídky, kontaktujte nás včas. Zahrnuje-li objednávka službu ochrany kupujícího, dodržujte také její postup pro hlášení. Lhůta této služby nezkracuje zákonná práva vůči prodejci. Během posuzování se vyhněte dalšímu používání nebo úpravám a přiložte fotografie s jasným popisem. S odpovědným prodejcem můžeme podle situace koordinovat prohlídku, pojištěné vrácení, opravu, výměnu, slevu nebo refundaci. Přiměřené uznané náklady vrácení nebudou účtovány spotřebiteli.
 
 ## 5. Výjimky
 
-Právo na odstoupení lze vyloučit pouze tam, kde to zákon dovoluje, například u skutečně osobně upraveného zboží vyrobeného podle vašeho zadání. Označení „konečný prodej“ nepřeváží povinná spotřebitelská práva. Nákupy od soukromé osoby mohou podléhat jiným zákonným pravidlům; postavení prodejce je uvedeno u transakce.
+Právo na odstoupení lze vyloučit pouze tam, kde to zákon dovoluje, například u skutečně osobně upraveného zboží vyrobeného podle vašeho zadání. Označení „konečný prodej“ nepřeváží povinná spotřebitelská práva. Unijní spotřebitelské právo na odstoupení do 14 dnů bez udání důvodu se zpravidla nevztahuje na nákup od skutečně soukromého prodejce. Nadále platí dobrovolně nabídnuté podmínky vrácení a příslušná práva při nesprávném popisu. Před nákupem si ověřte postavení prodejce a podmínky vrácení; při nejasnostech kontaktujte Kariv.
 
 ## 6. Dotazy
 
-Před vrácením cenného předmětu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`),
+Před vrácením cenného předmětu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`, '2. října 2026'),
   'warranty-policy': page('Odpovědnost za vady a záruky', 'Informace o zákonných právech, zárukách a uplatnění reklamace hodinek.', `## 1. Vaše zákonná práva
 
 Spotřebitelé nakupující zboží od podnikatele v EU mají zákonnou ochranu, že zboží odpovídá smlouvě. Tato ochrana je samostatná vůči jakékoli záruce výrobce či obchodní záruce a nelze ji takovou zárukou omezit. Příslušné lhůty a nároky stanoví kogentní právo; podle pravidel EU mají spotřebitelé obecně nejméně dvouletou zákonnou ochranu od doručení. Pro použité zboží mohou platit zvláštní pravidla, pokud vnitrostátní právo dovoluje výslovně dohodnutou kratší dobu, nikdy však pod zákonné minimum.
 
 Za zákonná práva z vad odpovídá podnikající prodejce uvedený v objednávce. Je-li zboží vadné nebo neodpovídá dohodnutému popisu, může být nárokem bezplatná oprava či výměna a při splnění zákonných podmínek sleva nebo ukončení smlouvy s vrácením peněz.
 
+Při nákupu z vlastních zásob Kariv Glamour odpovídá Kariv jako podnikající prodejce. Na nákup od skutečně soukromého prodejce se unijní spotřebitelská pravidla odpovědnosti za vady pro podnikatele nevztahují; další příslušná smluvní práva a práva při nesprávném popisu zůstávají zachována. Ověřte si, kdo hodinky prodává, a při nejasném postavení prodejce kontaktujte Kariv před nákupem.
+
 ## 2. Záruky výrobce a obchodní záruky
 
-Záruka výrobce či prodejce platí jen tehdy, je-li výslovně zahrnuta v nabídce, záruční kartě nebo potvrzení objednávky. Její poskytovatel, území, délka, převoditelnost a výluky se řídí uvedenými podmínkami. Samotné zobrazení značky nebo produktu nerozšiřuje záruku výrobce prostřednictvím Kariv Glamour. Obchodní záruka nikdy nenahrazuje povinná zákonná práva vůči prodejci.
+Kariv Glamour není autorizovaným prodejcem ani servisním střediskem výrobců hodinek zobrazených na webu. Případná zbývající záruka výrobce závisí na podmínkách výrobce a dokumentaci konkrétních hodinek včetně doby platnosti, území a převoditelnosti. Samotná záruční karta nebo značka nepotvrzuje aktuální krytí. Před nákupem si vyžádejte příslušné doklady.
+
+Samostatná záruka Kariv nebo prodejce platí pouze tehdy, je-li výslovně nabídnuta s uvedením poskytovatele, délky, rozsahu a výluk. Kontrola nabídky není obchodní zárukou. Obchodní záruka nikdy nenahrazuje povinná zákonná práva vůči prodejci.
 
 ## 3. Stav a běžné opotřebení
 
@@ -81,14 +85,16 @@ Použité a historické hodinky se prodávají se stavem, stářím, servisní h
 
 Kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) a uveďte číslo objednávky, popis problému, fotografie či video a příslušnou servisní zprávu. Nezadávejte opravu třetí osobě, dokud prodejce nedostane přiměřenou možnost reklamaci posoudit, ledaže je nutný okamžitý zásah k zabránění další škodě. Další postup zkoordinujeme s odpovědným prodejcem.
 
-Tato pravidla neomezují nevylučitelná práva spotřebitelů.`),
+Tato pravidla neomezují nevylučitelná práva spotřebitelů.`, '2. října 2026'),
   'terms-and-conditions': page('Obchodní podmínky', 'Podmínky používání tržiště Kariv Glamour a nákupu hodinek.', `## 1. Rozsah a provozovatel
 
 Tyto podmínky upravují používání webu Kariv Glamour, zákaznických účtů a transakcí dokončených prostřednictvím platformy. Provozovatelem je společnost uvedená výše. Podmínky konkrétního produktu v nabídce či potvrzení objednávky jsou součástí transakce. Při rozporu má přednost povinné pravidlo spotřebitelského práva.
 
 ## 2. Tržiště a totožnost prodejce
 
-Kariv Glamour může nabízet vlastní produkty i umožnit schváleným profesionálním obchodníkům nebo jiným jasně označeným prodejcům nabízet hodinky. Prodejce a případná odlišná smluvní protistrana jsou uvedeni v nabídce, při objednávání nebo v potvrzení. Kupní smlouva vzniká mezi kupujícím a tímto prodejcem. Kariv Glamour poskytuje služby tržiště, komunikace a podpory objednávek a u způsobilých transakcí ochranu kupujícího nebo koordinaci plateb.
+Kariv Glamour prodává hodinky z vlastních zásob a zprostředkovává nabídky soukromých vlastníků a nezávislých podnikatelů. Kupní smlouva se uzavírá s prodejcem uvedeným pro danou transakci; u vlastních zásob Kariv je tímto prodejcem Kariv Glamour s.r.o. Před nákupem si ověřte totožnost prodejce a zda jedná jako podnikatel, nebo soukromá osoba. Při nejasnostech kontaktujte Kariv, protože spotřebitelská práva na odstoupení a práva z vad se u podnikatelského a soukromého prodeje liší.
+
+Kariv poskytuje služby tržiště, komunikace a podpory objednávek a u způsobilých transakcí ochranu kupujícího nebo koordinaci plateb. Schválení účtu prodejce je oprávněním používat tržiště, nikoli autorizací výrobce ani potvrzením pravosti všech jeho hodinek. Kariv není propojeno s uvedenými výrobci hodinek, není jimi podporováno ani sponzorováno a není jejich autorizovaným prodejcem.
 
 ## 3. Účty a způsobilost
 
@@ -112,7 +118,7 @@ Doručení upravují [Informace o dopravě](/legal/shipping-policy). Odstoupení
 
 ## 7. Pravost a postavení vůči značkám
 
-Prodejci musí produkty přesně popisovat a dodržovat standardy pravosti platformy. Ověření pravosti je odborným posouzením hodinek a tehdy dostupných informací; viz [Prohlášení o pravosti](/legal/authenticity-disclaimer). Ochranné známky slouží k identifikaci produktů; viz [Prohlášení o značkách](/legal/brand-disclaimer).
+Prodejci musí nabízet pravé hodinky, přesně popisovat jejich stav a uvádět známé úpravy nebo náhradní díly. Padělané hodinky a součásti s padělanými ochrannými známkami jsou zakázány. Kontrola nabídky Kariv posuzuje dodané informace; nejde o fyzické ověření pravosti ani certifikaci výrobce. Tvrzení o prohlídce nebo ověření pravosti musí být podloženo dokumentací konkrétních hodinek. Viz [Prohlášení o pravosti](/legal/authenticity-disclaimer). Značky identifikují produkty a neznamenají vztah s výrobcem; viz [Prohlášení o značkách](/legal/brand-disclaimer).
 
 ## 8. Zakázané jednání
 
@@ -134,7 +140,7 @@ Nejprve kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}),
 
 ## 12. Změny a kontakt
 
-Podmínky můžeme do budoucna aktualizovat kvůli změnám práva, bezpečnosti či služby. Objednávku nadále řídí verze přijatá při jejím uzavření, nestanoví-li zákon jinak. Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`),
+Podmínky můžeme do budoucna aktualizovat kvůli změnám práva, bezpečnosti či služby. Objednávku nadále řídí verze přijatá při jejím uzavření, nestanoví-li zákon jinak. Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`, '2. října 2026'),
   'privacy-policy': page('Ochrana osobních údajů', 'Jak Kariv Glamour zpracovává osobní údaje a jaká máte práva.', `## 1. Správce a kontakt
 
 Kariv Glamour s.r.o. je správcem osobních údajů zpracovávaných pro provoz webu a tržiště, s výjimkou případů, kdy jasně označený prodejce nebo poskytovatel působí jako samostatný správce. Dotazy a žádosti zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
@@ -215,28 +221,38 @@ Cookies můžete také spravovat nebo smazat v prohlížeči. Blokování nezbyt
 ## Další informace
 
 Informace o osobních údajích najdete v našich [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`, '1. října 2026'),
-  'authenticity-disclaimer': page('Prohlášení o pravosti', 'Rozsah ověřování pravosti, dokumentace a postup při pochybnostech.', `## 1. Standard ověřování
+  'authenticity-disclaimer': page('Prohlášení o pravosti', 'Co znamená kontrola nabídky, jak ověřit dokumentaci hodinek a jak oznámit pochybnost o pravosti.', `## 1. Pravé hodinky a přesné nabídky
 
-Kariv Glamour požaduje, aby prodejci nabízeli pravé hodinky a přesné informace. Pokud je nabízena kontrola pravosti, kvalifikovaní posuzovatelé hodnotí hodinky podle tehdy dostupných informací a fyzických znaků. Posouzení může zahrnovat referenci, sériové údaje, strojek, pouzdro, číselník, ručky, náramek, puncy, materiály, zpracování, původ a doklady.
+Kariv Glamour je nezávislé tržiště hodinek. Prodáváme hodinky z vlastních zásob a zprostředkováváme nabídky soukromých vlastníků a nezávislých podnikatelů. Každý prodejce musí nabízet pravé hodinky, přesně je popsat a být schopen své údaje doložit. Padělané hodinky a součásti s padělanými ochrannými známkami nejsou povoleny. Kariv Glamour není propojeno s výrobci hodinek na tomto webu, není jimi schváleno, podporováno ani sponzorováno a není jejich autorizovaným prodejcem.
 
-## 2. Povaha posouzení
+## 2. Co znamená kontrola nabídky
 
-Ověření je odborný názor, nikoli prohlášení původního výrobce ani neomezená záruka proti každé skryté změně. Historické a použité hodinky mohou obsahovat legitimní servisní díly či dobové náhrady. Mohou také obsahovat neoriginální, upravené či vyměněné součásti; známé změny musí být uvedeny a mohou ovlivnit hodnotu, původnost nebo servis u výrobce.
+Kariv kontroluje informace dodané k nabídce. Označení **Verified** nebo **Informace v nabídce zkontrolovány** znamená, že byly zkontrolovány dodané údaje. Neznamená, že Kariv hodinky fyzicky prohlédlo, zkontrolovalo jejich strojek nebo certifikovalo pravost. Schválení účtu prodejce je rovněž odlišné od ověření pravosti konkrétních hodinek.
 
-Krabička, doklady, záruční karty, účtenky a certifikáty podporují doložení původu, samy však neprokazují původnost každé součásti. Není-li výslovně uvedeno jinak, Kariv Glamour nevydává certifikát ani záruku výrobce.
+Fyzické ověření pravosti není automatickou součástí nabídky nebo nákupu. Pokud jsou konkrétní hodinky označeny jako prohlédnuté, ověřené nebo certifikované, musí tvrzení podpořit dokumentace uvádějící hodinky, osobu či organizaci, která práci provedla, datum a rozsah. Vyžádejte si ji od prodejce před nákupem. Nezávislé posouzení není schválením výrobce a Kariv nevydává certifikáty jeho jménem.
 
-## 3. Nabídky a fotografie
+Prodejci musí být vlastníky nabízených hodinek a uchovávat podklady k vlastnictví, původu a svým tvrzením o pravosti či provedených kontrolách. Podnikatel může hodinky zkontrolovat sám nebo využít nezávislého odborníka; nesmí to však prezentovat jako kontrolu provedenou Kariv. Doklady uchovávané prodejcem nejsou automaticky součástí prodeje. Nabídka musí uvádět, které původní doklady, certifikáty nebo jiné dokumenty budou dodány s hodinkami. Před nákupem lze požádat o relevantní podklady při odpovídající ochraně osobních údajů.
 
-Fotografie a zprávy o stavu jsou součástí nabídky. Kupující je má posoudit společně s popisem, referencí, rozměry, servisní historií a rozsahem dodávky. Barvy a měřítko obrazu se mohou mírně lišit od skutečnosti. Podstatné nesrovnalosti oznamte včas.
+## 3. Původnost, servisní díly a úpravy
 
-## 4. Máte-li pochybnosti
+Pravé hodinky nemusí být od výroby nezměněné. Historické a použité hodinky mohou obsahovat servisní náhrady, neoriginální díly nebo pozdější úpravy. Prodejce musí jasně uvést známé náhradní díly, renovace, osazení diamanty a další změny. Nesmí následné úpravy popisovat jako původní z výroby nebo schválené výrobcem. Uvedení úpravy nečiní padělané hodinky nebo padělanou součást přípustnými.
+
+Krabička, doklady, záruční karty, účtenky a servisní záznamy mohou podpořit doložení původu, ale samy neprokazují pravost ani původnost každé součásti. Musí být jasný jejich vydavatel i skutečný rozsah dodávky. Záruka výrobce a možnost jeho servisu závisí na podmínkách výrobce; viz [Pravidla záruk](/legal/warranty-policy).
+
+## 4. Před nákupem
+
+Posuzujte společně popis, fotografie, stav, referenci, rozměry, servisní historii, uvedené úpravy a rozsah dodávky. Ptejte se uvedeného prodejce na chybějící či rozporné informace a podle potřeby si vyžádejte další fotografie nebo doklady. Kontrola nabídky nenahrazuje prohlídku fyzických hodinek. Náš [postup kontroly](/authentication) vysvětluje rozdíl mezi kontrolou nabídky a doloženou prohlídkou.
+
+## 5. Máte-li pochybnosti
 
 Pokud se důvodně domníváte, že dodané hodinky nejsou pravé nebo se podstatně liší od nabídky, nenoste je, neotevírejte, neupravujte velikost ani neopravujte. Uchovejte obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) s číslem objednávky, fotografiemi a důvody. Můžeme požadovat nezávislou kontrolu; použijí se příslušná práva ochrany kupujícího, vrácení a odpovědnosti za vady.
 
-Toto prohlášení nevylučuje odpovědnost za podvod či nepravdivé informace a neomezuje povinná práva spotřebitelů.`),
+Uchovejte doklady a komunikaci. Postup při problému vysvětlují [Podmínky vrácení](/legal/returns-refund-policy). Období ochrany kupujícího nezkracuje povinná práva vůči prodejci. Toto prohlášení nevylučuje odpovědnost za podvod či nepravdivé informace a neomezuje povinná práva spotřebitelů.`, '2. října 2026'),
   'brand-disclaimer': page('Prohlášení o značkách', 'Nezávislé postavení Kariv Glamour a používání ochranných známek.', `## Nezávislé tržiště
 
-Kariv Glamour je nezávislé tržiště luxusních hodinek. Pokud nabídka výslovně neuvádí jinak, Kariv Glamour není propojeno s výrobci zobrazenými na webu, není jimi schváleno ani sponzorováno a není jejich autorizovaným prodejcem nebo oficiálním servisním střediskem.
+Kariv Glamour s.r.o. provozuje nezávislé tržiště hodinek. Prodáváme hodinky z vlastních zásob a zprostředkováváme nabídky soukromých vlastníků a nezávislých podnikatelů. Kariv Glamour není propojeno s žádným výrobcem hodinek zobrazeným na webu, není jimi schváleno, podporováno ani sponzorováno a není jejich autorizovaným prodejcem nebo oficiálním servisním střediskem.
+
+Každá nabídka uvádí prodejce pro danou transakci. Schválení prodeje na Kariv znamená schválení používání našeho tržiště, nikoli autorizaci výrobcem hodinek. Vlastní obchodní vztahy prodejce se nevztahují na Kariv Glamour. Nemluvíme ani nevydáváme certifikáty jménem výrobců.
 
 ## Ochranné známky a názvy produktů
 
@@ -244,11 +260,11 @@ Značky, loga, názvy modelů, reference a další označení patří přísluš
 
 ## Obrázky a informace
 
-Produktové fotografie pro konkrétní nabídku poskytuje Kariv Glamour nebo schválení prodejci. Popisy výrobce a historická fakta mohou být shrnuta pro identifikaci a informování. Vlastníci práv mohou upozornit na nesprávné uvedení zdroje či neoprávněný obsah na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
+Produktové fotografie pro konkrétní nabídku poskytuje Kariv Glamour nebo prodejce. Popisy a redakční informace identifikují hodinky a vysvětlují jejich vlastnosti a historii; nejde o sdělení výrobců. Prodejci musí mít právo používat dodané materiály. Vlastníci práv mohou upozornit na nesprávné uvedení zdroje či neoprávněný obsah na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Záruky a servis
 
-Záruka výrobce, servisní způsobilost a následná podpora platí pouze podle vlastních podmínek výrobce a jen jsou-li výslovně zahrnuty s hodinkami. Zobrazení značky nevytváří záruku výrobce. Povinná práva vůči smluvnímu prodejci zůstávají nedotčena.`),
+Případná zbývající záruka výrobce nebo nárok na jeho servis podléhá podmínkám výrobce a dokumentaci konkrétních hodinek. Další prodej přes Kariv nezakládá, neprodlužuje ani nezaručuje záruku výrobce. Samostatné záruky Kariv nebo prodejce musí při výslovném nabídnutí uvádět poskytovatele a podmínky. Povinná práva vůči smluvnímu prodejci zůstávají nedotčena. Viz [Pravidla záruk](/legal/warranty-policy) a [Prohlášení o pravosti](/legal/authenticity-disclaimer).`, '2. října 2026'),
   impressum: page('Identifikační údaje', 'Oficiální firemní a kontaktní údaje společnosti Kariv Glamour s.r.o.', `## Odpovědnost za web
 
 Kariv Glamour s.r.o. zastupuje jednatel Peter Vasko. Právní oznámení lze zasílat do sídla společnosti nebo na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).

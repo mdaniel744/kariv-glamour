@@ -33,7 +33,7 @@ const SHIPPING_POLICY = createLegalPage({
   titleDe: 'Versandinformationen',
   descriptionEn: 'Shipping, tracking, insurance, delivery and customs information for Kariv Glamour orders.',
   descriptionDe: 'Informationen zu Versand, Sendungsverfolgung, Versicherung, Lieferung und Zoll bei Kariv Glamour.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 2 October 2026_
 
 ## 1. Where we deliver
 
@@ -44,7 +44,7 @@ Available delivery destinations are shown on the product listing or confirmed du
 - **Delivery within the Czech Republic:** Shipping is free on every order. Once your order has been confirmed and its status has been marked **Shipped**, delivery normally takes **1–3 business days**.
 - **Delivery to other EU countries:** Shipping is free on every order. Once your order has been confirmed and marked **Shipped**, delivery normally takes **3–7 business days**.
 
-These timeframes are estimates rather than guaranteed delivery dates. Delivery may take longer because of seller handling time, authentication checks, carrier disruptions, public holidays or events outside reasonable control. No delivery charge is added for an available EU destination. Any applicable tax or other mandatory amount payable through Kariv Glamour is shown before the order is placed.
+These timeframes are estimates rather than guaranteed delivery dates. Seller handling and any separately agreed inspection take place before dispatch; a physical authenticity check is not automatically included with every order. Carrier disruptions, public holidays or events outside reasonable control may delay delivery. No delivery charge is added for an available EU destination. Any applicable tax or other mandatory amount payable through Kariv Glamour is shown before the order is placed.
 
 ## 3. Insured and tracked delivery
 
@@ -58,12 +58,12 @@ Check the delivery address carefully before placing an order. For security reaso
 
 ## 5. Customs and import charges
 
-Cross-border orders may be subject to customs procedures, import VAT, duties or brokerage charges. Unless the checkout expressly states that these costs are included, the recipient is responsible for them. Customs processing can delay delivery and is controlled by the relevant authority rather than Kariv Glamour or the seller.
+Goods dispatched and delivered within the EU customs territory do not attract customs duty simply because they cross a border between EU countries. If a watch is dispatched from outside that territory, import procedures, taxes or clearance charges may apply. The seller must make the dispatch location and responsibility for any such charges clear before purchase. Free EU delivery refers to the shipping charge and does not, by itself, mean that an imported watch is free of tax or duty. Contact Kariv before ordering if the dispatch location or total cost is unclear.
 
 ## 6. On delivery
 
 Inspect the outer package before accepting it. If it is visibly damaged, note the damage with the carrier where possible, photograph the package before opening it, keep all packaging and contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) promptly. For loss, theft, damage or a delivery discrepancy, include your order number, photographs and any carrier report. This reporting request does not limit mandatory consumer rights.`,
-  contentDe: `_${LAST_UPDATED_DE}_
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
 ## 1. Liefergebiete
 
@@ -74,7 +74,7 @@ Die verfügbaren Lieferziele werden im Produktangebot angezeigt oder während de
 - **Lieferung innerhalb der Tschechischen Republik:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und mit dem Status **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **1–3 Werktage**.
 - **Lieferung in andere EU-Länder:** Der Versand ist bei jeder Bestellung kostenlos. Nachdem Ihre Bestellung bestätigt und als **Versendet** gekennzeichnet wurde, beträgt die übliche Lieferzeit **3–7 Werktage**.
 
-Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Die Lieferung kann sich durch Bearbeitungszeiten des Händlers, Echtheitsprüfungen, Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs verzögern. Für ein verfügbares Lieferziel in der EU fällt keine Versandgebühr an. Alle anfallenden Steuern oder sonstigen verpflichtenden Beträge, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
+Diese Zeiträume sind Schätzungen und keine garantierten Liefertermine. Bearbeitung durch den Verkäufer und gesondert vereinbarte Prüfungen erfolgen vor dem Versand; eine physische Echtheitsprüfung ist nicht automatisch bei jeder Bestellung enthalten. Störungen beim Versanddienstleister, Feiertage oder Ereignisse außerhalb des zumutbaren Einflussbereichs können die Lieferung verzögern. Für ein verfügbares Lieferziel in der EU fällt keine Versandgebühr an. Alle anfallenden Steuern oder sonstigen verpflichtenden Beträge, die über Kariv Glamour zu zahlen sind, werden vor Abgabe der Bestellung angezeigt.
 
 ## 3. Versicherter Versand mit Sendungsverfolgung
 
@@ -88,7 +88,7 @@ Prüfen Sie die Lieferadresse vor der Bestellung sorgfältig. Aus Sicherheitsgr�
 
 ## 5. Zoll und Einfuhrabgaben
 
-Bei grenzüberschreitenden Bestellungen können Zollverfahren, Einfuhrumsatzsteuer, Zölle oder Abfertigungsgebühren anfallen. Sofern im Checkout nicht ausdrücklich angegeben ist, dass diese Kosten enthalten sind, trägt sie der Empfänger. Die Zollabfertigung kann die Lieferung verzögern und wird von der zuständigen Behörde kontrolliert, nicht von Kariv Glamour oder dem Verkäufer.
+Waren, die innerhalb des EU-Zollgebiets versendet und zugestellt werden, unterliegen nicht allein wegen einer Grenze zwischen EU-Ländern einem Zoll. Wird eine Uhr von außerhalb dieses Gebiets versendet, können Einfuhrverfahren, Steuern oder Abfertigungsgebühren anfallen. Verkäufer müssen Versandort und Verantwortlichkeit für solche Kosten vor dem Kauf klar angeben. Kostenloser EU-Versand bezieht sich auf die Transportkosten und bedeutet für sich genommen keine Steuer- oder Zollfreiheit einer eingeführten Uhr. Kontaktieren Sie Kariv vor der Bestellung, wenn Versandort oder Gesamtkosten unklar sind.
 
 ## 6. Bei der Zustellung
 
@@ -101,7 +101,7 @@ const RETURNS_POLICY = createLegalPage({
   titleDe: 'Rückgabe & Rückerstattung',
   descriptionEn: 'Withdrawal, return eligibility and refund information for Kariv Glamour purchases.',
   descriptionDe: 'Informationen zu Widerruf, Rückgabeberechtigung und Erstattungen bei Kariv Glamour.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 2 October 2026_
 
 ## 1. Statutory right of withdrawal
 
@@ -125,16 +125,16 @@ Refunds are normally issued through the original payment route or the applicable
 
 ## 4. Defective, damaged or misdescribed watches
 
-If a watch arrives damaged, defective, incomplete, inauthentic or materially different from the listing, contact us promptly and within the buyer-protection period shown on the order. Do not wear, resize, open, repair or alter it. Provide photographs and a clear description. We may arrange inspection, insured return, repair, replacement, price reduction or refund as appropriate. Reasonable covered return costs will not be charged to the consumer.
+If a watch arrives damaged, defective, incomplete, inauthentic or materially different from the listing, contact us promptly. If your order includes a buyer-protection service, also follow its reporting instructions. That service's reporting period does not shorten mandatory rights against the seller. Avoid further use or alteration while the issue is assessed, and provide photographs and a clear description. We may coordinate inspection, insured return, repair, replacement, price reduction or refund with the responsible seller as appropriate. Reasonable covered return costs will not be charged to the consumer.
 
 ## 5. Exceptions
 
-The right of withdrawal may be excluded only where the law permits—for example, for a genuinely personalised item made to your specification. A listing marked “final sale” does not override mandatory consumer rights. Purchases from a private seller may be subject to different statutory rules; the seller’s status is shown with the transaction.
+The right of withdrawal may be excluded only where the law permits—for example, for a genuinely personalised item made to your specification. A listing marked “final sale” does not override mandatory consumer rights. The EU consumer right to a 14-day change-of-mind withdrawal generally does not apply to a purchase from a genuine private seller. Any voluntarily offered return terms and applicable rights for misdescription still apply. Check the seller's status and return terms before purchase; contact Kariv if either is unclear.
 
 ## 6. Questions
 
 Contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) before returning any high-value item. Nothing in this policy limits rights that cannot lawfully be excluded.`,
-  contentDe: `_${LAST_UPDATED_DE}_
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
 ## 1. Gesetzliches Widerrufsrecht
 
@@ -158,11 +158,11 @@ Erstattungen erfolgen grundsätzlich über den ursprünglichen Zahlungsweg oder 
 
 ## 4. Mangelhafte, beschädigte oder falsch beschriebene Uhren
 
-Trifft eine Uhr beschädigt, mangelhaft, unvollständig, nicht echt oder wesentlich abweichend vom Angebot ein, kontaktieren Sie uns unverzüglich und innerhalb der in der Bestellung genannten Käuferschutzfrist. Tragen, kürzen, öffnen, reparieren oder verändern Sie die Uhr nicht. Legen Sie Fotos und eine klare Beschreibung vor. Je nach Fall können Prüfung, versicherte Rücksendung, Reparatur, Ersatz, Preisminderung oder Erstattung erfolgen. Angemessene Kosten einer berechtigten Rücksendung werden dem Verbraucher nicht auferlegt.
+Trifft eine Uhr beschädigt, mangelhaft, unvollständig, nicht echt oder wesentlich abweichend vom Angebot ein, kontaktieren Sie uns zeitnah. Enthält Ihre Bestellung einen Käuferschutzservice, beachten Sie auch dessen Meldeverfahren. Dessen Meldefrist verkürzt keine zwingenden Ansprüche gegen den Verkäufer. Vermeiden Sie während der Klärung weitere Nutzung oder Veränderungen und legen Sie Fotos sowie eine klare Beschreibung vor. Wir können mit dem zuständigen Verkäufer je nach Fall Prüfung, versicherte Rücksendung, Reparatur, Ersatz, Preisminderung oder Erstattung koordinieren. Angemessene Kosten einer berechtigten Rücksendung werden dem Verbraucher nicht auferlegt.
 
 ## 5. Ausnahmen
 
-Das Widerrufsrecht ist nur ausgeschlossen, soweit das Gesetz dies erlaubt—beispielsweise bei einem tatsächlich nach Ihren Vorgaben personalisierten Artikel. Der Hinweis „Final Sale“ setzt zwingende Verbraucherrechte nicht außer Kraft. Für Käufe von einem privaten Verkäufer können andere gesetzliche Regeln gelten; der Status des Verkäufers wird bei der Transaktion angezeigt.
+Das Widerrufsrecht ist nur ausgeschlossen, soweit das Gesetz dies erlaubt—beispielsweise bei einem tatsächlich nach Ihren Vorgaben personalisierten Artikel. Der Hinweis „Final Sale“ setzt zwingende Verbraucherrechte nicht außer Kraft. Das unionsrechtliche 14-tägige Verbraucherwiderrufsrecht gilt grundsätzlich nicht beim Kauf von einem tatsächlich privaten Verkäufer. Freiwillig zugesagte Rückgabebedingungen und anwendbare Rechte bei Falschbeschreibung bleiben bestehen. Prüfen Sie Verkäuferstatus und Rückgabebedingungen vor dem Kauf; kontaktieren Sie Kariv bei Unklarheiten.
 
 ## 6. Fragen
 
@@ -175,7 +175,7 @@ const WARRANTY_POLICY = createLegalPage({
   titleDe: 'Garantie',
   descriptionEn: 'Legal guarantee, commercial warranty and claims information for watches sold through Kariv Glamour.',
   descriptionDe: 'Informationen zu Gewährleistung, Herstellergarantie und Ansprüchen für über Kariv Glamour verkaufte Uhren.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 2 October 2026_
 
 ## 1. Your legal guarantee
 
@@ -183,9 +183,13 @@ Consumers who buy goods from a professional seller in the EU have a legal guaran
 
 The professional seller identified in your order is responsible for the legal guarantee. If a watch is defective or does not match the agreed description, the available remedies may include repair or replacement without charge and, where the legal conditions are met, a price reduction or termination and refund.
 
+Kariv Glamour is responsible as the professional seller when you buy its own inventory. Purchases from a genuine private seller are not covered by the EU consumer legal-guarantee rules for professional sellers; other applicable contract and misdescription rights remain. Check who is selling the watch and ask Kariv before purchase if the seller's status is unclear.
+
 ## 2. Manufacturer and commercial warranties
 
-A manufacturer or dealer warranty applies only when it is expressly included in the product listing, warranty card or order confirmation. Its provider, territory, duration, transferability and exclusions are governed by the stated warranty terms. Kariv Glamour does not extend a manufacturer warranty merely by displaying a brand or product. A commercial warranty never replaces mandatory legal rights against the seller.
+Kariv Glamour is not an authorised dealer or service centre of the watch manufacturers shown on this website. Any remaining manufacturer warranty depends on the manufacturer's terms and the documentation for that specific watch, including duration, territory and transferability. A warranty card or brand name alone does not confirm current coverage. Ask for the relevant documents before purchase.
+
+A separate Kariv or seller warranty applies only where explicitly offered with its provider, duration, coverage and exclusions. Listing review is not a commercial warranty. A commercial warranty never replaces mandatory legal rights against the seller.
 
 ## 3. Condition and ordinary wear
 
@@ -196,7 +200,7 @@ Pre-owned and vintage watches are sold with the condition, age, service history 
 Contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) with the order number, a description of the issue, photographs or video and any relevant service report. Do not arrange third-party repairs before the seller has had a reasonable opportunity to assess the claim, except where urgent action is necessary to prevent further damage. We will coordinate the next steps with the responsible seller.
 
 Nothing in this policy limits non-excludable consumer rights.`,
-  contentDe: `_${LAST_UPDATED_DE}_
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
 ## 1. Ihre gesetzliche Gewährleistung
 
@@ -204,9 +208,13 @@ Verbraucher, die in der EU Waren von einem gewerblichen Verkäufer kaufen, haben
 
 Für die gesetzliche Gewährleistung ist der in Ihrer Bestellung ausgewiesene gewerbliche Verkäufer verantwortlich. Ist eine Uhr mangelhaft oder entspricht sie nicht der vereinbarten Beschreibung, können je nach gesetzlichen Voraussetzungen kostenlose Reparatur oder Ersatz sowie gegebenenfalls Preisminderung oder Vertragsbeendigung und Erstattung verlangt werden.
 
+Beim Kauf aus dem eigenen Bestand von Kariv Glamour ist Kariv der verantwortliche gewerbliche Verkäufer. Für Käufe von einem tatsächlich privaten Verkäufer gelten die unionsrechtlichen Verbrauchergewährleistungsregeln für gewerbliche Verkäufer nicht; sonstige anwendbare Vertragsrechte und Ansprüche bei Falschbeschreibung bleiben bestehen. Prüfen Sie, wer die Uhr verkauft, und fragen Sie vor dem Kauf bei Kariv nach, wenn der Verkäuferstatus unklar ist.
+
 ## 2. Hersteller- und gewerbliche Garantien
 
-Eine Hersteller- oder Händlergarantie gilt nur, wenn sie im Produktangebot, in der Garantiekarte oder in der Bestellbestätigung ausdrücklich enthalten ist. Anbieter, Gebiet, Laufzeit, Übertragbarkeit und Ausschlüsse richten sich nach den jeweiligen Garantiebedingungen. Kariv Glamour erweitert keine Herstellergarantie allein dadurch, dass eine Marke oder ein Produkt angezeigt wird. Eine gewerbliche Garantie ersetzt niemals zwingende gesetzliche Ansprüche gegen den Verkäufer.
+Kariv Glamour ist kein autorisierter Händler und kein Servicezentrum der auf dieser Website gezeigten Uhrenhersteller. Eine verbleibende Herstellergarantie richtet sich nach den Herstellerbedingungen und den Unterlagen der konkreten Uhr, einschließlich Laufzeit, Gebiet und Übertragbarkeit. Eine Garantiekarte oder ein Markenname allein bestätigt keinen aktuellen Garantieschutz. Fordern Sie vor dem Kauf die entsprechenden Unterlagen an.
+
+Eine gesonderte Kariv- oder Verkäufergarantie gilt nur bei ausdrücklichem Angebot mit Angaben zu Garantiegeber, Laufzeit, Umfang und Ausschlüssen. Eine Angebotsprüfung ist keine gewerbliche Garantie. Eine gewerbliche Garantie ersetzt niemals zwingende gesetzliche Ansprüche gegen den Verkäufer.
 
 ## 3. Zustand und gewöhnliche Abnutzung
 
@@ -225,7 +233,7 @@ const TERMS_POLICY = createLegalPage({
   titleDe: 'Allgemeine Geschäftsbedingungen',
   descriptionEn: 'Terms governing use of the Kariv Glamour marketplace and purchases made through it.',
   descriptionDe: 'Bedingungen für die Nutzung des Kariv-Glamour-Marktplatzes und darüber getätigte Käufe.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 2 October 2026_
 
 ## 1. Scope and operator
 
@@ -233,7 +241,9 @@ These terms govern use of the Kariv Glamour website, customer accounts and trans
 
 ## 2. Marketplace and seller identity
 
-Kariv Glamour may offer products itself and may also enable approved professional dealers or other clearly identified sellers to list watches. The seller and, where different, the contractual counterparty are identified on the listing, checkout or order confirmation. The purchase contract is between the buyer and that seller. Kariv Glamour provides marketplace, communication, order-support and, for eligible transactions, buyer-protection or payment-coordination services.
+Kariv Glamour sells watches from its own inventory and facilitates listings from private owners and independent businesses. The purchase contract is with the seller identified for the transaction; for Kariv's own stock, that seller is Kariv Glamour s.r.o. Check the seller's identity and whether they act as a professional or private seller before purchase. Contact Kariv if this is unclear, because consumer withdrawal and legal-guarantee rights differ between professional and private sales.
+
+Kariv provides marketplace, communication, order-support and, for eligible transactions, buyer-protection or payment-coordination services. Approval of a seller account is permission to use the marketplace, not manufacturer authorisation or authentication of every watch they list. Kariv is not affiliated with, endorsed by, sponsored by or an authorised dealer of the watch manufacturers shown here.
 
 ## 3. Accounts and eligibility
 
@@ -257,7 +267,7 @@ Delivery is governed by the [Shipping Information](/legal/shipping-policy). With
 
 ## 7. Authentication and brand status
 
-Sellers must describe products accurately and comply with the platform’s authenticity standards. Authentication is an expert assessment based on the watch and information available at the time; see the [Authenticity Disclaimer](/legal/authenticity-disclaimer). Brand names and trademarks are used for product identification; see the [Brand Disclaimer](/legal/brand-disclaimer).
+Sellers must offer authentic watches, accurately describe their condition and disclose known modifications or replacement parts. Counterfeit watches and components bearing counterfeit trademarks are prohibited. Kariv's listing review assesses submitted information; it is not physical authentication or manufacturer certification. A claim of inspection or authentication must be supported by documentation for the specific watch. See the [Authenticity Disclaimer](/legal/authenticity-disclaimer). Brand names and trademarks identify products and do not imply a manufacturer relationship; see the [Brand Disclaimer](/legal/brand-disclaimer).
 
 ## 8. Prohibited conduct
 
@@ -280,7 +290,7 @@ Please contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) first
 ## 12. Changes and contact
 
 We may update these terms prospectively for legal, security or service changes. The version accepted for an order continues to govern that order unless the law requires otherwise. Questions can be sent to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`,
-  contentDe: `_${LAST_UPDATED_DE}_
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
 ## 1. Geltungsbereich und Betreiber
 
@@ -288,7 +298,9 @@ Diese Bedingungen regeln die Nutzung der Kariv-Glamour-Website, der Kundenkonten
 
 ## 2. Marktplatz und Verkäuferidentität
 
-Kariv Glamour kann Produkte selbst anbieten und zugleich zugelassenen gewerblichen Händlern oder anderen klar gekennzeichneten Verkäufern ermöglichen, Uhren einzustellen. Verkäufer und gegebenenfalls abweichender Vertragspartner werden im Angebot, Checkout oder in der Bestellbestätigung ausgewiesen. Der Kaufvertrag kommt zwischen Käufer und diesem Verkäufer zustande. Kariv Glamour stellt Marktplatz-, Kommunikations- und Bestellunterstützung sowie bei berechtigten Transaktionen Käuferschutz- oder Zahlungskoordinationsdienste bereit.
+Kariv Glamour verkauft Uhren aus eigenem Bestand und ermöglicht Angebote von privaten Eigentümern und unabhängigen Unternehmen. Der Kaufvertrag kommt mit dem für die Transaktion benannten Verkäufer zustande; bei Karivs eigenem Bestand ist dies Kariv Glamour s.r.o. Prüfen Sie vor dem Kauf die Verkäuferidentität und ob der Verkäufer gewerblich oder privat handelt. Kontaktieren Sie Kariv bei Unklarheiten, da sich Verbraucherwiderruf und gesetzliche Gewährleistung bei gewerblichen und privaten Verkäufen unterscheiden.
+
+Kariv stellt Marktplatz-, Kommunikations- und Bestellunterstützung sowie bei berechtigten Transaktionen Käuferschutz- oder Zahlungskoordinationsdienste bereit. Die Freigabe eines Verkäuferkontos ist eine Erlaubnis zur Marktplatznutzung, keine Herstellerautorisierung oder Echtheitsbestätigung jeder angebotenen Uhr. Kariv ist mit den gezeigten Uhrenherstellern weder verbunden noch von ihnen unterstützt oder gesponsert und ist kein autorisierter Händler dieser Hersteller.
 
 ## 3. Konten und Teilnahmeberechtigung
 
@@ -312,7 +324,7 @@ Die Lieferung richtet sich nach den [Versandinformationen](/legal/shipping-polic
 
 ## 7. Echtheitsprüfung und Markenstatus
 
-Verkäufer müssen Produkte richtig beschreiben und die Echtheitsstandards der Plattform einhalten. Die Authentifizierung ist eine fachkundige Beurteilung auf Grundlage der zum Prüfzeitpunkt verfügbaren Uhr und Informationen; siehe [Echtheitserklärung](/legal/authenticity-disclaimer). Markennamen und Warenzeichen dienen der Produktidentifikation; siehe [Marken-Haftungsausschluss](/legal/brand-disclaimer).
+Verkäufer müssen echte Uhren anbieten, deren Zustand zutreffend beschreiben und bekannte Veränderungen oder Ersatzteile offenlegen. Gefälschte Uhren und Komponenten mit gefälschten Markenkennzeichen sind verboten. Karivs Angebotsprüfung betrifft die eingereichten Informationen; sie ist keine physische Echtheitsprüfung oder Herstellerzertifizierung. Aussagen über eine Untersuchung oder Authentifizierung müssen mit Unterlagen zur konkreten Uhr belegt sein. Siehe [Echtheitserklärung](/legal/authenticity-disclaimer). Marken und Warenzeichen dienen der Produktidentifikation und bedeuten keine Herstellerbeziehung; siehe [Marken-Haftungsausschluss](/legal/brand-disclaimer).
 
 ## 8. Unzulässige Nutzung
 
@@ -525,50 +537,66 @@ const AUTHENTICITY_POLICY = createLegalPage({
   slug: 'authenticity-disclaimer',
   titleEn: 'Authenticity Disclaimer',
   titleDe: 'Echtheitserklärung',
-  descriptionEn: 'How authenticity assessments and product representations work on Kariv Glamour.',
-  descriptionDe: 'Wie Echtheitsprüfungen und Produktdarstellungen bei Kariv Glamour funktionieren.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  descriptionEn: 'What listing review means, how to check watch documentation, and how to report an authenticity concern.',
+  descriptionDe: 'Was eine Angebotsprüfung bedeutet, wie Sie Uhrendokumente prüfen und Echtheitsbedenken melden können.',
+  contentEn: `_Last updated: 2 October 2026_
 
-## 1. Authentication standard
+## 1. Authentic watches and accurate listings
 
-Kariv Glamour requires sellers to list authentic watches and provide accurate product information. Where an authentication review is offered, qualified reviewers assess the watch using the information and physical characteristics available at the time. The review may consider reference and serial information, movement, case, dial, hands, bracelet, hallmarks, materials, workmanship, provenance and supporting documents.
+Kariv Glamour is an independent watch marketplace. We sell watches from our own inventory and facilitate listings from private owners and independent businesses. Every seller must offer authentic watches, describe them accurately and be able to support their claims. Counterfeit watches and components bearing counterfeit trademarks are not permitted. Kariv Glamour has no affiliation, endorsement, sponsorship or authorised-dealer relationship with the watch manufacturers shown on this website.
 
-## 2. Nature of an assessment
+## 2. What listing review means
 
-Authentication is a professional opinion, not a statement by the original manufacturer and not an unlimited guarantee against every concealed alteration. Vintage and pre-owned watches may contain legitimate service parts or period replacements. A watch can also include aftermarket, customised or replaced components; these must be disclosed when known and may affect value, originality or manufacturer service eligibility.
+Kariv reviews the information submitted for a listing. A listing marked **Verified** or **Listing information reviewed** means that its submitted information has been reviewed. It does not mean that Kariv has physically inspected the watch, examined its movement or certified its authenticity. Approval of a seller account is also separate from authentication of a particular watch.
 
-Box, papers, warranty cards, receipts and certificates support provenance but do not by themselves prove that every component is original. Unless expressly stated, Kariv Glamour is not issuing a manufacturer certificate or manufacturer warranty.
+Physical authentication is not automatically included with a listing or purchase. If an individual watch is described as inspected, authenticated or certified, the claim must be supported by documentation identifying the watch, the person or organisation that performed the work, its date and its scope. Ask the seller for that documentation before purchase. An independent assessment is not manufacturer approval, and Kariv does not issue certificates on a manufacturer's behalf.
 
-## 3. Listings and photographs
+Sellers must own the watches they list and retain records supporting ownership, provenance and any authenticity or inspection claims they make. A business may carry out its own checks or use an independent specialist; this must not be presented as an inspection by Kariv. Supporting records retained by a seller are not automatically included in the sale. The listing must identify which original papers, certificates or other documents will accompany the watch. Relevant evidence can be requested before purchase, with personal information appropriately protected.
 
-Product photographs and condition reports form part of the listing. Buyers should review them with the written description, reference number, dimensions, service history and scope of delivery. Screen colour and image scale may differ slightly from the physical watch. Material discrepancies must be reported promptly.
+## 3. Originality, service parts and modifications
 
-## 4. If you have a concern
+An authentic watch is not necessarily unchanged since manufacture. Vintage and pre-owned watches may contain service replacements, aftermarket parts or later customisation. Sellers must clearly disclose known replacement parts, refinishing, diamond setting and other modifications, and must not describe aftermarket work as factory-original or manufacturer-approved. Disclosure of a modification does not make a counterfeit watch or counterfeit component acceptable.
+
+Box, papers, warranty cards, receipts and service records can support provenance but do not establish authenticity or the originality of every component on their own. Their issuer and the items actually included must be clear. Manufacturer warranty and service eligibility depend on the manufacturer's own terms; see the [Warranty Policy](/legal/warranty-policy).
+
+## 4. Before you buy
+
+Read the description, photographs, condition, reference, dimensions, service history, disclosed modifications and scope of delivery together. Ask the identified seller about gaps or inconsistencies and request further photographs or documents where needed. Listing review does not replace examination of the physical watch. See our [review process](/authentication) for the distinction between listing review and documented inspection.
+
+## 5. If you have a concern
 
 If you reasonably believe a delivered watch is inauthentic or materially different from the listing, do not wear, open, resize, repair or alter it. Keep all packaging and contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) promptly with the order number, photographs and the basis for your concern. We may request independent inspection and will apply the relevant buyer-protection, return and legal-conformity rights.
 
-This disclaimer does not exclude liability for fraud or misrepresentation and does not limit mandatory consumer rights.`,
-  contentDe: `_${LAST_UPDATED_DE}_
+Keep supporting documents and communications. The [Returns & Refunds Policy](/legal/returns-refund-policy) explains how to raise an issue. An order's buyer-protection period does not shorten mandatory rights against the seller. This disclaimer does not exclude liability for fraud or misrepresentation and does not limit mandatory consumer rights.`,
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
-## 1. Authentifizierungsstandard
+## 1. Echte Uhren und zutreffende Angebote
 
-Kariv Glamour verpflichtet Verkäufer, ausschließlich echte Uhren anzubieten und zutreffende Produktangaben zu machen. Wird eine Echtheitsprüfung angeboten, beurteilen qualifizierte Prüfer die Uhr anhand der zum Prüfzeitpunkt verfügbaren Informationen und physischen Merkmale. Geprüft werden können Referenz- und Serienangaben, Werk, Gehäuse, Zifferblatt, Zeiger, Armband, Punzen, Materialien, Verarbeitung, Herkunft und Begleitdokumente.
+Kariv Glamour ist ein unabhängiger Uhrenmarktplatz. Wir verkaufen Uhren aus eigenem Bestand und ermöglichen Angebote von privaten Eigentümern und unabhängigen Unternehmen. Alle Verkäufer müssen echte Uhren anbieten, diese zutreffend beschreiben und ihre Angaben belegen können. Gefälschte Uhren und Komponenten mit gefälschten Markenkennzeichen sind nicht zugelassen. Kariv Glamour ist mit den gezeigten Uhrenherstellern weder verbunden noch von ihnen unterstützt oder gesponsert und ist kein autorisierter Händler dieser Hersteller.
 
-## 2. Charakter der Beurteilung
+## 2. Was eine Angebotsprüfung bedeutet
 
-Eine Authentifizierung ist eine fachkundige Beurteilung, keine Erklärung des Originalherstellers und keine unbegrenzte Garantie gegen jede verborgene Veränderung. Vintage- und gebrauchte Uhren können legitime Service- oder zeitgemäße Ersatzteile enthalten. Eine Uhr kann auch nachträglich gefertigte, individualisierte oder ersetzte Komponenten enthalten; soweit bekannt, müssen diese offengelegt werden und können Wert, Originalität oder die Serviceberechtigung beim Hersteller beeinflussen.
+Kariv prüft die zu einem Angebot eingereichten Informationen. Die Kennzeichnung **Verified** oder **Angebotsinformationen geprüft** bedeutet, dass die eingereichten Angaben geprüft wurden. Sie bedeutet nicht, dass Kariv die Uhr physisch untersucht, ihr Uhrwerk geprüft oder ihre Echtheit zertifiziert hat. Auch die Freigabe eines Verkäuferkontos ist von der Echtheitsprüfung einer bestimmten Uhr zu unterscheiden.
 
-Box, Papiere, Garantiekarten, Belege und Zertifikate stützen die Herkunft, beweisen jedoch allein nicht, dass jede Komponente original ist. Sofern nicht ausdrücklich erklärt, stellt Kariv Glamour kein Herstellerzertifikat und keine Herstellergarantie aus.
+Eine physische Echtheitsprüfung ist nicht automatisch Bestandteil eines Angebots oder Kaufs. Wird eine bestimmte Uhr als geprüft, authentifiziert oder zertifiziert beschrieben, muss dies durch Unterlagen belegt sein, die die Uhr, die prüfende Person oder Organisation, das Datum und den Prüfumfang nennen. Fordern Sie diese Unterlagen vor dem Kauf beim Verkäufer an. Eine unabhängige Beurteilung ist keine Herstellerfreigabe; Kariv stellt keine Zertifikate im Namen eines Herstellers aus.
 
-## 3. Angebote und Fotos
+Verkäufer müssen Eigentümer der angebotenen Uhren sein und Unterlagen zu Eigentum, Herkunft und ihren Angaben zur Echtheit oder Prüfung aufbewahren. Ein Unternehmen kann eigene Prüfungen durchführen oder einen unabhängigen Fachbetrieb beauftragen; dies darf nicht als Prüfung durch Kariv dargestellt werden. Vom Verkäufer aufbewahrte Nachweise sind nicht automatisch Bestandteil des Kaufs. Im Angebot muss stehen, welche Originalpapiere, Zertifikate oder sonstigen Unterlagen mitgeliefert werden. Relevante Nachweise können vor dem Kauf unter angemessenem Schutz personenbezogener Daten angefragt werden.
 
-Produktfotos und Zustandsberichte sind Bestandteil des Angebots. Käufer sollten sie zusammen mit schriftlicher Beschreibung, Referenznummer, Maßen, Wartungsverlauf und Lieferumfang prüfen. Bildschirmfarben und Bildmaßstab können geringfügig von der physischen Uhr abweichen. Wesentliche Abweichungen sind unverzüglich zu melden.
+## 3. Originalität, Serviceteile und Veränderungen
 
-## 4. Bei Zweifeln
+Eine echte Uhr muss sich nicht mehr vollständig im ursprünglichen Auslieferungszustand befinden. Vintage- und gebrauchte Uhren können Serviceersatzteile, nachträglich gefertigte Komponenten oder spätere Individualisierungen enthalten. Verkäufer müssen bekannte Ersatzteile, Aufarbeitungen, Diamantbesatz und andere Veränderungen klar offenlegen. Nachträgliche Arbeiten dürfen nicht als werkseitig oder vom Hersteller genehmigt dargestellt werden. Die Offenlegung einer Veränderung macht eine gefälschte Uhr oder gefälschte Komponente nicht zulässig.
+
+Box, Papiere, Garantiekarten, Belege und Serviceberichte können die Herkunft stützen, beweisen für sich allein jedoch weder die Echtheit noch die Originalität sämtlicher Komponenten. Aussteller und tatsächlicher Lieferumfang müssen klar sein. Herstellergarantie und Serviceberechtigung richten sich nach den Bedingungen des Herstellers; siehe [Garantierichtlinie](/legal/warranty-policy).
+
+## 4. Vor dem Kauf
+
+Prüfen Sie Beschreibung, Fotos, Zustand, Referenz, Maße, Wartungsverlauf, offengelegte Veränderungen und Lieferumfang gemeinsam. Klären Sie Lücken oder Widersprüche mit dem ausgewiesenen Verkäufer und fordern Sie bei Bedarf weitere Fotos oder Unterlagen an. Eine Angebotsprüfung ersetzt keine Untersuchung der physischen Uhr. Unser [Prüfverfahren](/authentication) erläutert den Unterschied zwischen Angebotsprüfung und dokumentierter Untersuchung.
+
+## 5. Bei Zweifeln
 
 Wenn Sie begründet annehmen, dass eine gelieferte Uhr nicht echt ist oder wesentlich vom Angebot abweicht, dürfen Sie sie nicht tragen, öffnen, kürzen, reparieren oder verändern. Bewahren Sie sämtliche Verpackungen auf und kontaktieren Sie zeitnah [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) mit Bestellnummer, Fotos und Begründung. Wir können eine unabhängige Prüfung verlangen und wenden die einschlägigen Käuferschutz-, Rückgabe- und gesetzlichen Mängelrechte an.
 
-Dieser Hinweis schließt keine Haftung für Betrug oder Falschdarstellung aus und beschränkt keine zwingenden Verbraucherrechte.`,
+Bewahren Sie Belege und Nachrichten auf. Die [Rückgabe- und Erstattungsrichtlinie](/legal/returns-refund-policy) erklärt das Vorgehen bei Problemen. Eine Käuferschutzfrist verkürzt keine zwingenden Ansprüche gegen den Verkäufer. Dieser Hinweis schließt keine Haftung für Betrug oder Falschdarstellung aus und beschränkt keine zwingenden Verbraucherrechte.`,
 });
 
 const BRAND_POLICY = createLegalPage({
@@ -577,11 +605,13 @@ const BRAND_POLICY = createLegalPage({
   titleDe: 'Marken-Haftungsausschluss',
   descriptionEn: 'Trademark, brand affiliation and product-identification information for Kariv Glamour.',
   descriptionDe: 'Informationen zu Marken, Herstellerbeziehungen und Produktkennzeichnung bei Kariv Glamour.',
-  contentEn: `_${LAST_UPDATED_EN}_
+  contentEn: `_Last updated: 2 October 2026_
 
 ## Independent marketplace
 
-Kariv Glamour is an independent luxury-watch marketplace. Unless a product listing expressly states otherwise, Kariv Glamour is not affiliated with, endorsed by, sponsored by, or an authorised dealer or official service centre of the watch manufacturers displayed on this website.
+Kariv Glamour s.r.o. operates an independent watch marketplace. We sell watches from our own inventory and facilitate listings from private owners and independent businesses. Kariv Glamour is not affiliated with, endorsed by, sponsored by, or an authorised dealer or official service centre of any watch manufacturer displayed on this website.
+
+Each listing identifies the seller for the transaction. Approval to sell on Kariv means approval to use our marketplace; it does not mean authorisation by a watch manufacturer. A seller's own business relationships do not extend to Kariv Glamour. We do not speak or issue certificates on behalf of manufacturers.
 
 ## Trademarks and product names
 
@@ -589,16 +619,18 @@ Brand names, logos, model names, reference numbers and other trademarks belong t
 
 ## Product imagery and information
 
-Product photographs are supplied by Kariv Glamour or authorised sellers for the relevant listing. Manufacturer descriptions or historical facts may be summarised for identification and informational purposes. Rights holders may report a concern about inaccurate attribution or unauthorised content to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
+Product photographs are supplied by Kariv Glamour or the seller for the relevant listing. Product descriptions and editorial information identify watches and explain their characteristics and history; they are not manufacturer communications. Sellers must have the right to use the material they submit. Rights holders may report a concern about inaccurate attribution or unauthorised content to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).
 
 ## Warranties and service
 
-Manufacturer warranties, service eligibility and after-sales support apply only under the manufacturer’s own terms and only when expressly included with the watch. Displaying a brand does not create a manufacturer warranty. Mandatory rights against the contractual seller remain unaffected.`,
-  contentDe: `_${LAST_UPDATED_DE}_
+Any remaining manufacturer warranty or eligibility for manufacturer service is subject to that manufacturer's terms and the documentation for the specific watch. Resale through Kariv does not start, extend or guarantee a manufacturer warranty. Kariv and seller warranties, where explicitly offered, are separate and must identify their provider and terms. Mandatory rights against the contractual seller remain unaffected. See the [Warranty Policy](/legal/warranty-policy) and [Authenticity Disclaimer](/legal/authenticity-disclaimer).`,
+  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
 
 ## Unabhängiger Marktplatz
 
-Kariv Glamour ist ein unabhängiger Marktplatz für Luxusuhren. Sofern ein Produktangebot nicht ausdrücklich etwas anderes angibt, ist Kariv Glamour mit den auf dieser Website gezeigten Uhrenherstellern weder verbunden noch von ihnen unterstützt oder gesponsert und ist kein autorisierter Händler oder offizielles Servicezentrum dieser Hersteller.
+Kariv Glamour s.r.o. betreibt einen unabhängigen Uhrenmarktplatz. Wir verkaufen Uhren aus eigenem Bestand und ermöglichen Angebote von privaten Eigentümern und unabhängigen Unternehmen. Kariv Glamour ist mit keinem der gezeigten Uhrenhersteller verbunden, wird von keinem dieser Hersteller unterstützt oder gesponsert und ist weder deren autorisierter Händler noch offizielles Servicezentrum.
+
+Jedes Angebot benennt den Verkäufer der Transaktion. Eine Zulassung zum Verkauf auf Kariv ist eine Freigabe für unseren Marktplatz und keine Autorisierung durch einen Uhrenhersteller. Eigene Geschäftsbeziehungen eines Verkäufers erstrecken sich nicht auf Kariv Glamour. Wir sprechen nicht im Namen von Herstellern und stellen keine Zertifikate in deren Namen aus.
 
 ## Marken und Produktnamen
 
@@ -606,11 +638,11 @@ Markennamen, Logos, Modellnamen, Referenznummern und sonstige Kennzeichen gehör
 
 ## Produktbilder und Informationen
 
-Produktfotos werden von Kariv Glamour oder zugelassenen Verkäufern für das jeweilige Angebot bereitgestellt. Herstellerbeschreibungen oder historische Fakten können zu Identifikations- und Informationszwecken zusammengefasst werden. Rechteinhaber können Bedenken wegen einer falschen Zuordnung oder unbefugter Inhalte an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) melden.
+Produktfotos werden von Kariv Glamour oder dem jeweiligen Verkäufer bereitgestellt. Produktbeschreibungen und redaktionelle Informationen identifizieren Uhren und erläutern ihre Eigenschaften und Geschichte; sie sind keine Mitteilungen des Herstellers. Verkäufer müssen zur Nutzung der eingereichten Inhalte berechtigt sein. Rechteinhaber können Bedenken wegen falscher Zuordnung oder unbefugter Inhalte an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) melden.
 
 ## Garantie und Service
 
-Herstellergarantien, Serviceberechtigung und Kundendienst gelten ausschließlich nach den Bedingungen des Herstellers und nur, wenn sie ausdrücklich mit der Uhr angeboten werden. Die Anzeige einer Marke begründet keine Herstellergarantie. Zwingende Rechte gegen den vertraglichen Verkäufer bleiben unberührt.`,
+Eine verbleibende Herstellergarantie oder Berechtigung zum Herstellerservice richtet sich nach den Herstellerbedingungen und den Unterlagen der konkreten Uhr. Ein Wiederverkauf über Kariv begründet, verlängert oder garantiert keine Herstellergarantie. Gesondert angebotene Kariv- oder Verkäufergarantien müssen Garantiegeber und Bedingungen nennen. Zwingende Rechte gegen den vertraglichen Verkäufer bleiben unberührt. Siehe [Garantierichtlinie](/legal/warranty-policy) und [Echtheitserklärung](/legal/authenticity-disclaimer).`,
 });
 
 const IMPRESSUM = createLegalPage({

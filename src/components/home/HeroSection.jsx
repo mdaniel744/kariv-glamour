@@ -50,7 +50,7 @@ export default function HeroSection() {
             {t(HERO.title[2])} <span className="text-[#9b7333]">{t(HERO.title[3])}</span>
           </h1>
 
-          <p className="hidden max-w-xl text-base leading-7 text-[#496057] dark:text-[#d0d8df] md:block md:text-lg md:leading-8">
+          <p className="hidden max-w-xl text-lg leading-8 text-[#496057] dark:text-[#d0d8df] md:block">
             {t(HERO.description)}
           </p>
 
@@ -81,8 +81,8 @@ export default function HeroSection() {
 
           <div className="mt-5 hidden flex-wrap items-center gap-2.5 md:flex">
             <span className="mr-1 text-xs font-medium text-[#60766c] dark:text-[#b9c5cf]">{t('components.hero.popularSearches')}</span>
-            <LocalizedLink to="/shop?brand=Rolex" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">Rolex</LocalizedLink>
-            <LocalizedLink to="/shop?brand=Omega" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">Omega</LocalizedLink>
+            <LocalizedLink to="/shop?isNewArrival=true" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{t('components.categoryGrid.newArrivals.title')}</LocalizedLink>
+            <LocalizedLink to="/shop?isVintage=true" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{t('components.categoryGrid.vintage.title')}</LocalizedLink>
             <LocalizedLink to="/shop?isCertifiedPreOwned=true" className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{t('components.hero.certified')}</LocalizedLink>
             {budget != null && <LocalizedLink to={`/shop?priceMax=${budget}`} className="rounded-full border border-[#ccd9d2] bg-white/70 px-3 py-1.5 text-xs font-medium text-[#315247] hover:border-primary hover:text-primary dark:border-[#526675] dark:bg-white/5 dark:text-[#d8dfe5] dark:hover:border-white dark:hover:text-white">{locale === 'cs' ? `Do ${formatMoney(budget)}` : t('components.hero.underTen')}</LocalizedLink>}
           </div>
@@ -100,7 +100,7 @@ export default function HeroSection() {
           <div className="absolute inset-x-[8%] inset-y-[12%] rounded-[50%] bg-white/70 shadow-[0_35px_90px_rgba(19,66,52,0.14)] ring-1 ring-[#b99354]/20 dark:bg-white/[0.07] dark:shadow-[0_35px_90px_rgba(0,0,0,0.28)] dark:ring-[#d9b56d]/20 sm:inset-[8%] sm:rounded-full" />
           <MediaImage src="/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png" alt="" aria-hidden="true" width={420} height={420} sizes="(max-width: 1023px) 40vw, 210px" quality={80} className="absolute left-[1%] top-[18%] z-10 hidden h-[44%] w-[44%] -rotate-12 object-contain opacity-75 mix-blend-multiply drop-shadow-[0_24px_24px_rgba(20,45,37,0.18)] dark:mix-blend-normal dark:drop-shadow-[0_24px_24px_rgba(0,0,0,0.34)] sm:block" />
           <MediaImage src="/brand-assets/cartier/collections/cartier-santos-de-cartier.png" alt="" aria-hidden="true" width={420} height={420} sizes="(max-width: 1023px) 36vw, 190px" quality={80} className="absolute bottom-[10%] right-[0%] z-20 hidden h-[40%] w-[40%] rotate-12 object-contain opacity-80 mix-blend-multiply drop-shadow-[0_24px_24px_rgba(20,45,37,0.18)] dark:mix-blend-normal dark:drop-shadow-[0_24px_24px_rgba(0,0,0,0.34)] sm:block" />
-          <MediaImage src="/brand-assets/rolex/collections/rolex-submariner.png" alt="Rolex Submariner watch" width={720} height={720} sizes="(max-width: 639px) 180px, (max-width: 1023px) 70vw, 380px" quality={88} priority className="relative z-30 h-[190px] w-[68%] max-w-[190px] object-contain mix-blend-multiply drop-shadow-[0_28px_26px_rgba(20,45,37,0.24)] dark:mix-blend-normal dark:drop-shadow-[0_28px_26px_rgba(0,0,0,0.38)] sm:h-[340px] sm:w-[72%] sm:max-w-none md:h-[440px] lg:h-[520px]" />
+          <MediaImage src="/brand-assets/rolex/collections/rolex-submariner.png" alt={t('components.hero.imageAlt')} width={720} height={720} sizes="(max-width: 639px) 180px, (max-width: 1023px) 70vw, 380px" quality={88} priority className="relative z-30 h-[190px] w-[68%] max-w-[190px] object-contain mix-blend-multiply drop-shadow-[0_28px_26px_rgba(20,45,37,0.24)] dark:mix-blend-normal dark:drop-shadow-[0_28px_26px_rgba(0,0,0,0.38)] sm:h-[340px] sm:w-[72%] sm:max-w-none md:h-[440px] lg:h-[520px]" />
         </div>
       </div>
     </section>

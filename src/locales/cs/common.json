@@ -33,7 +33,7 @@
   "emailPlaceholder": "Vaše e-mailová adresa",
   "copyright": "© {{year}} Kariv Glamour. Všechna práva vyhrazena.",
   "securePayment": "Bezpečná platba",
-  "buyerProtectionIncluded": "Včetně ochrany kupujícího",
+  "buyerProtectionIncluded": "Podpora při nákupu",
   "insuredShipping": "Pojištěná doprava v EU",
   "conditionAssessment": "Podrobné zprávy o stavu",
   "authenticatedLuxuryWatches": "Nabídka luxusních hodinek",
@@ -96,8 +96,8 @@
   },
   "seo": {
     "home": {
-      "title": "Koupit luxusní hodinky — originální Rolex, Patek Philippe a další",
-      "description": "Objevte originální luxusní hodinky v Kariv Glamour. Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet a další. Nové, použité i vintage hodinky s ochranou kupujícího."
+      "title": "Koupit hodinky — Nové, použité a vintage",
+      "description": "Najděte své další hodinky na nezávislém tržišti Kariv Glamour. Prohlédněte si nové, použité a vintage hodinky od soukromých vlastníků, nezávislých firem a Kariv."
     },
     "shop": {
       "title": "Obchod s luxusními hodinkami — celá nabídka",
@@ -105,14 +105,14 @@
     },
     "brands": {
       "title": "Značky luxusních hodinek",
-      "description": "Objevte výběr luxusních hodinek nejznámějších světových výrobců — Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet a dalších."
+      "description": "Procházejte nabídky hodinek podle značky na nezávislém tržišti Kariv. Porovnejte modely, stav, údaje o prodejci a dostupné doklady."
     },
     "about": {
       "title": "O Kariv Glamour",
-      "description": "Kariv Glamour je vaše důvěryhodné tržiště originálních luxusních hodinek. Poznejte naše poslání, zkušenosti a přístup k ověřování pravosti."
+      "description": "Poznejte Kariv Glamour, nezávislé tržiště a prodejce hodinek se sídlem v Praze, a pravidla pro soukromé i podnikatelské prodejce."
     },
     "authentication": {
-      "title": "Ověřování pravosti hodinek",
+      "title": "Kontrola nabídek a pravost hodinek",
       "description": "Zjistěte, jak Kariv kontroluje nabídky hodinek, co musí prodejci uvádět a zda je u konkrétních hodinek doloženo fyzické ověření pravosti."
     },
     "buyerProtection": {
@@ -143,21 +143,21 @@
   "components": {
     "hero": {
       "slide1": {
-        "eyebrow": "Nezávislé tržiště luxusních hodinek",
-        "title1": "Kupte si",
-        "title2": "hodinky",
-        "title3": "od nejznámějších",
-        "title4": "světových výrobců.",
-        "description": "Výběr nových, použitých, vintage i sběratelských hodinek značek Rolex, Patek Philippe, Omega, Cartier, Audemars Piguet a dalších.",
-        "cta": "Prohlédnout luxusní hodinky"
+        "eyebrow": "Nezávislé tržiště hodinek",
+        "title1": "Najděte",
+        "title2": "své",
+        "title3": "další",
+        "title4": "hodinky.",
+        "description": "Prohlédněte si nové, použité a vintage hodinky od soukromých vlastníků, nezávislých firem a Kariv.",
+        "cta": "Prohlédnout hodinky"
       },
       "slide2": {
-        "eyebrow": "Ikoničtí výrobci",
+        "eyebrow": "Kolekce hodinek",
         "title1": "Světové",
         "title2": "značky —",
         "title3": "každá s vlastním",
         "title4": "příběhem.",
-        "description": "Od Rolex po Patek Philippe — objevte příběhy, kolekce a reference nejuznávanějších hodinářských značek světa.",
+        "description": "Prozkoumejte kolekce hodinek, historii modelů a průvodce referencemi, které vám pomohou s výběrem.",
         "cta": "Prohlédnout značky"
       },
       "slide3": {
@@ -182,14 +182,15 @@
       "nextSlide": "Další snímek",
       "slideN": "Snímek {{n}}",
       "searchLabel": "Hledat hodinky",
-      "searchPlaceholder": "Značka, model nebo reference…",
+      "searchPlaceholder": "Hodinky, modely nebo reference…",
       "searchCta": "Hledat hodinky",
       "popularSearches": "Oblíbené",
       "certified": "Vybrané použité hodinky",
-      "underTen": "Do 10 000 €"
+      "underTen": "Do 10 000 €",
+      "imageAlt": "Hodinky na nezávislém tržišti Kariv"
     },
     "brandMarquee": {
-      "title": "Vybraní výrobci",
+      "title": "Hodinky podle značky",
       "subtitle": "Začněte jménem na ciferníku",
       "viewAll": "Všechny značky",
       "scrollLeft": "Posunout doleva",
@@ -210,7 +211,7 @@
     },
     "editorialHero": {
       "eyebrow": "Princip Kariv",
-      "title": "Každé hodinky jsou příslibem.",
+      "title": "Jasné informace. Informovaná volba.",
       "description": "Prodejci musí nabízet originální hodinky a přesně je popsat. Projděte si údaje o konkrétní nabídce a podle potřeby si vyžádejte doklady.",
       "cta": "Náš postup",
       "alt": "Výběr hodinek Kariv Glamour"
@@ -253,7 +254,7 @@
     },
     "sectionHeading": { "viewAll": "Zobrazit vše" },
     "trustBar": {
-      "authenticated": "Ověřování pravosti",
+      "authenticated": "Kontrola nabídky a pravost",
       "authenticatedDesc": "Seznamte se s postupem a stavem jednotlivých nabídek",
       "securePayment": "Ochrana kupujícího",
       "securePaymentDesc": "Poznejte průběh nákupu a podmínky ochrany",
@@ -318,7 +319,7 @@
       "total": "Celkem",
       "checkout": "K pokladně",
       "trustSecure": "Bezpečná šifrovaná pokladna",
-      "trustShipping": "Pojištěná doprava do celého světa",
+      "trustShipping": "Pojištěná doprava v EU zdarma",
       "trustAuth": "Projděte si údaje o pravosti konkrétních hodinek"
     },
     "about": {
@@ -326,7 +327,7 @@
       "eyebrow": "O nás",
       "heroTitle1": "Jedno místo pro",
       "heroTitle2": "náročné sběratele",
-      "heroDesc": "Kariv Glamour je nezávislé tržiště luxusních hodinek známých výrobců. Požadujeme originální zboží a jasné údaje o nabídkách, aby se kupující mohli rozhodovat informovaně.",
+      "heroDesc": "Kariv Glamour je nezávislé tržiště a prodejce hodinek se sídlem v Praze. Nabídky pocházejí od soukromých vlastníků, nezávislých firem a Kariv. S vyobrazenými výrobci hodinek nejsme propojeni, nejsme jimi podporováni ani nejsme jejich autorizovaným prodejcem.",
       "storyEyebrow": "Náš příběh",
       "storyTitle1": "Od sběratelů",
       "storyTitle2": "pro sběratele",
@@ -340,34 +341,38 @@
       "v1Desc": "Padělky nepovolujeme, kontrolujeme údaje o nabídkách a požadujeme přesné popisy stavu, součástí i přiložených dokladů.",
       "v2Title": "Transparentnost",
       "v2Desc": "Podrobné hodnocení stavu, rozsáhlá fotodokumentace a poctivé popisy vám umožní přesně vědět, co kupujete.",
-      "v3Title": "Kvalita",
-      "v3Desc": "Vybíráme nejkvalitnější exempláře jednotlivých referencí a dbáme na vysokou úroveň kvality i doloženého původu.",
+      "v3Title": "Jasné údaje o prodejci",
+      "v3Desc": "Ověřte si, kdo hodinky prodává a jaké podmínky se na nákup vztahují. Schválený účet prodejce není certifikací konkrétních hodinek ani dokladem o autorizaci výrobcem.",
       "v4Title": "Zákazník v centru pozornosti",
       "v4Desc": "Náš tým specialistů na hodinky vám poskytne osobní poradenství po celou dobu nákupu.",
-      "v5Title": "Mezinárodní dosah",
-      "v5Desc": "Pojištěná doprava do celého světa s individuální péčí zajistí, že vaše hodinky bezpečně dorazí, ať jste kdekoli.",
+      "v5Title": "Doručení po celé EU",
+      "v5Desc": "Pojištěná doprava v rámci EU je zdarma. Ověřte si předpokládanou dobu doručení a přepravní podmínky své objednávky.",
       "v6Title": "Vášeň",
       "v6Desc": "Jako sběratelé, kteří pracují pro sběratele, vkládáme nadšení pro jemné hodinářství do každého rozhodnutí.",
       "disclaimerTitle": "Prohlášení o značkách"
     },
     "authentication": {
       "breadcrumb": "Ověřování pravosti",
-      "eyebrow": "Náš postup",
-      "heroTitle1": "Ověření pravosti a",
-      "heroTitle2": "kontrola",
-      "heroDesc": "Kariv vyžaduje originální hodinky a kontroluje dodané údaje o nabídkách. To není totéž jako fyzická kontrola či certifikace každého kusu. U konkrétní nabídky si ověřte dostupné doklady.",
-      "s1Title": "Úvodní posouzení",
+      "eyebrow": "Jak rozumět nabídce",
+      "heroTitle1": "Kontrola nabídek",
+      "heroTitle2": "a pravost",
+      "heroDesc": "Kariv kontroluje údaje o nabídkách od soukromých a podnikatelských prodejců, kteří musí nabízet originální hodinky a přesně je popsat. Schválení nabídky neznamená, že Kariv nebo výrobce hodinky fyzicky prohlédl.",
+      "s1Title": "Jaké údaje kontrolujeme",
       "s1Desc": "Kontrolujeme dodané údaje a fotografie nabídky, včetně uvedené značky, modelu, reference a stavu.",
-      "s2Title": "Kontrola strojku",
-      "s2Desc": "Fyzická kontrola strojku ani sériových čísel neprobíhá automaticky. Pokud u konkrétních hodinek proběhla, vyžádejte si zprávu a rozsah kontroly.",
-      "s3Title": "Kontrola dokumentace",
+      "s2Title": "Co znamená prověřená nabídka",
+      "s2Desc": "Stav „Verified“ v katalogu označuje kontrolu údajů v nabídce. Nejde o fyzické ověření pravosti, certifikát ani schválení výrobcem hodinek. Také schválení účtu prodejce je oddělené od posouzení konkrétních hodinek.",
+      "s3Title": "Podpůrné doklady",
       "s3Desc": "Prodejce by měl uvést, jaká krabička, doklady, servisní záznamy či jiné dokumenty jsou součástí nabídky. Samy o sobě pravost neprokazují.",
-      "s4Title": "Hodnocení stavu",
-      "s4Desc": "Projděte si stav a fotografie konkrétní nabídky. Ptejte se na chybějící záběry, vyměněné díly či nejasnou historii hodinek.",
-      "s5Title": "Certifikace",
-      "s5Desc": "Samotná kontrola nabídky neznamená vydání certifikátu. Ověření pravosti nebo osvědčení konkrétních hodinek musí mít vlastní doklady.",
-      "noFakesTitle": "Nulová tolerance padělků",
-      "noFakesDesc": "Padělky ani repliky nepovolujeme. Pochybnosti o nabídce nebo doručených hodinkách nahlaste podpoře Kariv. Případ prověříme a uplatníme příslušná práva kupujícího a pravidla vrácení. Názvy značek a modelů označují produkty, nikoli partnerství s výrobcem."
+      "s4Title": "Stav a náhradní díly",
+      "s4Desc": "Prodejci musí uvést známé servisní díly, součásti jiných výrobců, úpravy a vady. Ptejte se na chybějící fotografie nebo nejasnou historii. Náhradní díly mohou ovlivnit originalitu, cenu či možnost servisu a nesmějí být nepravdivě označeny za originální.",
+      "s5Title": "Fyzické posouzení a certifikáty",
+      "s5Desc": "Pokud nabídka uvádí fyzickou kontrolu nebo ověření pravosti, vyžádejte si jméno posuzovatele, datum, rozsah a příslušnou zprávu. Kariv nevydává certifikáty výrobce. Jestliže dostupné doklady vaše otázky nezodpovídají, zvažte nezávislé posouzení.",
+      "noFakesTitle": "Pravost hodinek je podmínkou nabídky",
+      "noFakesDesc": "Padělky a repliky jsou zakázány. Pochybnosti o nabídce nebo doručených hodinkách nahlaste podpoře Kariv s číslem nabídky či objednávky a podpůrnými údaji. Oznámení prověřujeme podle příslušných pravidel. Zákonná práva neomezuje stav nabídky ani lhůta pro hlášení stanovená platformou.",
+      "resourcesTitle": "Související informace",
+      "authenticityLink": "Přečíst prohlášení o pravosti",
+      "brandLink": "Přečíst prohlášení o značkách",
+      "contactLink": "Kontaktovat podporu Kariv"
     },
     "customerService": {
       "breadcrumb": "Zákaznický servis",
@@ -428,7 +433,7 @@
     },
     "brands": {
       "breadcrumb": "Značky",
-      "eyebrow": "Výrobci",
+      "eyebrow": "Značky hodinek",
       "title": "Naše značky",
       "subtitle": "Objevte hodinky nejprestižnějších světových výrobců. Každá značka představuje tradici hodinářského mistrovství.",
       "exploreCollection": "Prohlédnout kolekci"
@@ -529,8 +534,8 @@
       "guarantee1Reviewed": "Údaje o nabídce zkontrolovány; fyzické ověření pravosti není doloženo",
       "guarantee1Pending": "Fyzické ověření pravosti není doloženo; zeptejte se prodejce",
       "guarantee2": "Zobrazit země doručení a podmínky dopravy",
-      "guarantee3": "Možnost vrácení do 14 dnů",
-      "guarantee3Final": "Konečný prodej — bez možnosti vrácení",
+      "guarantee3": "14 dnů na odstoupení u způsobilých spotřebitelských nákupů",
+      "guarantee3Final": "Viz podmínky vrácení — zákonná práva zůstávají zachována",
       "guarantee4": "Transparentní hodnocení stavu",
       "aboutTitle": "O těchto hodinkách",
       "specsTitle": "Technické údaje",
@@ -638,7 +643,7 @@
       "orderPlacedTitle": "Objednávka potvrzena — Kariv Glamour",
       "orderTitle": "Vaše objednávka — Kariv Glamour",
       "trustSecure": "Bezpečná šifrovaná pokladna",
-      "trustShipping": "Pojištěná doprava do celého světa",
+      "trustShipping": "Pojištěná doprava v EU zdarma",
       "trustAuth": "Projděte si údaje o pravosti konkrétních hodinek"
     },
     "wishlist": {
@@ -654,85 +659,85 @@
       "hero": {
         "eyebrow": "Ochrana kupujícího",
         "title": "Ochrana kupujícího Kariv",
-        "description": "Pořiďte si další luxusní hodinky s jistotou. Ochrana kupujícího Kariv pomáhá zabezpečit platbu, chránit objednávku, ověřovat standardy prodejců a podpořit vás během celého nákupu.",
-        "primaryCta": "Nakupovat luxusní hodinky",
+        "description": "Kariv Glamour je nezávislé tržiště s hodinkami od soukromých vlastníků, podnikatelů i samotné společnosti Kariv. Ověřte si prodejce, platební podmínky a práva na vrácení u své objednávky. Nejsme spojeni s výrobci hodinek.",
+        "primaryCta": "Nakupovat hodinky",
         "secondaryCta": "Jak ochrana kupujícího funguje",
-        "imageAlt": "Dohoda o chráněném nákupu luxusních hodinek",
-        "protectedPurchase": "Chráněný nákup",
+        "imageAlt": "Podpora při nákupu hodinek",
+        "protectedPurchase": "Podpora při nákupu",
         "badges": [
-          "Bezpečná úschova platby",
-          "Závazek k pravosti",
-          "Záruka vrácení peněz do 14 dnů",
+          "Platební podmínky objednávky",
+          "Informace o pravosti",
+          "Příslušná práva na vrácení",
           "Pojištěná doprava",
-          "Ověření prodejci",
+          "Informace o prodejci",
           "Podpora kupujících"
         ]
       },
       "included": {
-        "title": "Co zahrnuje ochrana kupujícího Kariv?",
+        "title": "Důležité informace o nákupu",
         "items": [
-          { "title": "Platba prostřednictvím úschovy", "text": "Vaši platbu bezpečně uchováváme, dokud hodinky neobdržíte a nemáte čas je zkontrolovat." },
-          { "title": "Závazek k pravosti", "text": "Každé nabízené hodinky musí být originální. Prodejci mohou nabízet pouze pravé hodinky." },
-          { "title": "Celosvětová záruka vrácení peněz do 14 dnů", "text": "Pokud jsou hodinky vadné, neodpovídají popisu nebo dohodnutým údajům nabídky, můžete do 14 dnů od doručení požádat o vrácení." },
-          { "title": "Přísná pravidla pro prodejce", "text": "Prodejci musí před zahájením prodeje splnit pravidla tržiště Kariv Glamour a požadavky na ověření." },
+          { "title": "Platební podmínky objednávky", "text": "Obvyklým způsobem nákupu je standardní pokladna. Úschova platí pouze tehdy, pokud je výslovně nabídnuta a potvrzena pro vaši objednávku." },
+          { "title": "Závazek k pravosti", "text": "Prodejci musí nabízet pravé hodinky a uvádět známé náhradní či neoriginální díly. Kontrola údajů v nabídce není fyzickým ověřením pravosti." },
+          { "title": "Vrácení a zákonná práva", "text": "U způsobilých spotřebitelských nákupů od podnikatele obvykle platí 14denní právo na odstoupení. Pro vady a otázky pravosti platí samostatná zákonná práva." },
+          { "title": "Informace o prodejci", "text": "Ověřte si, zda prodává Kariv, jiný podnikatel nebo soukromá osoba. Schválení účtu prodejce neověřuje pravost konkrétních hodinek." },
           { "title": "Pojištěné zásilky", "text": "Objednávky musí být odeslány s pojištěním a sledováním zásilky, aby byly chráněny tuzemské i mezinárodní nákupy." },
-          { "title": "Tým kvality a bezpečnosti Kariv", "text": "Náš tým podpory a bezpečnosti řeší problémy, sleduje podezřelou činnost a pomáhá kupujícím během celého nákupu." }
+          { "title": "Zákaznická podpora Kariv", "text": "Kontaktujte podporu s dotazy k nabídce, platbě, doručení, vrácení nebo pravosti hodinek." }
         ]
       },
       "howItWorks": {
         "title": "Jak ochrana kupujícího Kariv funguje",
         "steps": [
-          { "title": "Vyberte si hodinky", "text": "Prohlédněte si luxusní hodinky od důvěryhodných prodejců a ověřte značku, model, referenční číslo, stav, rok, krabičku a doklady, servisní historii, cenu i informace o dopravě." },
-          { "title": "Zaplaťte bezpečně přes Kariv", "text": "Pokud se na vaši objednávku vztahuje úschova Kariv, platbu bezpečně uchováme místo jejího okamžitého předání prodejci." },
+          { "title": "Vyberte si hodinky", "text": "Před objednáním si ověřte prodejce, referenci hodinek, stav, fotografie, zahrnuté příslušenství, servisní doklady, cenu a dodací podmínky." },
+          { "title": "Zkontrolujte platební pokyny", "text": "Použijte platební metodu uvedenou v pokladně. Standardní objednávka automaticky nezahrnuje úschovu ani odloženou výplatu prodejci." },
           { "title": "Prodejce odešle hodinky", "text": "Prodejce hodinky odešle pojištěnou zásilkou se sledováním. Údaje o zásilce přidá k objednávce, abyste mohli sledovat doručení." },
           { "title": "Zkontrolujte hodinky", "text": "Po doručení máte čas hodinky prohlédnout, porovnat s nabídkou a ověřit, že stav, doklady i příslušenství odpovídají popisu." },
-          { "title": "Prodejce obdrží platbu", "text": "Platbu uvolníme prodejci až po uplynutí ochranné lhůty kupujícího nebo po potvrzení objednávky." },
+          { "title": "Dodržujte podmínky objednávky", "text": "Platba probíhá podle podmínek potvrzených pro vaši objednávku. Pokud výslovně zahrnuje úschovu, platí její podmínky kontroly a uvolnění prostředků." },
           { "title": "Podpora je vám k dispozici", "text": "Pokud něco není v pořádku, podpora Kariv Glamour vám pomůže s dalším postupem, například s vrácením hodinek, peněz nebo posouzením sporu." }
         ]
       },
       "escrow": {
-        "title": "Platba prostřednictvím úschovy Kariv",
-        "intro": "U způsobilých objednávek služba úschovy Kariv bezpečně uchovává platbu během vyřizování nákupu. Místo přímé platby prodejci zůstávají prostředky na chráněném úschovním účtu po dobu doručení a kontroly. Máte tak čas hodinky převzít, posoudit jejich stav a ověřit shodu s nabídkou.",
-        "highlight": "Vaše peníze se prodejci neuvolňují okamžitě. Během lhůty pro kontrolu kupujícím zůstávají chráněny.",
+        "title": "Standardní platba a volitelná úschova",
+        "intro": "Nákupy obvykle probíhají přes standardní pokladnu. Úschova je samostatné platební ujednání a platí pouze tehdy, pokud je výslovně nabídnuta před platbou a potvrzena v objednávce. Běžný bankovní převod automaticky nepředstavuje platbu do úschovy.",
+        "highlight": "Podmínky držení a uvolnění prostředků v úschově platí pouze pro objednávku, která úschovu výslovně zahrnuje.",
         "points": [
-          "Platba je během transakce bezpečně uchována.",
-          "Kupující má na kontrolu hodinek 14 dnů od doručení.",
-          "Platbu prodejci uvolníme až po splnění podmínek ochrany kupujícího.",
-          "Úschova se vztahuje pouze na způsobilé objednávky zpracované přes pokladnu Kariv Glamour.",
-          "Přímé platby mimo Kariv Glamour nejsou chráněny."
+          "Před převodem ověřte prodejce a příjemce platby.",
+          "Před platbou si přečtěte případnou kontrolní lhůtu pro danou objednávku.",
+          "Pokud je úschova sjednána, platí její podmínky uvolnění peněz a řešení sporů.",
+          "Označení zkontrolované nabídky nepotvrzuje nárok na úschovu.",
+          "Platby sjednané mimo platformu nespadají do úschovy Kariv."
         ],
         "importantLabel": "Důležité",
-        "importantText": "Ochrana kupujícího Kariv se vztahuje pouze na způsobilé nákupy dokončené schváleným platebním postupem Kariv Glamour. Platby provedené mimo platformu nemusí být chráněny."
+        "importantText": "Tato stránka neslibuje úschovu pro každou objednávku ani všeobecnou záruku vrácení peněz. Vaše příslušná zákonná práva zůstávají platební metodou nedotčena."
       },
       "authenticity": {
         "title": "Závazek k pravosti",
-        "intro": "Kariv Glamour se zavazuje nabízet výhradně originální luxusní hodinky. Každý prodejce musí nabízet pravé hodinky a uvádět přesné informace. Nabídka má jasně uvádět značku, model, referenční číslo, stav, rok, přítomnost krabičky a dokladů, servisní historii a všechny známé vyměněné či neoriginální díly.",
+        "intro": "Kariv je nezávislé tržiště a prodejce bez vazby, podpory či vztahu autorizovaného prodejce s výrobci hodinek. Od soukromých i podnikatelských prodejců vyžadujeme pravé hodinky, přesný popis stavu a uvedení známých náhradních nebo neoriginálních dílů.",
         "points": [
-          "Pouze originální hodinky",
+          "Prodejci musí nabízet pravé hodinky",
           "Žádné padělky ani repliky",
           "Jasně uvedená referenční čísla",
           "Transparentní popis stavu",
           "Informace o krabičce a dokladech",
           "Servisní historie, je-li k dispozici",
           "Uvedení původních i náhradních dílů",
-          "Podezřelé nabídky mohou být prověřeny, skryty nebo odstraněny"
+          "Podezření na padělek nebo zavádějící nabídku nahlaste podpoře"
         ],
-        "notice": "Kariv Glamour nepovoluje nabídky padělků, replik ani záměrně zavádějící nabídky hodinek.",
-        "counterfeitTitle": "Jak pomáháme chránit před padělky",
-        "counterfeitIntro": "Luxusní hodinky vyžadují důvěru. Kariv Glamour omezuje riziko padělků a zavádějících nabídek pomocí pravidel pro prodejce, kontroly informací, hlášení zákazníků a prověřování podporou.",
+        "notice": "Označení nabídky „Verified“ znamená kontrolu jejích údajů. Neznamená, že Kariv hodinky fyzicky zkontroloval nebo že je výrobce certifikoval. Vyžádejte si doklady podporující případná tvrzení o ověření pravosti konkrétních hodinek.",
+        "counterfeitTitle": "Kontrola údajů v nabídce",
+        "counterfeitIntro": "Kontrola nabídky se týká dodaných informací. Liší se od otevření, prohlídky nebo testování hodinek. Tvrzení o fyzické kontrole či servisu by měla uvádět poskytovatele a být podložena doklady pro dané hodinky.",
         "counterfeitCards": [
-          "Ověření prodejce",
-          "Kontrola informací o produktu",
-          "Viditelné referenční číslo",
-          "Nástroje pro hlášení kupujícími",
-          "Sledování podezřelých nabídek",
-          "Posouzení týmem podpory"
+          "Informace o prodejci",
+          "Kontrola údajů v nabídce",
+          "Reference a model",
+          "Dostupné doklady k hodinkám",
+          "Podněty kupujících",
+          "Zákaznická podpora"
         ]
       },
       "moneyBack": {
-        "title": "Celosvětová záruka vrácení peněz do 14 dnů",
-        "intro": "Pokud jsou hodinky vadné, nefungují, neodpovídají popisu, chybí dohodnuté příslušenství nebo se podstatně liší od nabídky, můžete do 14 dnů od doručení kontaktovat podporu Kariv Glamour a požádat o vrácení.",
-        "coveredTitle": "Na co se ochrana může vztahovat",
+        "title": "Vrácení, odstoupení a problémy s hodinkami",
+        "intro": "U způsobilého online spotřebitelského nákupu od podnikatele, včetně Kariv jako prodávajícího, můžete obvykle odstoupit do 14 dnů od doručení bez udání důvodu. Zákonné právo na rozmyšlenou se zpravidla nevztahuje na prodej od soukromé osoby. Práva při vadném, nesprávně popsaném nebo nepravém zboží jsou samostatná.",
+        "coveredTitle": "S čím nás můžete kontaktovat",
         "covered": [
           "Hodinky neodpovídají popisu",
           "Nesprávný model nebo reference",
@@ -742,35 +747,35 @@
           "Podezření na problém s pravostí",
           "Nesprávná zásilka"
         ],
-        "notCoveredTitle": "Na co se ochrana nemusí vztahovat",
+        "notCoveredTitle": "Další důležité okolnosti",
         "notCovered": [
-          "Kupující si nákup rozmyslel po uplynutí lhůty pro vrácení",
-          "Hodinky byly po doručení nošeny, poškozeny, upraveny nebo byla změněna jejich velikost",
-          "Ztráta balení v důsledku nesprávného zacházení kupujícího",
-          "Přímé platby mimo Kariv Glamour",
-          "Individuální dohody nezaznamenané na platformě",
-          "Běžné známky opotřebení jasně uvedené v nabídce",
-          "Charakteristické znaky vintage hodinek již uvedené v popisu"
+          "Vrácení při změně názoru u soukromého prodejce závisí na případných sjednaných podmínkách.",
+          "Po uplynutí zákonné lhůty pro odstoupení mohou nadále existovat jiné nároky.",
+          "Zacházení nad rámec nezbytné kontroly hodinek může snížit jejich hodnotu.",
+          "Uschovejte krabičku, doklady a příslušenství; samotná chybějící vnější obalová krabice neruší zákonné právo na odstoupení.",
+          "Informujte podporu o případných samostatných dohodách s prodejcem.",
+          "Popsané opotřebení je součástí sjednaného stavu; neuvedené vady mohou zakládat nárok na nápravu.",
+          "Zákonná výjimka z odstoupení musí skutečně platit pro daný nákup."
         ],
-        "eligibilityNote": "Možnost vrácení závisí na stavu hodinek, údajích v nabídce a podání žádosti v požadované lhůtě.",
-        "returnsTitle": "Jednoduché vrácení",
+        "eligibilityNote": "14denní lhůta pro odstoupení ani kontrolní lhůta úschovy nezkracují příslušná práva z vad, nesprávného popisu či problémů s pravostí. Postup vysvětlují podmínky vrácení zboží a peněz.",
+        "returnsTitle": "Jak oznámit vrácení",
         "returnSteps": [
-          { "title": "Kontaktujte podporu Kariv", "text": "Do 14 dnů od převzetí hodinek napište našemu týmu podpory. Přiložte číslo objednávky, fotografie a srozumitelný popis problému." },
-          { "title": "Bezpečně odešlete hodinky zpět", "text": "Po schválení vrácení odešlete hodinky plně pojištěnou zásilkou se sledováním v původním balení včetně veškerého obdrženého příslušenství, dokumentů, visaček, článků náramku, krabičky, dokladů a certifikátů." },
-          { "title": "Obdržíte peníze zpět", "text": "Po přijetí a kontrole vrácených hodinek zpracuje Kariv Glamour vrácení peněz podle podmínek ochrany kupujícího a pravidel vrácení." }
+          { "title": "Kontaktujte podporu Kariv", "text": "Odstoupení oznamte prodávajícímu v příslušné lhůtě; důvod uvádět nemusíte. Podpora Kariv vám může pomoci. Problémy s hodinkami hlaste bez zbytečného odkladu s číslem objednávky a dostupnými údaji." },
+          { "title": "Bezpečně odešlete hodinky zpět", "text": "Potvrďte si adresu a dodržte příslušnou lhůtu pro odeslání. Hodinky bezpečně zabalte a vraťte přiložené příslušenství i doklady. Uschovejte potvrzení o odeslání a vyžádejte si vhodné pokyny k pojištěné přepravě." },
+          { "title": "Obdržíte peníze zpět", "text": "Prodávající vrací peníze podle příslušných právních pravidel a podmínek vrácení. Podpora Kariv může pomoci s objednávkou a platbou zpracovanou přes platformu." }
         ],
         "noteLabel": "Poznámka",
-        "note": "Ve většině případů může náklady na zpáteční dopravu nést kupující, pokud důvodem vrácení není chyba prodejce, nesprávný popis nebo jiný chráněný problém."
+        "note": "Při odstoupení z důvodu změny názoru nese kupující zpáteční poštovné jen tehdy, pokud to odpovídá příslušným pravidlům a informacím před nákupem. Náklady na vrácení vadného zboží nese podnikatel, který jej prodal."
       },
       "dealers": {
-        "title": "Přísná pravidla pro prodejce",
-        "intro": "Pro zachování důvěry na tržišti Kariv Glamour musí profesionální prodejci dodržovat přísná pravidla. Před zahájením prodeje mohou být požádáni o údaje k ověření totožnosti, registraci firmy, adresu, daňové údaje a další ověřovací dokumenty.",
+        "title": "Standardy prodejců a schválení účtu",
+        "intro": "Přes Kariv mohou hodinky nabízet soukromí vlastníci i podnikatelé; Kariv prodává také vlastní zásoby. Účty profesionálních prodejců vyžadují schválení administrátorem. Toto schválení je oddělené od fyzické kontroly jednotlivých hodinek a neznamená autorizaci výrobcem.",
         "requirements": [
-          "Platné ověření totožnosti",
+          "Přesné údaje o totožnosti prodejce",
           "Registrace podnikání, je-li relevantní",
           "Adresa firmy",
           "Daňové údaje, jsou-li relevantní",
-          "Ověřené kontaktní údaje",
+          "Aktuální kontaktní údaje",
           "Transparentní nabídky produktů",
           "Přesné hodnocení stavu",
           "Uvedení vyměněných dílů",
@@ -780,7 +785,7 @@
           "Dodržování pravidel vrácení a ochrany kupujícího Kariv Glamour"
         ],
         "reviewsTitle": "Hodnocení prodejců a transparentnost tržiště",
-        "reviewsText": "Zákaznické recenze, historie objednávek, komunikace a výsledky prodejce pomáhají kupujícím lépe poznat, od koho nakupují. Kariv Glamour má zobrazovat hodnocení, ověřené recenze, sídlo prodejce, délku působení, rychlost odpovědi a dokončené transakce, pokud jsou tyto údaje k dispozici."
+        "reviewsText": "Před nákupem si prohlédněte profil prodejce a dostupná hodnocení zákazníků. Recenze ani schválený účet prodejce nejsou certifikátem pravosti nabízených hodinek."
       },
       "shipping": {
         "title": "Pojištěné zásilky",
@@ -790,15 +795,15 @@
           "Povinné sledovací číslo",
           "Bezpečné balení",
           "Podpis při převzetí, je-li dostupný",
-          "Podpora tuzemských i mezinárodních zásilek",
+          "Doručení do zemí EU nabízených v pokladně",
           "Podpora kupujícího při problémech s dopravou",
           "Povinné potvrzení doručení"
         ],
-        "notice": "Kupující by měli zásilku při převzetí prohlédnout a viditelné poškození ihned nahlásit."
+        "notice": "Při převzetí zásilku zkontrolujte a případné poškození hlaste bez zbytečného odkladu, abychom mohli pomoci. Zákonná práva nezanikají jen proto, že jste poškození neoznámili dopravci při doručení."
       },
       "securityTeam": {
-        "title": "Tým kvality a bezpečnosti Kariv",
-        "intro": "Specializovaný tým kvality a bezpečnosti Kariv Glamour podporuje kupující během celého nákupu. Sleduje podezřelou činnost, prověřuje nahlášené nabídky, pomáhá s platbami a doručením a řeší případy, kdy hodinky neodpovídají popisu.",
+        "title": "Zákaznická podpora Kariv",
+        "intro": "Naše podpora vám pomůže s informacemi o prodejci, platbou, doručením a vrácením. Pošlete nám své pochybnosti o popisu či pravosti hodinek, abychom je mohli prověřit s prodejcem. Pomoc podpory není certifikací zajištěnou výrobcem.",
         "responsibilities": [
           "Prověřování podezřelých nabídek",
           "Podpora kupujících před nákupem",
@@ -806,33 +811,33 @@
           "Pomoc s žádostmi o vrácení",
           "Posouzení pochybností o pravosti",
           "Komunikace s prodejci",
-          "Sledování jednání prodejců",
+          "Vyžádat vysvětlení od prodejce",
           "Ochrana důvěry v tržiště"
         ]
       },
       "conditions": {
-        "appliesTitle": "Kdy se ochrana kupujícího uplatní",
+        "appliesTitle": "Ověřte podmínky své objednávky",
         "applies": [
-          "Nákup je dokončen přes pokladnu Kariv Glamour",
-          "Objednávka splňuje podmínky úschovy platby",
-          "Kupující dodrží platební pokyny Kariv Glamour",
-          "Vrácení nebo problém je nahlášen v požadované lhůtě",
-          "Hodinky jsou vráceny ve stejném stavu, v jakém byly převzaty",
-          "Kupující uschová všechny obaly, příslušenství, dokumenty a doklad o doručení",
-          "Kupující spolupracuje s podporou při posuzování případu"
+          "Zjistěte totožnost prodávajícího a zda jde o podnikatele, nebo soukromou osobu.",
+          "Použijte platební pokyny potvrzené Kariv pro vaši objednávku.",
+          "Ověřte, zda je úschova výslovně nabízena; standardní pokladna není úschova.",
+          "Přečtěte si příslušné informace o odstoupení, vrácení a reklamacích.",
+          "Hodinky zkontrolujte s přiměřenou péčí a uschovejte přiložené příslušenství.",
+          "Uschovejte potvrzení objednávky, komunikaci a doklad o platbě.",
+          "Pokud nabídka nebo podmínky nejsou jasné, obraťte se na podporu."
         ],
-        "notApplyTitle": "Kdy se ochrana kupujícího nemusí uplatnit",
-        "reviewLabel": "Přečtěte si pozorně",
+        "notApplyTitle": "Rozsah a omezení",
+        "reviewLabel": "Informace pro konkrétní objednávku",
         "notApply": [
-          "Platba je provedena mimo Kariv Glamour",
-          "Kupující a prodejce uzavřou soukromou dohodu mimo platformu",
-          "Kupující zmešká lhůtu pro vrácení",
-          "Hodinky jsou po doručení nošeny, poškozeny, upraveny, opraveny nebo je změněna jejich velikost",
-          "Kupující ztratí krabičku, doklady, příslušenství, články náramku, záruční kartu, certifikát nebo obal",
-          "Problém byl jasně uveden v nabídce produktu",
-          "Kupující odmítne poskytnout požadované důkazy",
-          "Vrácená zásilka je odeslána bez pojištění nebo sledování",
-          "Zásilka je odeslána na nesprávnou adresu"
+          "Úschova Kariv platí jen tam, kde je výslovně nabídnuta a sjednána.",
+          "Dohody mimo platformu nespadají do platebního zpracování Kariv.",
+          "U soukromých prodejců zpravidla nevzniká zákonné spotřebitelské právo na rozmyšlenou.",
+          "Uplynutí kontrolní lhůty neruší příslušná práva z vad.",
+          "Nadměrné zacházení může vést k zákonnému odečtení snížené hodnoty.",
+          "Schválený prodejce ani zkontrolovaná nabídka neznamenají fyzické ověření pravosti.",
+          "Nevzniká tím spojení s výrobcem ani jeho certifikace.",
+          "Vyžádejte si správnou adresu pro vrácení a vhodné přepravní pokyny.",
+          "Tyto body nevylučují ani neomezují povinná spotřebitelská práva."
         ]
       },
       "checklists": {
@@ -844,8 +849,8 @@
           "Potvrďte přítomnost krabičky a dokladů",
           "Zkontrolujte servisní historii, je-li dostupná",
           "Projděte si záruční podmínky",
-          "Zkontrolujte hodnocení a profil prodejce",
-          "Ověřte cenu dopravy a zemi doručení",
+          "Ověřte identitu prodejce, podnikatelský či soukromý status a dostupná hodnocení",
+          "Potvrďte zemi a podmínky doručení; doprava po EU je zdarma",
           "Přečtěte si podmínky vrácení",
           "Plaťte pouze schváleným postupem přes pokladnu Kariv Glamour"
         ],
@@ -857,25 +862,25 @@
           "Zkontrolujte referenční číslo a dokumenty",
           "Ověřte krabičku, doklady, články náramku, visačky a příslušenství",
           "Opatrně vyzkoušejte základní funkce",
-          "Dokud se nerozhodnete hodinky ponechat, nenoste je, neupravujte jejich velikost, neopravujte je ani neleštěte",
+          "Zacházejte s hodinkami jen v rozsahu nutném ke kontrole; během rozhodování o vrácení je neupravujte",
           "Pokud něco není v pořádku, ihned kontaktujte podporu Kariv"
         ]
       },
       "faq": {
         "title": "Často kladené dotazy",
         "items": [
-          { "q": "Co je ochrana kupujícího Kariv?", "a": "Ochrana kupujícího Kariv pomáhá zákazníkům bezpečně nakupovat luxusní hodinky prostřednictvím Kariv Glamour. Zahrnuje bezpečné zpracování plateb, standardy pravosti, pravidla pro prodejce, pojištěnou dopravu, pomoc podpory a u způsobilých objednávek 14denní lhůtu pro žádost o vrácení." },
-          { "q": "Jak funguje služba úschovy Kariv?", "a": "U způsobilých objednávek je platba kupujícího bezpečně uchována během dopravy a kontroly hodinek. Prodejce obdrží platbu až po splnění podmínek ochrany kupujícího." },
-          { "q": "Kolik času mám na kontrolu hodinek?", "a": "Na kontrolu hodinek a kontaktování podpory Kariv Glamour máte 14 dnů od doručení, pokud jsou hodinky vadné, neodpovídají popisu nebo mají jiný chráněný problém." },
-          { "q": "Jsou všechny hodinky na Kariv Glamour originální?", "a": "Kariv Glamour vyžaduje, aby prodejci nabízeli pouze originální hodinky. Padělky ani repliky nejsou povoleny. Pokud máte pochybnosti o pravosti, kontaktujte podporu v ochranné lhůtě." },
-          { "q": "Co když hodinky neodpovídají popisu?", "a": "Do 14 dnů od doručení kontaktujte podporu Kariv Glamour. Uveďte číslo objednávky, přiložte fotografie a jasně popište problém. Náš tým případ posoudí a pomůže s vrácením nebo jiným řešením." },
+          { "q": "Co je ochrana kupujícího Kariv?", "a": "Tato stránka vysvětluje standardy Kariv pro prodejce a nabídky, zákaznickou podporu a platební i vratné podmínky, které je třeba zkontrolovat před nákupem. Ochrana závisí na prodejci, objednávce a platném právu; nejde o všeobecný příslib úschovy nebo vrácení peněz." },
+          { "q": "Jak funguje služba úschovy Kariv?", "a": "Obvyklý postup je standardní pokladna. Úschova platí pouze tehdy, když je výslovně nabídnuta a potvrzena pro objednávku. Podmínky držení peněz, kontroly, sporů a uvolnění prostředků musí být poskytnuty před platbou." },
+          { "q": "Kolik času mám na kontrolu hodinek?", "a": "Hodinky zkontrolujte bez zbytečného odkladu. U způsobilých spotřebitelských nákupů od podnikatele obvykle platí 14denní lhůta pro odstoupení od doručení. Případná kontrolní lhůta úschovy je uvedena zvlášť a nezkracuje práva z vad nebo problémů s pravostí." },
+          { "q": "Jsou všechny hodinky na Kariv Glamour originální?", "a": "Prodejci musí nabízet pravé hodinky a uvádět známé úpravy či náhradní díly. Označení Verified znamená kontrolu informací, nikoli fyzické ověření pravosti nebo certifikaci výrobcem. Vyžádejte si doklady ke konkrétním hodinkám." },
+          { "q": "Co když hodinky neodpovídají popisu?", "a": "Kontaktujte prodejce a podporu Kariv bez zbytečného odkladu s číslem objednávky a dostupnými důkazy. Náprava závisí na problému a platném právu; práva z vad nejsou automaticky omezena na 14 dnů." },
           { "q": "Jsou zásilky pojištěny?", "a": "Příslušní prodejci musí hodinky odesílat s pojištěním a sledováním. To chrání kupující při vzácných případech ztráty, krádeže nebo nedoručení." },
-          { "q": "Kdo hradí zpáteční dopravu?", "a": "Ve většině případů může zpáteční dopravu hradit kupující, pokud důvodem není chyba prodejce, nesprávný popis nebo jiný chráněný problém. Pokyny k vrácení vám poskytne podpora." },
+          { "q": "Kdo hradí zpáteční dopravu?", "a": "Při odstoupení kvůli změně názoru může kupující nést náklady na vrácení, pokud byl řádně informován před nákupem. Za náklady na vrácení vadného zboží odpovídá podnikatel, který je prodal. Viz podmínky vrácení zboží a peněz." },
           { "q": "Co mám po převzetí hodinek uschovat?", "a": "Uschovejte originální obal, přepravní materiály, krabičku, doklady, záruční kartu, certifikát, články náramku, visačky, servisní dokumenty a veškeré příslušenství, dokud si nejste jisti, že si hodinky ponecháte." },
-          { "q": "Platí ochrana kupujícího, pokud zaplatím přímo prodejci?", "a": "Ne. Ochrana kupujícího platí pouze pro způsobilé transakce dokončené schváleným platebním postupem Kariv Glamour. Přímé platby mimo platformu nemusí být chráněny." },
-          { "q": "Mohu hodinky vrátit, pokud si nákup rozmyslím?", "a": "Možnost vrácení závisí na produktu, podmínkách prodejce, právním řádu a pravidlech Kariv Glamour. Záruka vrácení peněz do 14 dnů je určena především k ochraně kupujících při vadném zboží, nesouladu s popisem nebo jiném chráněném problému." },
+          { "q": "Zahrnuje standardní pokladna úschovu?", "a": "Ne. Řiďte se platebními podmínkami potvrzenými pro objednávku; úschova musí být výslovně zahrnuta. Platba mimo platformu nespadá do platebního zpracování Kariv, ale platební metoda neodnímá příslušná zákonná práva." },
+          { "q": "Mohu hodinky vrátit, pokud si nákup rozmyslím?", "a": "U způsobilých online spotřebitelských nákupů od podnikatele obvykle platí 14denní právo na odstoupení bez důvodu, s výhradou zákonných výjimek. U nákupu od soukromé osoby toto právo zpravidla neplatí, pokud nebylo sjednáno." },
           { "q": "Co když zásilka dorazí poškozená?", "a": "Poškození ihned zdokumentujte fotografiemi a kontaktujte podporu Kariv Glamour. Uschovejte veškeré balení a nevyhazujte přepravní materiály, dokud případ nebude posouzen." },
-          { "q": "Co když mám podezření na padělek?", "a": "Neprodleně, ještě v ochranné lhůtě, kontaktujte podporu Kariv Glamour. Poskytněte fotografie, dokumenty a popis svých pochybností. Kariv Glamour nepovoluje nabídky padělků ani replik." }
+          { "q": "Co když mám podezření na padělek?", "a": "Kontaktujte prodejce a podporu Kariv bez zbytečného odkladu s číslem objednávky a fotografiemi či doklady. Hodinky a dokumentaci uchovejte pro posouzení. Lhůta úschovy nebo vrácení nezkracuje příslušné zákonné nároky při problému s pravostí." }
         ]
       },
       "support": {
@@ -887,7 +892,7 @@
         "shippingCta": "Podmínky dopravy",
         "resourcesTitle": "Užitečné informace pro kupující",
         "resources": [
-          "Ověřování pravosti",
+          "Kontrola nabídky a pravost",
           "Hodnocení stavu",
           "Vrácení zboží a peněz",
           "Podmínky dopravy",

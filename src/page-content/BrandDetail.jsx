@@ -9,29 +9,44 @@ import TrustBar from '@/components/shared/TrustBar';
 import { motion } from 'framer-motion';
 
 const COPY = {
+  cs: {
+    home: 'Úvod',
+    brands: 'Značky',
+    manufacture: 'O značce',
+    collections: 'Kolekce',
+    available: 'Dostupné hodinky',
+    watchesAvailable: (count) => `Dostupné hodinky: ${count}`,
+    viewAll: 'Zobrazit vše v obchodě →',
+    empty: (brandName) => `Hodinky ${brandName} momentálně nejsou v nabídce. Podívejte se prosím později.`,
+    faq: 'Časté dotazy',
+    independent: (brandName) => `Nezávislé tržiště · Bez propojení s výrobcem ${brandName}`,
+    fallback: (brandName) => `Porovnejte nabídky hodinek ${brandName} na nezávislém tržišti Kariv Glamour. Prohlédněte si stav, údaje o prodejci a případné doložené ověření pravosti konkrétních hodinek. Kontrola nabídky není fyzickým ověřením pravosti.`,
+  },
   de: {
     home: 'Start',
     brands: 'Marken',
-    manufacture: 'Die Manufaktur',
+    manufacture: 'Über die Marke',
     collections: 'Kollektionen',
     available: 'Verfügbare Zeitmesser',
     watchesAvailable: (count) => `${count} Uhr${count !== 1 ? 'en' : ''} verfügbar`,
     viewAll: 'Alle im Shop ansehen →',
     empty: (brandName) => `Derzeit sind keine ${brandName} Uhren verfügbar. Bitte kommen Sie später zurück.`,
     faq: 'Häufig gestellte Fragen',
-    fallback: (brandName) => `Entdecken Sie unsere kuratierte Auswahl an authentischen ${brandName} Zeitmessern. Jede Uhr wurde von unserem Team horologischer Experten inspiziert.`,
+    independent: (brandName) => `Unabhängiger Marktplatz · Nicht mit ${brandName} verbunden`,
+    fallback: (brandName) => `Vergleichen Sie Angebote für ${brandName} Uhren auf dem unabhängigen Marktplatz Kariv Glamour. Prüfen Sie Zustand, Verkäuferangaben und eine gegebenenfalls dokumentierte Echtheitsprüfung der jeweiligen Uhr. Eine Angebotsprüfung ist keine physische Echtheitsprüfung.`,
   },
   en: {
     home: 'Home',
     brands: 'Brands',
-    manufacture: 'The Manufacture',
+    manufacture: 'About the brand',
     collections: 'Collections',
     available: 'Available Timepieces',
     watchesAvailable: (count) => `${count} watch${count !== 1 ? 'es' : ''} available`,
     viewAll: 'View all in the shop →',
     empty: (brandName) => `No ${brandName} watches are currently available. Please check back soon.`,
     faq: 'Frequently Asked Questions',
-    fallback: (brandName) => `Discover our curated selection of authentic ${brandName} timepieces. Each watch is presented with transparent details for a confident purchase.`,
+    independent: (brandName) => `Independent marketplace · Not affiliated with ${brandName}`,
+    fallback: (brandName) => `Compare ${brandName} watch listings on Kariv Glamour's independent marketplace. Review the condition, seller details and any documented authentication for the individual watch. Listing review is not physical authentication.`,
   },
 };
 
@@ -47,7 +62,7 @@ export default function BrandDetail({
   const [collections, setCollections] = useState(initialCollections);
   const [loading, setLoading] = useState(!initialBrand && initialProducts.length === 0 && initialCollections.length === 0);
   const { localize, localizeArray, locale } = useLocalizedField();
-  const copy = COPY[locale] || COPY.de;
+  const copy = COPY[locale] || COPY.en;
 
   const staticBrand = BRAND_DATA.find((b) => b.slug === slug);
 
@@ -106,6 +121,9 @@ export default function BrandDetail({
             
             {brandName}
           </motion.h1>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground dark:text-white/75">
+            {copy.independent(brandName)}
+          </p>
         </div>
       </section>
 
