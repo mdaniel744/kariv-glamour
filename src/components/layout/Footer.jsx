@@ -5,6 +5,12 @@ import { useTranslation } from 'react-i18next';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { COMPANY_DETAILS } from '@/lib/companyDetails';
 import { useLanguage } from '@/lib/languageContext';
+import { Facebook, Instagram } from 'lucide-react';
+
+const socialLinks = [
+  { label: 'Instagram', href: 'https://www.instagram.com/karivglamour/', icon: Instagram },
+  { label: 'Facebook', href: 'https://www.facebook.com/people/Kariv-Glamour/100063754812707/', icon: Facebook },
+];
 
 export default function Footer() {
   const { t } = useTranslation('navigation');
@@ -51,6 +57,19 @@ export default function Footer() {
                 {COMPANY_DETAILS.email}
               </a>
             </address>
+            <nav aria-label={t('footer.followUs')} className="mt-7">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
+                {t('footer.followUs')}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {socialLinks.map(({ label, href, icon: Icon }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${label} — Kariv Glamour`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#cbdad0] px-4 text-sm font-medium text-[#213d34] transition-colors hover:border-primary hover:text-primary dark:border-white/25 dark:text-white dark:hover:border-[#C5A367] dark:hover:text-[#C5A367]">
+                    <Icon size={18} aria-hidden="true" />
+                    <span>{label}</span>
+                  </a>
+                ))}
+              </div>
+            </nav>
             <div className="mt-8">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
                 {t('footer.appearance')}
@@ -81,6 +100,19 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[#dce5df] dark:border-white/10">
+        <div className="max-w-7xl mx-auto px-6 pt-6">
+          <p className="max-w-5xl text-sm leading-relaxed text-[#496057] dark:text-white/70 font-body">
+            <span className="font-semibold text-[#213d34] dark:text-white">{t('footer.disclaimerLabel')}</span>{' '}
+            {t('footer.independenceDisclaimer')}{' '}
+            <LocalizedLink to="/legal/brand-disclaimer" className="text-primary underline underline-offset-4 dark:text-[#C5A367]">
+              {t('footer.brandDisclaimer')}
+            </LocalizedLink>
+            {' '}{t('footer.authenticityStatement')}{' '}
+            <LocalizedLink to="/authentication" className="text-primary underline underline-offset-4 dark:text-[#C5A367]">
+              {t('footer.authenticityStandards')}
+            </LocalizedLink>
+          </p>
+        </div>
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[11px] text-[#60766c] dark:text-white/60 font-body">{t('common:copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">

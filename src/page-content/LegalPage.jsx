@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { ChevronRight } from 'lucide-react';
 import CompanyDetails from '@/components/legal/CompanyDetails';
 import { withCzechLegalFallback } from '@/lib/legalPageFallbacks';
+import { useTranslation } from 'react-i18next';
 
 function MarkdownLink({ node: _node, href = '', children, ...props }) {
   return (
@@ -34,6 +35,7 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
   const [page, setPage] = useState(initialPage);
   const [loading, setLoading] = useState(!initialPage);
   const { localize, locale } = useLocalizedField();
+  const { t } = useTranslation();
   const copy = locale === 'cs'
     ? { home: 'Úvod', notFound: 'Stránka nenalezena', missing: 'Tato stránka zatím nebyla vytvořena.', back: 'Zpět na úvodní stránku' }
     : locale === 'de'
@@ -95,6 +97,17 @@ export default function LegalPage({ slug: slugProp, initialPage = null }) {
 
       <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-10">{localize(page, 'title')}</h1>
       <CompanyDetails locale={locale} compact={slug !== 'impressum'} />
+      {slug === 'authenticity-disclaimer' && (
+        <section className="mb-10 rounded-2xl border border-border bg-card p-6 sm:p-8" aria-labelledby="seller-authenticity-checks">
+          <h2 id="seller-authenticity-checks" className="mb-4 font-display text-2xl font-semibold text-foreground">
+            {t('pages.authentication.sellerChecksTitle')}
+          </h2>
+          <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
+            <p>{t('pages.authentication.s2Desc')}</p>
+            <p>{t('pages.authentication.s3Desc')}</p>
+          </div>
+        </section>
+      )}
       <div className="legal-content">
         <ReactMarkdown components={markdownComponents}>{localize(page, 'content')}</ReactMarkdown>
       </div>

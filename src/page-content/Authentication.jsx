@@ -5,6 +5,7 @@ import LocalizedLink from '@/components/LocalizedLink';
 import SEO from '@/components/SEO';
 import { motion } from 'framer-motion';
 import TrustBar from '@/components/shared/TrustBar';
+import { COMPANY_DETAILS } from '@/lib/companyDetails';
 
 export default function Authentication() {
   const { t } = useTranslation();
@@ -75,12 +76,44 @@ export default function Authentication() {
         </div>
       </section>
 
+      <section className="border-t border-border py-16">
+        <div className="max-w-4xl mx-auto px-6 grid gap-10 md:grid-cols-2">
+          <div>
+            <h2 className="mb-4 font-display text-2xl font-semibold text-foreground">{t('pages.authentication.independenceTitle')}</h2>
+            <p className="text-base leading-relaxed text-muted-foreground">{t('pages.authentication.independenceDesc')}</p>
+          </div>
+          <div>
+            <h2 className="mb-4 font-display text-2xl font-semibold text-foreground">{t('pages.authentication.purchaseTitle')}</h2>
+            <p className="text-base leading-relaxed text-muted-foreground">{t('pages.authentication.purchaseDesc')}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-secondary py-14">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="mb-4 font-display text-2xl font-semibold text-foreground">{t('pages.authentication.operatorTitle')}</h2>
+          <p className="text-base leading-relaxed text-muted-foreground">
+            {t('pages.authentication.operatorIntro')}{' '}
+            <strong className="font-semibold text-foreground">{COMPANY_DETAILS.legalName}</strong>
+          </p>
+          <p className="mt-3 text-base text-muted-foreground">{COMPANY_DETAILS.registeredAddress}</p>
+          <p className="mt-2 text-base text-muted-foreground">
+            <a href={`mailto:${COMPANY_DETAILS.email}`} className="text-primary underline underline-offset-4">{COMPANY_DETAILS.email}</a>
+          </p>
+          <LocalizedLink to="/legal/impressum" className="mt-4 inline-block text-base text-primary underline underline-offset-4">
+            {t('pages.authentication.companyDetailsLink')}
+          </LocalizedLink>
+        </div>
+      </section>
+
       <nav className="max-w-4xl mx-auto px-6 py-12" aria-label={t('pages.authentication.resourcesTitle')}>
         <h2 className="text-xl font-display font-semibold mb-5">{t('pages.authentication.resourcesTitle')}</h2>
         <div className="flex flex-wrap gap-x-6 gap-y-4 text-base">
           <LocalizedLink className="text-primary underline underline-offset-4" to="/legal/authenticity-disclaimer">{t('pages.authentication.authenticityLink')}</LocalizedLink>
           <LocalizedLink className="text-primary underline underline-offset-4" to="/legal/brand-disclaimer">{t('pages.authentication.brandLink')}</LocalizedLink>
           <LocalizedLink className="text-primary underline underline-offset-4" to="/customer-service">{t('pages.authentication.contactLink')}</LocalizedLink>
+          <LocalizedLink className="text-primary underline underline-offset-4" to="/legal/returns-refund-policy">{t('pages.authentication.returnsLink')}</LocalizedLink>
+          <LocalizedLink className="text-primary underline underline-offset-4" to="/legal/privacy-policy">{t('pages.authentication.privacyLink')}</LocalizedLink>
         </div>
       </nav>
 

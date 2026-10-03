@@ -223,7 +223,7 @@ Cookies můžete také spravovat nebo smazat v prohlížeči. Blokování nezbyt
 Informace o osobních údajích najdete v našich [Zásadách ochrany osobních údajů](/legal/privacy-policy). Dotazy zasílejte na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}).`, '1. října 2026'),
   'authenticity-disclaimer': page('Prohlášení o pravosti', 'Co znamená kontrola nabídky, jak ověřit dokumentaci hodinek a jak oznámit pochybnost o pravosti.', `## 1. Pravé hodinky a přesné nabídky
 
-Kariv Glamour je nezávislé tržiště hodinek. Prodáváme hodinky z vlastních zásob a zprostředkováváme nabídky soukromých vlastníků a nezávislých podnikatelů. Každý prodejce musí nabízet pravé hodinky, přesně je popsat a být schopen své údaje doložit. Padělané hodinky a součásti s padělanými ochrannými známkami nejsou povoleny. Kariv Glamour není propojeno s výrobci hodinek na tomto webu, není jimi schváleno, podporováno ani sponzorováno a není jejich autorizovaným prodejcem.
+Web 24kariv.com provozuje Kariv Glamour s.r.o. jako nezávislé tržiště hodinek. Prodáváme hodinky z vlastních zásob a zprostředkováváme nabídky soukromých vlastníků a nezávislých podnikatelů. Každý prodejce musí nabízet pravé hodinky, přesně je popsat a být schopen své údaje doložit. Padělané hodinky a součásti s padělanými ochrannými známkami nejsou povoleny. Kariv Glamour není propojeno s výrobci hodinek na tomto webu, není jimi schváleno, podporováno ani sponzorováno a není jejich autorizovaným prodejcem.
 
 ## 2. Co znamená kontrola nabídky
 

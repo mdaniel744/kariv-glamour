@@ -543,7 +543,7 @@ const AUTHENTICITY_POLICY = createLegalPage({
 
 ## 1. Authentic watches and accurate listings
 
-Kariv Glamour is an independent watch marketplace. We sell watches from our own inventory and facilitate listings from private owners and independent businesses. Every seller must offer authentic watches, describe them accurately and be able to support their claims. Counterfeit watches and components bearing counterfeit trademarks are not permitted. Kariv Glamour has no affiliation, endorsement, sponsorship or authorised-dealer relationship with the watch manufacturers shown on this website.
+24kariv.com is operated by Kariv Glamour s.r.o., an independent watch marketplace. We sell watches from our own inventory and facilitate listings from private owners and independent businesses. Every seller must offer authentic watches, describe them accurately and be able to support their claims. Counterfeit watches and components bearing counterfeit trademarks are not permitted. Kariv Glamour has no affiliation, endorsement, sponsorship or authorised-dealer relationship with the watch manufacturers shown on this website.
 
 ## 2. What listing review means
 
@@ -572,7 +572,7 @@ Keep supporting documents and communications. The [Returns & Refunds Policy](/le
 
 ## 1. Echte Uhren und zutreffende Angebote
 
-Kariv Glamour ist ein unabhängiger Uhrenmarktplatz. Wir verkaufen Uhren aus eigenem Bestand und ermöglichen Angebote von privaten Eigentümern und unabhängigen Unternehmen. Alle Verkäufer müssen echte Uhren anbieten, diese zutreffend beschreiben und ihre Angaben belegen können. Gefälschte Uhren und Komponenten mit gefälschten Markenkennzeichen sind nicht zugelassen. Kariv Glamour ist mit den gezeigten Uhrenherstellern weder verbunden noch von ihnen unterstützt oder gesponsert und ist kein autorisierter Händler dieser Hersteller.
+24kariv.com wird von Kariv Glamour s.r.o. als unabhängigem Uhrenmarktplatz betrieben. Wir verkaufen Uhren aus eigenem Bestand und ermöglichen Angebote von privaten Eigentümern und unabhängigen Unternehmen. Alle Verkäufer müssen echte Uhren anbieten, diese zutreffend beschreiben und ihre Angaben belegen können. Gefälschte Uhren und Komponenten mit gefälschten Markenkennzeichen sind nicht zugelassen. Kariv Glamour ist mit den gezeigten Uhrenherstellern weder verbunden noch von ihnen unterstützt oder gesponsert und ist kein autorisierter Händler dieser Hersteller.
 
 ## 2. Was eine Angebotsprüfung bedeutet
 
