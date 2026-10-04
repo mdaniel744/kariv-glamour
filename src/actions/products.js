@@ -296,6 +296,10 @@ export async function createDealerListing(payload) {
   row.dealer_id = dealer.id;
   row.status = 'draft'; // dealer-created listings start as draft pending review
   row.is_featured = false;
+  // Required by the platform's kariv_product_guard trigger whenever a product
+  // is inserted with a dealer owner — it audits every ownership assignment.
+  row.ownership_change_reason = 'Dealer listing created';
+  row.ownership_changed_by = dealer.id;
   preserveDealerAuthentication(row, 'Pending'); // only the admin can verify a watch
   const { data, error } = await supabaseAdmin.from('products').insert(row).select().single();
   if (error) throw new Error(error.message);
