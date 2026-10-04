@@ -27,21 +27,24 @@ NEXT_PUBLIC_VAPID_PUBLIC_KEY=...
 OPENAI_API_KEY=sk-...
 OPENAI_TRANSLATION_MODEL=gpt-5-mini
 
-# Contact form email delivery (server-side; verify 24kariv.com in Resend first)
-RESEND_API_KEY=re_...
+# Contact form email delivery (server-side; sends via SMTP through info@24kariv.com)
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_USER=info@24kariv.com
+SMTP_PASSWORD=...
 # Optional override; defaults to Kariv Glamour <info@24kariv.com>
 CONTACT_FROM_EMAIL="Kariv Glamour <info@24kariv.com>"
 ```
 
 The public contact form submits to `/api/contact` and sends plain-text messages to
-`info@24kariv.com`. Configure `RESEND_API_KEY` on the Kariv server (and in
-`.env.local` for local delivery), verify `24kariv.com` as a sending domain in
-Resend, and restart the app with updated environment variables. The sender
-defaults to `Kariv Glamour <info@24kariv.com>`; use `CONTACT_FROM_EMAIL` only
-if your verified sender differs. If delivery is not configured or
-the provider rejects a message, the form shows an error rather than claiming
-it was sent; the direct email link remains available.
-On the VPS, keep the API key outside Git and restart with
+`info@24kariv.com` over SMTP (via `nodemailer`), using that same mailbox's own
+credentials to authenticate — no third-party email API involved. Configure
+`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASSWORD` on the Kariv server (and in
+`.env.local` for local delivery) and restart the app with updated environment
+variables. If delivery is not configured or the mail server rejects a message,
+the form shows an error rather than claiming it was sent; the direct email
+link remains available.
+On the VPS, keep the password outside Git and restart with
 `pm2 restart kariv --update-env` after setting it. Confirm one real form
 submission reaches the support inbox before treating delivery as live.
 
