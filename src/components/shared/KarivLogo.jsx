@@ -13,7 +13,7 @@ export default function KarivLogo({ className = '', sizes = '80px', loading = 'l
         width={256}
         height={256}
         sizes={sizes}
-        unoptimized
+        quality={76}
         loading={loading}
         className="block h-full w-full object-contain dark:hidden"
         draggable={false}
@@ -24,7 +24,7 @@ export default function KarivLogo({ className = '', sizes = '80px', loading = 'l
         width={256}
         height={256}
         sizes={sizes}
-        unoptimized
+        quality={76}
         loading={loading}
         className="hidden h-full w-full object-contain dark:block"
         draggable={false}

@@ -30,8 +30,7 @@ export default function PopularModels() {
                   alt={`${item.brand} ${item.model}`}
                   fill
                   sizes="(max-width: 639px) calc(50vw - 1.5rem), (max-width: 1023px) calc(50vw - 2rem), 280px"
-                  quality={82}
-                  unoptimized
+                  quality={76}
                   className="scale-[1.12] object-contain transition-transform duration-700 group-hover:scale-[1.18]"
                 />
                 <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center border border-border bg-background/75 text-muted-foreground opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 group-hover:text-primary">

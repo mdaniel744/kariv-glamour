@@ -19,6 +19,7 @@ export default function ProductCard({ product, enableGallery = true }) {
   const gestureRef = useRef({ startX: 0, moved: false });
   const suppressClickRef = useRef(false);
   const [activeImage, setActiveImage] = useState(0);
+  const [galleryActivated, setGalleryActivated] = useState(false);
   const title = localize(product, 'productTitle');
   const pricing = getPricing(product);
   const productPath = `/product/${productSlug(product)}`;
@@ -37,11 +38,13 @@ export default function ProductCard({ product, enableGallery = true }) {
 
   useEffect(() => {
     setActiveImage(0);
+    setGalleryActivated(false);
     if (galleryRef.current) galleryRef.current.scrollLeft = 0;
   }, [product.id]);
 
   const showImage = (nextIndex) => {
     const index = (nextIndex + images.length) % images.length;
+    setGalleryActivated(true);
     setActiveImage(index);
     const gallery = galleryRef.current;
     if (gallery) {
@@ -53,10 +56,12 @@ export default function ProductCard({ product, enableGallery = true }) {
     const gallery = galleryRef.current;
     if (!gallery || !gallery.clientWidth) return;
     const nextIndex = Math.round(gallery.scrollLeft / gallery.clientWidth);
+    if (nextIndex !== activeImage) setGalleryActivated(true);
     setActiveImage(Math.max(0, Math.min(nextIndex, images.length - 1)));
   };
 
   const handlePointerDown = (event) => {
+    setGalleryActivated(true);
     gestureRef.current = { startX: event.clientX, moved: false };
   };
 
@@ -95,6 +100,8 @@ export default function ProductCard({ product, enableGallery = true }) {
         {images.length > 0 ? (
           <div
             ref={galleryRef}
+            onPointerEnter={() => setGalleryActivated(true)}
+            onWheel={() => setGalleryActivated(true)}
             onScroll={handleGalleryScroll}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
@@ -111,15 +118,17 @@ export default function ProductCard({ product, enableGallery = true }) {
                 aria-label={`${title}, ${t('components.productCard.viewDetails')}, ${index + 1} / ${images.length}`}
                 className="relative block h-full w-full flex-none snap-center"
               >
-                <MediaImage
-                  src={image}
-                  alt={images.length > 1 ? `${title} — ${index + 1}` : title}
-                  fill
-                  sizes="(max-width: 639px) calc(50vw - 1.5rem), (max-width: 1023px) calc(33vw - 2rem), (max-width: 1439px) calc(25vw - 2.25rem), 280px"
-                  quality={82}
-                  draggable={false}
-                  className="select-none object-cover transition-transform duration-700 group-hover:scale-[1.025]"
-                />
+                {(index === activeImage || (galleryActivated && Math.abs(index - activeImage) <= 1)) && (
+                  <MediaImage
+                    src={image}
+                    alt={images.length > 1 ? `${title} — ${index + 1}` : title}
+                    fill
+                    sizes="(max-width: 639px) calc(50vw - 1.5rem), (max-width: 1023px) calc(33vw - 2rem), (max-width: 1439px) calc(25vw - 2.25rem), 280px"
+                    quality={76}
+                    draggable={false}
+                    className="select-none object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                  />
+                )}
               </LocalizedLink>
             ))}
           </div>

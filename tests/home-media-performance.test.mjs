@@ -28,3 +28,22 @@ test('root language redirect is resolved before authentication middleware', asyn
     { source: '/', destination: '/de', permanent: true },
   ]);
 });
+
+test('home artwork uses responsive images and prioritizes the hero watch', () => {
+  const hero = readFileSync(new URL('../src/components/home/HeroSection.jsx', import.meta.url), 'utf8');
+  const categories = readFileSync(new URL('../src/components/home/CategoryGrid.jsx', import.meta.url), 'utf8');
+  const models = readFileSync(new URL('../src/components/home/PopularModels.jsx', import.meta.url), 'utf8');
+  const logo = readFileSync(new URL('../src/components/shared/KarivLogo.jsx', import.meta.url), 'utf8');
+
+  assert.match(hero, /rolex-submariner\.webp[^\n]*priority fetchPriority="high"/);
+  for (const component of [hero, categories, models, logo]) {
+    assert.doesNotMatch(component, /\bunoptimized\b/);
+  }
+});
+
+test('product cards render only the first gallery image before interaction', () => {
+  const card = readFileSync(new URL('../src/components/shared/ProductCard.jsx', import.meta.url), 'utf8');
+  assert.match(card, /const \[galleryActivated, setGalleryActivated\] = useState\(false\)/);
+  assert.match(card, /index === activeImage \|\| \(galleryActivated && Math\.abs\(index - activeImage\) <= 1\)/);
+  assert.match(card, /onPointerDown=\{handlePointerDown\}/);
+});

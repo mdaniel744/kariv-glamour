@@ -29,8 +29,7 @@ export default function CategoryGrid() {
                 alt={categoryTitle(category)}
                 fill
                 sizes="(max-width: 639px) calc(50vw - 1.5rem), (max-width: 1023px) calc(25vw - 1.5rem), 280px"
-                quality={82}
-                unoptimized={category.image.startsWith('/media/home/')}
+                quality={76}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
