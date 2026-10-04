@@ -26,8 +26,8 @@ test('Kariv branding switches with the root theme and keeps square artwork uncro
   const html = renderToStaticMarkup(React.createElement(module.exports.default, {
     className: 'h-14 w-14 md:h-20 md:w-20', sizes: '(min-width: 768px) 80px, 56px', loading: 'eager',
   }));
-  assert.match(html, /kariv-emblem-light\.png[^>]+class="block h-full w-full object-contain dark:hidden"/);
-  assert.match(html, /kariv-emblem-dark\.png[^>]+class="hidden h-full w-full object-contain dark:block"/);
+  assert.match(html, /kariv-emblem-light\.webp[^>]+class="block h-full w-full object-contain dark:hidden"/);
+  assert.match(html, /kariv-emblem-dark\.webp[^>]+class="hidden h-full w-full object-contain dark:block"/);
   assert.doesNotMatch(html, /object-cover|scale-/);
   assert.equal((html.match(/alt="Kariv Glamour"/g) || []).length, 2);
   assert.equal((html.match(/loading="eager"/g) || []).length, 2);
@@ -44,6 +44,18 @@ test('both supplied logo assets retain their square dimensions and transparency'
   }
 });
 
+test('optimized logo variants stay transparent and small enough for navigation', async () => {
+  for (const variant of ['light', 'dark']) {
+    const bytes = readFileSync(new URL(`../public/logos/kariv-emblem-${variant}.webp`, import.meta.url));
+    const metadata = await sharp(bytes).metadata();
+    assert.equal(metadata.format, 'webp');
+    assert.equal(metadata.width, 256);
+    assert.equal(metadata.height, 256);
+    assert.equal(metadata.hasAlpha, true);
+    assert.ok(bytes.length < 40_000);
+  }
+});
+
 test('site branding surfaces share the new logo without changing fixed navbar heights', () => {
   for (const path of [
     'src/components/layout/Navbar.jsx', 'src/components/layout/Footer.jsx',
@@ -57,5 +69,5 @@ test('site branding surfaces share the new logo without changing fixed navbar he
   }
   assert.match(read('src/components/layout/Navbar.jsx'), /h-14 md:h-20 gap-2/);
   assert.match(read('src/components/layout/Navbar.jsx'), /top-\[102px\]/);
-  assert.match(read('public/sw.js'), /icon: '\/logos\/kariv-emblem-light\.png'/);
+  assert.match(read('public/sw.js'), /icon: '\/logos\/kariv-emblem-light-icon\.png'/);
 });

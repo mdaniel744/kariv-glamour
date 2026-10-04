@@ -2,6 +2,11 @@
 const nextConfig = {
   reactStrictMode: false,
   serverExternalPackages: ['sharp'],
+  // Resolve the language entry point before Clerk middleware runs. This keeps
+  // a first visit to / from entering the auth handshake before its /de redirect.
+  async redirects() {
+    return [{ source: '/', destination: '/de', permanent: true }];
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [320, 360, 390, 430, 640, 768, 1024, 1280, 1440, 1920],

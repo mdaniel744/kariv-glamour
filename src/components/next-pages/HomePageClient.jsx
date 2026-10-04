@@ -11,13 +11,13 @@ import EditorialSection from '@/components/home/EditorialSection';
 import EditorialHero from '@/components/home/EditorialHero';
 import TrustBar from '@/components/shared/TrustBar';
 
-export default function HomePageClient({ featured, newArrivals, certifiedPreOwned }) {
+export default function HomePageClient({ featured, newArrivals, certifiedPreOwned, brands }) {
   const { t } = useTranslation();
 
   return (
     <div className="-mt-16 md:-mt-28">
       <HeroSection />
-      <BrandMarquee />
+      <BrandMarquee initialBrands={brands} />
       <CategoryGrid />
       <PopularModels />
       <FeaturedProducts

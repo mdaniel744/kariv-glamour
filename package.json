@@ -15,6 +15,7 @@
     "media:audit": "node scripts/audit-media.mjs",
     "media:check": "node scripts/check-media-budget.mjs",
     "media:optimize": "node scripts/optimize-static-media.mjs",
+    "media:optimize:home": "node scripts/optimize-home-media.mjs",
     "preview": "next start"
   },
   "dependencies": {

@@ -12,7 +12,7 @@ export const HOME_CATEGORY_LINKS = [
   {
     key: 'certified',
     query: { isCertifiedPreOwned: true },
-    image: '/brand-assets/rolex/collections/rolex-datejust.png',
+    image: '/media/home/rolex-datejust.webp',
   },
   {
     key: 'vintage',
@@ -22,14 +22,14 @@ export const HOME_CATEGORY_LINKS = [
   {
     key: 'automatic',
     query: { movementType: 'Automatic' },
-    image: '/brand-assets/omega/collections/omega-speedmaster-collection.png',
+    image: '/media/home/omega-speedmaster.webp',
   },
   {
     key: 'gold',
     query: {
       caseMaterial: ['Yellow Gold', 'Rose Gold', 'White Gold', 'Steel and Gold', 'Steel and Rose Gold'],
     },
-    image: '/brand-assets/rolex/collections/rolex-day-date.png',
+    image: '/media/home/rolex-day-date.webp',
   },
   {
     key: 'newArrivals',
@@ -39,19 +39,19 @@ export const HOME_CATEGORY_LINKS = [
   {
     key: 'underTen',
     query: { priceMax: 10000 },
-    image: '/brand-assets/iwc-schaffhausen/page/iwc-schaffhausen-portugieser-guide.jpg',
+    image: '/media/home/iwc-portugieser.webp',
   },
 ];
 
 export const HOME_MODEL_LINKS = [
-  { brand: 'Rolex', model: 'Datejust', image: '/brand-assets/rolex/collections/rolex-datejust.png' },
-  { brand: 'Rolex', model: 'Submariner', image: '/brand-assets/rolex/collections/rolex-submariner.png' },
-  { brand: 'Rolex', model: 'Cosmograph Daytona', image: '/brand-assets/rolex/collections/rolex-cosmograph-daytona.png' },
-  { brand: 'Omega', model: 'Speedmaster', image: '/brand-assets/omega/collections/omega-speedmaster-collection.png' },
-  { brand: 'Audemars Piguet', model: 'Royal Oak', image: '/brand-assets/audemars-piguet/collections/audemars-piguet-royal-oak-collection.png' },
-  { brand: 'Patek Philippe', model: 'Nautilus', image: '/brand-assets/patek-philippe/collections/patek-philippe-nautilus-collection.png' },
-  { brand: 'Cartier', model: 'Santos de Cartier', image: '/brand-assets/cartier/collections/cartier-santos-de-cartier.png' },
-  { brand: 'Tudor', model: 'Black Bay', image: '/brand-assets/tudor/collections/tudor-black-bay-collection.png' },
+  { brand: 'Rolex', model: 'Datejust', image: '/media/home/rolex-datejust.webp' },
+  { brand: 'Rolex', model: 'Submariner', image: '/media/home/rolex-submariner.webp' },
+  { brand: 'Rolex', model: 'Cosmograph Daytona', image: '/media/home/rolex-daytona.webp' },
+  { brand: 'Omega', model: 'Speedmaster', image: '/media/home/omega-speedmaster.webp' },
+  { brand: 'Audemars Piguet', model: 'Royal Oak', image: '/media/home/ap-royal-oak.webp' },
+  { brand: 'Patek Philippe', model: 'Nautilus', image: '/media/home/patek-nautilus.webp' },
+  { brand: 'Cartier', model: 'Santos de Cartier', image: '/media/home/cartier-santos.webp' },
+  { brand: 'Tudor', model: 'Black Bay', image: '/media/home/tudor-black-bay.webp' },
 ];
 
 export function buildHomeShopHref(query) {

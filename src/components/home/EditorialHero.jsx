@@ -1,6 +1,5 @@
 import React from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import MediaImage from '@/components/shared/MediaImage';
@@ -13,12 +12,7 @@ export default function EditorialHero() {
   return (
     <section className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="grid md:grid-cols-2 border border-border overflow-hidden">
+        <div className="grid md:grid-cols-2 border border-border overflow-hidden">
           
           {/* Image */}
           <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[420px] overflow-hidden">
@@ -48,7 +42,7 @@ export default function EditorialHero() {
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </LocalizedLink>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

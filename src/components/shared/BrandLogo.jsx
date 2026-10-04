@@ -15,7 +15,7 @@ import MediaImage from '@/components/shared/MediaImage';
  *
  * Falls back to the light variant if a dark variant is not yet uploaded.
  */
-export default function BrandLogo({ slug, light, dark, alt = '', className = '', style, priority = false }) {
+export default function BrandLogo({ slug, light, dark, alt = '', className = '', style, priority = false, fetchPriority = undefined }) {
   const { theme } = useTheme();
 
   const entry = slug ? BRAND_LOGOS[slug] || {} : {};
@@ -26,5 +26,5 @@ export default function BrandLogo({ slug, light, dark, alt = '', className = '',
 
   if (!src) return null;
 
-  return <MediaImage src={src} alt={alt} width={240} height={96} sizes="190px" quality={82} priority={priority} className={className} style={style} />;
+  return <MediaImage src={src} alt={alt} width={240} height={96} sizes="190px" quality={82} priority={priority} fetchPriority={fetchPriority} className={className} style={style} />;
 }

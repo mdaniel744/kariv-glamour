@@ -8,23 +8,23 @@ export default function KarivLogo({ className = '', sizes = '80px', loading = 'l
   return (
     <span className={`inline-block shrink-0 align-middle ${className}`}>
       <MediaImage
-        src="/logos/kariv-emblem-light.png"
+        src="/logos/kariv-emblem-light.webp"
         alt="Kariv Glamour"
-        width={1254}
-        height={1254}
+        width={256}
+        height={256}
         sizes={sizes}
-        quality={90}
+        unoptimized
         loading={loading}
         className="block h-full w-full object-contain dark:hidden"
         draggable={false}
       />
       <MediaImage
-        src="/logos/kariv-emblem-dark.png"
+        src="/logos/kariv-emblem-dark.webp"
         alt="Kariv Glamour"
-        width={1254}
-        height={1254}
+        width={256}
+        height={256}
         sizes={sizes}
-        quality={90}
+        unoptimized
         loading={loading}
         className="hidden h-full w-full object-contain dark:block"
         draggable={false}

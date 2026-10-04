@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
 import ProductCard from '@/components/shared/ProductCard';
 import SectionHeading from '@/components/shared/SectionHeading';
 import { useLanguage } from '@/lib/languageContext';
@@ -20,6 +18,12 @@ export default function FeaturedProducts({ title = "Featured Timepieces", subtit
     let active = true;
     const load = async () => {
       try {
+        // The server-rendered home page already supplies these products. Keep
+        // the legacy client fallback out of its initial JavaScript bundle.
+        const [{ dataClient }, { asArray }] = await Promise.all([
+          import('@/lib/dataClient'),
+          import('@/lib/base44Data'),
+        ]);
         const data = asArray(await dataClient.entities.Products.filter(filter, '-created_date', limit, 0, locale));
         if (active) setProducts(data);
       } catch (e) {

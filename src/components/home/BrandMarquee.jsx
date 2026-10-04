@@ -1,35 +1,46 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import LocalizedLink from '@/components/LocalizedLink';
-import { dataClient } from '@/lib/dataClient';
-import { asArray } from '@/lib/base44Data';
 import BrandLogo from '@/components/shared/BrandLogo';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export default function BrandMarquee() {
+export default function BrandMarquee({ initialBrands = null }) {
   const { t } = useTranslation();
-  const [brands, setBrands] = useState([]);
+  const [brands, setBrands] = useState(initialBrands || []);
   const scrollRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
+  const [visibleLogos, setVisibleLogos] = useState(3);
 
   useEffect(() => {
+    if (initialBrands !== null) return;
+    let active = true;
     const load = async () => {
       try {
+        const [{ dataClient }, { asArray }] = await Promise.all([
+          import('@/lib/dataClient'),
+          import('@/lib/base44Data'),
+        ]);
         const data = asArray(await dataClient.entities.Brands.list());
-        setBrands(data.filter(b => b.brandLogoLight));
+        if (active) setBrands(data.filter(b => b.brandLogoLight));
       } catch (e) {
         console.error(e);
       }
     };
     load();
-  }, []);
+    return () => { active = false; };
+  }, [initialBrands]);
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
     setCanPrev(el.scrollLeft > 10);
     setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+    const cardWidth = el.querySelector('[data-brand-card]')?.offsetWidth || 190;
+    // Keep nearby logos ready, without downloading every large remote SVG
+    // in the horizontal track during the first mobile page load.
+    const nearbyCount = Math.ceil((el.scrollLeft + el.clientWidth + 240) / (cardWidth + 16));
+    setVisibleLogos((previous) => Math.max(previous, nearbyCount));
   }, []);
 
   useEffect(() => { updateArrows(); }, [updateArrows, brands]);
@@ -71,13 +82,18 @@ export default function BrandMarquee() {
               data-brand-card
               className="group flex h-20 min-w-[150px] flex-shrink-0 snap-start items-center justify-center border border-border px-6 transition-colors hover:border-primary/40 md:h-24 md:min-w-[190px]"
             >
-              <BrandLogo
-                slug={brand.slug}
-                light={brand.brandLogoLight}
-                dark={brand.brandLogoDark}
-                alt={t('components.brandMarquee.brandWatches', { brand: brand.brandName })}
-                className="h-full w-auto object-contain opacity-70 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
-              />
+              {i < visibleLogos ? (
+                <BrandLogo
+                  slug={brand.slug}
+                  light={brand.brandLogoLight}
+                  dark={brand.brandLogoDark}
+                  alt={t('components.brandMarquee.brandWatches', { brand: brand.brandName })}
+                  fetchPriority="low"
+                  className="h-full w-auto object-contain opacity-70 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
+                />
+              ) : (
+                <span className="text-center text-sm font-medium text-foreground">{brand.brandName}</span>
+              )}
             </LocalizedLink>
           ))}
         </div>

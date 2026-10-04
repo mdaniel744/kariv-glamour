@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import LocalizedLink from '@/components/LocalizedLink';
 import { useLanguage } from '@/lib/languageContext';
@@ -7,11 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '@/lib/cartContext';
 import { useAuth } from '@/lib/AuthContext';
 import { BRAND_DATA } from '@/lib/constants';
-import NotificationBell from '@/components/shared/NotificationBell';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
-import { motion, AnimatePresence } from 'framer-motion';
 import KarivLogo from '@/components/shared/KarivLogo';
+
+// Notification actions are only useful after sign-in. Keep their code and
+// animation dependency out of the first load for public visitors.
+const NotificationBell = dynamic(() => import('@/components/shared/NotificationBell'), { ssr: false });
 
 const NAVIGATION_COPY = {
   cs: { open: 'Otevřít navigaci', close: 'Zavřít navigaci', home: 'Kariv Glamour — úvod', account: 'Můj účet', signIn: 'Přihlásit se', signUp: 'Registrovat se', createAccount: 'Vytvořit účet', mobile: 'Mobilní navigace', clearSearch: 'Vymazat hledání' },
@@ -159,7 +162,7 @@ export default function Navbar() {
                   </span>
                 }
               </LocalizedLink>
-              <NotificationBell />
+              {isAuthenticated && <NotificationBell />}
               {isAuthenticated ? (
                 <LocalizedLink to="/portal" className="flex h-9 w-9 items-center justify-center text-foreground transition-colors hover:text-primary" aria-label={copy.account}>
                   <User size={18} />
@@ -200,14 +203,8 @@ export default function Navbar() {
               <button onClick={toggleBuy} className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">
                 {t('buyWatch')} <ChevronDown size={12} className={`transition-transform ${buyOpen ? 'rotate-180' : ''}`} />
               </button>
-              <AnimatePresence>
-                {buyOpen &&
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 pt-3">
+              {buyOpen &&
+                <div className="absolute top-full left-0 pt-3 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-2 motion-safe:duration-200">
                   
                     <div className="flex h-[70vh] w-[70vw] items-center gap-12 rounded-2xl border border-border bg-popover p-10 shadow-lg">
                       {/* Watch brands */}
@@ -233,9 +230,8 @@ export default function Navbar() {
                         </div>
                       </div>
                     </div>
-                  </motion.div>
-                }
-              </AnimatePresence>
+                </div>
+              }
             </div>
 
             <LocalizedLink to="/shop" className="text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">{t('topDeals')}</LocalizedLink>
@@ -246,14 +242,8 @@ export default function Navbar() {
               <button onClick={toggleSecurity} className="flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">
                 {t('karivSecurity')} <ChevronDown size={12} className={`transition-transform ${securityOpen ? 'rotate-180' : ''}`} />
               </button>
-              <AnimatePresence>
-                {securityOpen &&
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 pt-3">
+              {securityOpen &&
+                <div className="absolute top-full left-0 pt-3 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-2 motion-safe:duration-200">
                   
                     <div className="bg-popover border border-border rounded p-6 shadow-lg min-w-[260px]">
                       <div className="space-y-3">
@@ -264,9 +254,8 @@ export default function Navbar() {
                       )}
                       </div>
                     </div>
-                  </motion.div>
-                }
-              </AnimatePresence>
+                </div>
+              }
             </div>
 
             <LocalizedLink to="/guides" className="text-xs font-semibold uppercase tracking-[0.08em] text-primary transition-colors hover:text-primary/70">{t('watchGuides')}</LocalizedLink>
@@ -275,14 +264,9 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile off-canvas menu */}
-      <AnimatePresence>
-        {mobileOpen &&
-        <motion.div
-          initial={{ opacity: 0, x: -300 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -300 }}
-          transition={{ type: 'tween', duration: 0.3 }}
-          className="site-navigation fixed bottom-0 left-0 right-0 top-[102px] z-40 overflow-y-auto overscroll-contain border-t border-border bg-background font-body"
+      {mobileOpen &&
+        <div
+          className="site-navigation fixed bottom-0 left-0 right-0 top-[102px] z-40 overflow-y-auto overscroll-contain border-t border-border bg-background font-body motion-safe:animate-in motion-safe:slide-in-from-left motion-safe:duration-300"
           role="dialog"
           aria-modal="true"
           aria-label={copy.mobile}>
@@ -297,14 +281,8 @@ export default function Navbar() {
                   {t('buyWatch')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'buy' ? 'rotate-180' : ''}`} />
                 </button>
-                <AnimatePresence>
-                  {mobileExpanded === 'buy' &&
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden">
+                {mobileExpanded === 'buy' &&
+                <div className="overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200">
                   
                       <div className="pl-4 pt-2 pb-4 space-y-5">
                         <div>
@@ -328,9 +306,8 @@ export default function Navbar() {
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                </div>
                 }
-                </AnimatePresence>
               </div>
 
               <LocalizedLink to="/shop" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('topDeals')}</LocalizedLink>
@@ -345,14 +322,8 @@ export default function Navbar() {
                   {t('karivSecurity')}
                   <ChevronDown size={18} className={`transition-transform ${mobileExpanded === 'security' ? 'rotate-180' : ''}`} />
                 </button>
-                <AnimatePresence>
-                  {mobileExpanded === 'security' &&
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden">
+                {mobileExpanded === 'security' &&
+                <div className="overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200">
                   
                       <div className="pl-4 pt-2 pb-4 space-y-2">
                         {SECURITY_LINKS.map((s) =>
@@ -361,9 +332,8 @@ export default function Navbar() {
                           </LocalizedLink>
                     )}
                       </div>
-                    </motion.div>
+                </div>
                 }
-                </AnimatePresence>
               </div>
 
               <LocalizedLink to="/guides" onClick={closeMobile} className="block py-2 text-base font-semibold tracking-normal text-foreground transition-colors hover:text-primary">{t('watchGuides')}</LocalizedLink>
@@ -381,9 +351,8 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          </motion.div>
-        }
-      </AnimatePresence>
+        </div>
+      }
     </>);
 
 }

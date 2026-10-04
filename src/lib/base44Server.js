@@ -164,6 +164,26 @@ export async function getHomeFeaturedSections(locale) {
   return { featured, newArrivals, certifiedPreOwned };
 }
 
+const loadHomeBrandMarquee = unstable_cache(
+  async () => (await Brands.list())
+    .filter((brand) => brand.brandLogoLight)
+    .map(({ slug, brandName, brandLogoLight, brandLogoDark }) => ({
+      slug, brandName, brandLogoLight, brandLogoDark,
+    })),
+  ['home-brand-marquee', STORE_ID],
+  { revalidate: 300 },
+);
+
+export async function getHomeBrandMarquee() {
+  try {
+    return await loadHomeBrandMarquee();
+  } catch (error) {
+    console.error('Unable to load home page brands from Supabase:', error?.message || error);
+    // A temporary server-side failure can still use the old client fallback.
+    return null;
+  }
+}
+
 export async function getPublishedProducts(limit) {
   try {
     return await Products.filter({ isPublished: true }, '-updated_date', limit, 0);
