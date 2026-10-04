@@ -345,7 +345,7 @@ export default function ProductDetail({ id: idProp, initialProduct = null, initi
               <SafeHtml
                 as="div"
                 html={localize(product, 'productDescription')}
-                className="prose prose-sm max-w-none text-sm text-muted-foreground leading-relaxed [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_td]:p-2 [&_th]:border [&_th]:border-border [&_th]:p-2 [&_img]:max-w-full [&_img]:h-auto [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic"
+                className="product-description text-sm text-muted-foreground leading-relaxed"
               />
             </div>
           }
