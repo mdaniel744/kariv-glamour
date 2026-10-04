@@ -19,43 +19,62 @@ export default function CustomerService() {
   const contactCopy = locale === 'cs' ? {
     introduction: 'Máte dotaz k hodinkám, objednávce nebo nákupu? Kontaktujte Kariv Glamour pomocí údajů níže.',
     emailHint: 'Dotazy k produktům a zákaznická podpora',
-    officeHint: 'Sídlo společnosti — případné vrácení s námi prosím předem dohodněte.',
-    draftExplanation: 'Tento formulář připraví koncept ve vaší e-mailové aplikaci. Zprávu přes tuto stránku neodesílá.',
-    openDraft: 'Otevřít koncept e-mailu',
-    draftStatus: 'Zpráva zatím nebyla odeslána. Odešlete koncept ve své e-mailové aplikaci. Pokud se aplikace neotevře, použijte e-mailovou adresu níže.',
+    officeHint: 'Sídlo společnosti není adresou pro vrácení zboží. Pokyny pro vaši objednávku najdete v zásadách vrácení.',
+    formExplanation: 'Zprávu odešlete přímo našemu týmu podpory pomocí tohoto formuláře.',
+    sendMessage: 'Odeslat zprávu',
+    sendingMessage: 'Odesílání…',
+    sentStatus: 'Vaše zpráva byla odeslána zákaznické podpoře Kariv.',
+    errorStatus: 'Zprávu se nepodařilo odeslat. Zkuste to znovu nebo nám napište přímo na e-mail níže.',
+    returnsPolicy: 'Pokyny k vrácení zboží',
     emailFallback: 'Můžete nám také napsat přímo:',
   } : locale === 'de' ? {
     introduction: 'Fragen zu einer Uhr, einer Bestellung oder zum Einkauf? Kontaktieren Sie Kariv Glamour über die unten angegebenen Kontaktdaten.',
     emailHint: 'Für Produktfragen und Kundenservice',
-    officeHint: 'Eingetragener Firmensitz — Rücksendungen bitte vorab abstimmen.',
-    draftExplanation: 'Dieses Formular bereitet eine E-Mail in Ihrem E-Mail-Programm vor. Es sendet keine Nachricht über diese Website.',
-    openDraft: 'E-Mail-Entwurf öffnen',
-    draftStatus: 'Ihre Nachricht wurde noch nicht gesendet. Senden Sie den Entwurf in Ihrem E-Mail-Programm. Falls sich kein Programm öffnet, nutzen Sie die E-Mail-Adresse unten.',
+    officeHint: 'Der Firmensitz ist keine Rücksendeadresse. Hinweise zu Ihrer Bestellung finden Sie in den Rückgabebedingungen.',
+    formExplanation: 'Senden Sie Ihre Nachricht mit diesem Formular direkt an unser Support-Team.',
+    sendMessage: 'Nachricht senden',
+    sendingMessage: 'Wird gesendet…',
+    sentStatus: 'Ihre Nachricht wurde an den Kariv-Kundendienst gesendet.',
+    errorStatus: 'Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns an die unten angegebene E-Mail-Adresse.',
+    returnsPolicy: 'Rückgabebedingungen',
     emailFallback: 'Sie können uns auch direkt schreiben:',
   } : {
     introduction: 'Questions about a watch, an order or shopping with us? Contact Kariv Glamour using the details below.',
     emailHint: 'For product questions and customer support',
-    officeHint: 'Registered office — please arrange any return with us first.',
-    draftExplanation: 'This form prepares a draft in your email app. It does not send a message through this website.',
-    openDraft: 'Open email draft',
-    draftStatus: 'Your message has not been sent yet. Send the draft in your email app. If no app opens, use the email address below.',
+    officeHint: 'Registered office, not a returns address. See the returns policy for order-specific instructions.',
+    formExplanation: 'Send your message directly to our support team using this form.',
+    sendMessage: 'Send message',
+    sendingMessage: 'Sending…',
+    sentStatus: 'Your message has been sent to Kariv support.',
+    errorStatus: 'Your message could not be sent. Please try again or email us directly using the address below.',
+    returnsPolicy: 'Returns & Refund policy',
     emailFallback: 'You can also email us directly:',
   };
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [emailDraftRequested, setEmailDraftRequested] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '', companyWebsite: '' });
+  const [formStatus, setFormStatus] = useState('idle');
 
   useEffect(() => {
     dataClient.entities.FAQ.filter({}, 'sortOrder', 20).then(data => setFaqs(asArray(data))).catch(console.error);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const body = `${formData.message}\n\n${t('pages.customerService.placeholderName')}: ${formData.name}\n${t('pages.customerService.placeholderEmail')}: ${formData.email}`;
-    const draftUrl = `mailto:${COMPANY_DETAILS.email}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(body)}`;
-    setEmailDraftRequested(true);
-    window.location.assign(draftUrl);
+    if (formStatus === 'sending') return;
+    setFormStatus('sending');
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, locale }),
+      });
+      if (!response.ok) throw new Error('Contact message not accepted');
+      setFormData({ name: '', email: '', subject: '', message: '', companyWebsite: '' });
+      setFormStatus('sent');
+    } catch {
+      setFormStatus('error');
+    }
   };
 
   const contactMethods = [
@@ -96,6 +115,11 @@ export default function CustomerService() {
                 <p className="text-base text-foreground">{item.detail}</p>
               )}
               <p className="text-xs text-muted-foreground mt-1">{item.sub}</p>
+              {!item.href && (
+                <LocalizedLink to="/legal/returns-refund-policy" className="mt-3 inline-block text-sm text-primary underline underline-offset-4">
+                  {contactCopy.returnsPolicy}
+                </LocalizedLink>
+              )}
             </div>
           ))}
         </div>
@@ -105,32 +129,38 @@ export default function CustomerService() {
       <section className="border-t border-border py-16">
         <div className="max-w-2xl mx-auto px-6">
           <h2 className="font-display text-2xl md:text-3xl text-foreground font-semibold mb-8 text-center">{t('pages.customerService.formTitle')}</h2>
-          <p id="contact-draft-explanation" className="mb-6 text-base text-muted-foreground leading-relaxed">{contactCopy.draftExplanation}</p>
-            <form onSubmit={handleSubmit} aria-describedby="contact-draft-explanation" className="space-y-5">
+          <p id="contact-form-explanation" className="mb-6 text-base text-muted-foreground leading-relaxed">{contactCopy.formExplanation}</p>
+            <form onSubmit={handleSubmit} aria-describedby="contact-form-explanation" className="space-y-5">
               <div className="grid md:grid-cols-2 gap-5">
                 <label className="block text-sm font-medium text-foreground">
                   <span className="mb-2 block">{t('pages.customerService.placeholderName')}</span>
-                  <input required name="name" autoComplete="name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
+                  <input required name="name" maxLength={100} autoComplete="name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
                 </label>
                 <label className="block text-sm font-medium text-foreground">
                   <span className="mb-2 block">{t('pages.customerService.placeholderEmail')}</span>
-                  <input required name="email" autoComplete="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
+                  <input required name="email" maxLength={254} autoComplete="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
                 </label>
               </div>
               <label className="block text-sm font-medium text-foreground">
                 <span className="mb-2 block">{t('pages.customerService.placeholderSubject')}</span>
-                <input required name="subject" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
+                <input required name="subject" maxLength={160} value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full" />
               </label>
               <label className="block text-sm font-medium text-foreground">
                 <span className="mb-2 block">{t('pages.customerService.placeholderMessage')}</span>
-                <textarea required name="message" rows={5} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full resize-none" />
+                <textarea required name="message" maxLength={5000} rows={5} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="bg-card border border-border text-base text-foreground px-4 py-3 outline-none focus:border-primary w-full resize-none" />
               </label>
-              <button type="submit" className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors">
-                {contactCopy.openDraft}
+              <div className="absolute -left-[9999px]" aria-hidden="true">
+                <label htmlFor="contact-company-website">Website</label>
+                <input id="contact-company-website" name="companyWebsite" tabIndex={-1} autoComplete="off" value={formData.companyWebsite || ''} onChange={e => setFormData({...formData, companyWebsite: e.target.value})} />
+              </div>
+              <button type="submit" disabled={formStatus === 'sending'} className="w-full bg-primary text-primary-foreground text-[11px] tracking-[0.15em] uppercase font-medium py-4 hover:bg-primary/90 transition-colors disabled:opacity-60">
+                {formStatus === 'sending' ? contactCopy.sendingMessage : contactCopy.sendMessage}
               </button>
             </form>
-          {emailDraftRequested && (
-            <p role="status" className="mt-5 rounded-xl border border-border bg-card p-4 text-base leading-relaxed text-foreground">{contactCopy.draftStatus}</p>
+          {(formStatus === 'sent' || formStatus === 'error') && (
+            <p role="status" className="mt-5 rounded-xl border border-border bg-card p-4 text-base leading-relaxed text-foreground">
+              {formStatus === 'sent' ? contactCopy.sentStatus : contactCopy.errorStatus}
+            </p>
           )}
           <p className="mt-6 text-base text-muted-foreground leading-relaxed">
             {contactCopy.emailFallback}{' '}

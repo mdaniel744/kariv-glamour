@@ -26,7 +26,24 @@ NEXT_PUBLIC_VAPID_PUBLIC_KEY=...
 # Optional: fills missing DE/EN product title and description fields on save
 OPENAI_API_KEY=sk-...
 OPENAI_TRANSLATION_MODEL=gpt-5-mini
+
+# Contact form email delivery (server-side; verify 24kariv.com in Resend first)
+RESEND_API_KEY=re_...
+# Optional override; defaults to Kariv Glamour <info@24kariv.com>
+CONTACT_FROM_EMAIL="Kariv Glamour <info@24kariv.com>"
 ```
+
+The public contact form submits to `/api/contact` and sends plain-text messages to
+`info@24kariv.com`. Configure `RESEND_API_KEY` on the Kariv server (and in
+`.env.local` for local delivery), verify `24kariv.com` as a sending domain in
+Resend, and restart the app with updated environment variables. The sender
+defaults to `Kariv Glamour <info@24kariv.com>`; use `CONTACT_FROM_EMAIL` only
+if your verified sender differs. If delivery is not configured or
+the provider rejects a message, the form shows an error rather than claiming
+it was sent; the direct email link remains available.
+On the VPS, keep the API key outside Git and restart with
+`pm2 restart kariv --update-env` after setting it. Confirm one real form
+submission reaches the support inbox before treating delivery as live.
 
 `NEXT_PUBLIC_STORE_ID` scopes every Supabase query to this store's rows — the Supabase project is shared with other stores on the same platform.
 

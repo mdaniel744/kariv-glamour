@@ -14,19 +14,25 @@ test('customer service uses the existing company identity without placeholder co
   assert.doesNotMatch(source, /123 456 789|service@kariv-glamour\.com|Deutschland|Mo–Fr 9–18|emailSub|phoneSub|hoursSub/);
 });
 
-test('contact form opens an encoded email draft and never claims delivery', () => {
+test('contact form sends through the server and only confirms an accepted submission', () => {
   const source = read('src/page-content/CustomerService.jsx');
-  assert.match(source, /mailto:\$\{COMPANY_DETAILS\.email\}\?subject=\$\{encodeURIComponent\(formData\.subject\)\}&body=\$\{encodeURIComponent\(body\)\}/);
-  assert.match(source, /window\.location\.assign\(draftUrl\)/);
-  assert.match(source, /Your message has not been sent yet/);
-  assert.match(source, /Ihre Nachricht wurde noch nicht gesendet/);
+  const route = read('app/api/contact/route.js');
+  assert.match(source, /fetch\('\/api\/contact'/);
+  assert.match(source, /if \(!response\.ok\) throw/);
+  assert.match(source, /formStatus === 'sent'/);
+  assert.match(source, /formStatus === 'error'/);
+  assert.match(source, /disabled=\{formStatus === 'sending'\}/);
   assert.match(source, /role="status"/);
-  assert.doesNotMatch(source, /setSubmitted|formSuccess/);
+  assert.doesNotMatch(source, /window\.location\.assign|draftUrl|Open email draft/);
+  assert.match(read('src/lib/contactEmail.js'), /to: \[COMPANY_DETAILS\.email\]/);
+  assert.match(route, /process\.env\.RESEND_API_KEY/);
+  assert.match(route, /process\.env\.CONTACT_FROM_EMAIL/);
   for (const field of ['name', 'email', 'subject', 'message']) {
     assert.ok(source.includes(`name="${field}"`));
   }
   assert.ok((source.match(/<label\b/g) || []).length >= 4);
   assert.match(source, /contactCopy\.emailFallback/);
+  assert.match(source, /\/legal\/returns-refund-policy/);
 });
 
 test('footer does not offer fabricated social destinations', () => {
