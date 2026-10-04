@@ -42,8 +42,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-[#dce5df] bg-[#fbfcfa] dark:border-[#263747] dark:bg-[#060B14]">
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5">
+          <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <LocalizedLink to="/" aria-label={`Kariv Glamour — ${t('common:home')}`} className="mb-5 inline-flex max-w-full items-center">
               <KarivLogo className="h-28 w-28 md:h-32 md:w-32" sizes="(min-width: 768px) 128px, 112px" />
             </LocalizedLink>
@@ -57,19 +57,6 @@ export default function Footer() {
                 {COMPANY_DETAILS.email}
               </a>
             </address>
-            <nav aria-label={t('footer.followUs')} className="mt-7">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
-                {t('footer.followUs')}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {socialLinks.map(({ label, href, icon: Icon }) => (
-                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${label} — Kariv Glamour`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#cbdad0] px-4 text-sm font-medium text-[#213d34] transition-colors hover:border-primary hover:text-primary dark:border-white/25 dark:text-white dark:hover:border-[#C5A367] dark:hover:text-[#C5A367]">
-                    <Icon size={18} aria-hidden="true" />
-                    <span>{label}</span>
-                  </a>
-                ))}
-              </div>
-            </nav>
             <div className="mt-8">
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary dark:text-white">
                 {t('footer.appearance')}
@@ -96,12 +83,27 @@ export default function Footer() {
               </ul>
             </div>
           )}
+          <nav aria-label={t('footer.followUs')}>
+            <h3 className="text-[11px] tracking-[0.2em] uppercase text-primary dark:text-white font-semibold mb-5">
+              {t('footer.followUs')}
+            </h3>
+            <ul className="space-y-3">
+              {socialLinks.map(({ label, href, icon: Icon }) => (
+                <li key={label}>
+                  <a href={href} target="_blank" rel="noopener noreferrer" aria-label={`${label} — Kariv Glamour`} className="inline-flex min-h-11 items-center gap-2 text-sm text-[#213d34] transition-colors hover:text-primary dark:text-white/80 dark:hover:text-[#C5A367] font-body">
+                    <Icon size={18} aria-hidden="true" />
+                    <span>{label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
 
       <div className="border-t border-[#dce5df] dark:border-white/10">
         <div className="max-w-7xl mx-auto px-6 pt-6">
-          <p className="max-w-5xl text-sm leading-relaxed text-[#496057] dark:text-white/70 font-body">
+          <p className="max-w-5xl text-xs leading-relaxed text-[#496057] dark:text-white/70 font-body">
             <span className="font-semibold text-[#213d34] dark:text-white">{t('footer.disclaimerLabel')}</span>{' '}
             {t('footer.independenceDisclaimer')}{' '}
             <LocalizedLink to="/legal/brand-disclaimer" className="text-primary underline underline-offset-4 dark:text-[#C5A367]">

@@ -50,6 +50,8 @@ test('footer links to authenticity guidance and the supplied social profiles', (
   assert.match(footer, /footer\.authenticityStatement/);
   assert.match(footer, /https:\/\/www\.instagram\.com\/karivglamour\//);
   assert.match(footer, /https:\/\/www\.facebook\.com\/people\/Kariv-Glamour\/100063754812707\//);
+  assert.ok(footer.indexOf("{ title: t('footer.legal')") < footer.indexOf("<nav aria-label={t('footer.followUs')}"));
+  assert.match(footer, /className="max-w-5xl text-xs leading-relaxed/);
   for (const locale of ['en', 'de', 'cs']) {
     const navigation = JSON.parse(read(`src/locales/${locale}/navigation.json`));
     assert.ok(navigation.footer.independenceDisclaimer);

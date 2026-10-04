@@ -35,8 +35,40 @@ test('contact form sends through the server and only confirms an accepted submis
   assert.match(source, /\/legal\/returns-refund-policy/);
 });
 
-test('footer does not offer fabricated social destinations', () => {
-  assert.doesNotMatch(read('src/components/layout/Footer.jsx'), /href="#"|social\.slice/);
+test('footer links to the supplied social profiles without placeholder destinations', () => {
+  const source = read('src/components/layout/Footer.jsx');
+  assert.doesNotMatch(source, /href="#"|social\.slice/);
+  assert.match(source, /https:\/\/www\.instagram\.com\/karivglamour\//);
+  assert.match(source, /https:\/\/www\.facebook\.com\/people\/Kariv-Glamour\/100063754812707\//);
+  assert.match(source, /target="_blank" rel="noopener noreferrer"/);
+  for (const locale of ['en', 'de', 'cs']) {
+    const navigation = JSON.parse(read(`src/locales/${locale}/navigation.json`));
+    assert.ok(navigation.footer.followUs);
+  }
+});
+
+test('footer carries the independent-marketplace disclaimer in every language', () => {
+  const footer = read('src/components/layout/Footer.jsx');
+  assert.match(footer, /footer\.independenceDisclaimer/);
+  assert.match(footer, /to="\/legal\/brand-disclaimer"/);
+  assert.match(footer, /to="\/authentication"/);
+  assert.match(footer, /footer\.authenticityStatement/);
+  assert.match(footer, /footer\.authenticityStandards/);
+  for (const locale of ['en', 'de', 'cs']) {
+    const navigation = JSON.parse(read(`src/locales/${locale}/navigation.json`));
+    const disclaimer = navigation.footer.independenceDisclaimer;
+    assert.ok(navigation.footer.disclaimerLabel);
+    assert.match(disclaimer, /24kariv\.com/);
+    assert.match(disclaimer, /Kariv Glamour s\.r\.o\./);
+    assert.doesNotMatch(disclaimer, /certified|100% authentic/i);
+    assert.ok(navigation.footer.authenticityStatement);
+    assert.ok(navigation.footer.authenticityStandards);
+    assert.doesNotMatch(navigation.footer.authenticityStatement, /100%/);
+  }
+  const en = JSON.parse(read('src/locales/en/navigation.json'));
+  assert.match(en.footer.authenticityStatement, /Business dealers are verified/);
+  assert.match(en.footer.authenticityStatement, /guarantee the authenticity/);
+  assert.match(en.footer.authenticityStatement, /private sellers' proof of ownership/);
 });
 
 test('global navigation and trust strip direct shoppers to details without guaranteeing every listing', () => {
