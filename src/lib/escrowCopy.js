@@ -11,7 +11,7 @@ const COPY = {
     bankDescription: 'Transfer to our escrow bank account with your order reference.',
     active: 'Buyer Protection Active',
     protection: 'Kariv Glamour Buyer Protection',
-    protectionDescription: 'Your payment is held safely in escrow and only released to the dealer after you confirm receipt and authenticity of your watch.',
+    protectionDescription: 'For a protected order, your payment remains held during the 14-day period after courier-confirmed delivery. Request a return or report a problem during that period to keep the dealer payout on hold while the case is reviewed. If no case is open, payout may proceed after the period and required checks.',
   },
   cs: {
     labels: {
@@ -28,7 +28,7 @@ const COPY = {
       dealer_accepted: 'Prodejce potvrdil dostupnost. Pokračujte prosím platbou pro zajištění objednávky.',
       funds_secured: 'Vaše platba byla přijata a je bezpečně uložena v úschově. Prodejce dostal pokyn k odeslání hodinek. Prostředky budou uvolněny až po 14denní lhůtě pro kontrolu, která začíná doručením potvrzeným přepravcem.',
       shipped: 'Vaše hodinky byly odeslány. Informace pro sledování najdete níže. Jakmile přepravce potvrdí doručení, automaticky začne 14denní lhůta pro kontrolu.',
-      verified: 'Přepravce potvrdil doručení. Nyní běží vaše 14denní lhůta pro kontrolu. Případné problémy můžete nahlásit zahájením sporu u této objednávky. Pokud spor nezahájíte, prostředky budou po uplynutí lhůty uvolněny prodejci.',
+      verified: 'Přepravce potvrdil doručení. Nyní běží vaše 14denní lhůta pro kontrolu. Žádost o vrácení či refundaci nebo jiný problém nahlaste u této objednávky. Pokud není otevřený případ, může po uplynutí lhůty a kontrolách následovat výplata prodejci.',
       funds_released: 'Transakce je dokončena. Skončila 14denní lhůta pro kontrolu a prostředky byly uvolněny prodejci.',
       cancelled: 'Tato objednávka byla zrušena.',
     },
@@ -38,7 +38,7 @@ const COPY = {
     bankDescription: 'Převeďte prostředky na náš úschovní účet s referencí objednávky.',
     active: 'Ochrana kupujícího aktivní',
     protection: 'Ochrana kupujícího Kariv Glamour',
-    protectionDescription: 'Vaše platba je bezpečně uchována v úschově a uvolněna prodejci až po potvrzení převzetí a pravosti hodinek.',
+    protectionDescription: 'U chráněné objednávky zůstává platba zadržena po dobu 14 dnů od doručení potvrzeného dopravcem. Žádost o vrácení nebo nahlášení problému v této lhůtě pozastaví výplatu prodejci po dobu posouzení. Bez otevřeného případu může výplata po skončení lhůty a nutných kontrolách pokračovat.',
   },
   de: {
     labels: {
@@ -55,7 +55,7 @@ const COPY = {
       dealer_accepted: 'Der Händler hat die Verfügbarkeit bestätigt. Bitte bezahlen Sie jetzt, um die Bestellung zu sichern.',
       funds_secured: 'Ihre Zahlung ist eingegangen und im Treuhandkonto gesichert. Der Händler wurde zum Versand aufgefordert. Das Guthaben wird erst nach der 14-tägigen Prüffrist freigegeben, die mit der vom Kurier bestätigten Zustellung beginnt.',
       shipped: 'Ihre Uhr wurde versandt. Die Sendungsverfolgung finden Sie unten. Sobald der Kurier die Zustellung bestätigt, beginnt die 14-tägige Prüffrist automatisch.',
-      verified: 'Unser Kurierdienst hat die Zustellung bestätigt. Ihre 14-tägige Prüffrist läuft jetzt. Bei Bedenken können Sie zu dieser Bestellung einen Streitfall melden. Ohne Streitfall wird das Guthaben nach Ablauf der Prüffrist an den Händler freigegeben.',
+      verified: 'Unser Kurierdienst hat die Zustellung bestätigt. Ihre 14-tägige Prüffrist läuft jetzt. Melden Sie in dieser Zeit eine Rückgabe, Erstattung oder ein anderes Problem zur Bestellung. Ohne offenen Fall kann die Händlerauszahlung nach Ablauf der Frist und den erforderlichen Prüfungen erfolgen.',
       funds_released: 'Transaktion abgeschlossen. Die 14-tägige Prüffrist ist abgelaufen und das Guthaben wurde an den Händler freigegeben.',
       cancelled: 'Diese Bestellung wurde storniert.',
     },
@@ -65,7 +65,7 @@ const COPY = {
     bankDescription: 'Überweisen Sie mit Ihrer Bestellreferenz auf unser Treuhandkonto.',
     active: 'Käuferschutz aktiv',
     protection: 'Kariv Glamour Käuferschutz',
-    protectionDescription: 'Ihre Zahlung wird sicher im Treuhandkonto verwahrt und erst an den Händler freigegeben, nachdem Sie Empfang und Echtheit Ihrer Uhr bestätigt haben.',
+    protectionDescription: 'Bei einer geschützten Bestellung bleibt Ihre Zahlung 14 Tage nach der vom Versanddienst bestätigten Zustellung zurückgehalten. Eine Rückgabeanfrage oder Problemmeldung in dieser Zeit hält die Händlerauszahlung bis zur Klärung an. Ohne offenen Fall kann sie nach Ablauf der Frist und den erforderlichen Prüfungen erfolgen.',
   },
 };
 

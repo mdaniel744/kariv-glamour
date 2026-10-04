@@ -101,31 +101,39 @@ const RETURNS_POLICY = createLegalPage({
   titleDe: 'Rückgabe & Rückerstattung',
   descriptionEn: 'Withdrawal, return eligibility and refund information for Kariv Glamour purchases.',
   descriptionDe: 'Informationen zu Widerruf, Rückgabeberechtigung und Erstattungen bei Kariv Glamour.',
-  contentEn: `_Last updated: 2 October 2026_
+  contentEn: `_Last updated: 3 October 2026_
+
+This policy applies to orders placed through 24kariv.com. The seller identified for each order may be Kariv Glamour, an independent business dealer or a private owner. The applicable withdrawal and refund rights depend on who sold the watch and on the reason for return.
 
 ## 1. Statutory right of withdrawal
 
 If you are an EU/EEA consumer buying online from a professional seller, you generally have 14 days after you, or a person designated by you, receives the watch to withdraw from the purchase without giving a reason. Mandatory rights in your country may provide additional protection.
 
-To exercise the right, send a clear statement before the deadline to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Include your name, order number, the watch, delivery date and a reliable contact method. We will acknowledge the request and provide secure return instructions. Do not send a watch to the registered office without receiving return instructions first.
+To exercise this right, send a clear statement before the deadline to [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Include your name, order number, the watch and a reliable contact method; a reason is not required. We will acknowledge your notice, check the seller and coordinate return instructions. You do not need the dealer's prior approval to exercise a statutory withdrawal right.
 
 ## 2. Returning the watch
 
-After notifying us, return the watch within 14 days using the instructed tracked and insured service. Include the watch, presentation box, papers, certificates, warranty card, tags, spare links, accessories and all other items supplied. Package the watch securely and retain proof of shipment.
+After notifying us, send the watch back within 14 days. Kariv will confirm the return address supplied for the order. Dealer-sold watches are returned directly to the dealer who sold them; Kariv-owned watches go to the return address we provide. Do not send a watch to Kariv's registered office or to an unverified address. This also applies to cross-border returns: wait for the correct seller address and shipping instructions before dispatch.
+
+Use a trackable, appropriately insured service, package the watch securely and retain proof of shipment. Return the box, papers, certificates, warranty card, spare links and other items supplied with the watch where available. Missing outer packaging alone does not cancel a statutory withdrawal right, although missing items or avoidable damage may affect the amount refundable where the law permits.
 
 You may inspect a watch as you would reasonably be permitted to do in a shop. You may be responsible for diminished value caused by handling beyond what is necessary to establish its nature, characteristics and functioning. This does not remove statutory rights relating to defects or a product that is not as described.
 
-Unless the seller agreed otherwise, the listing or checkout stated otherwise, or the return concerns a covered defect, misdescription or seller error, the consumer may bear the direct cost of return shipping where permitted by law.
+For a change-of-mind withdrawal, the consumer may bear the direct return-shipping cost only if this was disclosed before purchase and the seller has not agreed to cover it. For an accepted defect, misdescription or seller error, the responsible professional seller bears reasonable return costs. Ask Kariv for the correct dealer address and suitable insurance instructions before sending a high-value watch across a border.
+
+### Escrow-protected orders
+
+If your order used Kariv escrow, the 14-day post-delivery inspection period starts when courier delivery is confirmed. If you want to return the watch, request a refund or report a problem during that period, open an order case from your account and select the return/refund reason or another applicable reason. This places the protected dealer payout on hold while the case is reviewed. You may also notify Kariv by email; an email notice is sufficient to exercise a statutory withdrawal right, but please open the account case too so the protected payout is paused. If you cannot access your account, tell Kariv immediately so support can help you report the issue before payout. If no case is open within the inspection period, Kariv may pay the dealer after that period and the required payout checks. No affirmative buyer confirmation is required. This does not end any statutory withdrawal, defect or misdescription right.
 
 ## 3. Refund timing and method
 
-For a valid withdrawal, amounts due—including the cost of the least expensive standard delivery offered for the original order—will be refunded without undue delay and no later than 14 days after the withdrawal notice. The refund may be withheld until the watch is received or you provide evidence of return, whichever occurs first.
+For a valid withdrawal, the amount legally due—including the cost of the least expensive standard delivery offered for the original order—must be refunded without undue delay and no later than 14 days after the withdrawal notice. The seller may withhold reimbursement until the watch is received or you provide evidence of return, whichever occurs first. A full refund is due where no lawful deduction applies; handling beyond what is needed to inspect the watch may result in a lawful deduction for diminished value.
 
-Refunds are normally issued through the original payment route or the applicable escrow process unless another method is agreed. Extra costs for an upgraded delivery method are not refundable unless required by law.
+For a Kariv-owned watch, Kariv arranges the refund. For a dealer sale paid directly to the dealer, that dealer is responsible for the refund and Kariv coordinates and follows up on the case. For an escrow-protected order, Kariv coordinates any eligible refund from protected funds before dealer payout. Refunds use the original payment method unless another method is expressly agreed, without additional refund fees. Extra costs for an upgraded delivery method are not refundable unless required by law. A bank or payment provider may take additional time to show an issued refund in your account.
 
 ## 4. Defective, damaged or misdescribed watches
 
-If a watch arrives damaged, defective, incomplete, inauthentic or materially different from the listing, contact us promptly. If your order includes a buyer-protection service, also follow its reporting instructions. That service's reporting period does not shorten mandatory rights against the seller. Avoid further use or alteration while the issue is assessed, and provide photographs and a clear description. We may coordinate inspection, insured return, repair, replacement, price reduction or refund with the responsible seller as appropriate. Reasonable covered return costs will not be charged to the consumer.
+If a watch arrives damaged, defective, incomplete, inauthentic or materially different from the listing, contact us promptly with your order number, photographs and a clear description. For an escrow-protected order, also open an order dispute during its inspection period to keep protected funds on hold. That period does not shorten mandatory rights against the seller. Avoid further use or alteration while the issue is assessed. Kariv will coordinate the dealer's return address and, where appropriate, inspection, repair, replacement, price reduction or refund with the responsible seller. Reasonable return costs for a valid defect or seller error will not be charged to the consumer.
 
 ## 5. Exceptions
 
@@ -134,31 +142,39 @@ The right of withdrawal may be excluded only where the law permits—for example
 ## 6. Questions
 
 Contact [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}) before returning any high-value item. Nothing in this policy limits rights that cannot lawfully be excluded.`,
-  contentDe: `_Zuletzt aktualisiert: 2. Oktober 2026_
+  contentDe: `_Zuletzt aktualisiert: 3. Oktober 2026_
+
+Diese Richtlinie gilt für Bestellungen über 24kariv.com. Der für die jeweilige Bestellung ausgewiesene Verkäufer kann Kariv Glamour, ein unabhängiger gewerblicher Händler oder eine Privatperson sein. Welche Widerrufs- und Erstattungsrechte gelten, hängt vom Verkäufer und vom Rückgabegrund ab.
 
 ## 1. Gesetzliches Widerrufsrecht
 
 Wenn Sie als Verbraucher im EU-/EWR-Raum online bei einem gewerblichen Verkäufer kaufen, haben Sie grundsätzlich 14 Tage ab dem Tag, an dem Sie oder eine von Ihnen benannte Person die Uhr erhalten, um den Kauf ohne Angabe von Gründen zu widerrufen. Zwingende Vorschriften Ihres Landes können zusätzlichen Schutz bieten.
 
-Zur Ausübung des Widerrufs senden Sie vor Ablauf der Frist eine eindeutige Erklärung an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nennen Sie Ihren Namen, die Bestellnummer, die Uhr, das Lieferdatum und eine verlässliche Kontaktmöglichkeit. Wir bestätigen die Anfrage und stellen sichere Rücksendeanweisungen bereit. Senden Sie keine Uhr ohne vorherige Rücksendeanweisung an den eingetragenen Firmensitz.
+Zur Ausübung dieses Rechts senden Sie vor Fristablauf eine eindeutige Erklärung an [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nennen Sie Ihren Namen, die Bestellnummer, die Uhr und eine verlässliche Kontaktmöglichkeit; eine Begründung ist nicht erforderlich. Wir bestätigen Ihre Erklärung, prüfen den Verkäuferstatus und koordinieren die Rücksendeanweisungen. Für einen gesetzlichen Widerruf ist keine vorherige Zustimmung des Händlers erforderlich.
 
 ## 2. Rücksendung der Uhr
 
-Senden Sie die Uhr nach Ihrer Mitteilung innerhalb von 14 Tagen mit dem angewiesenen nachverfolgbaren und versicherten Versanddienst zurück. Fügen Sie Uhr, Box, Papiere, Zertifikate, Garantiekarte, Etiketten, Ersatzglieder, Zubehör und sämtliche mitgelieferten Gegenstände bei. Verpacken Sie die Uhr sicher und bewahren Sie den Versandnachweis auf.
+Senden Sie die Uhr innerhalb von 14 Tagen nach Ihrer Mitteilung zurück. Kariv bestätigt die für die Bestellung geltende Rücksendeadresse. Von einem Händler verkaufte Uhren gehen direkt an diesen Händler; Uhren aus Karivs eigenem Bestand an die von uns mitgeteilte Adresse. Senden Sie keine Uhr an Karivs Firmensitz oder an eine nicht bestätigte Adresse. Das gilt auch bei grenzüberschreitenden Rücksendungen: Warten Sie vor dem Versand auf die zutreffende Händleradresse und Versandanweisung.
+
+Nutzen Sie einen nachverfolgbaren, angemessen versicherten Versand, verpacken Sie die Uhr sicher und bewahren Sie den Einlieferungsbeleg auf. Senden Sie Box, Papiere, Zertifikate, Garantiekarte, Ersatzglieder und weitere mitgelieferte Gegenstände nach Möglichkeit mit zurück. Das Fehlen der äußeren Originalverpackung allein beseitigt ein gesetzliches Widerrufsrecht nicht; fehlende Lieferbestandteile oder vermeidbare Schäden können sich jedoch auswirken, soweit das Gesetz dies zulässt.
 
 Sie dürfen die Uhr so prüfen, wie dies vernünftigerweise auch in einem Geschäft möglich wäre. Für einen Wertverlust aufgrund eines Umgangs, der über die Prüfung von Art, Eigenschaften und Funktionsweise hinausgeht, können Sie verantwortlich sein. Gesetzliche Rechte bei Mängeln oder einer von der Beschreibung abweichenden Ware bleiben unberührt.
 
-Sofern der Verkäufer nichts anderes vereinbart hat, im Angebot oder Checkout nichts anderes angegeben wurde und die Rückgabe nicht auf einem abgedeckten Mangel, einer Falschbeschreibung oder einem Verkäuferfehler beruht, kann der Verbraucher die unmittelbaren Rücksendekosten tragen, soweit dies gesetzlich zulässig ist.
+Bei einem Widerruf wegen Meinungsänderung trägt der Verbraucher die unmittelbaren Rücksendekosten nur, wenn darüber vor dem Kauf informiert wurde und der Verkäufer die Kosten nicht übernimmt. Bei einem anerkannten Mangel, einer Falschbeschreibung oder einem Verkäuferfehler trägt der verantwortliche gewerbliche Verkäufer die angemessenen Rücksendekosten. Fragen Sie Kariv vor einer grenzüberschreitenden Rücksendung einer hochwertigen Uhr nach der richtigen Händleradresse und geeigneter Versicherung.
+
+### Bestellungen mit Treuhandschutz
+
+Bei einer Bestellung mit Kariv-Treuhandschutz beginnt die 14-tägige Prüfzeit mit der vom Versanddienst bestätigten Zustellung. Möchten Sie die Uhr in dieser Zeit zurückgeben, eine Erstattung beantragen oder ein Problem melden, eröffnen Sie auf der Bestellseite Ihres Kontos einen Fall und wählen Sie Rückgabe/Erstattung oder einen anderen passenden Grund. Dadurch bleibt die geschützte Händlerauszahlung bis zur Klärung zurückgehalten. Sie können Kariv auch per E-Mail informieren; eine E-Mail-Erklärung genügt zur Ausübung eines gesetzlichen Widerrufs. Eröffnen Sie bitte zusätzlich den Fall im Konto, damit die geschützte Auszahlung angehalten wird. Falls Sie nicht auf Ihr Konto zugreifen können, informieren Sie Kariv umgehend, damit der Support Sie vor der Auszahlung beim Melden des Problems unterstützen kann. Ist während der Prüfzeit kein Fall offen, kann Kariv den Händler danach und nach den erforderlichen Auszahlungskontrollen bezahlen. Eine ausdrückliche Bestätigung des Käufers ist dafür nicht erforderlich. Gesetzliche Widerrufs- und Mängelrechte sowie Rechte bei Falschbeschreibung bleiben bestehen.
 
 ## 3. Zeitpunkt und Art der Erstattung
 
-Bei einem wirksamen Widerruf werden die geschuldeten Beträge einschließlich der Kosten der günstigsten für die ursprüngliche Bestellung angebotenen Standardlieferung unverzüglich und spätestens 14 Tage nach Eingang des Widerrufs erstattet. Die Erstattung kann zurückgehalten werden, bis die Uhr eingegangen ist oder Sie den Rückversand nachweisen, je nachdem, welches Ereignis früher eintritt.
+Bei einem wirksamen Widerruf sind die gesetzlich geschuldeten Beträge einschließlich der Kosten der günstigsten für die ursprüngliche Bestellung angebotenen Standardlieferung unverzüglich und spätestens 14 Tage nach Eingang der Widerrufserklärung zu erstatten. Der Verkäufer kann die Erstattung zurückhalten, bis die Uhr eingegangen ist oder Sie den Rückversand nachweisen, je nachdem, was zuerst eintritt. Eine vollständige Erstattung erfolgt, sofern kein rechtmäßiger Abzug anfällt; ein Umgang über die notwendige Prüfung hinaus kann zu einem gesetzlich zulässigen Abzug wegen Wertverlusts führen.
 
-Erstattungen erfolgen grundsätzlich über den ursprünglichen Zahlungsweg oder den jeweiligen Treuhandprozess, sofern keine andere Methode vereinbart wurde. Mehrkosten einer höherwertigen Versandart werden nur erstattet, wenn dies gesetzlich vorgeschrieben ist.
+Für eine Uhr aus Karivs eigenem Bestand veranlasst Kariv die Erstattung. Bei direkter Zahlung an einen Händler ist dieser für die Erstattung verantwortlich; Kariv koordiniert und verfolgt den Fall. Bei einer treuhandgeschützten Bestellung koordiniert Kariv eine berechtigte Erstattung aus den geschützten Mitteln vor Auszahlung an den Händler. Die Erstattung erfolgt ohne zusätzliche Erstattungsgebühren über den ursprünglichen Zahlungsweg, sofern nicht ausdrücklich etwas anderes vereinbart wird. Mehrkosten einer höherwertigen Versandart werden nur erstattet, wenn dies gesetzlich vorgeschrieben ist. Die Gutschrift einer bereits veranlassten Erstattung kann beim Zahlungsdienstleister oder der Bank zusätzliche Zeit benötigen.
 
 ## 4. Mangelhafte, beschädigte oder falsch beschriebene Uhren
 
-Trifft eine Uhr beschädigt, mangelhaft, unvollständig, nicht echt oder wesentlich abweichend vom Angebot ein, kontaktieren Sie uns zeitnah. Enthält Ihre Bestellung einen Käuferschutzservice, beachten Sie auch dessen Meldeverfahren. Dessen Meldefrist verkürzt keine zwingenden Ansprüche gegen den Verkäufer. Vermeiden Sie während der Klärung weitere Nutzung oder Veränderungen und legen Sie Fotos sowie eine klare Beschreibung vor. Wir können mit dem zuständigen Verkäufer je nach Fall Prüfung, versicherte Rücksendung, Reparatur, Ersatz, Preisminderung oder Erstattung koordinieren. Angemessene Kosten einer berechtigten Rücksendung werden dem Verbraucher nicht auferlegt.
+Trifft eine Uhr beschädigt, mangelhaft, unvollständig, nicht echt oder wesentlich abweichend vom Angebot ein, kontaktieren Sie uns zeitnah mit Bestellnummer, Fotos und einer klaren Beschreibung. Eröffnen Sie bei einer treuhandgeschützten Bestellung während der Prüfzeit zusätzlich einen Streitfall, damit die geschützten Mittel zurückgehalten werden. Diese Frist verkürzt keine zwingenden Ansprüche gegen den Verkäufer. Vermeiden Sie bis zur Klärung weitere Nutzung oder Veränderungen. Kariv koordiniert die Rücksendeadresse des Händlers und je nach Fall Prüfung, Reparatur, Ersatz, Preisminderung oder Erstattung mit dem verantwortlichen Verkäufer. Angemessene Rücksendekosten bei einem berechtigten Mangel oder Verkäuferfehler werden dem Verbraucher nicht auferlegt.
 
 ## 5. Ausnahmen
 
@@ -709,5 +725,19 @@ export function mergeLegalPageFallbacks(records = []) {
 export function withCzechLegalFallback(record) {
   const fallback = getLegalPageFallback(record?.slug);
   if (!record || !fallback) return record;
+  // The returns policy is maintained in code so an older dashboard copy
+  // cannot reintroduce outdated escrow and return instructions on the site.
+  if (record.slug === RETURNS_POLICY.slug) {
+    return {
+      ...record,
+      content: fallback.content,
+      content_en: fallback.content_en,
+      content_de: fallback.content_de,
+      content_cs: fallback.content_cs,
+      title_cs: record.title_cs || fallback.title_cs,
+      seoTitle_cs: record.seoTitle_cs || fallback.seoTitle_cs,
+      seoDescription_cs: record.seoDescription_cs || fallback.seoDescription_cs,
+    };
+  }
   return { ...record, ...Object.fromEntries(['title_cs', 'content_cs', 'seoTitle_cs', 'seoDescription_cs'].map((key) => [key, record[key] || fallback[key]])) };
 }

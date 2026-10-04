@@ -18,19 +18,19 @@ import { getDirectOrderCopy, getPurchaseRouteLabel, isProtectedOrder } from '@/l
 const ORDER_COPY = {
   cs: {
     reason: 'Důvod', selectReason: 'Vyberte důvod…', describe: 'Popište problém', detailHint: 'Uveďte prosím podrobnosti problému…', submitDispute: 'Odeslat žádost o řešení sporu',
-    reasons: { authenticity_issue: 'Pochybnosti o pravosti', condition_mismatch: 'Stav neodpovídá nabídce', item_not_received: 'Zboží nebylo doručeno', damaged_in_transit: 'Poškození při přepravě', not_as_described: 'Neodpovídá popisu', other: 'Jiný důvod' },
+    reasons: { return_request: 'Žádost o vrácení nebo refundaci', authenticity_issue: 'Pochybnosti o pravosti', condition_mismatch: 'Stav neodpovídá nabídce', item_not_received: 'Zboží nebylo doručeno', damaged_in_transit: 'Poškození při přepravě', not_as_described: 'Neodpovídá popisu', other: 'Jiný důvod' },
     statuses: { open: 'Otevřený', under_review: 'Posuzuje se', resolved_buyer: 'Vyřešeno ve prospěch kupujícího', resolved_seller: 'Vyřešeno ve prospěch prodejce', closed: 'Uzavřený' },
     rate: 'Ohodnoťte prodejce', review: 'Napsat recenzi', reviewHint: 'Jak jste byli s nákupem spokojeni? Vaše zkušenost pomůže ostatním kupujícím při rozhodování.',
   },
   de: {
     reason: 'Grund', selectReason: 'Grund auswählen…', describe: 'Problem beschreiben', detailHint: 'Bitte beschreiben Sie das Problem genauer…', submitDispute: 'Streitfall einreichen',
-    reasons: { authenticity_issue: 'Echtheitsbedenken', condition_mismatch: 'Abweichender Zustand', item_not_received: 'Artikel nicht erhalten', damaged_in_transit: 'Transportschaden', not_as_described: 'Nicht wie beschrieben', other: 'Sonstiges' },
+    reasons: { return_request: 'Rückgabe oder Erstattung beantragen', authenticity_issue: 'Echtheitsbedenken', condition_mismatch: 'Abweichender Zustand', item_not_received: 'Artikel nicht erhalten', damaged_in_transit: 'Transportschaden', not_as_described: 'Nicht wie beschrieben', other: 'Sonstiges' },
     statuses: { open: 'Offen', under_review: 'Wird geprüft', resolved_buyer: 'Zugunsten des Käufers geklärt', resolved_seller: 'Zugunsten des Verkäufers geklärt', closed: 'Geschlossen' },
     rate: 'Händler bewerten', review: 'Bewertung schreiben', reviewHint: 'Wie war Ihre Einkaufserfahrung? Ihre Rückmeldung hilft anderen Käufern bei der Entscheidung.',
   },
   en: {
     reason: 'Reason', selectReason: 'Select a reason...', describe: 'Describe the Issue', detailHint: 'Please provide details about the issue...', submitDispute: 'Submit Dispute Case',
-    reasons: { authenticity_issue: 'Authenticity Issue', condition_mismatch: 'Condition Mismatch', item_not_received: 'Item Not Received', damaged_in_transit: 'Damaged in Transit', not_as_described: 'Not As Described', other: 'Other' },
+    reasons: { return_request: 'Request a return or refund', authenticity_issue: 'Authenticity Issue', condition_mismatch: 'Condition Mismatch', item_not_received: 'Item Not Received', damaged_in_transit: 'Damaged in Transit', not_as_described: 'Not As Described', other: 'Other' },
     statuses: { open: 'Open', under_review: 'Under review', resolved_buyer: 'Resolved for buyer', resolved_seller: 'Resolved for seller', closed: 'Closed' },
     rate: 'Rate Your Dealer', review: 'Leave a Review', reviewHint: 'How was your purchase experience? Your feedback helps other buyers make informed decisions.',
   },
@@ -355,7 +355,7 @@ export default function PortalOrderDetail({ id: providedId }) {
                     <p className="text-[11px] text-muted-foreground">
                       {t('pages.portal.inspectionPeriodDesc', { defaultValue: 'Delivery confirmed on' })} {new Date(order.deliveryConfirmedAt).toLocaleDateString(locale)}.{' '}
                       {protectedOrder
-                        ? t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your protected payment remains held during the 14-day inspection period unless a dispute is filed.' })
+                        ? t('pages.portal.inspectionPeriodDesc2', { defaultValue: 'Your protected payment remains held for 14 days after confirmed delivery. An open return/refund or dispute case pauses dealer payout.' })
                         : t('pages.portal.directDeliveryWindowDesc')}
                     </p>
                   </div>

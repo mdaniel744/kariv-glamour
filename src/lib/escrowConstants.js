@@ -29,7 +29,7 @@ export const ESCROW_STATUS_DESCRIPTIONS = {
   dealer_accepted: 'The dealer has confirmed availability. Please proceed with your payment to secure the order.',
   funds_secured: 'Your payment has been received and is secured in our escrow. The dealer has been instructed to ship your watch. Funds will only be released to the dealer after the 14-day inspection period following courier-confirmed delivery.',
   shipped: 'Your watch has been shipped. Tracking information is shown below. Once the courier confirms delivery, the 14-day inspection period will begin automatically.',
-  verified: 'Delivery has been confirmed by our courier service. Your 14-day inspection period is now active. If you have any concerns, you may flag this order to open a dispute case. Funds will be released to the dealer after the inspection period if no dispute is filed.',
+  verified: 'Delivery has been confirmed by our courier service. Your 14-day inspection period is now active. Request a return or refund, or report another concern, from this order page during that period. An open case holds the protected payout; without one, dealer payout may proceed after the period and required checks.',
   funds_released: 'Transaction complete. The 14-day inspection period has ended and funds have been released to the dealer.',
   cancelled: 'This order has been cancelled.'
 };

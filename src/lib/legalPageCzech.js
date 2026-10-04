@@ -32,29 +32,37 @@ Zboží odeslané a doručené uvnitř celního území EU nepodléhá clu jen p
 ## 6. Při převzetí
 
 Před převzetím zkontrolujte vnější obal. Viditelné poškození podle možností zaznamenejte s dopravcem, balík před otevřením vyfotografujte, uchovejte veškerý obal a bez odkladu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Při ztrátě, krádeži, poškození nebo nesrovnalosti přiložte číslo objednávky, fotografie a případný záznam dopravce. Tento požadavek na oznámení neomezuje zákonná práva spotřebitele.`, '2. října 2026'),
-  'returns-refund-policy': page('Vrácení zboží a peněz', 'Odstoupení od smlouvy, podmínky vrácení a refundace nákupů na Kariv Glamour.', `## 1. Zákonné právo odstoupit od smlouvy
+  'returns-refund-policy': page('Vrácení zboží a peněz', 'Odstoupení od smlouvy, podmínky vrácení a refundace nákupů na Kariv Glamour.', `Tyto podmínky platí pro objednávky na 24kariv.com. Prodejcem uvedeným u objednávky může být Kariv Glamour, nezávislý podnikající prodejce nebo soukromá osoba. Práva při vrácení a refundaci závisejí na postavení prodejce a důvodu vrácení.
+
+## 1. Zákonné právo odstoupit od smlouvy
 
 Jste-li spotřebitelem v EU/EHP a nakupujete online od podnikatele, zpravidla můžete bez udání důvodu odstoupit do 14 dnů ode dne, kdy hodinky převezmete vy nebo vámi určená osoba. Povinná pravidla vaší země mohou poskytovat další ochranu.
 
-Pro uplatnění práva zašlete před koncem lhůty jednoznačné prohlášení na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Uveďte jméno, číslo objednávky, hodinky, datum doručení a spolehlivý kontakt. Žádost potvrdíme a poskytneme bezpečné pokyny pro vrácení. Hodinky neposílejte do sídla společnosti, dokud neobdržíte pokyny.
+Pro uplatnění práva zašlete před koncem lhůty jednoznačné prohlášení na [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Uveďte jméno, číslo objednávky, hodinky a spolehlivý kontakt; důvod uvádět nemusíte. Oznámení potvrdíme, ověříme prodejce a zkoordinujeme pokyny pro vrácení. Uplatnění zákonného práva na odstoupení nevyžaduje předchozí souhlas prodejce.
 
 ## 2. Odeslání hodinek zpět
 
-Po oznámení hodinky vraťte do 14 dnů prostřednictvím určené sledované a pojištěné služby. Přiložte krabičku, doklady, certifikáty, záruční kartu, štítky, náhradní články a veškeré dodané příslušenství. Hodinky bezpečně zabalte a uchovejte doklad o odeslání.
+Po oznámení odešlete hodinky zpět do 14 dnů. Kariv potvrdí správnou adresu pro danou objednávku. Hodinky prodané dealerem se vracejí přímo tomuto dealerovi; hodinky z vlastních zásob Kariv na adresu, kterou vám sdělíme. Hodinky neposílejte do sídla Kariv ani na neověřenou adresu. U přeshraničního vrácení vyčkejte na správnou adresu prodejce a pokyny k dopravě.
+
+Použijte sledovanou a přiměřeně pojištěnou přepravu, hodinky bezpečně zabalte a uchovejte doklad o odeslání. Pokud je máte k dispozici, vraťte také krabičku, doklady, certifikáty, záruční kartu, náhradní články a další dodané příslušenství. Samotná absence vnějšího původního obalu neruší zákonné právo na odstoupení; chybějící součásti nebo zbytečné poškození však mohou ovlivnit výši refundace, dovoluje-li to zákon.
 
 Hodinky můžete prohlédnout v rozsahu, který by byl přiměřeně umožněn v prodejně. Můžete odpovídat za snížení hodnoty způsobené nakládáním nad rámec nezbytný pro zjištění povahy, vlastností a funkčnosti. Tím nejsou odstraněna zákonná práva při vadě nebo nesouladu s popisem.
 
-Pokud se prodejce nedohodl jinak, nabídka či objednávka nestanovila jinak a nejde o oprávněnou reklamaci vady, nesprávného popisu či chybu prodejce, může spotřebitel nést přímé náklady zpětné dopravy, dovoluje-li to zákon.
+Při odstoupení bez udání důvodu může spotřebitel nést přímé náklady vrácení pouze tehdy, pokud byl o této povinnosti informován před nákupem a prodejce se nezavázal je uhradit. Při uznané vadě, nesprávném popisu nebo chybě prodejce hradí přiměřené náklady vrácení odpovědný podnikající prodejce. Před přeshraničním odesláním hodnotných hodinek si u Kariv ověřte adresu dealera a vhodné pojištění.
+
+### Objednávky s ochranou platby
+
+U objednávek s úschovou prostředků Kariv začíná čtrnáctidenní období pro kontrolu okamžikem potvrzeného doručení dopravcem. Chcete-li během tohoto období hodinky vrátit, požádat o refundaci nebo nahlásit problém, otevřete případ na stránce objednávky ve svém účtu a zvolte důvod vrácení/refundace nebo jiný vhodný důvod. Výplata chráněných prostředků dealerovi pak zůstane pozastavena po dobu posouzení. Kariv můžete informovat také e-mailem; e-mailové oznámení stačí k uplatnění zákonného odstoupení, ale otevřete také případ ve svém účtu, aby se výplata pozastavila. Pokud se do účtu nemůžete přihlásit, informujte Kariv neprodleně, aby vám podpora pomohla problém nahlásit před výplatou. Není-li během této doby otevřen žádný případ, může Kariv po jejím uplynutí a po nutných kontrolách vyplatit dealera. Výslovné potvrzení kupujícího se nevyžaduje. Zákonná práva na odstoupení a práva při vadě či nesouladu s popisem tím nezanikají.
 
 ## 3. Termín a způsob vrácení peněz
 
-Při platném odstoupení budou dlužné částky včetně ceny nejlevnější nabízené standardní dopravy původní objednávky vráceny bez zbytečného odkladu, nejpozději do 14 dnů od oznámení. Vrácení lze pozdržet do převzetí hodinek nebo předložení dokladu o jejich odeslání, podle toho, co nastane dříve.
+Při platném odstoupení musí být zákonem požadované částky včetně ceny nejlevnější nabízené standardní dopravy původní objednávky vráceny bez zbytečného odkladu, nejpozději do 14 dnů od oznámení odstoupení. Prodejce může refundaci pozdržet do převzetí hodinek nebo předložení dokladu o jejich odeslání, podle toho, co nastane dříve. Plná částka se vrací, pokud není dán zákonný důvod ke srážce; nadměrné zacházení s hodinkami může vést k přípustné srážce za snížení hodnoty.
 
-Peníze se zpravidla vracejí původní platební cestou nebo příslušným postupem úschovy, není-li dohodnut jiný způsob. Dodatečné náklady dražšího způsobu dopravy se nevracejí, pokud to nevyžaduje zákon.
+Za hodinky z vlastních zásob zajišťuje refundaci Kariv. Při přímé platbě dealerovi odpovídá za refundaci dealer; Kariv případ koordinuje a sleduje. U objednávky s úschovou Kariv koordinuje oprávněnou refundaci ze zadržených prostředků před vyplacením dealerovi. Peníze se bez dalších poplatků za refundaci vracejí původní platební cestou, není-li výslovně dohodnuto jinak. Dodatečné náklady dražšího způsobu dopravy se nevracejí, pokud to nevyžaduje zákon. Připsání již odeslané refundace může u banky nebo poskytovatele plateb trvat déle.
 
 ## 4. Vadné, poškozené nebo nesprávně popsané hodinky
 
-Pokud hodinky dorazí poškozené, vadné, neúplné, nepravé nebo se podstatně liší od nabídky, kontaktujte nás včas. Zahrnuje-li objednávka službu ochrany kupujícího, dodržujte také její postup pro hlášení. Lhůta této služby nezkracuje zákonná práva vůči prodejci. Během posuzování se vyhněte dalšímu používání nebo úpravám a přiložte fotografie s jasným popisem. S odpovědným prodejcem můžeme podle situace koordinovat prohlídku, pojištěné vrácení, opravu, výměnu, slevu nebo refundaci. Přiměřené uznané náklady vrácení nebudou účtovány spotřebiteli.
+Pokud hodinky dorazí poškozené, vadné, neúplné, nepravé nebo se podstatně liší od nabídky, kontaktujte nás včas a uveďte číslo objednávky, fotografie a jasný popis. U objednávky s úschovou otevřete během kontrolního období také spor k objednávce, aby prostředky zůstaly zadrženy. Tato lhůta nezkracuje zákonná práva vůči prodejci. Během posuzování se vyhněte dalšímu používání nebo úpravám. Kariv koordinuje adresu dealera pro vrácení a podle situace prohlídku, opravu, výměnu, slevu nebo refundaci s odpovědným prodejcem. Přiměřené náklady vrácení při oprávněné reklamaci vady nebo chybě prodejce nebudou účtovány spotřebiteli.
 
 ## 5. Výjimky
 
@@ -62,7 +70,7 @@ Právo na odstoupení lze vyloučit pouze tam, kde to zákon dovoluje, napříkl
 
 ## 6. Dotazy
 
-Před vrácením cenného předmětu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`, '2. října 2026'),
+Před vrácením cenného předmětu kontaktujte [${COMPANY_DETAILS.email}](mailto:${COMPANY_DETAILS.email}). Nic v těchto podmínkách neomezuje práva, která nelze zákonně vyloučit.`, '3. října 2026'),
   'warranty-policy': page('Odpovědnost za vady a záruky', 'Informace o zákonných právech, zárukách a uplatnění reklamace hodinek.', `## 1. Vaše zákonná práva
 
 Spotřebitelé nakupující zboží od podnikatele v EU mají zákonnou ochranu, že zboží odpovídá smlouvě. Tato ochrana je samostatná vůči jakékoli záruce výrobce či obchodní záruce a nelze ji takovou zárukou omezit. Příslušné lhůty a nároky stanoví kogentní právo; podle pravidel EU mají spotřebitelé obecně nejméně dvouletou zákonnou ochranu od doručení. Pro použité zboží mohou platit zvláštní pravidla, pokud vnitrostátní právo dovoluje výslovně dohodnutou kratší dobu, nikdy však pod zákonné minimum.
