@@ -57,9 +57,12 @@ async function readLimitedBody(request) {
 }
 
 export async function POST(request) {
-  const apiKey = process.env.RESEND_API_KEY;
+  const host = process.env.SMTP_HOST?.trim();
+  const port = process.env.SMTP_PORT?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const password = process.env.SMTP_PASSWORD;
   const from = process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_CONTACT_FROM;
-  if (!apiKey) return result({ ok: false, error: 'CONTACT_UNAVAILABLE' }, 503);
+  if (!host || !port || !user || !password) return result({ ok: false, error: 'CONTACT_UNAVAILABLE' }, 503);
 
   if (request.headers.get('sec-fetch-site') === 'cross-site') {
     return result({ ok: false, error: 'FORBIDDEN' }, 403);
@@ -84,7 +87,7 @@ export async function POST(request) {
   if (overLimit(rateLimitKey(request, contact.email))) return result({ ok: false, error: 'RATE_LIMITED' }, 429);
 
   try {
-    const accepted = await sendContactEmail(contact, { apiKey, from });
+    const accepted = await sendContactEmail(contact, { host, port, user, password, from });
     if (!accepted) {
       console.error('Contact email provider rejected request');
       return result({ ok: false, error: 'DELIVERY_FAILED' }, 502);

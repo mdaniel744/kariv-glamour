@@ -24,8 +24,8 @@ test('contact form sends through the server and only confirms an accepted submis
   assert.match(source, /disabled=\{formStatus === 'sending'\}/);
   assert.match(source, /role="status"/);
   assert.doesNotMatch(source, /window\.location\.assign|draftUrl|Open email draft/);
-  assert.match(read('src/lib/contactEmail.js'), /to: \[COMPANY_DETAILS\.email\]/);
-  assert.match(route, /process\.env\.RESEND_API_KEY/);
+  assert.match(read('src/lib/contactEmail.js'), /to: COMPANY_DETAILS\.email/);
+  assert.match(route, /process\.env\.SMTP_HOST/);
   assert.match(route, /process\.env\.CONTACT_FROM_EMAIL/);
   for (const field of ['name', 'email', 'subject', 'message']) {
     assert.ok(source.includes(`name="${field}"`));

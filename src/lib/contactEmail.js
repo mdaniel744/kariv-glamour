@@ -1,8 +1,9 @@
+import nodemailer from 'nodemailer';
 import { COMPANY_DETAILS } from './companyDetails.js';
 
 export const DEFAULT_CONTACT_FROM = `Kariv Glamour <${COMPANY_DETAILS.email}>`;
 
-export async function sendContactEmail(contact, { apiKey, from, fetcher = fetch }) {
+export async function sendContactEmail(contact, { host, port, user, password, from, createTransport = nodemailer.createTransport }) {
   const body = [
     'New Kariv Glamour contact form message',
     `Name: ${contact.name}`,
@@ -13,21 +14,24 @@ export async function sendContactEmail(contact, { apiKey, from, fetcher = fetch 
     contact.message,
   ].join('\n');
 
-  const response = await fetcher('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: [COMPANY_DETAILS.email],
-      reply_to: contact.email,
-      subject: `Kariv contact: ${contact.subject}`,
-      text: body,
-    }),
-    signal: AbortSignal.timeout(10_000),
+  const transport = createTransport({
+    host,
+    port: Number(port),
+    secure: Number(port) === 465,
+    auth: { user, pass: password },
+    connectionTimeout: 10_000,
   });
 
-  return response.ok;
+  try {
+    const info = await transport.sendMail({
+      from,
+      to: COMPANY_DETAILS.email,
+      replyTo: contact.email,
+      subject: `Kariv contact: ${contact.subject}`,
+      text: body,
+    });
+    return Boolean(info?.accepted?.length);
+  } finally {
+    transport.close?.();
+  }
 }
