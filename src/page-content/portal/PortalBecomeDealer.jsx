@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { submitDealerApplication } from '@/lib/supabaseData';
 import { getMyDealerApplication } from '@/actions/dealerApplications';
 import { useAuth } from '@/lib/AuthContext';
@@ -14,6 +14,9 @@ export default function PortalBecomeDealer() {
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  // setSubmitting is async, so a literal double-click can fire handleSubmit
+  // twice before the button re-renders disabled. This ref blocks synchronously.
+  const submittingRef = useRef(false);
   const [form, setForm] = useState({
     companyName: '', phone: '', taxId: '', website: '',
     address: '', city: '', postalCode: '', country: '', message: ''
@@ -27,6 +30,8 @@ export default function PortalBecomeDealer() {
   }, []);
 
   const handleSubmit = async () => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setSubmitting(true);
     try {
       const address = [form.address, form.postalCode, form.city].filter(Boolean).join(', ');
@@ -47,6 +52,7 @@ export default function PortalBecomeDealer() {
     } catch (e) {
       toast({ title: t('common:error'), description: e.message, variant: 'destructive' });
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };
